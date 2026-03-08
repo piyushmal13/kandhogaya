@@ -1,0 +1,442 @@
+import React, { useState, useEffect, useRef } from "react";
+import { useParams, Link } from "react-router-dom";
+import { motion, AnimatePresence } from "motion/react";
+import { 
+  Calendar, Clock, Users, ArrowRight, Video, 
+  MessageSquare, Send, Share2, Download, 
+  Play, Volume2, Maximize2, Star, Zap, ShieldCheck
+} from "lucide-react";
+import { supabase } from "../lib/supabase";
+import { AttendeeFeed } from "../components/webinars/AttendeeFeed";
+import { RegistrationModal } from "../components/webinars/RegistrationModal";
+import { CountdownTimer } from "../components/webinars/CountdownTimer";
+import { ExitIntentPopup } from "../components/webinars/ExitIntentPopup";
+
+export const WebinarDetail = () => {
+  const { id } = useParams();
+  const [webinar, setWebinar] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [isRegistered, setIsRegistered] = useState(false);
+  const [showRegModal, setShowRegModal] = useState(false);
+  const [messages, setMessages] = useState<any[]>([]);
+  const [newMessage, setNewMessage] = useState("");
+  const [activeTab, setActiveTab] = useState("chat"); // chat, agenda, resources
+  const chatEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const fetchWebinar = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("webinars")
+          .select("*")
+          .eq("id", id)
+          .single();
+
+        if (data) {
+          setWebinar(data);
+          // Check if user is registered (mock check for now, or use local storage)
+          const registered = localStorage.getItem(`webinar_reg_${id}`);
+          if (registered) setIsRegistered(true);
+        }
+      } catch (err) {
+        console.error("Error fetching webinar:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchWebinar();
+  }, [id]);
+
+  useEffect(() => {
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+
+  const handleSendMessage = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newMessage.trim()) return;
+    
+    const msg = {
+      id: Date.now(),
+      user: "You",
+      text: newMessage,
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    };
+    
+    setMessages([...messages, msg]);
+    setNewMessage("");
+  };
+
+  if (loading) return <div className="pt-32 text-center text-white">Loading...</div>;
+  if (!webinar) return <div className="pt-32 text-center text-white">Webinar not found.</div>;
+
+  const isLive = webinar.status === "live";
+  const isRecorded = webinar.status === "recorded";
+  const isUpcoming = webinar.status === "upcoming";
+
+  return (
+    <div className="pt-20 bg-[#020202] min-h-screen">
+      {/* Header Info */}
+      <div className="bg-[#050505] border-b border-white/5 py-6">
+        <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <Link to="/webinars" className="p-2 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 transition-colors">
+              <ArrowRight className="w-5 h-5 rotate-180" />
+            </Link>
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                {isLive && (
+                  <span className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-red-500/10 border border-red-500/20 text-red-500 text-[10px] font-bold uppercase animate-pulse">
+                    <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                    Live Now
+                  </span>
+                )}
+                {isRecorded && (
+                  <span className="px-2 py-0.5 rounded bg-blue-500/10 border border-blue-500/20 text-blue-500 text-[10px] font-bold uppercase">
+                    Recorded Session
+                  </span>
+                )}
+                <span className="text-gray-500 text-[10px] font-mono uppercase tracking-widest">{webinar.speaker_name}</span>
+              </div>
+              <h1 className="text-xl md:text-2xl font-bold text-white tracking-tight">{webinar.title}</h1>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 text-gray-400 text-sm">
+              <Users className="w-4 h-4 text-emerald-500" />
+              <span>{webinar.registration_count}+ Attending</span>
+            </div>
+            <button className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-gray-400 transition-colors">
+              <Share2 className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        {isUpcoming && (
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-12 p-8 md:p-12 bg-[#0a0a0a] border border-emerald-500/20 rounded-3xl relative overflow-hidden shadow-[0_0_50px_rgba(16,185,129,0.05)]"
+          >
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.05),transparent_70%)]" />
+            <div className="relative z-10 flex flex-col items-center text-center">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase tracking-widest mb-8">
+                <Zap className="w-3 h-3" />
+                Live Session Countdown
+              </div>
+              
+              <CountdownTimer targetDate={webinar.date_time} variant="hero" />
+              
+              {!isRegistered && (
+                <div className="mt-10 flex flex-col items-center">
+                  <p className="text-gray-400 text-sm mb-6 max-w-md">
+                    Don't miss out on this institutional breakdown. Secure your seat before the countdown hits zero.
+                  </p>
+                  <button 
+                    onClick={() => setShowRegModal(true)}
+                    className="px-10 py-4 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all shadow-[0_0_30px_rgba(16,185,129,0.3)] flex items-center gap-2 group"
+                  >
+                    Register for Free Access
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  </button>
+                </div>
+              )}
+              
+              {isRegistered && (
+                <div className="mt-10 flex items-center gap-3 px-6 py-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-400 font-bold">
+                  <ShieldCheck className="w-5 h-5" />
+                  <span>You're Registered! We'll notify you when we go live.</span>
+                </div>
+              )}
+            </div>
+          </motion.div>
+        )}
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          
+          {/* Main Content: Video Player */}
+          <div className="lg:col-span-8">
+            <div className="relative aspect-video bg-black rounded-2xl overflow-hidden border border-white/10 shadow-2xl group">
+              {isUpcoming && !isRegistered ? (
+                <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-gradient-to-b from-black/60 to-black">
+                  <div className="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mb-6 border border-emerald-500/20">
+                    <Lock className="w-10 h-10 text-emerald-500" />
+                  </div>
+                  <h2 className="text-2xl font-bold text-white mb-4">Registration Required</h2>
+                  <p className="text-gray-400 max-w-md mb-8">
+                    This session is exclusive to registered members. Join 1,200+ other traders to gain access to institutional insights.
+                  </p>
+
+                  <button 
+                    onClick={() => setShowRegModal(true)}
+                    className="px-8 py-4 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all shadow-[0_0_30px_rgba(16,185,129,0.3)]"
+                  >
+                    Register for Free Access
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <img 
+                    src={webinar.cover_image || "https://picsum.photos/seed/webinar/1280/720"} 
+                    alt="Webinar Cover" 
+                    className="w-full h-full object-cover opacity-40"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <button className="w-20 h-20 bg-emerald-500 text-black rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-[0_0_40px_rgba(16,185,129,0.4)]">
+                      <Play className="w-8 h-8 fill-current ml-1" />
+                    </button>
+                  </div>
+                  
+                  {/* Video Controls Overlay */}
+                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <Play className="w-5 h-5 text-white cursor-pointer" />
+                        <Volume2 className="w-5 h-5 text-white cursor-pointer" />
+                        <span className="text-white text-xs font-mono">00:00 / {webinar.duration}:00</span>
+                      </div>
+                      <Maximize2 className="w-5 h-5 text-white cursor-pointer" />
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Live Offer / CTA during session */}
+            <AnimatePresence>
+              {isLive && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-8 p-6 bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border border-emerald-500/20 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-6"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-emerald-500 rounded-full flex items-center justify-center text-black">
+                      <Zap className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h3 className="text-white font-bold">Exclusive Attendee Offer</h3>
+                      <p className="text-gray-400 text-sm">Get 3 months of VIP Signals for just $50 (Save $10)</p>
+                    </div>
+                  </div>
+                  <Link 
+                    to="/signals" 
+                    className="px-6 py-3 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all whitespace-nowrap"
+                  >
+                    Claim Discount Now
+                  </Link>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Description & Agenda */}
+            <div className="mt-12">
+              <div className="flex border-b border-white/5 mb-8">
+                {["Overview", "Agenda", "Resources"].map((tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveTab(tab.toLowerCase())}
+                    className={`px-6 py-4 text-sm font-bold transition-all relative ${
+                      activeTab === tab.toLowerCase() ? "text-emerald-500" : "text-gray-500 hover:text-gray-300"
+                    }`}
+                  >
+                    {tab}
+                    {activeTab === tab.toLowerCase() && (
+                      <motion.div layoutId="activeTab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-500" />
+                    )}
+                  </button>
+                ))}
+              </div>
+
+              <div className="prose prose-invert max-w-none">
+                {activeTab === "overview" && (
+                  <div className="text-gray-400 leading-relaxed">
+                    <p className="mb-6">{webinar.description}</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                      <div className="p-6 rounded-2xl bg-white/5 border border-white/5">
+                        <h4 className="text-white font-bold mb-4 flex items-center gap-2">
+                          <Star className="w-4 h-4 text-emerald-500" />
+                          What You'll Learn
+                        </h4>
+                        <ul className="space-y-3 text-sm">
+                          <li className="flex items-start gap-2">
+                            <Check className="w-4 h-4 text-emerald-500 mt-0.5" />
+                            <span>Institutional order flow identification</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <Check className="w-4 h-4 text-emerald-500 mt-0.5" />
+                            <span>Liquidity void trading strategies</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <Check className="w-4 h-4 text-emerald-500 mt-0.5" />
+                            <span>Risk management for large accounts</span>
+                          </li>
+                        </ul>
+                      </div>
+                      <div className="p-6 rounded-2xl bg-white/5 border border-white/5">
+                        <h4 className="text-white font-bold mb-4 flex items-center gap-2">
+                          <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                          Speaker Credibility
+                        </h4>
+                        <p className="text-sm">
+                          {webinar.speaker_name} has over 12 years of experience in quantitative trading and has managed portfolios for top-tier hedge funds.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                
+                {activeTab === "agenda" && (
+                  <div className="space-y-6">
+                    {[
+                      { time: "00:00", title: "Introduction & Market Context" },
+                      { time: "15:00", title: "Identifying Institutional Footprints" },
+                      { time: "30:00", title: "Live Chart Breakdown: XAUUSD" },
+                      { time: "45:00", title: "Risk Management Framework" },
+                      { time: "55:00", title: "Live Q&A Session" }
+                    ].map((item, i) => (
+                      <div key={i} className="flex gap-6 items-start group">
+                        <div className="text-emerald-500 font-mono text-sm pt-1">{item.time}</div>
+                        <div className="flex-1 pb-6 border-b border-white/5 group-last:border-0">
+                          <h4 className="text-white font-bold mb-1">{item.title}</h4>
+                          <p className="text-gray-500 text-sm">Deep dive into the core mechanics and practical application.</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {activeTab === "resources" && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {[
+                      { title: "Strategy PDF Guide", size: "2.4 MB", type: "PDF" },
+                      { title: "Indicator Settings", size: "156 KB", type: "TXT" },
+                      { title: "Risk Calculator Sheet", size: "1.2 MB", type: "XLSX" }
+                    ].map((file, i) => (
+                      <div key={i} className="p-4 rounded-xl bg-white/5 border border-white/5 flex items-center justify-between group hover:border-emerald-500/30 transition-colors">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500">
+                            <Download className="w-5 h-5" />
+                          </div>
+                          <div>
+                            <div className="text-white font-bold text-sm">{file.title}</div>
+                            <div className="text-gray-500 text-[10px] uppercase">{file.type} • {file.size}</div>
+                          </div>
+                        </div>
+                        <button className="p-2 text-gray-500 hover:text-emerald-500 transition-colors">
+                          <Download className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Sidebar: Chat & Feed */}
+          <div className="lg:col-span-4 space-y-8">
+            
+            {/* Live Chat */}
+            <div className="bg-[#0a0a0a] border border-white/10 rounded-2xl flex flex-col h-[600px] shadow-xl">
+              <div className="p-4 border-b border-white/5 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <MessageSquare className="w-4 h-4 text-emerald-500" />
+                  <span className="text-white font-bold text-sm">Live Chat</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="text-[10px] text-gray-500 font-mono">1,248 ONLINE</span>
+                </div>
+              </div>
+
+              <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-white/10">
+                {messages.length === 0 && (
+                  <div className="text-center py-12">
+                    <p className="text-gray-600 text-sm">Welcome to the live session! Say hello to the community.</p>
+                  </div>
+                )}
+                {messages.map((msg) => (
+                  <div key={msg.id} className="flex flex-col">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-emerald-500 font-bold text-[10px]">{msg.user}</span>
+                      <span className="text-gray-600 text-[9px]">{msg.time}</span>
+                    </div>
+                    <div className="bg-white/5 rounded-lg p-2.5 text-gray-300 text-sm">
+                      {msg.text}
+                    </div>
+                  </div>
+                ))}
+                <div ref={chatEndRef} />
+              </div>
+
+              <form onSubmit={handleSendMessage} className="p-4 border-t border-white/5">
+                <div className="relative">
+                  <input 
+                    type="text" 
+                    placeholder="Type a message..."
+                    value={newMessage}
+                    onChange={(e) => setNewMessage(e.target.value)}
+                    className="w-full bg-black border border-white/10 rounded-xl pl-4 pr-12 py-3 text-sm text-white focus:border-emerald-500 outline-none transition-all"
+                  />
+                  <button 
+                    type="submit"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-emerald-500 hover:text-emerald-400 transition-colors"
+                  >
+                    <Send className="w-4 h-4" />
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            {/* Attendee Feed (Social Proof) */}
+            <div className="bg-[#0a0a0a] border border-white/10 rounded-2xl p-6 shadow-xl">
+              <h3 className="text-white font-bold text-sm mb-6 flex items-center gap-2">
+                <Users className="w-4 h-4 text-emerald-500" />
+                Recent Joins
+              </h3>
+              <AttendeeFeed />
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      <AnimatePresence>
+        {showRegModal && (
+          <RegistrationModal 
+            onClose={() => setShowRegModal(false)} 
+            webinar={webinar} 
+            onSuccess={() => setIsRegistered(true)}
+          />
+        )}
+      </AnimatePresence>
+
+      {isUpcoming && !isRegistered && (
+        <ExitIntentPopup 
+          onRegister={() => setShowRegModal(true)} 
+          webinarTitle={webinar.title}
+        />
+      )}
+    </div>
+  );
+};
+
+const Lock = ({ className }: { className?: string }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+  </svg>
+);
+
+const Check = ({ className }: { className?: string }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+  </svg>
+);

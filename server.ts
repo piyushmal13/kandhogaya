@@ -98,16 +98,37 @@ async function startServer() {
 
   // Content Routes
   app.get("/api/content", async (req, res) => {
-    const { type } = req.query;
-    const { data: posts, error } = await supabase
+    const { type, page = 1, limit = 9, search = "" } = req.query;
+    const offset = (Number(page) - 1) * Number(limit);
+
+    let query = supabase
       .from('content_posts')
       .select('*')
       .eq('content_type', type || 'blog')
-      .eq('status', 'published')
-      .order('published_at', { ascending: false });
+      .eq('status', 'published');
+
+    if (search) {
+      query = query.or(`title.ilike.%${search}%,body.ilike.%${search}%`);
+    }
+
+    const { data: posts, error } = await query
+      .order('published_at', { ascending: false })
+      .range(offset, offset + Number(limit) - 1);
 
     if (error) return res.status(500).json({ error: error.message });
     res.json(posts);
+  });
+
+  app.get("/api/content/:slug", async (req, res) => {
+    const { slug } = req.params;
+    const { data: post, error } = await supabase
+      .from('content_posts')
+      .select('*')
+      .eq('slug', slug)
+      .single();
+
+    if (error) return res.status(404).json({ error: "Post not found" });
+    res.json(post);
   });
 
   // Product Routes

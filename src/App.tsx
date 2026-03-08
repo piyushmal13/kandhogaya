@@ -13,6 +13,7 @@ import { Marketplace } from "./pages/Marketplace";
 import { Results } from "./pages/Results";
 import { Academy } from "./pages/Academy";
 import { Webinars } from "./pages/Webinars";
+import { WebinarDetail } from "./pages/WebinarDetail";
 import { Blog } from "./pages/Blog";
 import { BlogDetail } from "./pages/BlogDetail";
 import { Login } from "./pages/Login";
@@ -42,6 +43,7 @@ export default function App() {
                 <Route path="/results" element={<Results />} />
                 <Route path="/courses" element={<Academy />} />
                 <Route path="/webinars" element={<Webinars />} />
+                <Route path="/webinars/:id" element={<WebinarDetail />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/:slug" element={<BlogDetail />} />
                 <Route path="/login" element={<Login />} />

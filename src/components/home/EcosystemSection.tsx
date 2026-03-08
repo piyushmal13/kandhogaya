@@ -96,7 +96,7 @@ const EcosystemCard = ({ mod, index }: { mod: typeof modules[0], index: number }
       >
         <Link 
           to={mod.link} 
-          className="block relative h-full p-8 rounded-[2rem] bg-[#050505] border border-white/5 overflow-hidden transition-colors duration-500 group-hover:bg-[#0a0a0a]"
+          className="block relative h-full p-6 md:p-8 rounded-[1.5rem] md:rounded-[2rem] bg-[#050505] border border-white/5 overflow-hidden transition-colors duration-500 group-hover:bg-[#0a0a0a]"
         >
           {/* Spotlight Background Glow */}
           <motion.div
@@ -108,7 +108,7 @@ const EcosystemCard = ({ mod, index }: { mod: typeof modules[0], index: number }
           
           {/* Glowing Edge Mask */}
           <motion.div
-            className="absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-[2rem]"
+            className="absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-[1.5rem] md:rounded-[2rem]"
             style={{
               background: useMotionTemplate`radial-gradient(400px circle at ${spotlightX}px ${spotlightY}px, rgba(16, 185, 129, 0.5), transparent 40%)`,
               WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
@@ -124,19 +124,19 @@ const EcosystemCard = ({ mod, index }: { mod: typeof modules[0], index: number }
             style={{ transform: "translateZ(40px)" }}
           >
             {/* Top Right Arrow */}
-            <div className="absolute top-0 right-0 w-10 h-10 rounded-full bg-white/[0.02] flex items-center justify-center border border-white/5 group-hover:bg-emerald-500/10 group-hover:border-emerald-500/30 transition-all duration-500 group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(16,185,129,0.2)]">
-              <ArrowUpRight className="w-5 h-5 text-gray-500 group-hover:text-emerald-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-500" />
+            <div className="absolute top-0 right-0 w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/[0.02] flex items-center justify-center border border-white/5 group-hover:bg-emerald-500/10 group-hover:border-emerald-500/30 transition-all duration-500 group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+              <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5 text-gray-500 group-hover:text-emerald-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-500" />
             </div>
 
-            <div className="w-16 h-16 rounded-2xl bg-white/[0.02] border border-white/5 flex items-center justify-center mb-8 group-hover:bg-emerald-500/10 group-hover:border-emerald-500/30 group-hover:shadow-[0_0_30px_rgba(16,185,129,0.2)] transition-all duration-500">
-              <mod.icon className="w-8 h-8 text-gray-400 group-hover:text-emerald-400 group-hover:scale-110 transition-all duration-500" />
+            <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-white/[0.02] border border-white/5 flex items-center justify-center mb-6 md:mb-8 group-hover:bg-emerald-500/10 group-hover:border-emerald-500/30 group-hover:shadow-[0_0_30px_rgba(16,185,129,0.2)] transition-all duration-500">
+              <mod.icon className="w-6 h-6 md:w-8 md:h-8 text-gray-400 group-hover:text-emerald-400 group-hover:scale-110 transition-all duration-500" />
             </div>
             
-            <h3 className="text-2xl font-semibold text-white mb-4 tracking-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-400 transition-all duration-500">
+            <h3 className="text-xl md:text-2xl font-semibold text-white mb-3 md:mb-4 tracking-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-400 transition-all duration-500">
               {mod.title}
             </h3>
             
-            <p className="text-gray-400 text-lg leading-relaxed max-w-md group-hover:text-gray-300 transition-colors duration-500">
+            <p className="text-gray-400 text-sm md:text-lg leading-relaxed max-w-md group-hover:text-gray-300 transition-colors duration-500">
               {mod.description}
             </p>
           </div>
@@ -148,15 +148,15 @@ const EcosystemCard = ({ mod, index }: { mod: typeof modules[0], index: number }
 
 export const EcosystemSection = () => {
   return (
-    <section className="py-32 bg-[#020202] relative overflow-hidden">
+    <section className="py-20 md:py-32 bg-[#020202] relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 relative z-10">
-        <div className="text-center mb-20">
+        <div className="text-center mb-12 md:mb-20">
           <motion.div 
             initial={{ opacity: 0, y: 20, filter: "blur(10px)" }}
             whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             viewport={{ once: true }}
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-gray-300 text-xs font-mono tracking-widest mb-6 backdrop-blur-md"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-gray-300 text-[10px] md:text-xs font-mono tracking-widest mb-6 backdrop-blur-md"
           >
             THE ECOSYSTEM
           </motion.div>
@@ -165,7 +165,7 @@ export const EcosystemSection = () => {
             whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             viewport={{ once: true }}
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-            className="text-4xl md:text-6xl font-bold text-white mb-6 tracking-tighter"
+            className="text-3xl md:text-6xl font-bold text-white mb-6 tracking-tighter"
           >
             Four Pillars of <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">Intelligence</span>
           </motion.h2>
@@ -174,13 +174,13 @@ export const EcosystemSection = () => {
             whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             viewport={{ once: true }}
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-            className="text-xl text-gray-400 max-w-2xl mx-auto tracking-tight"
+            className="text-base md:text-xl text-gray-400 max-w-2xl mx-auto tracking-tight"
           >
             Everything you need to dominate the markets, integrated into one powerful, institutional-grade platform.
           </motion.p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
           {modules.map((mod, i) => (
             <EcosystemCard key={mod.id} mod={mod} index={i} />
           ))}

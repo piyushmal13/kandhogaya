@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
-import { BarChart3, Zap, ShieldCheck, Users, ShoppingCart } from "lucide-react";
+import { BarChart3, Zap, ShieldCheck, Users, ShoppingCart, Video } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { supabase } from "../lib/supabase";
 import { cn } from "../utils/cn";
@@ -13,6 +13,10 @@ export const Admin = () => {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [type, setType] = useState("signal");
+  const [videoUrl, setVideoUrl] = useState("");
+  const [downloadUrl, setDownloadUrl] = useState("");
+  const [coverImage, setCoverImage] = useState("");
+  const [takeaways, setTakeaways] = useState("");
   
   const [licenseUserId, setLicenseUserId] = useState("");
   const [licenseAlgoId, setLicenseAlgoId] = useState("");
@@ -47,12 +51,27 @@ export const Admin = () => {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${session?.access_token}`
       },
-      body: JSON.stringify({ title, content_type: type, body, data: { entry: 2150, sl: 2140, tp: 2170 } })
+      body: JSON.stringify({ 
+        title, 
+        content_type: type, 
+        body, 
+        data: { 
+          video_url: videoUrl,
+          download_url: downloadUrl,
+          cover_image: coverImage,
+          takeaways: takeaways.split("\n").filter(t => t.trim() !== ""),
+          entry: 2150, sl: 2140, tp: 2170 
+        } 
+      })
     });
     if (res.ok) {
       alert("Published!");
       setTitle("");
       setBody("");
+      setVideoUrl("");
+      setDownloadUrl("");
+      setCoverImage("");
+      setTakeaways("");
     }
   };
 
@@ -78,6 +97,7 @@ export const Admin = () => {
     { id: "stats", name: "Analytics", icon: BarChart3 },
     { id: "content", name: "Publishing", icon: Zap },
     { id: "licenses", name: "Licenses", icon: ShieldCheck },
+    { id: "webinars", name: "Webinars", icon: Video },
     { id: "users", name: "Users", icon: Users },
   ];
 
@@ -143,6 +163,29 @@ export const Admin = () => {
                 <label className="block text-xs font-bold text-gray-500 uppercase mb-2">Body / Analysis</label>
                 <textarea rows={5} value={body} onChange={e => setBody(e.target.value)} className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-emerald-500" />
               </div>
+
+              {type === "blog" && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 bg-white/5 rounded-2xl border border-white/5">
+                  <div className="col-span-2 text-xs font-bold text-emerald-500 uppercase tracking-widest mb-2">Advanced Blog Features</div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-500 uppercase mb-2">Video URL (YouTube/Vimeo)</label>
+                    <input value={videoUrl} onChange={e => setVideoUrl(e.target.value)} className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-emerald-500" placeholder="https://..." />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-500 uppercase mb-2">Download URL (PDF/Report)</label>
+                    <input value={downloadUrl} onChange={e => setDownloadUrl(e.target.value)} className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-emerald-500" placeholder="https://..." />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-500 uppercase mb-2">Cover Image URL</label>
+                    <input value={coverImage} onChange={e => setCoverImage(e.target.value)} className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-emerald-500" placeholder="https://..." />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-500 uppercase mb-2">Key Takeaways (One per line)</label>
+                    <textarea rows={3} value={takeaways} onChange={e => setTakeaways(e.target.value)} className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-emerald-500" placeholder="Support at 2150&#10;Bullish trend..." />
+                  </div>
+                </div>
+              )}
+
               <button className="w-full py-4 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all">
                 Publish to Hub
               </button>
@@ -174,6 +217,69 @@ export const Admin = () => {
                 Generate & Save License
               </button>
             </form>
+          </div>
+        )}
+        {activeTab === "webinars" && (
+          <div className="space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="bg-zinc-900 border border-white/10 p-6 rounded-2xl">
+                <Users className="text-emerald-500 w-6 h-6 mb-4" />
+                <div className="text-2xl font-bold text-white mb-1">4,820</div>
+                <div className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Total Webinar Leads</div>
+              </div>
+              <div className="bg-zinc-900 border border-white/10 p-6 rounded-2xl">
+                <Video className="text-emerald-500 w-6 h-6 mb-4" />
+                <div className="text-2xl font-bold text-white mb-1">12</div>
+                <div className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Sessions Hosted</div>
+              </div>
+              <div className="bg-zinc-900 border border-white/10 p-6 rounded-2xl">
+                <ShoppingCart className="text-emerald-500 w-6 h-6 mb-4" />
+                <div className="text-2xl font-bold text-white mb-1">18.4%</div>
+                <div className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Avg. Conversion Rate</div>
+              </div>
+            </div>
+
+            <div className="bg-zinc-900 border border-white/10 rounded-2xl overflow-hidden">
+              <div className="p-6 border-b border-white/5 flex justify-between items-center">
+                <h3 className="text-white font-bold">Recent Webinar Performance</h3>
+                <button className="text-xs text-emerald-500 font-bold hover:underline">Export Leads (CSV)</button>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left">
+                  <thead>
+                    <tr className="text-[10px] text-gray-500 uppercase tracking-widest border-b border-white/5">
+                      <th className="px-6 py-4">Webinar Title</th>
+                      <th className="px-6 py-4">Date</th>
+                      <th className="px-6 py-4">Registrations</th>
+                      <th className="px-6 py-4">Attended</th>
+                      <th className="px-6 py-4">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="text-sm">
+                    {[
+                      { title: "Gold Market Outlook", date: "Oct 24, 2026", reg: 1248, attended: 842, status: "Upcoming" },
+                      { title: "Forex Macro Strategy", date: "Oct 17, 2026", reg: 950, attended: 620, status: "Completed" },
+                      { title: "Algo Trading Masterclass", date: "Oct 10, 2026", reg: 1540, attended: 1120, status: "Completed" },
+                    ].map((w, i) => (
+                      <tr key={i} className="border-b border-white/5 last:border-0 hover:bg-white/5 transition-colors">
+                        <td className="px-6 py-4 text-white font-medium">{w.title}</td>
+                        <td className="px-6 py-4 text-gray-400">{w.date}</td>
+                        <td className="px-6 py-4 text-white">{w.reg}</td>
+                        <td className="px-6 py-4 text-white">{w.attended}</td>
+                        <td className="px-6 py-4">
+                          <span className={cn(
+                            "px-2 py-0.5 rounded text-[10px] font-bold uppercase",
+                            w.status === "Upcoming" ? "bg-emerald-500/10 text-emerald-500" : "bg-gray-500/10 text-gray-500"
+                          )}>
+                            {w.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         )}
       </div>

@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from "motion/react";
 import { Check, X, Upload, Smartphone, ShieldCheck, Zap, Activity, BarChart3, TrendingUp, Clock, Globe, ArrowRight, Lock, MessageSquare, Users } from "lucide-react";
 import { supabase } from "../lib/supabase";
 
+import { WebinarPromoInline } from "../components/webinars/WebinarPromoInline";
+
 // --- Types ---
 type PlanDuration = "1 Month" | "3 Months" | "6 Months";
 
@@ -769,6 +771,9 @@ export const Signals = () => {
       <PerformanceMetrics />
       <HowItWorks />
       <SignalPreview />
+      <div className="max-w-7xl mx-auto px-4 mb-16">
+        <WebinarPromoInline />
+      </div>
       <PricingSection />
       <Testimonials />
       <FinalCTA />

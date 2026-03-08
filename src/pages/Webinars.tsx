@@ -6,30 +6,17 @@ import { WebinarCard } from "../components/webinars/WebinarCard";
 import { RegistrationModal } from "../components/webinars/RegistrationModal";
 import { AttendeeFeed } from "../components/webinars/AttendeeFeed";
 import { WebinarCalendar } from "../components/webinars/WebinarCalendar";
+import { CountdownTimer } from "../components/webinars/CountdownTimer";
+import { ExitIntentPopup } from "../components/webinars/ExitIntentPopup";
 
 export const Webinars = () => {
   const [webinars, setWebinars] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedWebinar, setSelectedWebinar] = useState<any | null>(null);
-  const [showExitIntent, setShowExitIntent] = useState(false);
-  const [hasSeenExitIntent, setHasSeenExitIntent] = useState(false);
 
   useEffect(() => {
     fetchWebinars();
   }, []);
-
-  // Exit Intent Logic
-  useEffect(() => {
-    const handleMouseLeave = (e: MouseEvent) => {
-      if (e.clientY <= 0 && !hasSeenExitIntent && webinars.length > 0) {
-        setShowExitIntent(true);
-        setHasSeenExitIntent(true);
-      }
-    };
-
-    document.addEventListener("mouseleave", handleMouseLeave);
-    return () => document.removeEventListener("mouseleave", handleMouseLeave);
-  }, [hasSeenExitIntent, webinars]);
 
   const fetchWebinars = async () => {
     try {
@@ -121,6 +108,11 @@ export const Webinars = () => {
                   {nextWebinar.title}
                 </h2>
                 
+                <div className="mb-10">
+                  <div className="text-[10px] font-bold text-emerald-500 uppercase tracking-[0.3em] mb-6">Session Starts In</div>
+                  <CountdownTimer targetDate={nextWebinar.date_time} variant="hero" />
+                </div>
+                
                 <p className="text-gray-400 text-lg mb-8 leading-relaxed">
                   {nextWebinar.description}
                 </p>
@@ -143,9 +135,14 @@ export const Webinars = () => {
                     Register Now
                     <ArrowRight className="w-5 h-5" />
                   </button>
-                  <div className="px-8 py-4 bg-white/5 text-white font-medium rounded-xl border border-white/10 flex items-center justify-center gap-2">
-                    <Users className="w-5 h-5 text-gray-400" />
-                    <span>{nextWebinar.registration_count} registered</span>
+                  <div className="px-8 py-4 bg-white/5 text-white font-medium rounded-xl border border-white/10 flex flex-col items-center justify-center gap-1">
+                    <div className="flex items-center gap-2">
+                      <Users className="w-5 h-5 text-gray-400" />
+                      <span>{nextWebinar.registration_count} registered</span>
+                    </div>
+                    <div className="text-[10px] text-red-400 font-bold uppercase tracking-widest animate-pulse">
+                      Only {nextWebinar.max_attendees - nextWebinar.registration_count} seats remaining
+                    </div>
                   </div>
                 </div>
               </div>
@@ -237,61 +234,10 @@ export const Webinars = () => {
         )}
       </AnimatePresence>
 
-      {/* --- Exit Intent Popup --- */}
-      <AnimatePresence>
-        {showExitIntent && nextWebinar && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md p-4"
-          >
-            <motion.div
-              initial={{ scale: 0.9, y: 20 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.9, y: 20 }}
-              className="bg-[#0a0a0a] border border-emerald-500/50 rounded-2xl w-full max-w-md p-8 text-center relative overflow-hidden shadow-[0_0_60px_rgba(16,185,129,0.2)]"
-            >
-              <button 
-                onClick={() => setShowExitIntent(false)}
-                className="absolute top-4 right-4 text-gray-400 hover:text-white"
-              >
-                <X className="w-5 h-5" />
-              </button>
-
-              <div className="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
-                <Clock className="w-8 h-8 text-emerald-500" />
-              </div>
-
-              <h3 className="text-2xl font-bold text-white mb-2">Wait! Don't Miss Out</h3>
-              <p className="text-gray-400 mb-6">
-                The <span className="text-emerald-400 font-bold">{nextWebinar.title}</span> is filling up fast. Only a few seats remaining for this session.
-              </p>
-
-              <div className="bg-white/5 rounded-xl p-4 mb-8 border border-white/10">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-xs text-gray-400 uppercase">Seats Left</span>
-                  <span className="text-sm font-bold text-red-400 animate-pulse">Only {nextWebinar.max_attendees - nextWebinar.registration_count} Remaining</span>
-                </div>
-                <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
-                  <div className="h-full bg-red-500 w-[85%]" />
-                </div>
-              </div>
-
-              <button 
-                onClick={() => {
-                  setShowExitIntent(false);
-                  setSelectedWebinar(nextWebinar);
-                }}
-                className="w-full py-3 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-colors shadow-lg shadow-emerald-500/20"
-              >
-                Secure My Seat Now
-              </button>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
+      <ExitIntentPopup 
+        onRegister={() => setSelectedWebinar(nextWebinar)} 
+        webinarTitle={nextWebinar?.title}
+      />
     </div>
   );
 };

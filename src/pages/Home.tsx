@@ -8,11 +8,13 @@ import { WebinarPromo } from "../components/home/WebinarPromo";
 import { BlogSection } from "../components/home/BlogSection";
 import { PerformanceHistory } from "../components/home/PerformanceHistory";
 import { NewsletterPopup } from "../components/NewsletterPopup";
+import { WebinarBanner } from "../components/webinars/WebinarBanner";
 import { cn } from "../utils/cn";
 import { motion } from "motion/react";
 
 export const Home = () => (
   <div className="bg-[#020202] min-h-screen relative overflow-hidden">
+    <WebinarBanner />
     <HeroSection />
     <MarketTicker />
 

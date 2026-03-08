@@ -11,7 +11,7 @@ interface RegistrationModalProps {
 
 export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationModalProps) => {
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({ name: "", email: "" });
+  const [formData, setFormData] = useState({ name: "", email: "", country: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -36,6 +36,7 @@ export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationM
               webinar_id: webinar.id,
               name: formData.name,
               email: formData.email,
+              country: formData.country,
               payment_status: 'free',
               attended: false
             }
@@ -88,6 +89,16 @@ export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationM
               </p>
             </div>
 
+            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                <span className="text-xs font-bold text-red-400 uppercase tracking-widest">Limited Availability</span>
+              </div>
+              <span className="text-sm font-bold text-white">
+                Only {webinar.max_attendees - webinar.registration_count} seats remaining
+              </span>
+            </div>
+
             <div className="bg-white/5 rounded-xl p-4 mb-6 border border-white/5">
               <div className="flex items-center gap-4 mb-4">
                 <div className="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500">
@@ -132,6 +143,17 @@ export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationM
                   value={formData.email}
                   onChange={e => setFormData({...formData, email: e.target.value})}
                   placeholder="john@example.com"
+                />
+              </div>
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">Country</label>
+                <input 
+                  required
+                  type="text" 
+                  className="w-full bg-black border border-white/10 rounded-lg px-4 py-3 text-white focus:border-emerald-500 outline-none transition-colors"
+                  value={formData.country}
+                  onChange={e => setFormData({...formData, country: e.target.value})}
+                  placeholder="e.g. United Arab Emirates"
                 />
               </div>
 
