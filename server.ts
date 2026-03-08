@@ -5,6 +5,18 @@ import { fileURLToPath } from "url";
 import jwt from "jsonwebtoken";
 import { z } from "zod";
 import { createClient } from "@supabase/supabase-js";
+import pino from "pino";
+import rateLimit from "express-rate-limit";
+
+const logger = pino({
+  level: process.env.LOG_LEVEL || "info",
+  transport: {
+    target: "pino-pretty",
+    options: {
+      colorize: true
+    }
+  }
+});
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -60,6 +72,14 @@ const LicenseService = {
 async function startServer() {
   const app = express();
   app.use(express.json());
+
+  // Request Logging Middleware
+  app.use((req, res, next) => {
+    if (req.url.startsWith('/api')) {
+      logger.info({ method: req.method, url: req.url }, "Incoming API Request");
+    }
+    next();
+  });
 
   // Middleware
   const authenticate = async (req: any, res: any, next: any) => {
@@ -136,13 +156,46 @@ async function startServer() {
   });
 
   // License Validation API (MT5)
-  app.post("/api/license/validate", async (req, res) => {
-    const { license_key, account_id, hardware_id } = req.body;
-    const result = await LicenseService.validate(license_key, account_id, hardware_id);
-    if (!result.valid) return res.status(403).json(result);
-    
-    const token = jwt.sign({ key: license_key, account_id }, JWT_SECRET, { expiresIn: "1h" });
-    res.json({ validation_token: token, valid_until: result.expires_at });
+  const licenseRateLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // Limit each IP to 100 requests per windowMs
+    message: { error: "Too many validation requests from this IP, please try again after 15 minutes" },
+    standardHeaders: true,
+    legacyHeaders: false,
+  });
+
+  app.post("/api/license/validate", licenseRateLimiter, async (req, res) => {
+    try {
+      const { license_key, account_id, hardware_id } = req.body;
+      logger.info({ license_key, account_id }, "Validating license");
+      const result = await LicenseService.validate(license_key, account_id, hardware_id);
+      if (!result.valid) {
+        logger.warn({ license_key, account_id, error: result.error }, "License validation failed");
+        return res.status(403).json(result);
+      }
+      
+      const token = jwt.sign({ key: license_key, account_id }, JWT_SECRET, { expiresIn: "1h" });
+      logger.info({ license_key, account_id }, "License validated successfully");
+      res.json({ validation_token: token, valid_until: result.expires_at });
+    } catch (error) {
+      logger.error({ err: error }, "Error validating license");
+      res.status(500).json({ error: "Internal server error during validation" });
+    }
+  });
+
+  // User Routes
+  app.get("/api/user/licenses", authenticate, async (req: any, res) => {
+    // RLS Enforcement: Only fetch licenses belonging to the authenticated user
+    const { data: licenses, error } = await supabase
+      .from('bot_licenses')
+      .select('*, products(name)')
+      .eq('user_id', req.user.id);
+
+    if (error) {
+      logger.error({ err: error, user_id: req.user.id }, "Error fetching user licenses");
+      return res.status(500).json({ error: "Failed to fetch licenses" });
+    }
+    res.json(licenses);
   });
 
   // Admin Routes
@@ -203,6 +256,12 @@ async function startServer() {
 
     if (error) return res.status(500).json({ error: error.message });
     res.json({ success: true });
+  });
+
+  // Global Error Handler for API routes
+  app.use("/api", (err: any, req: any, res: any, next: any) => {
+    logger.error({ err, req: { method: req.method, url: req.url } }, "Unhandled API Error");
+    res.status(500).json({ error: "Internal Server Error" });
   });
 
   // Vite Integration

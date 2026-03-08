@@ -1,0 +1,106 @@
+import React, { useState, useEffect } from "react";
+import { Navigate } from "react-router-dom";
+import { Zap, ShieldCheck, Bell } from "lucide-react";
+import { useAuth } from "../contexts/AuthContext";
+import { supabase } from "../lib/supabase";
+import { cn } from "../utils/cn";
+
+export const Dashboard = () => {
+  const { user } = useAuth();
+  const [licenses, setLicenses] = useState([]);
+
+  useEffect(() => {
+    if (user) {
+      const fetchLicenses = async () => {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+          const res = await fetch("/api/user/licenses", {
+            headers: { Authorization: `Bearer ${session.access_token}` }
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (Array.isArray(data)) {
+              setLicenses(data);
+            } else {
+              console.error("Failed to load licenses:", data);
+              setLicenses([]);
+            }
+          } else {
+            setLicenses([]);
+          }
+        }
+      };
+      fetchLicenses();
+    }
+  }, [user]);
+
+  if (!user) return <Navigate to="/login" />;
+
+  return (
+    <div className="pt-24 pb-20 px-4 max-w-7xl mx-auto">
+      <div className="flex justify-between items-center mb-12">
+        <h1 className="text-3xl font-bold text-white">Welcome, {user.user_metadata?.full_name || user.email}</h1>
+        <div className="flex gap-4">
+          <div className="bg-emerald-500/10 border border-emerald-500/20 px-4 py-2 rounded-lg">
+            <span className="text-xs text-emerald-500 font-bold uppercase">Pro Member</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2 space-y-8">
+          <div className="bg-zinc-900 border border-white/10 rounded-2xl p-8">
+            <h2 className="text-xl font-bold text-white mb-6">Active Subscriptions & Licenses</h2>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-4 bg-black rounded-xl border border-white/5">
+                <div className="flex items-center gap-4">
+                  <Zap className="text-emerald-500" />
+                  <div>
+                    <div className="text-white font-bold">Elite Signals</div>
+                    <div className="text-xs text-gray-500">Renews on Dec 31, 2024</div>
+                  </div>
+                </div>
+                <button type="button" onClick={() => alert("Opening subscription manager...")} className="text-xs text-gray-400 hover:text-white">Manage</button>
+              </div>
+              
+              {licenses.map((license: any) => (
+                <div key={license.id} className="flex items-center justify-between p-4 bg-black rounded-xl border border-white/5">
+                  <div className="flex items-center gap-4">
+                    <ShieldCheck className="text-emerald-500" />
+                    <div>
+                      <div className="text-white font-bold">{license.products?.name || "Algo Bot License"}</div>
+                      <div className="text-xs text-gray-500">Expires: {new Date(license.expires_at).toLocaleDateString()}</div>
+                      <div className="text-[10px] text-emerald-500 font-mono mt-1">Key: {license.license_key}</div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <span className={cn("text-xs font-bold px-2 py-1 rounded", license.is_active ? "bg-emerald-500/10 text-emerald-500" : "bg-red-500/10 text-red-500")}>
+                      {license.is_active ? "Active" : "Inactive"}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        
+        <div className="space-y-8">
+          <div className="bg-zinc-900 border border-white/10 rounded-2xl p-8">
+            <h2 className="text-xl font-bold text-white mb-6">Quick Actions</h2>
+            <div className="grid grid-cols-2 gap-4">
+              <button type="button" onClick={() => alert("Viewing licenses...")} className="flex flex-col items-center gap-2 p-4 bg-black rounded-xl border border-white/5 hover:border-emerald-500/50 transition-all">
+                <ShieldCheck className="text-emerald-500" />
+                <span className="text-xs text-white">Licenses</span>
+              </button>
+              <button type="button" onClick={() => alert("Viewing alerts...")} className="flex flex-col items-center gap-2 p-4 bg-black rounded-xl border border-white/5 hover:border-emerald-500/50 transition-all">
+                <Bell className="text-emerald-500" />
+                <span className="text-xs text-white">Alerts</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
