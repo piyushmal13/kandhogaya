@@ -20,29 +20,17 @@ interface PricingPlan {
 
 const HeroSection = () => {
   return (
-    <section className="relative min-h-[80vh] flex flex-col items-center justify-center overflow-hidden bg-[#020202] pt-20 pb-20">
-      {/* Animated Candlestick Background */}
-      <div className="absolute inset-0 overflow-hidden opacity-20 pointer-events-none">
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 z-10" />
-        {Array.from({ length: 20 }).map((_, i) => (
-          <motion.div
-            key={i}
-            initial={{ height: "10%", opacity: 0, y: "100%" }}
-            animate={{ 
-              height: ["10%", "40%", "10%"], 
-              opacity: [0, 0.5, 0], 
-              y: ["100%", "-20%"] 
-            }}
-            transition={{ 
-              duration: 5 + Math.random() * 5, 
-              repeat: Infinity, 
-              delay: Math.random() * 5,
-              ease: "linear"
-            }}
-            className={`absolute bottom-0 w-1 rounded-t-sm ${Math.random() > 0.5 ? 'bg-emerald-500' : 'bg-red-500'}`}
-            style={{ left: `${Math.random() * 100}%` }}
-          />
-        ))}
+    <section className="relative min-h-[80vh] flex flex-col items-center justify-center overflow-hidden bg-[#000000] pt-20 pb-20">
+      {/* --- Institutional Background System --- */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* 1. Ambient Spotlight (Top Center) */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[500px] bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.15),transparent_70%)] opacity-60" />
+
+        {/* 2. Large Structural Grid - Static & Stable */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:120px_120px] [mask-image:radial-gradient(ellipse_at_center,black_60%,transparent_100%)]" />
+
+        {/* 3. Subtle Horizon Glow (Bottom) */}
+        <div className="absolute bottom-0 left-0 right-0 h-[300px] bg-gradient-to-t from-emerald-900/10 to-transparent opacity-40" />
       </div>
 
       <div className="max-w-4xl mx-auto px-4 text-center relative z-10">

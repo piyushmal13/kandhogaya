@@ -1,110 +1,197 @@
 import React, { useState, useEffect } from "react";
-import { Star, CheckCircle2 } from "lucide-react";
-import { cn } from "../utils/cn";
-import { AlgoGreatness } from "../components/AlgoGreatness";
+import { motion, AnimatePresence } from "motion/react";
+import { Search, Filter, ArrowRight, ShieldCheck, Zap, TrendingUp, Activity } from "lucide-react";
+import { supabase } from "../lib/supabase";
+import { AlgoCard } from "../components/algo/AlgoCard";
+import { AlgoDetailModal } from "../components/algo/AlgoDetailModal";
 
 export const Marketplace = () => {
-  const [products, setProducts] = useState([]);
-  const [requestingId, setRequestingId] = useState<string | null>(null);
-  const [successId, setSuccessId] = useState<string | null>(null);
+  const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedAlgo, setSelectedAlgo] = useState<any | null>(null);
+  const [filter, setFilter] = useState("All");
 
   useEffect(() => {
-    fetch("/api/products")
-      .then(r => r.json())
-      .then(data => {
-        if (Array.isArray(data)) {
-          setProducts(data);
-        } else {
-          console.error("Failed to load products:", data);
-          setProducts([]);
-        }
-      })
-      .catch(err => {
-        console.error("Error fetching products:", err);
-        setProducts([]);
-      });
+    fetchProducts();
   }, []);
 
-  const handleRequestLicense = (botId: string) => {
-    setRequestingId(botId);
-    // Simulate API call for license request
-    setTimeout(() => {
-      setRequestingId(null);
-      setSuccessId(botId);
-      setTimeout(() => setSuccessId(null), 3000);
-    }, 1500);
+  const fetchProducts = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .eq("type", "algorithm");
+
+      if (error) throw error;
+      setProducts(data || []);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filteredProducts = filter === "All" 
+    ? products 
+    : products.filter(p => p.strategy_type.includes(filter) || p.risk_level === filter);
+
+  const handleSubscribe = async (algo: any, plan: 'Monthly' | 'Yearly') => {
+    // In a real app, redirect to Stripe Checkout
+    console.log(`Subscribing to ${algo.name} (${plan})`);
+    alert(`Redirecting to checkout for ${algo.name} - ${plan} Plan`);
+    
+    // Simulate subscription record creation (would happen via webhook in production)
+    /*
+    const { error } = await supabase
+      .from('algo_subscriptions')
+      .insert({
+        user_id: 'current_user_id',
+        algo_id: algo.id,
+        plan_type: plan,
+        subscription_status: 'active'
+      });
+    */
   };
 
   return (
-    <div className="pt-24 pb-20 px-4 max-w-7xl mx-auto">
-      <div className="mb-12">
-        <h1 className="text-4xl font-bold text-white mb-2 tracking-tight">Algo Marketplace</h1>
-        <p className="text-gray-400">Institutional-grade trading bots for MT5. Rent the edge.</p>
-      </div>
+    <div className="min-h-screen bg-[#020202] pt-20 pb-20">
+      
+      {/* --- Hero Section --- */}
+      <section className="relative py-20 overflow-hidden bg-[#000000]">
+        {/* --- Institutional Background System --- */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {/* 1. Ambient Spotlight (Top Center) */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[500px] bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.15),transparent_70%)] opacity-60" />
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {products.filter((p: any) => p.type === 'algo_bot').map((bot: any) => (
-          <div key={bot.id} className="bg-zinc-900 border border-white/10 rounded-3xl overflow-hidden group hover:border-emerald-500/30 transition-all flex flex-col">
-            <div className="aspect-video bg-black relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 to-transparent z-10" />
-              <img src={`https://picsum.photos/seed/${bot.name}/800/450`} alt={bot.name} className="w-full h-full object-cover opacity-50 group-hover:scale-110 transition-transform duration-500" referrerPolicy="no-referrer" />
-              <div className="absolute bottom-4 left-6 z-20">
-                <span className="px-3 py-1 bg-emerald-500 text-black text-[10px] font-bold rounded-full uppercase mb-2 inline-block">MT5 Compatible</span>
-                <h3 className="text-2xl font-bold text-white">{bot.name}</h3>
-              </div>
-            </div>
-            <div className="p-6 flex-1 flex flex-col">
-              <div className="flex justify-between items-center mb-4">
-                <p className="text-gray-400 text-sm line-clamp-2">{bot.description || "Advanced algorithmic trading system optimized for XAUUSD and major forex pairs."}</p>
-                <div className="flex items-center gap-1 bg-emerald-500/10 px-2 py-1 rounded-lg">
-                  <Star className="w-3 h-3 text-emerald-500 fill-emerald-500" />
-                  <span className="text-[10px] text-emerald-500 font-bold">4.9</span>
-                </div>
-              </div>
-              
-              <div className="space-y-3 mb-8 flex-1">
-                {bot.variants?.map((v: any) => (
-                  <div key={v.id} className="flex justify-between items-center p-3 bg-black/40 rounded-xl border border-white/5 hover:border-emerald-500/20 transition-all cursor-pointer">
-                    <div>
-                      <div className="text-white font-bold text-sm">{v.name}</div>
-                      <div className="text-[10px] text-gray-500">Full License Support</div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-emerald-500 font-bold">${v.price}</div>
-                      <div className="text-[10px] text-gray-500">/ month</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+          {/* 2. Large Structural Grid - Static & Stable */}
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:120px_120px] [mask-image:radial-gradient(ellipse_at_center,black_60%,transparent_100%)]" />
 
-              <button 
-                type="button"
-                onClick={() => handleRequestLicense(bot.id)}
-                disabled={requestingId === bot.id || successId === bot.id}
-                className={cn(
-                  "w-full py-4 font-bold rounded-xl transition-all flex items-center justify-center gap-2",
-                  successId === bot.id 
-                    ? "bg-emerald-500/20 text-emerald-500 border border-emerald-500/50" 
-                    : "bg-white text-black hover:bg-emerald-500 disabled:opacity-50"
-                )}
+          {/* 3. Subtle Horizon Glow (Bottom) */}
+          <div className="absolute bottom-0 left-0 right-0 h-[300px] bg-gradient-to-t from-emerald-900/10 to-transparent opacity-40" />
+        </div>
+        
+        <div className="max-w-7xl mx-auto px-4 text-center relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono tracking-widest mb-6"
+          >
+            <Zap className="w-3 h-3" />
+            ALGO MARKETPLACE
+          </motion.div>
+          
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tighter"
+          >
+            Professional Trading <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">
+              Algorithms
+            </span>
+          </motion.h1>
+          
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed mb-12"
+          >
+            Automated strategies designed by the IFXTrades research desk. Execute disciplined strategies based on market structure and quantitative models.
+          </motion.p>
+
+          {/* Filters */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="flex flex-wrap justify-center gap-4"
+          >
+            {["All", "Scalping", "Swing", "Low Risk", "High Risk"].map((f) => (
+              <button
+                key={f}
+                onClick={() => setFilter(f === "Low Risk" ? "Low" : f === "High Risk" ? "High" : f === "Scalping" ? "High-Frequency Scalping" : f === "Swing" ? "Swing Trading" : f)}
+                className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
+                  (filter === f || (f === "Low Risk" && filter === "Low") || (f === "High Risk" && filter === "High") || (f === "Scalping" && filter === "High-Frequency Scalping") || (f === "Swing" && filter === "Swing Trading"))
+                    ? "bg-emerald-500 text-black font-bold shadow-[0_0_20px_rgba(16,185,129,0.3)]"
+                    : "bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white border border-white/5"
+                }`}
               >
-                {requestingId === bot.id ? (
-                  <div className="animate-spin w-5 h-5 border-2 border-black border-t-transparent rounded-full" />
-                ) : successId === bot.id ? (
-                  <>
-                    <CheckCircle2 className="w-5 h-5" />
-                    License Requested
-                  </>
-                ) : (
-                  "Get License Key"
-                )}
+                {f}
               </button>
-            </div>
-          </div>
-        ))}
-      </div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
 
-      <AlgoGreatness />
+      {/* --- Algo Grid --- */}
+      <section className="max-w-7xl mx-auto px-4 pb-24">
+        {loading ? (
+          <div className="flex items-center justify-center py-20">
+            <div className="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin" />
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredProducts.map((algo, i) => (
+              <motion.div
+                key={algo.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+              >
+                <AlgoCard algo={algo} onSelect={setSelectedAlgo} />
+              </motion.div>
+            ))}
+          </div>
+        )}
+
+        {!loading && filteredProducts.length === 0 && (
+          <div className="text-center py-20 text-gray-500">
+            No algorithms found matching your criteria.
+          </div>
+        )}
+      </section>
+
+      {/* --- Trust Signals --- */}
+      <section className="border-t border-white/5 bg-[#050505] py-16">
+        <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+          <div className="p-6">
+            <div className="w-12 h-12 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-500">
+              <ShieldCheck className="w-6 h-6" />
+            </div>
+            <h3 className="text-white font-bold mb-2">Verified Strategy</h3>
+            <p className="text-gray-400 text-sm">Every algorithm passes rigorous backtesting and forward-testing phases.</p>
+          </div>
+          <div className="p-6">
+            <div className="w-12 h-12 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-500">
+              <Activity className="w-6 h-6" />
+            </div>
+            <h3 className="text-white font-bold mb-2">Backtested Performance</h3>
+            <p className="text-gray-400 text-sm">Transparent performance metrics based on historical tick data.</p>
+          </div>
+          <div className="p-6">
+            <div className="w-12 h-12 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-500">
+              <TrendingUp className="w-6 h-6" />
+            </div>
+            <h3 className="text-white font-bold mb-2">Institutional Desk</h3>
+            <p className="text-gray-400 text-sm">Built by the same team managing our proprietary capital.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* --- Detail Modal --- */}
+      <AnimatePresence>
+        {selectedAlgo && (
+          <AlgoDetailModal 
+            algo={selectedAlgo} 
+            onClose={() => setSelectedAlgo(null)} 
+            onSubscribe={handleSubscribe} 
+          />
+        )}
+      </AnimatePresence>
+
     </div>
   );
 };

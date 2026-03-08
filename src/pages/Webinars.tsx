@@ -1,305 +1,297 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Users, PlayCircle, Video, TrendingUp, X, Globe, Check, Calendar } from "lucide-react";
+import { Calendar, Clock, User, Users, ArrowRight, CheckCircle2, X, Zap, ShieldCheck, Activity } from "lucide-react";
+import { supabase } from "../lib/supabase";
+import { WebinarCard } from "../components/webinars/WebinarCard";
+import { RegistrationModal } from "../components/webinars/RegistrationModal";
+import { AttendeeFeed } from "../components/webinars/AttendeeFeed";
+import { WebinarCalendar } from "../components/webinars/WebinarCalendar";
 
 export const Webinars = () => {
-  const [webinars, setWebinars] = useState([]);
-  const [selectedWebinar, setSelectedWebinar] = useState<any>(null);
-  const [isRegistering, setIsRegistering] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [regData, setRegData] = useState({ name: "", email: "" });
+  const [webinars, setWebinars] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedWebinar, setSelectedWebinar] = useState<any | null>(null);
+  const [showExitIntent, setShowExitIntent] = useState(false);
+  const [hasSeenExitIntent, setHasSeenExitIntent] = useState(false);
 
   useEffect(() => {
-    fetch("/api/webinars")
-      .then(r => r.json())
-      .then(data => {
-        if (Array.isArray(data)) {
-          setWebinars(data);
-        } else {
-          console.error("Failed to load webinars:", data);
-          setWebinars([]);
-        }
-      })
-      .catch(err => {
-        console.error("Error fetching webinars:", err);
-        setWebinars([]);
-      });
+    fetchWebinars();
   }, []);
 
-  const generateGoogleCalendarUrl = (webinar: any) => {
-    const start = new Date(webinar.start_time).toISOString().replace(/-|:|\.\d\d\d/g, "");
-    const end = new Date(new Date(webinar.start_time).getTime() + 3600000).toISOString().replace(/-|:|\.\d\d\d/g, "");
-    const details = encodeURIComponent(`Join IFXTrades for: ${webinar.title}. Link will be sent to your email.`);
-    return `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(webinar.title)}&dates=${start}/${end}&details=${details}&location=Online&sf=true&output=xml`;
-  };
+  // Exit Intent Logic
+  useEffect(() => {
+    const handleMouseLeave = (e: MouseEvent) => {
+      if (e.clientY <= 0 && !hasSeenExitIntent && webinars.length > 0) {
+        setShowExitIntent(true);
+        setHasSeenExitIntent(true);
+      }
+    };
 
-  const generateICSFile = (webinar: any) => {
-    const start = new Date(webinar.start_time).toISOString().replace(/-|:|\.\d\d\d/g, "");
-    const end = new Date(new Date(webinar.start_time).getTime() + 3600000).toISOString().replace(/-|:|\.\d\d\d/g, "");
-    const icsContent = [
-      "BEGIN:VCALENDAR",
-      "VERSION:2.0",
-      "BEGIN:VEVENT",
-      `DTSTART:${start}`,
-      `DTEND:${end}`,
-      `SUMMARY:${webinar.title}`,
-      `DESCRIPTION:Join IFXTrades for: ${webinar.title}`,
-      "LOCATION:Online",
-      "END:VEVENT",
-      "END:VCALENDAR"
-    ].join("\n");
-    
-    const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
-    const link = document.createElement("a");
-    link.href = window.URL.createObjectURL(blob);
-    link.setAttribute("download", `${webinar.title.replace(/\s+/g, "_")}.ics`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+    document.addEventListener("mouseleave", handleMouseLeave);
+    return () => document.removeEventListener("mouseleave", handleMouseLeave);
+  }, [hasSeenExitIntent, webinars]);
 
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsRegistering(true); // Keep modal open
-    
-    // Add loading state
-    const submitBtn = e.currentTarget.querySelector('button[type="submit"]') as HTMLButtonElement;
-    if (submitBtn) {
-      submitBtn.disabled = true;
-      submitBtn.innerText = "Registering...";
-    }
-
+  const fetchWebinars = async () => {
     try {
-      const response = await fetch("/api/webinars/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ webinar_id: selectedWebinar.id, ...regData })
-      });
-      if (response.ok) {
-        setIsSuccess(true);
-      } else {
-        alert("Registration failed. Please try again.");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Registration failed. Please try again.");
+      const { data, error } = await supabase
+        .from("webinars")
+        .select("*")
+        .eq("status", "upcoming")
+        .order("date_time", { ascending: true });
+
+      if (error) throw error;
+      setWebinars(data || []);
+    } catch (error) {
+      console.error("Error fetching webinars:", error);
     } finally {
-      if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.innerText = "Confirm Registration";
-      }
+      setLoading(false);
     }
   };
 
-  const Countdown = ({ targetDate }: { targetDate: string }) => {
-    const [timeLeft, setTimeLeft] = useState<any>({});
-
-    useEffect(() => {
-      const timer = setInterval(() => {
-        const now = new Date().getTime();
-        const distance = new Date(targetDate).getTime() - now;
-        
-        if (distance < 0) {
-          clearInterval(timer);
-          setTimeLeft({ expired: true });
-        } else {
-          setTimeLeft({
-            days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-            hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-            minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-            seconds: Math.floor((distance % (1000 * 60)) / 1000),
-          });
-        }
-      }, 1000);
-      return () => clearInterval(timer);
-    }, [targetDate]);
-
-    if (timeLeft.expired) return <span className="text-red-500 font-bold">LIVE NOW</span>;
-
-    return (
-      <div className="flex gap-4 text-center">
-        {['days', 'hours', 'minutes', 'seconds'].map(unit => (
-          <div key={unit}>
-            <div className="text-2xl font-bold text-white leading-none">{timeLeft[unit] || '00'}</div>
-            <div className="text-[10px] text-gray-500 uppercase font-bold">{unit[0]}</div>
-          </div>
-        ))}
-      </div>
-    );
-  };
+  const nextWebinar = webinars[0];
 
   return (
-    <div className="pt-24 pb-20 px-4 max-w-7xl mx-auto">
-      <div className="text-center mb-16">
-        <span className="text-emerald-500 font-bold text-xs uppercase tracking-widest mb-4 inline-block">Weekly Training</span>
-        <h1 className="text-5xl font-bold text-white mb-6 tracking-tight">IFXTrades Live Webinars</h1>
-        <p className="text-gray-400 max-w-2xl mx-auto">Join our expert analysts every weekend for live market breakdowns, strategy sessions, and exclusive signal offers.</p>
-      </div>
+    <div className="min-h-screen bg-[#020202] pt-20 pb-20 relative">
+      <AttendeeFeed />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {webinars.length > 0 ? webinars.map((web: any) => (
-          <div key={web.id} className="bg-zinc-900 border border-white/10 rounded-3xl p-8 flex flex-col gap-8 relative overflow-hidden group">
-            <div className="absolute top-0 right-0 p-6">
-              <div className="flex items-center gap-2 bg-black/50 backdrop-blur px-3 py-1.5 rounded-full border border-white/10">
-                <Users className="w-3 h-3 text-emerald-500" />
-                <span className="text-[10px] text-white font-bold">1,240+ Registered</span>
-              </div>
-            </div>
+      {/* --- Hero Section --- */}
+      <section className="relative py-20 overflow-hidden bg-[#000000]">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[500px] bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.15),transparent_70%)] opacity-60" />
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:120px_120px] [mask-image:radial-gradient(ellipse_at_center,black_60%,transparent_100%)]" />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 text-center relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono tracking-widest mb-6"
+          >
+            <Zap className="w-3 h-3" />
+            LIVE TRADING EDUCATION
+          </motion.div>
+          
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tighter"
+          >
+            Institutional Market <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">
+              Intelligence
+            </span>
+          </motion.h1>
+          
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed mb-12"
+          >
+            Join our expert analysts for live market breakdowns, algorithmic trading workshops, and macroeconomic strategy sessions.
+          </motion.p>
+        </div>
+      </section>
+
+      {/* --- Featured Webinar (Next Up) --- */}
+      {nextWebinar && (
+        <section className="max-w-7xl mx-auto px-4 mb-24 relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="bg-[#0a0a0a] border border-emerald-500/30 rounded-3xl overflow-hidden relative shadow-[0_0_50px_rgba(16,185,129,0.1)]"
+          >
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 via-cyan-500 to-emerald-500 animate-gradient-x" />
             
-            <div className="flex flex-col md:flex-row gap-8 items-center">
-              <div className="w-full md:w-48 h-48 bg-black rounded-2xl flex-shrink-0 flex items-center justify-center border border-white/5 relative overflow-hidden">
-                <PlayCircle className="text-emerald-500 w-12 h-12 relative z-10 group-hover:scale-110 transition-transform" />
-                <div className="absolute inset-0 bg-emerald-500/5" />
-                <img src={`https://picsum.photos/seed/${web.id}/400/400`} className="absolute inset-0 w-full h-full object-cover opacity-20" referrerPolicy="no-referrer" />
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="flex -space-x-2">
-                    {[1,2,3].map(i => (
-                      <div key={i} className="w-6 h-6 rounded-full border border-black bg-zinc-800 overflow-hidden">
-                        <img src={`https://picsum.photos/seed/user${i}/24/24`} alt="User" referrerPolicy="no-referrer" />
-                      </div>
-                    ))}
+            <div className="grid grid-cols-1 lg:grid-cols-2">
+              <div className="p-8 md:p-12 flex flex-col justify-center">
+                <div className="flex items-center gap-3 mb-6">
+                  <span className="bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full animate-pulse flex items-center gap-1">
+                    <span className="w-2 h-2 bg-white rounded-full animate-ping" />
+                    UP NEXT
+                  </span>
+                  <span className="text-emerald-500 text-xs font-mono tracking-widest uppercase">
+                    {new Date(nextWebinar.date_time).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+                  </span>
+                </div>
+
+                <h2 className="text-3xl md:text-5xl font-bold text-white mb-6 leading-tight">
+                  {nextWebinar.title}
+                </h2>
+                
+                <p className="text-gray-400 text-lg mb-8 leading-relaxed">
+                  {nextWebinar.description}
+                </p>
+
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-sm font-bold text-white border border-white/10">
+                    {nextWebinar.speaker_name.charAt(0)}
                   </div>
-                  <span className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">1,240+ Registered</span>
+                  <div>
+                    <div className="text-white font-bold">{nextWebinar.speaker_name}</div>
+                    <div className="text-emerald-500 text-sm">{nextWebinar.speaker_role}</div>
+                  </div>
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-4">{web.title}</h3>
-                <div className="mb-6">
-                  <Countdown targetDate={web.start_time} />
+
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <button 
+                    onClick={() => setSelectedWebinar(nextWebinar)}
+                    className="px-8 py-4 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] flex items-center justify-center gap-2"
+                  >
+                    Register Now
+                    <ArrowRight className="w-5 h-5" />
+                  </button>
+                  <div className="px-8 py-4 bg-white/5 text-white font-medium rounded-xl border border-white/10 flex items-center justify-center gap-2">
+                    <Users className="w-5 h-5 text-gray-400" />
+                    <span>{nextWebinar.registration_count} registered</span>
+                  </div>
                 </div>
-                <button 
-                  type="button"
-                  onClick={() => { setSelectedWebinar(web); setIsRegistering(true); }}
-                  className="w-full md:w-auto px-8 py-3 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all shadow-[0_0_20px_rgba(16,185,129,0.2)]"
-                >
-                  Register Now
-                </button>
+              </div>
+              
+              <div className="relative h-[400px] lg:h-auto overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a] to-transparent z-10" />
+                <img 
+                  src={`https://picsum.photos/seed/${nextWebinar.id}/800/800`} 
+                  alt={nextWebinar.title} 
+                  className="w-full h-full object-cover opacity-60"
+                />
+              </div>
+            </div>
+          </motion.div>
+        </section>
+      )}
+
+      {/* --- Upcoming Grid & Calendar --- */}
+      <section className="max-w-7xl mx-auto px-4 pb-24">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Left: Webinar Grid */}
+          <div className="lg:col-span-2">
+            <h3 className="text-2xl font-bold text-white mb-8 flex items-center gap-2">
+              <Calendar className="w-6 h-6 text-emerald-500" />
+              Upcoming Sessions
+            </h3>
+            
+            {loading ? (
+              <div className="flex items-center justify-center py-20">
+                <div className="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin" />
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {webinars.slice(1).map((webinar, i) => (
+                  <motion.div
+                    key={webinar.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.1 }}
+                  >
+                    <WebinarCard webinar={webinar} onRegister={setSelectedWebinar} />
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Right: Calendar & Past */}
+          <div className="space-y-8">
+            <WebinarCalendar webinars={webinars} />
+            
+            <div className="bg-[#0a0a0a] border border-white/10 rounded-2xl p-6">
+              <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                <Activity className="w-5 h-5 text-emerald-500" />
+                Past Recordings
+              </h3>
+              <div className="space-y-4">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="group cursor-pointer">
+                    <div className="relative h-32 rounded-xl overflow-hidden mb-2">
+                      <div className="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-colors z-10 flex items-center justify-center">
+                        <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center group-hover:scale-110 transition-transform">
+                          <div className="w-0 h-0 border-t-[6px] border-t-transparent border-l-[10px] border-l-white border-b-[6px] border-b-transparent ml-1" />
+                        </div>
+                      </div>
+                      <img src={`https://picsum.photos/seed/past${i}/400/200`} alt="Recording" className="w-full h-full object-cover" />
+                    </div>
+                    <h4 className="text-white font-medium text-sm line-clamp-1 group-hover:text-emerald-400 transition-colors">
+                      Advanced Price Action Strategies
+                    </h4>
+                    <div className="text-xs text-gray-500 mt-1">Recorded 2 weeks ago</div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
-        )) : (
-          <div className="col-span-full py-20 text-center bg-zinc-900 rounded-3xl border border-dashed border-white/10">
-            <Video className="w-12 h-12 text-gray-700 mx-auto mb-4" />
-            <div className="text-gray-500 font-bold">No upcoming webinars scheduled.</div>
-            <p className="text-gray-600 text-sm">Check back soon for our weekend market outlook.</p>
-          </div>
-        )}
-      </div>
+        </div>
+      </section>
 
+      {/* --- Registration Modal --- */}
       <AnimatePresence>
-        {isRegistering && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-            <motion.div 
-              initial={{ opacity: 0 }} 
-              animate={{ opacity: 1 }} 
-              exit={{ opacity: 0 }}
-              onClick={() => setIsRegistering(false)}
-              className="absolute inset-0 bg-black/90 backdrop-blur-sm" 
-            />
-            <motion.div 
-              initial={{ scale: 0.9, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              className="relative w-full max-w-md bg-zinc-900 border border-white/10 rounded-3xl p-8 shadow-2xl"
-            >
-              <div className="flex justify-between items-start mb-8">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center">
-                    <TrendingUp className="text-black w-6 h-6" />
-                  </div>
-                  <div>
-                    <h2 className="text-xl font-bold text-white">Join Webinar</h2>
-                    <p className="text-xs text-gray-500">Sponsored by IFXTrades Capital</p>
-                  </div>
-                </div>
-                <button type="button" onClick={() => setIsRegistering(false)} className="text-gray-500 hover:text-white">
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-
-              <div className="bg-black/40 p-4 rounded-2xl border border-white/5 mb-8">
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <div className="text-xs text-emerald-500 font-bold uppercase mb-1">Selected Session</div>
-                    <div className="text-white font-bold">{selectedWebinar?.title}</div>
-                    <div className="text-[10px] text-gray-500 mt-1">{new Date(selectedWebinar?.start_time).toLocaleString()}</div>
-                  </div>
-                  <div className="w-12 h-12 bg-zinc-800 rounded-lg flex items-center justify-center border border-white/10">
-                    <Globe className="text-gray-600 w-6 h-6" />
-                  </div>
-                </div>
-              </div>
-
-              {!isSuccess ? (
-                <form className="space-y-4" onSubmit={handleRegister}>
-                  <div>
-                    <label className="block text-[10px] font-bold text-gray-500 uppercase mb-2">Full Name</label>
-                    <input 
-                      required 
-                      value={regData.name}
-                      onChange={(e) => setRegData({...regData, name: e.target.value})}
-                      className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-emerald-500" 
-                      placeholder="John Doe" 
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[10px] font-bold text-gray-500 uppercase mb-2">Email Address</label>
-                    <input 
-                      required 
-                      type="email" 
-                      value={regData.email}
-                      onChange={(e) => setRegData({...regData, email: e.target.value})}
-                      className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-emerald-500" 
-                      placeholder="john@example.com" 
-                    />
-                  </div>
-                  <button type="submit" className="w-full py-4 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all shadow-lg disabled:opacity-50">
-                    Confirm Registration
-                  </button>
-                  <p className="text-[10px] text-gray-600 text-center">By registering, you agree to receive email reminders and exclusive offers from IFXTrades.</p>
-                </form>
-              ) : (
-                <div className="text-center py-4">
-                  <div className="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <Check className="text-emerald-500 w-8 h-8" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-white mb-2">You're In!</h3>
-                  <p className="text-gray-400 text-sm mb-8">We've sent a confirmation email to <span className="text-white">{regData.email}</span> with your access link.</p>
-                  
-                  <div className="space-y-3">
-                    <div className="text-[10px] text-gray-500 uppercase font-bold tracking-widest mb-4">Add to Calendar</div>
-                    <div className="grid grid-cols-2 gap-3">
-                      <a 
-                        href={generateGoogleCalendarUrl(selectedWebinar)}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="flex items-center justify-center gap-2 py-3 bg-white/5 border border-white/10 rounded-xl text-white text-xs font-bold hover:bg-white/10 transition-all"
-                      >
-                        <Calendar className="w-4 h-4" /> Google
-                      </a>
-                      <button 
-                        type="button"
-                        onClick={() => generateICSFile(selectedWebinar)}
-                        className="flex items-center justify-center gap-2 py-3 bg-white/5 border border-white/10 rounded-xl text-white text-xs font-bold hover:bg-white/10 transition-all"
-                      >
-                        <Calendar className="w-4 h-4" /> iCal / Outlook
-                      </button>
-                    </div>
-                  </div>
-
-                  <button 
-                    type="button"
-                    onClick={() => { setIsRegistering(false); setIsSuccess(false); }}
-                    className="mt-8 text-gray-500 hover:text-white text-xs font-bold uppercase tracking-widest"
-                  >
-                    Close Window
-                  </button>
-                </div>
-              )}
-            </motion.div>
-          </div>
+        {selectedWebinar && (
+          <RegistrationModal 
+            webinar={selectedWebinar} 
+            onClose={() => setSelectedWebinar(null)} 
+            onSuccess={fetchWebinars} 
+          />
         )}
       </AnimatePresence>
+
+      {/* --- Exit Intent Popup --- */}
+      <AnimatePresence>
+        {showExitIntent && nextWebinar && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="bg-[#0a0a0a] border border-emerald-500/50 rounded-2xl w-full max-w-md p-8 text-center relative overflow-hidden shadow-[0_0_60px_rgba(16,185,129,0.2)]"
+            >
+              <button 
+                onClick={() => setShowExitIntent(false)}
+                className="absolute top-4 right-4 text-gray-400 hover:text-white"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
+                <Clock className="w-8 h-8 text-emerald-500" />
+              </div>
+
+              <h3 className="text-2xl font-bold text-white mb-2">Wait! Don't Miss Out</h3>
+              <p className="text-gray-400 mb-6">
+                The <span className="text-emerald-400 font-bold">{nextWebinar.title}</span> is filling up fast. Only a few seats remaining for this session.
+              </p>
+
+              <div className="bg-white/5 rounded-xl p-4 mb-8 border border-white/10">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-xs text-gray-400 uppercase">Seats Left</span>
+                  <span className="text-sm font-bold text-red-400 animate-pulse">Only {nextWebinar.max_attendees - nextWebinar.registration_count} Remaining</span>
+                </div>
+                <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                  <div className="h-full bg-red-500 w-[85%]" />
+                </div>
+              </div>
+
+              <button 
+                onClick={() => {
+                  setShowExitIntent(false);
+                  setSelectedWebinar(nextWebinar);
+                }}
+                className="w-full py-3 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-colors shadow-lg shadow-emerald-500/20"
+              >
+                Secure My Seat Now
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
     </div>
   );
 };

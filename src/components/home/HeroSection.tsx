@@ -1,64 +1,25 @@
 import React, { useRef } from "react";
 import { Link } from "react-router-dom";
-import { motion, useScroll, useTransform } from "motion/react";
+import { motion } from "motion/react";
 import { ArrowRight, ShieldCheck, Activity } from "lucide-react";
 
 export const HeroSection = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollY } = useScroll();
-  
-  // Parallax effects
-  const y1 = useTransform(scrollY, [0, 500], [0, 200]);
-  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
 
   return (
-    <section ref={containerRef} className="relative min-h-[90vh] flex flex-col items-center justify-center overflow-hidden bg-[#020202] pt-20">
+    <section ref={containerRef} className="relative min-h-[90vh] flex flex-col items-center justify-center overflow-hidden bg-[#000000] pt-20">
       
-      {/* --- Elite Background --- */}
+      {/* --- Institutional Background System --- */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Subtle Grid */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:60px_60px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_100%)] z-0" />
-        
-        {/* Deep Atmospheric Glows - Animated */}
-        <motion.div 
-          animate={{ 
-            scale: [1, 1.1, 1],
-            opacity: [0.4, 0.6, 0.4],
-          }}
-          transition={{ 
-            duration: 8, 
-            repeat: Infinity,
-            ease: "easeInOut" 
-          }}
-          className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-emerald-900/20 blur-[120px] rounded-full z-0" 
-        />
-        <motion.div 
-          animate={{ 
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3],
-            x: [0, 50, 0]
-          }}
-          transition={{ 
-            duration: 10, 
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1
-          }}
-          className="absolute bottom-[-10%] left-[-10%] w-[800px] h-[800px] bg-cyan-900/10 blur-[150px] rounded-full z-0" 
-        />
-        
-        {/* Shooting Star Animation */}
-        <motion.div
-          initial={{ x: -100, y: -100, opacity: 0 }}
-          animate={{ x: "120vw", y: "120vh", opacity: [0, 1, 0] }}
-          transition={{ 
-            duration: 3, 
-            repeat: Infinity, 
-            repeatDelay: 5,
-            ease: "linear"
-          }}
-          className="absolute top-0 left-0 w-[2px] h-[100px] bg-gradient-to-b from-transparent via-white to-transparent rotate-45 z-0"
-        />
+        {/* 1. Ambient Spotlight (Top Center) - Gives depth without motion */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[500px] bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.15),transparent_70%)] opacity-60" />
+
+        {/* 2. Large Structural Grid - Static & Stable */}
+        {/* Larger 120px cells feel more "enterprise" than tight meshes */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:120px_120px] [mask-image:radial-gradient(ellipse_at_center,black_60%,transparent_100%)]" />
+
+        {/* 3. Subtle Horizon Glow (Bottom) - Grounds the design */}
+        <div className="absolute bottom-0 left-0 right-0 h-[300px] bg-gradient-to-t from-emerald-900/10 to-transparent opacity-40" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10 w-full flex flex-col items-center text-center">
