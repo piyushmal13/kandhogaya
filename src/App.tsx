@@ -6,7 +6,7 @@ import {
   Menu, X, ChevronRight, ArrowUpRight, Zap, BarChart3, Globe, Users, 
   LogOut, ShoppingCart, PlayCircle, MessageSquare, Bell, Search, Filter,
   Star, Clock, Mail, Phone, Instagram, Twitter, Youtube, Briefcase,
-  CheckCircle2, Award, Target
+  CheckCircle2, Award, Target, Calendar, Check
 } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import ReactMarkdown from 'react-markdown';
@@ -29,13 +29,28 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check active sessions and sets the user
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
+    const checkSession = async () => {
+      try {
+        // Set a timeout to prevent hanging if Supabase is misconfigured
+        const timeout = setTimeout(() => {
+          if (loading) {
+            console.warn("Supabase session check timed out. Proceeding as guest.");
+            setLoading(false);
+          }
+        }, 3000);
 
-    // Listen for changes on auth state (logged in, signed out, etc.)
+        const { data: { session } } = await supabase.auth.getSession();
+        clearTimeout(timeout);
+        setUser(session?.user ?? null);
+        setLoading(false);
+      } catch (err) {
+        console.error("Auth initialization error:", err);
+        setLoading(false);
+      }
+    };
+
+    checkSession();
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
     });
@@ -58,7 +73,15 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AuthContext.Provider value={{ user, login, logout, loading }}>
-      {!loading && children}
+      {loading ? (
+        <div className="min-h-screen bg-black flex flex-col items-center justify-center text-white p-4">
+          <div className="w-16 h-16 bg-emerald-500 rounded-2xl flex items-center justify-center animate-pulse mb-6">
+            <TrendingUp className="text-black w-8 h-8" />
+          </div>
+          <div className="text-xl font-bold tracking-tighter mb-2">IFXTrades Hub</div>
+          <div className="text-xs text-gray-500 uppercase tracking-[0.3em] animate-pulse">Initializing Intelligence...</div>
+        </div>
+      ) : children}
     </AuthContext.Provider>
   );
 };
@@ -1006,10 +1029,62 @@ const Webinars = () => {
   const [webinars, setWebinars] = useState([]);
   const [selectedWebinar, setSelectedWebinar] = useState<any>(null);
   const [isRegistering, setIsRegistering] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [regData, setRegData] = useState({ name: "", email: "" });
 
   useEffect(() => {
     fetch("/api/webinars").then(r => r.json()).then(setWebinars);
   }, []);
+
+  const generateGoogleCalendarUrl = (webinar: any) => {
+    const start = new Date(webinar.start_time).toISOString().replace(/-|:|\.\d\d\d/g, "");
+    const end = new Date(new Date(webinar.start_time).getTime() + 3600000).toISOString().replace(/-|:|\.\d\d\d/g, "");
+    const details = encodeURIComponent(`Join IFXTrades for: ${webinar.title}. Link will be sent to your email.`);
+    return `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(webinar.title)}&dates=${start}/${end}&details=${details}&location=Online&sf=true&output=xml`;
+  };
+
+  const generateICSFile = (webinar: any) => {
+    const start = new Date(webinar.start_time).toISOString().replace(/-|:|\.\d\d\d/g, "");
+    const end = new Date(new Date(webinar.start_time).getTime() + 3600000).toISOString().replace(/-|:|\.\d\d\d/g, "");
+    const icsContent = [
+      "BEGIN:VCALENDAR",
+      "VERSION:2.0",
+      "BEGIN:VEVENT",
+      `DTSTART:${start}`,
+      `DTEND:${end}`,
+      `SUMMARY:${webinar.title}`,
+      `DESCRIPTION:Join IFXTrades for: ${webinar.title}`,
+      "LOCATION:Online",
+      "END:VEVENT",
+      "END:VCALENDAR"
+    ].join("\n");
+    
+    const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
+    const link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+    link.setAttribute("download", `${webinar.title.replace(/\s+/g, "_")}.ics`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("/api/webinars/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ webinar_id: selectedWebinar.id, ...regData })
+      });
+      if (response.ok) {
+        setIsSuccess(true);
+      } else {
+        alert("Registration failed. Please try again.");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const Countdown = ({ targetDate }: { targetDate: string }) => {
     const [timeLeft, setTimeLeft] = useState<any>({});
@@ -1144,26 +1219,75 @@ const Webinars = () => {
                     <div className="text-[10px] text-gray-500 mt-1">{new Date(selectedWebinar?.start_time).toLocaleString()}</div>
                   </div>
                   <div className="w-12 h-12 bg-zinc-800 rounded-lg flex items-center justify-center border border-white/10">
-                    <img src="/assets/logo.png" alt="Sponsor" className="w-full h-full object-cover hidden" />
                     <Globe className="text-gray-600 w-6 h-6" />
                   </div>
                 </div>
               </div>
 
-              <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); alert("Invitation sent to your email!"); setIsRegistering(false); }}>
-                <div>
-                  <label className="block text-[10px] font-bold text-gray-500 uppercase mb-2">Full Name</label>
-                  <input required className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-emerald-500" placeholder="John Doe" />
+              {!isSuccess ? (
+                <form className="space-y-4" onSubmit={handleRegister}>
+                  <div>
+                    <label className="block text-[10px] font-bold text-gray-500 uppercase mb-2">Full Name</label>
+                    <input 
+                      required 
+                      value={regData.name}
+                      onChange={(e) => setRegData({...regData, name: e.target.value})}
+                      className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-emerald-500" 
+                      placeholder="John Doe" 
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold text-gray-500 uppercase mb-2">Email Address</label>
+                    <input 
+                      required 
+                      type="email" 
+                      value={regData.email}
+                      onChange={(e) => setRegData({...regData, email: e.target.value})}
+                      className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-emerald-500" 
+                      placeholder="john@example.com" 
+                    />
+                  </div>
+                  <button className="w-full py-4 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all shadow-lg">
+                    Confirm Registration
+                  </button>
+                  <p className="text-[10px] text-gray-600 text-center">By registering, you agree to receive email reminders and exclusive offers from IFXTrades.</p>
+                </form>
+              ) : (
+                <div className="text-center py-4">
+                  <div className="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <Check className="text-emerald-500 w-8 h-8" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-white mb-2">You're In!</h3>
+                  <p className="text-gray-400 text-sm mb-8">We've sent a confirmation email to <span className="text-white">{regData.email}</span> with your access link.</p>
+                  
+                  <div className="space-y-3">
+                    <div className="text-[10px] text-gray-500 uppercase font-bold tracking-widest mb-4">Add to Calendar</div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <a 
+                        href={generateGoogleCalendarUrl(selectedWebinar)}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex items-center justify-center gap-2 py-3 bg-white/5 border border-white/10 rounded-xl text-white text-xs font-bold hover:bg-white/10 transition-all"
+                      >
+                        <Calendar className="w-4 h-4" /> Google
+                      </a>
+                      <button 
+                        onClick={() => generateICSFile(selectedWebinar)}
+                        className="flex items-center justify-center gap-2 py-3 bg-white/5 border border-white/10 rounded-xl text-white text-xs font-bold hover:bg-white/10 transition-all"
+                      >
+                        <Calendar className="w-4 h-4" /> iCal / Outlook
+                      </button>
+                    </div>
+                  </div>
+
+                  <button 
+                    onClick={() => { setIsRegistering(false); setIsSuccess(false); }}
+                    className="mt-8 text-gray-500 hover:text-white text-xs font-bold uppercase tracking-widest"
+                  >
+                    Close Window
+                  </button>
                 </div>
-                <div>
-                  <label className="block text-[10px] font-bold text-gray-500 uppercase mb-2">Email Address</label>
-                  <input required type="email" className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-emerald-500" placeholder="john@example.com" />
-                </div>
-                <button className="w-full py-4 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all shadow-lg">
-                  Confirm Registration
-                </button>
-                <p className="text-[10px] text-gray-600 text-center">By registering, you agree to receive email reminders and exclusive offers from IFXTrades.</p>
-              </form>
+              )}
             </motion.div>
           </div>
         )}

@@ -119,10 +119,20 @@ async function startServer() {
   });
 
   app.post("/api/webinars/register", authenticate, async (req: any, res) => {
-    const { webinar_id } = req.body;
-    // In a real app, you'd have a webinar_registrations table
-    // For now, we'll just log it or return success
-    res.json({ success: true, message: "Registered successfully" });
+    const { webinar_id, name, email } = req.body;
+    
+    // 1. Trigger Automated Email Reminders (Mocked)
+    console.log(`[EMAIL SERVICE] Sending confirmation to ${email} for webinar ${webinar_id}`);
+    console.log(`[EMAIL SERVICE] Scheduled reminders for ${email} at T-24h and T-1h`);
+
+    res.json({ 
+      success: true, 
+      message: "Registered successfully",
+      calendar_details: {
+        title: "IFXTrades Live Session",
+        reminder_sent: true
+      }
+    });
   });
 
   // License Validation API (MT5)
@@ -196,13 +206,17 @@ async function startServer() {
   });
 
   // Vite Integration
+  console.log(`[SERVER] NODE_ENV is: ${process.env.NODE_ENV}`);
   if (process.env.NODE_ENV !== "production") {
+    console.log("[SERVER] Starting Vite in middleware mode...");
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
     });
     app.use(vite.middlewares);
+    console.log("[SERVER] Vite middleware attached.");
   } else {
+    console.log("[SERVER] Serving static files from dist...");
     app.use(express.static(path.join(__dirname, "dist")));
     app.get("*", (req, res) => res.sendFile(path.join(__dirname, "dist", "index.html")));
   }
