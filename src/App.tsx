@@ -22,6 +22,11 @@ import { Hiring } from "./pages/Hiring";
 import { About } from "./pages/About";
 import { Contact } from "./pages/Contact";
 
+import { PrivacyPolicy } from "./pages/legal/PrivacyPolicy";
+import { TermsOfService } from "./pages/legal/TermsOfService";
+import { RiskDisclosure } from "./pages/legal/RiskDisclosure";
+import { CookiePolicy } from "./pages/legal/CookiePolicy";
+
 export default function App() {
   return (
     <ErrorBoundary>
@@ -45,6 +50,12 @@ export default function App() {
                 <Route path="/hiring" element={<Hiring />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
+                
+                {/* Legal Pages */}
+                <Route path="/privacy" element={<PrivacyPolicy />} />
+                <Route path="/terms" element={<TermsOfService />} />
+                <Route path="/risk" element={<RiskDisclosure />} />
+                <Route path="/cookies" element={<CookiePolicy />} />
               </Routes>
             </main>
             <Footer />
