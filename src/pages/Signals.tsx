@@ -4,9 +4,21 @@ import { Check, X, Upload, Smartphone, ShieldCheck, Zap, Activity, BarChart3, Tr
 import { supabase } from "../lib/supabase";
 
 import { WebinarPromoInline } from "../components/webinars/WebinarPromoInline";
+import { getSignals, subscribeToSignals } from "../services/apiHandlers";
 
 // --- Types ---
 type PlanDuration = "1 Month" | "3 Months" | "6 Months";
+
+interface Signal {
+  id: string;
+  asset: string;
+  direction: 'BUY' | 'SELL';
+  entry_price: number;
+  stop_loss: number;
+  take_profit: number;
+  status: 'active' | 'closed';
+  created_at: string;
+}
 
 interface PricingPlan {
   duration: PlanDuration;
@@ -19,6 +31,92 @@ interface PricingPlan {
 }
 
 // --- Components ---
+
+const LiveSignalsFeed = () => {
+  const [signals, setSignals] = useState<Signal[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchSignals = async () => {
+      const data = await getSignals();
+      if (data) setSignals(data as Signal[]);
+      setLoading(false);
+    };
+
+    fetchSignals();
+
+    const subscription = subscribeToSignals((payload) => {
+      if (payload.eventType === 'INSERT') {
+        setSignals(prev => [payload.new as Signal, ...prev].slice(0, 5));
+      } else if (payload.eventType === 'UPDATE') {
+        setSignals(prev => prev.map(s => s.id === payload.new.id ? payload.new as Signal : s));
+      } else if (payload.eventType === 'DELETE') {
+        setSignals(prev => prev.filter(s => s.id !== payload.old.id));
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  if (loading) return null;
+
+  return (
+    <section className="py-12 bg-black border-b border-white/5">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-3">
+            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <h2 className="text-lg font-bold text-white tracking-tight uppercase">Live Signal Feed</h2>
+          </div>
+          <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Real-time Updates Active</div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {signals.slice(0, 3).map((signal) => (
+            <motion.div
+              key={signal.id}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="bg-zinc-900/50 border border-white/10 rounded-2xl p-5 hover:border-emerald-500/30 transition-all group"
+            >
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <div className="text-xl font-bold text-white font-mono">{signal.asset}</div>
+                  <div className={`text-xs font-bold uppercase tracking-widest mt-1 ${signal.direction === 'BUY' ? 'text-emerald-500' : 'text-red-500'}`}>
+                    {signal.direction} @ {signal.entry_price}
+                  </div>
+                </div>
+                <div className={`px-2 py-1 rounded text-[10px] font-bold uppercase ${signal.status === 'active' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-gray-500/10 text-gray-500'}`}>
+                  {signal.status}
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <div className="text-[10px] text-gray-500 uppercase font-bold mb-1">Take Profit</div>
+                  <div className="text-sm font-bold text-white font-mono">{signal.take_profit}</div>
+                </div>
+                <div>
+                  <div className="text-[10px] text-gray-500 uppercase font-bold mb-1">Stop Loss</div>
+                  <div className="text-sm font-bold text-white font-mono">{signal.stop_loss}</div>
+                </div>
+              </div>
+              <div className="mt-4 pt-4 border-t border-white/5 flex justify-between items-center">
+                <div className="text-[10px] text-gray-500 font-mono">
+                  {new Date(signal.created_at).toLocaleTimeString()}
+                </div>
+                <div className="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-emerald-500/20 transition-colors">
+                  <Zap className="w-3 h-3 text-emerald-500" />
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
 
 const HeroSection = () => {
   return (
@@ -768,6 +866,7 @@ export const Signals = () => {
   return (
     <div className="bg-[#020202] min-h-screen">
       <HeroSection />
+      <LiveSignalsFeed />
       <PerformanceMetrics />
       <HowItWorks />
       <SignalPreview />

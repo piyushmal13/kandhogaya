@@ -7,6 +7,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { Navbar } from "./components/ui/Navbar";
 import { Footer } from "./components/ui/Footer";
 import { WhatsAppButton } from "./components/ui/WhatsAppButton";
+import { ScrollToTop } from "./components/ScrollToTop";
 
 import { Home } from "./pages/Home";
 import { Signals } from "./pages/Signals";
@@ -82,6 +83,7 @@ export default function App() {
     <ErrorBoundary>
       <AuthProvider>
         <Router>
+          <ScrollToTop />
           <ReferralHandler />
           <div className="bg-black min-h-screen font-sans selection:bg-emerald-500 selection:text-white">
             <Navbar />

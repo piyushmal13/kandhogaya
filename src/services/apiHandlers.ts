@@ -85,6 +85,22 @@ export const getBlogPostBySlug = async (slug: string) => {
   return data;
 };
 
+// --- REALTIME ---
+
+export const subscribeToSignals = (callback: (payload: any) => void) => {
+  return supabase
+    .channel('public:signals')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'signals' }, callback)
+    .subscribe();
+};
+
+export const subscribeToWebinars = (callback: (payload: any) => void) => {
+  return supabase
+    .channel('public:webinars')
+    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'webinars' }, callback)
+    .subscribe();
+};
+
 // --- AGENTS & SALES ---
 
 export const getAgentStats = async (agentId: string) => {

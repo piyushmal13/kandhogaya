@@ -22,8 +22,15 @@ export const supabase = createClient(
  * Defensive query wrapper to ensure consistent error handling and response validation
  */
 export const safeQuery = async <T>(query: any): Promise<T | []> => {
+  const start = performance.now();
   try {
     const { data, error } = await query;
+    const duration = performance.now() - start;
+    
+    if (duration > 500) {
+      console.warn(`Slow query detected (${Math.round(duration)}ms):`, query);
+    }
+
     if (error) {
       console.error("Supabase Query Error:", error);
       return [] as any;

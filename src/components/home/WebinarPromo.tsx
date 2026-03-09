@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import { Calendar, Clock, Users, ArrowRight, ShieldCheck, Mic2, Star, Activity } from "lucide-react";
-import { getWebinars } from "../../services/apiHandlers";
+import { getWebinars, subscribeToWebinars } from "../../services/apiHandlers";
 import { Link } from "react-router-dom";
 
 export const WebinarPromo = () => {
@@ -10,7 +10,7 @@ export const WebinarPromo = () => {
 
   useEffect(() => {
     const fetchNearestWebinar = async () => {
-      const webinars = await getWebinars();
+      const webinars: any[] = await getWebinars();
       if (webinars && webinars.length > 0) {
         const now = new Date().getTime();
         const upcoming = webinars.filter(w => new Date(w.date_time).getTime() > now);
@@ -22,7 +22,17 @@ export const WebinarPromo = () => {
       }
     };
     fetchNearestWebinar();
-  }, []);
+
+    const subscription = subscribeToWebinars((payload) => {
+      if (webinar && payload.new.id === webinar.id) {
+        setWebinar(payload.new);
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [webinar?.id]);
 
   useEffect(() => {
     if (!webinar) return;

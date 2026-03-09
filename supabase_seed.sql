@@ -58,3 +58,10 @@ INSERT INTO public.algorithms (name, description, created_at) VALUES
 ('Gamma Scalp', 'High frequency scalping for low volatility periods.', now()),
 ('Delta Hedge', 'Options hedging strategy for portfolio protection.', now()),
 ('Omega Arbitrage', 'Statistical arbitrage across correlated assets.', now());
+
+-- 8. Performance Indices for High-Usage Queries
+CREATE INDEX IF NOT EXISTS idx_webinars_date_time ON public.webinars (date_time);
+CREATE INDEX IF NOT EXISTS idx_content_posts_slug ON public.content_posts (slug);
+CREATE INDEX IF NOT EXISTS idx_content_posts_type_status ON public.content_posts (content_type, status);
+CREATE INDEX IF NOT EXISTS idx_signals_status_created ON public.signals (status, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_sales_agent_id ON public.sales_tracking (agent_id);
