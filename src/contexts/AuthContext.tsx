@@ -1,6 +1,6 @@
 import React, { useState, useEffect, createContext, useContext } from "react";
 import { TrendingUp } from "lucide-react";
-import { supabase } from "../lib/supabase";
+import { supabase } from "../services/supabaseClient";
 
 const AuthContext = createContext<any>(null);
 export const useAuth = () => useContext(AuthContext);
@@ -10,18 +10,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const handleReferral = async (currentUser: any) => {
+      if (!currentUser) return;
+      
+      const agentId = sessionStorage.getItem("ifx_referral_agent");
+      if (agentId && !currentUser.user_metadata?.referred_by) {
+        console.log(`[AUTH] Attributing user ${currentUser.id} to agent ${agentId}`);
+        await supabase.auth.updateUser({
+          data: { referred_by: agentId }
+        });
+        sessionStorage.removeItem("ifx_referral_agent");
+      }
+    };
+
     const checkSession = async () => {
       try {
-        const timeout = setTimeout(() => {
-          if (loading) {
-            console.warn("Supabase session check timed out. Proceeding as guest.");
-            setLoading(false);
-          }
-        }, 3000);
-
         const { data: { session } } = await supabase.auth.getSession();
-        clearTimeout(timeout);
-        setUser(session?.user ?? null);
+        const currentUser = session?.user ?? null;
+        setUser(currentUser);
+        if (currentUser) handleReferral(currentUser);
         setLoading(false);
       } catch (err) {
         console.error("Auth initialization error:", err);
@@ -32,7 +39,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     checkSession();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+      const currentUser = session?.user ?? null;
+      setUser(currentUser);
+      if (currentUser) handleReferral(currentUser);
     });
 
     return () => subscription.unsubscribe();

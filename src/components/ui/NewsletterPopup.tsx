@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { X, Mail, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
-import { supabase } from "../lib/supabase";
+import { supabase } from "../../lib/supabase";
 
 export const NewsletterPopup = () => {
   const [isOpen, setIsOpen] = useState(false);

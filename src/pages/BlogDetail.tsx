@@ -6,7 +6,7 @@ import { motion } from "motion/react";
 
 import { WebinarPromoInline } from "../components/webinars/WebinarPromoInline";
 
-import { supabase } from "../lib/supabase";
+import { getBlogPostBySlug } from "../services/apiHandlers";
 
 export const BlogDetail = () => {
   const { pathname } = useLocation();
@@ -17,21 +17,9 @@ export const BlogDetail = () => {
   useEffect(() => {
     const fetchPost = async () => {
       setLoading(true);
-      try {
-        const { data, error } = await supabase
-          .from('content_posts')
-          .select('*')
-          .eq('slug', slug)
-          .single();
-
-        if (error) throw error;
-        setPost(data);
-      } catch (err) {
-        console.error("Error fetching post:", err);
-        setPost(null);
-      } finally {
-        setLoading(false);
-      }
+      const data = await getBlogPostBySlug(slug);
+      setPost(data);
+      setLoading(false);
     };
 
     fetchPost();

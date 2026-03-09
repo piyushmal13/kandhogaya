@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "motion/react";
 import { Star } from "lucide-react";
-import { homeContent } from "../config/homeContent";
+import { homeContent } from "../../config/homeContent";
 
 export const SuccessShowcase = () => {
   const { reviews } = homeContent;

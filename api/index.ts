@@ -20,7 +20,13 @@ const authenticate = async (req: any, res: any, next: any) => {
   try {
     const { data: { user }, error } = await supabase.auth.getUser(token);
     if (error || !user) throw error;
-    req.user = { ...user, role: user.user_metadata?.role || 'user' };
+    
+    // Enrich user with role from metadata
+    req.user = { 
+      ...user, 
+      role: user.user_metadata?.role || 'user',
+      agent_code: user.user_metadata?.agent_code || null
+    };
     next();
   } catch (e) {
     res.status(401).json({ error: "Invalid token" });
@@ -112,12 +118,34 @@ app.post("/api/license/validate", async (req, res) => {
 // Admin Routes
 app.get("/api/admin/stats", authenticate, async (req: any, res) => {
   if (req.user.role !== "admin") return res.status(403).json({ error: "Forbidden" });
-  res.json({
-    total_users: 24500,
-    active_subscriptions: 1240,
-    revenue_mtd: 42500,
-    signal_accuracy: "82.4%"
-  });
+  
+  try {
+    // In a production environment, these would be real aggregations from Supabase
+    // For now, we return stable mock data that reflects the platform's scale
+    res.json({
+      total_users: "24,500",
+      active_subscriptions: "1,240",
+      revenue_mtd: "42,500",
+      signal_accuracy: "82.4%",
+      recent_sales: [
+        { id: 1, user: "Alex T.", product: "Gold Algo", amount: 299, date: "2 mins ago" },
+        { id: 2, user: "Sarah M.", product: "Signals Pro", amount: 99, date: "15 mins ago" },
+      ]
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch admin stats" });
+  }
+});
+
+app.get("/api/admin/agents", authenticate, async (req: any, res) => {
+  if (req.user.role !== "admin") return res.status(403).json({ error: "Forbidden" });
+  
+  const { data: agents, error } = await supabase
+    .from('agent_accounts')
+    .select('*, users(email, full_name)');
+
+  if (error) return res.status(500).json({ error: error.message });
+  res.json(agents);
 });
 
 app.post("/api/admin/licenses", authenticate, async (req: any, res) => {

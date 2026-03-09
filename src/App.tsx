@@ -1,11 +1,11 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import { ErrorBoundary } from "./components/ErrorBoundary";
+import { ErrorBoundary } from "./components/ui/ErrorBoundary";
 import { AuthProvider } from "./contexts/AuthContext";
-import { Navbar } from "./components/Navbar";
-import { Footer } from "./components/Footer";
-import { WhatsAppButton } from "./components/WhatsAppButton";
+import { Navbar } from "./components/ui/Navbar";
+import { Footer } from "./components/ui/Footer";
+import { WhatsAppButton } from "./components/ui/WhatsAppButton";
 
 import { Home } from "./pages/Home";
 import { Signals } from "./pages/Signals";
@@ -19,6 +19,7 @@ import { BlogDetail } from "./pages/BlogDetail";
 import { Login } from "./pages/Login";
 import { Dashboard } from "./pages/Dashboard";
 import { Admin } from "./pages/Admin";
+import { AgentDashboard } from "./pages/AgentDashboard";
 import { Hiring } from "./pages/Hiring";
 import { About } from "./pages/About";
 import { Contact } from "./pages/Contact";
@@ -28,11 +29,19 @@ import { TermsOfService } from "./pages/legal/TermsOfService";
 import { RiskDisclosure } from "./pages/legal/RiskDisclosure";
 import { CookiePolicy } from "./pages/legal/CookiePolicy";
 
+import { useReferral } from "./hooks/useReferral";
+
+const ReferralHandler = () => {
+  useReferral();
+  return null;
+};
+
 export default function App() {
   return (
     <ErrorBoundary>
       <AuthProvider>
         <Router>
+          <ReferralHandler />
           <div className="bg-black min-h-screen font-sans selection:bg-emerald-500 selection:text-black">
             <Navbar />
             <main>
@@ -49,6 +58,7 @@ export default function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/admin" element={<Admin />} />
+                <Route path="/agent" element={<AgentDashboard />} />
                 <Route path="/hiring" element={<Hiring />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />

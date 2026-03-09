@@ -6,7 +6,7 @@ import {
   MessageSquare, Send, Share2, Download, 
   Play, Volume2, Maximize2, Star, Zap, ShieldCheck
 } from "lucide-react";
-import { supabase } from "../lib/supabase";
+import { getWebinarById } from "../services/apiHandlers";
 import { AttendeeFeed } from "../components/webinars/AttendeeFeed";
 import { RegistrationModal } from "../components/webinars/RegistrationModal";
 import { CountdownTimer } from "../components/webinars/CountdownTimer";
@@ -25,24 +25,15 @@ export const WebinarDetail = () => {
 
   useEffect(() => {
     const fetchWebinar = async () => {
-      try {
-        const { data, error } = await supabase
-          .from("webinars")
-          .select("*")
-          .eq("id", id)
-          .single();
-
-        if (data) {
-          setWebinar(data);
-          // Check if user is registered (mock check for now, or use local storage)
-          const registered = localStorage.getItem(`webinar_reg_${id}`);
-          if (registered) setIsRegistered(true);
-        }
-      } catch (err) {
-        console.error("Error fetching webinar:", err);
-      } finally {
-        setLoading(false);
+      if (!id) return;
+      const data = await getWebinarById(id);
+      if (data) {
+        setWebinar(data);
+        // Check if user is registered (mock check for now, or use local storage)
+        const registered = localStorage.getItem(`webinar_reg_${id}`);
+        if (registered) setIsRegistered(true);
       }
+      setLoading(false);
     };
 
     fetchWebinar();

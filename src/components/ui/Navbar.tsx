@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { TrendingUp, LayoutDashboard, Settings, LogOut, Menu, X, Zap, BarChart3, Target, BookOpen, Video, MessageSquare, Briefcase, ChevronRight } from "lucide-react";
-import { useAuth } from "../contexts/AuthContext";
-import { cn } from "../utils/cn";
+import { useAuth } from "../../contexts/AuthContext";
+import { cn } from "../../utils/cn";
 import { motion, AnimatePresence } from "motion/react";
 
 export const Navbar = () => {

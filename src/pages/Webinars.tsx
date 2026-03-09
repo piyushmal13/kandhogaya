@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Calendar, Clock, User, Users, ArrowRight, CheckCircle2, X, Zap, ShieldCheck, Activity } from "lucide-react";
-import { supabase } from "../lib/supabase";
+import { getWebinars } from "../services/apiHandlers";
 import { WebinarCard } from "../components/webinars/WebinarCard";
 import { RegistrationModal } from "../components/webinars/RegistrationModal";
 import { AttendeeFeed } from "../components/webinars/AttendeeFeed";
@@ -19,20 +19,11 @@ export const Webinars = () => {
   }, []);
 
   const fetchWebinars = async () => {
-    try {
-      const { data, error } = await supabase
-        .from("webinars")
-        .select("*")
-        .eq("status", "upcoming")
-        .order("date_time", { ascending: true });
-
-      if (error) throw error;
-      setWebinars(data || []);
-    } catch (error) {
-      console.error("Error fetching webinars:", error);
-    } finally {
-      setLoading(false);
+    const data = await getWebinars();
+    if (Array.isArray(data)) {
+      setWebinars(data);
     }
+    setLoading(false);
   };
 
   const nextWebinar = webinars[0];

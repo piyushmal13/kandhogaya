@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Search, Filter, ArrowRight, ShieldCheck, Zap, TrendingUp, Activity } from "lucide-react";
 import { supabase } from "../lib/supabase";
-import { AlgoCard } from "../components/algo/AlgoCard";
-import { AlgoDetailModal } from "../components/algo/AlgoDetailModal";
+import { AlgoCard } from "../components/algorithms/AlgoCard";
+import { AlgoDetailModal } from "../components/algorithms/AlgoDetailModal";
 
 export const Marketplace = () => {
   const [products, setProducts] = useState<any[]>([]);

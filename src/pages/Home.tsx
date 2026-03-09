@@ -1,5 +1,5 @@
 import React from "react";
-import { SuccessShowcase } from "../components/SuccessShowcase";
+import { SuccessShowcase } from "../components/ui/SuccessShowcase";
 import { HeroSection } from "../components/home/HeroSection";
 import { MarketTicker } from "../components/home/MarketTicker";
 import { EcosystemSection } from "../components/home/EcosystemSection";
@@ -7,7 +7,7 @@ import { GlobalReach } from "../components/home/GlobalReach";
 import { WebinarPromo } from "../components/home/WebinarPromo";
 import { BlogSection } from "../components/home/BlogSection";
 import { PerformanceHistory } from "../components/home/PerformanceHistory";
-import { NewsletterPopup } from "../components/NewsletterPopup";
+import { NewsletterPopup } from "../components/ui/NewsletterPopup";
 import { WebinarBanner } from "../components/webinars/WebinarBanner";
 import { cn } from "../utils/cn";
 import { motion } from "motion/react";

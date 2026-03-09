@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { Calendar, Clock, ArrowRight, Video, Download, Search, Filter } from "lucide-react";
 
-import { supabase } from "../lib/supabase";
+import { getBlogPosts } from "../services/apiHandlers";
 
 export const Blog = () => {
   const [posts, setPosts] = useState<any[]>([]);
@@ -28,36 +28,17 @@ export const Blog = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       setLoading(true);
-      try {
-        let query = supabase
-          .from('content_posts')
-          .select('*')
-          .eq('content_type', 'blog')
-          .eq('status', 'published')
-          .order('published_at', { ascending: false })
-          .range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
-
-        if (searchQuery) {
-          query = query.ilike('title', `%${searchQuery}%`);
+      const data = await getBlogPosts(page, PAGE_SIZE, searchQuery);
+      
+      if (Array.isArray(data)) {
+        if (page === 0) {
+          setPosts(data);
+        } else {
+          setPosts(prev => [...prev, ...data]);
         }
-
-        const { data, error } = await query;
-
-        if (error) throw error;
-
-        if (data) {
-          if (page === 0) {
-            setPosts(data);
-          } else {
-            setPosts(prev => [...prev, ...data]);
-          }
-          setHasMore(data.length === PAGE_SIZE);
-        }
-      } catch (err) {
-        console.error("Error fetching posts:", err);
-      } finally {
-        setLoading(false);
+        setHasMore(data.length === PAGE_SIZE);
       }
+      setLoading(false);
     };
 
     fetchPosts();
