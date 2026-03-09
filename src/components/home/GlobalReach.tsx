@@ -117,7 +117,7 @@ export const GlobalReach = () => {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 1 }}
-            className="flex-1 w-full max-w-[300px] sm:max-w-[400px] lg:max-w-[500px] aspect-square relative mx-auto order-1 lg:order-2"
+            className="flex-1 w-full max-w-[260px] sm:max-w-[400px] lg:max-w-[500px] aspect-square relative mx-auto order-1 lg:order-2"
           >
             <div className="absolute inset-0 bg-emerald-500/10 blur-[60px] md:blur-[100px] rounded-full pointer-events-none" />
             <canvas

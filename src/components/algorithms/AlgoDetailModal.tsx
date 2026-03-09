@@ -40,29 +40,29 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
       >
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 z-10 p-2 bg-black/50 rounded-full hover:bg-white/10 transition-colors text-white"
+          className="absolute top-4 right-4 z-20 p-2 bg-black/50 rounded-full hover:bg-white/10 transition-colors text-white"
         >
-          <X className="w-6 h-6" />
+          <X className="w-5 h-5 md:w-6 md:h-6" />
         </button>
 
         {/* Left: Details & Tabs */}
-        <div className="flex-1 p-8 md:p-12 overflow-y-auto border-r border-white/5">
-          <div className="mb-8">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono tracking-widest mb-4">
+        <div className="flex-1 p-6 md:p-12 overflow-y-auto border-b md:border-b-0 md:border-r border-white/5">
+          <div className="mb-6 md:mb-8">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] md:text-xs font-mono tracking-widest mb-3 md:mb-4">
               <Zap className="w-3 h-3" />
               {algo.category || "Algorithm"}
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{algo.name}</h2>
-            <p className="text-gray-400 leading-relaxed text-lg">{algo.description}</p>
+            <h2 className="text-2xl md:text-4xl font-bold text-white mb-3 md:mb-4">{algo.name}</h2>
+            <p className="text-gray-400 leading-relaxed text-sm md:text-lg">{algo.description}</p>
           </div>
 
           {/* Tabs Navigation */}
-          <div className="flex gap-6 border-b border-white/5 mb-8 overflow-x-auto whitespace-nowrap scrollbar-hide">
+          <div className="flex gap-4 md:gap-6 border-b border-white/5 mb-6 md:mb-8 overflow-x-auto whitespace-nowrap scrollbar-hide">
             {['overview', 'performance', 'reviews', 'qa', 'terms'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab as any)}
-                className={`pb-4 text-sm font-bold uppercase tracking-widest transition-all relative ${
+                className={`pb-3 md:pb-4 text-[10px] md:text-sm font-bold uppercase tracking-widest transition-all relative ${
                   activeTab === tab ? 'text-emerald-500' : 'text-gray-500 hover:text-white'
                 }`}
               >
@@ -75,11 +75,11 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
           </div>
 
           {/* Tab Content */}
-          <div className="min-h-[400px]">
+          <div className="min-h-[300px] md:min-h-[400px]">
             {activeTab === 'overview' && (
-              <div className="space-y-8">
+              <div className="space-y-6 md:space-y-8">
                 {algo.video_explanation_url && (
-                  <div className="aspect-video rounded-2xl overflow-hidden bg-black border border-white/10 relative group">
+                  <div className="aspect-video rounded-xl md:rounded-2xl overflow-hidden bg-black border border-white/10 relative group">
                     <iframe 
                       src={algo.video_explanation_url.includes('youtube.com') ? algo.video_explanation_url.replace('watch?v=', 'embed/') : algo.video_explanation_url} 
                       className="w-full h-full"
@@ -87,20 +87,20 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
                     />
                   </div>
                 )}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="p-6 rounded-2xl bg-white/5 border border-white/5">
-                    <h4 className="text-white font-bold mb-4 flex items-center gap-2">
-                      <ShieldCheck className="w-5 h-5 text-emerald-500" />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+                  <div className="p-5 md:p-6 rounded-xl md:rounded-2xl bg-white/5 border border-white/5">
+                    <h4 className="text-white font-bold mb-3 md:mb-4 flex items-center gap-2 text-sm md:text-base">
+                      <ShieldCheck className="w-4 h-4 md:w-5 md:h-5 text-emerald-500" />
                       Risk Management
                     </h4>
-                    <p className="text-gray-400 text-sm">Proprietary risk protocols ensuring capital preservation through dynamic position sizing and stop-loss logic.</p>
+                    <p className="text-gray-400 text-xs md:text-sm">Proprietary risk protocols ensuring capital preservation through dynamic position sizing and stop-loss logic.</p>
                   </div>
-                  <div className="p-6 rounded-2xl bg-white/5 border border-white/5">
-                    <h4 className="text-white font-bold mb-4 flex items-center gap-2">
-                      <Activity className="w-5 h-5 text-emerald-500" />
+                  <div className="p-5 md:p-6 rounded-xl md:rounded-2xl bg-white/5 border border-white/5">
+                    <h4 className="text-white font-bold mb-3 md:mb-4 flex items-center gap-2 text-sm md:text-base">
+                      <Activity className="w-4 h-4 md:w-5 md:h-5 text-emerald-500" />
                       Execution Engine
                     </h4>
-                    <p className="text-gray-400 text-sm">Low-latency execution optimized for institutional liquidity providers and minimal slippage.</p>
+                    <p className="text-gray-400 text-xs md:text-sm">Low-latency execution optimized for institutional liquidity providers and minimal slippage.</p>
                   </div>
                 </div>
               </div>
@@ -188,66 +188,66 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
         </div>
 
         {/* Right: Subscription */}
-        <div className="w-full md:w-[400px] bg-[#050505] p-8 md:p-12 flex flex-col justify-center relative">
+        <div className="w-full md:w-[400px] bg-[#050505] p-6 md:p-12 flex flex-col justify-center relative">
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-cyan-500" />
           
-          <h3 className="text-2xl font-bold text-white mb-6">Subscription Plans</h3>
+          <h3 className="text-xl md:text-2xl font-bold text-white mb-4 md:mb-6">Subscription Plans</h3>
 
-          <div className="space-y-4 mb-8">
+          <div className="space-y-3 md:space-y-4 mb-6 md:mb-8">
             <button 
               onClick={() => handleSubscribeClick('Monthly')}
-              className="w-full p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-emerald-500/50 transition-all text-left group"
+              className="w-full p-5 md:p-6 rounded-xl md:rounded-2xl bg-white/5 border border-white/10 hover:border-emerald-500/50 transition-all text-left group"
             >
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-white font-bold">Monthly Access</span>
-                <span className="text-2xl font-bold text-white">${algo.price}</span>
+              <div className="flex justify-between items-center mb-1 md:mb-2">
+                <span className="text-white font-bold text-sm md:text-base">Monthly Access</span>
+                <span className="text-xl md:text-2xl font-bold text-white">${algo.price}</span>
               </div>
-              <p className="text-gray-500 text-xs">Full algorithm access with 24/5 support.</p>
+              <p className="text-gray-500 text-[10px] md:text-xs">Full algorithm access with 24/5 support.</p>
             </button>
 
             {algo.long_plan_offers?.map((offer, i) => (
               <button 
                 key={i}
                 onClick={() => handleSubscribeClick(offer.duration)}
-                className="w-full p-6 rounded-2xl bg-emerald-500/5 border border-emerald-500/20 hover:border-emerald-500/50 transition-all text-left relative group"
+                className="w-full p-5 md:p-6 rounded-xl md:rounded-2xl bg-emerald-500/5 border border-emerald-500/20 hover:border-emerald-500/50 transition-all text-left relative group"
               >
-                <div className="absolute -top-3 -right-2 bg-red-500 text-white text-[9px] px-2 py-1 rounded-full font-bold">
+                <div className="absolute -top-2.5 -right-1.5 bg-red-500 text-white text-[8px] md:text-[9px] px-1.5 py-0.5 md:px-2 md:py-1 rounded-full font-bold">
                   {offer.discount}
                 </div>
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-white font-bold">{offer.duration} Plan</span>
-                  <span className="text-2xl font-bold text-emerald-500">${offer.price}</span>
+                <div className="flex justify-between items-center mb-1 md:mb-2">
+                  <span className="text-white font-bold text-sm md:text-base">{offer.duration} Plan</span>
+                  <span className="text-xl md:text-2xl font-bold text-emerald-500">${offer.price}</span>
                 </div>
-                <p className="text-gray-400 text-xs">Best value for long-term institutional trading.</p>
+                <p className="text-gray-400 text-[10px] md:text-xs">Best value for long-term institutional trading.</p>
               </button>
             ))}
           </div>
 
-          <ul className="space-y-4 mb-8">
-            <li className="flex items-center gap-3 text-sm text-gray-300">
-              <Check className="w-4 h-4 text-emerald-500" />
+          <ul className="space-y-3 md:space-y-4 mb-6 md:mb-8">
+            <li className="flex items-center gap-3 text-xs md:text-sm text-gray-300">
+              <Check className="w-3.5 h-3.5 md:w-4 h-4 text-emerald-500" />
               Full Algorithm Access
             </li>
-            <li className="flex items-center gap-3 text-sm text-gray-300">
-              <Check className="w-4 h-4 text-emerald-500" />
+            <li className="flex items-center gap-3 text-xs md:text-sm text-gray-300">
+              <Check className="w-3.5 h-3.5 md:w-4 h-4 text-emerald-500" />
               24/7 VPS Hosting Included
             </li>
-            <li className="flex items-center gap-3 text-sm text-gray-300">
-              <ShieldCheck className="w-4 h-4 text-emerald-500" />
+            <li className="flex items-center gap-3 text-xs md:text-sm text-gray-300">
+              <ShieldCheck className="w-3.5 h-3.5 md:w-4 h-4 text-emerald-500" />
               Institutional Liquidity
             </li>
           </ul>
 
           <button 
             onClick={() => handleSubscribeClick('Monthly')}
-            className="w-full py-4 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] flex items-center justify-center gap-2 group"
+            className="w-full py-3.5 md:py-4 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] flex items-center justify-center gap-2 group text-sm md:text-base"
           >
-            {!user && <Lock className="w-4 h-4" />}
+            {!user && <Lock className="w-3.5 h-3.5 md:w-4 h-4" />}
             Get Started
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
           </button>
           
-          <div className="text-center mt-4 text-xs text-gray-600">
+          <div className="text-center mt-4 text-[10px] md:text-xs text-gray-600">
             Secure payment via Stripe. Cancel anytime.
           </div>
         </div>

@@ -97,7 +97,7 @@ export const WebinarPromo = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="text-3xl sm:text-4xl md:text-6xl font-bold text-white mb-6 tracking-tighter leading-[1.1]"
+              className="text-2xl sm:text-4xl md:text-6xl font-bold text-white mb-4 md:mb-6 tracking-tighter leading-[1.1]"
             >
               {webinar.title}
             </motion.h2>
@@ -107,7 +107,7 @@ export const WebinarPromo = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="text-gray-400 text-base md:text-lg mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed"
+              className="text-sm md:text-lg text-gray-400 mb-8 md:mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed px-2"
             >
               {webinar.description}
             </motion.p>

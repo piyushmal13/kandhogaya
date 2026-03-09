@@ -7,18 +7,18 @@ export const HeroSection = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   return (
-    <section ref={containerRef} className="relative min-h-[85vh] md:min-h-[90vh] flex flex-col items-center justify-center overflow-hidden bg-[#000000] pt-24 pb-12 md:pt-20">
+    <section ref={containerRef} className="relative min-h-[90vh] flex flex-col items-center justify-center overflow-hidden bg-[#000000] pt-28 pb-16 md:pt-20">
       
       {/* --- Institutional Background System --- */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* 1. Ambient Spotlight (Top Center) - Gives depth without motion */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] md:w-[1200px] h-[400px] md:h-[500px] bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.2),transparent_70%)] opacity-70" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] md:w-[1200px] h-[300px] md:h-[500px] bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.2),transparent_70%)] opacity-70" />
 
         {/* 2. Large Structural Grid - Static & Stable */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:60px_60px] md:bg-[size:120px_120px] [mask-image:radial-gradient(ellipse_at_center,black_70%,transparent_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] md:bg-[size:120px_120px] [mask-image:radial-gradient(ellipse_at_center,black_70%,transparent_100%)]" />
 
         {/* 3. Subtle Horizon Glow (Bottom) - Grounds the design */}
-        <div className="absolute bottom-0 left-0 right-0 h-[200px] md:h-[300px] bg-gradient-to-t from-emerald-900/20 to-transparent opacity-50" />
+        <div className="absolute bottom-0 left-0 right-0 h-[150px] md:h-[300px] bg-gradient-to-t from-emerald-900/20 to-transparent opacity-50" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10 w-full flex flex-col items-center text-center">
@@ -31,7 +31,7 @@ export const HeroSection = () => {
           className="inline-flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-8 md:mb-12 group hover:border-emerald-500/30 transition-colors cursor-default"
         >
           <ShieldCheck className="w-3.5 h-3.5 md:w-4 h-4 text-emerald-500" />
-          <span className="text-[10px] md:text-xs font-mono text-gray-300 tracking-widest uppercase group-hover:text-white transition-colors">
+          <span className="text-[9px] md:text-xs font-mono text-gray-300 tracking-widest uppercase group-hover:text-white transition-colors">
             Trusted by 12,000+ Institutional Traders
           </span>
         </motion.div>
@@ -41,9 +41,9 @@ export const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1 }}
-          className="text-4xl sm:text-6xl md:text-8xl lg:text-[100px] font-bold text-white tracking-tight leading-[1.1] md:leading-[1.1] mb-6 md:mb-8 max-w-5xl mx-auto"
+          className="text-[2.5rem] sm:text-6xl md:text-8xl lg:text-[100px] font-bold text-white tracking-tight leading-[1.05] md:leading-[1.1] mb-6 md:mb-8 max-w-5xl mx-auto"
         >
-          Institutional Edge. <br className="hidden md:block" />
+          Institutional Edge. <br className="hidden sm:block" />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-emerald-500 to-cyan-500 pb-2">
             Retail Accessibility.
           </span>
@@ -54,7 +54,7 @@ export const HeroSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-sm sm:text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10 md:mb-12 leading-relaxed font-light px-4"
+          className="text-sm sm:text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10 md:mb-12 leading-relaxed font-light px-2"
         >
           We provide the <span className="text-white font-medium">low-latency infrastructure</span>, proprietary algorithms, and order-flow data used by elite quantitative firms. 
           <br className="hidden md:block" />
@@ -66,7 +66,7 @@ export const HeroSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="flex flex-col sm:flex-row justify-center gap-4 md:gap-6 w-full sm:w-auto px-4"
+          className="flex flex-col sm:flex-row justify-center gap-3 md:gap-6 w-full sm:w-auto px-4"
         >
           <Link 
             to="/login" 
@@ -84,7 +84,7 @@ export const HeroSection = () => {
             className="group px-6 py-3.5 md:px-8 md:py-4 bg-white/5 text-white font-medium rounded-xl border border-white/10 hover:border-emerald-500/50 hover:bg-white/10 transition-all duration-500 backdrop-blur-sm flex items-center justify-center gap-2 text-base md:text-lg w-full sm:w-auto"
           >
             <Activity className="w-5 h-5 text-emerald-500 group-hover:scale-110 transition-transform" />
-            <span>View Live Performance</span>
+            <span>View Performance</span>
           </Link>
         </motion.div>
 

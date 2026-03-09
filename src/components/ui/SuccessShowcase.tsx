@@ -12,21 +12,21 @@ export const SuccessShowcase = () => {
   }, []);
 
   return (
-    <section className="py-32 bg-black relative overflow-hidden border-t border-white/5">
+    <section className="py-16 md:py-32 bg-black relative overflow-hidden border-t border-white/5">
       <div className="max-w-7xl mx-auto px-4 relative z-10">
-        <div className="text-center mb-20">
+        <div className="text-center mb-12 md:mb-20">
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl font-semibold text-white mb-4 tracking-tight"
+            className="text-3xl md:text-5xl font-semibold text-white mb-4 tracking-tight"
           >
             Trusted by Professionals
           </motion.h2>
         </div>
 
         <motion.div 
-          className="flex gap-6 cursor-grab"
+          className="flex gap-4 md:gap-6 cursor-grab"
           drag="x"
           dragConstraints={{ right: 0, left: -1000 }}
           style={{ x }}
@@ -34,23 +34,23 @@ export const SuccessShowcase = () => {
           {reviews.map((rev, i) => (
             <motion.div 
               key={i}
-              className="p-8 rounded-[2rem] bg-zinc-900 border border-zinc-800 transition-colors duration-300 flex flex-col h-full min-w-[300px] md:min-w-[400px]"
+              className="p-6 md:p-8 rounded-2xl md:rounded-[2rem] bg-zinc-900 border border-zinc-800 transition-colors duration-300 flex flex-col h-full min-w-[280px] md:min-w-[400px]"
             >
-              <div className="flex gap-1 mb-6">
+              <div className="flex gap-1 mb-4 md:mb-6">
                 {[...Array(rev.rating)].map((_, j) => (
-                  <Star key={j} className="w-4 h-4 text-emerald-500 fill-emerald-500" />
+                  <Star key={j} className="w-3.5 h-3.5 md:w-4 h-4 text-emerald-500 fill-emerald-500" />
                 ))}
               </div>
-              <p className="text-gray-300 text-lg leading-relaxed mb-8 flex-1 font-normal tracking-tight">
+              <p className="text-gray-300 text-sm md:text-lg leading-relaxed mb-6 md:mb-8 flex-1 font-normal tracking-tight">
                 "{rev.text}"
               </p>
-              <div className="flex items-center gap-4 pt-6 border-t border-zinc-800">
-                <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 font-medium">
+              <div className="flex items-center gap-3 md:gap-4 pt-4 md:pt-6 border-t border-zinc-800">
+                <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 font-medium text-xs md:text-base">
                   {rev.name.charAt(0)}
                 </div>
                 <div>
-                  <div className="text-white font-medium text-sm">{rev.name}</div>
-                  <div className="text-gray-500 text-xs">{rev.role}</div>
+                  <div className="text-white font-medium text-xs md:text-sm">{rev.name}</div>
+                  <div className="text-gray-500 text-[10px] md:text-xs">{rev.role}</div>
                 </div>
               </div>
             </motion.div>

@@ -11,7 +11,7 @@ export const Footer = () => (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8 mb-20">
         
         {/* Brand Column */}
-        <div className="lg:col-span-4">
+        <div className="lg:col-span-6">
           <Link to="/" className="flex items-center mb-8 group">
             <div className="h-12 w-auto flex items-center justify-center overflow-hidden transition-all relative">
               <img 
@@ -72,34 +72,6 @@ export const Footer = () => (
             <li><Link to="/contact" className="hover:text-emerald-500 transition-colors">Contact</Link></li>
           </ul>
         </div>
-
-        {/* Status Column */}
-        <div className="lg:col-span-2">
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-              </div>
-              <span className="text-xs font-bold text-emerald-500 tracking-wider">SYSTEM ONLINE</span>
-            </div>
-            <div className="space-y-2 text-[10px] font-mono text-gray-500">
-              <div className="flex justify-between">
-                <span>EXECUTION</span>
-                <span className="text-gray-300">12ms</span>
-              </div>
-              <div className="flex justify-between">
-                <span>UPTIME</span>
-                <span className="text-gray-300">99.99%</span>
-              </div>
-              <div className="flex justify-between">
-                <span>DATA FEED</span>
-                <span className="text-emerald-500">CONNECTED</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
       </div>
 
       {/* Bottom Bar */}

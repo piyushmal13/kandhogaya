@@ -8,10 +8,30 @@
 }
 
 @layer base {
+  html {
+    @apply scroll-smooth;
+  }
   body {
-    @apply bg-black text-zinc-100 antialiased;
+    @apply bg-black text-zinc-100 antialiased overflow-x-hidden;
   }
   h1, h2, h3, h4 {
     @apply font-sans font-semibold tracking-tight text-white;
+  }
+  
+  /* Responsive Typography Base */
+  h1 { @apply text-3xl sm:text-5xl md:text-7xl lg:text-8xl; }
+  h2 { @apply text-2xl sm:text-4xl md:text-5xl lg:text-6xl; }
+  h3 { @apply text-xl sm:text-2xl md:text-3xl; }
+  
+  /* Custom Scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-white/10 rounded-full hover:bg-white/20 transition-colors;
   }
 }

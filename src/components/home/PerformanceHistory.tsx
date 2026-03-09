@@ -42,7 +42,7 @@ export const PerformanceHistory = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-6 sm:grid-cols-9 md:grid-cols-12 gap-3">
+          <div className="grid grid-cols-6 sm:grid-cols-9 md:grid-cols-12 gap-1.5 md:gap-3">
             {monthlyResults.map((month, i) => (
               <motion.div
                 key={i}
@@ -51,13 +51,13 @@ export const PerformanceHistory = () => {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.02 }}
                 className={`
-                  relative group aspect-square rounded-lg border flex items-center justify-center cursor-default
+                  relative group aspect-square rounded-md md:rounded-lg border flex items-center justify-center cursor-default
                   ${month.isPositive 
                     ? 'bg-emerald-500/10 border-emerald-500/20 hover:bg-emerald-500/20' 
                     : 'bg-red-500/10 border-red-500/20 hover:bg-red-500/20'}
                 `}
               >
-                <span className={`text-[10px] sm:text-xs font-mono font-bold ${month.isPositive ? 'text-emerald-400' : 'text-red-400'}`}>
+                <span className={`text-[8px] sm:text-[10px] md:text-xs font-mono font-bold ${month.isPositive ? 'text-emerald-400' : 'text-red-400'}`}>
                   {month.value}%
                 </span>
                 
