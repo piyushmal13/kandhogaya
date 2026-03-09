@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { TrendingUp, LayoutDashboard, Settings, LogOut, Menu, X, Zap, BarChart3, Target, BookOpen, Video, MessageSquare, Briefcase, ChevronRight } from "lucide-react";
+import { TrendingUp, LayoutDashboard, Settings, LogOut, Menu, X, Zap, BarChart3, Target, BookOpen, Video, MessageSquare, Briefcase, ChevronRight, Database } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
 import { BRANDING } from "../../constants/branding";
 import { cn } from "../../utils/cn";
 import { motion, AnimatePresence } from "motion/react";
+import { SupabaseStatus } from "./SupabaseStatus";
 
 export const Navbar = () => {
   const { user, logout } = useAuth();
@@ -54,6 +55,7 @@ export const Navbar = () => {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-8">
+              <SupabaseStatus />
               {navLinks.map((link) => (
                 <Link
                   key={link.path}
@@ -140,6 +142,10 @@ export const Navbar = () => {
                 >
                   <X className="w-6 h-6" />
                 </button>
+              </div>
+
+              <div className="px-6 py-4 border-b border-white/5">
+                <SupabaseStatus />
               </div>
 
               <div className="flex-1 overflow-y-auto p-6">

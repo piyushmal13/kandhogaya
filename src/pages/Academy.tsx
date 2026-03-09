@@ -1,13 +1,35 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "motion/react";
-import { Clock, BookOpen } from "lucide-react";
+import { Clock, BookOpen, PlayCircle } from "lucide-react";
+import { Link } from "react-router-dom";
+import { getCourses } from "../services/apiHandlers";
+import { Course } from "../types";
 
 export const Academy = () => {
-  const courses = [
-    { id: 1, title: "Forex Mastery 101", level: "Beginner", duration: "12 Hours", lessons: 24, image: "https://picsum.photos/seed/forex/800/450" },
-    { id: 2, title: "Gold Scalping Secrets", level: "Advanced", duration: "8 Hours", lessons: 15, image: "https://picsum.photos/seed/gold/800/450" },
-    { id: 3, title: "Algo Trading with MT5", level: "Intermediate", duration: "15 Hours", lessons: 30, image: "https://picsum.photos/seed/algo/800/450" },
-  ];
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        setLoading(true);
+        const data = await getCourses();
+        setCourses(data || []);
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourses();
+  }, []);
+
+  if (loading) return (
+    <div className="pt-32 min-h-screen flex items-center justify-center">
+      <div className="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin" />
+    </div>
+  );
 
   return (
     <div className="pt-32 pb-20 px-4 max-w-7xl mx-auto min-h-screen">
@@ -24,29 +46,49 @@ export const Academy = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1 }}
-            className="bg-zinc-900 border border-white/10 rounded-[2.5rem] overflow-hidden group hover:border-emerald-500/50 transition-all"
+            className="bg-zinc-900 border border-white/10 rounded-[2.5rem] overflow-hidden group hover:border-emerald-500/50 transition-all flex flex-col"
           >
             <div className="aspect-video relative overflow-hidden">
-              <img src={course.image} alt={course.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" referrerPolicy="no-referrer" />
+              <img 
+                src={course.image_url || `https://picsum.photos/seed/${course.id}/800/450`} 
+                alt={course.title} 
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-60 group-hover:opacity-80" 
+                referrerPolicy="no-referrer" 
+              />
               <div className="absolute top-4 left-4">
                 <span className="px-3 py-1 bg-black/60 backdrop-blur-md text-emerald-500 text-[10px] font-bold rounded-full border border-white/10 uppercase tracking-widest">
-                  {course.level}
+                  {course.level || "Beginner"}
                 </span>
               </div>
-            </div>
-            <div className="p-8">
-              <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-emerald-500 transition-colors">{course.title}</h3>
-              <div className="flex items-center gap-6 mb-8 text-gray-500 text-xs font-bold uppercase tracking-widest">
-                <div className="flex items-center gap-2"><Clock className="w-4 h-4" /> {course.duration}</div>
-                <div className="flex items-center gap-2"><BookOpen className="w-4 h-4" /> {course.lessons} Lessons</div>
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="w-16 h-16 bg-emerald-500 rounded-full flex items-center justify-center text-black shadow-[0_0_30px_rgba(16,185,129,0.5)]">
+                  <PlayCircle className="w-8 h-8" />
+                </div>
               </div>
-              <button type="button" onClick={() => alert("Course module opening...")} className="w-full py-4 bg-white/5 text-white font-bold rounded-xl border border-white/10 hover:bg-white hover:text-black transition-all">
+            </div>
+            <div className="p-8 flex-1 flex flex-col">
+              <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-emerald-400 transition-colors">{course.title}</h3>
+              <p className="text-gray-400 text-sm mb-6 line-clamp-2">{course.description}</p>
+              <div className="flex items-center gap-6 mb-8 text-gray-500 text-xs font-bold uppercase tracking-widest mt-auto">
+                <div className="flex items-center gap-2"><Clock className="w-4 h-4" /> {course.duration || "Self-paced"}</div>
+                <div className="flex items-center gap-2"><BookOpen className="w-4 h-4" /> {course.chapters?.length || 0} Modules</div>
+              </div>
+              <Link 
+                to={`/academy/${course.id}`}
+                className="w-full py-4 bg-white/5 text-white font-bold rounded-xl border border-white/10 hover:bg-white hover:text-black transition-all text-center"
+              >
                 Start Learning
-              </button>
+              </Link>
             </div>
           </motion.div>
         ))}
       </div>
+
+      {!loading && courses.length === 0 && (
+        <div className="text-center py-20 text-gray-500">
+          No courses available at the moment. Check back soon!
+        </div>
+      )}
     </div>
   );
 };

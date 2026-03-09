@@ -14,6 +14,7 @@ import { Signals } from "./pages/Signals";
 import { Marketplace } from "./pages/Marketplace";
 import { Results } from "./pages/Results";
 import { Academy } from "./pages/Academy";
+import { CourseDetail } from "./pages/CourseDetail";
 import { Webinars } from "./pages/Webinars";
 import { WebinarDetail } from "./pages/WebinarDetail";
 import { Blog } from "./pages/Blog";
@@ -54,6 +55,8 @@ const AnimatedRoutes = () => {
           <Route path="/signals" element={<Signals />} />
           <Route path="/marketplace" element={<Marketplace />} />
           <Route path="/results" element={<Results />} />
+          <Route path="/academy" element={<Academy />} />
+          <Route path="/academy/:courseId" element={<CourseDetail />} />
           <Route path="/courses" element={<Academy />} />
           <Route path="/webinars" element={<Webinars />} />
           <Route path="/webinars/:id" element={<WebinarDetail />} />

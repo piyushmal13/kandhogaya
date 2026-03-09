@@ -1,6 +1,6 @@
 import React, { useState, useEffect, createContext, useContext } from "react";
 import { TrendingUp } from "lucide-react";
-import { supabase } from "../services/supabaseClient";
+import { supabase } from "../lib/supabase";
 
 const AuthContext = createContext<any>(null);
 export const useAuth = () => useContext(AuthContext);

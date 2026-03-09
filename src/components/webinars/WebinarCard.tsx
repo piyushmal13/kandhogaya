@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "motion/react";
-import { Calendar, Clock, User, Users, ArrowRight, CheckCircle2, X } from "lucide-react";
-import { Link } from "react-router-dom";
+import { motion } from "motion/react";
+import { Calendar, Clock, ArrowRight, Lock } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Webinar } from "../../types";
+import { useAuth } from "../../contexts/AuthContext";
 
 interface WebinarCardProps {
-  webinar: any;
-  onRegister: (webinar: any) => void;
+  webinar: Webinar;
+  onRegister: (webinar: Webinar) => void;
 }
 
 export const WebinarCard = ({ webinar, onRegister }: WebinarCardProps) => {
   const [timeLeft, setTimeLeft] = useState<string>("");
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -30,8 +34,17 @@ export const WebinarCard = ({ webinar, onRegister }: WebinarCardProps) => {
     return () => clearInterval(timer);
   }, [webinar.date_time]);
 
+  const handleRegisterClick = () => {
+    if (!user) {
+      alert("Please sign in to register for this webinar.");
+      navigate("/login");
+      return;
+    }
+    onRegister(webinar);
+  };
+
   const seatsLeft = webinar.max_attendees - webinar.registration_count;
-  const isLowSeats = seatsLeft < 100;
+  const isLowSeats = seatsLeft < 20;
 
   return (
     <motion.div
@@ -40,9 +53,10 @@ export const WebinarCard = ({ webinar, onRegister }: WebinarCardProps) => {
     >
       <Link to={`/webinars/${webinar.id}`} className="relative h-48 overflow-hidden block">
         <img 
-          src={`https://picsum.photos/seed/${webinar.id}/800/450`} 
+          src={webinar.webinar_image_url || `https://picsum.photos/seed/${webinar.id}/800/450`} 
           alt={webinar.title} 
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-60 group-hover:opacity-80"
+          referrerPolicy="no-referrer"
         />
         <div className="absolute top-4 left-4 flex flex-col gap-2">
           <div className="flex gap-2">
@@ -57,17 +71,22 @@ export const WebinarCard = ({ webinar, onRegister }: WebinarCardProps) => {
               </span>
             )}
             {webinar.is_paid && (
-              <span className="bg-emerald-500 text-black text-xs font-bold px-3 py-1 rounded-full">
-                PREMIUM
+              <span className="bg-amber-500 text-black text-[10px] font-black px-2 py-1 rounded-full uppercase tracking-tighter">
+                Premium
               </span>
             )}
           </div>
-          {isLowSeats && (
+          {isLowSeats && seatsLeft > 0 && (
             <span className="bg-red-500/90 text-white text-[10px] font-bold px-3 py-1 rounded-full animate-pulse self-start">
               ONLY {seatsLeft} SEATS LEFT
             </span>
           )}
         </div>
+        {webinar.brand_logo_url && (
+          <div className="absolute bottom-4 right-4 w-10 h-10 bg-black/40 backdrop-blur-md rounded-lg p-1 border border-white/10">
+            <img src={webinar.brand_logo_url} alt="Brand" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
+          </div>
+        )}
       </Link>
 
       <div className="p-6 flex-1 flex flex-col">
@@ -76,7 +95,7 @@ export const WebinarCard = ({ webinar, onRegister }: WebinarCardProps) => {
           {new Date(webinar.date_time).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
           <span className="text-gray-600">•</span>
           <Clock className="w-3 h-3" />
-          {webinar.metadata?.duration || '60 mins'}
+          {new Date(webinar.date_time).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
         </div>
 
         <Link to={`/webinars/${webinar.id}`} className="block">
@@ -90,28 +109,29 @@ export const WebinarCard = ({ webinar, onRegister }: WebinarCardProps) => {
         </p>
 
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold text-white">
-            {webinar.speaker?.charAt(0) || 'S'}
-          </div>
+          {webinar.speaker_profile_url ? (
+            <img src={webinar.speaker_profile_url} alt={webinar.speaker_name} className="w-8 h-8 rounded-full object-cover border border-white/10" referrerPolicy="no-referrer" />
+          ) : (
+            <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold text-white">
+              {webinar.speaker_name?.charAt(0) || 'S'}
+            </div>
+          )}
           <div>
-            <div className="text-white text-sm font-medium">{webinar.speaker || 'Speaker'}</div>
-            <div className="text-gray-500 text-xs">{webinar.metadata?.level || 'All Levels'}</div>
+            <div className="text-white text-sm font-medium">{webinar.speaker_name || 'Speaker'}</div>
+            <div className="text-gray-500 text-xs">Expert Analyst</div>
           </div>
         </div>
 
         <div className="mt-auto pt-4 border-t border-white/5 flex items-center justify-between">
-          <div>
-            {webinar.is_paid ? (
-              <div className="text-white font-bold">${webinar.price}</div>
-            ) : (
-              <div className="text-emerald-500 font-bold">Free</div>
-            )}
+          <div className="text-emerald-500 font-bold">
+            {webinar.is_paid ? `$${webinar.price}` : "Free Registration"}
           </div>
           <button 
-            onClick={() => onRegister(webinar)}
+            onClick={handleRegisterClick}
             className="px-4 py-2 bg-white text-black text-sm font-bold rounded-lg hover:bg-emerald-500 transition-colors flex items-center gap-2"
           >
-            Register
+            {!user && <Lock className="w-3 h-3" />}
+            {webinar.is_paid ? "Purchase Access" : "Register"}
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>

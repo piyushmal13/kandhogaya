@@ -9,14 +9,28 @@ import { WebinarCalendar } from "../components/webinars/WebinarCalendar";
 import { CountdownTimer } from "../components/webinars/CountdownTimer";
 import { ExitIntentPopup } from "../components/webinars/ExitIntentPopup";
 
+import { useAuth } from "../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
+
 export const Webinars = () => {
   const [webinars, setWebinars] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedWebinar, setSelectedWebinar] = useState<any | null>(null);
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchWebinars();
   }, []);
+
+  const handleRegisterClick = (webinar: any) => {
+    if (!user) {
+      alert("Please sign in to register for this webinar.");
+      navigate("/login");
+      return;
+    }
+    setSelectedWebinar(webinar);
+  };
 
   const fetchWebinars = async () => {
     const data = await getWebinars();
@@ -109,21 +123,30 @@ export const Webinars = () => {
                 </p>
 
                 <div className="flex items-center gap-4 mb-8">
-                  <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-sm font-bold text-white border border-white/10">
-                    {nextWebinar.speaker?.charAt(0) || 'S'}
-                  </div>
+                  {nextWebinar.speaker_profile_url ? (
+                    <img 
+                      src={nextWebinar.speaker_profile_url} 
+                      alt={nextWebinar.speaker_name} 
+                      className="w-12 h-12 rounded-full object-cover border border-white/10" 
+                      referrerPolicy="no-referrer"
+                    />
+                  ) : (
+                    <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-sm font-bold text-white border border-white/10">
+                      {nextWebinar.speaker_name?.charAt(0) || 'S'}
+                    </div>
+                  )}
                   <div>
-                    <div className="text-white font-bold">{nextWebinar.speaker || 'Speaker'}</div>
-                    <div className="text-emerald-500 text-sm">{nextWebinar.metadata?.level || 'All Levels'}</div>
+                    <div className="text-white font-bold">{nextWebinar.speaker_name || 'Speaker'}</div>
+                    <div className="text-emerald-500 text-sm">Expert Analyst</div>
                   </div>
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-4">
                   <button 
-                    onClick={() => setSelectedWebinar(nextWebinar)}
+                    onClick={() => handleRegisterClick(nextWebinar)}
                     className="px-8 py-4 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] flex items-center justify-center gap-2"
                   >
-                    Register Now
+                    {nextWebinar.is_paid ? `Purchase Access ($${nextWebinar.price})` : "Register Now"}
                     <ArrowRight className="w-5 h-5" />
                   </button>
                   <div className="px-8 py-4 bg-white/5 text-white font-medium rounded-xl border border-white/10 flex flex-col items-center justify-center gap-1">
@@ -131,19 +154,27 @@ export const Webinars = () => {
                       <Users className="w-5 h-5 text-gray-400" />
                       <span>{nextWebinar.registration_count} registered</span>
                     </div>
-                    <div className="text-[10px] text-red-400 font-bold uppercase tracking-widest animate-pulse">
-                      Only {nextWebinar.max_attendees - nextWebinar.registration_count} seats remaining
-                    </div>
+                    {nextWebinar.max_attendees - nextWebinar.registration_count < 20 && nextWebinar.max_attendees - nextWebinar.registration_count > 0 && (
+                      <div className="text-[10px] text-red-400 font-bold uppercase tracking-widest animate-pulse">
+                        Only {nextWebinar.max_attendees - nextWebinar.registration_count} seats remaining
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
               
               <div className="relative h-[400px] lg:h-auto overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a] to-transparent z-10" />
+                {nextWebinar.brand_logo_url && (
+                  <div className="absolute top-8 right-8 w-20 h-20 bg-black/40 backdrop-blur-md rounded-2xl p-4 border border-white/10 z-20">
+                    <img src={nextWebinar.brand_logo_url} alt="Brand" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
+                  </div>
+                )}
                 <img 
-                  src={`https://picsum.photos/seed/${nextWebinar.id}/800/800`} 
+                  src={nextWebinar.webinar_image_url || `https://picsum.photos/seed/${nextWebinar.id}/800/800`} 
                   alt={nextWebinar.title} 
                   className="w-full h-full object-cover opacity-60"
+                  referrerPolicy="no-referrer"
                 />
               </div>
             </div>
@@ -175,7 +206,7 @@ export const Webinars = () => {
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.1 }}
                   >
-                    <WebinarCard webinar={webinar} onRegister={setSelectedWebinar} />
+                    <WebinarCard webinar={webinar} onRegister={handleRegisterClick} />
                   </motion.div>
                 ))}
               </div>

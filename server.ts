@@ -25,9 +25,20 @@ const __dirname = path.dirname(__filename);
 const JWT_SECRET = process.env.JWT_SECRET || "hub-secret-2024";
 const supabaseUrl = process.env.VITE_SUPABASE_URL || "https://placeholder.supabase.co";
 const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY || "placeholder";
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 // Initialize Supabase Client
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// We use the Service Role Key on the backend to bypass RLS for administrative tasks
+const supabase = createClient(
+  supabaseUrl, 
+  supabaseServiceKey || supabaseAnonKey,
+  {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false
+    }
+  }
+);
 
 // --- BACKEND SERVICES ---
 

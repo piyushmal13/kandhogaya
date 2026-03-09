@@ -1,35 +1,29 @@
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
-import { X, Check, ArrowRight, ShieldCheck, Activity, BarChart3, TrendingUp, Zap } from "lucide-react";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { motion } from "motion/react";
+import { X, Check, ArrowRight, ShieldCheck, Activity, Zap, Play, HelpCircle, Star, BarChart3, Lock, FileText } from "lucide-react";
+import { Product } from "../../types";
+import { useAuth } from "../../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 interface AlgoDetailModalProps {
-  algo: any;
+  algo: Product;
   onClose: () => void;
-  onSubscribe: (algo: any, plan: 'Monthly' | 'Yearly') => void;
+  onSubscribe: (algo: Product, plan: string) => void;
 }
 
-const data = [
-  { name: 'Jan', equity: 10000 },
-  { name: 'Feb', equity: 10500 },
-  { name: 'Mar', equity: 11200 },
-  { name: 'Apr', equity: 10800 },
-  { name: 'May', equity: 11500 },
-  { name: 'Jun', equity: 12100 },
-  { name: 'Jul', equity: 12800 },
-  { name: 'Aug', equity: 13500 },
-  { name: 'Sep', equity: 14200 },
-  { name: 'Oct', equity: 15000 },
-  { name: 'Nov', equity: 15800 },
-  { name: 'Dec', equity: 16500 },
-];
-
 export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalProps) => {
-  const [plan, setPlan] = useState<'Monthly' | 'Yearly'>('Yearly');
+  const [activeTab, setActiveTab] = useState<'overview' | 'performance' | 'reviews' | 'qa' | 'terms'>('overview');
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
-  const monthlyPrice = algo.monthly_price || algo.metadata?.monthly_price || algo.price || 99;
-  const yearlyPrice = algo.yearly_price || algo.metadata?.yearly_price || (monthlyPrice * 10);
-  const savings = (monthlyPrice * 12) - yearlyPrice;
+  const handleSubscribeClick = (plan: string) => {
+    if (!user) {
+      alert("Please sign in to purchase a subscription.");
+      navigate("/login");
+      return;
+    }
+    onSubscribe(algo, plan);
+  };
 
   return (
     <motion.div
@@ -51,73 +45,145 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
           <X className="w-6 h-6" />
         </button>
 
-        {/* Left: Details & Chart */}
+        {/* Left: Details & Tabs */}
         <div className="flex-1 p-8 md:p-12 overflow-y-auto border-r border-white/5">
           <div className="mb-8">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono tracking-widest mb-4">
               <Zap className="w-3 h-3" />
-              {algo.strategy_type || algo.metadata?.strategy_type || "Algorithm"}
+              {algo.category || "Algorithm"}
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{algo.name}</h2>
             <p className="text-gray-400 leading-relaxed text-lg">{algo.description}</p>
           </div>
 
-          {/* Performance Chart */}
-          <div className="mb-10">
-            <h3 className="text-white font-bold mb-4 flex items-center gap-2">
-              <Activity className="w-5 h-5 text-emerald-500" />
-              Equity Growth (Backtest)
-            </h3>
-            <div className="h-[300px] w-full min-h-[300px] bg-white/5 rounded-xl border border-white/5 p-4">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={data}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} />
-                  <XAxis dataKey="name" stroke="#666" fontSize={12} tickLine={false} axisLine={false} />
-                  <YAxis stroke="#666" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `$${value}`} />
-                  <Tooltip 
-                    contentStyle={{ backgroundColor: '#000', border: '1px solid #333', borderRadius: '8px' }}
-                    itemStyle={{ color: '#fff' }}
-                    formatter={(value: number) => [`$${value}`, 'Equity']}
-                  />
-                  <Line type="monotone" dataKey="equity" stroke="#10b981" strokeWidth={2} dot={false} activeDot={{ r: 6, fill: '#10b981' }} />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
+          {/* Tabs Navigation */}
+          <div className="flex gap-6 border-b border-white/5 mb-8 overflow-x-auto whitespace-nowrap scrollbar-hide">
+            {['overview', 'performance', 'reviews', 'qa', 'terms'].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab as any)}
+                className={`pb-4 text-sm font-bold uppercase tracking-widest transition-all relative ${
+                  activeTab === tab ? 'text-emerald-500' : 'text-gray-500 hover:text-white'
+                }`}
+              >
+                {tab}
+                {activeTab === tab && (
+                  <motion.div layoutId="activeTab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-500" />
+                )}
+              </button>
+            ))}
           </div>
 
-          {/* Features Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <h4 className="text-white font-bold mb-3 text-sm uppercase tracking-wider">Strategy Features</h4>
-              <ul className="space-y-2">
-                {(algo.features || algo.metadata?.features || ['Automated execution', 'Risk management', '24/5 trading']).map((feature: string, i: number) => (
-                  <li key={i} className="flex items-center gap-2 text-gray-400 text-sm">
-                    <Check className="w-4 h-4 text-emerald-500" />
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-white font-bold mb-3 text-sm uppercase tracking-wider">Risk Profile</h4>
-              <div className="space-y-4">
-                <div>
-                  <div className="text-xs text-gray-500 mb-1">Risk Level</div>
-                  <div className={`text-sm font-bold ${
-                    (algo.risk_level || algo.metadata?.risk_level) === 'High' ? 'text-red-400' : 
-                    (algo.risk_level || algo.metadata?.risk_level) === 'Medium' ? 'text-yellow-400' : 'text-emerald-400'
-                  }`}>{algo.risk_level || algo.metadata?.risk_level || "Standard"}</div>
-                </div>
-                <div>
-                  <div className="text-xs text-gray-500 mb-1">Win Rate</div>
-                  <div className="text-sm font-bold text-white">{algo.win_rate || algo.metadata?.win_rate || "N/A"}%</div>
-                </div>
-                <div>
-                  <div className="text-xs text-gray-500 mb-1">Supported Assets</div>
-                  <div className="text-sm text-white">{(algo.supported_assets || algo.metadata?.supported_assets || ['Forex', 'Crypto']).join(', ')}</div>
+          {/* Tab Content */}
+          <div className="min-h-[400px]">
+            {activeTab === 'overview' && (
+              <div className="space-y-8">
+                {algo.video_explanation_url && (
+                  <div className="aspect-video rounded-2xl overflow-hidden bg-black border border-white/10 relative group">
+                    <iframe 
+                      src={algo.video_explanation_url.includes('youtube.com') ? algo.video_explanation_url.replace('watch?v=', 'embed/') : algo.video_explanation_url} 
+                      className="w-full h-full"
+                      allowFullScreen
+                    />
+                  </div>
+                )}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="p-6 rounded-2xl bg-white/5 border border-white/5">
+                    <h4 className="text-white font-bold mb-4 flex items-center gap-2">
+                      <ShieldCheck className="w-5 h-5 text-emerald-500" />
+                      Risk Management
+                    </h4>
+                    <p className="text-gray-400 text-sm">Proprietary risk protocols ensuring capital preservation through dynamic position sizing and stop-loss logic.</p>
+                  </div>
+                  <div className="p-6 rounded-2xl bg-white/5 border border-white/5">
+                    <h4 className="text-white font-bold mb-4 flex items-center gap-2">
+                      <Activity className="w-5 h-5 text-emerald-500" />
+                      Execution Engine
+                    </h4>
+                    <p className="text-gray-400 text-sm">Low-latency execution optimized for institutional liquidity providers and minimal slippage.</p>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
+
+            {activeTab === 'performance' && (
+              <div className="space-y-8">
+                <div className="bg-white/5 rounded-2xl p-6 border border-white/5">
+                  <h4 className="text-white font-bold mb-6 flex items-center gap-2">
+                    <BarChart3 className="w-5 h-5 text-emerald-500" />
+                    Strategy Equity Curve
+                  </h4>
+                  <img src={algo.strategy_graph_url || `https://picsum.photos/seed/${algo.id}graph/800/400`} alt="Strategy Graph" className="w-full h-auto rounded-xl opacity-80" referrerPolicy="no-referrer" />
+                </div>
+                <div className="bg-white/5 rounded-2xl p-6 border border-white/5">
+                  <h4 className="text-white font-bold mb-6 flex items-center gap-2">
+                    <Activity className="w-5 h-5 text-emerald-500" />
+                    Backtesting Results
+                  </h4>
+                  <img src={algo.backtesting_result_url || `https://picsum.photos/seed/${algo.id}backtest/800/400`} alt="Backtest Result" className="w-full h-auto rounded-xl opacity-80" referrerPolicy="no-referrer" />
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'reviews' && (
+              <div className="space-y-6">
+                {algo.reviews?.length ? algo.reviews.map((review, i) => (
+                  <div key={i} className="p-6 rounded-2xl bg-white/5 border border-white/5">
+                    <div className="flex justify-between items-start mb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 font-bold">
+                          {review.user_name.charAt(0)}
+                        </div>
+                        <div>
+                          <div className="text-white font-bold">{review.user_name}</div>
+                          <div className="text-xs text-gray-500">{new Date(review.date).toLocaleDateString()}</div>
+                        </div>
+                      </div>
+                      <div className="flex gap-1">
+                        {[...Array(5)].map((_, j) => (
+                          <Star key={j} className={`w-3 h-3 ${j < review.rating ? 'text-amber-500 fill-amber-500' : 'text-gray-600'}`} />
+                        ))}
+                      </div>
+                    </div>
+                    <p className="text-gray-400 text-sm italic">"{review.comment}"</p>
+                  </div>
+                )) : (
+                  <div className="text-center py-20 text-gray-500">No reviews yet for this algorithm.</div>
+                )}
+              </div>
+            )}
+
+            {activeTab === 'qa' && (
+              <div className="space-y-6">
+                {algo.q_and_a?.length ? algo.q_and_a.map((qa, i) => (
+                  <div key={i} className="p-6 rounded-2xl bg-white/5 border border-white/5">
+                    <div className="flex items-start gap-4">
+                      <HelpCircle className="w-5 h-5 text-emerald-500 shrink-0 mt-1" />
+                      <div>
+                        <h4 className="text-white font-bold mb-2">{qa.question}</h4>
+                        <p className="text-gray-400 text-sm">{qa.answer}</p>
+                      </div>
+                    </div>
+                  </div>
+                )) : (
+                  <div className="text-center py-20 text-gray-500">No Q&A available for this algorithm.</div>
+                )}
+              </div>
+            )}
+
+            {activeTab === 'terms' && (
+              <div className="p-8 rounded-2xl bg-white/5 border border-white/5">
+                <h4 className="text-white font-bold mb-6 flex items-center gap-2">
+                  <FileText className="w-5 h-5 text-emerald-500" />
+                  Terms & Strategy Details
+                </h4>
+                <div className="prose prose-invert prose-sm max-w-none text-gray-400">
+                  <p className="whitespace-pre-wrap leading-relaxed">
+                    {algo.terms_and_conditions || "Standard institutional trading terms apply. This algorithm is designed for high-liquidity environments and requires a minimum capital allocation of $500. Past performance is not indicative of future results."}
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -125,40 +191,36 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
         <div className="w-full md:w-[400px] bg-[#050505] p-8 md:p-12 flex flex-col justify-center relative">
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-cyan-500" />
           
-          <h3 className="text-2xl font-bold text-white mb-6">Select Plan</h3>
+          <h3 className="text-2xl font-bold text-white mb-6">Subscription Plans</h3>
 
-          {/* Toggle */}
-          <div className="flex bg-black p-1 rounded-xl mb-8 border border-white/10">
+          <div className="space-y-4 mb-8">
             <button 
-              onClick={() => setPlan('Monthly')}
-              className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all ${plan === 'Monthly' ? 'bg-white/10 text-white' : 'text-gray-500 hover:text-white'}`}
+              onClick={() => handleSubscribeClick('Monthly')}
+              className="w-full p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-emerald-500/50 transition-all text-left group"
             >
-              Monthly
-            </button>
-            <button 
-              onClick={() => setPlan('Yearly')}
-              className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all relative ${plan === 'Yearly' ? 'bg-emerald-500 text-black' : 'text-gray-500 hover:text-white'}`}
-            >
-              Yearly
-              <span className="absolute -top-3 -right-2 bg-red-500 text-white text-[9px] px-1.5 py-0.5 rounded-full animate-bounce">
-                SAVE 30%
-              </span>
-            </button>
-          </div>
-
-          {/* Price Display */}
-          <div className="text-center mb-8">
-            <div className="text-5xl font-bold text-white mb-2 tracking-tight">
-              ${plan === 'Monthly' ? monthlyPrice : yearlyPrice}
-            </div>
-            <div className="text-gray-500 text-sm">
-              per {plan === 'Monthly' ? 'month' : 'year'}
-            </div>
-            {plan === 'Yearly' && (
-              <div className="mt-4 inline-block bg-emerald-500/10 border border-emerald-500/20 rounded-lg px-4 py-2">
-                <span className="text-emerald-400 text-sm font-bold">You save ${savings} per year</span>
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-white font-bold">Monthly Access</span>
+                <span className="text-2xl font-bold text-white">${algo.price}</span>
               </div>
-            )}
+              <p className="text-gray-500 text-xs">Full algorithm access with 24/5 support.</p>
+            </button>
+
+            {algo.long_plan_offers?.map((offer, i) => (
+              <button 
+                key={i}
+                onClick={() => handleSubscribeClick(offer.duration)}
+                className="w-full p-6 rounded-2xl bg-emerald-500/5 border border-emerald-500/20 hover:border-emerald-500/50 transition-all text-left relative group"
+              >
+                <div className="absolute -top-3 -right-2 bg-red-500 text-white text-[9px] px-2 py-1 rounded-full font-bold">
+                  {offer.discount}
+                </div>
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-white font-bold">{offer.duration} Plan</span>
+                  <span className="text-2xl font-bold text-emerald-500">${offer.price}</span>
+                </div>
+                <p className="text-gray-400 text-xs">Best value for long-term institutional trading.</p>
+              </button>
+            ))}
           </div>
 
           <ul className="space-y-4 mb-8">
@@ -171,20 +233,17 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
               24/7 VPS Hosting Included
             </li>
             <li className="flex items-center gap-3 text-sm text-gray-300">
-              <Check className="w-4 h-4 text-emerald-500" />
-              Priority Support
-            </li>
-            <li className="flex items-center gap-3 text-sm text-gray-300">
               <ShieldCheck className="w-4 h-4 text-emerald-500" />
-              30-Day Money Back Guarantee
+              Institutional Liquidity
             </li>
           </ul>
 
           <button 
-            onClick={() => onSubscribe(algo, plan)}
+            onClick={() => handleSubscribeClick('Monthly')}
             className="w-full py-4 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] flex items-center justify-center gap-2 group"
           >
-            Subscribe Now
+            {!user && <Lock className="w-4 h-4" />}
+            Get Started
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </button>
           

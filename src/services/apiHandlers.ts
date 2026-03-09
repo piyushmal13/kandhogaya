@@ -1,4 +1,5 @@
-import { supabase, safeQuery } from "./supabaseClient";
+import { supabase, safeQuery } from "../lib/supabase";
+import { Webinar, Blog, Product, Course } from "../types";
 
 /**
  * API Handlers Service
@@ -9,7 +10,7 @@ import { supabase, safeQuery } from "./supabaseClient";
 // --- WEBINARS ---
 
 export const getWebinars = async () => {
-  return safeQuery<any[]>(
+  return safeQuery<Webinar[]>(
     supabase
       .from("webinars")
       .select("*")
@@ -28,7 +29,7 @@ export const getWebinarById = async (id: string) => {
     console.error(`Error fetching webinar ${id}:`, error);
     return null;
   }
-  return data;
+  return data as Webinar;
 };
 
 // --- SIGNALS ---
@@ -42,15 +43,29 @@ export const getSignals = async () => {
   );
 };
 
-// --- ALGORITHMS ---
+// --- ALGORITHMS / PRODUCTS ---
 
-export const getAlgorithms = async () => {
-  return safeQuery<any[]>(
+export const getProducts = async () => {
+  return safeQuery<Product[]>(
     supabase
-      .from("algorithms")
+      .from("products")
       .select("*")
       .order("created_at", { ascending: false })
   );
+};
+
+export const getProductById = async (id: string) => {
+  const { data, error } = await supabase
+    .from("products")
+    .select("*")
+    .eq("id", id)
+    .single();
+  
+  if (error) {
+    console.error(`Error fetching product ${id}:`, error);
+    return null;
+  }
+  return data as Product;
 };
 
 // --- BLOG / CONTENT ---
@@ -59,16 +74,15 @@ export const getBlogPosts = async (page = 0, pageSize = 9, searchQuery = "") => 
   let query = supabase
     .from('content_posts')
     .select('*')
-    .eq('content_type', 'blog')
     .eq('status', 'published')
-    .order('published_at', { ascending: false })
+    .order('created_at', { ascending: false })
     .range(page * pageSize, (page + 1) * pageSize - 1);
 
   if (searchQuery) {
     query = query.ilike('title', `%${searchQuery}%`);
   }
 
-  return safeQuery<any[]>(query);
+  return safeQuery<Blog[]>(query);
 };
 
 export const getBlogPostBySlug = async (slug: string) => {
@@ -82,7 +96,44 @@ export const getBlogPostBySlug = async (slug: string) => {
     console.error(`Error fetching blog post ${slug}:`, error);
     return null;
   }
-  return data;
+  return data as Blog;
+};
+
+// --- ACADEMY / COURSES ---
+
+export const getCourses = async () => {
+  return safeQuery<Course[]>(
+    supabase
+      .from("courses")
+      .select("*")
+      .order("created_at", { ascending: false })
+  );
+};
+
+export const getCourseById = async (id: string) => {
+  const { data, error } = await supabase
+    .from("courses")
+    .select("*")
+    .eq("id", id)
+    .single();
+  
+  if (error) {
+    console.error(`Error fetching course ${id}:`, error);
+    return null;
+  }
+  return data as Course;
+};
+
+export const checkUserAccess = async (userId: string, itemId: string) => {
+  const { data, error } = await supabase
+    .from("user_access")
+    .select("*")
+    .eq("user_id", userId)
+    .eq("item_id", itemId)
+    .maybeSingle();
+  
+  if (error) return false;
+  return !!data;
 };
 
 // --- REALTIME ---

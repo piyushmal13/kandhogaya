@@ -4,11 +4,21 @@ import { createClient } from "@supabase/supabase-js";
 
 // --- CONFIGURATION ---
 const JWT_SECRET = process.env.JWT_SECRET || "hub-secret-2024";
-const supabaseUrl = process.env.VITE_SUPABASE_URL || "";
-const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY || "";
+const supabaseUrl = process.env.VITE_SUPABASE_URL || "https://placeholder.supabase.co";
+const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY || "placeholder";
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 // Initialize Supabase Client
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+const supabase = createClient(
+  supabaseUrl, 
+  supabaseServiceKey || supabaseAnonKey,
+  {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false
+    }
+  }
+);
 
 const app = express();
 app.use(express.json());

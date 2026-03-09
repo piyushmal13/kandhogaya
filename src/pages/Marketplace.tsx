@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Search, Filter, ArrowRight, ShieldCheck, Zap, TrendingUp, Activity } from "lucide-react";
-import { supabase } from "../lib/supabase";
+import { Zap, ShieldCheck, Activity, TrendingUp } from "lucide-react";
 import { AlgoCard } from "../components/algorithms/AlgoCard";
 import { AlgoDetailModal } from "../components/algorithms/AlgoDetailModal";
+import { getProducts } from "../services/apiHandlers";
+import { Product } from "../types";
 
 export const Marketplace = () => {
-  const [products, setProducts] = useState<any[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedAlgo, setSelectedAlgo] = useState<any | null>(null);
+  const [selectedAlgo, setSelectedAlgo] = useState<Product | null>(null);
   const [filter, setFilter] = useState("All");
 
   useEffect(() => {
@@ -17,12 +18,8 @@ export const Marketplace = () => {
 
   const fetchProducts = async () => {
     try {
-      const { data, error } = await supabase
-        .from("products")
-        .select("*")
-        .eq("type", "algo_bot");
-
-      if (error) throw error;
+      setLoading(true);
+      const data = await getProducts();
       setProducts(data || []);
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -33,24 +30,11 @@ export const Marketplace = () => {
 
   const filteredProducts = filter === "All" 
     ? products 
-    : products.filter(p => (p.strategy_type || "").includes(filter) || p.risk_level === filter);
+    : products.filter(p => (p.category || "").includes(filter));
 
-  const handleSubscribe = async (algo: any, plan: 'Monthly' | 'Yearly') => {
-    // In a real app, redirect to Stripe Checkout
+  const handleSubscribe = async (algo: Product, plan: string) => {
     console.log(`Subscribing to ${algo.name} (${plan})`);
     alert(`Redirecting to checkout for ${algo.name} - ${plan} Plan`);
-    
-    // Simulate subscription record creation (would happen via webhook in production)
-    /*
-    const { error } = await supabase
-      .from('algo_subscriptions')
-      .insert({
-        user_id: 'current_user_id',
-        algo_id: algo.id,
-        plan_type: plan,
-        subscription_status: 'active'
-      });
-    */
   };
 
   return (

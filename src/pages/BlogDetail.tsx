@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ArrowUpRight, Zap, Video, Download, Play, FileText, Share2, Calendar, Clock } from "lucide-react";
+import { ArrowUpRight, Zap, Play, Share2, Calendar, Clock, User } from "lucide-react";
 import ReactMarkdown from 'react-markdown';
 import { motion } from "motion/react";
 
 import { WebinarPromoInline } from "../components/webinars/WebinarPromoInline";
-
 import { getBlogPostBySlug } from "../services/apiHandlers";
+import { Blog } from "../types";
 
 export const BlogDetail = () => {
   const { pathname } = useLocation();
   const slug = pathname.split("/").pop() as string;
-  const [post, setPost] = useState<any>(null);
+  const [post, setPost] = useState<Blog | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -48,16 +48,27 @@ export const BlogDetail = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-[10px] text-emerald-500 font-bold uppercase mb-4 tracking-widest"
         >
-          {post.content_type || "Market Analysis"}
+          {post.category || "Market Analysis"}
         </motion.div>
         <motion.h1 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="text-4xl md:text-6xl font-bold text-white mb-8 tracking-tighter leading-tight"
+          className="text-4xl md:text-6xl font-bold text-white mb-6 tracking-tighter leading-tight"
         >
           {post.title}
         </motion.h1>
+        
+        {post.bold_headline && (
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+            className="text-xl md:text-2xl text-gray-400 font-medium mb-8 leading-relaxed italic border-l-4 border-emerald-500 pl-6"
+          >
+            {post.bold_headline}
+          </motion.p>
+        )}
         
         <motion.div 
           initial={{ opacity: 0, y: 10 }}
@@ -66,13 +77,17 @@ export const BlogDetail = () => {
           className="flex flex-wrap items-center justify-between gap-6 py-6 border-y border-white/5"
         >
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-emerald-500 rounded-full flex items-center justify-center text-black font-bold">
-              IFX
-            </div>
+            {post.author_profile_url ? (
+              <img src={post.author_profile_url} alt={post.author_name} className="w-12 h-12 rounded-full object-cover border border-white/10" referrerPolicy="no-referrer" />
+            ) : (
+              <div className="w-12 h-12 bg-emerald-500 rounded-full flex items-center justify-center text-black font-bold">
+                {post.author_name?.charAt(0) || 'A'}
+              </div>
+            )}
             <div>
-              <div className="text-white font-bold text-sm">IFXTrades Analyst Team</div>
+              <div className="text-white font-bold text-sm">{post.author_name || "IFXTrades Analyst"}</div>
               <div className="flex items-center gap-3 text-xs text-gray-500 mt-1">
-                <span className="flex items-center gap-1"><Calendar className="w-3 h-3" /> {new Date(post.published_at).toLocaleDateString()}</span>
+                <span className="flex items-center gap-1"><Calendar className="w-3 h-3" /> {new Date(post.created_at).toLocaleDateString()}</span>
                 <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> 5 min read</span>
               </div>
             </div>
@@ -92,20 +107,17 @@ export const BlogDetail = () => {
         transition={{ delay: 0.3 }}
         className="mb-12 rounded-3xl overflow-hidden border border-white/10 bg-black aspect-video relative group"
       >
-        {post.metadata?.video_url ? (
-          <div className="w-full h-full flex items-center justify-center relative">
-            <img 
-              src={post.metadata?.cover_image || `https://picsum.photos/seed/${post.slug}/1280/720`} 
-              alt="Cover" 
-              className="absolute inset-0 w-full h-full object-cover opacity-40"
+        {post.video_url ? (
+          <div className="w-full h-full">
+            <iframe 
+              src={post.video_url.includes('youtube.com') ? post.video_url.replace('watch?v=', 'embed/') : post.video_url} 
+              className="w-full h-full"
+              allowFullScreen
             />
-            <button className="w-20 h-20 bg-emerald-500 text-black rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-[0_0_40px_rgba(16,185,129,0.4)] relative z-10">
-              <Play className="w-8 h-8 fill-current ml-1" />
-            </button>
           </div>
         ) : (
           <img 
-            src={post.metadata?.cover_image || `https://picsum.photos/seed/${post.slug}/1280/720`} 
+            src={post.image_url || `https://picsum.photos/seed/${post.id}/1280/720`} 
             alt={post.title} 
             className="w-full h-full object-cover" 
             referrerPolicy="no-referrer" 
@@ -122,28 +134,14 @@ export const BlogDetail = () => {
               </ReactMarkdown>
             </div>
           </div>
-
-          {/* Downloadable Resources */}
-          {post.metadata?.download_url && (
-            <div className="mt-12 p-8 rounded-3xl bg-emerald-500/5 border border-emerald-500/20">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-500">
-                  <Download className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="text-white font-bold">Download Analysis Report</h3>
-                  <p className="text-gray-400 text-sm">Get the full technical breakdown in PDF format.</p>
-                </div>
+          
+          {post.author_bio && (
+            <div className="mt-16 p-8 rounded-3xl bg-zinc-900 border border-white/10">
+              <div className="flex items-center gap-4 mb-4">
+                <User className="text-emerald-500 w-5 h-5" />
+                <h3 className="text-white font-bold">About the Author</h3>
               </div>
-              <a 
-                href={post.metadata.download_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 w-full py-4 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all"
-              >
-                <FileText className="w-5 h-5" />
-                Download PDF Report (2.4 MB)
-              </a>
+              <p className="text-gray-400 text-sm leading-relaxed">{post.author_bio}</p>
             </div>
           )}
         </div>
@@ -152,26 +150,21 @@ export const BlogDetail = () => {
           <div className="bg-zinc-900 p-8 rounded-3xl border border-white/10">
             <h3 className="text-white font-bold mb-6 flex items-center gap-2">
               <Zap className="text-emerald-500 w-5 h-5" />
-              Key Takeaways
+              Key Insights
             </h3>
             <ul className="space-y-4 text-gray-400 text-sm">
-              {post.metadata?.takeaways?.map((t: string, i: number) => (
-                <li key={i} className="flex items-start gap-3">
-                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
-                  <span>{t}</span>
-                </li>
-              )) || (
-                <>
-                  <li className="flex items-start gap-3">
-                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
-                    <span>Monitor XAUUSD support at 2150.</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
-                    <span>Weekly trend remains bullish on H4 timeframe.</span>
-                  </li>
-                </>
-              )}
+              <li className="flex items-start gap-3">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
+                <span>Institutional order flow analysis.</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
+                <span>Macroeconomic impact assessment.</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
+                <span>Risk management protocols.</span>
+              </li>
             </ul>
           </div>
 
