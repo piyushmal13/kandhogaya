@@ -92,10 +92,10 @@ export const BlogDetail = () => {
         transition={{ delay: 0.3 }}
         className="mb-12 rounded-3xl overflow-hidden border border-white/10 bg-black aspect-video relative group"
       >
-        {post.data?.video_url ? (
+        {post.metadata?.video_url ? (
           <div className="w-full h-full flex items-center justify-center relative">
             <img 
-              src={post.data?.cover_image || `https://picsum.photos/seed/${post.slug}/1280/720`} 
+              src={post.metadata?.cover_image || `https://picsum.photos/seed/${post.slug}/1280/720`} 
               alt="Cover" 
               className="absolute inset-0 w-full h-full object-cover opacity-40"
             />
@@ -105,7 +105,7 @@ export const BlogDetail = () => {
           </div>
         ) : (
           <img 
-            src={post.data?.cover_image || `https://picsum.photos/seed/${post.slug}/1280/720`} 
+            src={post.metadata?.cover_image || `https://picsum.photos/seed/${post.slug}/1280/720`} 
             alt={post.title} 
             className="w-full h-full object-cover" 
             referrerPolicy="no-referrer" 
@@ -118,13 +118,13 @@ export const BlogDetail = () => {
           <div className="prose prose-invert max-w-none">
             <div className="text-lg md:text-xl text-gray-300 leading-relaxed mb-8">
               <ReactMarkdown>
-                {post.body}
+                {post.content}
               </ReactMarkdown>
             </div>
           </div>
 
           {/* Downloadable Resources */}
-          {post.data?.download_url && (
+          {post.metadata?.download_url && (
             <div className="mt-12 p-8 rounded-3xl bg-emerald-500/5 border border-emerald-500/20">
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-12 h-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-500">
@@ -136,7 +136,7 @@ export const BlogDetail = () => {
                 </div>
               </div>
               <a 
-                href={post.data.download_url}
+                href={post.metadata.download_url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 w-full py-4 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all"
@@ -155,7 +155,7 @@ export const BlogDetail = () => {
               Key Takeaways
             </h3>
             <ul className="space-y-4 text-gray-400 text-sm">
-              {post.data?.takeaways?.map((t: string, i: number) => (
+              {post.metadata?.takeaways?.map((t: string, i: number) => (
                 <li key={i} className="flex items-start gap-3">
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
                   <span>{t}</span>

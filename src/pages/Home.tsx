@@ -1,5 +1,6 @@
 import React from "react";
 import { SuccessShowcase } from "../components/ui/SuccessShowcase";
+import { SignupForm } from "../components/ui/SignupForm";
 import { HeroSection } from "../components/home/HeroSection";
 import { MarketTicker } from "../components/home/MarketTicker";
 import { EcosystemSection } from "../components/home/EcosystemSection";
@@ -29,6 +30,8 @@ export const Home = () => (
     <PerformanceHistory />
 
     <SuccessShowcase />
+
+    <SignupForm />
 
     <NewsletterPopup />
   </div>

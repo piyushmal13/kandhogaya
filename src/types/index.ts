@@ -17,12 +17,13 @@ export interface Webinar {
   title: string;
   description: string;
   date_time: string;
-  duration: number;
-  speaker_name: string;
-  cover_image?: string;
+  speaker?: string;
+  is_paid?: boolean;
+  price?: number;
   status: 'upcoming' | 'live' | 'recorded';
   registration_count: number;
   max_attendees: number;
+  metadata?: any;
 }
 
 export interface Signal {

@@ -259,7 +259,7 @@ async function startServer() {
   app.post("/api/admin/content", authenticate, async (req: any, res) => {
     if (req.user.role !== "admin") return res.status(403).json({ error: "Forbidden" });
     
-    const { title, content_type, body, data } = req.body;
+    const { title, content_type, content, metadata } = req.body;
     const slug = title.toLowerCase().replace(/ /g, "-") + "-" + Math.random().toString(36).substr(2, 5);
     
     const { error } = await supabase
@@ -269,12 +269,52 @@ async function startServer() {
         slug,
         content_type,
         status: 'published',
-        body,
-        data: data || {},
+        content,
+        metadata: metadata || {},
         published_at: new Date().toISOString(),
         author_id: req.user.id
       });
 
+    if (error) return res.status(500).json({ error: error.message });
+    res.json({ success: true });
+  });
+
+  app.delete("/api/admin/content/:id", authenticate, async (req: any, res) => {
+    if (req.user.role !== "admin") return res.status(403).json({ error: "Forbidden" });
+    const { id } = req.params;
+    const { error } = await supabase.from('content_posts').delete().eq('id', id);
+    if (error) return res.status(500).json({ error: error.message });
+    res.json({ success: true });
+  });
+
+  app.post("/api/admin/webinars", authenticate, async (req: any, res) => {
+    if (req.user.role !== "admin") return res.status(403).json({ error: "Forbidden" });
+    
+    const { title, description, date_time, speaker, is_paid, price, max_attendees, metadata } = req.body;
+    
+    const { error } = await supabase
+      .from('webinars')
+      .insert({
+        title,
+        description,
+        date_time,
+        speaker,
+        is_paid,
+        price,
+        max_attendees,
+        metadata: metadata || {},
+        status: 'upcoming',
+        registration_count: 0
+      });
+
+    if (error) return res.status(500).json({ error: error.message });
+    res.json({ success: true });
+  });
+
+  app.delete("/api/admin/webinars/:id", authenticate, async (req: any, res) => {
+    if (req.user.role !== "admin") return res.status(403).json({ error: "Forbidden" });
+    const { id } = req.params;
+    const { error } = await supabase.from('webinars').delete().eq('id', id);
     if (error) return res.status(500).json({ error: error.message });
     res.json({ success: true });
   });

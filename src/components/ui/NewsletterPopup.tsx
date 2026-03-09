@@ -34,9 +34,8 @@ export const NewsletterPopup = () => {
     setMessage("");
 
     try {
-      // Assuming a 'subscribers' table exists in Supabase
       const { error } = await supabase
-        .from('subscribers')
+        .from('leads')
         .insert([{ email, created_at: new Date().toISOString() }]);
 
       if (error) throw error;

@@ -110,11 +110,11 @@ export const Webinars = () => {
 
                 <div className="flex items-center gap-4 mb-8">
                   <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-sm font-bold text-white border border-white/10">
-                    {nextWebinar.speaker_name.charAt(0)}
+                    {nextWebinar.speaker?.charAt(0) || 'S'}
                   </div>
                   <div>
-                    <div className="text-white font-bold">{nextWebinar.speaker_name}</div>
-                    <div className="text-emerald-500 text-sm">{nextWebinar.speaker_role}</div>
+                    <div className="text-white font-bold">{nextWebinar.speaker || 'Speaker'}</div>
+                    <div className="text-emerald-500 text-sm">{nextWebinar.metadata?.level || 'All Levels'}</div>
                   </div>
                 </div>
 

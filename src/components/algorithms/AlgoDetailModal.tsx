@@ -27,8 +27,8 @@ const data = [
 export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalProps) => {
   const [plan, setPlan] = useState<'Monthly' | 'Yearly'>('Yearly');
 
-  const monthlyPrice = algo.monthly_price;
-  const yearlyPrice = algo.yearly_price;
+  const monthlyPrice = algo.monthly_price || algo.metadata?.monthly_price || algo.price || 99;
+  const yearlyPrice = algo.yearly_price || algo.metadata?.yearly_price || (monthlyPrice * 10);
   const savings = (monthlyPrice * 12) - yearlyPrice;
 
   return (
@@ -56,7 +56,7 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
           <div className="mb-8">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono tracking-widest mb-4">
               <Zap className="w-3 h-3" />
-              {algo.strategy_type}
+              {algo.strategy_type || algo.metadata?.strategy_type || "Algorithm"}
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{algo.name}</h2>
             <p className="text-gray-400 leading-relaxed text-lg">{algo.description}</p>
@@ -68,7 +68,7 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
               <Activity className="w-5 h-5 text-emerald-500" />
               Equity Growth (Backtest)
             </h3>
-            <div className="h-[300px] w-full bg-white/5 rounded-xl border border-white/5 p-4">
+            <div className="h-[300px] w-full min-h-[300px] bg-white/5 rounded-xl border border-white/5 p-4">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={data}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} />
@@ -90,7 +90,7 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
             <div>
               <h4 className="text-white font-bold mb-3 text-sm uppercase tracking-wider">Strategy Features</h4>
               <ul className="space-y-2">
-                {algo.features?.map((feature: string, i: number) => (
+                {(algo.features || algo.metadata?.features || ['Automated execution', 'Risk management', '24/5 trading']).map((feature: string, i: number) => (
                   <li key={i} className="flex items-center gap-2 text-gray-400 text-sm">
                     <Check className="w-4 h-4 text-emerald-500" />
                     {feature}
@@ -104,17 +104,17 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
                 <div>
                   <div className="text-xs text-gray-500 mb-1">Risk Level</div>
                   <div className={`text-sm font-bold ${
-                    algo.risk_level === 'High' ? 'text-red-400' : 
-                    algo.risk_level === 'Medium' ? 'text-yellow-400' : 'text-emerald-400'
-                  }`}>{algo.risk_level}</div>
+                    (algo.risk_level || algo.metadata?.risk_level) === 'High' ? 'text-red-400' : 
+                    (algo.risk_level || algo.metadata?.risk_level) === 'Medium' ? 'text-yellow-400' : 'text-emerald-400'
+                  }`}>{algo.risk_level || algo.metadata?.risk_level || "Standard"}</div>
                 </div>
                 <div>
                   <div className="text-xs text-gray-500 mb-1">Win Rate</div>
-                  <div className="text-sm font-bold text-white">{algo.win_rate}%</div>
+                  <div className="text-sm font-bold text-white">{algo.win_rate || algo.metadata?.win_rate || "N/A"}%</div>
                 </div>
                 <div>
                   <div className="text-xs text-gray-500 mb-1">Supported Assets</div>
-                  <div className="text-sm text-white">{algo.supported_assets?.join(', ')}</div>
+                  <div className="text-sm text-white">{(algo.supported_assets || algo.metadata?.supported_assets || ['Forex', 'Crypto']).join(', ')}</div>
                 </div>
               </div>
             </div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Zap, Video, Download, Image as ImageIcon, FileText, Plus, Search, Trash2, Edit2 } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 
@@ -11,6 +11,20 @@ export const ContentManager = () => {
   const [coverImage, setCoverImage] = useState("");
   const [takeaways, setTakeaways] = useState("");
   const [loading, setLoading] = useState(false);
+  const [recentContent, setRecentContent] = useState<any[]>([]);
+
+  const fetchRecentContent = async () => {
+    const { data } = await supabase
+      .from('content_posts')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(10);
+    if (data) setRecentContent(data);
+  };
+
+  useEffect(() => {
+    fetchRecentContent();
+  }, []);
 
   const handlePublish = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,8 +40,8 @@ export const ContentManager = () => {
         body: JSON.stringify({ 
           title, 
           content_type: type, 
-          body, 
-          data: { 
+          content: body, 
+          metadata: { 
             video_url: videoUrl,
             download_url: downloadUrl,
             cover_image: coverImage,
@@ -43,6 +57,7 @@ export const ContentManager = () => {
         setDownloadUrl("");
         setCoverImage("");
         setTakeaways("");
+        fetchRecentContent();
       } else {
         const err = await res.json();
         alert(`Error: ${err.error}`);
@@ -52,6 +67,24 @@ export const ContentManager = () => {
       alert("An unexpected error occurred.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this content?")) return;
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const res = await fetch(`/api/admin/content/${id}`, {
+        method: "DELETE",
+        headers: { "Authorization": `Bearer ${session?.access_token}` }
+      });
+      if (res.ok) {
+        fetchRecentContent();
+      } else {
+        alert("Failed to delete content.");
+      }
+    } catch (err) {
+      console.error("Delete error:", err);
     }
   };
 
@@ -159,23 +192,27 @@ export const ContentManager = () => {
             </div>
           </div>
           <div className="p-4 space-y-4">
-            {[1, 2, 3, 4, 5].map((i) => (
-              <div key={i} className="p-4 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between group hover:border-emerald-500/30 transition-all cursor-pointer">
+            {recentContent.map((item) => (
+              <div key={item.id} className="p-4 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between group hover:border-emerald-500/30 transition-all cursor-pointer">
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-black flex items-center justify-center text-emerald-500 font-bold text-xs">
-                    {i === 1 ? 'SIG' : 'BLG'}
+                  <div className="w-10 h-10 rounded-xl bg-black flex items-center justify-center text-emerald-500 font-bold text-xs uppercase">
+                    {item.content_type.substring(0, 3)}
                   </div>
                   <div>
-                    <div className="text-white font-bold text-sm line-clamp-1">Institutional Order Flow...</div>
-                    <div className="text-[10px] text-gray-500 uppercase font-bold tracking-widest mt-1">Oct 24, 2026 • Published</div>
+                    <div className="text-white font-bold text-sm line-clamp-1">{item.title}</div>
+                    <div className="text-[10px] text-gray-500 uppercase font-bold tracking-widest mt-1">
+                      {new Date(item.created_at).toLocaleDateString()} • {item.status}
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button className="p-2 text-gray-500 hover:text-white transition-colors"><Edit2 className="w-4 h-4" /></button>
-                  <button className="p-2 text-gray-500 hover:text-red-500 transition-colors"><Trash2 className="w-4 h-4" /></button>
+                  <button onClick={() => handleDelete(item.id)} className="p-2 text-gray-500 hover:text-red-500 transition-colors"><Trash2 className="w-4 h-4" /></button>
                 </div>
               </div>
             ))}
+            {recentContent.length === 0 && (
+              <div className="text-center text-gray-500 py-8">No recent content found.</div>
+            )}
           </div>
         </div>
       </div>

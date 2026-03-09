@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { TrendingUp, LayoutDashboard, Settings, LogOut, Menu, X, Zap, BarChart3, Target, BookOpen, Video, MessageSquare, Briefcase, ChevronRight } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
+import { BRANDING } from "../../constants/branding";
 import { cn } from "../../utils/cn";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -44,8 +45,8 @@ export const Navbar = () => {
             <Link to="/" className="flex items-center group">
               <div className="h-10 md:h-12 w-auto flex items-center justify-center overflow-hidden transition-all relative py-1">
                 <img 
-                  src="/logo.png" 
-                  alt="IFXTrades Logo" 
+                  src={BRANDING.logoUrl} 
+                  alt={`${BRANDING.name} Logo`} 
                   className="h-full w-auto object-contain z-10" 
                 />
               </div>
@@ -66,10 +67,6 @@ export const Navbar = () => {
                 </Link>
               ))}
               <div className="flex items-center gap-4 border-l border-white/10 pl-8">
-                <Link to="/hiring" className="flex items-center gap-1.5 text-xs font-bold text-emerald-500 bg-emerald-500/10 px-3 py-1.5 rounded-full hover:bg-emerald-500 hover:text-black transition-all">
-                  <Briefcase className="w-3 h-3" />
-                  Hiring
-                </Link>
                 {user ? (
                   <>
                     <Link to="/dashboard" className="text-gray-400 hover:text-white transition-colors">
@@ -135,7 +132,7 @@ export const Navbar = () => {
             >
               <div className="flex items-center justify-between p-6 border-b border-white/5">
                 <Link to="/" onClick={() => setIsOpen(false)}>
-                  <img src="/logo.png" alt="Logo" className="h-8 w-auto" />
+                  <img src={BRANDING.logoUrl} alt={BRANDING.name} className="h-8 w-auto" />
                 </Link>
                 <button 
                   onClick={() => setIsOpen(false)}
@@ -175,15 +172,7 @@ export const Navbar = () => {
                     Institutional
                   </div>
                   
-                  <Link 
-                    to="/hiring" 
-                    onClick={() => setIsOpen(false)}
-                    className="flex items-center gap-4 p-4 rounded-xl text-emerald-400 hover:bg-emerald-500/5 transition-all"
-                  >
-                    <Briefcase className="w-5 h-5" />
-                    <span className="text-lg font-bold tracking-tight">Careers / Hiring</span>
-                  </Link>
-
+                  {/* Removed Hiring Link */}
                   {user ? (
                     <>
                       <Link 

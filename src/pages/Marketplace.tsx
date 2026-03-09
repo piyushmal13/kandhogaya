@@ -20,7 +20,7 @@ export const Marketplace = () => {
       const { data, error } = await supabase
         .from("products")
         .select("*")
-        .eq("type", "algorithm");
+        .eq("type", "algo_bot");
 
       if (error) throw error;
       setProducts(data || []);
@@ -33,7 +33,7 @@ export const Marketplace = () => {
 
   const filteredProducts = filter === "All" 
     ? products 
-    : products.filter(p => p.strategy_type.includes(filter) || p.risk_level === filter);
+    : products.filter(p => (p.strategy_type || "").includes(filter) || p.risk_level === filter);
 
   const handleSubscribe = async (algo: any, plan: 'Monthly' | 'Yearly') => {
     // In a real app, redirect to Stripe Checkout

@@ -9,7 +9,7 @@ import { supabase, safeQuery } from "./supabaseClient";
 // --- WEBINARS ---
 
 export const getWebinars = async () => {
-  return safeQuery(
+  return safeQuery<any[]>(
     supabase
       .from("webinars")
       .select("*")
@@ -34,7 +34,7 @@ export const getWebinarById = async (id: string) => {
 // --- SIGNALS ---
 
 export const getSignals = async () => {
-  return safeQuery(
+  return safeQuery<any[]>(
     supabase
       .from("signals")
       .select("*")
@@ -45,7 +45,7 @@ export const getSignals = async () => {
 // --- ALGORITHMS ---
 
 export const getAlgorithms = async () => {
-  return safeQuery(
+  return safeQuery<any[]>(
     supabase
       .from("algorithms")
       .select("*")
@@ -68,7 +68,7 @@ export const getBlogPosts = async (page = 0, pageSize = 9, searchQuery = "") => 
     query = query.ilike('title', `%${searchQuery}%`);
   }
 
-  return safeQuery(query);
+  return safeQuery<any[]>(query);
 };
 
 export const getBlogPostBySlug = async (slug: string) => {

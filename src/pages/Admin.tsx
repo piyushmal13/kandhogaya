@@ -9,6 +9,7 @@ import { Overview } from "./admin/Overview";
 import { ContentManager } from "./admin/ContentManager";
 import { LicenseManager } from "./admin/LicenseManager";
 import { AgentManager } from "./admin/AgentManager";
+import { WebinarManager } from "./admin/WebinarManager";
 
 /**
  * Master Admin CRM Dashboard
@@ -87,8 +88,9 @@ export const Admin = () => {
         {activeTab === "content" && <ContentManager />}
         {activeTab === "licenses" && <LicenseManager />}
         {activeTab === "agents" && <AgentManager />}
+        {activeTab === "webinars" && <WebinarManager />}
         
-        {(activeTab === "webinars" || activeTab === "settings") && (
+        {activeTab === "settings" && (
           <div className="flex flex-col items-center justify-center py-32 text-center bg-zinc-900/50 border border-white/5 rounded-3xl">
             <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center text-gray-700 mb-6">
               <Settings className="w-8 h-8" />

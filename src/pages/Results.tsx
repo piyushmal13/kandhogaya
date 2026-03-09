@@ -30,7 +30,7 @@ export const Results = () => {
             <div className="text-[10px] text-gray-500 uppercase font-bold tracking-widest text-right">Total Gain (LTM)</div>
           </div>
           <h3 className="text-2xl font-bold text-white mb-10">Equity Growth Curve</h3>
-          <div className="h-[400px] w-full">
+          <div className="h-[400px] w-full min-h-[400px]">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={data}>
                 <defs>

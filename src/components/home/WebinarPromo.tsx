@@ -1,25 +1,61 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import { Calendar, Clock, Users, ArrowRight, ShieldCheck, Mic2, Star, Activity } from "lucide-react";
+import { getWebinars } from "../../services/apiHandlers";
+import { Link } from "react-router-dom";
 
 export const WebinarPromo = () => {
-  // Countdown logic
-  const [timeLeft, setTimeLeft] = useState({ h: 48, m: 15, s: 30 });
+  const [webinar, setWebinar] = useState<any>(null);
+  const [timeLeft, setTimeLeft] = useState({ h: 0, m: 0, s: 0 });
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        let { h, m, s } = prev;
-        s--;
-        if (s < 0) { s = 59; m--; }
-        if (m < 0) { m = 59; h--; }
-        return { h, m, s };
-      });
-    }, 1000);
-    return () => clearInterval(timer);
+    const fetchNearestWebinar = async () => {
+      const webinars = await getWebinars();
+      if (webinars && webinars.length > 0) {
+        const now = new Date().getTime();
+        const upcoming = webinars.filter(w => new Date(w.date_time).getTime() > now);
+        if (upcoming.length > 0) {
+          setWebinar(upcoming[0]);
+        } else {
+          setWebinar(webinars[webinars.length - 1]); // Fallback to the latest one
+        }
+      }
+    };
+    fetchNearestWebinar();
   }, []);
 
+  useEffect(() => {
+    if (!webinar) return;
+
+    const targetDate = new Date(webinar.date_time).getTime();
+
+    const timer = setInterval(() => {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance < 0) {
+        clearInterval(timer);
+        setTimeLeft({ h: 0, m: 0, s: 0 });
+        return;
+      }
+
+      const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)) + Math.floor(distance / (1000 * 60 * 60 * 24)) * 24;
+      const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const s = Math.floor((distance % (1000 * 60)) / 1000);
+
+      setTimeLeft({ h, m, s });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [webinar]);
+
   const format = (n: number) => n.toString().padStart(2, '0');
+
+  if (!webinar) return null;
+
+  const isSponsored = webinar.metadata?.is_sponsored;
+  const sponsors = webinar.metadata?.sponsors || [];
+  const isFree = !webinar.is_paid;
 
   return (
     <section className="py-16 md:py-24 bg-[#020202] relative overflow-hidden border-t border-white/5">
@@ -53,8 +89,7 @@ export const WebinarPromo = () => {
               transition={{ delay: 0.1 }}
               className="text-3xl sm:text-4xl md:text-6xl font-bold text-white mb-6 tracking-tighter leading-[1.1]"
             >
-              Institutional Order Flow <br />
-              <span className="text-gray-500">& Liquidity Voids</span>
+              {webinar.title}
             </motion.h2>
             
             <motion.p 
@@ -64,7 +99,7 @@ export const WebinarPromo = () => {
               transition={{ delay: 0.2 }}
               className="text-gray-400 text-base md:text-lg mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed"
             >
-              Join our Head of Quantitative Analysis for an exclusive, free masterclass on identifying institutional footprints in real-time order books. Stop trading retail patterns.
+              {webinar.description}
             </motion.p>
 
             {/* Speakers */}
@@ -76,45 +111,36 @@ export const WebinarPromo = () => {
               className="flex flex-wrap justify-center lg:justify-start gap-6 md:gap-8 mb-12"
             >
               <div className="flex items-center gap-3 md:gap-4">
-                <div className="w-12 h-12 md:w-14 md:h-14 rounded-full border-2 border-emerald-500/30 p-0.5">
-                  <img src="https://picsum.photos/seed/speaker1/200/200" alt="Speaker" className="w-full h-full rounded-full object-cover grayscale hover:grayscale-0 transition-all duration-500" referrerPolicy="no-referrer" />
+                <div className="w-12 h-12 md:w-14 md:h-14 rounded-full border-2 border-emerald-500/30 p-0.5 flex items-center justify-center bg-white/5 text-white font-bold text-xl">
+                  {webinar.speaker?.charAt(0) || 'S'}
                 </div>
                 <div className="text-left">
-                  <div className="text-white font-bold text-xs md:text-sm">Alex Wright</div>
-                  <div className="text-emerald-500 text-[9px] md:text-[10px] font-mono tracking-wider uppercase">Head Quant</div>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 md:gap-4">
-                <div className="w-12 h-12 md:w-14 md:h-14 rounded-full border-2 border-white/10 p-0.5">
-                  <img src="https://picsum.photos/seed/speaker2/200/200" alt="Speaker" className="w-full h-full rounded-full object-cover grayscale hover:grayscale-0 transition-all duration-500" referrerPolicy="no-referrer" />
-                </div>
-                <div className="text-left">
-                  <div className="text-white font-bold text-xs md:text-sm">Sarah Chen</div>
-                  <div className="text-gray-500 text-[9px] md:text-[10px] font-mono tracking-wider uppercase">Risk Manager</div>
+                  <div className="text-white font-bold text-xs md:text-sm">{webinar.speaker || 'Speaker'}</div>
+                  <div className="text-emerald-500 text-[9px] md:text-[10px] font-mono tracking-wider uppercase">{webinar.metadata?.level || 'Expert'}</div>
                 </div>
               </div>
             </motion.div>
 
             {/* Sponsors */}
-            <motion.div 
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4 }}
-              className="flex items-center justify-center lg:justify-start gap-4 md:gap-6 pt-8 border-t border-white/5"
-            >
-              <span className="text-[10px] font-mono text-gray-600 uppercase tracking-widest">Sponsored By:</span>
-              <div className="flex gap-4 md:gap-6 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
-                <div className="flex items-center gap-1.5 md:gap-2">
-                  <ShieldCheck className="w-4 h-4 md:w-5 md:h-5 text-white" />
-                  <span className="text-white font-bold tracking-tight text-[10px] md:text-xs">APEX LIQUIDITY</span>
+            {isSponsored && sponsors.length > 0 && (
+              <motion.div 
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4 }}
+                className="flex items-center justify-center lg:justify-start gap-4 md:gap-6 pt-8 border-t border-white/5"
+              >
+                <span className="text-[10px] font-mono text-gray-600 uppercase tracking-widest">Sponsored By:</span>
+                <div className="flex gap-4 md:gap-6 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
+                  {sponsors.map((sponsor: string, idx: number) => (
+                    <div key={idx} className="flex items-center gap-1.5 md:gap-2">
+                      <ShieldCheck className="w-4 h-4 md:w-5 md:h-5 text-white" />
+                      <span className="text-white font-bold tracking-tight text-[10px] md:text-xs">{sponsor}</span>
+                    </div>
+                  ))}
                 </div>
-                <div className="flex items-center gap-1.5 md:gap-2">
-                  <Activity className="w-4 h-4 md:w-5 md:h-5 text-white" />
-                  <span className="text-white font-bold tracking-tight text-[10px] md:text-xs">QUANT.AI</span>
-                </div>
-              </div>
-            </motion.div>
+              </motion.div>
+            )}
           </div>
 
           {/* Right: Registration Card */}
@@ -130,10 +156,10 @@ export const WebinarPromo = () => {
               <div className="flex items-center justify-between mb-6 md:mb-8">
                 <div className="flex items-center gap-2 text-emerald-500 font-mono text-[10px] md:text-xs tracking-widest">
                   <Calendar className="w-3.5 h-3.5 md:w-4 h-4" />
-                  <span>OCT 24, 2026</span>
+                  <span>{new Date(webinar.date_time).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                 </div>
                 <div className="px-2 py-0.5 md:px-3 md:py-1 rounded-full bg-white/5 border border-white/10 text-[9px] md:text-[10px] font-bold text-white uppercase tracking-wider">
-                  Limited Seats
+                  {webinar.max_attendees - webinar.registration_count} Seats Left
                 </div>
               </div>
 
@@ -166,13 +192,13 @@ export const WebinarPromo = () => {
                 </div>
               </div>
 
-              <button className="w-full py-3.5 md:py-4 bg-emerald-500 hover:bg-emerald-400 text-black font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] text-sm md:text-base">
-                Reserve Free Seat
+              <Link to={`/webinars/${webinar.id}`} className="w-full py-3.5 md:py-4 bg-emerald-500 hover:bg-emerald-400 text-black font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] text-sm md:text-base">
+                {isFree ? 'Reserve Free Seat' : `Register for $${webinar.price}`}
                 <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover/btn:translate-x-1 transition-transform" />
-              </button>
+              </Link>
               
               <div className="text-center mt-4 text-[9px] md:text-[10px] text-gray-600 font-mono">
-                NO CREDIT CARD REQUIRED • INSTANT ACCESS
+                {isFree ? 'NO CREDIT CARD REQUIRED • INSTANT ACCESS' : 'SECURE CHECKOUT • INSTANT ACCESS'}
               </div>
 
             </motion.div>

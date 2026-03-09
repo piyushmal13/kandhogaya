@@ -89,7 +89,7 @@ export const WebinarDetail = () => {
                     Recorded Session
                   </span>
                 )}
-                <span className="text-gray-500 text-[10px] font-mono uppercase tracking-widest">{webinar.speaker_name}</span>
+                <span className="text-gray-500 text-[10px] font-mono uppercase tracking-widest">{webinar.speaker || 'Speaker'}</span>
               </div>
               <h1 className="text-xl md:text-2xl font-bold text-white tracking-tight">{webinar.title}</h1>
             </div>
@@ -190,7 +190,7 @@ export const WebinarDetail = () => {
                       <div className="flex items-center gap-4">
                         <Play className="w-5 h-5 text-white cursor-pointer" />
                         <Volume2 className="w-5 h-5 text-white cursor-pointer" />
-                        <span className="text-white text-xs font-mono">00:00 / {webinar.duration}:00</span>
+                        <span className="text-white text-xs font-mono">00:00 / {webinar.metadata?.duration || '60 mins'}</span>
                       </div>
                       <Maximize2 className="w-5 h-5 text-white cursor-pointer" />
                     </div>
@@ -276,7 +276,7 @@ export const WebinarDetail = () => {
                           Speaker Credibility
                         </h4>
                         <p className="text-sm">
-                          {webinar.speaker_name} has over 12 years of experience in quantitative trading and has managed portfolios for top-tier hedge funds.
+                          {webinar.speaker || 'Speaker'} has over 12 years of experience in quantitative trading and has managed portfolios for top-tier hedge funds.
                         </p>
                       </div>
                     </div>

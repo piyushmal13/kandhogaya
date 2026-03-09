@@ -112,18 +112,18 @@ export const Blog = () => {
                 <div className="bg-[#0a0a0a] border border-white/5 rounded-3xl overflow-hidden hover:border-emerald-500/30 transition-all flex flex-col h-full shadow-2xl">
                   <div className="aspect-video bg-black overflow-hidden relative">
                     <img 
-                      src={post.data?.cover_image || `https://picsum.photos/seed/${post.slug}/800/450`} 
+                      src={post.metadata?.cover_image || `https://picsum.photos/seed/${post.slug}/800/450`} 
                       alt={post.title} 
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-60 group-hover:opacity-100" 
                       referrerPolicy="no-referrer" 
                     />
                     <div className="absolute top-4 left-4 flex gap-2">
-                      {post.data?.video_url && (
+                      {post.metadata?.video_url && (
                         <div className="bg-emerald-500 text-black p-1.5 rounded-lg shadow-lg">
                           <Video className="w-4 h-4" />
                         </div>
                       )}
-                      {post.data?.download_url && (
+                      {post.metadata?.download_url && (
                         <div className="bg-blue-500 text-white p-1.5 rounded-lg shadow-lg">
                           <Download className="w-4 h-4" />
                         </div>
@@ -133,13 +133,13 @@ export const Blog = () => {
                   <div className="p-8 flex flex-col flex-1">
                     <div className="flex items-center gap-2 text-[10px] text-emerald-500 font-bold uppercase mb-4 tracking-widest">
                       <Calendar className="w-3 h-3" />
-                      {new Date(post.published_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                      {new Date(post.published_at || post.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                     </div>
                     <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-emerald-400 transition-colors leading-tight tracking-tight">
                       {post.title}
                     </h3>
                     <p className="text-gray-400 text-sm line-clamp-3 mb-8 leading-relaxed flex-1">
-                      {post.body}
+                      {post.content}
                     </p>
                     <div className="flex items-center justify-between pt-6 border-t border-white/5">
                       <div className="flex items-center gap-2">

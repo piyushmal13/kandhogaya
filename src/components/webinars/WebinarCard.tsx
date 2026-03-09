@@ -76,7 +76,7 @@ export const WebinarCard = ({ webinar, onRegister }: WebinarCardProps) => {
           {new Date(webinar.date_time).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
           <span className="text-gray-600">•</span>
           <Clock className="w-3 h-3" />
-          {webinar.duration} min
+          {webinar.metadata?.duration || '60 mins'}
         </div>
 
         <Link to={`/webinars/${webinar.id}`} className="block">
@@ -91,11 +91,11 @@ export const WebinarCard = ({ webinar, onRegister }: WebinarCardProps) => {
 
         <div className="flex items-center gap-3 mb-6">
           <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold text-white">
-            {webinar.speaker_name.charAt(0)}
+            {webinar.speaker?.charAt(0) || 'S'}
           </div>
           <div>
-            <div className="text-white text-sm font-medium">{webinar.speaker_name}</div>
-            <div className="text-gray-500 text-xs">{webinar.speaker_role}</div>
+            <div className="text-white text-sm font-medium">{webinar.speaker || 'Speaker'}</div>
+            <div className="text-gray-500 text-xs">{webinar.metadata?.level || 'All Levels'}</div>
           </div>
         </div>
 
