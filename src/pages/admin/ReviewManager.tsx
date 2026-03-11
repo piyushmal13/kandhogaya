@@ -41,12 +41,14 @@ export const ReviewManager = () => {
     const { error } = await supabase
       .from('reviews')
       .update({
+        name: editForm.name || editForm.user_name,
         user_name: editForm.user_name,
         rating: editForm.rating,
         comment: editForm.comment,
         text: editForm.text || editForm.comment,
         image_url: editForm.image_url,
-        region: editForm.region
+        region: editForm.region,
+        role: editForm.role
       })
       .eq('id', editingId);
     
@@ -76,11 +78,13 @@ export const ReviewManager = () => {
 
   const handleCreate = async () => {
     const newReview = {
+      name: "New Client",
       user_name: "New Client",
       rating: 5,
       comment: "Excellent service!",
       text: "Excellent service!",
       region: "Global",
+      role: "Trader",
       image_url: "https://picsum.photos/seed/user/200/200",
       target_id: '00000000-0000-0000-0000-000000000000' // Placeholder for general review
     };

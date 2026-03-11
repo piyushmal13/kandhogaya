@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS products (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+ALTER TABLE products ADD COLUMN IF NOT EXISTS type TEXT DEFAULT 'algo_bot';
 ALTER TABLE products ADD COLUMN IF NOT EXISTS price DECIMAL(12,2) DEFAULT 0;
 ALTER TABLE products ADD COLUMN IF NOT EXISTS image_url TEXT;
 ALTER TABLE products ADD COLUMN IF NOT EXISTS strategy_details TEXT;
@@ -131,6 +132,7 @@ CREATE TABLE IF NOT EXISTS webinars (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+ALTER TABLE webinars ADD COLUMN IF NOT EXISTS type TEXT DEFAULT 'free';
 ALTER TABLE webinars ADD COLUMN IF NOT EXISTS speaker_name TEXT;
 ALTER TABLE webinars ADD COLUMN IF NOT EXISTS speaker_profile_url TEXT;
 ALTER TABLE webinars ADD COLUMN IF NOT EXISTS brand_logo_url TEXT;
@@ -169,16 +171,26 @@ CREATE TABLE IF NOT EXISTS lessons (
 CREATE TABLE IF NOT EXISTS reviews (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID REFERENCES users(id),
-    target_id UUID NOT NULL, -- product_id or course_id
-    rating INTEGER CHECK (rating >= 1 AND rating <= 5),
-    comment TEXT,
+    target_id UUID, -- product_id or course_id (optional for general testimonials)
+    name TEXT NOT NULL, -- Display Name
+    user_name TEXT, -- Legacy/Alternative name field
+    role TEXT, -- e.g., 'Prop Firm Trader'
+    rating INTEGER DEFAULT 5 CHECK (rating >= 1 AND rating <= 5),
+    comment TEXT, -- Legacy comment field
+    text TEXT NOT NULL, -- Main review content
+    image_url TEXT,
+    region TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- Ensure all columns exist for existing tables
+ALTER TABLE reviews ADD COLUMN IF NOT EXISTS name TEXT;
+ALTER TABLE reviews ADD COLUMN IF NOT EXISTS text TEXT;
+ALTER TABLE reviews ADD COLUMN IF NOT EXISTS role TEXT;
 ALTER TABLE reviews ADD COLUMN IF NOT EXISTS image_url TEXT;
 ALTER TABLE reviews ADD COLUMN IF NOT EXISTS region TEXT;
 ALTER TABLE reviews ADD COLUMN IF NOT EXISTS user_name TEXT;
-ALTER TABLE reviews ADD COLUMN IF NOT EXISTS text TEXT;
+ALTER TABLE reviews ADD COLUMN IF NOT EXISTS target_id UUID;
 
 -- 7. Market Data & Signals
 CREATE TABLE IF NOT EXISTS market_data (

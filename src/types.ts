@@ -35,12 +35,14 @@ export interface Blog {
 
 export interface Review {
   id?: string;
+  name: string;
   user_name: string;
   rating: number;
   comment: string;
   text?: string;
   image_url?: string;
   region?: string;
+  role?: string;
   date?: string;
   created_at?: string;
 }
