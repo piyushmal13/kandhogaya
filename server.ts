@@ -321,12 +321,7 @@ async function startServer() {
     if (error) {
       logger.error({ 
         msg: "Error fetching user licenses", 
-        err: error, 
-        user_id: req.user.id,
-        code: error.code,
-        message: error.message,
-        details: error.details,
-        hint: error.hint
+        error: error
       });
       return res.status(500).json({ error: "Failed to fetch licenses", details: error.message });
     }
