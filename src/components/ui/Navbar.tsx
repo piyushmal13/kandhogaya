@@ -133,7 +133,7 @@ export const Navbar = () => {
             >
               <div className="flex items-center justify-between p-6 border-b border-white/5">
                 <Link to="/" onClick={() => setIsOpen(false)}>
-                  <img src={BRANDING.logoUrl} alt={BRANDING.name} className="h-8 w-auto" />
+                  <img src={BRANDING.logoUrl} alt={BRANDING.name} className="h-10 w-auto" />
                 </Link>
                 <button 
                   onClick={() => setIsOpen(false)}
