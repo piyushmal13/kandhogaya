@@ -87,13 +87,26 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
                     />
                   </div>
                 )}
+                
+                {algo.strategy_details && (
+                  <div className="p-6 rounded-2xl bg-white/5 border border-white/5">
+                    <h4 className="text-white font-bold mb-4 flex items-center gap-2">
+                      <Zap className="w-5 h-5 text-emerald-500" />
+                      Institutional Strategy Details
+                    </h4>
+                    <p className="text-gray-400 text-sm whitespace-pre-wrap leading-relaxed">{algo.strategy_details}</p>
+                  </div>
+                )}
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                   <div className="p-5 md:p-6 rounded-xl md:rounded-2xl bg-white/5 border border-white/5">
                     <h4 className="text-white font-bold mb-3 md:mb-4 flex items-center gap-2 text-sm md:text-base">
                       <ShieldCheck className="w-4 h-4 md:w-5 md:h-5 text-emerald-500" />
                       Risk Management
                     </h4>
-                    <p className="text-gray-400 text-xs md:text-sm">Proprietary risk protocols ensuring capital preservation through dynamic position sizing and stop-loss logic.</p>
+                    <p className="text-gray-400 text-xs md:text-sm">
+                      {algo.risk_profile || "Proprietary risk protocols ensuring capital preservation through dynamic position sizing and stop-loss logic."}
+                    </p>
                   </div>
                   <div className="p-5 md:p-6 rounded-xl md:rounded-2xl bg-white/5 border border-white/5">
                     <h4 className="text-white font-bold mb-3 md:mb-4 flex items-center gap-2 text-sm md:text-base">

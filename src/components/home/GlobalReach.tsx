@@ -82,7 +82,7 @@ export const GlobalReach = () => {
               transition={{ delay: 0.1 }}
               className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tighter mb-6"
             >
-              Powering Traders <br className="hidden lg:block"/> Across the Globe
+              Powering Traders Across the Globe
             </motion.h2>
             
             <motion.p 

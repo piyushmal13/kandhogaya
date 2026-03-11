@@ -7,12 +7,17 @@ export const WebinarManager = () => {
   const [description, setDescription] = useState("");
   const [dateTime, setDateTime] = useState("");
   const [speaker, setSpeaker] = useState("");
+  const [speakerProfileUrl, setSpeakerProfileUrl] = useState("");
+  const [brandLogoUrl, setBrandLogoUrl] = useState("");
+  const [webinarImageUrl, setWebinarImageUrl] = useState("");
+  const [aboutContent, setAboutContent] = useState("");
   const [level, setLevel] = useState("All Levels");
   const [duration, setDuration] = useState("60 mins");
   const [isPaid, setIsPaid] = useState(false);
   const [price, setPrice] = useState(0);
   const [isSponsored, setIsSponsored] = useState(false);
   const [sponsors, setSponsors] = useState("");
+  const [sponsorLogos, setSponsorLogos] = useState("");
   const [maxAttendees, setMaxAttendees] = useState(500);
   const [loading, setLoading] = useState(false);
   const [recentWebinars, setRecentWebinars] = useState<any[]>([]);
@@ -34,46 +39,51 @@ export const WebinarManager = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      const res = await fetch("/api/admin/webinars", {
-        method: "POST",
-        headers: { 
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${session?.access_token}`
-        },
-        body: JSON.stringify({ 
-          title, 
+      const { error } = await supabase
+        .from('webinars')
+        .insert([{
+          title,
           description,
           date_time: new Date(dateTime).toISOString(),
-          speaker,
+          speaker_name: speaker,
+          speaker_profile_url: speakerProfileUrl,
+          brand_logo_url: brandLogoUrl,
+          webinar_image_url: webinarImageUrl,
+          about_content: aboutContent,
           is_paid: isPaid,
           price: isPaid ? price : 0,
           max_attendees: maxAttendees,
-          metadata: { 
+          status: 'upcoming',
+          sponsor_logos: sponsorLogos.split(",").map(s => s.trim()).filter(s => s !== ""),
+          metadata: {
             level,
             duration,
             is_sponsored: isSponsored,
             sponsors: sponsors.split(",").map(s => s.trim()).filter(s => s !== ""),
-          } 
-        })
-      });
-      if (res.ok) {
+          }
+        }]);
+
+      if (!error) {
         alert("Webinar published successfully!");
         setTitle("");
         setDescription("");
         setDateTime("");
         setSpeaker("");
+        setSpeakerProfileUrl("");
+        setBrandLogoUrl("");
+        setWebinarImageUrl("");
+        setAboutContent("");
         setLevel("All Levels");
         setDuration("60 mins");
         setIsPaid(false);
         setPrice(0);
         setIsSponsored(false);
         setSponsors("");
+        setSponsorLogos("");
         setMaxAttendees(500);
         fetchRecentWebinars();
       } else {
-        const err = await res.json();
-        alert(`Error: ${err.error}`);
+        alert(`Error: ${error.message}`);
       }
     } catch (err) {
       console.error("Publishing error:", err);
@@ -170,6 +180,47 @@ export const WebinarManager = () => {
               </div>
 
               <div>
+                <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Speaker Profile Image URL</label>
+                <input 
+                  value={speakerProfileUrl} 
+                  onChange={e => setSpeakerProfileUrl(e.target.value)} 
+                  placeholder="https://..."
+                  className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-emerald-500 transition-all" 
+                />
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Brand Logo URL</label>
+                <input 
+                  value={brandLogoUrl} 
+                  onChange={e => setBrandLogoUrl(e.target.value)} 
+                  placeholder="https://..."
+                  className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-emerald-500 transition-all" 
+                />
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Webinar Main Image URL</label>
+                <input 
+                  value={webinarImageUrl} 
+                  onChange={e => setWebinarImageUrl(e.target.value)} 
+                  placeholder="https://..."
+                  className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-emerald-500 transition-all" 
+                />
+              </div>
+
+              <div className="md:col-span-2">
+                <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">About Webinar (Detailed)</label>
+                <textarea 
+                  rows={4} 
+                  value={aboutContent} 
+                  onChange={e => setAboutContent(e.target.value)} 
+                  placeholder="Detailed breakdown of what will be covered..."
+                  className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-emerald-500 transition-all resize-none"
+                />
+              </div>
+
+              <div>
                 <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Level</label>
                 <select 
                   value={level} 
@@ -226,14 +277,25 @@ export const WebinarManager = () => {
                   <span className="text-sm text-white">Sponsored Webinar</span>
                 </label>
                 {isSponsored && (
-                  <div>
-                    <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Sponsors (Comma separated)</label>
-                    <input 
-                      value={sponsors} 
-                      onChange={e => setSponsors(e.target.value)} 
-                      placeholder="e.g., APEX LIQUIDITY, QUANT.AI"
-                      className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-emerald-500 transition-all" 
-                    />
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Sponsors (Comma separated)</label>
+                      <input 
+                        value={sponsors} 
+                        onChange={e => setSponsors(e.target.value)} 
+                        placeholder="e.g., APEX LIQUIDITY, QUANT.AI"
+                        className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-emerald-500 transition-all" 
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Sponsor Logo URLs (Comma separated)</label>
+                      <input 
+                        value={sponsorLogos} 
+                        onChange={e => setSponsorLogos(e.target.value)} 
+                        placeholder="https://logo1.png, https://logo2.png"
+                        className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-emerald-500 transition-all" 
+                      />
+                    </div>
                   </div>
                 )}
               </div>

@@ -30,8 +30,8 @@ export const Results = () => {
             <div className="text-[10px] text-gray-500 uppercase font-bold tracking-widest text-right">Total Gain (LTM)</div>
           </div>
           <h3 className="text-2xl font-bold text-white mb-10">Equity Growth Curve</h3>
-          <div className="h-[400px] w-full min-h-[400px]">
-            <ResponsiveContainer width="100%" height="100%">
+          <div className="h-[400px] w-full min-h-[400px] relative">
+            <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
               <AreaChart data={data}>
                 <defs>
                   <linearGradient id="colorPips" x1="0" y1="0" x2="0" y2="1">

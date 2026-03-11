@@ -213,32 +213,21 @@ export const Webinars = () => {
             )}
           </div>
 
-          {/* Right: Calendar & Past */}
+          {/* Right: Calendar */}
           <div className="space-y-8">
             <WebinarCalendar webinars={webinars} />
             
-            <div className="bg-[#0a0a0a] border border-white/10 rounded-2xl p-6">
-              <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-                <Activity className="w-5 h-5 text-emerald-500" />
-                Past Recordings
-              </h3>
-              <div className="space-y-4">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="group cursor-pointer">
-                    <div className="relative h-32 rounded-xl overflow-hidden mb-2">
-                      <div className="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition-colors z-10 flex items-center justify-center">
-                        <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center group-hover:scale-110 transition-transform">
-                          <div className="w-0 h-0 border-t-[6px] border-t-transparent border-l-[10px] border-l-white border-b-[6px] border-b-transparent ml-1" />
-                        </div>
-                      </div>
-                      <img src={`https://picsum.photos/seed/past${i}/400/200`} alt="Recording" className="w-full h-full object-cover" />
-                    </div>
-                    <h4 className="text-white font-medium text-sm line-clamp-1 group-hover:text-emerald-400 transition-colors">
-                      Advanced Price Action Strategies
-                    </h4>
-                    <div className="text-xs text-gray-500 mt-1">Recorded 2 weeks ago</div>
-                  </div>
-                ))}
+            <div className="bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 border border-emerald-500/20 rounded-2xl p-8 relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-4 opacity-10">
+                <Zap className="w-20 h-20 text-emerald-500" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-4 relative z-10">Institutional Edge</h3>
+              <p className="text-gray-400 text-sm leading-relaxed mb-6 relative z-10">
+                Our live sessions provide real-time alpha that isn't available anywhere else. Join the next session to stay ahead of the curve.
+              </p>
+              <div className="flex items-center gap-2 text-emerald-500 text-xs font-bold uppercase tracking-widest relative z-10">
+                <ShieldCheck className="w-4 h-4" />
+                Verified Institutional Data
               </div>
             </div>
           </div>

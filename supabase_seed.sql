@@ -59,6 +59,17 @@ INSERT INTO public.algorithms (name, description, created_at) VALUES
 ('Delta Hedge', 'Options hedging strategy for portfolio protection.', now()),
 ('Omega Arbitrage', 'Statistical arbitrage across correlated assets.', now());
 
+-- 9. Populate Market Data
+INSERT INTO public.market_data (symbol, price, change, up) VALUES
+('XAUUSD', '2150.45', '+0.45%', true),
+('EURUSD', '1.0845', '-0.12%', false),
+('BTCUSD', '64230.00', '+2.40%', true),
+('NASDAQ', '18240.50', '+1.10%', true),
+('GBPUSD', '1.2650', '-0.05%', false),
+('USDJPY', '149.80', '+0.20%', true),
+('US30', '39087.30', '+0.85%', true),
+('ETHUSD', '3450.00', '+1.80%', true);
+
 -- 8. Performance Indices for High-Usage Queries
 CREATE INDEX IF NOT EXISTS idx_webinars_date_time ON public.webinars (date_time);
 CREATE INDEX IF NOT EXISTS idx_content_posts_slug ON public.content_posts (slug);

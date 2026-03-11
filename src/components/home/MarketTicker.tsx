@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { TrendingUp, TrendingDown } from 'lucide-react';
+import { supabase, safeQuery } from '../../lib/supabase';
 
-const pairs = [
+const defaultPairs = [
   { symbol: "XAUUSD", price: "2150.45", change: "+0.45%", up: true },
   { symbol: "EURUSD", price: "1.0845", change: "-0.12%", up: false },
   { symbol: "BTCUSD", price: "64230.00", change: "+2.40%", up: true },
@@ -14,6 +15,20 @@ const pairs = [
 ];
 
 export const MarketTicker = () => {
+  const [pairs, setPairs] = useState(defaultPairs);
+
+  useEffect(() => {
+    const fetchMarketData = async () => {
+      const data = await safeQuery<any[]>(
+        supabase.from('market_data').select('*').order('symbol')
+      );
+      if (data && data.length > 0) {
+        setPairs(data);
+      }
+    };
+    fetchMarketData();
+  }, []);
+
   // Duplicate for seamless infinite scroll
   const tickerItems = [...pairs, ...pairs, ...pairs];
 

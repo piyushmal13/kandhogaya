@@ -10,6 +10,7 @@ import { BlogSection } from "../components/home/BlogSection";
 import { PerformanceHistory } from "../components/home/PerformanceHistory";
 import { NewsletterPopup } from "../components/ui/NewsletterPopup";
 import { WebinarBanner } from "../components/webinars/WebinarBanner";
+import { AlgoGreatness } from "../components/AlgoGreatness";
 import { cn } from "../utils/cn";
 import { motion } from "motion/react";
 
@@ -24,7 +25,7 @@ export const Home = () => (
     <EcosystemSection />
     
     <GlobalReach />
-
+    <AlgoGreatness />
     <BlogSection />
 
     <PerformanceHistory />

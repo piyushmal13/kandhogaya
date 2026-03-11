@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
-import { BarChart3, Zap, ShieldCheck, Users, Video, Settings } from "lucide-react";
+import { BarChart3, Zap, ShieldCheck, Users, Video, Settings, Star } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { cn } from "../utils/cn";
 
@@ -10,6 +10,8 @@ import { ContentManager } from "./admin/ContentManager";
 import { LicenseManager } from "./admin/LicenseManager";
 import { AgentManager } from "./admin/AgentManager";
 import { WebinarManager } from "./admin/WebinarManager";
+import { ProductManager } from "./admin/ProductManager";
+import { ReviewManager } from "./admin/ReviewManager";
 
 /**
  * Master Admin CRM Dashboard
@@ -50,8 +52,10 @@ export const Admin = () => {
     { id: "stats", name: "Analytics", icon: BarChart3 },
     { id: "content", name: "Publishing", icon: Zap },
     { id: "licenses", name: "Licenses", icon: ShieldCheck },
+    { id: "algos", name: "Algos", icon: Zap },
     { id: "agents", name: "Sales Agents", icon: Users },
     { id: "webinars", name: "Webinars", icon: Video },
+    { id: "reviews", name: "Reviews", icon: Star },
     { id: "settings", name: "Settings", icon: Settings },
   ];
 
@@ -87,8 +91,10 @@ export const Admin = () => {
         {activeTab === "stats" && <Overview stats={stats} />}
         {activeTab === "content" && <ContentManager />}
         {activeTab === "licenses" && <LicenseManager />}
+        {activeTab === "algos" && <ProductManager />}
         {activeTab === "agents" && <AgentManager />}
         {activeTab === "webinars" && <WebinarManager />}
+        {activeTab === "reviews" && <ReviewManager />}
         
         {activeTab === "settings" && (
           <div className="flex flex-col items-center justify-center py-32 text-center bg-zinc-900/50 border border-white/5 rounded-3xl">

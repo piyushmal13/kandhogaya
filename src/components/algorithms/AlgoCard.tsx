@@ -18,13 +18,14 @@ export const AlgoCard = ({ algo, onSelect }: AlgoCardProps) => {
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
       <div className="relative h-48 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10" />
         <img 
           src={algo.image_url || `https://picsum.photos/seed/${algo.id}/800/450`} 
           alt={algo.name} 
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-60 group-hover:opacity-80"
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-70 group-hover:opacity-100"
           referrerPolicy="no-referrer"
         />
-        <div className="absolute top-4 left-4">
+        <div className="absolute top-4 left-4 z-20">
           <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-mono tracking-widest uppercase">
             <Zap className="w-3 h-3" />
             {algo.category || "Algorithm"}

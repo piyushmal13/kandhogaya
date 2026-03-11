@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { 
   Calendar, Clock, Users, ArrowRight, Video, 
   MessageSquare, Send, Share2, Download, 
-  Play, Volume2, Maximize2, Star, Zap, ShieldCheck
+  Play, Volume2, Maximize2, Star, Zap, ShieldCheck, BarChart3
 } from "lucide-react";
 import { getWebinarById } from "../services/apiHandlers";
 import { AttendeeFeed } from "../components/webinars/AttendeeFeed";
@@ -64,7 +64,7 @@ export const WebinarDetail = () => {
   if (!webinar) return <div className="pt-32 text-center text-white">Webinar not found.</div>;
 
   const isLive = webinar.status === "live";
-  const isRecorded = webinar.status === "recorded";
+  const isRecorded = webinar.status === "recorded" || webinar.status === "completed" || webinar.status === "past";
   const isUpcoming = webinar.status === "upcoming";
 
   return (
@@ -85,11 +85,11 @@ export const WebinarDetail = () => {
                   </span>
                 )}
                 {isRecorded && (
-                  <span className="px-2 py-0.5 rounded bg-blue-500/10 border border-blue-500/20 text-blue-500 text-[10px] font-bold uppercase">
-                    Recorded Session
+                  <span className="px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-[10px] font-bold uppercase">
+                    Institutional Breakdown Complete
                   </span>
                 )}
-                <span className="text-gray-500 text-[10px] font-mono uppercase tracking-widest">{webinar.speaker || 'Speaker'}</span>
+                <span className="text-gray-500 text-[10px] font-mono uppercase tracking-widest">{webinar.speaker_name || webinar.speaker || 'Institutional Lead'}</span>
               </div>
               <h1 className="text-xl md:text-2xl font-bold text-white tracking-tight">{webinar.title}</h1>
             </div>
@@ -98,7 +98,7 @@ export const WebinarDetail = () => {
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 text-gray-400 text-sm">
               <Users className="w-4 h-4 text-emerald-500" />
-              <span>{webinar.registration_count}+ Attending</span>
+              <span>{webinar.registration_count}+ Attended</span>
             </div>
             <button className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-gray-400 transition-colors">
               <Share2 className="w-5 h-5" />
@@ -150,10 +150,111 @@ export const WebinarDetail = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           
-          {/* Main Content: Video Player */}
+          {/* Main Content: Video Player or Graphic */}
           <div className="lg:col-span-8">
             <div className="relative aspect-video bg-black rounded-2xl overflow-hidden border border-white/10 shadow-2xl group">
-              {isUpcoming && !isRegistered ? (
+              {isRecorded ? (
+                <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-[#050505] overflow-hidden">
+                  {/* Animated Background Elements */}
+                  <div className="absolute inset-0">
+                    <motion.div 
+                      animate={{ 
+                        scale: [1, 1.2, 1],
+                        opacity: [0.1, 0.2, 0.1]
+                      }}
+                      transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-emerald-500/10 rounded-full blur-[120px]" 
+                    />
+                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20" />
+                    
+                    {/* Floating Data Particles */}
+                    {[...Array(20)].map((_, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ 
+                          x: Math.random() * 1000 - 500, 
+                          y: Math.random() * 1000 - 500,
+                          opacity: 0 
+                        }}
+                        animate={{ 
+                          y: [0, -100, 0],
+                          opacity: [0, 0.5, 0]
+                        }}
+                        transition={{ 
+                          duration: 3 + Math.random() * 5, 
+                          repeat: Infinity,
+                          delay: Math.random() * 5
+                        }}
+                        className="absolute w-1 h-1 bg-emerald-500 rounded-full"
+                      />
+                    ))}
+                  </div>
+                  
+                  <div className="relative z-10">
+                    <motion.div 
+                      initial={{ scale: 0.5, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ type: "spring", damping: 12 }}
+                      className="w-24 h-24 bg-emerald-500/10 rounded-full flex items-center justify-center mb-8 border border-emerald-500/20 mx-auto"
+                    >
+                      <BarChart3 className="w-12 h-12 text-emerald-500" />
+                    </motion.div>
+                    
+                    <motion.h2 
+                      initial={{ y: 20, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ delay: 0.2 }}
+                      className="text-4xl md:text-6xl font-black text-white mb-6 tracking-tighter uppercase italic leading-none"
+                    >
+                      Institutional Alpha <br/>
+                      <span className="text-emerald-500">Successfully Unlocked</span>
+                    </motion.h2>
+                    
+                    <motion.p 
+                      initial={{ y: 20, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ delay: 0.3 }}
+                      className="text-gray-400 max-w-xl mx-auto mb-10 text-lg leading-relaxed"
+                    >
+                      This session has concluded. The institutional insights shared are now being implemented by our elite trading group. 
+                      Join the next live session to witness the future of quantitative finance.
+                    </motion.p>
+                    
+                    <div className="grid grid-cols-3 gap-8 max-w-2xl mx-auto mb-12">
+                      {[
+                        { label: "Accuracy", value: "94.2%", delay: 0.4 },
+                        { label: "Volume Analyzed", value: "1.4M+", delay: 0.5 },
+                        { label: "Latency", value: "0.1ms", delay: 0.6 }
+                      ].map((stat, i) => (
+                        <motion.div 
+                          key={i}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: stat.delay }}
+                          className="text-center p-4 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm"
+                        >
+                          <div className="text-2xl md:text-3xl font-bold text-emerald-500 font-mono">{stat.value}</div>
+                          <div className="text-[10px] text-gray-500 uppercase tracking-widest font-bold mt-1">{stat.label}</div>
+                        </motion.div>
+                      ))}
+                    </div>
+
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.8 }}
+                    >
+                      <Link 
+                        to="/webinars"
+                        className="inline-flex items-center gap-2 px-10 py-4 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all shadow-[0_0_40px_rgba(16,185,129,0.3)] group"
+                      >
+                        View Upcoming Sessions
+                        <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                      </Link>
+                    </motion.div>
+                  </div>
+                </div>
+              ) : isUpcoming && !isRegistered ? (
                 <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-gradient-to-b from-black/60 to-black">
                   <div className="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mb-6 border border-emerald-500/20">
                     <Lock className="w-10 h-10 text-emerald-500" />
@@ -173,7 +274,7 @@ export const WebinarDetail = () => {
               ) : (
                 <>
                   <img 
-                    src={webinar.cover_image || "https://picsum.photos/seed/webinar/1280/720"} 
+                    src={webinar.webinar_image_url || webinar.cover_image || "https://picsum.photos/seed/webinar/1280/720"} 
                     alt="Webinar Cover" 
                     className="w-full h-full object-cover opacity-40"
                     referrerPolicy="no-referrer"
@@ -248,7 +349,37 @@ export const WebinarDetail = () => {
               <div className="prose prose-invert max-w-none">
                 {activeTab === "overview" && (
                   <div className="text-gray-400 leading-relaxed">
-                    <p className="mb-6">{webinar.description}</p>
+                    <div className="flex items-center gap-6 mb-8 p-6 bg-white/5 border border-white/5 rounded-2xl">
+                      {webinar.brand_logo_url && (
+                        <img src={webinar.brand_logo_url} alt="Brand" className="h-12 w-auto object-contain" referrerPolicy="no-referrer" />
+                      )}
+                      <div className="h-10 w-px bg-white/10" />
+                      <div className="flex -space-x-3">
+                        {webinar.speaker_images && webinar.speaker_images.length > 0 ? (
+                          webinar.speaker_images.map((img: string, i: number) => (
+                            <img key={i} src={img} alt="Speaker" className="w-12 h-12 rounded-full border-2 border-[#0a0a0a] object-cover" referrerPolicy="no-referrer" />
+                          ))
+                        ) : (
+                          <div className="w-12 h-12 rounded-full bg-emerald-500/20 border-2 border-[#0a0a0a] flex items-center justify-center text-emerald-500 font-bold">
+                            {webinar.speaker_name?.charAt(0) || 'S'}
+                          </div>
+                        )}
+                      </div>
+                      <div>
+                        <div className="text-white font-bold text-sm">{webinar.speaker_name || webinar.speaker || 'Institutional Lead'}</div>
+                        <div className="text-[10px] text-gray-500 uppercase tracking-widest">Lead Strategist</div>
+                      </div>
+                    </div>
+
+                    <p className="mb-6 text-lg text-white/80">{webinar.description}</p>
+                    
+                    {webinar.about_content && (
+                      <div className="mb-10">
+                        <h3 className="text-white font-bold mb-4">About This Session</h3>
+                        <p className="whitespace-pre-wrap">{webinar.about_content}</p>
+                      </div>
+                    )}
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
                       <div className="p-6 rounded-2xl bg-white/5 border border-white/5">
                         <h4 className="text-white font-bold mb-4 flex items-center gap-2">
@@ -256,18 +387,27 @@ export const WebinarDetail = () => {
                           What You'll Learn
                         </h4>
                         <ul className="space-y-3 text-sm">
-                          <li className="flex items-start gap-2">
-                            <Check className="w-4 h-4 text-emerald-500 mt-0.5" />
-                            <span>Institutional order flow identification</span>
-                          </li>
-                          <li className="flex items-start gap-2">
-                            <Check className="w-4 h-4 text-emerald-500 mt-0.5" />
-                            <span>Liquidity void trading strategies</span>
-                          </li>
-                          <li className="flex items-start gap-2">
-                            <Check className="w-4 h-4 text-emerald-500 mt-0.5" />
-                            <span>Risk management for large accounts</span>
-                          </li>
+                          {webinar.advanced_features?.learning_points?.map((point: string, i: number) => (
+                            <li key={i} className="flex items-start gap-2">
+                              <Check className="w-4 h-4 text-emerald-500 mt-0.5" />
+                              <span>{point}</span>
+                            </li>
+                          )) || (
+                            <>
+                              <li className="flex items-start gap-2">
+                                <Check className="w-4 h-4 text-emerald-500 mt-0.5" />
+                                <span>Institutional order flow identification</span>
+                              </li>
+                              <li className="flex items-start gap-2">
+                                <Check className="w-4 h-4 text-emerald-500 mt-0.5" />
+                                <span>Liquidity void trading strategies</span>
+                              </li>
+                              <li className="flex items-start gap-2">
+                                <Check className="w-4 h-4 text-emerald-500 mt-0.5" />
+                                <span>Risk management for large accounts</span>
+                              </li>
+                            </>
+                          )}
                         </ul>
                       </div>
                       <div className="p-6 rounded-2xl bg-white/5 border border-white/5">
@@ -276,10 +416,24 @@ export const WebinarDetail = () => {
                           Speaker Credibility
                         </h4>
                         <p className="text-sm">
-                          {webinar.speaker || 'Speaker'} has over 12 years of experience in quantitative trading and has managed portfolios for top-tier hedge funds.
+                          {webinar.speaker_name || webinar.speaker || 'Institutional Lead'} has over 12 years of experience in quantitative trading and has managed portfolios for top-tier hedge funds.
                         </p>
+                        {webinar.speaker_profile_url && (
+                          <a href={webinar.speaker_profile_url} target="_blank" rel="noopener noreferrer" className="text-emerald-500 text-xs font-bold mt-4 inline-block hover:underline">View Professional Profile</a>
+                        )}
                       </div>
                     </div>
+
+                    {webinar.sponsor_logos?.length > 0 && (
+                      <div className="mt-12">
+                        <h4 className="text-gray-500 text-[10px] font-bold uppercase tracking-[0.2em] mb-6 text-center">Institutional Partners</h4>
+                        <div className="flex flex-wrap justify-center items-center gap-8 opacity-50 grayscale hover:grayscale-0 transition-all">
+                          {webinar.sponsor_logos.map((logo: string, i: number) => (
+                            <img key={i} src={logo} alt="Sponsor" className="h-8 w-auto object-contain" referrerPolicy="no-referrer" />
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
                 

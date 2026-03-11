@@ -1,13 +1,18 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import { Play, Star, ShieldCheck, Cpu, Activity, CheckCircle2 } from "lucide-react";
+import { fetchReviews } from "../services/reviewService";
 
 export const AlgoGreatness = () => {
-  const reviews = [
-    { name: "Michael T.", role: "Prop Firm Funded", text: "Passed my $100k challenge in 12 days using the XAUUSD bot. The drawdown management is insane.", rating: 5 },
-    { name: "Sarah L.", role: "Retail Trader", text: "I've tried dozens of EAs. This is the only one that actually adapts to news events instead of blowing the account.", rating: 5 },
-    { name: "David K.", role: "Institutional Analyst", text: "The underlying logic mirrors institutional order block trading. Very impressive architecture.", rating: 5 }
-  ];
+  const [reviews, setReviews] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetchReviews().then(data => {
+      if (data && data.length > 0) {
+        setReviews(data.slice(0, 3));
+      }
+    });
+  }, []);
 
   return (
     <div className="py-16 md:py-24 border-t border-white/10 mt-10 md:mt-20">

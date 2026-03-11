@@ -70,15 +70,15 @@ export const Navbar = () => {
               <div className="flex items-center gap-4 border-l border-white/10 pl-8">
                 {user ? (
                   <>
-                    <Link to="/dashboard" className="text-gray-400 hover:text-white transition-colors">
+                    <Link to="/dashboard" className="text-gray-400 hover:text-white transition-colors" title="Dashboard">
                       <LayoutDashboard className="w-5 h-5" />
                     </Link>
                     {(user.email === 'admin@ifxtrades.com' || user.email === 'admin@tradinghub.com' || user.user_metadata?.role === 'admin') && (
-                      <Link to="/admin" className="text-gray-400 hover:text-white transition-colors">
+                      <Link to="/admin" className="text-gray-400 hover:text-white transition-colors" title="Admin Panel">
                         <Settings className="w-5 h-5" />
                       </Link>
                     )}
-                    <button type="button" onClick={logout} className="text-gray-400 hover:text-red-400 transition-colors">
+                    <button type="button" onClick={logout} className="text-gray-400 hover:text-red-400 transition-colors" title="Sign Out">
                       <LogOut className="w-5 h-5" />
                     </button>
                   </>
@@ -173,7 +173,6 @@ export const Navbar = () => {
                     Institutional
                   </div>
                   
-                  {/* Removed Hiring Link */}
                   {user ? (
                     <>
                       <Link 

@@ -7,10 +7,14 @@ export interface Webinar {
   speaker_profile_url: string;
   brand_logo_url: string;
   webinar_image_url: string;
+  sponsor_logos: string[];
+  speaker_images: string[];
+  about_content: string;
+  q_and_a: QA[];
+  advanced_features: any;
   registration_count: number;
   max_attendees: number;
   status: 'upcoming' | 'live' | 'past';
-  recording_url?: string;
   is_paid: boolean;
   price: number;
 }
@@ -30,10 +34,15 @@ export interface Blog {
 }
 
 export interface Review {
+  id?: string;
   user_name: string;
   rating: number;
   comment: string;
-  date: string;
+  text?: string;
+  image_url?: string;
+  region?: string;
+  date?: string;
+  created_at?: string;
 }
 
 export interface QA {
@@ -53,6 +62,9 @@ export interface Product {
   description: string;
   price: number;
   image_url: string;
+  strategy_details: string;
+  risk_profile: string;
+  performance_data: { type: 'text' | 'image'; content: string }[];
   strategy_graph_url: string;
   backtesting_result_url: string;
   video_explanation_url: string;
