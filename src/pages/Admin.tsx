@@ -12,6 +12,9 @@ import { AgentManager } from "./admin/AgentManager";
 import { WebinarManager } from "./admin/WebinarManager";
 import { ProductManager } from "./admin/ProductManager";
 import { ReviewManager } from "./admin/ReviewManager";
+import { SettingsManager } from "./admin/SettingsManager";
+
+import { supabase } from "../lib/supabase";
 
 /**
  * Master Admin CRM Dashboard
@@ -27,7 +30,10 @@ export const Admin = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await fetch("/api/admin/stats");
+        const { data: { session } } = await supabase.auth.getSession();
+        const res = await fetch("/api/admin/stats", {
+          headers: { "Authorization": `Bearer ${session?.access_token}` }
+        });
         const data = await res.json();
         if (data && !data.error) {
           setStats(data);
@@ -44,6 +50,7 @@ export const Admin = () => {
   // Security Check: Only allow admins
   const isAdmin = user?.email === 'admin@ifxtrades.com' || 
                   user?.email === 'admin@tradinghub.com' || 
+                  user?.email === 'piyushmal1301@gmail.com' ||
                   user?.user_metadata?.role === 'admin';
 
   if (!user || !isAdmin) return <Navigate to="/dashboard" />;
@@ -95,16 +102,7 @@ export const Admin = () => {
         {activeTab === "agents" && <AgentManager />}
         {activeTab === "webinars" && <WebinarManager />}
         {activeTab === "reviews" && <ReviewManager />}
-        
-        {activeTab === "settings" && (
-          <div className="flex flex-col items-center justify-center py-32 text-center bg-zinc-900/50 border border-white/5 rounded-3xl">
-            <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center text-gray-700 mb-6">
-              <Settings className="w-8 h-8" />
-            </div>
-            <h3 className="text-white font-bold text-xl mb-2">Module Under Construction</h3>
-            <p className="text-gray-500 text-sm max-w-md">This management module is currently being optimized for the new institutional architecture.</p>
-          </div>
-        )}
+        {activeTab === "settings" && <SettingsManager />}
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { TrendingUp, Instagram, Twitter, Youtube, Mail, Shield, AlertTriangle, FileText, Globe } from "lucide-react";
+import { BRANDING } from "../../constants/branding";
 
 export const Footer = () => (
   <footer className="bg-[#050505] border-t border-white/5 pt-24 pb-12 relative overflow-hidden">
@@ -15,7 +16,7 @@ export const Footer = () => (
           <Link to="/" className="flex items-center mb-8 group">
             <div className="h-12 w-auto flex items-center justify-center overflow-hidden transition-all relative">
               <img 
-                src="/logo.png" 
+                src={BRANDING.logoUrl} 
                 alt="IFXTrades Logo" 
                 className="h-full w-auto object-contain z-10" 
               />

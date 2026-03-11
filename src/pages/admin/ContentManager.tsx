@@ -12,6 +12,7 @@ export const ContentManager = () => {
   const [takeaways, setTakeaways] = useState("");
   const [loading, setLoading] = useState(false);
   const [recentContent, setRecentContent] = useState<any[]>([]);
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   const fetchRecentContent = async () => {
     const { data } = await supabase
@@ -26,37 +27,71 @@ export const ContentManager = () => {
     fetchRecentContent();
   }, []);
 
+  const handleEdit = (item: any) => {
+    setEditingId(item.id);
+    setTitle(item.title || "");
+    setBody(item.content || "");
+    setType(item.content_type || "signal");
+    setVideoUrl(item.metadata?.video_url || "");
+    setDownloadUrl(item.metadata?.download_url || "");
+    setCoverImage(item.metadata?.cover_image || "");
+    setTakeaways(item.metadata?.takeaways?.join("\n") || "");
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleCancelEdit = () => {
+    setEditingId(null);
+    setTitle("");
+    setBody("");
+    setType("signal");
+    setVideoUrl("");
+    setDownloadUrl("");
+    setCoverImage("");
+    setTakeaways("");
+  };
+
   const handlePublish = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
       const { data: { session } } = await supabase.auth.getSession();
-      const res = await fetch("/api/admin/content", {
-        method: "POST",
-        headers: { 
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${session?.access_token}`
-        },
-        body: JSON.stringify({ 
-          title, 
-          content_type: type, 
-          content: body, 
-          metadata: { 
-            video_url: videoUrl,
-            download_url: downloadUrl,
-            cover_image: coverImage,
-            takeaways: takeaways.split("\n").filter(t => t.trim() !== ""),
-          } 
-        })
-      });
+      
+      const payload = { 
+        title, 
+        content_type: type, 
+        content: body, 
+        metadata: { 
+          video_url: videoUrl,
+          download_url: downloadUrl,
+          cover_image: coverImage,
+          takeaways: takeaways.split("\n").filter(t => t.trim() !== ""),
+        } 
+      };
+
+      let res;
+      if (editingId) {
+        res = await fetch(`/api/admin/content/${editingId}`, {
+          method: "PUT",
+          headers: { 
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${session?.access_token}`
+          },
+          body: JSON.stringify(payload)
+        });
+      } else {
+        res = await fetch("/api/admin/content", {
+          method: "POST",
+          headers: { 
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${session?.access_token}`
+          },
+          body: JSON.stringify(payload)
+        });
+      }
+
       if (res.ok) {
-        alert("Published successfully!");
-        setTitle("");
-        setBody("");
-        setVideoUrl("");
-        setDownloadUrl("");
-        setCoverImage("");
-        setTakeaways("");
+        alert(editingId ? "Updated successfully!" : "Published successfully!");
+        handleCancelEdit();
         fetchRecentContent();
       } else {
         const err = await res.json();
@@ -96,7 +131,9 @@ export const ContentManager = () => {
             <div className="w-10 h-10 bg-emerald-500/10 rounded-xl flex items-center justify-center text-emerald-500">
               <Plus className="w-5 h-5" />
             </div>
-            <h2 className="text-xl font-bold text-white tracking-tight">Create New Content</h2>
+            <h2 className="text-xl font-bold text-white tracking-tight">
+              {editingId ? "Edit Content" : "Create New Content"}
+            </h2>
           </div>
 
           <form onSubmit={handlePublish} className="space-y-6">
@@ -168,13 +205,24 @@ export const ContentManager = () => {
               </div>
             )}
 
-            <button 
-              disabled={loading}
-              className="w-full py-4 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 disabled:opacity-50"
-            >
-              {loading ? <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" /> : <Zap className="w-5 h-5" />}
-              Publish to Intelligence Hub
-            </button>
+            <div className="flex gap-4">
+              {editingId && (
+                <button 
+                  type="button" 
+                  onClick={handleCancelEdit}
+                  className="px-6 py-4 bg-white/5 text-white font-bold rounded-xl hover:bg-white/10 transition-all"
+                >
+                  Cancel
+                </button>
+              )}
+              <button 
+                disabled={loading}
+                className="flex-1 py-4 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 disabled:opacity-50"
+              >
+                {loading ? <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" /> : <Zap className="w-5 h-5" />}
+                {editingId ? "Update Content" : "Publish to Intelligence Hub"}
+              </button>
+            </div>
           </form>
         </div>
       </div>
@@ -206,6 +254,7 @@ export const ContentManager = () => {
                   </div>
                 </div>
                 <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button onClick={() => handleEdit(item)} className="p-2 text-gray-500 hover:text-emerald-500 transition-colors"><Edit2 className="w-4 h-4" /></button>
                   <button onClick={() => handleDelete(item.id)} className="p-2 text-gray-500 hover:text-red-500 transition-colors"><Trash2 className="w-4 h-4" /></button>
                 </div>
               </div>

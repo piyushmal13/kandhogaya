@@ -1,6 +1,7 @@
 import React, { useState, useEffect, createContext, useContext } from "react";
 import { TrendingUp } from "lucide-react";
 import { supabase } from "../lib/supabase";
+import { BRANDING } from "../constants/branding";
 
 const AuthContext = createContext<any>(null);
 export const useAuth = () => useContext(AuthContext);
@@ -51,9 +52,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) {
       console.error("Login error:", error.message);
-      return false;
+      return { success: false, error: error.message };
     }
-    return true;
+    return { success: true };
+  };
+
+  const signup = async (email: string, password: string) => {
+    const { data, error } = await supabase.auth.signUp({ 
+      email, 
+      password,
+      options: {
+        emailRedirectTo: window.location.origin + '/dashboard'
+      }
+    });
+    if (error) {
+      console.error("Signup error:", error.message);
+      return { success: false, error: error.message };
+    }
+    return { success: true, needsEmailConfirmation: !data.session };
   };
 
   const logout = async () => {
@@ -61,12 +77,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, signup, logout, loading }}>
       {loading ? (
         <div className="min-h-screen bg-black flex flex-col items-center justify-center text-white p-4">
           <div className="h-16 w-auto flex items-center justify-center animate-pulse mb-6">
             <img 
-              src="/logo.png" 
+              src={BRANDING.logoUrl} 
               alt="IFXTrades Logo" 
               className="h-full w-auto object-contain" 
             />

@@ -38,25 +38,35 @@ export const ReviewManager = () => {
     if (!editingId) return;
     
     setLoading(true);
-    const { error } = await supabase
-      .from('reviews')
-      .update({
-        name: editForm.name || editForm.user_name,
-        user_name: editForm.user_name,
-        rating: editForm.rating,
-        comment: editForm.comment,
-        text: editForm.text || editForm.comment,
-        image_url: editForm.image_url,
-        region: editForm.region,
-        role: editForm.role
-      })
-      .eq('id', editingId);
-    
-    if (error) {
-      alert("Error updating review: " + error.message);
-    } else {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const res = await fetch(`/api/admin/reviews/${editingId}`, {
+        method: "PUT",
+        headers: { 
+          "Authorization": `Bearer ${session?.access_token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name: editForm.name || editForm.user_name,
+          user_name: editForm.user_name,
+          rating: editForm.rating,
+          comment: editForm.comment,
+          text: editForm.text || editForm.comment,
+          image_url: editForm.image_url,
+          region: editForm.region,
+          role: editForm.role
+        })
+      });
+      
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Failed to update review");
+      }
+      
       setEditingId(null);
       fetchReviews();
+    } catch (error: any) {
+      alert("Error updating review: " + error.message);
     }
     setLoading(false);
   };
@@ -64,15 +74,21 @@ export const ReviewManager = () => {
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this review?")) return;
     
-    const { error } = await supabase
-      .from('reviews')
-      .delete()
-      .eq('id', id);
-    
-    if (error) {
-      alert("Error deleting review: " + error.message);
-    } else {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const res = await fetch(`/api/admin/reviews/${id}`, {
+        method: "DELETE",
+        headers: { "Authorization": `Bearer ${session?.access_token}` }
+      });
+      
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Failed to delete review");
+      }
+      
       fetchReviews();
+    } catch (error: any) {
+      alert("Error deleting review: " + error.message);
     }
   };
 
@@ -89,14 +105,25 @@ export const ReviewManager = () => {
       target_id: '00000000-0000-0000-0000-000000000000' // Placeholder for general review
     };
 
-    const { error } = await supabase
-      .from('reviews')
-      .insert([newReview]);
-    
-    if (error) {
-      alert("Error creating review: " + error.message);
-    } else {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const res = await fetch(`/api/admin/reviews`, {
+        method: "POST",
+        headers: { 
+          "Authorization": `Bearer ${session?.access_token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(newReview)
+      });
+      
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Failed to create review");
+      }
+      
       fetchReviews();
+    } catch (error: any) {
+      alert("Error creating review: " + error.message);
     }
   };
 

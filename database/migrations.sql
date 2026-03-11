@@ -13,6 +13,13 @@ CREATE TABLE IF NOT EXISTS users (
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+ALTER TABLE users ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Users can view their own profile" ON users FOR SELECT USING (id = auth.uid());
+CREATE POLICY "Users can update their own profile" ON users FOR UPDATE USING (id = auth.uid());
+CREATE POLICY "Admins can view all users" ON users FOR SELECT USING (
+  EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin')
+);
+
 ALTER TABLE users ADD COLUMN IF NOT EXISTS full_name TEXT;
 ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar_url TEXT;
 ALTER TABLE users ADD COLUMN IF NOT EXISTS role TEXT DEFAULT 'user';
@@ -117,6 +124,12 @@ CREATE TABLE IF NOT EXISTS bot_licenses (
     last_validated_at TIMESTAMPTZ,
     expires_at TIMESTAMPTZ,
     created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE bot_licenses ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Users can view their own licenses" ON bot_licenses FOR SELECT USING (user_id = auth.uid());
+CREATE POLICY "Admins have full access to licenses" ON bot_licenses FOR ALL USING (
+  EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin')
 );
 
 -- 5. Event & Education Service
@@ -309,3 +322,24 @@ CREATE INDEX IF NOT EXISTS idx_signals_status ON signals(status);
 CREATE INDEX IF NOT EXISTS idx_market_symbol ON market_data(symbol);
 CREATE INDEX IF NOT EXISTS idx_leads_email ON leads(email);
 CREATE INDEX IF NOT EXISTS idx_webinar_reg_email ON webinar_registrations(email);
+CREATE TABLE IF NOT EXISTS audit_logs (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  actor_id UUID REFERENCES auth.users(id),
+  action VARCHAR(255) NOT NULL,
+  entity_type VARCHAR(255) NOT NULL,
+  entity_id VARCHAR(255),
+  details JSONB,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- RLS for audit_logs
+ALTER TABLE audit_logs ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Admins can view audit logs" ON audit_logs FOR SELECT USING (
+  EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin')
+);
+CREATE POLICY "Admins can insert audit logs" ON audit_logs FOR INSERT WITH CHECK (
+  EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin')
+);
+
+CREATE INDEX IF NOT EXISTS idx_audit_logs_actor ON audit_logs(actor_id);
+CREATE INDEX IF NOT EXISTS idx_audit_logs_created_at ON audit_logs(created_at DESC);

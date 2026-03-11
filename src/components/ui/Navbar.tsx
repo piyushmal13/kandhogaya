@@ -73,7 +73,7 @@ export const Navbar = () => {
                     <Link to="/dashboard" className="text-gray-400 hover:text-white transition-colors" title="Dashboard">
                       <LayoutDashboard className="w-5 h-5" />
                     </Link>
-                    {(user.email === 'admin@ifxtrades.com' || user.email === 'admin@tradinghub.com' || user.user_metadata?.role === 'admin') && (
+                    {(user.email === 'admin@ifxtrades.com' || user.email === 'admin@tradinghub.com' || user.email === 'piyushmal1301@gmail.com' || user.user_metadata?.role === 'admin') && (
                       <Link to="/admin" className="text-gray-400 hover:text-white transition-colors" title="Admin Panel">
                         <Settings className="w-5 h-5" />
                       </Link>
@@ -183,7 +183,7 @@ export const Navbar = () => {
                         <LayoutDashboard className="w-5 h-5" />
                         <span className="text-lg font-bold tracking-tight">Dashboard</span>
                       </Link>
-                      {(user.email === 'admin@ifxtrades.com' || user.email === 'admin@tradinghub.com' || user.user_metadata?.role === 'admin') && (
+                      {(user.email === 'admin@ifxtrades.com' || user.email === 'admin@tradinghub.com' || user.email === 'piyushmal1301@gmail.com' || user.user_metadata?.role === 'admin') && (
                         <Link 
                           to="/admin" 
                           onClick={() => setIsOpen(false)}

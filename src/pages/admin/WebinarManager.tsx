@@ -22,6 +22,8 @@ export const WebinarManager = () => {
   const [loading, setLoading] = useState(false);
   const [recentWebinars, setRecentWebinars] = useState<any[]>([]);
 
+  const [editingId, setEditingId] = useState<string | null>(null);
+
   const fetchRecentWebinars = async () => {
     const { data } = await supabase
       .from('webinars')
@@ -35,55 +37,105 @@ export const WebinarManager = () => {
     fetchRecentWebinars();
   }, []);
 
+  const handleEdit = (webinar: any) => {
+    setEditingId(webinar.id);
+    setTitle(webinar.title || "");
+    setDescription(webinar.description || "");
+    setDateTime(webinar.date_time ? new Date(webinar.date_time).toISOString().slice(0, 16) : "");
+    setSpeaker(webinar.speaker_name || "");
+    setSpeakerProfileUrl(webinar.speaker_profile_url || "");
+    setBrandLogoUrl(webinar.brand_logo_url || "");
+    setWebinarImageUrl(webinar.webinar_image_url || "");
+    setAboutContent(webinar.about_content || "");
+    setLevel(webinar.metadata?.level || "All Levels");
+    setDuration(webinar.metadata?.duration || "60 mins");
+    setIsPaid(webinar.is_paid || false);
+    setPrice(webinar.price || 0);
+    setIsSponsored(webinar.metadata?.is_sponsored || false);
+    setSponsors(webinar.metadata?.sponsors?.join(", ") || "");
+    setSponsorLogos(Array.isArray(webinar.sponsor_logos) ? webinar.sponsor_logos.join(", ") : "");
+    setMaxAttendees(webinar.max_attendees || 500);
+    
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleCancelEdit = () => {
+    setEditingId(null);
+    setTitle("");
+    setDescription("");
+    setDateTime("");
+    setSpeaker("");
+    setSpeakerProfileUrl("");
+    setBrandLogoUrl("");
+    setWebinarImageUrl("");
+    setAboutContent("");
+    setLevel("All Levels");
+    setDuration("60 mins");
+    setIsPaid(false);
+    setPrice(0);
+    setIsSponsored(false);
+    setSponsors("");
+    setSponsorLogos("");
+    setMaxAttendees(500);
+  };
+
   const handlePublish = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const { error } = await supabase
-        .from('webinars')
-        .insert([{
-          title,
-          description,
-          date_time: new Date(dateTime).toISOString(),
-          speaker_name: speaker,
-          speaker_profile_url: speakerProfileUrl,
-          brand_logo_url: brandLogoUrl,
-          webinar_image_url: webinarImageUrl,
-          about_content: aboutContent,
-          is_paid: isPaid,
-          price: isPaid ? price : 0,
-          max_attendees: maxAttendees,
-          status: 'upcoming',
-          sponsor_logos: sponsorLogos.split(",").map(s => s.trim()).filter(s => s !== ""),
-          metadata: {
-            level,
-            duration,
-            is_sponsored: isSponsored,
-            sponsors: sponsors.split(",").map(s => s.trim()).filter(s => s !== ""),
-          }
-        }]);
+      const payload = {
+        title,
+        description,
+        date_time: new Date(dateTime).toISOString(),
+        speaker_name: speaker,
+        speaker_profile_url: speakerProfileUrl,
+        brand_logo_url: brandLogoUrl,
+        webinar_image_url: webinarImageUrl,
+        about_content: aboutContent,
+        is_paid: isPaid,
+        price: isPaid ? price : 0,
+        max_attendees: maxAttendees,
+        status: 'upcoming',
+        sponsor_logos: sponsorLogos.split(",").map(s => s.trim()).filter(s => s !== ""),
+        metadata: {
+          level,
+          duration,
+          is_sponsored: isSponsored,
+          sponsors: sponsors.split(",").map(s => s.trim()).filter(s => s !== ""),
+        }
+      };
 
-      if (!error) {
-        alert("Webinar published successfully!");
-        setTitle("");
-        setDescription("");
-        setDateTime("");
-        setSpeaker("");
-        setSpeakerProfileUrl("");
-        setBrandLogoUrl("");
-        setWebinarImageUrl("");
-        setAboutContent("");
-        setLevel("All Levels");
-        setDuration("60 mins");
-        setIsPaid(false);
-        setPrice(0);
-        setIsSponsored(false);
-        setSponsors("");
-        setSponsorLogos("");
-        setMaxAttendees(500);
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      let res;
+      if (editingId) {
+        res = await fetch(`/api/admin/webinars/${editingId}`, {
+          method: "PUT",
+          headers: { 
+            "Authorization": `Bearer ${session?.access_token}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
+      } else {
+        res = await fetch(`/api/admin/webinars`, {
+          method: "POST",
+          headers: { 
+            "Authorization": `Bearer ${session?.access_token}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
+      }
+
+      if (res.ok) {
+        alert(editingId ? "Webinar updated successfully!" : "Webinar published successfully!");
+        handleCancelEdit();
         fetchRecentWebinars();
       } else {
-        alert(`Error: ${error.message}`);
+        const err = await res.json();
+        alert(`Error: ${err.error || "Failed to save webinar"}`);
       }
     } catch (err) {
       console.error("Publishing error:", err);
@@ -119,7 +171,9 @@ export const WebinarManager = () => {
             <div className="w-10 h-10 bg-emerald-500/10 rounded-xl flex items-center justify-center text-emerald-500">
               <Video className="w-5 h-5" />
             </div>
-            <h2 className="text-xl font-bold text-white tracking-tight">Create New Webinar</h2>
+            <h2 className="text-xl font-bold text-white tracking-tight">
+              {editingId ? "Edit Webinar" : "Create New Webinar"}
+            </h2>
           </div>
 
           <form onSubmit={handlePublish} className="space-y-6">
@@ -301,14 +355,25 @@ export const WebinarManager = () => {
               </div>
             </div>
 
-            <button 
-              type="submit" 
-              disabled={loading}
-              className="w-full py-4 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all shadow-[0_0_20px_rgba(16,185,129,0.2)] disabled:opacity-50 flex items-center justify-center gap-2"
-            >
-              {loading ? "Publishing..." : "Publish Webinar"}
-              {!loading && <Plus className="w-5 h-5" />}
-            </button>
+            <div className="flex gap-4">
+              {editingId && (
+                <button 
+                  type="button" 
+                  onClick={handleCancelEdit}
+                  className="px-6 py-4 bg-white/5 text-white font-bold rounded-xl hover:bg-white/10 transition-all"
+                >
+                  Cancel
+                </button>
+              )}
+              <button 
+                type="submit" 
+                disabled={loading}
+                className="flex-1 py-4 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all shadow-[0_0_20px_rgba(16,185,129,0.2)] disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {loading ? "Saving..." : (editingId ? "Update Webinar" : "Publish Webinar")}
+                {!loading && !editingId && <Plus className="w-5 h-5" />}
+              </button>
+            </div>
           </form>
         </div>
       </div>
@@ -340,6 +405,7 @@ export const WebinarManager = () => {
                   </div>
                 </div>
                 <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button onClick={() => handleEdit(item)} className="p-2 text-gray-500 hover:text-emerald-500 transition-colors"><Edit2 className="w-4 h-4" /></button>
                   <button onClick={() => handleDelete(item.id)} className="p-2 text-gray-500 hover:text-red-500 transition-colors"><Trash2 className="w-4 h-4" /></button>
                 </div>
               </div>

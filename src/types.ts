@@ -62,6 +62,7 @@ export interface Product {
   id: string;
   name: string;
   description: string;
+  type?: string;
   price: number;
   image_url: string;
   strategy_details: string;

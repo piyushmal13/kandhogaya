@@ -14,7 +14,14 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 export const supabase = createClient(
   supabaseUrl || 'https://placeholder.supabase.co',
-  supabaseAnonKey || 'placeholder'
+  supabaseAnonKey || 'placeholder',
+  {
+    auth: {
+      autoRefreshToken: true,
+      persistSession: true,
+      detectSessionInUrl: true
+    }
+  }
 );
 
 /**
@@ -28,7 +35,7 @@ export const safeQuery = async <T>(query: any): Promise<T | []> => {
     const duration = performance.now() - start;
     
     // Log slow queries for optimization (IT Head monitoring)
-    if (duration > 500) {
+    if (duration > 2000) {
       console.warn(`[DB Performance] Slow query detected (${Math.round(duration)}ms):`, query);
     }
 

@@ -2,41 +2,38 @@
 -- Run this script in your Supabase SQL Editor to populate your tables with professional institutional examples.
 
 -- 1. Populate Products (Institutional Algos)
-INSERT INTO public.products (name, description, type, category, price, image_url, strategy_details, risk_profile, performance_data, terms_and_conditions) VALUES
+INSERT INTO public.products (name, description, category, price, image_url, strategy_details, risk_profile, performance_data, terms_and_conditions) VALUES
 (
   'Apex Alpha V4', 
   'High-frequency quantitative model designed for XAUUSD and Major FX pairs. Executes trades in sub-millisecond environments.', 
-  'algo_bot', 
   'Quantitative', 
   199.00, 
   'https://images.unsplash.com/photo-1642790103517-181294696222?auto=format&fit=crop&q=80&w=800',
   'Utilizes a proprietary mean-reversion algorithm combined with institutional order flow tracking. It identifies liquidity voids and enters trades with 0.1ms execution logic.',
   'Conservative: Max Drawdown 4.2%. Dynamic position sizing based on ATR volatility.',
-  '[{"type": "text", "content": "92% Win Rate over 24 months"}, {"type": "image", "content": "https://picsum.photos/seed/apex/800/400"}]',
+  '[{"type": "text", "content": "92% Win Rate over 24 months"}, {"type": "image", "content": "https://picsum.photos/seed/apex/800/400"}]'::jsonb,
   'Standard institutional license applies. No redistribution.'
 ),
 (
   'QuantFlow HFT', 
   'Sub-millisecond execution engine for scalping the New York session. Optimized for ECN bridges.', 
-  'algo_bot', 
   'HFT Scalping', 
   299.00, 
   'https://images.unsplash.com/photo-1611974717535-7c446a0564cb?auto=format&fit=crop&q=80&w=800',
   'Focuses on micro-inefficiencies in the ECN bridge. Best used with low-spread institutional brokers.',
   'Aggressive: Designed for high-frequency turnover. Requires minimum $10k equity.',
-  '[{"type": "text", "content": "Average Monthly Return: 18.4%"}]',
+  '[{"type": "text", "content": "Average Monthly Return: 18.4%"}]'::jsonb,
   'Requires VPS with <1ms latency to broker server.'
 ),
 (
   'Macro Trend AI', 
   'Long-term trend following model using deep learning to analyze macroeconomic cycles.', 
-  'algo_bot', 
   'Trend Following', 
   149.00, 
   'https://images.unsplash.com/photo-1611974717535-7c446a0564cb?auto=format&fit=crop&q=80&w=800',
   'Analyzes interest rate differentials, inflation data, and central bank sentiment to position for multi-month trends.',
   'Moderate: Targeted Sharpe Ratio of 1.8. Diversified across 12 major pairs.',
-  '[{"type": "text", "content": "Annualized Return: 42%"}]',
+  '[{"type": "text", "content": "Annualized Return: 42%"}]'::jsonb,
   'Best suited for long-term capital appreciation.'
 );
 

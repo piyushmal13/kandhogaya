@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
-import { Zap, ShieldCheck, Bell } from "lucide-react";
+import { Zap, ShieldCheck, Bell, Settings } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { supabase } from "../lib/supabase";
 import { cn } from "../utils/cn";
+import { Link } from "react-router-dom";
 
 export const Dashboard = () => {
   const { user } = useAuth();
@@ -36,12 +37,23 @@ export const Dashboard = () => {
 
   if (!user) return <Navigate to="/login" />;
 
+  const isAdmin = user.email === 'admin@ifxtrades.com' || 
+                  user.email === 'admin@tradinghub.com' || 
+                  user.email === 'piyushmal1301@gmail.com' ||
+                  user.user_metadata?.role === 'admin';
+
   return (
     <div className="pt-24 pb-20 px-4 max-w-7xl mx-auto">
-      <div className="flex justify-between items-center mb-12">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-12">
         <h1 className="text-3xl font-bold text-white">Welcome, {user.user_metadata?.full_name || user.email}</h1>
         <div className="flex gap-4">
-          <div className="bg-emerald-500/10 border border-emerald-500/20 px-4 py-2 rounded-lg">
+          {isAdmin && (
+            <Link to="/admin" className="bg-white text-black px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 hover:bg-gray-200 transition-all">
+              <Settings className="w-4 h-4" />
+              Admin Panel
+            </Link>
+          )}
+          <div className="bg-emerald-500/10 border border-emerald-500/20 px-4 py-2 rounded-lg flex items-center">
             <span className="text-xs text-emerald-500 font-bold uppercase">Pro Member</span>
           </div>
         </div>

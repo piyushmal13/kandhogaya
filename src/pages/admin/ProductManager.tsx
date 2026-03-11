@@ -38,16 +38,39 @@ export const ProductManager = () => {
     if (!editingId) return;
     
     setLoading(true);
-    const { error } = await supabase
-      .from('products')
-      .update(editForm)
-      .eq('id', editingId);
     
-    if (error) {
-      alert("Error updating product: " + error.message);
-    } else {
+    // Ensure performance_data is valid JSON before saving
+    let dataToSave = { ...editForm };
+    if (typeof dataToSave.performance_data === 'string') {
+      try {
+        dataToSave.performance_data = JSON.parse(dataToSave.performance_data);
+      } catch (e) {
+        alert("Performance Data must be valid JSON.");
+        setLoading(false);
+        return;
+      }
+    }
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const res = await fetch(`/api/admin/products/${editingId}`, {
+        method: "PUT",
+        headers: { 
+          "Authorization": `Bearer ${session?.access_token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(dataToSave)
+      });
+      
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Failed to update product");
+      }
+      
       setEditingId(null);
       fetchProducts();
+    } catch (error: any) {
+      alert("Error updating product: " + error.message);
     }
     setLoading(false);
   };
@@ -55,15 +78,21 @@ export const ProductManager = () => {
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this algorithm?")) return;
     
-    const { error } = await supabase
-      .from('products')
-      .delete()
-      .eq('id', id);
-    
-    if (error) {
-      alert("Error deleting product: " + error.message);
-    } else {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const res = await fetch(`/api/admin/products/${id}`, {
+        method: "DELETE",
+        headers: { "Authorization": `Bearer ${session?.access_token}` }
+      });
+      
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Failed to delete product");
+      }
+      
       fetchProducts();
+    } catch (error: any) {
+      alert("Error deleting product: " + error.message);
     }
   };
 
@@ -73,6 +102,7 @@ export const ProductManager = () => {
       description: "Enter description here",
       price: 99,
       category: "Quantitative",
+      type: "algo_bot",
       image_url: "https://picsum.photos/seed/newalgo/800/450",
       strategy_graph_url: "",
       backtesting_result_url: "",
@@ -80,17 +110,29 @@ export const ProductManager = () => {
       long_plan_offers: [],
       reviews: [],
       q_and_a: [],
-      terms_and_conditions: "Standard terms apply."
+      terms_and_conditions: "Standard terms apply.",
+      performance_data: []
     };
 
-    const { error } = await supabase
-      .from('products')
-      .insert([newProduct]);
-    
-    if (error) {
-      alert("Error creating product: " + error.message);
-    } else {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const res = await fetch(`/api/admin/products`, {
+        method: "POST",
+        headers: { 
+          "Authorization": `Bearer ${session?.access_token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(newProduct)
+      });
+      
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Failed to create product");
+      }
+      
       fetchProducts();
+    } catch (error: any) {
+      alert("Error creating product: " + error.message);
     }
   };
 
@@ -138,6 +180,38 @@ export const ProductManager = () => {
                         value={editForm.category || ""} 
                         onChange={e => setEditForm({...editForm, category: e.target.value})}
                         className="w-full bg-black border border-white/10 rounded-xl px-4 py-2 text-white outline-none focus:border-emerald-500"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Type</label>
+                      <select 
+                        value={editForm.type || "algo_bot"} 
+                        onChange={e => setEditForm({...editForm, type: e.target.value})}
+                        className="w-full bg-black border border-white/10 rounded-xl px-4 py-2 text-white outline-none focus:border-emerald-500"
+                      >
+                        <option value="algo_bot">Algo Bot</option>
+                        <option value="indicator">Indicator</option>
+                        <option value="course">Course</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Performance Data (JSON)</label>
+                      <input 
+                        value={typeof editForm.performance_data === 'string' ? editForm.performance_data : JSON.stringify(editForm.performance_data || [])} 
+                        onChange={e => {
+                          try {
+                            const parsed = JSON.parse(e.target.value);
+                            setEditForm({...editForm, performance_data: parsed});
+                          } catch (err) {
+                            // If invalid JSON, just store as string temporarily while typing
+                            setEditForm({...editForm, performance_data: e.target.value as any});
+                          }
+                        }}
+                        placeholder='[{"type": "text", "content": "92% Win Rate"}]'
+                        className="w-full bg-black border border-white/10 rounded-xl px-4 py-2 text-white outline-none focus:border-emerald-500 font-mono text-xs"
                       />
                     </div>
                   </div>

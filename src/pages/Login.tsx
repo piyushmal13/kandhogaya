@@ -1,29 +1,70 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
 import { TrendingUp, Globe } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { supabase } from "../lib/supabase";
 
+import { BRANDING } from "../constants/branding";
+
 export const Login = () => {
-  const { login } = useAuth();
+  const { login, signup } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isOtpMode, setIsOtpMode] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  // Handle Supabase auth errors passed in the URL hash (e.g., expired links)
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash && hash.includes('error_description')) {
+      const params = new URLSearchParams(hash.substring(1));
+      const errorDesc = params.get('error_description');
+      if (errorDesc) {
+        // Replace + with spaces for readability
+        alert(`Authentication Error: ${errorDesc.replace(/\+/g, ' ')}`);
+        // Clean up the URL so it doesn't keep showing the error on refresh
+        window.history.replaceState(null, '', window.location.pathname);
+      }
+    }
+  }, []);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     setLoading(true);
     if (isOtpMode) {
-      const { error } = await supabase.auth.signInWithOtp({ email });
+      const { error } = await supabase.auth.signInWithOtp({ 
+        email,
+        options: {
+          emailRedirectTo: window.location.origin + '/dashboard'
+        }
+      });
       if (error) alert(error.message);
       else setOtpSent(true);
     } else {
-      if (await login(email, password)) navigate("/dashboard");
-      else alert("Login failed. Check your credentials.");
+      if (isSignUp) {
+        const result = await signup(email, password);
+        if (result.success) {
+          if (result.needsEmailConfirmation) {
+            alert("Account created! Please check your email to confirm your account before logging in.");
+          } else {
+            alert("Account created successfully! You can now log in.");
+          }
+          setIsSignUp(false);
+        } else {
+          alert(`Signup failed: ${result.error}`);
+        }
+      } else {
+        const result = await login(email, password);
+        if (result.success) {
+          navigate("/dashboard");
+        } else {
+          alert(`Login failed: ${result.error}`);
+        }
+      }
     }
     setLoading(false);
   };
@@ -50,7 +91,7 @@ export const Login = () => {
         <div className="text-center mb-10">
           <div className="h-16 w-auto flex items-center justify-center mx-auto mb-6">
             <img 
-              src="/logo.png" 
+              src={BRANDING.logoUrl} 
               alt="IFXTrades Logo" 
               className="h-full w-auto object-contain" 
             />
@@ -111,15 +152,24 @@ export const Login = () => {
               disabled={loading}
               className="w-full py-4 bg-emerald-500 text-black font-bold rounded-2xl hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/20 disabled:opacity-50"
             >
-              {loading ? "Processing..." : (isOtpMode ? "Send Magic Link" : "Sign In to Hub")}
+              {loading ? "Processing..." : (isOtpMode ? "Send Magic Link" : (isSignUp ? "Create Account" : "Sign In to Hub"))}
             </button>
           </form>
 
-          <div className="text-center">
+          <div className="text-center space-y-3">
+            {!isOtpMode && (
+              <button 
+                type="button"
+                onClick={() => setIsSignUp(!isSignUp)}
+                className="text-xs text-white hover:text-emerald-500 transition-colors font-bold block w-full"
+              >
+                {isSignUp ? "Already have an account? Sign In" : "Don't have an account? Sign Up"}
+              </button>
+            )}
             <button 
               type="button"
               onClick={() => setIsOtpMode(!isOtpMode)}
-              className="text-xs text-gray-500 hover:text-emerald-500 transition-colors font-bold"
+              className="text-xs text-gray-500 hover:text-emerald-500 transition-colors font-bold block w-full"
             >
               {isOtpMode ? "Use Password Instead" : "Login with Magic Link (OTP)"}
             </button>
