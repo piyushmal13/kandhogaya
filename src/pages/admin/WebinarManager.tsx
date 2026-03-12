@@ -98,7 +98,7 @@ export const WebinarManager = () => {
         max_attendees: maxAttendees,
         status: 'upcoming',
         sponsor_logos: sponsorLogos.split(",").map(s => s.trim()).filter(s => s !== ""),
-        metadata: {
+        advanced_features: {
           level,
           duration,
           is_sponsored: isSponsored,

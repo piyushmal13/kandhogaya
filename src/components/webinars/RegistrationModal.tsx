@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { X, Check, ArrowRight, ShieldCheck, Activity, BarChart3, TrendingUp, Zap, Calendar, Clock, User, Users } from "lucide-react";
 import { supabase } from "../../lib/supabase";
+import { useAuth } from "../../contexts/AuthContext";
+import { Link } from "react-router-dom";
 
 interface RegistrationModalProps {
   webinar: any;
@@ -10,10 +12,55 @@ interface RegistrationModalProps {
 }
 
 export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationModalProps) => {
+  const { user } = useAuth();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({ name: "", email: "", country: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (user) {
+      setFormData(prev => ({
+        ...prev,
+        name: user.full_name || "",
+        email: user.email || ""
+      }));
+    }
+  }, [user]);
+
+  if (!user) {
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-4"
+      >
+        <motion.div
+          initial={{ scale: 0.95, y: 20 }}
+          animate={{ scale: 1, y: 0 }}
+          exit={{ scale: 0.95, y: 20 }}
+          className="bg-[#0a0a0a] border border-white/10 rounded-2xl w-full max-w-md p-8 text-center shadow-2xl"
+        >
+          <div className="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Calendar className="w-8 h-8 text-emerald-500" />
+          </div>
+          <h3 className="text-2xl font-bold text-white mb-2">Authentication Required</h3>
+          <p className="text-gray-400 mb-8">
+            Please log in to your account to register for this institutional webinar.
+          </p>
+          <div className="flex gap-3">
+            <button onClick={onClose} className="flex-1 py-3 bg-white/5 text-white font-bold rounded-xl hover:bg-white/10">
+              Cancel
+            </button>
+            <Link to="/login" className="flex-1 py-3 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 text-center">
+              Log In
+            </Link>
+          </div>
+        </motion.div>
+      </motion.div>
+    );
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,10 +81,7 @@ export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationM
           .insert([
             {
               webinar_id: webinar.id,
-              name: formData.name,
-              email: formData.email,
-              country: formData.country,
-              payment_status: 'free',
+              user_id: user.id,
               attended: false
             }
           ]);

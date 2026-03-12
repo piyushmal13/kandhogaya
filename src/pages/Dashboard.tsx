@@ -17,10 +17,11 @@ export const Dashboard = () => {
         setLoading(true);
         // Using safeQuery to prevent crashes if table is empty or missing
         // The correct table name is 'bot_licenses' per the schema
+        // Relationship: bot_licenses -> algo_bots(name)
         const licenseData = await safeQuery(
           supabase
             .from('bot_licenses')
-            .select('*, products(name)')
+            .select('*, algo_bots(name)')
             .eq('user_id', user.id)
         );
         
@@ -98,7 +99,7 @@ export const Dashboard = () => {
                       <div className="flex items-center gap-4">
                         <ShieldCheck className="text-emerald-500" />
                         <div>
-                          <div className="text-white font-bold">{license.products?.name || "Algo Bot License"}</div>
+                          <div className="text-white font-bold">{license.algo_bots?.name || "Algo Bot License"}</div>
                           <div className="text-xs text-gray-500">Expires: {new Date(license.expires_at).toLocaleDateString()}</div>
                           <div className="text-[10px] text-emerald-500 font-mono mt-1">Key: {license.license_key}</div>
                         </div>

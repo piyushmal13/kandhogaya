@@ -315,7 +315,7 @@ async function startServer() {
     // RLS Enforcement: Only fetch licenses belonging to the authenticated user
     const { data: licenses, error } = await req.supabase
       .from('bot_licenses')
-      .select('*, products(name)')
+      .select('*, algo_bots(name)')
       .eq('user_id', req.user.id);
 
     if (error) {
@@ -390,7 +390,7 @@ async function startServer() {
     
     const { data, error } = await req.supabase
       .from('bot_licenses')
-      .select('*, products(name), users(email)')
+      .select('*, algo_bots(name), users(email)')
       .order('created_at', { ascending: false });
 
     if (error) return res.status(500).json({ error: error.message });
@@ -491,7 +491,7 @@ async function startServer() {
   app.post("/api/admin/webinars", authenticate, async (req: any, res) => {
     if (req.user.role !== "admin") return res.status(403).json({ error: "Forbidden" });
     
-    const { title, description, date_time, speaker, is_paid, price, max_attendees, metadata } = req.body;
+    const { title, description, date_time, speaker_name, is_paid, price, max_attendees, advanced_features } = req.body;
     
     const { data, error } = await req.supabase
       .from('webinars')
@@ -499,11 +499,11 @@ async function startServer() {
         title,
         description,
         date_time,
-        speaker,
+        speaker_name,
         is_paid,
         price,
         max_attendees,
-        metadata: metadata || {},
+        advanced_features: advanced_features || {},
         status: 'upcoming',
         registration_count: 0
       })

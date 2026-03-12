@@ -21,14 +21,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           .maybeSingle();
 
         // 2. Check for active subscriptions in both tables
-        // Note: signal_subscriptions uses user_id (per database/migrations.sql)
-        // and algo_subscriptions uses 'subscription_status'
-        const [algoSubResult, signalSubResult] = await Promise.all([
-          supabase.from('algo_subscriptions').select('id').eq('user_id', userId).eq('subscription_status', 'active').limit(1),
+        // Note: signal_subscriptions and subscriptions use 'status'
+        const [subResult, signalSubResult] = await Promise.all([
+          supabase.from('subscriptions').select('id').eq('user_id', userId).eq('status', 'active').limit(1),
           supabase.from('signal_subscriptions').select('id').eq('user_id', userId).eq('status', 'active').limit(1)
         ]);
 
-        const isPro = (algoSubResult.data && algoSubResult.data.length > 0) || 
+        const isPro = (subResult.data && subResult.data.length > 0) || 
                       (signalSubResult.data && signalSubResult.data.length > 0);
 
         if (!userError && userData) {
