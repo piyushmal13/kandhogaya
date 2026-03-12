@@ -1,6 +1,6 @@
+import logoImage from '../logo.png'; // This forces the bundler to lock onto the physical file
+
 export const BRANDING = {
   name: "IFXTrades",
-  // To update the logo, simply replace the file at public/logo.png in your repository.
-  // The website will automatically reflect the new logo.
-  logoUrl: "/logo.png",
+  logoUrl: logoImage,
 };
