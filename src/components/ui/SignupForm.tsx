@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { supabase } from "../../lib/supabase";
-import { motion } from "motion/react";
 
 export const SignupForm = () => {
   const [email, setEmail] = useState("");
@@ -10,7 +9,15 @@ export const SignupForm = () => {
     e.preventDefault();
     if (!supabase) return;
     setStatus('loading');
-    const { error } = await supabase.from('leads').insert({ email });
+    
+    // Using Supabase Auth Magic Link instead of just saving to a table
+    const { error } = await supabase.auth.signInWithOtp({ 
+        email,
+        options: {
+          emailRedirectTo: window.location.origin + '/dashboard'
+        }
+    });
+
     if (error) {
       setStatus('error');
     } else {
@@ -29,7 +36,7 @@ export const SignupForm = () => {
             type="email" 
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your corporate email"
+            placeholder="Enter your email"
             className="flex-1 px-6 py-4 bg-zinc-900 border border-zinc-800 rounded-xl text-white focus:outline-none focus:border-emerald-500"
             required
           />
@@ -38,10 +45,10 @@ export const SignupForm = () => {
             disabled={status === 'loading'}
             className="px-8 py-4 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all"
           >
-            {status === 'loading' ? 'Joining...' : 'Join Now'}
+            {status === 'loading' ? 'Sending Link...' : 'Send Magic Link'}
           </button>
         </form>
-        {status === 'success' && <p className="text-emerald-500 mt-4">Thank you for joining!</p>}
+        {status === 'success' && <p className="text-emerald-500 mt-4">Check your inbox for your magic login link!</p>}
         {status === 'error' && <p className="text-red-500 mt-4">Something went wrong. Please try again.</p>}
       </div>
     </section>
