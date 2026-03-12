@@ -16,9 +16,10 @@ export const Dashboard = () => {
       const fetchDashboardData = async () => {
         setLoading(true);
         // Using safeQuery to prevent crashes if table is empty or missing
+        // The correct table name is 'bot_licenses' per the schema
         const licenseData = await safeQuery(
           supabase
-            .from('licenses')
+            .from('bot_licenses')
             .select('*, products(name)')
             .eq('user_id', user.id)
         );

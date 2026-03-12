@@ -11,29 +11,36 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchUserProfile = async (userId: string) => {
+    const fetchUserProfile = async (userId: string, email?: string) => {
       try {
-        // 1. Fetch base user data
+        // 1. Fetch base user data from public.users table
         const { data: userData, error: userError } = await supabase
           .from('users')
           .select('*')
           .eq('id', userId)
-          .single();
+          .maybeSingle();
 
         // 2. Check for active subscriptions in both tables
-        const [subResult, signalSubResult] = await Promise.all([
-          supabase.from('subscriptions').select('id').eq('user_id', userId).eq('status', 'active').limit(1),
+        // Note: signal_subscriptions uses user_id (per database/migrations.sql)
+        // and algo_subscriptions uses 'subscription_status'
+        const [algoSubResult, signalSubResult] = await Promise.all([
+          supabase.from('algo_subscriptions').select('id').eq('user_id', userId).eq('subscription_status', 'active').limit(1),
           supabase.from('signal_subscriptions').select('id').eq('user_id', userId).eq('status', 'active').limit(1)
         ]);
 
-        const isPro = (subResult.data && subResult.data.length > 0) || 
+        const isPro = (algoSubResult.data && algoSubResult.data.length > 0) || 
                       (signalSubResult.data && signalSubResult.data.length > 0);
 
         if (!userError && userData) {
           setUserProfile({ ...userData, isPro });
         } else {
-          // Default profile if user record doesn't exist yet
-          setUserProfile({ role: 'user', isPro: false });
+          // Default profile if user record doesn't exist yet in public.users
+          setUserProfile({ 
+            id: userId,
+            email: email,
+            role: 'user', 
+            isPro 
+          });
         }
       } catch (err) {
         console.error("Error fetching user profile:", err);
@@ -42,16 +49,29 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     const checkSession = async () => {
+      // Safety timeout: don't block the user for more than 4 seconds
+      const timeoutId = setTimeout(() => {
+        if (loading) {
+          console.warn("Auth initialization timed out. Proceeding to app...");
+          setLoading(false);
+        }
+      }, 4000);
+
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        
+        if (sessionError) throw sessionError;
+
         const currentUser = session?.user ?? null;
         setUser(currentUser);
+        
         if (currentUser) {
-          await fetchUserProfile(currentUser.id);
+          await fetchUserProfile(currentUser.id, currentUser.email);
         }
       } catch (err) {
         console.error("Auth initialization error:", err);
       } finally {
+        clearTimeout(timeoutId);
         setLoading(false);
       }
     };
@@ -62,7 +82,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const currentUser = session?.user ?? null;
       setUser(currentUser);
       if (currentUser) {
-         await fetchUserProfile(currentUser.id);
+         await fetchUserProfile(currentUser.id, currentUser.email);
       } else {
          setUserProfile(null);
       }
