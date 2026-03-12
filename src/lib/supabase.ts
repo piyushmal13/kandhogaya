@@ -1,51 +1,29 @@
 import { createClient } from '@supabase/supabase-js';
 
-/**
- * Centralized Supabase Client for IFXTrades
- * Handles connection to the database and authentication.
- */
-
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
+// Fail loudly if keys are missing
 if (!supabaseUrl || !supabaseAnonKey) {
-  console.warn("Supabase credentials missing. Ensure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are set in your environment.");
+  throw new Error("CRITICAL: Supabase credentials missing. Check your .env file.");
 }
 
-export const supabase = createClient(
-  supabaseUrl || 'https://placeholder.supabase.co',
-  supabaseAnonKey || 'placeholder',
-  {
-    auth: {
-      autoRefreshToken: true,
-      persistSession: true,
-      detectSessionInUrl: true
-    }
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: true
   }
-);
+});
 
-/**
- * Defensive query wrapper to ensure consistent error handling and performance tracking.
- * Use this for all data fetching operations to catch errors gracefully.
- */
 export const safeQuery = async <T>(query: any): Promise<T | []> => {
-  const start = performance.now();
   try {
     const { data, error } = await query;
-    const duration = performance.now() - start;
-    
-    // Log slow queries for optimization (IT Head monitoring)
-    if (duration > 2000) {
-      console.warn(`[DB Performance] Slow query detected (${Math.round(duration)}ms):`, query);
-    }
-
     if (error) {
-      console.error("[Supabase Error]:", error.message, error.details);
+      console.error("[Supabase Error]:", error.message);
       return [] as any;
     }
-    
-    if (!data) return [] as any;
-    return data;
+    return data || [] as any;
   } catch (err) {
     console.error("[Database Exception]:", err);
     return [] as any;

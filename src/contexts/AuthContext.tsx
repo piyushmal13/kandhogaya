@@ -1,5 +1,4 @@
 import React, { useState, useEffect, createContext, useContext } from "react";
-import { TrendingUp } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { BRANDING } from "../constants/branding";
 
@@ -8,19 +7,37 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<any>(null);
+  const [userProfile, setUserProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const handleReferral = async (currentUser: any) => {
-      if (!currentUser) return;
-      
-      const agentId = sessionStorage.getItem("ifx_referral_agent");
-      if (agentId && !currentUser.user_metadata?.referred_by) {
-        console.log(`[AUTH] Attributing user ${currentUser.id} to agent ${agentId}`);
-        await supabase.auth.updateUser({
-          data: { referred_by: agentId }
-        });
-        sessionStorage.removeItem("ifx_referral_agent");
+    const fetchUserProfile = async (userId: string) => {
+      try {
+        // 1. Fetch base user data
+        const { data: userData, error: userError } = await supabase
+          .from('users')
+          .select('*')
+          .eq('id', userId)
+          .single();
+
+        // 2. Check for active subscriptions in both tables
+        const [subResult, signalSubResult] = await Promise.all([
+          supabase.from('subscriptions').select('id').eq('user_id', userId).eq('status', 'active').limit(1),
+          supabase.from('signal_subscriptions').select('id').eq('user_id', userId).eq('status', 'active').limit(1)
+        ]);
+
+        const isPro = (subResult.data && subResult.data.length > 0) || 
+                      (signalSubResult.data && signalSubResult.data.length > 0);
+
+        if (!userError && userData) {
+          setUserProfile({ ...userData, isPro });
+        } else {
+          // Default profile if user record doesn't exist yet
+          setUserProfile({ role: 'user', isPro: false });
+        }
+      } catch (err) {
+        console.error("Error fetching user profile:", err);
+        setUserProfile({ role: 'user', isPro: false });
       }
     };
 
@@ -29,31 +46,34 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const { data: { session } } = await supabase.auth.getSession();
         const currentUser = session?.user ?? null;
         setUser(currentUser);
-        if (currentUser) handleReferral(currentUser);
-        setLoading(false);
+        if (currentUser) {
+          await fetchUserProfile(currentUser.id);
+        }
       } catch (err) {
         console.error("Auth initialization error:", err);
+      } finally {
         setLoading(false);
       }
     };
 
     checkSession();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       const currentUser = session?.user ?? null;
       setUser(currentUser);
-      if (currentUser) handleReferral(currentUser);
+      if (currentUser) {
+         await fetchUserProfile(currentUser.id);
+      } else {
+         setUserProfile(null);
+      }
     });
 
     return () => subscription.unsubscribe();
   }, []);
 
   const login = async (email: string, password: string) => {
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) {
-      console.error("Login error:", error.message);
-      return { success: false, error: error.message };
-    }
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) return { success: false, error: error.message };
     return { success: true };
   };
 
@@ -65,10 +85,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         emailRedirectTo: window.location.origin + '/dashboard'
       }
     });
-    if (error) {
-      console.error("Signup error:", error.message);
-      return { success: false, error: error.message };
-    }
+    if (error) return { success: false, error: error.message };
     return { success: true, needsEmailConfirmation: !data.session };
   };
 
@@ -77,17 +94,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, signup, logout, loading }}>
+    <AuthContext.Provider value={{ user, userProfile, login, signup, logout, loading }}>
       {loading ? (
         <div className="min-h-screen bg-black flex flex-col items-center justify-center text-white p-4">
           <div className="h-16 w-auto flex items-center justify-center animate-pulse mb-6">
-            <img 
-              src={BRANDING.logoUrl} 
-              alt="IFXTrades Logo" 
-              className="h-full w-auto object-contain" 
-            />
+            <img src={BRANDING.logoUrl} alt="IFXTrades Logo" className="h-full w-auto object-contain" />
           </div>
-          <div className="text-xs text-gray-500 uppercase tracking-[0.3em] animate-pulse">Initializing Intelligence...</div>
+          <div className="text-xs text-gray-500 uppercase tracking-[0.3em] animate-pulse">Initializing Hub...</div>
         </div>
       ) : children}
     </AuthContext.Provider>

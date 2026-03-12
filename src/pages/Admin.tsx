@@ -22,7 +22,7 @@ import { supabase } from "../lib/supabase";
  * Handles user management, content publishing, license generation, and sales analytics.
  */
 export const Admin = () => {
-  const { user } = useAuth();
+  const { user, userProfile } = useAuth();
   const [activeTab, setActiveTab] = useState("stats");
   const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -48,10 +48,10 @@ export const Admin = () => {
   }, []);
 
   // Security Check: Only allow admins
-  const isAdmin = user?.email === 'admin@ifxtrades.com' || 
+  const isAdmin = userProfile?.role === 'admin' || 
+                  user?.email === 'admin@ifxtrades.com' || 
                   user?.email === 'admin@tradinghub.com' || 
-                  user?.email === 'piyushmal1301@gmail.com' ||
-                  user?.user_metadata?.role === 'admin';
+                  user?.email === 'piyushmal1301@gmail.com';
 
   if (!user || !isAdmin) return <Navigate to="/dashboard" />;
 

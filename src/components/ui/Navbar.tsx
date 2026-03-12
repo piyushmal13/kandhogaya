@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { SupabaseStatus } from "./SupabaseStatus";
 
 export const Navbar = () => {
-  const { user, logout } = useAuth();
+  const { user, userProfile, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
 
@@ -37,6 +37,11 @@ export const Navbar = () => {
     { name: "Webinars", path: "/webinars", icon: Video },
     { name: "Blog", path: "/blog", icon: MessageSquare },
   ];
+
+  const isAdmin = userProfile?.role === 'admin' || 
+                  user?.email === 'admin@ifxtrades.com' || 
+                  user?.email === 'admin@tradinghub.com' || 
+                  user?.email === 'piyushmal1301@gmail.com';
 
   return (
     <>
@@ -73,7 +78,7 @@ export const Navbar = () => {
                     <Link to="/dashboard" className="text-gray-400 hover:text-white transition-colors" title="Dashboard">
                       <LayoutDashboard className="w-5 h-5" />
                     </Link>
-                    {(user.email === 'admin@ifxtrades.com' || user.email === 'admin@tradinghub.com' || user.email === 'piyushmal1301@gmail.com' || user.user_metadata?.role === 'admin') && (
+                    {isAdmin && (
                       <Link to="/admin" className="text-gray-400 hover:text-white transition-colors" title="Admin Panel">
                         <Settings className="w-5 h-5" />
                       </Link>
@@ -183,7 +188,7 @@ export const Navbar = () => {
                         <LayoutDashboard className="w-5 h-5" />
                         <span className="text-lg font-bold tracking-tight">Dashboard</span>
                       </Link>
-                      {(user.email === 'admin@ifxtrades.com' || user.email === 'admin@tradinghub.com' || user.email === 'piyushmal1301@gmail.com' || user.user_metadata?.role === 'admin') && (
+                      {isAdmin && (
                         <Link 
                           to="/admin" 
                           onClick={() => setIsOpen(false)}
