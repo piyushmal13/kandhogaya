@@ -164,7 +164,20 @@ async function startServer() {
     res.json({
       status: "ok",
       uptime: Math.floor((Date.now() - metrics.startTime) / 1000),
-      metrics
+      metrics,
+      env: {
+        hasSupabaseUrl: !!process.env.VITE_SUPABASE_URL,
+        hasSupabaseAnonKey: !!process.env.VITE_SUPABASE_ANON_KEY,
+        nodeEnv: process.env.NODE_ENV
+      }
+    });
+  });
+
+  // Public config for the frontend to pick up keys if they weren't baked in at build time
+  app.get("/api/config", (req, res) => {
+    res.json({
+      supabaseUrl: process.env.VITE_SUPABASE_URL,
+      supabaseAnonKey: process.env.VITE_SUPABASE_ANON_KEY
     });
   });
 
@@ -599,8 +612,27 @@ async function startServer() {
     console.log("[SERVER] Vite middleware attached.");
   } else {
     console.log("[SERVER] Serving static files from dist...");
-    app.use(express.static(path.join(__dirname, "dist")));
-    app.get("*", (req, res) => res.sendFile(path.join(__dirname, "dist", "index.html")));
+    const distPath = path.join(__dirname, "dist");
+    app.use(express.static(distPath));
+    
+    app.get("*", (req, res) => {
+      const indexPath = path.join(distPath, "index.html");
+      if (fs.existsSync(indexPath)) {
+        let html = fs.readFileSync(indexPath, 'utf8');
+        // Inject environment variables into the HTML so the client can pick them up
+        // even if they weren't baked in at build time.
+        const injection = `
+          <script>
+            window._SUPABASE_URL = "${process.env.VITE_SUPABASE_URL || ''}";
+            window._SUPABASE_ANON_KEY = "${process.env.VITE_SUPABASE_ANON_KEY || ''}";
+          </script>
+        `;
+        html = html.replace('</head>', `${injection}</head>`);
+        res.send(html);
+      } else {
+        res.status(404).send("Not found");
+      }
+    });
   }
 
   app.listen(3000, "0.0.0.0", () => console.log("IFXTrades Hub API running on port 3000"));

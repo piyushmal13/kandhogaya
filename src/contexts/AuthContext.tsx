@@ -9,6 +9,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<any>(null);
   const [userProfile, setUserProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [connectionError, setConnectionError] = useState(false);
 
   useEffect(() => {
     const fetchUserProfile = async (userId: string, email?: string) => {
@@ -21,7 +22,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           .maybeSingle();
 
         // 2. Check for active subscriptions in both tables
-        // Note: signal_subscriptions and subscriptions use 'status'
         const [subResult, signalSubResult] = await Promise.all([
           supabase.from('subscriptions').select('id').eq('user_id', userId).eq('status', 'active').limit(1),
           supabase.from('signal_subscriptions').select('id').eq('user_id', userId).eq('status', 'active').limit(1)
@@ -33,7 +33,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         if (!userError && userData) {
           setUserProfile({ ...userData, isPro });
         } else {
-          // Default profile if user record doesn't exist yet in public.users
           setUserProfile({ 
             id: userId,
             email: email,
@@ -48,10 +47,27 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     const checkSession = async () => {
+      // 0. Connection Health Check
+      try {
+        const { error: healthError } = await supabase.from('products').select('id').limit(1);
+        if (healthError) {
+          console.error("[Supabase Health Check Failed]:", healthError.message);
+          if (healthError.message.includes('Failed to fetch')) {
+            console.error("CRITICAL: The browser cannot reach Supabase. This usually means the Supabase URL is wrong or CORS is blocking " + window.location.origin);
+            setConnectionError(true);
+          }
+        } else {
+          console.log("[Supabase Health Check]: Success.");
+          setConnectionError(false);
+        }
+      } catch (e) {
+        console.error("[Supabase Health Check Exception]:", e);
+      }
+
       // Safety timeout: don't block the user for more than 4 seconds
       const timeoutId = setTimeout(() => {
         if (loading) {
-          console.warn("Auth initialization timed out. Proceeding to app...");
+          console.warn("Auth initialization timed out. This usually indicates a connection issue with Supabase.");
           setLoading(false);
         }
       }, 4000);
@@ -117,9 +133,32 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       {loading ? (
         <div className="min-h-screen bg-black flex flex-col items-center justify-center text-white p-4">
           <div className="h-16 w-auto flex items-center justify-center animate-pulse mb-6">
-            <img src={BRANDING.logoUrl} alt="IFXTrades Logo" className="h-full w-auto object-contain" />
+            <img 
+              src={BRANDING.logoUrl} 
+              alt="IFXTrades Logo" 
+              className="h-full w-auto object-contain"
+              onError={(e) => {
+                // Fallback if the local logo fails
+                (e.target as HTMLImageElement).src = BRANDING.fallbackLogoUrl;
+              }}
+            />
           </div>
-          <div className="text-xs text-gray-500 uppercase tracking-[0.3em] animate-pulse">Initializing Hub...</div>
+          <div className="text-xs text-gray-500 uppercase tracking-[0.3em] animate-pulse mb-4">Initializing Hub...</div>
+          
+          {connectionError && (
+            <div className="max-w-xs text-center p-6 bg-red-500/10 border border-red-500/20 rounded-3xl backdrop-blur-md">
+              <p className="text-[10px] text-red-400 font-mono uppercase tracking-widest leading-relaxed mb-4">
+                Connection Error: Unable to reach Supabase. <br />
+                Please ensure VITE_SUPABASE_URL is correctly set in Vercel.
+              </p>
+              <button 
+                onClick={() => window.location.reload()}
+                className="px-4 py-2 bg-red-500 text-white text-[10px] font-bold uppercase tracking-widest rounded-xl hover:bg-red-400 transition-all"
+              >
+                Retry Connection
+              </button>
+            </div>
+          )}
         </div>
       ) : children}
     </AuthContext.Provider>

@@ -20,8 +20,39 @@ const supabase = createClient(
   }
 );
 
+// Verify connection at startup
+(async () => {
+  try {
+    const { data, error } = await supabase.from('products').select('id').limit(1);
+    if (error) {
+      console.error("[Vercel API]: Supabase connection failed:", error.message);
+    } else {
+      console.log("[Vercel API]: Supabase connection successful.");
+    }
+  } catch (e) {
+    console.error("[Vercel API]: Supabase connection exception:", e);
+  }
+})();
+
 const app = express();
 app.use(express.json());
+
+app.get("/api/health", (req, res) => {
+  res.json({
+    status: "ok",
+    env: {
+      hasSupabaseUrl: !!process.env.VITE_SUPABASE_URL,
+      hasSupabaseAnonKey: !!process.env.VITE_SUPABASE_ANON_KEY
+    }
+  });
+});
+
+app.get("/api/config", (req, res) => {
+  res.json({
+    supabaseUrl: process.env.VITE_SUPABASE_URL,
+    supabaseAnonKey: process.env.VITE_SUPABASE_ANON_KEY
+  });
+});
 
 // Middleware
 const authenticate = async (req: any, res: any, next: any) => {

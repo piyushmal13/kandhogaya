@@ -1,6 +1,5 @@
-import logoImage from '../logo.png'; // This forces the bundler to lock onto the physical file
-
 export const BRANDING = {
   name: "IFXTrades",
-  logoUrl: logoImage,
+  logoUrl: "/logo.png", // Use the public path for stability
+  fallbackLogoUrl: "https://ais-dev-bwe4fydxla3bmnlvte5djg-820083470.asia-east1.run.app/logo.png" // Fallback to dev URL if needed
 };
