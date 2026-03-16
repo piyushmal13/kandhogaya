@@ -38,10 +38,10 @@ export const Marketplace = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#020202] pt-20 pb-20">
+    <div className="min-h-screen bg-[#0A192F] pt-20 pb-20">
       
       {/* --- Hero Section --- */}
-      <section className="relative py-20 overflow-hidden bg-[#000000]">
+      <section className="relative py-20 overflow-hidden bg-[#0A192F]">
         {/* --- Institutional Background System --- */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           {/* 1. Ambient Spotlight (Top Center) */}
@@ -139,7 +139,7 @@ export const Marketplace = () => {
       </section>
 
       {/* --- Trust Signals --- */}
-      <section className="border-t border-white/5 bg-[#050505] py-16">
+      <section className="border-t border-white/5 bg-[#0A192F] py-16">
         <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
           <div className="p-6">
             <div className="w-12 h-12 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-500">

@@ -80,7 +80,7 @@ export const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black px-4 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center bg-[#0A192F] px-4 relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,#10b98110,transparent_70%)]" />
       
       <motion.div 

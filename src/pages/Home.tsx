@@ -15,7 +15,7 @@ import { cn } from "../utils/cn";
 import { motion } from "motion/react";
 
 export const Home = () => (
-  <div className="bg-[#020202] min-h-screen relative overflow-hidden">
+  <div className="bg-[#0A192F] min-h-screen relative overflow-hidden">
     <WebinarBanner />
     <HeroSection />
     <MarketTicker />

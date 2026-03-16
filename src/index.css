@@ -12,7 +12,7 @@
     @apply scroll-smooth;
   }
   body {
-    @apply bg-black text-zinc-100 antialiased overflow-x-hidden;
+    @apply bg-[#0A192F] text-zinc-100 antialiased overflow-x-hidden;
   }
   h1, h2, h3, h4 {
     @apply font-sans font-semibold tracking-tight text-white;

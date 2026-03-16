@@ -130,37 +130,23 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AuthContext.Provider value={{ user, userProfile, login, signup, logout, loading }}>
-      {loading ? (
-        <div className="min-h-screen bg-black flex flex-col items-center justify-center text-white p-4">
-          <div className="h-16 w-auto flex items-center justify-center animate-pulse mb-6">
-            <img 
-              src={BRANDING.logoUrl} 
-              alt="IFXTrades Logo" 
-              className="h-full w-auto object-contain"
-              onError={(e) => {
-                // Fallback if the local logo fails
-                (e.target as HTMLImageElement).src = BRANDING.fallbackLogoUrl;
-              }}
-            />
-          </div>
-          <div className="text-xs text-gray-500 uppercase tracking-[0.3em] animate-pulse mb-4">Initializing Hub...</div>
-          
-          {connectionError && (
-            <div className="max-w-xs text-center p-6 bg-red-500/10 border border-red-500/20 rounded-3xl backdrop-blur-md">
-              <p className="text-[10px] text-red-400 font-mono uppercase tracking-widest leading-relaxed mb-4">
-                Connection Error: Unable to reach Supabase. <br />
-                Please ensure VITE_SUPABASE_URL is correctly set in Vercel.
-              </p>
-              <button 
-                onClick={() => window.location.reload()}
-                className="px-4 py-2 bg-red-500 text-white text-[10px] font-bold uppercase tracking-widest rounded-xl hover:bg-red-400 transition-all"
-              >
-                Retry Connection
-              </button>
-            </div>
-          )}
+      {children}
+      
+      {/* Non-blocking connection error overlay (only shown if there's a critical failure) */}
+      {connectionError && (
+        <div className="fixed bottom-4 right-4 z-[9999] max-w-xs p-6 bg-red-500/10 border border-red-500/20 rounded-3xl backdrop-blur-md shadow-2xl">
+          <p className="text-[10px] text-red-400 font-mono uppercase tracking-widest leading-relaxed mb-4">
+            Connection Error: Unable to reach Supabase. <br />
+            Please ensure VITE_SUPABASE_URL is correctly set in Vercel.
+          </p>
+          <button 
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-red-500 text-white text-[10px] font-bold uppercase tracking-widest rounded-xl hover:bg-red-400 transition-all w-full"
+          >
+            Retry Connection
+          </button>
         </div>
-      ) : children}
+      )}
     </AuthContext.Provider>
   );
 };

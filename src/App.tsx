@@ -88,7 +88,7 @@ export default function App() {
         <Router>
           <ScrollToTop />
           <ReferralHandler />
-          <div className="bg-black min-h-screen font-sans selection:bg-emerald-500 selection:text-white">
+          <div className="bg-[#0A192F] min-h-screen font-sans selection:bg-emerald-500 selection:text-white">
             <Navbar />
             <main>
               <AnimatedRoutes />
