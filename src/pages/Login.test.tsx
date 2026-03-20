@@ -6,15 +6,25 @@ import { AuthProvider } from '../contexts/AuthContext';
 import { BrowserRouter } from 'react-router-dom';
 
 // Mock Supabase
-vi.mock('../lib/supabase', () => ({
-  supabase: {
-    auth: {
-      getSession: vi.fn().mockResolvedValue({ data: { session: null } }),
-      onAuthStateChange: vi.fn().mockReturnValue({ data: { subscription: { unsubscribe: vi.fn() } } }),
-      signInWithPassword: vi.fn().mockResolvedValue({ data: { user: { id: 1 } }, error: null }),
+vi.mock('../lib/supabase', () => {
+  const mockQueryBuilder = {
+    select: vi.fn().mockReturnThis(),
+    eq: vi.fn().mockReturnThis(),
+    maybeSingle: vi.fn().mockResolvedValue({ data: { id: 1 }, error: null }),
+    limit: vi.fn().mockResolvedValue({ data: [], error: null })
+  };
+
+  return {
+    supabase: {
+      auth: {
+        getSession: vi.fn().mockResolvedValue({ data: { session: null } }),
+        onAuthStateChange: vi.fn().mockReturnValue({ data: { subscription: { unsubscribe: vi.fn() } } }),
+        signInWithPassword: vi.fn().mockResolvedValue({ data: { user: { id: 1 } }, error: null }),
+      },
+      from: vi.fn(() => mockQueryBuilder),
     }
-  }
-}));
+  };
+});
 
 describe('Login Component', () => {
   it('renders login form', async () => {
@@ -27,7 +37,7 @@ describe('Login Component', () => {
     );
     
     await waitFor(() => {
-      expect(screen.getByText('Access the Operating System for Retail Traders')).toBeInTheDocument();
+      expect(screen.getByText('Access the operating surface for disciplined retail traders.')).toBeInTheDocument();
     });
     expect(screen.getByPlaceholderText('name@company.com')).toBeInTheDocument();
   });
