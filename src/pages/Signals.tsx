@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 import { WebinarPromoInline } from "../components/webinars/WebinarPromoInline";
 import { getSignals, subscribeToSignals } from "../services/apiHandlers";
 import { PageMeta } from "../components/site/PageMeta";
-import { getSignals, subscribeToSignals } from "../services/apiHandlers";
 
 // --- Types ---
 type PlanDuration = "1 Month" | "3 Months" | "6 Months";
