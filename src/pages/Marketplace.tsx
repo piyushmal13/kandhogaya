@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import React, { useEffect, useState, useRef } from "react";
+import { motion, AnimatePresence, useScroll, useTransform } from "motion/react";
 import { Zap, ShieldCheck, Activity, TrendingUp } from "lucide-react";
 
 import { PageMeta } from "../components/site/PageMeta";
@@ -37,8 +37,16 @@ export const Marketplace = () => {
     alert(`Redirecting to checkout for ${algo.name} - ${plan} Plan`);
   };
 
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+  });
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  const opacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
+
   return (
-    <div className="min-h-screen bg-[#0A192F] pt-20 pb-20">
+    <div className="min-h-screen bg-[#020202]">
       <PageMeta
         title="Algorithm Marketplace"
         description="Explore IFXTrades trading algorithms, strategy filters, and subscription-ready systematic products."
@@ -46,37 +54,50 @@ export const Marketplace = () => {
         keywords={["trading algorithms", "algo marketplace", "MT5 trading bots"]}
       />
 
-      <section className="relative py-20 overflow-hidden bg-[#0A192F]">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[500px] bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.15),transparent_70%)] opacity-60" />
-          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:120px_120px] [mask-image:radial-gradient(ellipse_at_center,black_60%,transparent_100%)]" />
-          <div className="absolute bottom-0 left-0 right-0 h-[300px] bg-gradient-to-t from-emerald-900/10 to-transparent opacity-40" />
+      <section ref={ref} className="relative min-h-[70vh] flex flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-[#020617] to-[#0a0a0a] pt-32 pb-24">
+        <motion.div style={{ y, opacity }} className="absolute inset-0 overflow-hidden pointer-events-none will-change-transform">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1400px] h-[600px] bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.12),transparent_70%)] opacity-80" />
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:120px_120px] [mask-image:radial-gradient(ellipse_at_center,black_70%,transparent_100%)]" />
+        </motion.div>
+
+        {/* Floating background elements */}
+        <div className="absolute inset-0 max-w-7xl mx-auto pointer-events-none hidden md:block">
+          <motion.div
+            animate={{ y: [0, -20, 0], rotate: [0, 5, 0] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute left-10 top-1/4 w-32 h-32 bg-emerald-500/5 rounded-full blur-3xl"
+          />
+          <motion.div
+            animate={{ y: [0, 20, 0], rotate: [0, -5, 0] }}
+            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            className="absolute right-10 bottom-1/4 w-40 h-40 bg-cyan-500/5 rounded-full blur-3xl"
+          />
         </div>
 
         <div className="max-w-7xl mx-auto px-4 text-center relative z-10">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono tracking-widest mb-6">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono tracking-widest mb-6">
             <Zap className="w-3 h-3" />
             ALGO MARKETPLACE
           </motion.div>
 
-          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tighter">
+          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.1 }} className="text-5xl md:text-8xl font-bold text-white mb-8 tracking-tighter leading-tight">
             Professional Trading <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">Algorithms</span>
           </motion.h1>
 
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed mb-12">
-            Automated strategies designed by the IFXTrades research desk. Execute disciplined strategies based on market structure and quantitative models.
+          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="text-lg md:text-2xl text-gray-400 max-w-3xl mx-auto leading-relaxed mb-12 font-light">
+            Automated strategies designed by the IFXTrades quantitative research desk. Execute disciplined strategies based on strict market structure and probabilistic models.
           </motion.p>
 
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="flex flex-wrap justify-center gap-4">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.3 }} className="flex flex-wrap justify-center gap-4">
             {["All", "Scalping", "Swing", "Low Risk", "High Risk"].map((label) => (
               <button
                 key={label}
                 onClick={() => setFilter(label === "Low Risk" ? "Low" : label === "High Risk" ? "High" : label === "Scalping" ? "High-Frequency Scalping" : label === "Swing" ? "Swing Trading" : label)}
-                className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
+                className={`px-8 py-3 rounded-2xl text-sm font-bold transition-all duration-300 ${
                   (filter === label || (label === "Low Risk" && filter === "Low") || (label === "High Risk" && filter === "High") || (label === "Scalping" && filter === "High-Frequency Scalping") || (label === "Swing" && filter === "Swing Trading"))
-                    ? "bg-emerald-500 text-black font-bold shadow-[0_0_20px_rgba(16,185,129,0.3)]"
-                    : "bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white border border-white/5"
+                    ? "bg-emerald-500 text-black shadow-[0_0_30px_rgba(16,185,129,0.4)] scale-105"
+                    : "bg-[#111820]/80 backdrop-blur-xl text-gray-400 hover:bg-white/10 hover:text-white border border-white/10"
                 }`}
               >
                 {label}
@@ -86,7 +107,7 @@ export const Marketplace = () => {
         </div>
       </section>
 
-      <section className="max-w-7xl mx-auto px-4 pb-24">
+      <section className="max-w-7xl mx-auto px-4 pb-24 relative z-20 -mt-10">
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <div className="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin" />
@@ -94,7 +115,13 @@ export const Marketplace = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredProducts.map((algo, index) => (
-              <motion.div key={algo.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1 }}>
+              <motion.div 
+                key={algo.id} 
+                initial={{ opacity: 0, y: 30 }} 
+                whileInView={{ opacity: 1, y: 0 }} 
+                viewport={{ once: true, margin: "-100px" }} 
+                transition={{ duration: 0.6, delay: index * 0.1, ease: "easeOut" }}
+              >
                 <AlgoCard algo={algo} onSelect={setSelectedAlgo} />
               </motion.div>
             ))}
@@ -108,29 +135,29 @@ export const Marketplace = () => {
         ) : null}
       </section>
 
-      <section className="border-t border-white/5 bg-[#0A192F] py-16">
+      <section className="border-t border-white/5 bg-[#020202] py-24">
         <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-          <div className="p-6">
-            <div className="w-12 h-12 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-500">
+          <motion.div whileHover={{ y: -5 }} className="p-8 bg-[#0a0a0a] rounded-3xl border border-white/5">
+            <div className="w-16 h-16 bg-emerald-500/10 rounded-2xl flex items-center justify-center mx-auto mb-6 text-emerald-500 border border-emerald-500/20">
               <ShieldCheck className="w-6 h-6" />
             </div>
-            <h3 className="text-white font-bold mb-2">Verified Strategy</h3>
-            <p className="text-gray-400 text-sm">Every algorithm passes rigorous backtesting and forward-testing phases.</p>
-          </div>
-          <div className="p-6">
-            <div className="w-12 h-12 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-500">
+            <h3 className="text-xl text-white font-bold mb-3">Verified Strategy</h3>
+            <p className="text-gray-400 text-sm leading-relaxed">Every algorithm passes rigorous backtesting and forward-testing phases.</p>
+          </motion.div>
+          <motion.div whileHover={{ y: -5 }} className="p-8 bg-[#0a0a0a] rounded-3xl border border-white/5">
+            <div className="w-16 h-16 bg-emerald-500/10 rounded-2xl flex items-center justify-center mx-auto mb-6 text-emerald-500 border border-emerald-500/20">
               <Activity className="w-6 h-6" />
             </div>
-            <h3 className="text-white font-bold mb-2">Backtested Performance</h3>
-            <p className="text-gray-400 text-sm">Transparent performance metrics based on historical tick data.</p>
-          </div>
-          <div className="p-6">
-            <div className="w-12 h-12 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-500">
+            <h3 className="text-xl text-white font-bold mb-3">Backtested Performance</h3>
+            <p className="text-gray-400 text-sm leading-relaxed">Transparent performance metrics based on historical tick data.</p>
+          </motion.div>
+          <motion.div whileHover={{ y: -5 }} className="p-8 bg-[#0a0a0a] rounded-3xl border border-white/5">
+            <div className="w-16 h-16 bg-emerald-500/10 rounded-2xl flex items-center justify-center mx-auto mb-6 text-emerald-500 border border-emerald-500/20">
               <TrendingUp className="w-6 h-6" />
             </div>
-            <h3 className="text-white font-bold mb-2">Institutional Desk</h3>
-            <p className="text-gray-400 text-sm">Built by the same team managing our proprietary capital.</p>
-          </div>
+            <h3 className="text-xl text-white font-bold mb-3">Institutional Desk</h3>
+            <p className="text-gray-400 text-sm leading-relaxed">Built by the same quantitative team managing our proprietary capital.</p>
+          </motion.div>
         </div>
       </section>
 

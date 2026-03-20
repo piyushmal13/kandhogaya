@@ -46,7 +46,7 @@ export const Webinars = () => {
   const nextWebinar = webinars[0];
 
   return (
-    <div className="min-h-screen pt-20 pb-20 relative overflow-hidden">
+    <div className="min-h-screen pt-20 pb-20 relative overflow-hidden bg-[#020202]">
       <PageMeta
         title="Webinars"
         description="Register for IFXTrades webinars covering market structure, live analysis, algorithmic workflows, and trader education."
@@ -83,7 +83,7 @@ export const Webinars = () => {
               </p>
               <button
                 onClick={() => setSelectedWebinar(nextWebinar)}
-                className="inline-flex rounded-full bg-emerald-300 px-5 py-3 text-sm font-semibold text-slate-950"
+                className="inline-flex rounded-full bg-emerald-500 px-6 py-3 text-sm font-bold text-black hover:bg-emerald-400 transition-colors shadow-[0_0_20px_rgba(16,185,129,0.3)]"
               >
                 Register Now
               </button>
@@ -103,12 +103,12 @@ export const Webinars = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-[#0a0a0a] border border-emerald-500/30 rounded-3xl overflow-hidden relative shadow-[0_0_50px_rgba(16,185,129,0.1)]"
+            className="bg-[#0a0a0a]/80 backdrop-blur-2xl border border-emerald-500/30 rounded-[2.5rem] overflow-hidden relative shadow-[0_0_80px_rgba(16,185,129,0.15)] group"
           >
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 via-cyan-500 to-emerald-500 animate-gradient-x" />
             
             <div className="grid grid-cols-1 lg:grid-cols-2">
-              <div className="p-8 md:p-12 flex flex-col justify-center">
+              <div className="p-8 md:p-14 flex flex-col justify-center relative z-10">
                 <div className="flex items-center gap-3 mb-6">
                   <span className="bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full animate-pulse flex items-center gap-1">
                     <span className="w-2 h-2 bg-white rounded-full animate-ping" />
@@ -119,7 +119,7 @@ export const Webinars = () => {
                   </span>
                 </div>
 
-                <h2 className="text-3xl md:text-5xl font-bold text-white mb-6 leading-tight">
+                <h2 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight tracking-tighter">
                   {nextWebinar.title}
                 </h2>
                 
@@ -128,7 +128,7 @@ export const Webinars = () => {
                   <CountdownTimer targetDate={nextWebinar.date_time} variant="hero" />
                 </div>
                 
-                <p className="text-gray-400 text-lg mb-8 leading-relaxed">
+                <p className="text-gray-400 text-lg mb-10 leading-relaxed font-light">
                   {nextWebinar.description}
                 </p>
 
@@ -137,29 +137,29 @@ export const Webinars = () => {
                     <img 
                       src={nextWebinar.speaker_profile_url} 
                       alt={nextWebinar.speaker_name} 
-                      className="w-12 h-12 rounded-full object-cover border border-white/10" 
+                      className="w-14 h-14 rounded-full object-cover border-2 border-white/10" 
                       referrerPolicy="no-referrer"
                     />
                   ) : (
-                    <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-sm font-bold text-white border border-white/10">
+                    <div className="w-14 h-14 rounded-full bg-white/10 flex items-center justify-center text-lg font-bold text-white border-2 border-white/10">
                       {nextWebinar.speaker_name?.charAt(0) || 'S'}
                     </div>
                   )}
                   <div>
-                    <div className="text-white font-bold">{nextWebinar.speaker_name || 'Speaker'}</div>
-                    <div className="text-emerald-500 text-sm">Expert Analyst</div>
+                    <div className="text-white font-bold text-lg">{nextWebinar.speaker_name || 'Speaker'}</div>
+                    <div className="text-emerald-500 text-xs font-mono uppercase tracking-widest mt-1">Lead Strategist</div>
                   </div>
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-4">
                   <button 
                     onClick={() => handleRegisterClick(nextWebinar)}
-                    className="px-8 py-4 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] flex items-center justify-center gap-2"
+                    className="px-8 py-4 bg-emerald-500 text-black font-bold rounded-2xl hover:bg-emerald-400 transition-all shadow-[0_0_30px_rgba(16,185,129,0.4)] hover:shadow-[0_0_50px_rgba(16,185,129,0.6)] flex items-center justify-center gap-3 text-lg"
                   >
                     {nextWebinar.is_paid ? `Purchase Access ($${nextWebinar.price})` : "Register Now"}
                     <ArrowRight className="w-5 h-5" />
                   </button>
-                  <div className="px-8 py-4 bg-white/5 text-white font-medium rounded-xl border border-white/10 flex flex-col items-center justify-center gap-1">
+                  <div className="px-8 py-4 bg-[#111820]/80 backdrop-blur-xl text-white font-medium rounded-2xl border border-white/10 flex flex-col items-center justify-center gap-1">
                     <div className="flex items-center gap-2">
                       <Users className="w-5 h-5 text-gray-400" />
                       <span>{nextWebinar.registration_count} registered</span>
@@ -174,7 +174,7 @@ export const Webinars = () => {
               </div>
               
               <div className="relative h-[400px] lg:h-auto overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a] to-transparent z-10" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a]/90 via-[#0a0a0a]/50 to-transparent z-10" />
                 {nextWebinar.brand_logo_url && (
                   <div className="absolute top-8 right-8 w-20 h-20 bg-black/40 backdrop-blur-md rounded-2xl p-4 border border-white/10 z-20">
                     <img src={nextWebinar.brand_logo_url} alt="Brand" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
@@ -183,7 +183,7 @@ export const Webinars = () => {
                 <img 
                   src={nextWebinar.webinar_image_url || `https://picsum.photos/seed/${nextWebinar.id}/800/800`} 
                   alt={nextWebinar.title} 
-                  className="w-full h-full object-cover opacity-60"
+                  className="w-full h-full object-cover opacity-50 group-hover:scale-105 transition-transform duration-1000"
                   referrerPolicy="no-referrer"
                 />
               </div>

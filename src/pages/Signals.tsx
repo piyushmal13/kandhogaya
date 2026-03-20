@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useScroll, useTransform } from "motion/react";
 import { Check, X, Upload, Smartphone, ShieldCheck, Zap, Activity, BarChart3, TrendingUp, Clock, Globe, ArrowRight, Lock, MessageSquare, Users } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "../contexts/AuthContext";
@@ -79,13 +79,15 @@ const LiveSignalsFeed = () => {
           {signals.slice(0, 3).map((signal) => (
             <motion.div
               key={signal.id}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="bg-zinc-900/50 border border-white/10 rounded-2xl p-5 hover:border-emerald-500/30 transition-all group"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              whileHover={{ y: -5, scale: 1.02 }}
+              className="bg-zinc-900/40 backdrop-blur-xl border border-white/10 rounded-3xl p-6 hover:border-emerald-500/50 hover:shadow-[0_0_40px_rgba(16,185,129,0.15)] transition-all duration-300 group relative overflow-hidden"
             >
+              <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-2xl group-hover:bg-emerald-500/10 transition-colors" />
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <div className="text-xl font-bold text-white font-mono">{signal.asset}</div>
+                  <div className="text-2xl font-bold text-white font-mono tracking-tight">{signal.asset}</div>
                   <div className={`text-xs font-bold uppercase tracking-widest mt-1 ${signal.direction === 'BUY' ? 'text-emerald-500' : 'text-red-500'}`}>
                     {signal.direction} @ {signal.entry_price}
                   </div>
@@ -120,22 +122,129 @@ const LiveSignalsFeed = () => {
   );
 };
 
-const HeroSection = () => {
+const RoboticCore = () => {
+  // Floating particle animation variants (looping keyframes)
+  const floatAnim = {
+    animate: {
+      y: [0, -12, 0],
+      rotate: [0, 6, -6, 0],
+      transition: {
+        duration: 6,
+        ease: "easeInOut",
+        repeat: Infinity,
+      },
+    },
+  };
+
   return (
-    <section className="relative min-h-[80vh] flex flex-col items-center justify-center overflow-hidden bg-[#000000] pt-20 pb-20">
-      {/* --- Institutional Background System --- */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* 1. Ambient Spotlight (Top Center) */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[500px] bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.15),transparent_70%)] opacity-60" />
+    <div className="relative w-full h-[360px] md:h-[500px] flex items-center justify-center mb-16 pointer-events-none" style={{ perspective: "1200px" }}>
+      <div
+        className="relative w-[300px] h-[300px] md:w-[520px] md:h-[520px]"
+        style={{ transformStyle: "preserve-3d" }}
+      >
+        {/* Deep nested glass circles */}
+        {Array.from({ length: 6 }).map((_, i) => {
+          const baseSize = typeof window !== 'undefined' && window.innerWidth < 768 ? 280 : 520;
+          const size = baseSize - i * (baseSize / 7.5);
+          const blur = i % 2 === 0 ? "blur-2xl" : "blur-xl";
+          const z = i * 40;
+          return (
+            <motion.div
+              key={i}
+              className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full ${blur}`}
+              style={{
+                width: size,
+                height: size,
+                background: `radial-gradient(circle at 30% 30%, rgba(16,185,129,${0.02 + i * 0.02}), transparent 40%), rgba(17,24,32,${0.08 + i * 0.03})`,
+                boxShadow: `0 ${8 + i * 6}px ${30 + i * 10}px rgba(2,6,23,${0.25 + i * 0.03})`,
+                transform: `translateZ(${z}px) rotateX(${i * 6}deg) rotateY(${i * -4}deg)`,
+                willChange: "transform, opacity",
+              }}
+              animate={{
+                rotateY: [0, 8, -6, 0],
+                rotateX: [0, -4, 4, 0],
+              }}
+              transition={{
+                duration: 12 + i * 2,
+                ease: "easeInOut",
+                repeat: Infinity,
+              }}
+            />
+          );
+        })}
 
-        {/* 2. Large Structural Grid - Static & Stable */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:120px_120px] [mask-image:radial-gradient(ellipse_at_center,black_60%,transparent_100%)]" />
-
-        {/* 3. Subtle Horizon Glow (Bottom) */}
-        <div className="absolute bottom-0 left-0 right-0 h-[300px] bg-gradient-to-t from-emerald-900/10 to-transparent opacity-40" />
+        {/* Center Neural Core Card */}
+        <motion.div
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[240px] h-[160px] md:w-[320px] md:h-[200px] rounded-3xl backdrop-blur-2xl bg-[rgba(17,24,32,0.6)] border border-emerald-500/20 shadow-[0_0_50px_rgba(16,185,129,0.15)] flex flex-col items-center justify-center p-6 text-white"
+          style={{ transform: "translateZ(220px)" }}
+          initial={{ scale: 0.98 }}
+          animate={{ scale: [0.98, 1.02, 0.98] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-emerald-500/20 flex items-center justify-center mb-4 border border-emerald-500/40 shadow-[0_0_30px_rgba(16,185,129,0.5)]">
+            <Zap className="w-6 h-6 md:w-7 md:h-7 text-emerald-400" />
+          </div>
+          <h2 className="text-2xl md:text-3xl font-light tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Neural Core</h2>
+          <p className="mt-2 text-[10px] md:text-xs text-emerald-500/70 font-mono uppercase tracking-widest text-center">Interactive Execution</p>
+        </motion.div>
       </div>
 
+      {/* Floating Particles / Telemetry Cards */}
+      <div className="absolute inset-0 max-w-4xl mx-auto">
+        <motion.div
+          className="absolute left-0 md:left-4 top-16 md:top-24 w-32 md:w-40 h-20 md:h-24 rounded-2xl backdrop-blur-xl bg-[#111820]/80 border border-white/10 text-white p-4 flex flex-col justify-center shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
+          variants={floatAnim}
+          animate="animate"
+          style={{ transform: "translateZ(80px)" }}
+        >
+          <div className="text-[10px] md:text-xs font-light text-gray-400 uppercase tracking-widest mb-1">Latency</div>
+          <div className="text-xl md:text-2xl font-semibold text-emerald-400 font-mono">0.1ms</div>
+        </motion.div>
+
+        <motion.div
+          className="absolute right-0 md:right-8 bottom-16 md:bottom-28 w-36 md:w-48 h-24 md:h-28 rounded-2xl backdrop-blur-xl bg-[#111820]/80 border border-white/10 text-white p-4 flex flex-col justify-center shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
+          animate={{
+            y: [0, -18, 0],
+            rotate: [0, 4, -4, 0],
+          }}
+          transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+          style={{ transform: "translateZ(120px)" }}
+        >
+          <div className="text-[10px] md:text-xs font-light text-gray-400 uppercase tracking-widest mb-1">Throughput</div>
+          <div className="text-xl md:text-2xl font-semibold text-cyan-400 font-mono">1.4k/s</div>
+        </motion.div>
+      </div>
+    </div>
+  );
+};
+
+const HeroSection = () => {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+  });
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  const opacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
+
+  return (
+    <section ref={ref} className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-[#020617] to-[#0a0a0a] pt-32 pb-24">
+      {/* --- Institutional Background System --- */}
+      <motion.div style={{ y, opacity }} className="absolute inset-0 overflow-hidden pointer-events-none will-change-transform">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1400px] h-[600px] bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.12),transparent_70%)] opacity-80" />
+
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:120px_120px] [mask-image:radial-gradient(ellipse_at_center,black_70%,transparent_100%)]" />
+      </motion.div>
+
       <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+        >
+          <RoboticCore />
+        </motion.div>
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -153,11 +262,11 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1 }}
-          className="text-5xl md:text-7xl font-bold text-white tracking-tighter mb-6 leading-tight"
+          className="text-5xl md:text-8xl font-bold text-white tracking-tighter mb-8 leading-tight"
         >
-          Professional Trading <br />
+          Algorithmic Execution. <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">
-            Signals Since 2018
+            Zero Emotion.
           </span>
         </motion.h1>
 
@@ -165,9 +274,9 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-lg md:text-xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed"
+          className="text-lg md:text-2xl text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed font-light"
         >
-          Institutional-grade trade setups delivered directly to your WhatsApp. Our research desk analyzes the market daily to identify high-probability trading opportunities with precise entry, stop loss, and take profit levels.
+          Institutional-grade trade setups parsed by our active neural engine and delivered directly to your phone. We analyze global liquidity voids and execute with precision.
         </motion.p>
 
         <motion.button
@@ -175,7 +284,7 @@ const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3 }}
           onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
-          className="group relative px-8 py-4 bg-emerald-500 text-black font-bold rounded-xl overflow-hidden flex items-center gap-2 mx-auto hover:scale-105 transition-transform duration-300 shadow-[0_0_40px_rgba(16,185,129,0.3)]"
+          className="group relative px-10 py-5 bg-emerald-500 text-black font-bold text-lg rounded-2xl overflow-hidden flex items-center gap-3 mx-auto hover:scale-105 transition-all duration-300 shadow-[0_0_60px_rgba(16,185,129,0.4)] hover:shadow-[0_0_80px_rgba(16,185,129,0.6)]"
         >
           <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[0.16,1,0.3,1]" />
           <span className="relative z-10 flex items-center gap-2">
@@ -273,11 +382,11 @@ const SignalPreview = () => {
       <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         <div>
           <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">Precision Signals. <br /><span className="text-emerald-500">Zero Ambiguity.</span></h2>
-          <p className="text-gray-400 text-lg mb-8 leading-relaxed">
-            Every signal comes with clear instructions. No "maybe" trades. We provide exact entry zones, multiple take profit levels for scaling out, and a hard stop loss to protect capital.
+          <p className="text-gray-400 text-xl mb-10 leading-relaxed font-light">
+            Every signal is filtered through our quantitative execution engine. We provide exact entry zones, algorithmic take-profit structures, and rigid capital protection.
           </p>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {[
               "Daily Trade Setups", "Gold (XAUUSD) Focus", "Forex Major Pairs", 
               "Risk Management Guide", "Market Commentary", "24/7 Support"
@@ -296,15 +405,18 @@ const SignalPreview = () => {
           initial={{ opacity: 0, x: 50 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
-          className="relative"
+          className="relative perspective-1000"
         >
           {/* Phone Mockup Frame */}
-          <div className="w-[320px] mx-auto bg-black border-[8px] border-zinc-800 rounded-[3rem] overflow-hidden shadow-2xl relative">
+          <motion.div 
+            whileHover={{ rotateY: -5, rotateX: 5 }}
+            className="w-[320px] md:w-[360px] mx-auto bg-black border-[8px] border-zinc-800 rounded-[3rem] overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.8)] relative transition-transform duration-500 ease-out"
+          >
             {/* Notch */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-zinc-800 rounded-b-xl z-20" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-36 h-7 bg-zinc-800 rounded-b-2xl z-20" />
             
             {/* Screen Content */}
-            <div className="bg-[#0b141a] h-[600px] w-full flex flex-col">
+            <div className="bg-[#0b141a] h-[640px] w-full flex flex-col">
               {/* Header */}
               <div className="bg-[#202c33] p-4 pt-12 flex items-center gap-3 shadow-md z-10">
                 <div className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white font-bold">IFX</div>
@@ -370,13 +482,34 @@ const SignalPreview = () => {
 
               </div>
             </div>
-          </div>
+          </motion.div>
           
-          {/* Floating Elements */}
-          <div className="absolute -right-12 top-1/4 bg-[#202c33] p-4 rounded-xl border border-white/5 shadow-xl hidden md:block">
-            <div className="text-emerald-400 font-bold text-2xl">+450 Pips</div>
-            <div className="text-gray-400 text-xs uppercase tracking-wider">This Week</div>
-          </div>
+          {/* Floating Elements (Antigravity Feel) */}
+          <motion.div
+            animate={{ y: [0, -30, 0], rotate: [0, 5, 0] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute -right-16 top-1/4 bg-[#111820]/80 backdrop-blur-2xl p-6 rounded-3xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] hidden lg:block z-30"
+          >
+            <div className="text-emerald-400 font-bold text-4xl mb-1">+450</div>
+            <div className="text-gray-400 text-xs uppercase tracking-widest font-mono mb-3">Pips Captured</div>
+            <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+               <motion.div animate={{ width: ["0%", "100%", "0%"] }} transition={{ duration: 4, repeat: Infinity, ease: "linear" }} className="h-full bg-emerald-500" />
+            </div>
+          </motion.div>
+
+          <motion.div
+            animate={{ y: [0, 40, 0], rotate: [0, -10, 0] }}
+            transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            className="absolute -left-12 bottom-1/4 bg-[#111820]/80 backdrop-blur-2xl p-5 rounded-3xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] hidden lg:flex items-center gap-4 z-30"
+          >
+            <div className="w-12 h-12 bg-emerald-500/10 rounded-full flex items-center justify-center">
+              <Activity className="w-6 h-6 text-emerald-400" />
+            </div>
+            <div>
+               <div className="text-white font-bold text-lg">94%</div>
+               <div className="text-gray-400 text-xs uppercase tracking-widest">Accuracy</div>
+            </div>
+          </motion.div>
         </motion.div>
       </div>
     </section>
