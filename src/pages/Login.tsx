@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Globe } from "lucide-react";
 import { motion } from "motion/react";
-import { TrendingUp, Globe } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
+import { PageMeta } from "../components/site/PageMeta";
+import { BRANDING } from "../constants/branding";
 import { useAuth } from "../contexts/AuthContext";
 import { supabase } from "../lib/supabase";
-
-import { BRANDING } from "../constants/branding";
 
 export const Login = () => {
   const { login, signup } = useAuth();
@@ -17,34 +18,40 @@ export const Login = () => {
   const [otpSent, setOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Handle Supabase auth errors passed in the URL hash (e.g., expired links)
   useEffect(() => {
     const hash = window.location.hash;
-    if (hash && hash.includes('error_description')) {
+    if (hash && hash.includes("error_description")) {
       const params = new URLSearchParams(hash.substring(1));
-      const errorDesc = params.get('error_description');
+      const errorDesc = params.get("error_description");
       if (errorDesc) {
-        // Replace + with spaces for readability
-        alert(`Authentication Error: ${errorDesc.replace(/\+/g, ' ')}`);
-        // Clean up the URL so it doesn't keep showing the error on refresh
-        window.history.replaceState(null, '', window.location.pathname);
+        alert(`Authentication Error: ${errorDesc.replace(/\+/g, " ")}`);
+        window.history.replaceState(null, "", window.location.pathname);
       }
     }
   }, []);
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
     setLoading(true);
-    if (isOtpMode) {
-      const { error } = await supabase.auth.signInWithOtp({ 
-        email,
-        options: {
-          emailRedirectTo: window.location.origin + '/dashboard'
+
+    try {
+      if (isOtpMode) {
+        const { error } = await supabase.auth.signInWithOtp({
+          email,
+          options: {
+            emailRedirectTo: `${window.location.origin}/dashboard`,
+          },
+        });
+
+        if (error) {
+          alert(error.message);
+        } else {
+          setOtpSent(true);
         }
-      });
-      if (error) alert(error.message);
-      else setOtpSent(true);
-    } else {
+
+        return;
+      }
+
       if (isSignUp) {
         const result = await signup(email, password);
         if (result.success) {
@@ -57,119 +64,130 @@ export const Login = () => {
         } else {
           alert(`Signup failed: ${result.error}`);
         }
-      } else {
-        const result = await login(email, password);
-        if (result.success) {
-          navigate("/dashboard");
-        } else {
-          alert(`Login failed: ${result.error}`);
-        }
+
+        return;
       }
+
+      const result = await login(email, password);
+      if (result.success) {
+        navigate("/dashboard");
+      } else {
+        alert(`Login failed: ${result.error}`);
+      }
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleGoogleLogin = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
+      provider: "google",
       options: {
-        redirectTo: window.location.origin + '/dashboard'
-      }
+        redirectTo: `${window.location.origin}/dashboard`,
+      },
     });
-    if (error) alert(error.message);
+
+    if (error) {
+      alert(error.message);
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0A192F] px-4 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,#10b98110,transparent_70%)]" />
-      
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.9 }}
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-black px-4">
+      <PageMeta
+        title="Client Access"
+        description="Sign in to IFXTrades to access dashboards, trading products, and client workflows."
+        path="/login"
+        robots="noindex,follow"
+      />
+
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_12%,rgba(88,242,182,0.18),transparent_35%),linear-gradient(180deg,rgba(255,255,255,0.03),transparent_35%)]" />
+      <div className="site-grid absolute inset-0 opacity-30" />
+
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="w-full max-w-md bg-zinc-900/50 backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-10 relative z-10 shadow-2xl"
+        className="relative z-10 w-full max-w-md rounded-[2.5rem] border border-white/10 bg-zinc-900/65 p-10 shadow-2xl backdrop-blur-xl"
       >
-        <div className="text-center mb-10">
-          <div className="h-16 w-auto flex items-center justify-center mx-auto mb-6">
-            <img 
-              src={BRANDING.logoUrl} 
-              alt="IFXTrades Logo" 
-              className="h-full w-auto object-contain" 
-            />
+        <div className="mb-10 text-center">
+          <div className="mx-auto mb-6 flex h-16 w-auto items-center justify-center">
+            <img src={BRANDING.logoUrl} alt={`${BRANDING.name} logo`} className="h-full w-auto object-contain" />
           </div>
-          <p className="text-gray-500 text-sm">Access the Operating System for Retail Traders</p>
+          <p className="text-sm text-gray-500">Access the operating surface for disciplined retail traders.</p>
         </div>
 
         <div className="space-y-6">
-          <button 
+          <button
             type="button"
             onClick={handleGoogleLogin}
-            className="w-full py-4 bg-white text-black font-bold rounded-2xl flex items-center justify-center gap-3 hover:bg-emerald-400 transition-all shadow-lg"
+            className="flex w-full items-center justify-center gap-3 rounded-2xl bg-white py-4 font-bold text-black shadow-lg transition-all hover:bg-emerald-300"
           >
-            <Globe className="w-5 h-5" />
+            <Globe className="h-5 w-5" />
             Continue with Google
           </button>
 
           <div className="flex items-center gap-4">
-            <div className="h-px bg-white/10 flex-1" />
-            <span className="text-[10px] text-gray-600 font-bold uppercase">or continue with email</span>
-            <div className="h-px bg-white/10 flex-1" />
+            <div className="h-px flex-1 bg-white/10" />
+            <span className="text-[10px] font-bold uppercase text-gray-600">or continue with email</span>
+            <div className="h-px flex-1 bg-white/10" />
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-[10px] font-bold text-gray-500 uppercase mb-2 ml-1">Email Address</label>
-              <input 
+              <label className="mb-2 ml-1 block text-[10px] font-bold uppercase text-gray-500">Email Address</label>
+              <input
                 required
                 type="email"
-                value={email} 
-                onChange={e => setEmail(e.target.value)} 
-                className="w-full bg-black/50 border border-white/10 rounded-2xl px-5 py-4 text-white outline-none focus:border-emerald-500 transition-all" 
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                className="w-full rounded-2xl border border-white/10 bg-black/50 px-5 py-4 text-white outline-none transition-all focus:border-emerald-500"
                 placeholder="name@company.com"
               />
             </div>
-            
-            {!isOtpMode && (
+
+            {!isOtpMode ? (
               <div>
-                <label className="block text-[10px] font-bold text-gray-500 uppercase mb-2 ml-1">Password</label>
-                <input 
+                <label className="mb-2 ml-1 block text-[10px] font-bold uppercase text-gray-500">Password</label>
+                <input
                   required
-                  type="password" 
-                  value={password} 
-                  onChange={e => setPassword(e.target.value)} 
-                  className="w-full bg-black/50 border border-white/10 rounded-2xl px-5 py-4 text-white outline-none focus:border-emerald-500 transition-all" 
-                  placeholder="••••••••"
+                  type="password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  className="w-full rounded-2xl border border-white/10 bg-black/50 px-5 py-4 text-white outline-none transition-all focus:border-emerald-500"
+                  placeholder="********"
                 />
               </div>
-            )}
+            ) : null}
 
-            {otpSent && (
-              <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl text-emerald-500 text-xs font-bold text-center">
-                Magic link sent! Check your email to login.
+            {otpSent ? (
+              <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-center text-xs font-bold text-emerald-300">
+                Magic link sent. Check your email to complete login.
               </div>
-            )}
+            ) : null}
 
-            <button 
+            <button
               disabled={loading}
-              className="w-full py-4 bg-emerald-500 text-black font-bold rounded-2xl hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/20 disabled:opacity-50"
+              className="w-full rounded-2xl bg-emerald-500 py-4 font-bold text-black shadow-lg shadow-emerald-500/20 transition-all hover:bg-emerald-400 disabled:opacity-50"
             >
-              {loading ? "Processing..." : (isOtpMode ? "Send Magic Link" : (isSignUp ? "Create Account" : "Sign In to Hub"))}
+              {loading ? "Processing..." : isOtpMode ? "Send Magic Link" : isSignUp ? "Create Account" : "Sign In to Hub"}
             </button>
           </form>
 
-          <div className="text-center space-y-3">
-            {!isOtpMode && (
-              <button 
+          <div className="space-y-3 text-center">
+            {!isOtpMode ? (
+              <button
                 type="button"
-                onClick={() => setIsSignUp(!isSignUp)}
-                className="text-xs text-white hover:text-emerald-500 transition-colors font-bold block w-full"
+                onClick={() => setIsSignUp((value) => !value)}
+                className="block w-full text-xs font-bold text-white transition-colors hover:text-emerald-500"
               >
                 {isSignUp ? "Already have an account? Sign In" : "Don't have an account? Sign Up"}
               </button>
-            )}
-            <button 
+            ) : null}
+
+            <button
               type="button"
-              onClick={() => setIsOtpMode(!isOtpMode)}
-              className="text-xs text-gray-500 hover:text-emerald-500 transition-colors font-bold block w-full"
+              onClick={() => setIsOtpMode((value) => !value)}
+              className="block w-full text-xs font-bold text-gray-500 transition-colors hover:text-emerald-500"
             >
               {isOtpMode ? "Use Password Instead" : "Login with Magic Link (OTP)"}
             </button>

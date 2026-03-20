@@ -4,6 +4,9 @@ import { motion, AnimatePresence } from "motion/react";
 import { Calendar, Clock, ArrowRight, Video, Download, Search, Filter } from "lucide-react";
 
 import { getBlogPosts } from "../services/apiHandlers";
+import { PageHero } from "../components/site/PageHero";
+import { PageMeta } from "../components/site/PageMeta";
+import { PageSection } from "../components/site/PageSection";
 
 export const Blog = () => {
   const [posts, setPosts] = useState<any[]>([]);
@@ -51,126 +54,122 @@ export const Blog = () => {
   };
 
   return (
-    <div className="pt-32 pb-20 px-4 max-w-7xl mx-auto">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
-        <div>
-          <motion.div 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-[10px] text-emerald-500 font-bold uppercase mb-4 tracking-widest"
-          >
-            Institutional Research
-          </motion.div>
-          <motion.h1 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-4xl md:text-6xl font-bold text-white mb-4 tracking-tighter"
-          >
-            Market Insights
-          </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-gray-400 max-w-xl text-lg"
-          >
-            Expert analysis on Forex, Gold, and Global Macro markets. Updated daily by our institutional research desk.
-          </motion.p>
-        </div>
+    <div className="relative overflow-hidden pb-20">
+      <PageMeta
+        title="Market Insights"
+        description="Read IFXTrades research on forex, gold, macro structure, and execution workflows from the institutional analysis desk."
+        path="/blog"
+        keywords={["trading blog", "forex market analysis", "gold market insights"]}
+      />
 
-        <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
-          <form onSubmit={handleSearch} className="relative group">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-emerald-500 transition-colors" />
-            <input 
-              type="text" 
-              placeholder="Search analysis..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full sm:w-64 bg-zinc-900 border border-white/10 rounded-xl pl-12 pr-4 py-3 text-sm text-white focus:border-emerald-500 outline-none transition-all"
-            />
-          </form>
-          <button className="flex items-center gap-2 px-4 py-3 bg-zinc-900 border border-white/10 rounded-xl text-gray-400 hover:text-white transition-all text-sm">
-            <Filter className="w-4 h-4" />
-            All Topics
-          </button>
-        </div>
-      </div>
+      <PageHero
+        eyebrow="Institutional Research"
+        title={
+          <>
+            Market insights with <span className="site-title-gradient">execution relevance.</span>
+          </>
+        }
+        description="Read analysis designed to help traders frame bias, risk, and market structure. The goal is not content volume. The goal is better decisions."
+        metrics={[
+          { label: "Cadence", value: "Daily", helper: "Fresh market context and trade framing" },
+          { label: "Coverage", value: "Forex + Gold + Macro", helper: "Focused on tradable market structure" },
+        ]}
+        aside={
+          <div className="space-y-4">
+            <form onSubmit={handleSearch} className="relative group">
+              <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500 group-focus-within:text-emerald-200" />
+              <input
+                type="text"
+                placeholder="Search analysis..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full rounded-2xl border border-white/10 bg-black/30 py-3 pr-4 pl-12 text-sm text-white outline-none focus:border-emerald-300/40"
+              />
+            </form>
+            <button className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-300 hover:text-white">
+              <Filter className="h-4 w-4 text-emerald-200" />
+              All Topics
+            </button>
+          </div>
+        }
+      />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <AnimatePresence mode="popLayout">
-          {posts.map((post: any, index: number) => (
-            <motion.div
-              key={post.id}
-              ref={index === posts.length - 1 ? lastPostElementRef : null}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: (index % 3) * 0.1 }}
-              layout
-            >
-              <Link to={`/blog/${post.slug}`} className="group block h-full">
-                <div className="bg-[#0a0a0a] border border-white/5 rounded-3xl overflow-hidden hover:border-emerald-500/30 transition-all flex flex-col h-full shadow-2xl">
-                  <div className="aspect-video bg-black overflow-hidden relative">
-                    <img 
-                      src={post.metadata?.cover_image || `https://picsum.photos/seed/${post.slug}/800/450`} 
-                      alt={post.title} 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-60 group-hover:opacity-100" 
-                      referrerPolicy="no-referrer" 
-                    />
-                    <div className="absolute top-4 left-4 flex gap-2">
-                      {post.metadata?.video_url && (
-                        <div className="bg-emerald-500 text-black p-1.5 rounded-lg shadow-lg">
-                          <Video className="w-4 h-4" />
-                        </div>
-                      )}
-                      {post.metadata?.download_url && (
-                        <div className="bg-blue-500 text-white p-1.5 rounded-lg shadow-lg">
-                          <Download className="w-4 h-4" />
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  <div className="p-8 flex flex-col flex-1">
-                    <div className="flex items-center gap-2 text-[10px] text-emerald-500 font-bold uppercase mb-4 tracking-widest">
-                      <Calendar className="w-3 h-3" />
-                      {new Date(post.published_at || post.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                    </div>
-                    <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-emerald-400 transition-colors leading-tight tracking-tight">
-                      {post.title}
-                    </h3>
-                    <p className="text-gray-400 text-sm line-clamp-3 mb-8 leading-relaxed flex-1">
-                      {post.content}
-                    </p>
-                    <div className="flex items-center justify-between pt-6 border-t border-white/5">
-                      <div className="flex items-center gap-2">
-                        <div className="w-6 h-6 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500">
-                          <Clock className="w-3 h-3" />
-                        </div>
-                        <span className="text-[10px] text-gray-500 font-bold uppercase">5 min read</span>
+      <PageSection className="pt-0">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <AnimatePresence mode="popLayout">
+            {posts.map((post: any, index: number) => (
+              <motion.div
+                key={post.id}
+                ref={index === posts.length - 1 ? lastPostElementRef : null}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: (index % 3) * 0.1 }}
+                layout
+              >
+                <Link to={`/blog/${post.slug}`} className="group block h-full">
+                  <div className="site-panel flex h-full flex-col overflow-hidden">
+                    <div className="relative aspect-video overflow-hidden bg-black">
+                      <img
+                        src={post.metadata?.cover_image || `https://picsum.photos/seed/${post.slug}/800/450`}
+                        alt={post.title}
+                        className="h-full w-full object-cover opacity-65 transition-transform duration-700 group-hover:scale-105 group-hover:opacity-100"
+                        referrerPolicy="no-referrer"
+                      />
+                      <div className="absolute top-4 left-4 flex gap-2">
+                        {post.metadata?.video_url ? (
+                          <div className="rounded-lg bg-emerald-300 p-1.5 text-slate-950 shadow-lg">
+                            <Video className="h-4 w-4" />
+                          </div>
+                        ) : null}
+                        {post.metadata?.download_url ? (
+                          <div className="rounded-lg bg-sky-500 p-1.5 text-white shadow-lg">
+                            <Download className="h-4 w-4" />
+                          </div>
+                        ) : null}
                       </div>
-                      <div className="text-emerald-500 group-hover:translate-x-1 transition-transform">
-                        <ArrowRight className="w-5 h-5" />
+                    </div>
+                    <div className="flex flex-1 flex-col p-8">
+                      <div className="mb-4 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-emerald-200/80">
+                        <Calendar className="h-3 w-3" />
+                        {new Date(post.published_at || post.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                      </div>
+                      <h3 className="mb-4 text-2xl font-semibold leading-tight text-white transition-colors group-hover:text-emerald-100">
+                        {post.title}
+                      </h3>
+                      <p className="mb-8 flex-1 text-sm leading-7 text-slate-300 line-clamp-3">
+                        {post.content}
+                      </p>
+                      <div className="flex items-center justify-between border-t border-white/5 pt-6">
+                        <div className="flex items-center gap-2">
+                          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-300/10 text-emerald-200">
+                            <Clock className="h-3 w-3" />
+                          </div>
+                          <span className="text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-500">5 min read</span>
+                        </div>
+                        <div className="text-emerald-200 transition-transform group-hover:translate-x-1">
+                          <ArrowRight className="h-5 w-5" />
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
-        </AnimatePresence>
-      </div>
-
-      {loading && (
-        <div className="flex justify-center mt-12">
-          <div className="w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin" />
+                </Link>
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
-      )}
 
-      {!loading && posts.length === 0 && (
-        <div className="text-center py-20">
-          <p className="text-gray-500">No analysis found matching your search.</p>
-        </div>
-      )}
+        {loading ? (
+          <div className="mt-12 flex justify-center">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-emerald-300 border-t-transparent" />
+          </div>
+        ) : null}
+
+        {!loading && posts.length === 0 ? (
+          <div className="py-20 text-center">
+            <p className="text-slate-500">No analysis found matching your search.</p>
+          </div>
+        ) : null}
+      </PageSection>
     </div>
   );
 };

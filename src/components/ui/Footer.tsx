@@ -1,92 +1,123 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { TrendingUp, Instagram, Twitter, Youtube, Mail, Shield, AlertTriangle, FileText, Globe } from "lucide-react";
+import {
+  Activity,
+  AlertTriangle,
+  ArrowUpRight,
+  BookOpen,
+  FileText,
+  Globe,
+  Mail,
+  MessageSquare,
+  Shield,
+  Video,
+} from "lucide-react";
+
 import { BRANDING } from "../../constants/branding";
 
 export const Footer = () => (
-  <footer className="bg-[#050505] border-t border-white/5 pt-24 pb-12 relative overflow-hidden">
-    {/* Background Pattern */}
-    <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 pointer-events-none" />
-    
-    <div className="max-w-7xl mx-auto px-4 relative z-10">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8 mb-20">
-        
-        {/* Brand Column */}
-        <div className="lg:col-span-6">
-          <Link to="/" className="flex items-center mb-8 group">
-            <div className="h-12 w-auto flex items-center justify-center overflow-hidden transition-all relative">
-              <img 
-                src={BRANDING.logoUrl} 
-                alt="IFXTrades Logo" 
-                className="h-full w-auto object-contain z-10" 
-              />
+  <footer className="relative overflow-hidden border-t border-white/5 pt-24 pb-12">
+    <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_15%_0%,rgba(88,242,182,0.1),transparent_30%),linear-gradient(180deg,rgba(255,255,255,0.02),transparent_18%)]" />
+
+    <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="grid gap-10 lg:grid-cols-[1.25fr_.8fr_.8fr_.9fr]">
+        <div className="site-panel p-8">
+          <Link to="/" className="flex items-center gap-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/5">
+              <img src={BRANDING.logoUrl} alt="IFXTrades Logo" className="h-8 w-8 object-contain" />
+            </div>
+            <div>
+              <div className="text-sm font-semibold tracking-[0.22em] text-white">{BRANDING.name}</div>
+              <div className="text-[11px] uppercase tracking-[0.32em] text-slate-400">Institutional Trading Surface</div>
             </div>
           </Link>
-          <p className="text-gray-500 text-sm leading-relaxed mb-8 max-w-sm">
-            The Operating System for Retail Traders. Empowering the next generation with institutional-grade intelligence, automated execution, and liquidity solutions.
+
+          <p className="mt-6 max-w-md text-sm leading-7 text-slate-300">
+            {BRANDING.description}
           </p>
-          <div className="flex gap-4">
-            {[
-              { icon: Twitter, href: "#" },
-              { icon: Instagram, href: "#" },
-              { icon: Youtube, href: "#" },
-              { icon: Mail, href: "#" }
-            ].map((social, i) => (
-              <a 
-                key={i} 
-                href={social.href} 
-                className="w-10 h-10 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-gray-400 hover:bg-emerald-500 hover:text-black hover:border-emerald-500 transition-all duration-300 group"
-              >
-                <social.icon className="w-4 h-4 group-hover:scale-110 transition-transform" />
-              </a>
-            ))}
+
+          <div className="mt-8 grid gap-3 sm:grid-cols-2">
+            <a
+              href={BRANDING.whatsappUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="site-panel-muted flex items-center justify-between rounded-2xl px-4 py-3 text-sm text-slate-200"
+            >
+              <span className="inline-flex items-center gap-2">
+                <MessageSquare className="h-4 w-4 text-emerald-200" />
+                WhatsApp Desk
+              </span>
+              <ArrowUpRight className="h-4 w-4 text-slate-500" />
+            </a>
+            <a
+              href={`mailto:${BRANDING.supportEmail}`}
+              className="site-panel-muted flex items-center justify-between rounded-2xl px-4 py-3 text-sm text-slate-200"
+            >
+              <span className="inline-flex items-center gap-2">
+                <Mail className="h-4 w-4 text-emerald-200" />
+                Support
+              </span>
+              <ArrowUpRight className="h-4 w-4 text-slate-500" />
+            </a>
           </div>
         </div>
 
-        {/* Links Columns */}
-        <div className="lg:col-span-2">
-          <h4 className="text-white font-bold mb-6 text-sm tracking-wider uppercase">Platform</h4>
-          <ul className="space-y-4 text-sm text-gray-500 font-medium">
-            <li><Link to="/signals" className="hover:text-emerald-500 transition-colors flex items-center gap-2"><span className="w-1 h-1 rounded-full bg-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity"/> Live Signals</Link></li>
-            <li><Link to="/marketplace" className="hover:text-emerald-500 transition-colors">Algo Marketplace</Link></li>
-            <li><Link to="/terminal" className="hover:text-emerald-500 transition-colors">Web Terminal</Link></li>
-            <li><Link to="/pricing" className="hover:text-emerald-500 transition-colors">Pricing</Link></li>
+        <div className="site-panel-muted p-6">
+          <h4 className="mb-5 text-sm font-semibold uppercase tracking-[0.28em] text-white">Platform</h4>
+          <ul className="space-y-4 text-sm text-slate-300">
+            <li><Link to="/signals" className="hover:text-white">Live Signals</Link></li>
+            <li><Link to="/marketplace" className="hover:text-white">Algorithm Marketplace</Link></li>
+            <li><Link to="/results" className="hover:text-white">Performance Results</Link></li>
+            <li><Link to="/login" className="hover:text-white">Client Access</Link></li>
           </ul>
         </div>
 
-        <div className="lg:col-span-2">
-          <h4 className="text-white font-bold mb-6 text-sm tracking-wider uppercase">Resources</h4>
-          <ul className="space-y-4 text-sm text-gray-500 font-medium">
-            <li><Link to="/academy" className="hover:text-emerald-500 transition-colors">Trading Academy</Link></li>
-            <li><Link to="/blog" className="hover:text-emerald-500 transition-colors">Market Insights</Link></li>
-            <li><Link to="/webinars" className="hover:text-emerald-500 transition-colors">Webinars</Link></li>
-            <li><Link to="/docs" className="hover:text-emerald-500 transition-colors">Documentation</Link></li>
+        <div className="site-panel-muted p-6">
+          <h4 className="mb-5 text-sm font-semibold uppercase tracking-[0.28em] text-white">Research</h4>
+          <ul className="space-y-4 text-sm text-slate-300">
+            <li><Link to="/courses" className="inline-flex items-center gap-2 hover:text-white"><BookOpen className="h-4 w-4 text-emerald-200" /> Academy</Link></li>
+            <li><Link to="/blog" className="inline-flex items-center gap-2 hover:text-white"><Activity className="h-4 w-4 text-emerald-200" /> Market Insights</Link></li>
+            <li><Link to="/webinars" className="inline-flex items-center gap-2 hover:text-white"><Video className="h-4 w-4 text-emerald-200" /> Webinars</Link></li>
+            <li><Link to="/contact" className="inline-flex items-center gap-2 hover:text-white"><MessageSquare className="h-4 w-4 text-emerald-200" /> Contact Desk</Link></li>
           </ul>
         </div>
 
-        <div className="lg:col-span-2">
-          <h4 className="text-white font-bold mb-6 text-sm tracking-wider uppercase">Company</h4>
-          <ul className="space-y-4 text-sm text-gray-500 font-medium">
-            <li><Link to="/about" className="hover:text-emerald-500 transition-colors">About Us</Link></li>
-            <li><Link to="/careers" className="hover:text-emerald-500 transition-colors">Careers <span className="text-[10px] bg-emerald-500/10 text-emerald-500 px-1.5 py-0.5 rounded ml-1">HIRING</span></Link></li>
-            <li><Link to="/partners" className="hover:text-emerald-500 transition-colors">Partners</Link></li>
-            <li><Link to="/contact" className="hover:text-emerald-500 transition-colors">Contact</Link></li>
-          </ul>
+        <div className="site-panel p-6">
+          <div className="mb-4 flex items-center gap-2">
+            <div className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-300 opacity-75"></span>
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-300"></span>
+            </div>
+            <span className="text-xs font-semibold tracking-[0.28em] text-emerald-100/80">SYSTEM ONLINE</span>
+          </div>
+          <div className="space-y-4 text-sm text-slate-300">
+            <div className="flex justify-between">
+              <span>Execution Layer</span>
+              <span className="font-semibold text-white">12ms</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Research Uptime</span>
+              <span className="font-semibold text-white">99.99%</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Region</span>
+              <span className="inline-flex items-center gap-2 font-semibold text-white"><Globe className="h-4 w-4 text-emerald-200" /> Global</span>
+            </div>
+            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.04] p-4 text-xs leading-6 text-slate-400">
+              Designed for signals, education, and algorithm licensing with a single premium visual system.
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Bottom Bar */}
-      <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-        <div className="flex flex-col md:flex-row items-center gap-6 text-xs text-gray-600 font-medium">
-          <span>© 2026 IFXTrades Inc.</span>
-          <div className="hidden md:block w-1 h-1 rounded-full bg-gray-800" />
-          <div className="flex items-center gap-2">
-            <Globe className="w-3 h-3" />
-            <span>Global Region (English)</span>
-          </div>
+      <div className="mt-12 flex flex-col gap-6 border-t border-white/5 pt-8 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-4 text-xs text-slate-500 md:flex-row md:items-center">
+          <span>Copyright 2026 {BRANDING.name}. All rights reserved.</span>
+          <span className="hidden h-1 w-1 rounded-full bg-slate-700 md:block" />
+          <span>Institutional trading intelligence for modern retail execution.</span>
         </div>
-        
-        <div className="flex flex-wrap justify-center gap-6 text-xs text-gray-500 font-medium">
+
+        <div className="flex flex-wrap gap-5 text-xs font-medium text-slate-400">
           <Link to="/privacy" className="hover:text-white transition-colors flex items-center gap-1.5">
             <Shield className="w-3 h-3" /> Privacy Policy
           </Link>
@@ -96,17 +127,15 @@ export const Footer = () => (
           <Link to="/risk" className="hover:text-white transition-colors flex items-center gap-1.5">
             <AlertTriangle className="w-3 h-3" /> Risk Disclosure
           </Link>
-          <Link to="/cookies" className="hover:text-white transition-colors">Cookie Settings</Link>
+          <Link to="/cookies" className="hover:text-white transition-colors">
+            Cookie Policy
+          </Link>
         </div>
       </div>
 
-      {/* Disclaimer */}
-      <div className="mt-12 text-[10px] text-gray-700 leading-relaxed max-w-5xl mx-auto text-center border-t border-white/5 pt-8">
-        <p>
-          Risk Warning: Trading leveraged products such as Forex and CFDs carries a high level of risk and may not be suitable for all investors. The high degree of leverage can work against you as well as for you. Before deciding to trade, you should carefully consider your investment objectives, level of experience, and risk appetite. You could sustain a loss of some or all of your initial investment. You should be aware of all the risks associated with trading and seek advice from an independent financial advisor if you have any doubts.
-        </p>
+      <div className="mt-10 border-t border-white/5 pt-8 text-[11px] leading-6 text-slate-600">
+        Risk Warning: Trading leveraged products such as Forex and CFDs carries a high level of risk and may not be suitable for all investors. Consider your objectives, experience, and risk appetite before trading live capital. Seek independent advice where appropriate.
       </div>
-
     </div>
   </footer>
 );

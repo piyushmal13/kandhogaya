@@ -6,6 +6,8 @@ import { useAuth } from "../contexts/AuthContext";
 import { Link } from "react-router-dom";
 import { WebinarPromoInline } from "../components/webinars/WebinarPromoInline";
 import { getSignals, subscribeToSignals } from "../services/apiHandlers";
+import { PageMeta } from "../components/site/PageMeta";
+import { getSignals, subscribeToSignals } from "../services/apiHandlers";
 
 // --- Types ---
 type PlanDuration = "1 Month" | "3 Months" | "6 Months";
@@ -908,6 +910,12 @@ const FinalCTA = () => {
 export const Signals = () => {
   return (
     <div className="bg-[#020202] min-h-screen">
+      <PageMeta
+        title="Signals"
+        description="Access IFXTrades live signal workflows, pricing, performance framing, and structured execution guidance for active traders."
+        path="/signals"
+        keywords={["forex signals", "gold signals", "live trading signals"]}
+      />
       <HeroSection />
       <LiveSignalsFeed />
       <PerformanceMetrics />

@@ -1,160 +1,235 @@
 import React, { useState } from "react";
-import { MessageSquare, Mail, Loader2, CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Loader2, Mail, MessageSquare } from "lucide-react";
+
+import { PageHero } from "../components/site/PageHero";
+import { PageMeta } from "../components/site/PageMeta";
+import { PageSection, SectionHeading } from "../components/site/PageSection";
+import { Reveal } from "../components/site/Reveal";
+import { BRANDING } from "../constants/branding";
 import { supabase } from "../lib/supabase";
 
-export const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "General Inquiry",
-    message: ""
-  });
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+type ContactStatus = "idle" | "loading" | "success" | "error";
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setStatus('loading');
+const initialFormState = {
+  name: "",
+  email: "",
+  subject: "General Inquiry",
+  message: "",
+};
+
+export const Contact = () => {
+  const [formData, setFormData] = useState(initialFormState);
+  const [status, setStatus] = useState<ContactStatus>("idle");
+
+  const updateField = (field: keyof typeof initialFormState, value: string) => {
+    setFormData((current) => ({ ...current, [field]: value }));
+  };
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setStatus("loading");
 
     try {
-      const { error } = await supabase
-        .from('contact_messages')
-        .insert([
-          { 
-            full_name: formData.name, 
-            email: formData.email, 
-            subject: formData.subject, 
-            message: formData.message,
-            created_at: new Date().toISOString()
-          }
-        ]);
+      const { error } = await supabase.from("contact_messages").insert([
+        {
+          full_name: formData.name,
+          email: formData.email,
+          subject: formData.subject,
+          message: formData.message,
+          created_at: new Date().toISOString(),
+        },
+      ]);
 
-      if (error) throw error;
-      
-      setStatus('success');
-      setFormData({ name: "", email: "", subject: "General Inquiry", message: "" });
-    } catch (err) {
-      console.error("[Contact Form Error]:", err);
-      setStatus('error');
+      if (error) {
+        throw error;
+      }
+
+      setStatus("success");
+      setFormData(initialFormState);
+    } catch (error) {
+      console.error("[Contact Form Error]:", error);
+      setStatus("error");
     }
   };
 
   return (
-    <div className="pt-32 pb-20 px-4 max-w-7xl mx-auto min-h-screen">
-      <div className="text-center mb-20">
-        <span className="text-emerald-500 font-bold text-xs uppercase tracking-[0.3em] mb-4 inline-block">Get in Touch</span>
-        <h1 className="text-6xl font-bold text-white mb-6 tracking-tight">Contact IFXTrades</h1>
-        <p className="text-gray-400 max-w-2xl mx-auto text-lg">Have a question about our algorithms, signals, or enterprise solutions? Our support team is available 24/5.</p>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-        <div className="space-y-8">
-          <div className="bg-zinc-900 border border-white/10 rounded-3xl p-8 flex items-start gap-6">
-            <div className="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center flex-shrink-0">
-              <MessageSquare className="text-emerald-500 w-6 h-6" />
-            </div>
-            <div>
-              <h3 className="text-xl font-bold text-white mb-2">WhatsApp Support</h3>
-              <p className="text-gray-400 text-sm mb-4">Fastest response time for active members and license inquiries.</p>
-              <a href="https://wa.me/917709583224" target="_blank" rel="noreferrer" className="text-emerald-500 font-bold hover:underline">Chat with us →</a>
-            </div>
-          </div>
-          <div className="bg-zinc-900 border border-white/10 rounded-3xl p-8 flex items-start gap-6">
-            <div className="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center flex-shrink-0">
-              <Mail className="text-emerald-500 w-6 h-6" />
-            </div>
-            <div>
-              <h3 className="text-xl font-bold text-white mb-2">Email Support</h3>
-              <p className="text-gray-400 text-sm mb-4">For partnership inquiries, billing, and technical support.</p>
-              <a href="mailto:support@ifxtrades.com" className="text-emerald-500 font-bold hover:underline">support@ifxtrades.com →</a>
-            </div>
-          </div>
-        </div>
-        <div className="bg-zinc-900 border border-white/10 rounded-[3rem] p-10">
-          <h3 className="text-2xl font-bold text-white mb-8">Send a Message</h3>
-          
-          {status === 'success' ? (
-            <div className="text-center py-12">
-              <CheckCircle2 className="w-16 h-16 text-emerald-500 mx-auto mb-6" />
-              <h4 className="text-2xl font-bold text-white mb-2">Message Received</h4>
-              <p className="text-gray-400 mb-8">Our team will review your inquiry and get back to you within 24 hours.</p>
-              <button 
-                onClick={() => setStatus('idle')}
-                className="px-8 py-3 bg-white/5 border border-white/10 rounded-xl text-white hover:bg-white/10 transition-all"
-              >
-                Send Another Message
-              </button>
-            </div>
-          ) : (
-            <form className="space-y-6" onSubmit={handleSubmit}>
-              <div className="grid grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-xs font-bold text-gray-500 uppercase mb-2">Name</label>
-                  <input 
-                    required 
-                    value={formData.name}
-                    onChange={(e) => setFormData({...formData, name: e.target.value})}
-                    className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-emerald-500" 
-                    placeholder="John Doe" 
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-gray-500 uppercase mb-2">Email</label>
-                  <input 
-                    required 
-                    type="email" 
-                    value={formData.email}
-                    onChange={(e) => setFormData({...formData, email: e.target.value})}
-                    className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-emerald-500" 
-                    placeholder="john@example.com" 
-                  />
-                </div>
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-gray-500 uppercase mb-2">Subject</label>
-                <select 
-                  value={formData.subject}
-                  onChange={(e) => setFormData({...formData, subject: e.target.value})}
-                  className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-emerald-500"
-                >
-                  <option>General Inquiry</option>
-                  <option>Algo Licensing</option>
-                  <option>Signal Subscription</option>
-                  <option>Partnership</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-gray-500 uppercase mb-2">Message</label>
-                <textarea 
-                  required 
-                  rows={4} 
-                  value={formData.message}
-                  onChange={(e) => setFormData({...formData, message: e.target.value})}
-                  className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-emerald-500" 
-                  placeholder="How can we help you?" 
-                />
-              </div>
-              
-              {status === 'error' && (
-                <p className="text-red-500 text-sm">Failed to send message. Please try again or contact support directly.</p>
-              )}
+    <div className="relative overflow-hidden pb-16">
+      <PageMeta
+        title="Contact"
+        description="Contact IFXTrades for support, partnership inquiries, algorithm licensing, or signal access questions."
+        path="/contact"
+        keywords={["contact IFXTrades", "trading support", "algo licensing"]}
+      />
 
-              <button 
-                type="submit" 
-                disabled={status === 'loading'}
-                className="w-full py-4 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all flex items-center justify-center gap-2"
-              >
-                {status === 'loading' ? (
-                  <>
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                    Sending...
-                  </>
-                ) : (
-                  'Send Message'
-                )}
-              </button>
-            </form>
-          )}
+      <PageHero
+        eyebrow="Support Surface"
+        title={
+          <>
+            Talk to the <span className="site-title-gradient">IFXTrades desk</span> without friction.
+          </>
+        }
+        description="Use the contact desk for support, partnerships, billing, and product access questions. The UI is upgraded, but the underlying contact flow still writes directly into the existing Supabase table."
+        actions={[
+          { label: "WhatsApp Desk", href: BRANDING.whatsappUrl },
+          { label: "Email Support", href: `mailto:${BRANDING.supportEmail}`, variant: "secondary" },
+        ]}
+        metrics={[
+          { label: "Support Window", value: "24/5", helper: "Aligned with active market participation" },
+          { label: "Channels", value: "WhatsApp + Email", helper: "Fastest direct routes to the team" },
+        ]}
+      />
+
+      <PageSection>
+        <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="grid gap-6">
+            <Reveal className="site-panel p-6">
+              <div className="flex items-start gap-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-300/10 text-emerald-200">
+                  <MessageSquare className="h-6 w-6" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-white">WhatsApp Support</h3>
+                  <p className="mt-3 text-sm leading-7 text-slate-300">
+                    Fastest route for active members, onboarding, signal access, and operational questions.
+                  </p>
+                  <a
+                    href={BRANDING.whatsappUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-4 inline-flex text-sm font-semibold text-emerald-200 hover:text-white"
+                  >
+                    Chat with the desk
+                  </a>
+                </div>
+              </div>
+            </Reveal>
+
+            <Reveal delay={0.08} className="site-panel-muted p-6">
+              <div className="flex items-start gap-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-300/10 text-emerald-200">
+                  <Mail className="h-6 w-6" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-white">Email Support</h3>
+                  <p className="mt-3 text-sm leading-7 text-slate-300">
+                    Best for technical help, billing questions, partnerships, and enterprise-style requests.
+                  </p>
+                  <a
+                    href={`mailto:${BRANDING.supportEmail}`}
+                    className="mt-4 inline-flex text-sm font-semibold text-emerald-200 hover:text-white"
+                  >
+                    {BRANDING.supportEmail}
+                  </a>
+                </div>
+              </div>
+            </Reveal>
+          </div>
+
+          <Reveal className="site-panel p-8 md:p-10">
+            <SectionHeading
+              eyebrow="Contact Form"
+              title="Send a focused request."
+              description="Use the form when you need a documented thread or a structured follow-up from the team."
+            />
+
+            {status === "success" ? (
+              <div className="py-8 text-center">
+                <CheckCircle2 className="mx-auto h-16 w-16 text-emerald-300" />
+                <h3 className="mt-6 text-3xl font-semibold text-white">Message received</h3>
+                <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-slate-300">
+                  Your request is now stored in the current contact pipeline. The team can review it without any backend rewiring.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setStatus("idle")}
+                  className="mt-8 inline-flex rounded-full border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-white hover:bg-white/10"
+                >
+                  Send another message
+                </button>
+              </div>
+            ) : (
+              <form className="space-y-5" onSubmit={handleSubmit}>
+                <div className="grid gap-5 md:grid-cols-2">
+                  <div>
+                    <label className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-500">
+                      Name
+                    </label>
+                    <input
+                      required
+                      value={formData.name}
+                      onChange={(event) => updateField("name", event.target.value)}
+                      className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none focus:border-emerald-300/40"
+                      placeholder="John Doe"
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-500">
+                      Email
+                    </label>
+                    <input
+                      required
+                      type="email"
+                      value={formData.email}
+                      onChange={(event) => updateField("email", event.target.value)}
+                      className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none focus:border-emerald-300/40"
+                      placeholder="john@example.com"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-500">
+                    Subject
+                  </label>
+                  <select
+                    value={formData.subject}
+                    onChange={(event) => updateField("subject", event.target.value)}
+                    className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none focus:border-emerald-300/40"
+                  >
+                    <option>General Inquiry</option>
+                    <option>Algo Licensing</option>
+                    <option>Signal Subscription</option>
+                    <option>Partnership</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-500">
+                    Message
+                  </label>
+                  <textarea
+                    required
+                    rows={5}
+                    value={formData.message}
+                    onChange={(event) => updateField("message", event.target.value)}
+                    className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none focus:border-emerald-300/40"
+                    placeholder="How can we help you?"
+                  />
+                </div>
+
+                {status === "error" ? (
+                  <p className="text-sm text-red-400">
+                    Failed to send the message. Please retry or contact support directly.
+                  </p>
+                ) : null}
+
+                <button
+                  type="submit"
+                  disabled={status === "loading"}
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-emerald-300 px-6 py-3 text-sm font-semibold text-slate-950 disabled:opacity-70"
+                >
+                  {status === "loading" ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      Sending message
+                    </>
+                  ) : (
+                    "Send Message"
+                  )}
+                </button>
+              </form>
+            )}
+          </Reveal>
         </div>
-      </div>
+      </PageSection>
     </div>
   );
 };

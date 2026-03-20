@@ -8,6 +8,9 @@ import { AttendeeFeed } from "../components/webinars/AttendeeFeed";
 import { WebinarCalendar } from "../components/webinars/WebinarCalendar";
 import { CountdownTimer } from "../components/webinars/CountdownTimer";
 import { ExitIntentPopup } from "../components/webinars/ExitIntentPopup";
+import { PageHero } from "../components/site/PageHero";
+import { PageMeta } from "../components/site/PageMeta";
+import { PageSection } from "../components/site/PageSection";
 
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -43,52 +46,59 @@ export const Webinars = () => {
   const nextWebinar = webinars[0];
 
   return (
-    <div className="min-h-screen bg-[#020202] pt-20 pb-20 relative">
+    <div className="min-h-screen pt-20 pb-20 relative overflow-hidden">
+      <PageMeta
+        title="Webinars"
+        description="Register for IFXTrades webinars covering market structure, live analysis, algorithmic workflows, and trader education."
+        path="/webinars"
+        keywords={["trading webinars", "live market analysis", "forex webinar"]}
+      />
+
       <AttendeeFeed />
 
-      {/* --- Hero Section --- */}
-      <section className="relative py-20 overflow-hidden bg-[#000000]">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[500px] bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.15),transparent_70%)] opacity-60" />
-          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:120px_120px] [mask-image:radial-gradient(ellipse_at_center,black_60%,transparent_100%)]" />
-        </div>
-
-        <div className="max-w-7xl mx-auto px-4 text-center relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono tracking-widest mb-6"
-          >
-            <Zap className="w-3 h-3" />
-            LIVE TRADING EDUCATION
-          </motion.div>
-          
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tighter"
-          >
-            Institutional Market <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">
-              Intelligence
-            </span>
-          </motion.h1>
-          
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed mb-12"
-          >
-            Join our expert analysts for live market breakdowns, algorithmic trading workshops, and macroeconomic strategy sessions.
-          </motion.p>
-        </div>
-      </section>
+      <PageHero
+        eyebrow="Live Trading Education"
+        title={
+          <>
+            Institutional market <span className="site-title-gradient">intelligence sessions.</span>
+          </>
+        }
+        description="Join IFXTrades analysts for live breakdowns, workflow walkthroughs, and practical execution education across forex, gold, and macro structure."
+        metrics={[
+          { label: "Formats", value: "Live + Recorded", helper: "Real-time sessions with replay support" },
+          { label: "Audience", value: "Global Traders", helper: "Designed for practical decision makers" },
+        ]}
+        aside={
+          nextWebinar ? (
+            <div className="space-y-4">
+              <div className="text-[11px] uppercase tracking-[0.32em] text-emerald-200/80">Next Session</div>
+              <h3 className="text-2xl font-semibold text-white">{nextWebinar.title}</h3>
+              <p className="text-sm leading-7 text-slate-300">
+                {new Date(nextWebinar.date_time).toLocaleDateString("en-US", {
+                  weekday: "long",
+                  month: "long",
+                  day: "numeric",
+                })}{" "}
+                with {nextWebinar.speaker || "IFXTrades Analyst Team"}.
+              </p>
+              <button
+                onClick={() => setSelectedWebinar(nextWebinar)}
+                className="inline-flex rounded-full bg-emerald-300 px-5 py-3 text-sm font-semibold text-slate-950"
+              >
+                Register Now
+              </button>
+            </div>
+          ) : (
+            <div className="text-sm leading-7 text-slate-300">
+              Loading the current webinar calendar and featured session.
+            </div>
+          )
+        }
+      />
 
       {/* --- Featured Webinar (Next Up) --- */}
       {nextWebinar && (
-        <section className="max-w-7xl mx-auto px-4 mb-24 relative z-10">
+        <PageSection className="mb-8 pt-0">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -179,11 +189,11 @@ export const Webinars = () => {
               </div>
             </div>
           </motion.div>
-        </section>
+        </PageSection>
       )}
 
       {/* --- Upcoming Grid & Calendar --- */}
-      <section className="max-w-7xl mx-auto px-4 pb-24">
+      <PageSection className="pb-24">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left: Webinar Grid */}
           <div className="lg:col-span-2">
@@ -232,7 +242,7 @@ export const Webinars = () => {
             </div>
           </div>
         </div>
-      </section>
+      </PageSection>
 
       {/* --- Registration Modal --- */}
       <AnimatePresence>

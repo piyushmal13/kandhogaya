@@ -11,6 +11,7 @@ import { AttendeeFeed } from "../components/webinars/AttendeeFeed";
 import { RegistrationModal } from "../components/webinars/RegistrationModal";
 import { CountdownTimer } from "../components/webinars/CountdownTimer";
 import { ExitIntentPopup } from "../components/webinars/ExitIntentPopup";
+import { PageMeta } from "../components/site/PageMeta";
 
 export const WebinarDetail = () => {
   const { id } = useParams();
@@ -60,8 +61,23 @@ export const WebinarDetail = () => {
     setNewMessage("");
   };
 
-  if (loading) return <div className="pt-32 text-center text-white">Loading...</div>;
-  if (!webinar) return <div className="pt-32 text-center text-white">Webinar not found.</div>;
+  if (loading) return <div className="pt-32 text-center text-white">
+    <PageMeta
+      title="Webinar"
+      description="Loading IFXTrades webinar details."
+      path={id ? `/webinars/${id}` : "/webinars"}
+    />
+    Loading...
+  </div>;
+  if (!webinar) return <div className="pt-32 text-center text-white">
+    <PageMeta
+      title="Webinar Not Found"
+      description="The requested IFXTrades webinar could not be found."
+      path={id ? `/webinars/${id}` : "/webinars"}
+      robots="noindex,follow"
+    />
+    Webinar not found.
+  </div>;
 
   const isLive = webinar.status === "live";
   const isRecorded = webinar.status === "recorded" || webinar.status === "completed" || webinar.status === "past";
@@ -69,6 +85,13 @@ export const WebinarDetail = () => {
 
   return (
     <div className="pt-20 bg-[#020202] min-h-screen">
+      <PageMeta
+        title={webinar.title}
+        description={webinar.description || "IFXTrades webinar details and registration."}
+        path={id ? `/webinars/${id}` : "/webinars"}
+        type="article"
+        keywords={["trading webinar", webinar.speaker || "IFXTrades", webinar.status || "webinar"]}
+      />
       {/* Header Info */}
       <div className="bg-[#050505] border-b border-white/5 py-6">
         <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row md:items-center justify-between gap-4">

@@ -1,48 +1,89 @@
-import React from "react";
-import { motion } from "motion/react";
-import { Zap, Globe, MessageSquare } from "lucide-react";
+import { Globe, MessageSquare, Zap } from "lucide-react";
+
+import { PageHero } from "../components/site/PageHero";
+import { PageMeta } from "../components/site/PageMeta";
+import { PageSection, SectionHeading } from "../components/site/PageSection";
+import { Reveal } from "../components/site/Reveal";
+import { BRANDING } from "../constants/branding";
+
+const roles = [
+  { title: "Senior Analyst", type: "Full-time", dept: "Trading", icon: Zap },
+  { title: "Full Stack Engineer", type: "Remote", dept: "Engineering", icon: Globe },
+  { title: "Content Strategist", type: "Contract", dept: "Marketing", icon: MessageSquare },
+];
 
 export const Hiring = () => (
-  <div className="pt-32 pb-20 px-4 max-w-7xl mx-auto min-h-screen">
-    <div className="text-center mb-20">
-      <span className="text-emerald-500 font-bold text-xs uppercase tracking-[0.3em] mb-4 inline-block">Careers</span>
-      <h1 className="text-6xl font-bold text-white mb-6 tracking-tight">Join the Elite Team</h1>
-      <p className="text-gray-400 max-w-2xl mx-auto text-lg">We are looking for the brightest minds in trading, development, and content creation to help us build the future of retail trading.</p>
-    </div>
+  <div className="relative overflow-hidden pb-16">
+    <PageMeta
+      title="Hiring"
+      description="Explore open roles at IFXTrades across trading, engineering, and content for the next generation of retail trading infrastructure."
+      path="/hiring"
+      keywords={["IFXTrades careers", "trading jobs", "quant trading careers"]}
+    />
 
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
-      {[
-        { title: "Senior Analyst", type: "Full-time", dept: "Trading", icon: Zap },
-        { title: "Full Stack Engineer", type: "Remote", dept: "Engineering", icon: Globe },
-        { title: "Content Strategist", type: "Contract", dept: "Marketing", icon: MessageSquare },
-      ].map((job, i) => (
-        <motion.div 
-          key={i}
-          whileHover={{ y: -10 }}
-          className="bg-zinc-900 border border-white/10 p-8 rounded-[2rem] hover:border-emerald-500/50 transition-all group"
+    <PageHero
+      eyebrow="Careers"
+      title={
+        <>
+          Build the <span className="site-title-gradient">infrastructure layer</span> serious traders actually need.
+        </>
+      }
+      description="IFXTrades hires people who care about execution quality, clarity, and building systems that reduce noise for the end user. We are interested in operators, analysts, and engineers who think in frameworks."
+      actions={[
+        { label: "Open Application", href: `mailto:${BRANDING.careersEmail}` },
+        { label: "About IFXTrades", to: "/about", variant: "secondary" },
+      ]}
+      metrics={[
+        { label: "Focus Areas", value: "Trading, Engineering, Content", helper: "Roles that shape the product surface end-to-end" },
+        { label: "Team Style", value: "Remote-first", helper: "Built for asynchronous, high-context work" },
+      ]}
+    />
+
+    <PageSection>
+      <SectionHeading
+        eyebrow="Open Roles"
+        title="Current hiring priorities."
+        description="We recruit around leverage points inside the platform: research quality, engineering stability, and communication that sharpens decision making."
+      />
+
+      <div className="grid gap-6 md:grid-cols-3">
+        {roles.map((role, index) => (
+          <Reveal key={role.title} delay={index * 0.08} className="site-panel p-6">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-300/10 text-emerald-200">
+              <role.icon className="h-6 w-6" />
+            </div>
+            <h3 className="mt-6 text-xl font-semibold text-white">{role.title}</h3>
+            <div className="mt-3 flex flex-wrap gap-2 text-[11px] uppercase tracking-[0.28em]">
+              <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-slate-300">{role.type}</span>
+              <span className="rounded-full border border-emerald-300/20 bg-emerald-300/10 px-3 py-1 text-emerald-100">{role.dept}</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => alert("Application form opening...")}
+              className="mt-6 inline-flex w-full items-center justify-center rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white hover:bg-white/10"
+            >
+              Apply Now
+            </button>
+          </Reveal>
+        ))}
+      </div>
+    </PageSection>
+
+    <PageSection className="pt-0">
+      <Reveal className="site-panel p-8 text-center md:p-10">
+        <SectionHeading
+          eyebrow="Open Application"
+          title="Do not wait for the perfect role title."
+          description="If your work sharpens research quality, accelerates execution, or improves trader understanding, send a concise case for how you would raise the bar."
+          align="center"
+        />
+        <a
+          href={`mailto:${BRANDING.careersEmail}`}
+          className="inline-flex rounded-full bg-emerald-300 px-6 py-3 text-sm font-semibold text-slate-950"
         >
-          <div className="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-emerald-500 group-hover:text-black transition-all">
-            <job.icon className="w-6 h-6" />
-          </div>
-          <h3 className="text-xl font-bold text-white mb-2">{job.title}</h3>
-          <div className="flex gap-3 mb-8">
-            <span className="text-[10px] font-bold text-gray-500 uppercase px-2 py-1 bg-white/5 rounded-md">{job.type}</span>
-            <span className="text-[10px] font-bold text-emerald-500 uppercase px-2 py-1 bg-emerald-500/10 rounded-md">{job.dept}</span>
-          </div>
-          <button type="button" onClick={() => alert("Application form opening...")} className="w-full py-4 bg-white/5 text-white font-bold rounded-xl border border-white/10 hover:bg-white hover:text-black transition-all">
-            Apply Now
-          </button>
-        </motion.div>
-      ))}
-    </div>
-
-    <div className="bg-emerald-500 p-12 rounded-[3rem] text-center relative overflow-hidden">
-      <div className="absolute top-0 right-0 w-64 h-64 bg-white/20 blur-[80px] rounded-full -mr-32 -mt-32" />
-      <h2 className="text-4xl font-bold text-black mb-6 relative z-10">Don't see a role for you?</h2>
-      <p className="text-black/70 max-w-xl mx-auto mb-10 font-medium relative z-10">We're always looking for exceptional talent. Send us your portfolio and tell us how you can contribute to the IFXTrades ecosystem.</p>
-      <a href="mailto:careers@ifxtrades.com" className="inline-block px-10 py-4 bg-black text-white font-bold rounded-2xl hover:scale-105 transition-transform relative z-10">
-        Send Open Application
-      </a>
-    </div>
+          Send Portfolio
+        </a>
+      </Reveal>
+    </PageSection>
   </div>
 );

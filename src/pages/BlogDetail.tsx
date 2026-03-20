@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ArrowUpRight, Zap, Play, Share2, Calendar, Clock, User } from "lucide-react";
-import ReactMarkdown from 'react-markdown';
+import { ArrowUpRight, Zap, Share2, Calendar, Clock, User } from "lucide-react";
+import ReactMarkdown from "react-markdown";
 import { motion } from "motion/react";
 
+import { PageMeta } from "../components/site/PageMeta";
 import { WebinarPromoInline } from "../components/webinars/WebinarPromoInline";
 import { getBlogPostBySlug } from "../services/apiHandlers";
 import { Blog } from "../types";
@@ -25,41 +26,54 @@ export const BlogDetail = () => {
     fetchPost();
   }, [slug]);
 
-  if (loading) return <div className="pt-32 text-center text-white">
-    <div className="w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto" />
-  </div>;
-  
-  if (!post) return <div className="pt-32 text-center text-white">Post not found.</div>;
+  if (loading) {
+    return (
+      <div className="pt-32 text-center text-white">
+        <PageMeta title="Market Insight" description="Loading IFXTrades market insight." path={pathname} />
+        <div className="w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto" />
+      </div>
+    );
+  }
+
+  if (!post) {
+    return (
+      <div className="pt-32 text-center text-white">
+        <PageMeta
+          title="Insight Not Found"
+          description="The requested IFXTrades market insight could not be found."
+          path={pathname}
+          robots="noindex,follow"
+        />
+        Post not found.
+      </div>
+    );
+  }
 
   return (
     <div className="pt-32 pb-20 px-4 max-w-4xl mx-auto">
-      <motion.div
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-      >
+      <PageMeta
+        title={post.title}
+        description={(post.content || "").slice(0, 160)}
+        path={pathname}
+        type="article"
+        keywords={["market insight", post.category || "market analysis", "IFXTrades blog"]}
+      />
+
+      <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
         <Link to="/blog" className="text-emerald-500 text-sm font-bold flex items-center gap-2 mb-8 hover:translate-x-[-4px] transition-transform">
           <ArrowUpRight className="rotate-[225deg] w-4 h-4" /> Back to Insights
         </Link>
       </motion.div>
 
       <div className="mb-12">
-        <motion.div 
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-[10px] text-emerald-500 font-bold uppercase mb-4 tracking-widest"
-        >
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-[10px] text-emerald-500 font-bold uppercase mb-4 tracking-widest">
           {post.category || "Market Analysis"}
         </motion.div>
-        <motion.h1 
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="text-4xl md:text-6xl font-bold text-white mb-6 tracking-tighter leading-tight"
-        >
+        <motion.h1 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-4xl md:text-6xl font-bold text-white mb-6 tracking-tighter leading-tight">
           {post.title}
         </motion.h1>
-        
-        {post.bold_headline && (
+
+        {post.bold_headline ? (
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -68,9 +82,9 @@ export const BlogDetail = () => {
           >
             {post.bold_headline}
           </motion.p>
-        )}
-        
-        <motion.div 
+        ) : null}
+
+        <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
@@ -81,7 +95,7 @@ export const BlogDetail = () => {
               <img src={post.author_profile_url} alt={post.author_name} className="w-12 h-12 rounded-full object-cover border border-white/10" referrerPolicy="no-referrer" />
             ) : (
               <div className="w-12 h-12 bg-emerald-500 rounded-full flex items-center justify-center text-black font-bold">
-                {post.author_name?.charAt(0) || 'A'}
+                {post.author_name?.charAt(0) || "A"}
               </div>
             )}
             <div>
@@ -100,28 +114,17 @@ export const BlogDetail = () => {
         </motion.div>
       </div>
 
-      {/* Featured Image or Video */}
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.3 }}
-        className="mb-12 rounded-3xl overflow-hidden border border-white/10 bg-black aspect-video relative group"
-      >
+      <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3 }} className="mb-12 rounded-3xl overflow-hidden border border-white/10 bg-black aspect-video relative group">
         {post.video_url ? (
           <div className="w-full h-full">
-            <iframe 
-              src={post.video_url.includes('youtube.com') ? post.video_url.replace('watch?v=', 'embed/') : post.video_url} 
+            <iframe
+              src={post.video_url.includes("youtube.com") ? post.video_url.replace("watch?v=", "embed/") : post.video_url}
               className="w-full h-full"
               allowFullScreen
             />
           </div>
         ) : (
-          <img 
-            src={post.image_url || `https://picsum.photos/seed/${post.id}/1280/720`} 
-            alt={post.title} 
-            className="w-full h-full object-cover" 
-            referrerPolicy="no-referrer" 
-          />
+          <img src={post.image_url || `https://picsum.photos/seed/${post.id}/1280/720`} alt={post.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
         )}
       </motion.div>
 
@@ -129,13 +132,11 @@ export const BlogDetail = () => {
         <div className="lg:col-span-8">
           <div className="prose prose-invert max-w-none">
             <div className="text-lg md:text-xl text-gray-300 leading-relaxed mb-8">
-              <ReactMarkdown>
-                {post.content}
-              </ReactMarkdown>
+              <ReactMarkdown>{post.content}</ReactMarkdown>
             </div>
           </div>
-          
-          {post.author_bio && (
+
+          {post.author_bio ? (
             <div className="mt-16 p-8 rounded-3xl bg-zinc-900 border border-white/10">
               <div className="flex items-center gap-4 mb-4">
                 <User className="text-emerald-500 w-5 h-5" />
@@ -143,7 +144,7 @@ export const BlogDetail = () => {
               </div>
               <p className="text-gray-400 text-sm leading-relaxed">{post.author_bio}</p>
             </div>
-          )}
+          ) : null}
         </div>
 
         <div className="lg:col-span-4 space-y-8">
@@ -177,7 +178,7 @@ export const BlogDetail = () => {
           </div>
         </div>
       </div>
-      
+
       <div className="mt-24 pt-24 border-t border-white/5">
         <WebinarPromoInline />
       </div>

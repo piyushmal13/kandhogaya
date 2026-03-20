@@ -1,0 +1,16 @@
+{
+  "name": "IFXTrades",
+  "short_name": "IFX",
+  "description": "Institutional-grade algorithmic trading, live signals, education, and market intelligence.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050816",
+  "theme_color": "#58f2b6",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

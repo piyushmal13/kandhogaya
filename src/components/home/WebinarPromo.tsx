@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "motion/react";
-import { Calendar, Clock, Users, ArrowRight, ShieldCheck, Mic2, Star, Activity } from "lucide-react";
-import { getWebinars, subscribeToWebinars } from "../../services/apiHandlers";
+import { Calendar, ArrowRight, ShieldCheck, Mic2, Star } from "lucide-react";
 import { Link } from "react-router-dom";
+
+import { getWebinars, subscribeToWebinars } from "../../services/apiHandlers";
 
 export const WebinarPromo = () => {
   const [webinar, setWebinar] = useState<any>(null);
@@ -10,17 +11,14 @@ export const WebinarPromo = () => {
 
   useEffect(() => {
     const fetchNearestWebinar = async () => {
-      const webinars: any[] = await getWebinars();
-      if (webinars && webinars.length > 0) {
+      const webinars = await getWebinars();
+      if (Array.isArray(webinars) && webinars.length > 0) {
         const now = new Date().getTime();
-        const upcoming = webinars.filter(w => new Date(w.date_time).getTime() > now);
-        if (upcoming.length > 0) {
-          setWebinar(upcoming[0]);
-        } else {
-          setWebinar(webinars[webinars.length - 1]); // Fallback to the latest one
-        }
+        const upcoming = webinars.filter((item: any) => new Date(item.date_time).getTime() > now);
+        setWebinar(upcoming.length > 0 ? upcoming[0] : webinars[webinars.length - 1]);
       }
     };
+
     fetchNearestWebinar();
 
     const subscription = subscribeToWebinars((payload) => {
@@ -59,7 +57,7 @@ export const WebinarPromo = () => {
     return () => clearInterval(timer);
   }, [webinar]);
 
-  const format = (n: number) => n.toString().padStart(2, '0');
+  const format = (value: number) => value.toString().padStart(2, "0");
 
   if (!webinar) return null;
 
@@ -69,17 +67,13 @@ export const WebinarPromo = () => {
 
   return (
     <section className="py-16 md:py-24 bg-[#020202] relative overflow-hidden border-t border-white/5">
-      {/* Background Elements */}
       <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 pointer-events-none" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[800px] h-[300px] md:h-[800px] bg-emerald-500/5 blur-[80px] md:blur-[120px] rounded-full pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 relative z-10">
-        
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-12 items-center">
-          
-          {/* Left: Content */}
           <div className="lg:col-span-7 text-center lg:text-left">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -91,8 +85,8 @@ export const WebinarPromo = () => {
               </span>
               LIVE MASTERCLASS
             </motion.div>
-            
-            <motion.h2 
+
+            <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -101,8 +95,8 @@ export const WebinarPromo = () => {
             >
               {webinar.title}
             </motion.h2>
-            
-            <motion.p 
+
+            <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -112,8 +106,7 @@ export const WebinarPromo = () => {
               {webinar.description}
             </motion.p>
 
-            {/* Speakers */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -122,18 +115,17 @@ export const WebinarPromo = () => {
             >
               <div className="flex items-center gap-3 md:gap-4">
                 <div className="w-12 h-12 md:w-14 md:h-14 rounded-full border-2 border-emerald-500/30 p-0.5 flex items-center justify-center bg-white/5 text-white font-bold text-xl">
-                  {webinar.speaker?.charAt(0) || 'S'}
+                  {webinar.speaker?.charAt(0) || "S"}
                 </div>
                 <div className="text-left">
-                  <div className="text-white font-bold text-xs md:text-sm">{webinar.speaker || 'Speaker'}</div>
-                  <div className="text-emerald-500 text-[9px] md:text-[10px] font-mono tracking-wider uppercase">{webinar.metadata?.level || 'Expert'}</div>
+                  <div className="text-white font-bold text-xs md:text-sm">{webinar.speaker || "Speaker"}</div>
+                  <div className="text-emerald-500 text-[9px] md:text-[10px] font-mono tracking-wider uppercase">{webinar.metadata?.level || "Expert"}</div>
                 </div>
               </div>
             </motion.div>
 
-            {/* Sponsors */}
-            {isSponsored && sponsors.length > 0 && (
-              <motion.div 
+            {isSponsored && sponsors.length > 0 ? (
+              <motion.div
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
@@ -150,35 +142,33 @@ export const WebinarPromo = () => {
                   ))}
                 </div>
               </motion.div>
-            )}
+            ) : null}
           </div>
 
-          {/* Right: Registration Card */}
           <div className="lg:col-span-5">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               className="bg-[#0a0a0a] border border-white/10 rounded-2xl md:rounded-3xl p-6 md:p-8 relative overflow-hidden group shadow-2xl"
             >
               <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-              
+
               <div className="flex items-center justify-between mb-6 md:mb-8">
                 <div className="flex items-center gap-2 text-emerald-500 font-mono text-[10px] md:text-xs tracking-widest">
-                  <Calendar className="w-3.5 h-3.5 md:w-4 h-4" />
-                  <span>{new Date(webinar.date_time).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                  <Calendar className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                  <span>{new Date(webinar.date_time).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</span>
                 </div>
                 <div className="px-2 py-0.5 md:px-3 md:py-1 rounded-full bg-white/5 border border-white/10 text-[9px] md:text-[10px] font-bold text-white uppercase tracking-wider">
                   {webinar.max_attendees - webinar.registration_count} Seats Left
                 </div>
               </div>
 
-              {/* Countdown */}
               <div className="grid grid-cols-3 gap-3 md:gap-4 mb-6 md:mb-8">
                 {[
                   { label: "HOURS", value: timeLeft.h },
                   { label: "MINS", value: timeLeft.m },
-                  { label: "SECS", value: timeLeft.s }
+                  { label: "SECS", value: timeLeft.s },
                 ].map((item, i) => (
                   <div key={i} className="bg-black border border-white/10 rounded-lg md:rounded-xl py-3 md:py-4 flex flex-col items-center justify-center">
                     <span className="text-2xl md:text-3xl font-bold text-white font-mono tracking-tighter">{format(item.value)}</span>
@@ -190,30 +180,28 @@ export const WebinarPromo = () => {
               <div className="space-y-3 md:space-y-4 mb-6 md:mb-8">
                 <div className="flex items-center gap-3 text-xs md:text-sm text-gray-400">
                   <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500">
-                    <Mic2 className="w-3.5 h-3.5 md:w-4 h-4" />
+                    <Mic2 className="w-3.5 h-3.5 md:w-4 md:h-4" />
                   </div>
-                  <span>Live Q&A Session Included</span>
+                  <span>Live Q&amp;A Session Included</span>
                 </div>
                 <div className="flex items-center gap-3 text-xs md:text-sm text-gray-400">
                   <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500">
-                    <Star className="w-3.5 h-3.5 md:w-4 h-4" />
+                    <Star className="w-3.5 h-3.5 md:w-4 md:h-4" />
                   </div>
                   <span>Exclusive Strategy PDF for Attendees</span>
                 </div>
               </div>
 
               <Link to={`/webinars/${webinar.id}`} className="w-full py-3.5 md:py-4 bg-emerald-500 hover:bg-emerald-400 text-black font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] text-sm md:text-base">
-                {isFree ? 'Reserve Free Seat' : `Register for $${webinar.price}`}
+                {isFree ? "Reserve Free Seat" : `Register for $${webinar.price}`}
                 <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover/btn:translate-x-1 transition-transform" />
               </Link>
-              
-              <div className="text-center mt-4 text-[9px] md:text-[10px] text-gray-600 font-mono">
-                {isFree ? 'NO CREDIT CARD REQUIRED • INSTANT ACCESS' : 'SECURE CHECKOUT • INSTANT ACCESS'}
-              </div>
 
+              <div className="text-center mt-4 text-[9px] md:text-[10px] text-gray-600 font-mono">
+                {isFree ? "NO CREDIT CARD REQUIRED • INSTANT ACCESS" : "SECURE CHECKOUT • INSTANT ACCESS"}
+              </div>
             </motion.div>
           </div>
-
         </div>
       </div>
     </section>

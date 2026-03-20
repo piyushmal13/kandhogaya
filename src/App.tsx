@@ -8,6 +8,7 @@ import { Navbar } from "./components/ui/Navbar";
 import { Footer } from "./components/ui/Footer";
 import { WhatsAppButton } from "./components/ui/WhatsAppButton";
 import { ScrollToTop } from "./components/ScrollToTop";
+import { SiteBackdrop } from "./components/site/SiteBackdrop";
 
 import { Home } from "./pages/Home";
 import { Signals } from "./pages/Signals";
@@ -26,6 +27,7 @@ import { AgentDashboard } from "./pages/AgentDashboard";
 import { Hiring } from "./pages/Hiring";
 import { About } from "./pages/About";
 import { Contact } from "./pages/Contact";
+import { NotFound } from "./pages/NotFound";
 
 import { PrivacyPolicy } from "./pages/legal/PrivacyPolicy";
 import { TermsOfService } from "./pages/legal/TermsOfService";
@@ -69,12 +71,11 @@ const AnimatedRoutes = () => {
           <Route path="/hiring" element={<Hiring />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
-          
-          {/* Legal Pages */}
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfService />} />
           <Route path="/risk" element={<RiskDisclosure />} />
           <Route path="/cookies" element={<CookiePolicy />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </motion.div>
     </AnimatePresence>
@@ -88,9 +89,10 @@ export default function App() {
         <Router>
           <ScrollToTop />
           <ReferralHandler />
-          <div className="bg-[#0A192F] min-h-screen font-sans selection:bg-emerald-500 selection:text-white">
+          <div className="relative min-h-screen overflow-hidden font-sans selection:bg-emerald-200 selection:text-slate-950">
+            <SiteBackdrop />
             <Navbar />
-            <main>
+            <main id="main-content" className="relative z-10">
               <AnimatedRoutes />
             </main>
             <Footer />

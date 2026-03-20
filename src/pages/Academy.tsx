@@ -1,94 +1,164 @@
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { BookOpen, Clock, GraduationCap, PlayCircle } from "lucide-react";
 import { motion } from "motion/react";
-import { Clock, BookOpen, PlayCircle } from "lucide-react";
 import { Link } from "react-router-dom";
+
+import { PageHero } from "../components/site/PageHero";
+import { PageMeta } from "../components/site/PageMeta";
+import { PageSection, SectionHeading } from "../components/site/PageSection";
+import { Reveal } from "../components/site/Reveal";
 import { getCourses } from "../services/apiHandlers";
 import { Course } from "../types";
+
+const getCourseImage = (course: Course) =>
+  course.image_url || course.thumbnail_url || `https://picsum.photos/seed/${course.id}/960/540`;
 
 export const Academy = () => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let active = true;
+
     const fetchCourses = async () => {
       try {
         setLoading(true);
         const data = await getCourses();
-        setCourses(data || []);
+        if (active) {
+          setCourses(data || []);
+        }
       } catch (error) {
         console.error("Error fetching courses:", error);
       } finally {
-        setLoading(false);
+        if (active) {
+          setLoading(false);
+        }
       }
     };
 
     fetchCourses();
+
+    return () => {
+      active = false;
+    };
   }, []);
 
-  if (loading) return (
-    <div className="pt-32 min-h-screen flex items-center justify-center">
-      <div className="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin" />
-    </div>
-  );
+  const totalLessons = courses.reduce((sum, course) => sum + (course.chapters?.length || 0), 0);
 
   return (
-    <div className="pt-32 pb-20 px-4 max-w-7xl mx-auto min-h-screen">
-      <div className="text-center mb-20">
-        <span className="text-emerald-500 font-bold text-xs uppercase tracking-[0.3em] mb-4 inline-block">Education</span>
-        <h1 className="text-6xl font-bold text-white mb-6 tracking-tight">IFXTrades Academy</h1>
-        <p className="text-gray-400 max-w-2xl mx-auto text-lg">Master the markets with our structured learning paths. From basic pips to advanced algorithmic strategies.</p>
-      </div>
+    <div className="relative overflow-hidden pb-16">
+      <PageMeta
+        title="Academy"
+        description="Explore the IFXTrades Academy for structured trader education across forex, gold, and algorithmic execution workflows."
+        path="/academy"
+        keywords={["trading academy", "forex education", "algo trading course"]}
+      />
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {courses.map((course, i) => (
-          <motion.div 
-            key={course.id}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1 }}
-            className="bg-zinc-900 border border-white/10 rounded-[2.5rem] overflow-hidden group hover:border-emerald-500/50 transition-all flex flex-col"
-          >
-            <div className="aspect-video relative overflow-hidden">
-              <img 
-                src={course.image_url || `https://picsum.photos/seed/${course.id}/800/450`} 
-                alt={course.title} 
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-60 group-hover:opacity-80" 
-                referrerPolicy="no-referrer" 
-              />
-              <div className="absolute top-4 left-4">
-                <span className="px-3 py-1 bg-black/60 backdrop-blur-md text-emerald-500 text-[10px] font-bold rounded-full border border-white/10 uppercase tracking-widest">
-                  {course.level || "Beginner"}
-                </span>
-              </div>
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                <div className="w-16 h-16 bg-emerald-500 rounded-full flex items-center justify-center text-black shadow-[0_0_30px_rgba(16,185,129,0.5)]">
-                  <PlayCircle className="w-8 h-8" />
-                </div>
-              </div>
+      <PageHero
+        eyebrow="Trader Development"
+        title={
+          <>
+            Education that compounds into <span className="site-title-gradient">better execution decisions.</span>
+          </>
+        }
+        description="The IFXTrades Academy is built for traders moving from scattered information into a repeatable execution process. Learn market structure, risk discipline, and system thinking from a single operating surface."
+        actions={[
+          { label: "Client Access", to: "/login", icon: <PlayCircle className="h-4 w-4" /> },
+          { label: "Explore Webinars", to: "/webinars", variant: "secondary" },
+        ]}
+        metrics={[
+          { label: "Tracks", value: loading ? "Loading" : String(courses.length || 0), helper: "Active course paths" },
+          { label: "Lessons", value: loading ? "Loading" : String(totalLessons), helper: "Structured modules from the live catalog" },
+          { label: "Format", value: "Video + Frameworks", helper: "Execution-first trader education" },
+        ]}
+        aside={
+          <div className="space-y-4">
+            <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
+              <div className="text-[11px] uppercase tracking-[0.32em] text-emerald-200/80">Learning System</div>
+              <ul className="mt-3 space-y-3 text-sm text-slate-300">
+                <li>Market structure and directional bias.</li>
+                <li>Risk planning and execution discipline.</li>
+                <li>Algorithmic thinking for repeatable setups.</li>
+              </ul>
             </div>
-            <div className="p-8 flex-1 flex flex-col">
-              <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-emerald-400 transition-colors">{course.title}</h3>
-              <p className="text-gray-400 text-sm mb-6 line-clamp-2">{course.description}</p>
-              <div className="flex items-center gap-6 mb-8 text-gray-500 text-xs font-bold uppercase tracking-widest mt-auto">
-                <div className="flex items-center gap-2"><Clock className="w-4 h-4" /> {course.duration || "Self-paced"}</div>
-                <div className="flex items-center gap-2"><BookOpen className="w-4 h-4" /> {course.chapters?.length || 0} Modules</div>
-              </div>
-              <Link 
-                to={`/academy/${course.id}`}
-                className="w-full py-4 bg-white/5 text-white font-bold rounded-xl border border-white/10 hover:bg-white hover:text-black transition-all text-center"
-              >
-                Start Learning
-              </Link>
+            <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
+              <div className="text-[11px] uppercase tracking-[0.32em] text-emerald-200/80">Best For</div>
+              <p className="mt-3 text-sm leading-7 text-slate-300">
+                Traders moving from intuition-led entries toward process, structure, and repeatability.
+              </p>
             </div>
-          </motion.div>
-        ))}
-      </div>
+          </div>
+        }
+      />
 
-      {!loading && courses.length === 0 && (
-        <div className="text-center py-20 text-gray-500">
-          No courses available at the moment. Check back soon!
-        </div>
-      )}
+      <PageSection>
+        <SectionHeading
+          eyebrow="Curriculum"
+          title="A clean path from market basics to execution systems."
+          description="Each course is backed by the live academy data model. This keeps the public surface aligned with the content library instead of drifting into placeholder marketing copy."
+        />
+
+        {loading ? (
+          <div className="site-panel flex min-h-[260px] items-center justify-center">
+            <div className="flex items-center gap-4 text-sm font-semibold uppercase tracking-[0.28em] text-slate-400">
+              <div className="h-10 w-10 animate-spin rounded-full border-2 border-emerald-300/30 border-t-emerald-200" />
+              Loading courses
+            </div>
+          </div>
+        ) : null}
+
+        {!loading && !courses.length ? (
+          <div className="site-panel p-10 text-center">
+            <h3 className="text-2xl font-semibold text-white">No courses are published yet.</h3>
+            <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-slate-300">
+              The academy route is connected and ready. Once course records are available in Supabase, they will appear here without additional wiring changes.
+            </p>
+          </div>
+        ) : null}
+
+        {!loading && courses.length ? (
+          <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+            {courses.map((course, index) => (
+              <Reveal key={course.id} delay={index * 0.08}>
+                <motion.article whileHover={{ y: -8 }} className="site-panel flex h-full flex-col overflow-hidden">
+                  <div className="aspect-video overflow-hidden">
+                    <img
+                      src={getCourseImage(course)}
+                      alt={course.title}
+                      className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+                  <div className="flex flex-1 flex-col p-6">
+                    <div className="inline-flex w-fit rounded-full border border-emerald-300/20 bg-emerald-300/10 px-3 py-1 text-[11px] uppercase tracking-[0.28em] text-emerald-100/90">
+                      {course.level || "Beginner"}
+                    </div>
+                    <h3 className="mt-4 text-2xl font-semibold text-white">{course.title}</h3>
+                    <p className="mt-4 text-sm leading-7 text-slate-300">{course.description}</p>
+                    <div className="mt-6 flex flex-wrap gap-4 text-sm text-slate-400">
+                      <span className="inline-flex items-center gap-2">
+                        <Clock className="h-4 w-4 text-emerald-200" />
+                        {course.duration || "Self-paced"}
+                      </span>
+                      <span className="inline-flex items-center gap-2">
+                        <BookOpen className="h-4 w-4 text-emerald-200" />
+                        {course.chapters?.length || 0} modules
+                      </span>
+                    </div>
+                    <Link
+                      to={`/academy/${course.id}`}
+                      className="mt-8 inline-flex items-center justify-center gap-2 rounded-full bg-white/5 px-5 py-3 text-sm font-semibold text-white hover:bg-white/10"
+                    >
+                      <GraduationCap className="h-4 w-4 text-emerald-200" />
+                      Start Learning
+                    </Link>
+                  </div>
+                </motion.article>
+              </Reveal>
+            ))}
+          </div>
+        ) : null}
+      </PageSection>
     </div>
   );
 };
