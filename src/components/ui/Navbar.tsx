@@ -58,11 +58,11 @@ export const Navbar = () => {
       <nav className="fixed inset-x-0 top-3 z-50 px-4 sm:px-6">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between rounded-full border border-white/10 bg-slate-950/72 px-4 shadow-[0_18px_60px_rgba(0,0,0,0.28)] backdrop-blur-xl sm:px-6">
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 overflow-hidden">
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5 overflow-hidden transition-all group-hover:border-emerald-500/30 group-hover:bg-white/10 shadow-[0_0_20px_rgba(255,255,255,0.02)]">
               <img
                 src={BRANDING.logoUrl}
                 alt={`${BRANDING.name} Logo`}
-                className="h-7 w-7 object-contain"
+                className="h-9 w-9 object-contain transform group-hover:scale-105 transition-transform duration-500"
               />
             </div>
             <div className="hidden md:block">
@@ -166,8 +166,8 @@ export const Navbar = () => {
               <div className="p-6 flex flex-col min-h-full">
                 <div className="flex items-center justify-between mb-8">
                   <Link to="/" onClick={() => setIsOpen(false)} className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 overflow-hidden">
-                      <img src={BRANDING.logoUrl} alt={BRANDING.name} className="h-7 w-7 object-contain rounded-sm" />
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-white/10 bg-white/5 overflow-hidden">
+                      <img src={BRANDING.logoUrl} alt={BRANDING.name} className="h-10 w-10 object-contain rounded-sm" />
                     </div>
                     <div>
                       <div className="text-xs font-bold tracking-[0.22em] text-white uppercase">{BRANDING.shortName}</div>
