@@ -157,123 +157,124 @@ export const Navbar = () => {
             />
 
             <motion.div
-              initial={{ y: -20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: -20, opacity: 0 }}
-              transition={{ duration: 0.25 }}
-              className="fixed inset-x-4 top-24 z-[70] rounded-[2rem] border border-white/10 bg-[#061120]/96 p-5 shadow-[0_24px_60px_rgba(0,0,0,0.35)] backdrop-blur-xl md:hidden"
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 30, stiffness: 300 }}
+              className="fixed inset-y-0 right-0 z-[70] w-full max-w-[320px] bg-[#020617]/95 border-l border-white/10 shadow-[-20px_0_60px_rgba(0,0,0,0.5)] backdrop-blur-2xl md:hidden overflow-y-auto"
             >
-              <div className="mb-5 flex items-center justify-between">
-                <Link to="/" onClick={() => setIsOpen(false)} className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 overflow-hidden">
-                    <img src={BRANDING.logoUrl} alt={BRANDING.name} className="h-7 w-7 object-contain rounded-sm" />
-                  </div>
-                  <div>
-                    <div className="text-sm font-semibold tracking-[0.22em] text-white">{BRANDING.shortName}</div>
-                    <div className="text-[10px] uppercase tracking-[0.28em] text-slate-400">Trading Surface</div>
-                  </div>
-                </Link>
-                <button
-                  type="button"
-                  onClick={() => setIsOpen(false)}
-                  className="rounded-full border border-white/10 bg-white/5 p-2 text-slate-400 hover:text-white transition-colors"
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
-
-              <div className="space-y-2">
-                <div className="px-2 text-[11px] font-semibold uppercase tracking-[0.32em] text-slate-500">Market Access</div>
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.path}
-                    to={link.path}
-                    onClick={() => setIsOpen(false)}
-                    className={cn(
-                      "flex items-center gap-4 rounded-2xl border px-4 py-4 transition-all",
-                      location.pathname === link.path
-                        ? "border-emerald-200/20 bg-emerald-300/10 text-emerald-100"
-                        : "border-white/[0.06] bg-white/[0.04] text-slate-300 hover:border-white/[0.12] hover:bg-white/[0.07]",
-                    )}
-                  >
-                    <link.icon className="h-5 w-5 text-emerald-200" />
-                    <span className="text-base font-semibold">{link.name}</span>
+              <div className="p-6 flex flex-col min-h-full">
+                <div className="flex items-center justify-between mb-8">
+                  <Link to="/" onClick={() => setIsOpen(false)} className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 overflow-hidden">
+                      <img src={BRANDING.logoUrl} alt={BRANDING.name} className="h-7 w-7 object-contain rounded-sm" />
+                    </div>
+                    <div>
+                      <div className="text-xs font-bold tracking-[0.22em] text-white uppercase">{BRANDING.shortName}</div>
+                      <div className="text-[9px] uppercase tracking-[0.28em] text-slate-500 font-medium">Trading Surface</div>
+                    </div>
                   </Link>
-                ))}
-              </div>
-
-              <div className="my-5 h-px bg-white/[0.08]" />
-
-              <div className="space-y-2">
-                <div className="px-2 text-[11px] font-semibold uppercase tracking-[0.32em] text-slate-500">Institutional</div>
-                <Link
-                  to="/about"
-                  onClick={() => setIsOpen(false)}
-                  className="flex items-center gap-4 rounded-2xl border border-white/[0.06] bg-white/[0.04] px-4 py-4 text-slate-300 hover:border-white/[0.12] hover:bg-white/[0.07]"
-                >
-                  <MessageSquare className="h-5 w-5 text-emerald-200" />
-                  <span className="text-base font-semibold">About IFXTrades</span>
-                </Link>
-                <Link
-                  to="/contact"
-                  onClick={() => setIsOpen(false)}
-                  className="flex items-center gap-4 rounded-2xl border border-white/[0.06] bg-white/[0.04] px-4 py-4 text-slate-300 hover:border-white/[0.12] hover:bg-white/[0.07]"
-                >
-                  <Phone className="h-5 w-5 text-emerald-200" />
-                  <span className="text-base font-semibold">Contact Desk</span>
-                </Link>
-
-                {user ? (
-                  <>
-                    <Link
-                      to="/dashboard"
-                      onClick={() => setIsOpen(false)}
-                      className="flex items-center gap-4 rounded-2xl border border-white/[0.06] bg-white/[0.04] px-4 py-4 text-slate-300 hover:border-white/[0.12] hover:bg-white/[0.07]"
-                    >
-                      <LayoutDashboard className="h-5 w-5 text-emerald-200" />
-                      <span className="text-base font-semibold">Dashboard</span>
-                    </Link>
-                    {isAdmin ? (
-                      <Link
-                        to="/admin"
-                        onClick={() => setIsOpen(false)}
-                        className="flex items-center gap-4 rounded-2xl border border-white/[0.06] bg-white/[0.04] px-4 py-4 text-slate-300 hover:border-white/[0.12] hover:bg-white/[0.07]"
-                      >
-                        <Settings className="h-5 w-5 text-emerald-200" />
-                        <span className="text-base font-semibold">Admin Panel</span>
-                      </Link>
-                    ) : null}
-                  </>
-                ) : (
-                  <Link
-                    to="/login"
-                    onClick={() => setIsOpen(false)}
-                    className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-full bg-emerald-300 px-5 py-3 text-sm font-semibold text-slate-950"
-                  >
-                    Access Platform
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                )}
-              </div>
-
-              {user ? (
-                <div className="mt-6">
                   <button
                     type="button"
-                    onClick={() => {
-                      logout();
-                      setIsOpen(false);
-                    }}
-                    className="flex w-full items-center justify-center gap-3 rounded-full border border-red-400/[0.15] bg-red-400/[0.08] px-5 py-3 text-sm font-semibold text-red-200"
+                    onClick={() => setIsOpen(false)}
+                    className="w-10 h-10 flex items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-400 hover:text-white transition-colors"
                   >
-                    <LogOut className="h-4 w-4" />
-                    <span>Sign Out</span>
+                    <X className="h-5 w-5" />
                   </button>
                 </div>
-              ) : null}
 
-              <div className="mt-6 rounded-2xl border border-white/[0.08] bg-white/[0.04] p-4 text-sm text-slate-400">
-                Institutional-grade signals, algorithms, and research with a single access layer.
+                <div className="space-y-6">
+                  <div>
+                    <div className="px-2 mb-4 text-[10px] font-bold uppercase tracking-[0.3em] text-emerald-500/60">Core Access</div>
+                    <div className="grid grid-cols-1 gap-2">
+                      {navLinks.map((link) => (
+                        <Link
+                          key={link.path}
+                          to={link.path}
+                          onClick={() => setIsOpen(false)}
+                          className={cn(
+                            "flex items-center gap-4 rounded-xl border px-4 py-3.5 transition-all duration-300",
+                            location.pathname === link.path
+                              ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-400"
+                              : "border-white/[0.03] bg-white/[0.02] text-slate-400 hover:border-white/[0.1] hover:bg-white/[0.05]",
+                          )}
+                        >
+                          <link.icon className="h-4 w-4" />
+                          <span className="text-sm font-bold tracking-tight">{link.name}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="px-2 mb-4 text-[10px] font-bold uppercase tracking-[0.3em] text-slate-600">Account Control</div>
+                    <div className="grid grid-cols-1 gap-2">
+                      <Link
+                        to="/contact"
+                        onClick={() => setIsOpen(false)}
+                        className="flex items-center gap-4 rounded-xl border border-white/[0.03] bg-white/[0.02] px-4 py-3.5 text-slate-400 hover:border-white/[0.1] hover:bg-white/[0.05]"
+                      >
+                        <Phone className="h-4 w-4" />
+                        <span className="text-sm font-bold tracking-tight">Contact Desk</span>
+                      </Link>
+
+                      {user ? (
+                        <>
+                          <Link
+                            to="/dashboard"
+                            onClick={() => setIsOpen(false)}
+                            className="flex items-center gap-4 rounded-xl border border-white/[0.03] bg-white/[0.02] px-4 py-3.5 text-slate-400 hover:border-white/[0.1] hover:bg-white/[0.05]"
+                          >
+                            <LayoutDashboard className="h-4 w-4" />
+                            <span className="text-sm font-bold tracking-tight">Dashboard</span>
+                          </Link>
+                          {isAdmin ? (
+                            <Link
+                              to="/admin"
+                              onClick={() => setIsOpen(false)}
+                              className="flex items-center gap-4 rounded-xl border border-white/[0.03] bg-white/[0.02] px-4 py-3.5 text-slate-400 hover:border-white/[0.1] hover:bg-white/[0.05]"
+                            >
+                              <Settings className="h-4 w-4" />
+                              <span className="text-sm font-bold tracking-tight">Admin Master</span>
+                            </Link>
+                          ) : null}
+                        </>
+                      ) : (
+                        <Link
+                          to="/login"
+                          onClick={() => setIsOpen(false)}
+                          className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 px-5 py-4 text-sm font-bold text-slate-950 shadow-[0_10px_30px_rgba(16,185,129,0.2)]"
+                        >
+                          Access Platform
+                          <ArrowRight className="h-4 w-4" />
+                        </Link>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-auto pt-8">
+                  {user ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        logout();
+                        setIsOpen(false);
+                      }}
+                      className="flex w-full items-center justify-center gap-3 rounded-xl border border-red-500/10 bg-red-500/5 px-5 py-4 text-sm font-bold text-red-400 transition-colors hover:bg-red-500/10"
+                    >
+                      <LogOut className="h-4 w-4" />
+                      <span>Terminate Session</span>
+                    </button>
+                  ) : null}
+
+                  <div className="mt-6 p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/10">
+                    <div className="text-[9px] font-bold text-emerald-500 uppercase tracking-[0.2em] mb-1">Status: Operational</div>
+                    <div className="text-[10px] text-slate-500 leading-relaxed font-medium">
+                      Market protocols and institutional access layers are currently online for your region.
+                    </div>
+                  </div>
+                </div>
               </div>
             </motion.div>
           </>
