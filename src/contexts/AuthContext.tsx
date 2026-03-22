@@ -99,19 +99,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     checkSession();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      const currentUser = session?.user ?? null;
-      setSession(session);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, newSession) => {
+      setSession(newSession);
+      const currentUser = newSession?.user ?? null;
       setUser(currentUser);
       if (currentUser) {
-         await fetchUserProfile(currentUser.id, currentUser.email);
+         fetchUserProfile(currentUser.id, currentUser.email);
       } else {
          setUserProfile(null);
       }
     });
 
     return () => subscription.unsubscribe();
-  }, [loading]);
+  }, []);
 
   const login = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
