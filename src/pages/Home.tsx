@@ -10,7 +10,6 @@ import { WebinarPromo } from "../components/home/WebinarPromo";
 import { NewsletterPopup } from "../components/ui/NewsletterPopup";
 import { SignupForm } from "../components/ui/SignupForm";
 import { SuccessShowcase } from "../components/ui/SuccessShowcase";
-import { WebinarBanner } from "../components/webinars/WebinarBanner";
 import { organizationSchema, websiteSchema, faqSchema } from "../utils/structuredData";
 
 const homeFaqs = [
@@ -54,7 +53,6 @@ export const Home = () => (
       ]}
       structuredData={[organizationSchema(), websiteSchema(), faqSchema(homeFaqs)]}
     />
-    <WebinarBanner />
     <HeroSection />
     <MarketTicker />
     <WebinarPromo />
