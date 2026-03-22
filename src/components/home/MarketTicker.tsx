@@ -26,36 +26,46 @@ const SYMBOLS = "XAU/USD,EUR/USD,BTC/USD,USD/JPY,GBP/USD,ETH/USD,SOL/USD";
 export const MarketTicker = () => {
   const [pairs, setPairs] = useState<MarketPair[]>(INITIAL_PAIRS);
   const [lastUpdate, setLastUpdate] = useState<string>("");
+  const [errorStatus, setErrorStatus] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          `https://api.twelvedata.com/quote?symbol=${SYMBOLS}&apikey=${API_KEY}`
-        );
-        const data = await response.json();
+        const response = await fetch(`https://api.twelvedata.com/quote?symbol=${SYMBOLS}&apikey=${API_KEY}`);
+        const rawData = await response.json();
 
+        // 1. API Error Handling (e.g. invalid key or rate limit)
+        if (rawData.status === "error") {
+          console.error("TwelveData API Error:", rawData.message);
+          setErrorStatus(rawData.message);
+          return;
+        }
+
+        // 2. Clear error on success
+        setErrorStatus(null);
+
+        // 3. Handle data transformation (TwelveData returns an object with symbols as keys for multi-symbol requests)
         const updatePairs = (symbolData: any, symbol: string) => {
-          const rawBase = symbol.split('/')[0];
-          const base = rawBase.replace('USDT', '').replace('USD', '');
-          
-          const percentChange = Number.parseFloat(symbolData.percent_change);
+          // Guard against undefined/malformed data to prevent NaN
+          if (!symbolData || !symbolData.close || symbolData.percent_change === undefined) {
+             console.warn(`Malformed data for ${symbol}:`, symbolData);
+             return null;
+          }
+
+          const base = symbol.split('/')[0].replace('USDT', '').replace('USD', '');
+          const percentChange = Number.parseFloat(symbolData.percent_change) || 0;
           const isUp = percentChange >= 0;
+          const price = Number.parseFloat(symbolData.close) || 0;
           
-          const price = Number.parseFloat(symbolData.close);
           let formattedPrice = "";
           if (price > 1000) {
             formattedPrice = price.toLocaleString(undefined, { maximumFractionDigits: 2 });
           } else {
             formattedPrice = price.toFixed(4);
           }
-          
+
           let finalBaseSymbol = base;
-          if (base === "BTC" || base === "ETH") {
-            finalBaseSymbol = base;
-          } else if (base === "XAU") {
-            finalBaseSymbol = "GOLD";
-          }
+          if (base === "XAU") finalBaseSymbol = "GOLD";
           
           return {
             symbol: symbol.replace('/', ''),
@@ -66,19 +76,23 @@ export const MarketTicker = () => {
           };
         };
 
-        const newPairs = Object.entries(data).map(([sym, details]: [string, any]) => updatePairs(details, sym));
+        const newPairs: MarketPair[] = [];
+        Object.entries(rawData).forEach(([sym, details]: [string, any]) => {
+          const transformed = updatePairs(details, sym);
+          if (transformed) newPairs.push(transformed);
+        });
+
         if (newPairs.length > 0) {
           setPairs(newPairs);
           setLastUpdate(new Date().toLocaleTimeString());
         }
       } catch (err) {
-        console.error("TwelveData fetch failed", err);
+        console.error("TwelveData fetch exception:", err);
       }
     };
 
     fetchData();
     const interval = setInterval(fetchData, 30000); 
-
     return () => clearInterval(interval);
   }, []);
 
@@ -86,9 +100,12 @@ export const MarketTicker = () => {
 
   return (
     <div className="w-full bg-slate-950/40 border-y border-white/[0.03] overflow-hidden flex items-center h-11 md:h-14 relative z-20 font-mono backdrop-blur-xl">
+      {/* Live Status + Error Messaging */}
       <div className="absolute left-4 z-30 flex items-center gap-2 pointer-events-none opacity-50 hidden sm:flex">
-        <div className={`w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse`} />
-        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-tighter">Live {lastUpdate}</span>
+        <div className={`w-1.5 h-1.5 rounded-full ${errorStatus ? 'bg-red-500' : 'bg-emerald-500 animate-pulse'}`} />
+        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-tighter">
+          {errorStatus ? `API: ${errorStatus}` : `Live ${lastUpdate || 'Syncing...'}`}
+        </span>
       </div>
 
       <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-slate-950/90 via-slate-950/40 to-transparent z-10 pointer-events-none" />
@@ -108,10 +125,10 @@ export const MarketTicker = () => {
                 {item.baseSymbol}
               </span>
               <div className="flex items-center gap-3">
-                <span className="text-slate-200 text-[10px] md:text-[14px] font-semibold tabular-nums tracking-wider text-shadow-glow">
+                <span className="text-slate-200 text-[10px] md:text-[14px] font-semibold tabular-nums tracking-wider">
                   {item.price}
                 </span>
-                <div className={`flex items-center text-[8px] md:text-[10px] font-black px-2 py-0.5 rounded-[4px] border transition-all duration-500 shadow-sm ${
+                <div className={`flex items-center text-[8px] md:text-[10px] font-black px-2 py-0.5 rounded-[4px] border transition-all duration-500 ${
                   item.up 
                     ? 'text-emerald-400 bg-emerald-500/5 border-emerald-500/10' 
                     : 'text-rose-400 bg-rose-500/5 border-rose-500/10'
