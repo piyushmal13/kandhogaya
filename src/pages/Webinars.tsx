@@ -12,26 +12,16 @@ import { PageHero } from "../components/site/PageHero";
 import { PageMeta } from "../components/site/PageMeta";
 import { PageSection } from "../components/site/PageSection";
 
-import { useAuth } from "../contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
-
 export const Webinars = () => {
   const [webinars, setWebinars] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedWebinar, setSelectedWebinar] = useState<any | null>(null);
-  const { user } = useAuth();
-  const navigate = useNavigate();
 
   useEffect(() => {
     fetchWebinars();
   }, []);
 
   const handleRegisterClick = (webinar: any) => {
-    if (!user) {
-      alert("Please sign in to register for this webinar.");
-      navigate("/login");
-      return;
-    }
     setSelectedWebinar(webinar);
   };
 

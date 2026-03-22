@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import { Calendar, Clock, ArrowRight, Lock } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Webinar } from "../../types";
 import { useAuth } from "../../contexts/AuthContext";
 
@@ -13,7 +13,6 @@ interface WebinarCardProps {
 export const WebinarCard = ({ webinar, onRegister }: WebinarCardProps) => {
   const [timeLeft, setTimeLeft] = useState<string>("");
   const { user } = useAuth();
-  const navigate = useNavigate();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -35,11 +34,6 @@ export const WebinarCard = ({ webinar, onRegister }: WebinarCardProps) => {
   }, [webinar.date_time]);
 
   const handleRegisterClick = () => {
-    if (!user) {
-      alert("Please sign in to register for this webinar.");
-      navigate("/login");
-      return;
-    }
     onRegister(webinar);
   };
 
