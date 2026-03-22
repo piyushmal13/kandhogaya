@@ -10,53 +10,68 @@ interface MarketPair {
 }
 
 const INITIAL_PAIRS: MarketPair[] = [
-  { symbol: "XAUUSD", price: "---", change: "0.00%", up: true, baseSymbol: "GOLD" },
-  { symbol: "EURUSD", price: "---", change: "0.00%", up: true, baseSymbol: "EUR" },
-  { symbol: "BTCUSD", price: "64750", change: "+2.40%", up: true, baseSymbol: "BTC" },
-  { symbol: "USDJPY", price: "---", change: "0.00%", up: true, baseSymbol: "JPY" },
-  { symbol: "ETHUSD", price: "3480", change: "+1.80%", up: true, baseSymbol: "ETH" },
-  { symbol: "GBPUSD", price: "---", change: "0.00%", up: true, baseSymbol: "GBP" },
-  { symbol: "NAS100", price: "18240", change: "+0.12%", up: true, baseSymbol: "NDAQ" },
-  { symbol: "XAGUSD", price: "---", change: "0.00%", up: true, baseSymbol: "SLVR" },
+  { symbol: "XAU/USD", price: "---", change: "0.00%", up: true, baseSymbol: "GOLD" },
+  { symbol: "EUR/USD", price: "---", change: "0.00%", up: true, baseSymbol: "EUR" },
+  { symbol: "BTC/USD", price: "---", change: "0.00%", up: true, baseSymbol: "BTC" },
+  { symbol: "USD/JPY", price: "---", change: "0.00%", up: true, baseSymbol: "JPY" },
+  { symbol: "ETH/USD", price: "---", change: "0.00%", up: true, baseSymbol: "ETH" },
+  { symbol: "GBP/USD", price: "---", change: "0.00%", up: true, baseSymbol: "GBP" },
+  { symbol: "NAS100", price: "18210", change: "+0.15%", up: true, baseSymbol: "NDAQ" },
+  { symbol: "SOL/USD", price: "---", change: "0.00%", up: true, baseSymbol: "SOL" },
 ];
+
+const TWELVE_DATA_KEY = "6ac663a609254023a49d4412d9ea419e";
+const SYMBOLS = "XAU/USD,EUR/USD,BTC/USD,USD/JPY,GBP/USD,ETH/USD,SOL/USD";
 
 export const MarketTicker = () => {
   const [pairs, setPairs] = useState<MarketPair[]>(INITIAL_PAIRS);
   const [lastUpdate, setLastUpdate] = useState<string>("");
 
-  const updatePairsFromData = (currentPairs: MarketPair[], gold: any, silver: any, forex: any) => {
-    return currentPairs.map(p => {
-      if (p.symbol === "XAUUSD" && gold?.price) return { ...p, price: gold.price.toFixed(2), change: "+0.42%", up: true };
-      if (p.symbol === "XAGUSD" && silver?.price) return { ...p, price: silver.price.toFixed(2), change: "-0.15%", up: false };
-      if (p.symbol === "EURUSD" && forex?.rates?.EUR) return { ...p, price: (1 / forex.rates.EUR).toFixed(4), change: "+0.05%", up: true };
-      if (p.symbol === "GBPUSD" && forex?.rates?.GBP) return { ...p, price: (1 / forex.rates.GBP).toFixed(4), change: "+0.02%", up: true };
-      if (p.symbol === "USDJPY" && forex?.rates?.JPY) return { ...p, price: forex.rates.JPY.toFixed(2), change: "-0.08%", up: false };
-      return p;
-    });
-  };
-
   useEffect(() => {
-    const fetchMarketData = async () => {
+    const fetchData = async () => {
       try {
-        const [goldRes, silverRes, forexRes] = await Promise.all([
-          fetch("https://api.gold-api.com/price/XAU"),
-          fetch("https://api.gold-api.com/price/XAG"),
-          fetch("https://api.frankfurter.app/latest?from=USD&to=EUR,GBP,JPY")
-        ]);
+        const response = await fetch(
+          `https://api.twelvedata.com/quote?symbol=${SYMBOLS}&apikey=${TWELVE_DATA_KEY}`
+        );
+        const data = await response.json();
 
-        const goldData = await goldRes.json();
-        const silverData = await silverRes.json();
-        const forexData = await forexRes.json();
+        // Twelve Data returns a symbol-keyed object for multiple symbols
+        const newPairs = Object.entries(data).map(([sym, details]: [string, any]) => {
+          if (!details || details.status === "error") return null;
 
-        setPairs(prev => updatePairsFromData(prev, goldData, silverData, forexData));
-        setLastUpdate(new Date().toLocaleTimeString());
+          const base = sym.split('/')[0];
+          const price = Number.parseFloat(details.close) || 0;
+          const pct = Number.parseFloat(details.percent_change) || 0;
+          
+          let formattedPrice = "";
+          if (price > 1000) {
+            formattedPrice = price.toLocaleString(undefined, { maximumFractionDigits: 2 });
+          } else {
+            formattedPrice = price.toFixed(4);
+          }
+
+          return {
+            symbol: sym.replace('/', ''),
+            price: formattedPrice,
+            change: (pct >= 0 ? "+" : "") + pct.toFixed(2) + "%",
+            up: pct >= 0,
+            baseSymbol: base === "XAU" ? "GOLD" : base
+          };
+        }).filter(p => p !== null) as MarketPair[];
+
+        if (newPairs.length > 0) {
+          setPairs(newPairs);
+          setLastUpdate(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+        }
       } catch (err) {
-        console.error("Market data fetch failed:", err);
+        console.error("Market Data Fetch Error:", err);
       }
     };
 
-    fetchMarketData();
-    const interval = setInterval(fetchMarketData, 30000); 
+    fetchData();
+    // 8 calls per minute = ~every 7.5 seconds. 
+    // We'll use 30 seconds to be extremely safe for standard user browsing/refresh.
+    const interval = setInterval(fetchData, 30000); 
     return () => clearInterval(interval);
   }, []);
 
@@ -76,7 +91,7 @@ export const MarketTicker = () => {
       <motion.div 
         className="flex whitespace-nowrap items-center"
         animate={{ x: ["0%", "-33.333333%"] }}
-        transition={{ ease: "linear", duration: 35, repeat: Infinity }}
+        transition={{ ease: "linear", duration: 40, repeat: Infinity }}
       >
         {tickerItems.map((item, i) => (
           <div key={`${item.symbol}-${i}`} className="flex items-center gap-3 md:gap-5 px-6 md:px-10 border-r border-white/5 transition-opacity duration-300">
