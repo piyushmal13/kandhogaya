@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { Activity } from 'lucide-react';
 
 interface MarketPair {
   symbol: string;
@@ -11,87 +10,72 @@ interface MarketPair {
 }
 
 const INITIAL_PAIRS: MarketPair[] = [
-  { symbol: "XAUUSD", price: "---", change: "0.00%", up: true, baseSymbol: "GOLD" },
-  { symbol: "EURUSD", price: "---", change: "0.00%", up: true, baseSymbol: "EUR" },
-  { symbol: "BTCUSDT", price: "---", change: "0.00%", up: true, baseSymbol: "BTC" },
-  { symbol: "USDJPY", price: "---", change: "0.00%", up: true, baseSymbol: "JPY" },
-  { symbol: "ETHUSDT", price: "---", change: "0.00%", up: true, baseSymbol: "ETH" },
-  { symbol: "GBPUSD", price: "---", change: "0.00%", up: true, baseSymbol: "GBP" },
+  { symbol: "XAU/USD", price: "---", change: "0.00%", up: true, baseSymbol: "GOLD" },
+  { symbol: "EUR/USD", price: "---", change: "0.00%", up: true, baseSymbol: "EUR" },
+  { symbol: "BTC/USD", price: "---", change: "0.00%", up: true, baseSymbol: "BTC" },
+  { symbol: "USD/JPY", price: "---", change: "0.00%", up: true, baseSymbol: "JPY" },
+  { symbol: "ETH/USD", price: "---", change: "0.00%", up: true, baseSymbol: "ETH" },
+  { symbol: "GBP/USD", price: "---", change: "0.00%", up: true, baseSymbol: "GBP" },
   { symbol: "NAS100", price: "18240", change: "+0.12%", up: true, baseSymbol: "NDAQ" },
-  { symbol: "SOLUSDT", price: "---", change: "0.00%", up: true, baseSymbol: "SOL" },
+  { symbol: "SOL/USD", price: "---", change: "0.00%", up: true, baseSymbol: "SOL" },
 ];
+
+const API_KEY = "6ac663a609254023a49d4412d9ea419e";
+const SYMBOLS = "XAU/USD,EUR/USD,BTC/USD,USD/JPY,GBP/USD,ETH/USD,SOL/USD";
 
 export const MarketTicker = () => {
   const [pairs, setPairs] = useState<MarketPair[]>(INITIAL_PAIRS);
-  const [isConnected, setIsConnected] = useState(false);
-  const ws = useRef<WebSocket | null>(null);
+  const [lastUpdate, setLastUpdate] = useState<string>("");
 
   useEffect(() => {
-    // ── 1. Crypto WebSocket (Real-time updates) ──
-    const cryptoPairs = INITIAL_PAIRS.filter(p => p.symbol.endsWith("USDT"));
-    const connectWS = () => {
-      const streams = cryptoPairs.map(p => `${p.symbol.toLowerCase()}@ticker`).join('/');
-      ws.current = new WebSocket(`wss://stream.binance.com:9443/stream?streams=${streams}`);
-
-      ws.current.onopen = () => setIsConnected(true);
-      ws.current.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        const { s: symbol, c: closePrice, P: priceChangePercent } = data.data;
-
-        setPairs(prev => prev.map(p => {
-          if (p.symbol === symbol) {
-            const price = parseFloat(closePrice);
-            const formattedPrice = price > 1 ? price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : price.toFixed(4);
-            const changeNum = parseFloat(priceChangePercent);
-            return { ...p, price: formattedPrice, change: (changeNum >= 0 ? "+" : "") + priceChangePercent + "%", up: changeNum >= 0 };
-          }
-          return p;
-        }));
-      };
-      ws.current.onclose = () => { setIsConnected(false); setTimeout(connectWS, 5000); };
-    };
-
-    // ── 2. Forex/Gold Polling (Institutional Free Feed) ──
-    const fetchForex = async () => {
+    const fetchData = async () => {
       try {
-        // Using Frankfurter (Free open-source API for Forex, stable but non-WebSocket)
-        const response = await fetch("https://api.frankfurter.app/latest?from=USD&to=EUR,GBP,JPY");
+        const response = await fetch(
+          `https://api.twelvedata.com/quote?symbol=${SYMBOLS}&apikey=${API_KEY}`
+        );
         const data = await response.json();
-        
-        setPairs(prev => prev.map(p => {
-          if (p.symbol === "EURUSD") return { ...p, price: (1 / data.rates.EUR).toFixed(4), change: "+0.05%", up: true };
-          if (p.symbol === "GBPUSD") return { ...p, price: (1 / data.rates.GBP).toFixed(4), change: "-0.02%", up: false };
-          if (p.symbol === "USDJPY") return { ...p, price: data.rates.JPY.toFixed(2), change: "+0.11%", up: true };
-          if (p.symbol === "XAUUSD") return { ...p, price: "2164.45", change: "+0.32%", up: true }; // Placeholder for Gold unless key provided
-          return p;
-        }));
+
+        const updatePairs = (symbolData: any, symbol: string) => {
+          const base = symbol.split('/')[0].replace('USDT', '').replace('USD', '');
+          const isUp = Number.parseFloat(symbolData.percent_change) >= 0;
+          const price = Number.parseFloat(symbolData.close);
+          const formattedPrice = price > 1000 ? price.toLocaleString(undefined, { maximumFractionDigits: 2 }) : price.toFixed(4);
+          
+          return {
+            symbol: symbol.replace('/', ''),
+            price: formattedPrice,
+            change: (isUp ? "+" : "") + Number.parseFloat(symbolData.percent_change).toFixed(2) + "%",
+            up: isUp,
+            baseSymbol: base === "BTC" ? "BTC" : base === "ETH" ? "ETH" : base === "XAU" ? "GOLD" : base
+          };
+        };
+
+        const newPairs = Object.entries(data).map(([sym, details]: [string, any]) => updatePairs(details, sym));
+        if (newPairs.length > 0) {
+          setPairs(newPairs);
+          setLastUpdate(new Date().toLocaleTimeString());
+        }
       } catch (err) {
-        console.error("Forex fetch failed", err);
+        console.error("TwelveData fetch failed", err);
       }
     };
 
-    connectWS();
-    fetchForex();
-    const pollInterval = setInterval(fetchForex, 60000); // Pulse every minute
+    fetchData();
+    // API limit is 8 per minute (7.5s interval). We use 30s for stability.
+    const interval = setInterval(fetchData, 30000); 
 
-    return () => {
-      ws.current?.close();
-      clearInterval(pollInterval);
-    };
+    return () => clearInterval(interval);
   }, []);
 
-  // Triple the items for a perfectly smooth infinite scroll across all screen widths
   const tickerItems = [...pairs, ...pairs, ...pairs];
 
   return (
     <div className="w-full bg-slate-950/40 border-y border-white/[0.03] overflow-hidden flex items-center h-11 md:h-14 relative z-20 font-mono backdrop-blur-xl">
-      {/* Visual Status Indicator */}
       <div className="absolute left-4 z-30 flex items-center gap-2 pointer-events-none opacity-50 hidden sm:flex">
-        <div className={`w-1.5 h-1.5 rounded-full ${isConnected ? 'bg-emerald-500 animate-pulse' : 'bg-red-500'}`} />
-        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-tighter">Live</span>
+        <div className={`w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse`} />
+        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-tighter">Live {lastUpdate}</span>
       </div>
 
-      {/* Edge Fades & Ambient Glow */}
       <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-slate-950/90 via-slate-950/40 to-transparent z-10 pointer-events-none" />
       <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-slate-950/90 via-slate-950/40 to-transparent z-10 pointer-events-none" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(88,242,182,0.03),transparent_70%)] pointer-events-none" />
@@ -109,10 +93,10 @@ export const MarketTicker = () => {
                 {item.baseSymbol}
               </span>
               <div className="flex items-center gap-3">
-                <span className="text-slate-200 text-[10px] md:text-[14px] font-semibold tabular-nums tracking-wider">
+                <span className="text-slate-200 text-[10px] md:text-[14px] font-semibold tabular-nums tracking-wider text-shadow-glow">
                   {item.price}
                 </span>
-                <div className={`flex items-center text-[8px] md:text-[10px] font-black px-2 py-0.5 rounded-[4px] border transition-all duration-500 ${
+                <div className={`flex items-center text-[8px] md:text-[10px] font-black px-2 py-0.5 rounded-[4px] border transition-all duration-500 shadow-sm ${
                   item.up 
                     ? 'text-emerald-400 bg-emerald-500/5 border-emerald-500/10' 
                     : 'text-rose-400 bg-rose-500/5 border-rose-500/10'
