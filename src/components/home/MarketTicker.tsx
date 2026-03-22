@@ -47,7 +47,7 @@ export const MarketTicker = () => {
         // 3. Handle data transformation (TwelveData returns an object with symbols as keys for multi-symbol requests)
         const updatePairs = (symbolData: any, symbol: string) => {
           // Guard against undefined/malformed data to prevent NaN
-          if (!symbolData || !symbolData.close || symbolData.percent_change === undefined) {
+          if (!symbolData?.close || symbolData.percent_change === undefined) {
              console.warn(`Malformed data for ${symbol}:`, symbolData);
              return null;
           }
