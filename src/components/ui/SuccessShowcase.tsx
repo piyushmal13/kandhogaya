@@ -1,59 +1,101 @@
-import React, { useState, useEffect } from "react";
-import { motion, useMotionValue } from "motion/react";
-import { Star } from "lucide-react";
+import React, { useState, useEffect, useMemo } from "react";
+import { motion, useReducedMotion } from "motion/react";
+import { Star, CheckCircle2, Quote } from "lucide-react";
 import { fetchReviews } from "../../services/reviewService";
 
 export const SuccessShowcase = () => {
   const [reviews, setReviews] = useState<any[]>([]);
-  const x = useMotionValue(0);
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
-    fetchReviews().then(setReviews);
+    fetchReviews().then(data => {
+      if (data && data.length > 0) {
+        setReviews(data);
+      }
+    });
   }, []);
 
+  // Triple the items for a seamless loop
+  const scrollItems = useMemo(() => {
+    if (reviews.length === 0) return [];
+    return [...reviews, ...reviews, ...reviews];
+  }, [reviews]);
+
+  if (reviews.length === 0) return null;
+
   return (
-    <section className="py-16 md:py-32 bg-black relative overflow-hidden border-t border-white/5">
-      <div className="max-w-7xl mx-auto px-4 relative z-10">
-        <div className="text-center mb-12 md:mb-20">
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-3xl md:text-5xl font-semibold text-white mb-4 tracking-tight"
-          >
-            Trusted by Professionals
-          </motion.h2>
-        </div>
+    <section className="py-20 md:py-32 bg-[#020202] relative overflow-hidden border-t border-white/5">
+      {/* Dynamic Background Effects */}
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-500/5 rounded-full blur-[120px] pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto px-4 relative z-10 mb-16 md:mb-24 text-center">
+        <motion.div
+  initial = {{ opacity: 0, y: 20 }}
+  whileInView = {{ opacity: 1, y: 0 }}
+  viewport = {{ once: true }}
+>
+          <span className="text-emerald-500 font-bold text-[10px] md:text-xs uppercase tracking-[0.4em] mb-4 inline-block">Validation</span>
+          <h2 className="text-3xl md:text-6xl font-bold text-white mb-6 tracking-tight">Trusted by Professionals</h2>
+          <p className="text-gray-400 max-w-2xl mx-auto text-sm md:text-lg">
+            Institutional-grade performance verified by traders across the globe.
+          </p>
+        </motion.div>
+      </div>
+
+      <div className="relative">
+        {/* Institutional Grade Gradient Masks */}
+        <div className="absolute inset-y-0 left-0 w-32 md:w-64 bg-gradient-to-r from-[#020202] to-transparent z-20 pointer-events-none" />
+        <div className="absolute inset-y-0 right-0 w-32 md:w-64 bg-gradient-to-l from-[#020202] to-transparent z-20 pointer-events-none" />
 
         <motion.div 
-          className="flex gap-4 md:gap-6 cursor-grab"
-          drag="x"
-          dragConstraints={{ right: 0, left: -1000 }}
-          style={{ x }}
+          className="flex gap-4 md:gap-8"
+          animate={prefersReducedMotion ? {} : { x: ["0%", "-33.333333%"] }}
+          transition={{
+            duration: 40,
+            repeat: Infinity,
+            ease: "linear",
+          }}
         >
-          {reviews.map((rev, i) => (
-            <motion.div 
-              key={i}
-              className="p-6 md:p-8 rounded-2xl md:rounded-[2rem] bg-zinc-900 border border-zinc-800 transition-colors duration-300 flex flex-col h-full min-w-[280px] md:min-w-[400px]"
+          {scrollItems.map((rev, i) => (
+            <div 
+              key={`${rev.id || i}-${i}`}
+              className="group relative p-6 md:p-10 rounded-2xl md:rounded-[2.5rem] bg-zinc-900/50 border border-white/5 backdrop-blur-xl transition-all duration-500 hover:border-emerald-500/30 min-w-[300px] md:min-w-[480px] flex flex-col"
             >
-              <div className="flex gap-1 mb-4 md:mb-6">
-                {[...Array(rev.rating)].map((_, j) => (
-                  <Star key={j} className="w-3.5 h-3.5 md:w-4 h-4 text-emerald-500 fill-emerald-500" />
+              <div className="absolute top-6 right-8 opacity-10 group-hover:opacity-20 transition-opacity">
+                <Quote className="w-12 h-12 text-emerald-500" />
+              </div>
+
+              <div className="flex gap-1 mb-6 md:mb-8">
+                {Array.from({ length: rev.rating || 5 }).map((_, j) => (
+                  <Star key={`${rev.id}-${i}-star-${j}`} className="w-4 h-4 text-emerald-500 fill-emerald-500" />
                 ))}
               </div>
-              <p className="text-gray-300 text-sm md:text-lg leading-relaxed mb-6 md:mb-8 flex-1 font-normal tracking-tight">
+
+              <p className="text-gray-300 text-base md:text-xl leading-relaxed mb-8 md:mb-12 flex-1 font-medium italic">
                 "{rev.text}"
               </p>
-              <div className="flex items-center gap-3 md:gap-4 pt-4 md:pt-6 border-t border-zinc-800">
-                <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 font-medium text-xs md:text-base">
-                  {rev.name.charAt(0)}
+
+              <div className="flex items-center gap-4 pt-6 md:pt-8 border-t border-white/5 mt-auto">
+                <div className="relative">
+                  <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 font-bold text-lg border border-emerald-500/30">
+                    {rev.name?.charAt(0) || "U"}
+                  </div>
+                  {rev.is_verified !== false && (
+                    <div className="absolute -bottom-1 -right-1 bg-black rounded-full p-0.5 border border-white/10">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                    </div>
+                  )}
                 </div>
                 <div>
-                  <div className="text-white font-medium text-xs md:text-sm">{rev.name}</div>
-                  <div className="text-gray-500 text-[10px] md:text-xs">{rev.role}</div>
+                  <div className="text-white font-bold text-sm md:text-base flex items-center gap-2">
+                    {rev.name}
+                    {rev.is_verified !== false && <span className="text-[10px] md:text-xs text-emerald-500/70 font-mono tracking-widest uppercase">Verified</span>}
+                  </div>
+                  <div className="text-gray-500 text-[10px] md:text-xs uppercase tracking-widest font-mono">{rev.role || "Trader"}</div>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </motion.div>
       </div>
