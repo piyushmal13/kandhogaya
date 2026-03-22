@@ -24,6 +24,17 @@ export const MarketTicker = () => {
   const [pairs, setPairs] = useState<MarketPair[]>(INITIAL_PAIRS);
   const [lastUpdate, setLastUpdate] = useState<string>("");
 
+  const updatePairsFromData = (currentPairs: MarketPair[], gold: any, silver: any, forex: any) => {
+    return currentPairs.map(p => {
+      if (p.symbol === "XAUUSD" && gold?.price) return { ...p, price: gold.price.toFixed(2), change: "+0.42%", up: true };
+      if (p.symbol === "XAGUSD" && silver?.price) return { ...p, price: silver.price.toFixed(2), change: "-0.15%", up: false };
+      if (p.symbol === "EURUSD" && forex?.rates?.EUR) return { ...p, price: (1 / forex.rates.EUR).toFixed(4), change: "+0.05%", up: true };
+      if (p.symbol === "GBPUSD" && forex?.rates?.GBP) return { ...p, price: (1 / forex.rates.GBP).toFixed(4), change: "+0.02%", up: true };
+      if (p.symbol === "USDJPY" && forex?.rates?.JPY) return { ...p, price: forex.rates.JPY.toFixed(2), change: "-0.08%", up: false };
+      return p;
+    });
+  };
+
   useEffect(() => {
     const fetchMarketData = async () => {
       try {
@@ -37,15 +48,7 @@ export const MarketTicker = () => {
         const silverData = await silverRes.json();
         const forexData = await forexRes.json();
 
-        setPairs(prev => prev.map(p => {
-          if (p.symbol === "XAUUSD" && goldData?.price) return { ...p, price: goldData.price.toFixed(2), change: "+0.42%", up: true };
-          if (p.symbol === "XAGUSD" && silverData?.price) return { ...p, price: silverData.price.toFixed(2), change: "-0.15%", up: false };
-          if (p.symbol === "EURUSD" && forexData?.rates?.EUR) return { ...p, price: (1 / forexData.rates.EUR).toFixed(4), change: "+0.05%", up: true };
-          if (p.symbol === "GBPUSD" && forexData?.rates?.GBP) return { ...p, price: (1 / forexData.rates.GBP).toFixed(4), change: "+0.02%", up: true };
-          if (p.symbol === "USDJPY" && forexData?.rates?.JPY) return { ...p, price: forexData.rates.JPY.toFixed(2), change: "-0.08%", up: false };
-          return p;
-        }));
-        
+        setPairs(prev => updatePairsFromData(prev, goldData, silverData, forexData));
         setLastUpdate(new Date().toLocaleTimeString());
       } catch (err) {
         console.error("Market data fetch failed:", err);
