@@ -248,7 +248,7 @@ const PaymentModal = ({ plan, onClose }: { plan: PricingPlan; onClose: () => voi
     if (e.target.files?.[0]) setFile(e.target.files[0]);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setUploading(true);
     try {
@@ -388,10 +388,10 @@ const PaymentModal = ({ plan, onClose }: { plan: PricingPlan; onClose: () => voi
                   ))}
 
                   <div>
-                    <label className="block text-xs mb-1 font-semibold uppercase tracking-wider" style={{ color: "var(--text-muted)" }}>
+                    <span className="block text-xs mb-1 font-semibold uppercase tracking-wider" style={{ color: "var(--text-muted)" }}>
                       Payment Screenshot
-                    </label>
-                    <div className="border-2 border-dashed rounded-[var(--radius-input)] p-4 text-center hover:border-[var(--accent)]/50 transition-colors cursor-pointer relative" style={{ borderColor: "var(--border-default)" }}>
+                    </span>
+                    <label className="border-2 border-dashed rounded-[var(--radius-input)] p-4 text-center hover:border-[var(--accent)]/50 transition-colors cursor-pointer relative block" style={{ borderColor: "var(--border-default)" }}>
                       <input type="file" accept="image/*" onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer" required aria-label="Upload payment screenshot" />
                       {file ? (
                         <div className="text-emerald-400 text-sm flex items-center justify-center gap-2">
@@ -403,7 +403,7 @@ const PaymentModal = ({ plan, onClose }: { plan: PricingPlan; onClose: () => voi
                           <span>Click to upload screenshot</span>
                         </div>
                       )}
-                    </div>
+                    </label>
                   </div>
 
                   <div className="flex gap-3 pt-2">
@@ -599,7 +599,7 @@ const PricingSection = () => {
                 </div>
               )}
 
-              {plan.savings && (
+              {Boolean(plan.savings) && (
                 <div
                   className="absolute top-4 right-4 text-[10px] font-bold px-2 py-1 rounded border"
                   style={{ color: "var(--accent)", background: "var(--accent-subtle)", borderColor: "rgba(88,242,182,0.2)" }}
@@ -614,7 +614,7 @@ const PricingSection = () => {
                 </h3>
                 <div className="flex items-baseline gap-2">
                   <span className="text-4xl font-bold text-white">${plan.price}</span>
-                  {plan.originalPrice && (
+                  {Boolean(plan.originalPrice) && (
                     <span className="text-lg line-through" style={{ color: "var(--text-muted)" }}>
                       ${plan.originalPrice}
                     </span>

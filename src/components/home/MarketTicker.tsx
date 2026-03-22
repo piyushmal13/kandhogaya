@@ -36,17 +36,33 @@ export const MarketTicker = () => {
         const data = await response.json();
 
         const updatePairs = (symbolData: any, symbol: string) => {
-          const base = symbol.split('/')[0].replace('USDT', '').replace('USD', '');
-          const isUp = Number.parseFloat(symbolData.percent_change) >= 0;
+          const rawBase = symbol.split('/')[0];
+          const base = rawBase.replace('USDT', '').replace('USD', '');
+          
+          const percentChange = Number.parseFloat(symbolData.percent_change);
+          const isUp = percentChange >= 0;
+          
           const price = Number.parseFloat(symbolData.close);
-          const formattedPrice = price > 1000 ? price.toLocaleString(undefined, { maximumFractionDigits: 2 }) : price.toFixed(4);
+          let formattedPrice = "";
+          if (price > 1000) {
+            formattedPrice = price.toLocaleString(undefined, { maximumFractionDigits: 2 });
+          } else {
+            formattedPrice = price.toFixed(4);
+          }
+          
+          let finalBaseSymbol = base;
+          if (base === "BTC" || base === "ETH") {
+            finalBaseSymbol = base;
+          } else if (base === "XAU") {
+            finalBaseSymbol = "GOLD";
+          }
           
           return {
             symbol: symbol.replace('/', ''),
             price: formattedPrice,
-            change: (isUp ? "+" : "") + Number.parseFloat(symbolData.percent_change).toFixed(2) + "%",
+            change: (isUp ? "+" : "") + percentChange.toFixed(2) + "%",
             up: isUp,
-            baseSymbol: base === "BTC" ? "BTC" : base === "ETH" ? "ETH" : base === "XAU" ? "GOLD" : base
+            baseSymbol: finalBaseSymbol
           };
         };
 
@@ -61,7 +77,6 @@ export const MarketTicker = () => {
     };
 
     fetchData();
-    // API limit is 8 per minute (7.5s interval). We use 30s for stability.
     const interval = setInterval(fetchData, 30000); 
 
     return () => clearInterval(interval);
