@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "NODE_ENV=development tsx server.ts",
+    "dev": "cross-env NODE_ENV=development tsx server.ts",
     "build": "vite build",
     "start": "node server.ts",
     "clean": "rm -rf dist",
@@ -50,6 +50,7 @@
     "@types/node": "^22.14.0",
     "@vercel/node": "^5.6.11",
     "autoprefixer": "^10.4.21",
+    "cross-env": "^10.1.0",
     "jsdom": "^28.1.0",
     "tailwindcss": "^4.1.14",
     "tsx": "^4.21.0",

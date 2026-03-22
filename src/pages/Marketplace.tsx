@@ -5,14 +5,18 @@ import { Zap, ShieldCheck, Activity, TrendingUp } from "lucide-react";
 import { PageMeta } from "../components/site/PageMeta";
 import { AlgoCard } from "../components/algorithms/AlgoCard";
 import { AlgoDetailModal } from "../components/algorithms/AlgoDetailModal";
-import { getProducts } from "../services/apiHandlers";
+import { getProducts, subscribeToAlgo } from "../services/apiHandlers";
 import { Product } from "../types";
+import { useAuth } from "../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export const Marketplace = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedAlgo, setSelectedAlgo] = useState<Product | null>(null);
   const [filter, setFilter] = useState("All");
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchProducts();
@@ -33,8 +37,34 @@ export const Marketplace = () => {
   const filteredProducts = filter === "All" ? products : products.filter((product) => (product.category || "").includes(filter));
 
   const handleSubscribe = async (algo: Product, plan: string) => {
-    console.log(`Subscribing to ${algo.name} (${plan})`);
-    alert(`Redirecting to checkout for ${algo.name} - ${plan} Plan`);
+    if (!user) {
+      alert("Please sign in to subscribe.");
+      navigate("/login");
+      return;
+    }
+
+    try {
+      const durationMap: Record<string, number> = {
+        'Monthly': 30,
+        'Quarterly': 90,
+        'Yearly': 365,
+        'Lifetime': 36500
+      };
+      
+      const days = durationMap[plan] || 30;
+      
+      const result = await subscribeToAlgo(user.id, algo.id, days);
+      
+      if (result.success) {
+        alert(`Successfully subscribed to ${algo.name} on the ${plan} plan! Your license key: ${result.license?.license_key}`);
+        navigate("/dashboard");
+      } else {
+        alert("There was an issue processing your subscription. Please try again.");
+      }
+    } catch (error) {
+      console.error("Subscription error:", error);
+      alert("An unexpected error occurred. Please try again.");
+    }
   };
 
   const ref = useRef(null);
@@ -90,19 +120,34 @@ export const Marketplace = () => {
           </motion.p>
 
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.3 }} className="flex flex-wrap justify-center gap-4">
-            {["All", "Scalping", "Swing", "Low Risk", "High Risk"].map((label) => (
-              <button
-                key={label}
-                onClick={() => setFilter(label === "Low Risk" ? "Low" : label === "High Risk" ? "High" : label === "Scalping" ? "High-Frequency Scalping" : label === "Swing" ? "Swing Trading" : label)}
-                className={`px-8 py-3 rounded-2xl text-sm font-bold transition-all duration-300 ${
-                  (filter === label || (label === "Low Risk" && filter === "Low") || (label === "High Risk" && filter === "High") || (label === "Scalping" && filter === "High-Frequency Scalping") || (label === "Swing" && filter === "Swing Trading"))
-                    ? "bg-emerald-500 text-black shadow-[0_0_30px_rgba(16,185,129,0.4)] scale-105"
-                    : "bg-[#111820]/80 backdrop-blur-xl text-gray-400 hover:bg-white/10 hover:text-white border border-white/10"
-                }`}
-              >
-                {label}
-              </button>
-            ))}
+            {["All", "Scalping", "Swing", "Low Risk", "High Risk"].map((label) => {
+              const isActive = 
+                filter === label || 
+                (label === "Low Risk" && filter === "Low") || 
+                (label === "High Risk" && filter === "High") || 
+                (label === "Scalping" && filter === "High-Frequency Scalping") || 
+                (label === "Swing" && filter === "Swing Trading");
+
+              return (
+                <button
+                  key={label}
+                  onClick={() => {
+                    if (label === "Low Risk") setFilter("Low");
+                    else if (label === "High Risk") setFilter("High");
+                    else if (label === "Scalping") setFilter("High-Frequency Scalping");
+                    else if (label === "Swing") setFilter("Swing Trading");
+                    else setFilter(label);
+                  }}
+                  className={`px-8 py-3 rounded-2xl text-sm font-bold transition-all duration-300 ${
+                    isActive
+                      ? "bg-emerald-500 text-black shadow-[0_0_30px_rgba(16,185,129,0.4)] scale-105"
+                      : "bg-[#111820]/80 backdrop-blur-xl text-gray-400 hover:bg-white/10 hover:text-white border border-white/10"
+                  }`}
+                >
+                  {label}
+                </button>
+              );
+            })}
           </motion.div>
         </div>
       </section>

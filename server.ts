@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import { createServer as createViteServer } from "vite";
 import path from "node:path";
@@ -225,8 +226,9 @@ async function startServer() {
       .eq('content_type', type || 'blog')
       .eq('status', 'published');
 
-    if (search) {
-      query = query.or(`title.ilike.%${String(search)}%,body.ilike.%${String(search)}%`);
+    const searchStr = String(search || "");
+    if (searchStr) {
+      query = query.or(`title.ilike.%${searchStr}%,body.ilike.%${searchStr}%`);
     }
 
     const { data: posts, error } = await query
@@ -599,7 +601,7 @@ async function startServer() {
 
   // Vite Integration
   console.log(`[SERVER] NODE_ENV is: ${process.env.NODE_ENV}`);
-  if (process.env.NODE_ENV === "production") {
+  if (process.env.NODE_ENV !== "production") {
     console.log("[SERVER] Starting Vite in middleware mode...");
     const vite = await createViteServer({
       server: { middlewareMode: true },

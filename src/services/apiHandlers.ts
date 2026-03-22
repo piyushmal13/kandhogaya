@@ -68,6 +68,26 @@ export const getProductById = async (id: string) => {
   return data as Product;
 };
 
+export const subscribeToAlgo = async (userId: string, algoId: string, durationDays: number) => {
+  const key = `IFX-${Math.random().toString(36).toUpperCase().substring(2, 6)}-${Math.random().toString(36).toUpperCase().substring(2, 6)}`;
+  const expiresAt = new Date();
+  expiresAt.setDate(expiresAt.getDate() + durationDays);
+
+  const { data, error } = await supabase.from('bot_licenses').insert({
+    user_id: userId,
+    algo_id: algoId,
+    license_key: key,
+    is_active: true,
+    expires_at: expiresAt.toISOString()
+  }).select().single();
+
+  if (error) {
+    console.error("Error creating license:", error);
+    return { success: false, error };
+  }
+  return { success: true, license: data };
+};
+
 // --- BLOG / CONTENT ---
 
 export const getBlogPosts = async (page = 0, pageSize = 9, searchQuery = "") => {
