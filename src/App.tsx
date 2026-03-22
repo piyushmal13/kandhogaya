@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "motion/react";
 
 import { ErrorBoundary } from "./components/ui/ErrorBoundary";
 import { AuthProvider } from "./contexts/AuthContext";
+import { ToastProvider } from "./contexts/ToastContext";
 import { Navbar } from "./components/ui/Navbar";
 import { Footer } from "./components/ui/Footer";
 import { WhatsAppButton } from "./components/ui/WhatsAppButton";
@@ -112,24 +113,26 @@ export default function App() {
 
   return (
     <ErrorBoundary>
-      <AuthProvider>
-        <Router>
-          <ScrollToTop />
-          <ReferralHandler />
-          <a href="#main-content" className="skip-to-content">
-            Skip to main content
-          </a>
-          <div className="relative min-h-screen overflow-hidden font-sans selection:bg-emerald-200 selection:text-slate-950">
-            <SiteBackdrop />
-            <Navbar />
-            <main id="main-content" className="relative z-10">
-              <AnimatedRoutes />
-            </main>
-            <Footer />
-            <WhatsAppButton />
-          </div>
-        </Router>
-      </AuthProvider>
+      <ToastProvider>
+        <AuthProvider>
+          <Router>
+            <ScrollToTop />
+            <ReferralHandler />
+            <a href="#main-content" className="skip-to-content">
+              Skip to main content
+            </a>
+            <div className="relative min-h-screen overflow-hidden font-sans selection:bg-emerald-200 selection:text-slate-950">
+              <SiteBackdrop />
+              <Navbar />
+              <main id="main-content" className="relative z-10">
+                <AnimatedRoutes />
+              </main>
+              <Footer />
+              <WhatsAppButton />
+            </div>
+          </Router>
+        </AuthProvider>
+      </ToastProvider>
     </ErrorBoundary>
   );
 }

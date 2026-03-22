@@ -28,47 +28,52 @@ const getSupabaseConfig = () => {
 
 const { url: initialUrl, key: initialKey } = getSupabaseConfig();
 
-// Create a proxy-like object or a getter to handle late initialization
-let supabaseClient = createClient(initialUrl || 'https://placeholder.supabase.co', initialKey || 'placeholder', {
+// Keep a reference to the active client instance
+let activeClient = createClient(initialUrl || 'https://placeholder.supabase.co', initialKey || 'placeholder', {
   auth: {
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: true
   },
   global: {
-    fetch: (url, options) => {
+    fetch: (fetchUrl, options) => {
       const signal = options?.signal || (typeof AbortSignal !== 'undefined' && 'timeout' in AbortSignal ? (AbortSignal as any).timeout(10000) : undefined);
-      return fetch(url, { ...options, signal });
+      return fetch(fetchUrl, { ...options, signal });
     }
   }
 });
 
-export const supabase = supabaseClient;
+// Export a Proxy so that consumers always interact with the most current client instance
+export const supabase = new Proxy({} as any, {
+  get: (_, prop) => {
+    const value = (activeClient as any)[prop];
+    return typeof value === 'function' ? value.bind(activeClient) : value;
+  }
+});
 
 // Helper to re-initialize if keys are found later (e.g. after fetching from /api/config)
 export const reinitializeSupabase = (url: string, key: string) => {
   if (!url || !key || url.includes('placeholder')) return;
   
-  console.log("[Supabase]: Re-initializing with runtime config...");
-  const newClient = createClient(url, key, {
+  // Prevent unnecessary re-initialization if the URL and Key haven't changed
+  if ((activeClient as any).supabaseUrl === url && (activeClient as any).supabaseKey === key) {
+    return;
+  }
+
+  console.log("[Supabase]: Initializing with runtime config...");
+  activeClient = createClient(url, key, {
     auth: {
       autoRefreshToken: true,
       persistSession: true,
       detectSessionInUrl: true
     },
     global: {
-      fetch: (url, options) => {
+      fetch: (fetchUrl, options) => {
         const signal = options?.signal || (typeof AbortSignal !== 'undefined' && 'timeout' in AbortSignal ? (AbortSignal as any).timeout(10000) : undefined);
-        return fetch(url, { ...options, signal });
+        return fetch(fetchUrl, { ...options, signal });
       }
     }
   });
-  
-  // Update the exported client properties
-  // Since we can't re-assign the export, we have to rely on the fact that 
-  // most Supabase operations are called on the object.
-  // This is tricky. A better way is to export a getter.
-  Object.assign(supabase, newClient);
 };
 
 export const safeQuery = async <T>(query: unknown): Promise<T | []> => {

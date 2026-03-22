@@ -6,10 +6,12 @@ import { useNavigate } from "react-router-dom";
 import { PageMeta } from "../components/site/PageMeta";
 import { BRANDING } from "../constants/branding";
 import { useAuth } from "../contexts/AuthContext";
+import { useToast } from "../contexts/ToastContext";
 import { supabase } from "../lib/supabase";
 
 export const Login = () => {
   const { login, signup, signInWithOtp, verifyOtp } = useAuth();
+  const { success, error: toastError, info } = useToast();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,29 +28,41 @@ export const Login = () => {
       const params = new URLSearchParams(hash.substring(1));
       const errorDesc = params.get("error_description");
       if (errorDesc) {
-        alert(`Authentication Error: ${errorDesc.replaceAll("+", " ")}`);
+        toastError(`Authentication Error: ${errorDesc.replaceAll("+", " ")}`);
         globalThis.history.replaceState(null, "", globalThis.location.pathname);
       }
     }
-  }, []);
+  }, [toastError]);
 
   const handleOtpFlow = async () => {
     if (otpSent) {
       const result = await verifyOtp(email, token);
-      if (result.success) navigate("/dashboard");
-      else alert(`OTP Verification failed: ${result.error}`);
+      if (result.success) {
+        success("Successfully logged in!");
+        navigate("/dashboard");
+      } else {
+        toastError(`Verification failed: ${result.error}`);
+      }
     } else {
       const result = await signInWithOtp(email);
-      if (result.success) setOtpSent(true);
-      else alert(result.error);
+      if (result.success) {
+        setOtpSent(true);
+        info("Magic Link & Code sent to your email!");
+      } else {
+        toastError(String(result.error));
+      }
     }
   };
 
   const handlePasswordFlow = async () => {
     if (signupSent) {
       const result = await verifyOtp(email, token);
-      if (result.success) navigate("/dashboard");
-      else alert(`Verification failed: ${result.error}`);
+      if (result.success) {
+        success("Account verified successfully!");
+        navigate("/dashboard");
+      } else {
+        toastError(`Verification failed: ${result.error}`);
+      }
       return;
     }
 
@@ -56,14 +70,18 @@ export const Login = () => {
       const result = await signup(email, password);
       if (result.success) {
         setSignupSent(true);
-        alert("Account processing. Please enter the verification code sent to your email.");
+        info("Account created. Please enter the verification code sent to your email.");
       } else {
-        alert(`Signup failed: ${result.error}`);
+        toastError(`Signup failed: ${result.error}`);
       }
     } else {
       const result = await login(email, password);
-      if (result.success) navigate("/dashboard");
-      else alert(`Login failed: ${result.error}`);
+      if (result.success) {
+        success("Welcome back!");
+        navigate("/dashboard");
+      } else {
+        toastError(`Login failed: ${result.error}`);
+      }
     }
   };
 
@@ -91,7 +109,7 @@ export const Login = () => {
     });
 
     if (error) {
-      alert(error.message);
+      toastError(error.message);
     }
   };
 
