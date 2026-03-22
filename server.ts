@@ -226,8 +226,8 @@ async function startServer() {
       .eq('content_type', type || 'blog')
       .eq('status', 'published');
 
-    const searchStr = String(search || "");
-    if (searchStr) {
+    const searchStr = String(search ?? "");
+    if (searchStr.length > 0) {
       query = query.or(`title.ilike.%${searchStr}%,body.ilike.%${searchStr}%`);
     }
 
@@ -601,15 +601,7 @@ async function startServer() {
 
   // Vite Integration
   console.log(`[SERVER] NODE_ENV is: ${process.env.NODE_ENV}`);
-  if (process.env.NODE_ENV !== "production") {
-    console.log("[SERVER] Starting Vite in middleware mode...");
-    const vite = await createViteServer({
-      server: { middlewareMode: true },
-      appType: "spa",
-    });
-    app.use(vite.middlewares);
-    console.log("[SERVER] Vite middleware attached.");
-  } else {
+  if (process.env.NODE_ENV === "production") {
     console.log("[SERVER] Serving static files from dist...");
     const distPath = path.join(__dirname, "dist");
     app.use(express.static(distPath));
@@ -629,8 +621,8 @@ async function startServer() {
         // even if they weren't baked in at build time.
         const injection = `
           <script>
-            window._SUPABASE_URL = "${process.env.VITE_SUPABASE_URL || ''}";
-            window._SUPABASE_ANON_KEY = "${process.env.VITE_SUPABASE_ANON_KEY || ''}";
+            globalThis._SUPABASE_URL = "${process.env.VITE_SUPABASE_URL || ''}";
+            globalThis._SUPABASE_ANON_KEY = "${process.env.VITE_SUPABASE_ANON_KEY || ''}";
           </script>
         `;
         html = html.replace('</head>', `${injection}</head>`);
@@ -639,9 +631,42 @@ async function startServer() {
         res.status(404).send("Not found");
       }
     });
+  } else {
+    const vite = await createViteServer({
+      server: { middlewareMode: true },
+      appType: "spa",
+    });
+
+    // Injected variables into the index.html for dev mode
+    app.use(async (req, res, next) => {
+      if (req.method === 'GET' && req.url === '/') {
+        try {
+          const indexPath = path.join(__dirname, "index.html");
+          let html = fs.readFileSync(indexPath, 'utf8');
+          html = await vite.transformIndexHtml(req.url, html);
+          
+          const injection = `
+            <script>
+              globalThis._SUPABASE_URL = "${process.env.VITE_SUPABASE_URL || ''}";
+              globalThis._SUPABASE_ANON_KEY = "${process.env.VITE_SUPABASE_ANON_KEY || ''}";
+            </script>
+          `;
+          html = html.replace('</head>', `${injection}</head>`);
+          return res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
+        } catch (e: any) {
+          vite?.ssrFixStacktrace?.(e);
+          next(e);
+        }
+      } else {
+        next();
+      }
+    });
+
+    app.use(vite.middlewares);
+    console.log("[SERVER] Vite middleware attached and script injection enabled.");
   }
 
   app.listen(3000, "0.0.0.0", () => console.log("IFXTrades Hub API running on port 3000"));
 }
 
-startServer();
+await startServer();

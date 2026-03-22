@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -12,6 +12,7 @@ import { SiteBackdrop } from "./components/site/SiteBackdrop";
 import { LoadingSpinner } from "./components/ui/LoadingSpinner";
 
 import { useReferral } from "./hooks/useReferral";
+import { reinitializeSupabase } from "./lib/supabase";
 
 // ── Lazy-loaded pages (route-level code splitting) ──
 const Home = lazy(() => import("./pages/Home").then(m => ({ default: m.Home })));
@@ -93,6 +94,22 @@ const AnimatedRoutes = () => {
 };
 
 export default function App() {
+  useEffect(() => {
+    // Fail-safe: ensure Supabase is initialized even if env vars were missing at build time
+    const init = async () => {
+      try {
+        const res = await fetch("/api/config");
+        const config = await res.json();
+        if (config.supabaseUrl && config.supabaseAnonKey) {
+          reinitializeSupabase(config.supabaseUrl, config.supabaseAnonKey);
+        }
+      } catch (e) {
+        console.error("Failed to fetch runtime config:", e);
+      }
+    };
+    init();
+  }, []);
+
   return (
     <ErrorBoundary>
       <AuthProvider>
