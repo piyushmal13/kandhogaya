@@ -27,7 +27,7 @@ export const AlgoGreatness = () => {
     });
 
     // Fetch Gold Scalper or first algorithm for the video
-    getProducts().then(allProducts => {
+    getProducts().then((allProducts: any[]) => {
       const gold = allProducts?.find(p => p.name.includes("Gold"));
       const first = allProducts?.[0];
       if (gold) setFeaturedAlgo(gold);
@@ -113,7 +113,7 @@ export const AlgoGreatness = () => {
           <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">Verified User Reviews</h3>
           <div className="flex items-center justify-center gap-2">
             <div className="flex">
-              {[...new Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 md:w-6 md:h-6 text-emerald-500 fill-emerald-500" />)}
+              {Array.from({ length: 5 }).map((_, i) => <Star key={`main-star-${i}`} className="w-4 h-4 md:w-6 md:h-6 text-emerald-500 fill-emerald-500" />)}
             </div>
             <span className="text-white font-bold text-lg md:text-xl ml-2">{stats.avg}/5</span>
             <span className="text-gray-500 text-xs md:text-sm ml-2">from {stats.count.toLocaleString()}+ traders</span>
