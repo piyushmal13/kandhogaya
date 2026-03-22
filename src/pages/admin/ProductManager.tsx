@@ -41,6 +41,10 @@ export const ProductManager = () => {
     
     // Ensure performance_data is valid JSON before saving
     let dataToSave = { ...editForm };
+    delete (dataToSave as any).type;
+    delete (dataToSave as any).reviews;
+    delete (dataToSave as any).variants;
+    
     if (typeof dataToSave.performance_data === 'string') {
       try {
         dataToSave.performance_data = JSON.parse(dataToSave.performance_data);
@@ -105,13 +109,11 @@ export const ProductManager = () => {
       description: "Enter description here",
       price: 99,
       category: "Quantitative",
-      type: "algo_bot",
       image_url: "https://picsum.photos/seed/newalgo/800/450",
       strategy_graph_url: "",
       backtesting_result_url: "",
       video_explanation_url: "",
       long_plan_offers: [],
-      reviews: [],
       q_and_a: [],
       terms_and_conditions: "Standard terms apply.",
       performance_data: []

@@ -50,7 +50,6 @@ export const ReviewManager = () => {
           name: editForm.name || editForm.user_name,
           user_name: editForm.user_name,
           rating: editForm.rating,
-          comment: editForm.comment,
           text: editForm.text || editForm.comment,
           image_url: editForm.image_url,
           region: editForm.region,
@@ -103,8 +102,7 @@ export const ReviewManager = () => {
       text: "Excellent service!",
       region: "Global",
       role: "Trader",
-      image_url: "https://picsum.photos/seed/user/200/200",
-      target_id: '00000000-0000-0000-0000-000000000000' // Placeholder for general review
+      image_url: "https://picsum.photos/seed/user/200/200"
     };
 
     try {
