@@ -64,7 +64,7 @@ export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationM
     );
   }
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError("");

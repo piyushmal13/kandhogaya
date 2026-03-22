@@ -75,7 +75,7 @@ export const WebinarPromoInline = () => {
           </div>
           <div className="flex items-center gap-2 text-gray-300 text-sm">
             <Timer className="w-4 h-4 text-emerald-500" />
-            <span>{nextWebinar.duration} Minutes</span>
+            <span>60 Minutes</span>
           </div>
         </div>
 

@@ -70,7 +70,7 @@ export const Webinars = () => {
                   month: "long",
                   day: "numeric",
                 })}{" "}
-                with {nextWebinar.speaker || "IFXTrades Analyst Team"}.
+                with {nextWebinar.speaker_name || "IFXTrades Analyst Team"}.
               </p>
               <button
                 onClick={() => setSelectedWebinar(nextWebinar)}

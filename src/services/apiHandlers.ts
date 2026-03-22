@@ -73,7 +73,7 @@ export const getProductById = async (id: string) => {
 export const getBlogPosts = async (page = 0, pageSize = 9, searchQuery = "") => {
   let query = supabase
     .from('content_posts')
-    .select('*')
+    .select('*, author:users!content_posts_author_id_fkey(full_name, avatar_url)')
     .eq('status', 'published')
     .order('created_at', { ascending: false })
     .range(page * pageSize, (page + 1) * pageSize - 1);
@@ -88,7 +88,7 @@ export const getBlogPosts = async (page = 0, pageSize = 9, searchQuery = "") => 
 export const getBlogPostBySlug = async (slug: string) => {
   const { data, error } = await supabase
     .from('content_posts')
-    .select('*')
+    .select('*, author:users!content_posts_author_id_fkey(full_name, avatar_url)')
     .eq('slug', slug)
     .single();
   

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
-import { Calendar, Clock, ArrowRight, Video, Download, Search, Filter } from "lucide-react";
+import { Calendar, Clock, ArrowRight, Search, Filter } from "lucide-react";
 
 import { getBlogPosts } from "../services/apiHandlers";
 import { PageHero } from "../components/site/PageHero";
@@ -117,28 +117,16 @@ export const Blog = () => {
                   <div className="site-panel flex h-full flex-col overflow-hidden">
                     <div className="relative aspect-video overflow-hidden bg-black">
                       <img
-                        src={post.metadata?.cover_image || `https://picsum.photos/seed/${post.slug}/800/450`}
+                        src={post.image_url || post.featured_image || `https://picsum.photos/seed/${post.slug}/800/450`}
                         alt={post.title}
                         className="h-full w-full object-cover opacity-65 transition-transform duration-700 group-hover:scale-105 group-hover:opacity-100"
                         referrerPolicy="no-referrer"
                       />
-                      <div className="absolute top-4 left-4 flex gap-2">
-                        {post.metadata?.video_url ? (
-                          <div className="rounded-lg bg-emerald-300 p-1.5 text-slate-950 shadow-lg">
-                            <Video className="h-4 w-4" />
-                          </div>
-                        ) : null}
-                        {post.metadata?.download_url ? (
-                          <div className="rounded-lg bg-sky-500 p-1.5 text-white shadow-lg">
-                            <Download className="h-4 w-4" />
-                          </div>
-                        ) : null}
-                      </div>
                     </div>
                     <div className="flex flex-1 flex-col p-8">
                       <div className="mb-4 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-emerald-200/80">
                         <Calendar className="h-3 w-3" />
-                        {new Date(post.published_at || post.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                        {new Date(post.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                       </div>
                       <h3 className="mb-4 text-2xl font-semibold leading-tight text-white transition-colors group-hover:text-emerald-100">
                         {post.title}

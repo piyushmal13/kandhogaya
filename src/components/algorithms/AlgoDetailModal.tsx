@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "motion/react";
-import { X, Check, ArrowRight, ShieldCheck, Activity, Zap, Play, HelpCircle, Star, BarChart3, Lock, FileText } from "lucide-react";
+import { X, Check, ArrowRight, ShieldCheck, Activity, Zap, HelpCircle, Star, BarChart3, Lock, FileText } from "lucide-react";
 import { Product } from "../../types";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -83,6 +83,7 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
                     <iframe 
                       src={algo.video_explanation_url.includes('youtube.com') ? algo.video_explanation_url.replace('watch?v=', 'embed/') : algo.video_explanation_url} 
                       className="w-full h-full"
+                      title="Algorithm explanation video"
                       allowFullScreen
                     />
                   </div>
@@ -140,25 +141,27 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
 
             {activeTab === 'reviews' && (
               <div className="space-y-6">
-                {algo.reviews?.length ? algo.reviews.map((review, i) => (
-                  <div key={i} className="p-6 rounded-2xl bg-white/5 border border-white/5">
+                {algo.reviews?.length ? algo.reviews.map((review) => (
+                  <div key={review.id || review.user_name || Math.random()} className="p-6 rounded-2xl bg-white/5 border border-white/5">
                     <div className="flex justify-between items-start mb-4">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 font-bold">
-                          {review.user_name.charAt(0)}
+                          {(review.user_name || review.name || "U").charAt(0)}
                         </div>
                         <div>
-                          <div className="text-white font-bold">{review.user_name}</div>
-                          <div className="text-xs text-gray-500">{new Date(review.date).toLocaleDateString()}</div>
+                          <div className="text-white font-bold">{review.user_name || review.name}</div>
+                          <div className="text-xs text-gray-500">
+                            {review.created_at ? new Date(review.created_at).toLocaleDateString() : 'Recent'}
+                          </div>
                         </div>
                       </div>
                       <div className="flex gap-1">
-                        {[...Array(5)].map((_, j) => (
-                          <Star key={j} className={`w-3 h-3 ${j < review.rating ? 'text-amber-500 fill-amber-500' : 'text-gray-600'}`} />
+                        {['s1', 's2', 's3', 's4', 's5'].map((starKey, j) => (
+                          <Star key={starKey} className={`w-3 h-3 ${j < review.rating ? 'text-amber-500 fill-amber-500' : 'text-gray-600'}`} />
                         ))}
                       </div>
                     </div>
-                    <p className="text-gray-400 text-sm italic">"{review.comment}"</p>
+                    <p className="text-gray-400 text-sm italic">"{review.text}"</p>
                   </div>
                 )) : (
                   <div className="text-center py-20 text-gray-500">No reviews yet for this algorithm.</div>
@@ -168,8 +171,8 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
 
             {activeTab === 'qa' && (
               <div className="space-y-6">
-                {algo.q_and_a?.length ? algo.q_and_a.map((qa, i) => (
-                  <div key={i} className="p-6 rounded-2xl bg-white/5 border border-white/5">
+                {algo.q_and_a?.length ? algo.q_and_a.map((qa) => (
+                  <div key={qa.question} className="p-6 rounded-2xl bg-white/5 border border-white/5">
                     <div className="flex items-start gap-4">
                       <HelpCircle className="w-5 h-5 text-emerald-500 shrink-0 mt-1" />
                       <div>
@@ -218,9 +221,9 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
               <p className="text-gray-500 text-[10px] md:text-xs">Full algorithm access with 24/5 support.</p>
             </button>
 
-            {algo.long_plan_offers?.map((offer, i) => (
+            {algo.long_plan_offers?.map((offer) => (
               <button 
-                key={i}
+                key={offer.duration}
                 onClick={() => handleSubscribeClick(offer.duration)}
                 className="w-full p-5 md:p-6 rounded-xl md:rounded-2xl bg-emerald-500/5 border border-emerald-500/20 hover:border-emerald-500/50 transition-all text-left relative group"
               >

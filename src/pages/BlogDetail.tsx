@@ -11,7 +11,7 @@ import { Blog } from "../types";
 
 export const BlogDetail = () => {
   const { pathname } = useLocation();
-  const slug = pathname.split("/").pop() as string;
+  const slug = pathname.split("/").pop();
   const [post, setPost] = useState<Blog | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -91,15 +91,20 @@ export const BlogDetail = () => {
           className="flex flex-wrap items-center justify-between gap-6 py-6 border-y border-white/5"
         >
           <div className="flex items-center gap-4">
-            {post.author_profile_url ? (
-              <img src={post.author_profile_url} alt={post.author_name} className="w-12 h-12 rounded-full object-cover border border-white/10" referrerPolicy="no-referrer" />
+            { (post.author?.avatar_url || post.author_profile_url) ? (
+              <img 
+                src={post.author?.avatar_url || post.author_profile_url} 
+                alt={post.author?.full_name || post.author_name || "Author"} 
+                className="w-12 h-12 rounded-full object-cover border border-white/10" 
+                referrerPolicy="no-referrer" 
+              />
             ) : (
               <div className="w-12 h-12 bg-emerald-500 rounded-full flex items-center justify-center text-black font-bold">
-                {post.author_name?.charAt(0) || "A"}
+                {(post.author?.full_name || post.author_name || "A").charAt(0)}
               </div>
             )}
             <div>
-              <div className="text-white font-bold text-sm">{post.author_name || "IFXTrades Analyst"}</div>
+              <div className="text-white font-bold text-sm">{post.author?.full_name || post.author_name || "IFXTrades Analyst"}</div>
               <div className="flex items-center gap-3 text-xs text-gray-500 mt-1">
                 <span className="flex items-center gap-1"><Calendar className="w-3 h-3" /> {new Date(post.created_at).toLocaleDateString()}</span>
                 <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> 5 min read</span>
@@ -117,9 +122,10 @@ export const BlogDetail = () => {
       <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3 }} className="mb-12 rounded-3xl overflow-hidden border border-white/10 bg-black aspect-video relative group">
         {post.video_url ? (
           <div className="w-full h-full">
-            <iframe
+            <iframe 
               src={post.video_url.includes("youtube.com") ? post.video_url.replace("watch?v=", "embed/") : post.video_url}
               className="w-full h-full"
+              title="Blog post video material"
               allowFullScreen
             />
           </div>

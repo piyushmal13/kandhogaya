@@ -13,7 +13,7 @@ export const WebinarBanner = () => {
   useEffect(() => {
     const fetchNextWebinar = async () => {
       try {
-        const { data, error } = await supabase
+        const { data } = await supabase
           .from("webinars")
           .select("*")
           .eq("status", "upcoming")

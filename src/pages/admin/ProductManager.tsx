@@ -194,17 +194,13 @@ export const ProductManager = () => {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label htmlFor="type" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Type</label>
-                      <select 
-                        id="type"
-                        value={editForm.type || "algo_bot"} 
-                        onChange={e => setEditForm({...editForm, type: e.target.value})}
+                      <label htmlFor="category" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Category</label>
+                      <input
+                        id="category"
+                        value={editForm.category || ""}
+                        onChange={e => setEditForm({...editForm, category: e.target.value})}
                         className="w-full bg-black border border-white/10 rounded-xl px-4 py-2 text-white outline-none focus:border-emerald-500"
-                      >
-                        <option value="algo_bot">Algo Bot</option>
-                        <option value="indicator">Indicator</option>
-                        <option value="course">Course</option>
-                      </select>
+                      />
                     </div>
                     <div>
                       <label htmlFor="performanceData" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Performance Data (JSON)</label>

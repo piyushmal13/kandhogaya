@@ -42,7 +42,7 @@ export const WebinarCalendar = ({ webinars }: WebinarCalendarProps) => {
                 <Clock className="w-3 h-3" />
                 {new Date(webinar.date_time).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
                 <span className="w-1 h-1 bg-gray-600 rounded-full" />
-                {webinar.speaker || 'Speaker'}
+                {webinar.speaker_name || 'Speaker'}
               </div>
             </div>
 

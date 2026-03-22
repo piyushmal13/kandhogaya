@@ -50,7 +50,7 @@ export const ReviewManager = () => {
           name: editForm.name || editForm.user_name,
           user_name: editForm.user_name,
           rating: editForm.rating,
-          text: editForm.text || editForm.comment,
+          text: editForm.text,
           image_url: editForm.image_url,
           region: editForm.region,
           role: editForm.role
@@ -206,8 +206,8 @@ export const ReviewManager = () => {
                     <label htmlFor="reviewText" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Review Text</label>
                     <textarea 
                       id="reviewText"
-                      value={editForm.text || editForm.comment || ""} 
-                      onChange={e => setEditForm({...editForm, text: e.target.value, comment: e.target.value})}
+                      value={editForm.text || ""} 
+                      onChange={e => setEditForm({...editForm, text: e.target.value})}
                       rows={3}
                       className="w-full bg-black border border-white/10 rounded-xl px-4 py-2 text-white outline-none focus:border-emerald-500"
                     />
@@ -247,7 +247,7 @@ export const ReviewManager = () => {
                         <Star key={key} className={`w-3 h-3 ${i < review.rating ? 'text-amber-500 fill-amber-500' : 'text-gray-700'}`} />
                       ))}
                     </div>
-                    <p className="text-gray-400 text-xs line-clamp-3 italic">"{review.text || review.comment}"</p>
+                    <p className="text-gray-400 text-xs line-clamp-3 italic">"{review.text}"</p>
                   </div>
                 </div>
               )}

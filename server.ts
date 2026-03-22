@@ -1,14 +1,13 @@
 import express from "express";
 import { createServer as createViteServer } from "vite";
-import path from "path";
-import { fileURLToPath } from "url";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import jwt from "jsonwebtoken";
-import { z } from "zod";
 import { createClient } from "@supabase/supabase-js";
 import pino from "pino";
 import rateLimit from "express-rate-limit";
 import multer from "multer";
-import fs from "fs";
+import fs from "node:fs";
 
 const logger = pino({
   level: process.env.LOG_LEVEL || "info",
@@ -227,11 +226,11 @@ async function startServer() {
       .eq('status', 'published');
 
     if (search) {
-      query = query.or(`title.ilike.%${search}%,body.ilike.%${search}%`);
+      query = query.or(`title.ilike.%${String(search)}%,body.ilike.%${String(search)}%`);
     }
 
     const { data: posts, error } = await query
-      .order('published_at', { ascending: false })
+      .order('created_at', { ascending: false })
       .range(offset, offset + Number(limit) - 1);
 
     if (error) return res.status(500).json({ error: error.message });
@@ -272,14 +271,14 @@ async function startServer() {
     const { data: webinars, error } = await supabase
       .from('webinars')
       .select('*')
-      .order('start_time', { ascending: true });
+      .order('date_time', { ascending: true });
 
     if (error) return res.status(500).json({ error: error.message });
     res.json(webinars);
   });
 
   app.post("/api/webinars/register", authenticate, async (req: any, res) => {
-    const { webinar_id, name, email } = req.body;
+    const { webinar_id, email } = req.body;
     
     // 1. Trigger Automated Email Reminders (Mocked)
     console.log(`[EMAIL SERVICE] Sending confirmation to ${email} for webinar ${webinar_id}`);
@@ -368,6 +367,7 @@ async function startServer() {
         signal_accuracy: "82.4%"
       });
     } catch (err) {
+      logger.error({ err }, "Failed to fetch admin stats");
       res.status(500).json({ error: "Failed to fetch stats" });
     }
   });
@@ -447,8 +447,8 @@ async function startServer() {
   app.post("/api/admin/content", authenticate, async (req: any, res) => {
     if (req.user.role !== "admin") return res.status(403).json({ error: "Forbidden" });
     
-    const { title, content_type, content, metadata } = req.body;
-    const slug = title.toLowerCase().replace(/ /g, "-") + "-" + Math.random().toString(36).substring(2, 7);
+    const { title, content_type, content } = req.body;
+    const slug = title.toLowerCase().replaceAll(" ", "-") + "-" + Math.random().toString(36).substring(2, 7);
     
     const { data, error } = await req.supabase
       .from('content_posts')
@@ -458,8 +458,6 @@ async function startServer() {
         content_type,
         status: 'published',
         content,
-        metadata: metadata || {},
-        published_at: new Date().toISOString(),
         author_id: req.user.id
       })
       .select()
@@ -473,8 +471,8 @@ async function startServer() {
   app.put("/api/admin/content/:id", authenticate, async (req: any, res) => {
     if (req.user.role !== "admin") return res.status(403).json({ error: "Forbidden" });
     const { id } = req.params;
-    const { title, content_type, content, metadata } = req.body;
-    const slug = title.toLowerCase().replace(/ /g, "-") + "-" + Math.random().toString(36).substring(2, 7);
+    const { title, content_type, content } = req.body;
+    const slug = title.toLowerCase().replaceAll(" ", "-") + "-" + Math.random().toString(36).substring(2, 7);
     
     const { error } = await req.supabase
       .from('content_posts')
@@ -482,8 +480,7 @@ async function startServer() {
         title,
         slug,
         content_type,
-        content,
-        metadata: metadata || {}
+        content
       })
       .eq('id', id);
 
@@ -602,7 +599,7 @@ async function startServer() {
 
   // Vite Integration
   console.log(`[SERVER] NODE_ENV is: ${process.env.NODE_ENV}`);
-  if (process.env.NODE_ENV !== "production") {
+  if (process.env.NODE_ENV === "production") {
     console.log("[SERVER] Starting Vite in middleware mode...");
     const vite = await createViteServer({
       server: { middlewareMode: true },
