@@ -111,15 +111,29 @@ export const WebinarPromo = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
-              className="flex flex-wrap justify-center lg:justify-start gap-6 md:gap-8 mb-12"
+              className="flex flex-wrap justify-center lg:justify-start gap-8 mb-12"
             >
-              <div className="flex items-center gap-3 md:gap-4">
-                <div className="w-12 h-12 md:w-14 md:h-14 rounded-full border-2 border-emerald-500/30 p-0.5 flex items-center justify-center bg-white/5 text-white font-bold text-xl">
-                  {webinar.speaker?.charAt(0) || "S"}
+              <div className="flex items-center gap-4">
+                <div className="relative group">
+                  <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-full opacity-30 blur group-hover:opacity-50 transition duration-500" />
+                  <div className="w-14 h-14 md:w-16 md:h-16 rounded-full border border-white/10 p-0.5 flex items-center justify-center bg-zinc-900 overflow-hidden relative z-10">
+                    {webinar.speaker_images?.[0] ? (
+                      <img src={webinar.speaker_images[0]} alt={webinar.speaker} className="w-full h-full object-cover" />
+                    ) : (
+                      <span className="text-white font-bold text-xl">{webinar.speaker?.charAt(0) || "S"}</span>
+                    )}
+                  </div>
                 </div>
                 <div className="text-left">
-                  <div className="text-white font-bold text-xs md:text-sm">{webinar.speaker || "Speaker"}</div>
-                  <div className="text-emerald-500 text-[9px] md:text-[10px] font-mono tracking-wider uppercase">{webinar.metadata?.level || "Expert"}</div>
+                  <div className="text-white font-bold text-sm md:text-base">{webinar.speaker || webinar.speaker_name || "Institutional Lead"}</div>
+                  <div className="text-emerald-500 text-[10px] font-mono tracking-wider uppercase">{webinar.metadata?.level || "Executive Strategist"}</div>
+                </div>
+              </div>
+
+              <div className="hidden sm:flex items-center gap-4 border-l border-white/10 pl-8">
+                <div className="text-left">
+                  <div className="text-gray-500 text-[10px] font-mono uppercase tracking-widest mb-1">Capacity</div>
+                  <div className="text-white font-bold text-sm">{webinar.max_attendees || 500} Total Seats</div>
                 </div>
               </div>
             </motion.div>
@@ -130,13 +144,17 @@ export const WebinarPromo = () => {
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.4 }}
-                className="flex items-center justify-center lg:justify-start gap-4 md:gap-6 pt-8 border-t border-white/5"
+                className="flex items-center justify-center lg:justify-start gap-6 pt-8 border-t border-white/5"
               >
-                <span className="text-[10px] font-mono text-gray-600 uppercase tracking-widest">Sponsored By:</span>
-                <div className="flex gap-4 md:gap-6 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
+                <span className="text-[10px] font-mono text-gray-600 uppercase tracking-widest">Institutional Partners:</span>
+                <div className="flex flex-wrap gap-6 opacity-40 grayscale hover:grayscale-0 transition-all duration-500">
                   {sponsors.map((sponsor: string, idx: number) => (
-                    <div key={`${sponsor}-${idx}`} className="flex items-center gap-1.5 md:gap-2">
-                      <ShieldCheck className="w-4 h-4 md:w-5 md:h-5 text-white" />
+                    <div key={`${sponsor}-${idx}`} className="flex items-center gap-2">
+                       {webinar.sponsor_logos?.[idx] ? (
+                         <img src={webinar.sponsor_logos[idx]} alt={sponsor} className="h-4 md:h-5 w-auto object-contain" />
+                       ) : (
+                         <ShieldCheck className="w-4 h-4 text-white" />
+                       )}
                       <span className="text-white font-bold tracking-tight text-[10px] md:text-xs">{sponsor}</span>
                     </div>
                   ))}
