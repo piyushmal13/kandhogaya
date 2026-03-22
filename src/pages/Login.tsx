@@ -9,70 +9,73 @@ import { useAuth } from "../contexts/AuthContext";
 import { supabase } from "../lib/supabase";
 
 export const Login = () => {
-  const { login, signup } = useAuth();
+  const { login, signup, signInWithOtp, verifyOtp } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [token, setToken] = useState("");
   const [isOtpMode, setIsOtpMode] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
+  const [signupSent, setSignupSent] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const hash = window.location.hash;
-    if (hash && hash.includes("error_description")) {
+    const hash = globalThis.location.hash;
+    if (hash?.includes("error_description")) {
       const params = new URLSearchParams(hash.substring(1));
       const errorDesc = params.get("error_description");
       if (errorDesc) {
-        alert(`Authentication Error: ${errorDesc.replace(/\+/g, " ")}`);
-        window.history.replaceState(null, "", window.location.pathname);
+        alert(`Authentication Error: ${errorDesc.replaceAll("+", " ")}`);
+        globalThis.history.replaceState(null, "", globalThis.location.pathname);
       }
     }
   }, []);
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const handleOtpFlow = async () => {
+    if (otpSent) {
+      const result = await verifyOtp(email, token);
+      if (result.success) navigate("/dashboard");
+      else alert(`OTP Verification failed: ${result.error}`);
+    } else {
+      const result = await signInWithOtp(email);
+      if (result.success) setOtpSent(true);
+      else alert(result.error);
+    }
+  };
+
+  const handlePasswordFlow = async () => {
+    if (signupSent) {
+      const result = await verifyOtp(email, token);
+      if (result.success) navigate("/dashboard");
+      else alert(`Verification failed: ${result.error}`);
+      return;
+    }
+
+    if (isSignUp) {
+      const result = await signup(email, password);
+      if (result.success) {
+        setSignupSent(true);
+        alert("Account processing. Please enter the verification code sent to your email.");
+      } else {
+        alert(`Signup failed: ${result.error}`);
+      }
+    } else {
+      const result = await login(email, password);
+      if (result.success) navigate("/dashboard");
+      else alert(`Login failed: ${result.error}`);
+    }
+  };
+
+  const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     setLoading(true);
 
     try {
       if (isOtpMode) {
-        const { error } = await supabase.auth.signInWithOtp({
-          email,
-          options: {
-            emailRedirectTo: `${window.location.origin}/dashboard`,
-          },
-        });
-
-        if (error) {
-          alert(error.message);
-        } else {
-          setOtpSent(true);
-        }
-
-        return;
-      }
-
-      if (isSignUp) {
-        const result = await signup(email, password);
-        if (result.success) {
-          if (result.needsEmailConfirmation) {
-            alert("Account created! Please check your email to confirm your account before logging in.");
-          } else {
-            alert("Account created successfully! You can now log in.");
-          }
-          setIsSignUp(false);
-        } else {
-          alert(`Signup failed: ${result.error}`);
-        }
-
-        return;
-      }
-
-      const result = await login(email, password);
-      if (result.success) {
-        navigate("/dashboard");
+        await handleOtpFlow();
       } else {
-        alert(`Login failed: ${result.error}`);
+        await handlePasswordFlow();
       }
     } finally {
       setLoading(false);
@@ -83,13 +86,20 @@ export const Login = () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/dashboard`,
+        redirectTo: `${globalThis.location.origin}/dashboard`,
       },
     });
 
     if (error) {
       alert(error.message);
     }
+  };
+
+  const getButtonText = () => {
+    if (loading) return "Processing...";
+    if (isOtpMode) return otpSent ? "Verify & Login" : "Send Magic Link / OTP";
+    if (signupSent) return "Verify Account";
+    return isSignUp ? "Create Account" : "Sign In to Hub";
   };
 
   return (
@@ -134,8 +144,9 @@ export const Login = () => {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="mb-2 ml-1 block text-[10px] font-bold uppercase text-gray-500">Email Address</label>
+              <label htmlFor="email" className="mb-2 ml-1 block text-[10px] font-bold uppercase text-gray-500">Email Address</label>
               <input
+                id="email"
                 required
                 type="email"
                 value={email}
@@ -145,10 +156,11 @@ export const Login = () => {
               />
             </div>
 
-            {!isOtpMode ? (
+            {isOtpMode ? null : (
               <div>
-                <label className="mb-2 ml-1 block text-[10px] font-bold uppercase text-gray-500">Password</label>
+                <label htmlFor="password" className="mb-2 ml-1 block text-[10px] font-bold uppercase text-gray-500">Password</label>
                 <input
+                  id="password"
                   required
                   type="password"
                   value={password}
@@ -157,11 +169,26 @@ export const Login = () => {
                   placeholder="********"
                 />
               </div>
-            ) : null}
+            )}
 
-            {otpSent ? (
-              <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-center text-xs font-bold text-emerald-300">
-                Magic link sent. Check your email to complete login.
+            {(isOtpMode && otpSent) || signupSent ? (
+              <div className="space-y-4">
+                <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-center text-xs font-bold text-emerald-300">
+                  {signupSent ? "Enter the code from your confirmation email." : "Verification code sent! Enter the 6-digit code."}
+                </div>
+                <div>
+                  <label htmlFor="otp-token" className="mb-2 ml-1 block text-[10px] font-bold uppercase text-gray-500">Verification Code</label>
+                  <input
+                    id="otp-token"
+                    required
+                    type="text"
+                    value={token}
+                    onChange={(event) => setToken(event.target.value)}
+                    className="w-full rounded-2xl border border-white/10 bg-black/50 px-5 py-4 text-white outline-none transition-all focus:border-emerald-500 text-center text-2xl tracking-[0.5em] font-mono"
+                    placeholder="000000"
+                    maxLength={6}
+                  />
+                </div>
               </div>
             ) : null}
 
@@ -169,12 +196,12 @@ export const Login = () => {
               disabled={loading}
               className="w-full rounded-2xl bg-emerald-500 py-4 font-bold text-black shadow-lg shadow-emerald-500/20 transition-all hover:bg-emerald-400 disabled:opacity-50"
             >
-              {loading ? "Processing..." : isOtpMode ? "Send Magic Link" : isSignUp ? "Create Account" : "Sign In to Hub"}
+              {getButtonText()}
             </button>
           </form>
 
           <div className="space-y-3 text-center">
-            {!isOtpMode ? (
+            {isOtpMode ? null : (
               <button
                 type="button"
                 onClick={() => setIsSignUp((value) => !value)}
@@ -182,7 +209,7 @@ export const Login = () => {
               >
                 {isSignUp ? "Already have an account? Sign In" : "Don't have an account? Sign Up"}
               </button>
-            ) : null}
+            )}
 
             <button
               type="button"

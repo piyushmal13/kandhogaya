@@ -274,8 +274,11 @@ CREATE TABLE IF NOT EXISTS webinar_registrations (
     webinar_id UUID REFERENCES webinars(id) ON DELETE CASCADE,
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
     email TEXT,
+    attended BOOLEAN DEFAULT FALSE,
+    payment_status TEXT DEFAULT 'completed',
+    payment_id TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW(),
-    UNIQUE(webinar_id, email)
+    UNIQUE(webinar_id, user_id)
 );
 
 -- 10. Payments & Subscriptions

@@ -1,5 +1,8 @@
 import { supabase, safeQuery } from "../lib/supabase";
-import { Webinar, Blog, Product, Course, Signal } from "../types";
+import {
+  Webinar, Signal, Product, Review, Blog, Course,
+  Lesson, BotLicense, ProductVariant, WebinarRegistration
+} from "../types";
 
 /**
  * API Handlers Service
@@ -30,6 +33,21 @@ export const getWebinarById = async (id: string) => {
     return null;
   }
   return data as Webinar;
+};
+
+export const checkWebinarRegistration = async (webinarId: string, userId: string) => {
+  const { data, error } = await supabase
+    .from("webinar_registrations")
+    .select("id")
+    .eq("webinar_id", webinarId)
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (error) {
+    console.error("Error checking registration:", error);
+    return false;
+  }
+  return !!data;
 };
 
 // --- SIGNALS ---

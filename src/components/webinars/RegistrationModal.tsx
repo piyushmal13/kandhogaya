@@ -70,39 +70,56 @@ export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationM
     setError("");
 
     try {
+      // 1. Check if already registered
+      const { data: existing } = await supabase
+        .from('webinar_registrations')
+        .select('id')
+        .eq('webinar_id', webinar.id)
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (existing) {
+        setStep(3); // Already registered success
+        setLoading(false);
+        return;
+      }
+
       if (webinar.is_paid) {
-        // Redirect to payment gateway (simulated)
-        setTimeout(() => {
-          setLoading(false);
-          setStep(2); // Payment success
-        }, 2000);
+        // Payment logic would go here
+        setError("Paid webinars require a payment integration. Please contact support.");
+        setLoading(false);
       } else {
-        // Free registration
+        // 2. Insert registration
         const { error: insertError } = await supabase
           .from('webinar_registrations')
           .insert([
             {
               webinar_id: webinar.id,
               user_id: user.id,
-              attended: false
+              email: formData.email,
+              attended: false,
+              payment_status: 'completed'
             }
           ]);
 
         if (insertError) throw insertError;
 
-        // Update registration count
-        await supabase
+        // 3. Update webinar registration count
+        const { error: updateError } = await supabase
           .from('webinars')
-          .update({ registration_count: webinar.registration_count + 1 })
+          .update({ 
+            registration_count: (webinar.registration_count || 0) + 1 
+          })
           .eq('id', webinar.id);
+
+        if (updateError) console.error("Could not update count:", updateError);
 
         setLoading(false);
         setStep(3); // Success
       }
-    } catch (err: unknown) {
-      const error = err as Error;
-      console.error("Registration error:", error);
-      setError(error.message || "Failed to register. Please try again.");
+    } catch (err: any) {
+      console.error("Registration error:", err);
+      setError(err.message || "Failed to register. Please try again.");
       setLoading(false);
     }
   };

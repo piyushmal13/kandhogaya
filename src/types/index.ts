@@ -238,3 +238,14 @@ export interface BotLicense {
   expires_at?: string;
   created_at: string;
 }
+
+export interface WebinarRegistration {
+  id: string;
+  webinar_id: string;
+  user_id: string;
+  email?: string;
+  attended: boolean;
+  payment_status: string;
+  payment_id?: string;
+  created_at: string;
+}

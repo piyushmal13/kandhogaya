@@ -6,12 +6,13 @@ import {
   MessageSquare, Send, Share2, Download, 
   Play, Volume2, Maximize2, Star, Zap, ShieldCheck, BarChart3
 } from "lucide-react";
-import { getWebinarById } from "../services/apiHandlers";
+import { getWebinarById, checkWebinarRegistration } from "../services/apiHandlers";
 import { AttendeeFeed } from "../components/webinars/AttendeeFeed";
 import { RegistrationModal } from "../components/webinars/RegistrationModal";
 import { CountdownTimer } from "../components/webinars/CountdownTimer";
 import { ExitIntentPopup } from "../components/webinars/ExitIntentPopup";
 import { PageMeta } from "../components/site/PageMeta";
+import { useAuth } from "../contexts/AuthContext";
 
 export const WebinarDetail = () => {
   const { id } = useParams();
@@ -23,6 +24,7 @@ export const WebinarDetail = () => {
   const [newMessage, setNewMessage] = useState("");
   const [activeTab, setActiveTab] = useState("chat"); // chat, agenda, resources
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchWebinar = async () => {
@@ -30,15 +32,17 @@ export const WebinarDetail = () => {
       const data = await getWebinarById(id);
       if (data) {
         setWebinar(data);
-        // Check if user is registered (mock check for now, or use local storage)
-        const registered = localStorage.getItem(`webinar_reg_${id}`);
-        if (registered) setIsRegistered(true);
+        // Check if user is registered in Supabase
+        if (user) {
+          const registered = await checkWebinarRegistration(id, user.id);
+          setIsRegistered(registered);
+        }
       }
       setLoading(false);
     };
 
     fetchWebinar();
-  }, [id]);
+  }, [id, user]);
 
   useEffect(() => {
     if (chatEndRef.current) {
