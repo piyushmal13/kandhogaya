@@ -1,6 +1,6 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { motion } from "motion/react";
-import { Zap, Wifi, Activity, ArrowRight, Clock, AlertCircle, CheckCircle2 } from "lucide-react";
+import { Zap, Activity, Clock, AlertCircle, CheckCircle2 } from "lucide-react";
 
 // 3 Active, 1 Pending
 const trades = [
@@ -51,7 +51,7 @@ const monthlyResults = Array.from({ length: 36 }).map((_, i) => {
   
   return {
     month: `M${i + 1}`,
-    value: parseFloat(value),
+    value: Number.parseFloat(value),
     isPositive
   };
 });
@@ -79,7 +79,7 @@ export const LiveAlgoTerminal = () => {
                 <div>
                   <div className="text-white font-bold text-sm">LIVE TERMINAL</div>
                   <div className="flex items-center gap-1.5 text-[10px] font-mono text-emerald-500">
-                    <span className="relative flex h-1.5 w-1.5">
+                    <span className="relative flex h-1.5 w-1.5 mr-1.5">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                       <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
                     </span>
@@ -95,38 +95,40 @@ export const LiveAlgoTerminal = () => {
 
             {/* Trades List */}
             <div className="space-y-3 flex-1 overflow-y-auto max-h-[300px] pr-1 custom-scrollbar">
-              {trades.map((trade, i) => (
-                <div key={i} className="bg-white/[0.02] border border-white/5 rounded-lg p-3 hover:bg-white/[0.04] transition-colors group">
-                  <div className="flex justify-between items-start mb-2">
-                    <div className="flex items-center gap-2">
-                      <span className="text-white font-bold text-sm">{trade.pair}</span>
-                      <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${trade.type === 'LONG' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'}`}>
-                        {trade.type}
+              {trades.map((trade) => {
+                const isPositive = trade.pl.startsWith('+');
+                const plColor = trade.status === 'PENDING' ? 'text-gray-500' : (isPositive ? 'text-emerald-400' : 'text-red-400');
+                
+                return (
+                  <div key={trade.pair} className="bg-white/[0.02] border border-white/5 rounded-lg p-3 hover:bg-white/[0.04] transition-colors group">
+                    <div className="flex justify-between items-start mb-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-white font-bold text-sm">{trade.pair}</span>
+                        <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${trade.type === 'LONG' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'}`}>
+                          {trade.type}
+                        </span>
+                      </div>
+                      <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1 ${
+                        trade.status === 'ACTIVE' 
+                          ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20' 
+                          : 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20'
+                      }`}>
+                        {trade.status === 'ACTIVE' ? <CheckCircle2 className="w-2 h-2" /> : <AlertCircle className="w-2 h-2" />}
+                        {trade.status}
                       </span>
                     </div>
-                    <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1 ${
-                      trade.status === 'ACTIVE' 
-                        ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20' 
-                        : 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20'
-                    }`}>
-                      {trade.status === 'ACTIVE' ? <CheckCircle2 className="w-2 h-2" /> : <AlertCircle className="w-2 h-2" />}
-                      {trade.status}
-                    </span>
-                  </div>
-                  
-                  <div className="flex justify-between items-end">
-                    <div className="text-[10px] text-gray-500 font-mono flex items-center gap-1">
-                      <Clock className="w-2.5 h-2.5" /> {trade.time}
-                    </div>
-                    <div className={`text-sm font-bold font-mono ${
-                      trade.status === 'PENDING' ? 'text-gray-500' : 
-                      trade.pl.startsWith('+') ? 'text-emerald-400' : 'text-red-400'
-                    }`}>
-                      {trade.pl}
+                    
+                    <div className="flex justify-between items-end">
+                      <div className="text-[10px] text-gray-500 font-mono flex items-center gap-1">
+                        <Clock className="w-2.5 h-2.5" /> {trade.time}
+                      </div>
+                      <div className={`text-sm font-bold font-mono ${plColor}`}>
+                        {trade.pl}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </motion.div>
 
@@ -156,7 +158,7 @@ export const LiveAlgoTerminal = () => {
             <div className="grid grid-cols-6 sm:grid-cols-9 md:grid-cols-12 gap-1.5 md:gap-2">
               {monthlyResults.map((month, i) => (
                 <motion.div
-                  key={i}
+                  key={month.month}
                   initial={{ opacity: 0, scale: 0.8 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
