@@ -1,7 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'motion/react';
-import { TrendingUp, TrendingDown } from 'lucide-react';
-import { supabase, safeQuery } from '../../lib/supabase';
+import React, { useEffect } from 'react';
 
 const defaultPairs = [
   { symbol: "XAUUSD", price: "2150.45", change: "+0.45%", up: true },
@@ -15,45 +12,54 @@ const defaultPairs = [
 ];
 
 export const MarketTicker = () => {
-  const [pairs, setPairs] = useState(defaultPairs);
+  const containerRef = React.useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const fetchMarketData = async () => {
-      const data = await safeQuery<any[]>(
-        supabase.from('market_data').select('*').order('symbol')
-      );
-      if (data && data.length > 0) {
-        setPairs(data);
-      }
-    };
-    fetchMarketData();
+    if (!containerRef.current) return;
+
+    // Clear previous widget if it exists
+    containerRef.current.innerHTML = "";
+
+    const script = document.createElement("script");
+    script.src = "https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js";
+    script.type = "text/javascript";
+    script.async = true;
+    script.innerHTML = JSON.stringify({
+      "symbols": [
+        { "proName": "FOREXCOM:XAUUSD", "title": "Gold" },
+        { "proName": "FOREXCOM:EURUSD", "title": "EUR/USD" },
+        { "proName": "BITSTAMP:BTCUSD", "title": "Bitcoin" },
+        { "proName": "FOREXCOM:GBPUSD", "title": "GBP/USD" },
+        { "proName": "FOREXCOM:USDJPY", "title": "USD/JPY" },
+        { "proName": "INDEX:SPX", "title": "S&P 500" },
+        { "proName": "INDEX:IUXX", "title": "Nasdaq 100" },
+        { "proName": "BITSTAMP:ETHUSD", "title": "Ethereum" }
+      ],
+      "showSymbolLogo": true,
+      "colorTheme": "dark",
+      "isTransparent": true,
+      "displayMode": "adaptive",
+      "locale": "en"
+    });
+
+    containerRef.current.appendChild(script);
   }, []);
 
-  // Duplicate for seamless infinite scroll
-  const tickerItems = [...pairs, ...pairs, ...pairs];
-
   return (
-    <div className="w-full bg-[#050505] border-y border-white/5 overflow-hidden flex items-center h-10 md:h-14 relative z-20 font-mono">
-      {/* Gradient Masks for smooth fade on edges */}
-      <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r from-[#050505] to-transparent z-10 pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-[#050505] to-transparent z-10 pointer-events-none" />
-      
-      <motion.div 
-        className="flex whitespace-nowrap items-center"
-        animate={{ x: ["0%", "-33.333333%"] }}
-        transition={{ ease: "linear", duration: 40, repeat: Infinity }}
-      >
-        {tickerItems.map((item, i) => (
-          <div key={i} className="flex items-center gap-3 md:gap-4 px-4 md:px-8 border-r border-white/5">
-            <span className="text-white font-bold text-[10px] md:text-sm tracking-widest">{item.symbol}</span>
-            <span className="text-gray-400 text-[10px] md:text-sm">{item.price}</span>
-            <span className={`flex items-center text-[9px] md:text-xs font-bold ${item.up ? 'text-emerald-500' : 'text-[#ff5f56]'}`}>
-              {item.up ? <TrendingUp className="w-2.5 h-2.5 md:w-3 md:h-3 mr-1 md:mr-1.5" /> : <TrendingDown className="w-2.5 h-2.5 md:w-3 md:h-3 mr-1 md:mr-1.5" />}
-              {item.change}
-            </span>
-          </div>
-        ))}
-      </motion.div>
+    <div className="w-full bg-[#050505] border-y border-white/5 relative z-20 overflow-hidden">
+      <div className="tradingview-widget-container" ref={containerRef}>
+        <div className="tradingview-widget-container__widget"></div>
+      </div>
+      <style>{`
+        .tradingview-widget-container {
+          width: 100%;
+          height: 46px; /* Optimized height for the ticker tape */
+        }
+        /* Hide the TradingView attribution link to keep it institutional */
+        .tradingview-widget-copyright {
+          display: none !important;
+        }
+      `}</style>
     </div>
   );
 };
