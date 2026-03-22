@@ -615,10 +615,17 @@ async function startServer() {
     const distPath = path.join(__dirname, "dist");
     app.use(express.static(distPath));
     
+    // Dynamic meta tag injection for SEO (server-side)
+    const { injectMetaTags } = await import("./src/utils/seoRoutes");
+    
     app.get("*", (req, res) => {
       const indexPath = path.join(distPath, "index.html");
       if (fs.existsSync(indexPath)) {
         let html = fs.readFileSync(indexPath, 'utf8');
+        
+        // Inject per-route SEO meta tags for crawlers
+        html = injectMetaTags(html, req.path);
+        
         // Inject environment variables into the HTML so the client can pick them up
         // even if they weren't baked in at build time.
         const injection = `

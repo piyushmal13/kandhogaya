@@ -5,8 +5,10 @@ import { Link } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
 import { CountdownTimer } from "./CountdownTimer";
 
+import { Webinar } from '../../types';
+
 export const WebinarBanner = () => {
-  const [nextWebinar, setNextWebinar] = useState<any>(null);
+  const [nextWebinar, setNextWebinar] = useState<Webinar | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

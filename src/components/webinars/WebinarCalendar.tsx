@@ -2,8 +2,10 @@ import React from "react";
 import { motion } from "motion/react";
 import { Calendar, Clock, ArrowRight } from "lucide-react";
 
+import { Webinar } from '../../types';
+
 interface WebinarCalendarProps {
-  webinars: any[];
+  webinars: Webinar[];
 }
 
 export const WebinarCalendar = ({ webinars }: WebinarCalendarProps) => {

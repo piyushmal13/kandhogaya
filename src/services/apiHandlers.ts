@@ -1,5 +1,5 @@
 import { supabase, safeQuery } from "../lib/supabase";
-import { Webinar, Blog, Product, Course } from "../types";
+import { Webinar, Blog, Product, Course, Signal } from "../types";
 
 /**
  * API Handlers Service
@@ -35,7 +35,7 @@ export const getWebinarById = async (id: string) => {
 // --- SIGNALS ---
 
 export const getSignals = async () => {
-  return safeQuery<any[]>(
+  return safeQuery<Signal[]>(
     supabase
       .from("signals")
       .select("*")
@@ -138,14 +138,14 @@ export const checkUserAccess = async (userId: string, itemId: string) => {
 
 // --- REALTIME ---
 
-export const subscribeToSignals = (callback: (payload: any) => void) => {
+export const subscribeToSignals = (callback: (payload: unknown) => void) => {
   return supabase
     .channel('public:signals')
     .on('postgres_changes', { event: '*', schema: 'public', table: 'signals' }, callback)
     .subscribe();
 };
 
-export const subscribeToWebinars = (callback: (payload: any) => void) => {
+export const subscribeToWebinars = (callback: (payload: unknown) => void) => {
   return supabase
     .channel('public:webinars')
     .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'webinars' }, callback)

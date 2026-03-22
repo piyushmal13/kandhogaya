@@ -11,17 +11,18 @@ import { ExitIntentPopup } from "../components/webinars/ExitIntentPopup";
 import { PageHero } from "../components/site/PageHero";
 import { PageMeta } from "../components/site/PageMeta";
 import { PageSection } from "../components/site/PageSection";
+import { Webinar } from "../types";
 
 export const Webinars = () => {
-  const [webinars, setWebinars] = useState<any[]>([]);
+  const [webinars, setWebinars] = useState<Webinar[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedWebinar, setSelectedWebinar] = useState<any | null>(null);
+  const [selectedWebinar, setSelectedWebinar] = useState<Webinar | null>(null);
 
   useEffect(() => {
     fetchWebinars();
   }, []);
 
-  const handleRegisterClick = (webinar: any) => {
+  const handleRegisterClick = (webinar: Webinar) => {
     setSelectedWebinar(webinar);
   };
 

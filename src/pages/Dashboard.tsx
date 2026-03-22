@@ -6,9 +6,18 @@ import { supabase, safeQuery } from "../lib/supabase";
 import { cn } from "../utils/cn";
 import { Link } from "react-router-dom";
 
+interface BotLicense {
+  id: string;
+  user_id: string;
+  expires_at: string;
+  license_key: string;
+  is_active: boolean;
+  algo_bots?: { name: string };
+}
+
 export const Dashboard = () => {
   const { user, userProfile } = useAuth();
-  const [licenses, setLicenses] = useState<any[]>([]);
+  const [licenses, setLicenses] = useState<BotLicense[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -94,7 +103,7 @@ export const Dashboard = () => {
                 )}
                 
                 {licenses.length > 0 ? (
-                  licenses.map((license: any) => (
+                  licenses.map((license) => (
                     <div key={license.id} className="flex items-center justify-between p-4 bg-black rounded-xl border border-white/5">
                       <div className="flex items-center gap-4">
                         <ShieldCheck className="text-emerald-500" />

@@ -71,25 +71,26 @@ export const reinitializeSupabase = (url: string, key: string) => {
   Object.assign(supabase, newClient);
 };
 
-export const safeQuery = async <T>(query: any): Promise<T | []> => {
+export const safeQuery = async <T>(query: unknown): Promise<T | []> => {
   try {
-    const { data, error } = await query;
+    const { data, error } = await (query as Promise<{data: T, error: any}>);
     if (error) {
       // Handle "Failed to fetch" which is usually a network/ad-blocker issue
-      if (error.message === 'Failed to fetch' || (error as any).name === 'TypeError') {
+      if (error.message === 'Failed to fetch' || error.name === 'TypeError') {
         console.error("[Supabase Connection Error]: Failed to reach Supabase. This is likely due to an ad-blocker, VPN, or the project being paused.");
       } else {
         console.error("[Supabase Error]:", error.message);
       }
-      return [] as any;
+      return [];
     }
-    return data || [] as any;
-  } catch (err: any) {
-    if (err.message === 'Failed to fetch' || err.name === 'TypeError') {
+    return data || [];
+  } catch (err: unknown) {
+    const error = err as Error;
+    if (error.message === 'Failed to fetch' || error.name === 'TypeError') {
       console.error("[Supabase Network Exception]: Connection failed. Check your internet or ad-blocker.");
     } else {
-      console.error("[Database Exception]:", err);
+      console.error("[Database Exception]:", error);
     }
-    return [] as any;
+    return [];
   }
 };

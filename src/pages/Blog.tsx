@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { Calendar, Clock, ArrowRight, Video, Download, Search, Filter } from "lucide-react";
@@ -7,9 +7,12 @@ import { getBlogPosts } from "../services/apiHandlers";
 import { PageHero } from "../components/site/PageHero";
 import { PageMeta } from "../components/site/PageMeta";
 import { PageSection } from "../components/site/PageSection";
+import { BlogCardSkeleton } from "../components/ui/Skeleton";
+import { breadcrumbSchema } from "../utils/structuredData";
+import { Blog as BlogPost } from "../types";
 
 export const Blog = () => {
-  const [posts, setPosts] = useState<any[]>([]);
+  const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
@@ -17,7 +20,7 @@ export const Blog = () => {
   const observer = useRef<IntersectionObserver | null>(null);
   const PAGE_SIZE = 9;
 
-  const lastPostElementRef = useCallback((node: any) => {
+  const lastPostElementRef = useCallback((node: HTMLDivElement | null) => {
     if (loading) return;
     if (observer.current) observer.current.disconnect();
     observer.current = new IntersectionObserver(entries => {
@@ -56,10 +59,14 @@ export const Blog = () => {
   return (
     <div className="relative overflow-hidden pb-20">
       <PageMeta
-        title="Market Insights"
-        description="Read IFXTrades research on forex, gold, macro structure, and execution workflows from the institutional analysis desk."
+        title="Market Insights & Trading Analysis"
+        description="Read IFXTrades research on forex, gold, macro structure, and execution workflows from the institutional analysis desk. Daily market insights."
         path="/blog"
-        keywords={["trading blog", "forex market analysis", "gold market insights"]}
+        keywords={["trading blog", "forex market analysis", "gold market insights", "trading research", "market commentary"]}
+        structuredData={breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Market Insights", path: "/blog" },
+        ])}
       />
 
       <PageHero
@@ -97,7 +104,7 @@ export const Blog = () => {
       <PageSection className="pt-0">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           <AnimatePresence mode="popLayout">
-            {posts.map((post: any, index: number) => (
+            {posts.map((post: BlogPost, index: number) => (
               <motion.div
                 key={post.id}
                 ref={index === posts.length - 1 ? lastPostElementRef : null}
@@ -158,17 +165,25 @@ export const Blog = () => {
           </AnimatePresence>
         </div>
 
-        {loading ? (
-          <div className="mt-12 flex justify-center">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-emerald-300 border-t-transparent" />
+        {loading && posts.length === 0 && (
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <BlogCardSkeleton key={i} />
+            ))}
           </div>
-        ) : null}
+        )}
 
-        {!loading && posts.length === 0 ? (
+        {loading && posts.length > 0 && (
+          <div className="mt-12 flex justify-center">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-[var(--accent)] border-t-transparent" />
+          </div>
+        )}
+
+        {!loading && posts.length === 0 && (
           <div className="py-20 text-center">
             <p className="text-slate-500">No analysis found matching your search.</p>
           </div>
-        ) : null}
+        )}
       </PageSection>
     </div>
   );

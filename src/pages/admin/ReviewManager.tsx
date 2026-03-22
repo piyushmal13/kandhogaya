@@ -65,8 +65,9 @@ export const ReviewManager = () => {
       
       setEditingId(null);
       fetchReviews();
-    } catch (error: any) {
-      alert("Error updating review: " + error.message);
+    } catch (error: unknown) {
+      const err = error as Error;
+      alert("Error updating review: " + err.message);
     }
     setLoading(false);
   };
@@ -87,8 +88,9 @@ export const ReviewManager = () => {
       }
       
       fetchReviews();
-    } catch (error: any) {
-      alert("Error deleting review: " + error.message);
+    } catch (error: unknown) {
+      const err = error as Error;
+      alert("Error deleting review: " + err.message);
     }
   };
 
@@ -122,8 +124,9 @@ export const ReviewManager = () => {
       }
       
       fetchReviews();
-    } catch (error: any) {
-      alert("Error creating review: " + error.message);
+    } catch (error: unknown) {
+      const err = error as Error;
+      alert("Error creating review: " + err.message);
     }
   };
 

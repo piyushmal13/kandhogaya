@@ -58,7 +58,7 @@ export const Navbar = () => {
       <nav className="fixed inset-x-0 top-3 z-50 px-4 sm:px-6">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between rounded-full border border-white/10 bg-slate-950/72 px-4 shadow-[0_18px_60px_rgba(0,0,0,0.28)] backdrop-blur-xl sm:px-6">
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 overflow-hidden">
               <img
                 src={BRANDING.logoUrl}
                 alt={`${BRANDING.name} Logo`}
@@ -165,8 +165,8 @@ export const Navbar = () => {
             >
               <div className="mb-5 flex items-center justify-between">
                 <Link to="/" onClick={() => setIsOpen(false)} className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5">
-                    <img src={BRANDING.logoUrl} alt={BRANDING.name} className="h-7 w-7 object-contain" />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 overflow-hidden">
+                    <img src={BRANDING.logoUrl} alt={BRANDING.name} className="h-7 w-7 object-contain rounded-sm" />
                   </div>
                   <div>
                     <div className="text-sm font-semibold tracking-[0.22em] text-white">{BRANDING.shortName}</div>

@@ -1,0 +1,16 @@
+﻿src/components/home/WebinarPromo.tsx(25,30): error TS2339: Property 'new' does not exist on type 'unknown'.
+src/components/home/WebinarPromo.tsx(26,28): error TS2339: Property 'new' does not exist on type 'unknown'.
+src/components/signals/LiveSignalsFeed.tsx(33,19): error TS2339: Property 'eventType' does not exist on type 'unknown'.
+src/components/signals/LiveSignalsFeed.tsx(34,39): error TS2339: Property 'new' does not exist on type 'unknown'.
+src/components/signals/LiveSignalsFeed.tsx(35,26): error TS2339: Property 'eventType' does not exist on type 'unknown'.
+src/components/signals/LiveSignalsFeed.tsx(37,45): error TS2339: Property 'new' does not exist on type 'unknown'.
+src/components/signals/LiveSignalsFeed.tsx(37,63): error TS2339: Property 'new' does not exist on type 'unknown'.
+src/components/signals/LiveSignalsFeed.tsx(39,26): error TS2339: Property 'eventType' does not exist on type 'unknown'.
+src/components/signals/LiveSignalsFeed.tsx(40,66): error TS2339: Property 'old' does not exist on type 'unknown'.
+src/components/webinars/WebinarPromoInline.tsx(78,32): error TS2339: Property 'duration' does not exist on type 'Webinar'.
+src/pages/Blog.tsx(116,41): error TS2339: Property 'slug' does not exist on type 'Blog'.
+src/pages/Blog.tsx(120,35): error TS2339: Property 'metadata' does not exist on type 'Blog'.
+src/pages/Blog.tsx(120,95): error TS2339: Property 'slug' does not exist on type 'Blog'.
+src/pages/Blog.tsx(126,31): error TS2339: Property 'metadata' does not exist on type 'Blog'.
+src/pages/Blog.tsx(131,31): error TS2339: Property 'metadata' does not exist on type 'Blog'.
+src/pages/Blog.tsx(141,40): error TS2339: Property 'published_at' does not exist on type 'Blog'.

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { BookOpen, Clock, GraduationCap, PlayCircle } from "lucide-react";
 import { motion } from "motion/react";
 import { Link } from "react-router-dom";
+import { CourseCardSkeleton } from "../components/ui/Skeleton";
+import { breadcrumbSchema, courseSchema } from "../utils/structuredData";
 
 import { PageHero } from "../components/site/PageHero";
 import { PageMeta } from "../components/site/PageMeta";
@@ -47,12 +49,19 @@ export const Academy = () => {
 
   return (
     <div className="relative overflow-hidden pb-16">
-      <PageMeta
-        title="Academy"
-        description="Explore the IFXTrades Academy for structured trader education across forex, gold, and algorithmic execution workflows."
-        path="/academy"
-        keywords={["trading academy", "forex education", "algo trading course"]}
-      />
+        <PageMeta
+          title="Trading Academy"
+          description="Explore the IFXTrades Academy for structured trader education across forex, gold, and algorithmic execution workflows. Learn at your own pace."
+          path="/academy"
+          keywords={["trading academy", "forex education", "algo trading course", "online trading courses", "forex learning"]}
+          structuredData={[
+            breadcrumbSchema([
+              { name: "Home", path: "/" },
+              { name: "Academy", path: "/academy" },
+            ]),
+            ...(courses.length > 0 ? courses.map(courseSchema) : []),
+          ]}
+        />
 
       <PageHero
         eyebrow="Trader Development"
@@ -99,11 +108,10 @@ export const Academy = () => {
         />
 
         {loading ? (
-          <div className="site-panel flex min-h-[260px] items-center justify-center">
-            <div className="flex items-center gap-4 text-sm font-semibold uppercase tracking-[0.28em] text-slate-400">
-              <div className="h-10 w-10 animate-spin rounded-full border-2 border-emerald-300/30 border-t-emerald-200" />
-              Loading courses
-            </div>
+          <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <CourseCardSkeleton key={i} />
+            ))}
           </div>
         ) : null}
 

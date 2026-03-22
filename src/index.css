@@ -1,6 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Cormorant+Garamond:wght@500;600;700&display=swap");
 @import "tailwindcss";
 
+/* ═══════════════════════════════════════════════════
+   DESIGN TOKEN SYSTEM — IFXTrades
+   All colors, spacing, and effects are defined here.
+   Never hardcode values in components.
+   ═══════════════════════════════════════════════════ */
+
 @theme {
   --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
@@ -9,13 +15,52 @@
 
 @layer base {
   :root {
-    --canvas-950: #050816;
-    --panel-border: rgba(255, 255, 255, 0.08);
-    --panel-border-strong: rgba(131, 255, 200, 0.16);
-    --text-strong: #f3fbff;
-    --text-muted: #9fb0c5;
+    /* ── Background Scale (3 semantic levels) ── */
+    --bg-base: #050816;
+    --bg-raised: #0a1120;
+    --bg-surface: #0f1a2e;
+
+    /* ── Border Scale ── */
+    --border-default: rgba(255, 255, 255, 0.08);
+    --border-emphasis: rgba(131, 255, 200, 0.16);
+    --border-hover: rgba(255, 255, 255, 0.14);
+
+    /* ── Text Scale ── */
+    --text-primary: #f3fbff;
+    --text-secondary: #c7d3e1;
+    --text-muted: #7a8ea3;
+
+    /* ── Accent Scale ── */
     --accent: #58f2b6;
-    --accent-strong: #8df6cf;
+    --accent-hover: #8df6cf;
+    --accent-subtle: rgba(88, 242, 182, 0.12);
+    --accent-fg: #051119;
+
+    /* ── Semantic Colors ── */
+    --success: #34d399;
+    --warning: #fbbf24;
+    --danger: #f87171;
+    --info: #60a5fa;
+
+    /* ── Spacing Scale (Section / Content) ── */
+    --space-section: 6rem;
+    --space-section-sm: 4rem;
+    --space-content: 4rem;
+    --space-content-sm: 2rem;
+
+    /* ── Radius Scale ── */
+    --radius-card: 1.75rem;
+    --radius-panel: 1.5rem;
+    --radius-button: 0.875rem;
+    --radius-pill: 999px;
+    --radius-input: 1rem;
+
+    /* ── Shadow Scale ── */
+    --shadow-card: 0 30px 80px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    --shadow-panel: 0 18px 44px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    --shadow-glow: 0 16px 40px rgba(88, 242, 182, 0.18);
+    --shadow-float: 0 24px 60px rgba(0, 0, 0, 0.35);
+
     color-scheme: dark;
   }
 
@@ -25,12 +70,12 @@
 
   body {
     min-height: 100vh;
-    background-color: var(--canvas-950);
+    background-color: var(--bg-base);
     background-image:
       radial-gradient(circle at top, rgba(88, 242, 182, 0.16), transparent 26%),
       radial-gradient(circle at 82% 18%, rgba(77, 153, 255, 0.14), transparent 24%),
       linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 16%);
-    color: var(--text-strong);
+    color: var(--text-primary);
     @apply antialiased overflow-x-hidden;
   }
 
@@ -53,19 +98,18 @@
   }
 
   * {
-    border-color: rgba(255, 255, 255, 0.08);
+    border-color: var(--border-default);
   }
 
   ::selection {
     background: rgba(88, 242, 182, 0.32);
-    color: #051119;
+    color: var(--accent-fg);
   }
 
-  h1,
-  h2,
-  h3,
-  h4 {
-    @apply font-sans font-semibold tracking-tight text-white;
+  /* ── Heading Scale ── */
+  h1, h2, h3, h4 {
+    @apply font-sans font-semibold tracking-tight;
+    color: var(--text-primary);
   }
 
   h1 { @apply text-3xl sm:text-5xl md:text-7xl lg:text-8xl; }
@@ -73,9 +117,10 @@
   h3 { @apply text-xl sm:text-2xl md:text-3xl; }
 
   p {
-    color: var(--text-muted);
+    color: var(--text-secondary);
   }
 
+  /* ── Focus Ring ── */
   a:focus-visible,
   button:focus-visible,
   input:focus-visible,
@@ -84,22 +129,45 @@
     outline: 2px solid var(--accent);
     outline-offset: 3px;
   }
+
+  /* ── Skip-to-Content (Accessibility) ── */
+  .skip-to-content {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 9999;
+    padding: 0.75rem 1.5rem;
+    background: var(--accent);
+    color: var(--accent-fg);
+    font-weight: 700;
+    font-size: 0.875rem;
+    border-radius: 0 0 var(--radius-button) var(--radius-button);
+  }
+
+  .skip-to-content:focus {
+    left: 50%;
+    transform: translateX(-50%);
+  }
 }
 
 @layer components {
+  /* ── Scrollbar ── */
   .custom-scrollbar::-webkit-scrollbar {
     width: 4px;
     height: 4px;
   }
-
   .custom-scrollbar::-webkit-scrollbar-track {
     @apply bg-transparent;
   }
-
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-white/10 rounded-full hover:bg-white/20 transition-colors;
+    @apply rounded-full;
+    background: rgba(255, 255, 255, 0.1);
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
   }
 
+  /* ── Grid Backdrop ── */
   .site-grid {
     background-image:
       linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
@@ -108,30 +176,29 @@
     mask-image: radial-gradient(circle at center, black, transparent 78%);
   }
 
+  /* ── Panel (Primary Card) ── */
   .site-panel {
-    border: 1px solid var(--panel-border-strong);
-    border-radius: 1.75rem;
+    border: 1px solid var(--border-emphasis);
+    border-radius: var(--radius-card);
     background:
       linear-gradient(180deg, rgba(15, 25, 40, 0.82), rgba(6, 12, 22, 0.92)),
       linear-gradient(135deg, rgba(88, 242, 182, 0.08), transparent 40%);
-    box-shadow:
-      0 30px 80px rgba(0, 0, 0, 0.32),
-      inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    box-shadow: var(--shadow-card);
     backdrop-filter: blur(24px);
   }
 
+  /* ── Panel Muted (Secondary Card) ── */
   .site-panel-muted {
-    border: 1px solid var(--panel-border);
-    border-radius: 1.5rem;
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-panel);
     background: linear-gradient(180deg, rgba(10, 20, 34, 0.72), rgba(7, 12, 22, 0.9));
-    box-shadow:
-      0 18px 44px rgba(0, 0, 0, 0.24),
-      inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    box-shadow: var(--shadow-panel);
     backdrop-filter: blur(16px);
   }
 
+  /* ── Pill / Badge ── */
   .site-pill {
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     border: 1px solid rgba(255, 255, 255, 0.1);
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
     box-shadow:
@@ -140,6 +207,7 @@
     backdrop-filter: blur(12px);
   }
 
+  /* ── Gradient Title ── */
   .site-title-gradient {
     background-image: linear-gradient(135deg, #fbfdff 0%, #a5f8d9 38%, #74e0ff 100%);
     -webkit-background-clip: text;
@@ -147,8 +215,9 @@
     color: transparent;
   }
 
+  /* ── Prose / Copy Styles ── */
   .site-copy {
-    color: #d3dceb;
+    color: var(--text-secondary);
   }
 
   .site-copy h1,
@@ -161,14 +230,14 @@
   .prose h4 {
     margin-top: 1.5em;
     margin-bottom: 0.7em;
-    color: white;
+    color: var(--text-primary);
     line-height: 1.15;
   }
 
   .site-copy p,
   .prose p {
     margin: 1em 0;
-    color: #c7d3e1;
+    color: var(--text-secondary);
     line-height: 1.85;
   }
 
@@ -178,7 +247,7 @@
   .prose ol {
     margin: 1em 0;
     padding-left: 1.4rem;
-    color: #c7d3e1;
+    color: var(--text-secondary);
   }
 
   .site-copy li,
@@ -188,20 +257,20 @@
 
   .site-copy strong,
   .prose strong {
-    color: white;
+    color: var(--text-primary);
     font-weight: 600;
   }
 
   .site-copy a,
   .prose a {
-    color: var(--accent-strong);
+    color: var(--accent-hover);
   }
 
   .site-copy blockquote,
   .prose blockquote {
     margin: 1.5rem 0;
     border-left: 3px solid rgba(88, 242, 182, 0.4);
-    background: rgba(88, 242, 182, 0.06);
+    background: var(--accent-subtle);
     padding: 1rem 1.25rem;
     color: #d8edf3;
   }
@@ -213,5 +282,32 @@
     padding: 0.15rem 0.4rem;
     font-family: var(--font-mono);
     font-size: 0.88em;
+  }
+
+  /* ── Skeleton Loading ── */
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.04) 25%,
+      rgba(255, 255, 255, 0.08) 50%,
+      rgba(255, 255, 255, 0.04) 75%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.8s ease-in-out infinite;
+    border-radius: var(--radius-button);
+  }
+
+  @keyframes skeleton-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+}
+
+/* ── Reduced Motion Support ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

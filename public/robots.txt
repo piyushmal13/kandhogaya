@@ -1,2 +1,8 @@
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /agent
+Disallow: /dashboard
+Disallow: /api/
+
+Sitemap: https://ifxtrades.com/sitemap.xml

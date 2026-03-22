@@ -5,8 +5,11 @@ import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../contexts/AuthContext";
 import { Link } from "react-router-dom";
 
+import { Webinar } from '../../types';
+
 interface RegistrationModalProps {
-  webinar: any;
+  isOpen?: boolean;
+  webinar: Webinar;
   onClose: () => void;
   onSuccess: () => void;
 }
@@ -97,9 +100,10 @@ export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationM
         setLoading(false);
         setStep(3); // Success
       }
-    } catch (err: any) {
-      console.error("Registration error:", err);
-      setError(err.message || "Failed to register. Please try again.");
+    } catch (err: unknown) {
+      const error = err as Error;
+      console.error("Registration error:", error);
+      setError(error.message || "Failed to register. Please try again.");
       setLoading(false);
     }
   };

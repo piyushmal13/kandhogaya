@@ -6,8 +6,21 @@ import {
 import { Users, ShieldCheck, ShoppingCart, Zap, TrendingUp, DollarSign } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 
-export const Overview = ({ stats }: { stats: any }) => {
-  const [chartData, setChartData] = useState<any[]>([]);
+interface OverviewStats {
+  total_users?: number;
+  active_subscriptions?: number;
+  revenue_mtd?: number;
+  signal_accuracy?: string;
+}
+
+interface ChartData {
+  name: string;
+  revenue: number;
+  users: number;
+}
+
+export const Overview = ({ stats }: { stats: OverviewStats }) => {
+  const [chartData, setChartData] = useState<ChartData[]>([]);
 
   useEffect(() => {
     // Generate some realistic looking chart data based on current month

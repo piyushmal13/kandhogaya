@@ -21,7 +21,7 @@ export const WebinarPromo = () => {
 
     fetchNearestWebinar();
 
-    const subscription = subscribeToWebinars((payload) => {
+    const subscription = subscribeToWebinars((payload: any) => {
       if (webinar && payload.new.id === webinar.id) {
         setWebinar(payload.new);
       }

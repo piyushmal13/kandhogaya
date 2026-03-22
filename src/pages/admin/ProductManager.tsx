@@ -69,8 +69,9 @@ export const ProductManager = () => {
       
       setEditingId(null);
       fetchProducts();
-    } catch (error: any) {
-      alert("Error updating product: " + error.message);
+    } catch (error: unknown) {
+      const err = error as Error;
+      alert("Error updating product: " + err.message);
     }
     setLoading(false);
   };
@@ -91,8 +92,9 @@ export const ProductManager = () => {
       }
       
       fetchProducts();
-    } catch (error: any) {
-      alert("Error deleting product: " + error.message);
+    } catch (error: unknown) {
+      const err = error as Error;
+      alert("Error deleting product: " + err.message);
     }
   };
 
@@ -131,8 +133,9 @@ export const ProductManager = () => {
       }
       
       fetchProducts();
-    } catch (error: any) {
-      alert("Error creating product: " + error.message);
+    } catch (error: unknown) {
+      const err = error as Error;
+      alert("Error creating product: " + err.message);
     }
   };
 
@@ -205,7 +208,8 @@ export const ProductManager = () => {
                           try {
                             const parsed = JSON.parse(e.target.value);
                             setEditForm({...editForm, performance_data: parsed});
-                          } catch (err) {
+                          } catch (err: unknown) {
+      const error = err as Error;
                             // If invalid JSON, just store as string temporarily while typing
                             setEditForm({...editForm, performance_data: e.target.value as any});
                           }

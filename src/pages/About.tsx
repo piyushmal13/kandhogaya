@@ -4,6 +4,7 @@ import { PageHero } from "../components/site/PageHero";
 import { PageMeta } from "../components/site/PageMeta";
 import { PageSection, SectionHeading } from "../components/site/PageSection";
 import { Reveal } from "../components/site/Reveal";
+import { organizationSchema, breadcrumbSchema } from "../utils/structuredData";
 
 const values = [
   {
@@ -30,6 +31,13 @@ export const About = () => (
       description="Learn how IFXTrades combines institutional market structure, trader education, and algorithmic systems into one execution-focused platform."
       path="/about"
       keywords={["about IFXTrades", "institutional trading team", "algorithmic trading firm"]}
+      structuredData={[
+        organizationSchema(),
+        breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "About", path: "/about" },
+        ]),
+      ]}
     />
 
     <PageHero

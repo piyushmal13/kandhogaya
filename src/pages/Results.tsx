@@ -7,6 +7,7 @@ import { PageMeta } from "../components/site/PageMeta";
 import { PageSection, SectionHeading } from "../components/site/PageSection";
 import { Reveal } from "../components/site/Reveal";
 import { cn } from "../utils/cn";
+import { breadcrumbSchema } from "../utils/structuredData";
 
 const equityData = [
   { month: "Oct", pips: 4200 },
@@ -26,10 +27,14 @@ const stats = [
 export const Results = () => (
   <div className="relative overflow-hidden pb-16">
     <PageMeta
-      title="Results"
-      description="Review IFXTrades performance metrics, equity growth, and audited-style transparency across signals and systematic trading workflows."
+      title="Performance Results"
+      description="Review IFXTrades performance metrics, equity growth, and audited-style transparency across signals and systematic trading workflows. 82.4% win rate, 48,250+ pips generated."
       path="/results"
-      keywords={["trading performance", "forex results", "trading win rate"]}
+      keywords={["trading performance", "forex results", "trading win rate", "equity curve", "trading track record"]}
+      structuredData={breadcrumbSchema([
+        { name: "Home", path: "/" },
+        { name: "Results", path: "/results" },
+      ])}
     />
 
     <PageHero

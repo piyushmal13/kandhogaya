@@ -28,12 +28,14 @@ export default defineConfig(({mode}) => {
       hmr: process.env.DISABLE_HMR !== 'true',
     },
     build: {
-      chunkSizeWarningLimit: 2000,
+      chunkSizeWarningLimit: 600,
       rollupOptions: {
         output: {
           manualChunks: {
             'vendor-react': ['react', 'react-dom', 'react-router-dom'],
-            'vendor-utils': ['lucide-react', 'motion', 'recharts', 'd3'],
+            'vendor-motion': ['motion'],
+            'vendor-charts': ['recharts'],
+            'vendor-ui': ['lucide-react', 'clsx', 'tailwind-merge'],
           }
         }
       }

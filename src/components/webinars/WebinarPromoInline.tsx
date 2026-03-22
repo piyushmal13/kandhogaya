@@ -4,8 +4,10 @@ import { Calendar, Users, ArrowRight, Video, Timer } from "lucide-react";
 import { Link } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
 
+import { Webinar } from '../../types';
+
 export const WebinarPromoInline = () => {
-  const [nextWebinar, setNextWebinar] = useState<any>(null);
+  const [nextWebinar, setNextWebinar] = useState<Webinar | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
