@@ -124,7 +124,7 @@ const LiveSignalsFeed = () => {
 
 const RoboticCore = () => {
   // Floating particle animation variants (looping keyframes)
-  const floatAnim = {
+  const floatAnim: any = {
     animate: {
       y: [0, -12, 0],
       rotate: [0, 6, -6, 0],
