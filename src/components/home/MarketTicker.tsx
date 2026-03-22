@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
-import { TrendingUp, TrendingDown, Activity } from 'lucide-react';
+import { Activity } from 'lucide-react';
 
 interface MarketPair {
   symbol: string;
@@ -84,16 +84,17 @@ export const MarketTicker = () => {
   const tickerItems = [...pairs, ...pairs, ...pairs];
 
   return (
-    <div className="w-full bg-[#020617]/40 border-y border-white/5 overflow-hidden flex items-center h-10 md:h-12 relative z-20 font-mono backdrop-blur-md">
+    <div className="w-full bg-slate-950/40 border-y border-white/[0.03] overflow-hidden flex items-center h-11 md:h-14 relative z-20 font-mono backdrop-blur-xl">
       {/* Visual Status Indicator */}
       <div className="absolute left-4 z-30 flex items-center gap-2 pointer-events-none opacity-50 hidden sm:flex">
         <div className={`w-1.5 h-1.5 rounded-full ${isConnected ? 'bg-emerald-500 animate-pulse' : 'bg-red-500'}`} />
         <span className="text-[10px] font-bold text-slate-500 uppercase tracking-tighter">Live</span>
       </div>
 
-      {/* Edge Fades */}
-      <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-[#050816] to-transparent z-10 pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-[#050816] to-transparent z-10 pointer-events-none" />
+      {/* Edge Fades & Ambient Glow */}
+      <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-slate-950/90 via-slate-950/40 to-transparent z-10 pointer-events-none" />
+      <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-slate-950/90 via-slate-950/40 to-transparent z-10 pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(88,242,182,0.03),transparent_70%)] pointer-events-none" />
       
       <motion.div 
         className="flex whitespace-nowrap items-center"
@@ -102,21 +103,22 @@ export const MarketTicker = () => {
       >
         {tickerItems.map((item, i) => (
           <div key={`${item.symbol}-${i}`} className="flex items-center gap-3 md:gap-5 px-6 md:px-10 border-r border-white/5 transition-opacity duration-300">
-            <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-3">
-              <span className="text-white font-bold text-[11px] md:text-sm tracking-widest flex items-center gap-1.5">
-                <span className="text-[9px] text-slate-500 font-normal">#</span>
+            <div className="flex flex-col md:flex-row md:items-center gap-1.5 md:gap-4 group">
+              <span className="text-white font-bold text-[11px] md:text-[13px] tracking-[0.15em] flex items-center gap-2 group-hover:text-emerald-400 transition-colors">
+                <span className="text-[9px] text-slate-600 font-bold group-hover:text-emerald-500/50 transition-colors">/</span>
                 {item.baseSymbol}
               </span>
-              <div className="flex items-center gap-2">
-                <span className="text-slate-300 text-[10px] md:text-[13px] font-medium transition-all tabular-nums">
+              <div className="flex items-center gap-3">
+                <span className="text-slate-200 text-[10px] md:text-[14px] font-semibold tabular-nums tracking-wider">
                   {item.price}
                 </span>
-                <span className={`flex items-center text-[9px] md:text-[11px] font-bold px-1.5 py-0.5 rounded-md ${
-                  item.up ? 'text-emerald-400 bg-emerald-500/10' : 'text-red-400 bg-red-500/10'
+                <div className={`flex items-center text-[8px] md:text-[10px] font-black px-2 py-0.5 rounded-[4px] border transition-all duration-500 ${
+                  item.up 
+                    ? 'text-emerald-400 bg-emerald-500/5 border-emerald-500/10' 
+                    : 'text-rose-400 bg-rose-500/5 border-rose-500/10'
                 }`}>
-                  {item.up ? <TrendingUp className="w-2.5 h-2.5 mr-1" /> : <TrendingDown className="w-2.5 h-2.5 mr-1" />}
                   {item.change}
-                </span>
+                </div>
               </div>
             </div>
           </div>
