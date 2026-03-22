@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Star, Trash2, Plus, Save, X, MapPin } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { Review } from "../../types";
+import { useAuth } from "../../contexts/AuthContext";
 
 export const ReviewManager = () => {
+  const { session } = useAuth();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -39,7 +41,7 @@ export const ReviewManager = () => {
     
     setLoading(true);
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error("No active session");
       const res = await fetch(`/api/admin/reviews/${editingId}`, {
         method: "PUT",
         headers: { 
@@ -75,7 +77,7 @@ export const ReviewManager = () => {
     if (!confirm("Are you sure you want to delete this review?")) return;
     
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error("No active session");
       const res = await fetch(`/api/admin/reviews/${id}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${session?.access_token}` }
@@ -106,7 +108,7 @@ export const ReviewManager = () => {
     };
 
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error("No active session");
       const res = await fetch(`/api/admin/reviews`, {
         method: "POST",
         headers: { 

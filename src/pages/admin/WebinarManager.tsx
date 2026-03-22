@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Video, Plus, Calendar, Clock, Users, DollarSign, ShieldCheck, Search, Trash2, Edit2 } from "lucide-react";
 import { supabase } from "../../lib/supabase";
+import { useAuth } from "../../contexts/AuthContext";
 
 export const WebinarManager = () => {
+  const { session } = useAuth();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [dateTime, setDateTime] = useState("");
@@ -106,7 +108,7 @@ export const WebinarManager = () => {
         }
       };
 
-      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error("No active session");
       
       let res;
       if (editingId) {
@@ -148,7 +150,7 @@ export const WebinarManager = () => {
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this webinar?")) return;
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error("No active session");
       const res = await fetch(`/api/admin/webinars/${id}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${session?.access_token}` }

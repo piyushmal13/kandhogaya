@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Zap, Plus, Trash2, Edit2, Save, X, Image as ImageIcon, BarChart3, HelpCircle } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { Product } from "../../types";
+import { useAuth } from "../../contexts/AuthContext";
 
 export const ProductManager = () => {
+  const { session } = useAuth();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -55,9 +57,29 @@ export const ProductManager = () => {
         return;
       }
     }
+    if (typeof dataToSave.q_and_a === 'string') {
+      try {
+        dataToSave.q_and_a = JSON.parse(dataToSave.q_and_a);
+      } catch (e) {
+        console.error("Invalid JSON:", e);
+        alert("Q&A Data must be valid JSON.");
+        setLoading(false);
+        return;
+      }
+    }
+    if (typeof dataToSave.long_plan_offers === 'string') {
+      try {
+        dataToSave.long_plan_offers = JSON.parse(dataToSave.long_plan_offers);
+      } catch (e) {
+        console.error("Invalid JSON:", e);
+        alert("Long Plan Offers must be valid JSON.");
+        setLoading(false);
+        return;
+      }
+    }
 
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error("No active session");
       const res = await fetch(`/api/admin/products/${editingId}`, {
         method: "PUT",
         headers: { 
@@ -85,7 +107,7 @@ export const ProductManager = () => {
     if (!confirm("Are you sure you want to delete this algorithm?")) return;
     
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error("No active session");
       const res = await fetch(`/api/admin/products/${id}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${session?.access_token}` }
@@ -120,7 +142,7 @@ export const ProductManager = () => {
     };
 
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error("No active session");
       const res = await fetch(`/api/admin/products`, {
         method: "POST",
         headers: { 
@@ -320,6 +342,47 @@ export const ProductManager = () => {
                       rows={3}
                       className="w-full bg-black border border-white/10 rounded-xl px-4 py-2 text-white outline-none focus:border-emerald-500"
                     />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label htmlFor="qaData" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Q & A (JSON)</label>
+                      <textarea 
+                        id="qaData"
+                        value={typeof editForm.q_and_a === 'string' ? editForm.q_and_a : JSON.stringify(editForm.q_and_a || [])} 
+                        onChange={e => {
+                          try {
+                            const parsed = JSON.parse(e.target.value);
+                            setEditForm({...editForm, q_and_a: parsed});
+                          } catch (err) {
+                            console.debug("JSON parsing while typing...", err);
+                            setEditForm({...editForm, q_and_a: e.target.value as any});
+                          }
+                        }}
+                        placeholder='[{"question": "How it works?", "answer": "Algorithms..."}]'
+                        rows={6}
+                        className="w-full bg-black border border-white/10 rounded-xl px-4 py-2 text-white outline-none focus:border-emerald-500 font-mono text-xs"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="longPlanOffers" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Long Plan Offers (JSON)</label>
+                      <textarea 
+                        id="longPlanOffers"
+                        value={typeof editForm.long_plan_offers === 'string' ? editForm.long_plan_offers : JSON.stringify(editForm.long_plan_offers || [])} 
+                        onChange={e => {
+                          try {
+                            const parsed = JSON.parse(e.target.value);
+                            setEditForm({...editForm, long_plan_offers: parsed});
+                          } catch (err) {
+                            console.debug("JSON parsing while typing...", err);
+                            setEditForm({...editForm, long_plan_offers: e.target.value as any});
+                          }
+                        }}
+                        placeholder='[{"months": 12, "discount_percent": 20}]'
+                        rows={6}
+                        className="w-full bg-black border border-white/10 rounded-xl px-4 py-2 text-white outline-none focus:border-emerald-500 font-mono text-xs"
+                      />
+                    </div>
                   </div>
 
                   <div className="flex justify-end gap-4 pt-4">

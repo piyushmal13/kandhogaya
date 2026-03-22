@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Zap, Video, Download, Image as ImageIcon, FileText, Plus, Search, Trash2, Edit2 } from "lucide-react";
 import { supabase } from "../../lib/supabase";
+import { useAuth } from "../../contexts/AuthContext";
 
 export const ContentManager = () => {
+  const { session } = useAuth();
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [type, setType] = useState("signal");
@@ -54,7 +56,7 @@ export const ContentManager = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error("No active session");
       
       const payload = { 
         title, 
@@ -108,7 +110,7 @@ export const ContentManager = () => {
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this content?")) return;
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error("No active session");
       const res = await fetch(`/api/admin/content/${id}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${session?.access_token}` }

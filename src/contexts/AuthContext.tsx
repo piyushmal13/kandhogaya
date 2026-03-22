@@ -8,6 +8,7 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<any>(null);
   const [userProfile, setUserProfile] = useState<any>(null);
+  const [session, setSession] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [connectionError, setConnectionError] = useState(false);
 
@@ -78,6 +79,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         if (sessionError) throw sessionError;
 
         const currentUser = session?.user ?? null;
+        setSession(session);
         setUser(currentUser);
         
         if (currentUser) {
@@ -95,6 +97,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       const currentUser = session?.user ?? null;
+      setSession(session);
       setUser(currentUser);
       if (currentUser) {
          await fetchUserProfile(currentUser.id, currentUser.email);
@@ -129,7 +132,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, userProfile, login, signup, logout, loading }}>
+    <AuthContext.Provider value={{ user, userProfile, session, login, signup, logout, loading }}>
       {children}
       
       {/* Non-blocking connection error overlay (only shown if there's a critical failure) */}
