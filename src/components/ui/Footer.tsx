@@ -23,8 +23,8 @@ export const Footer = () => (
       <div className="grid gap-10 lg:grid-cols-[1.25fr_.8fr_.8fr_.9fr]">
         <div className="site-panel p-8">
           <Link to="/" className="flex items-center gap-4">
-            <div className="flex h-14 w-14 items-center justify-center rounded-xl border border-white/10 bg-white/5 overflow-hidden group-hover:border-emerald-500/30 transition-all duration-500">
-              <img src={BRANDING.logoUrl} alt="IFXTrades Logo" className="h-11 w-11 object-contain transform group-hover:scale-110 transition-transform duration-500" />
+            <div className="flex items-center justify-center overflow-hidden rounded-[12px]">
+              <img src={BRANDING.logoUrl} alt="IFXTrades Logo" className="h-14 w-14 object-contain" />
             </div>
             <div>
               <div className="text-sm font-semibold tracking-[0.22em] text-white">{BRANDING.name}</div>
