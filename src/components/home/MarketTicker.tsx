@@ -27,35 +27,22 @@ export const MarketTicker = () => {
   useEffect(() => {
     const fetchMarketData = async () => {
       try {
-        // 1. Fetch Gold (XAU) and Silver (XAG) from Free Gold-API (No Key/CORS)
-        const goldRes = await fetch("https://api.gold-api.com/price/XAU");
-        const silverRes = await fetch("https://api.gold-api.com/price/XAG");
+        const [goldRes, silverRes, forexRes] = await Promise.all([
+          fetch("https://api.gold-api.com/price/XAU"),
+          fetch("https://api.gold-api.com/price/XAG"),
+          fetch("https://api.frankfurter.app/latest?from=USD&to=EUR,GBP,JPY")
+        ]);
+
         const goldData = await goldRes.json();
         const silverData = await silverRes.json();
-
-        // 2. Fetch Forex (EUR, GBP, JPY) from Frankfurter (No Key/CORS)
-        const forexRes = await fetch("https://api.frankfurter.app/latest?from=USD&to=EUR,GBP,JPY");
         const forexData = await forexRes.json();
 
         setPairs(prev => prev.map(p => {
-          // Update Gold
-          if (p.symbol === "XAUUSD" && goldData?.price) {
-            return { ...p, price: goldData.price.toFixed(2), change: "+0.42%", up: true };
-          }
-          // Update Silver
-          if (p.symbol === "XAGUSD" && silverData?.price) {
-            return { ...p, price: silverData.price.toFixed(2), change: "-0.15%", up: false };
-          }
-          // Update Forex Major Pairs
-          if (p.symbol === "EURUSD" && forexData?.rates?.EUR) {
-            return { ...p, price: (1 / forexData.rates.EUR).toFixed(4), change: "+0.05%", up: true };
-          }
-          if (p.symbol === "GBPUSD" && forexData?.rates?.GBP) {
-            return { ...p, price: (1 / forexData.rates.GBP).toFixed(4), change: "+0.02%", up: true };
-          }
-          if (p.symbol === "USDJPY" && forexData?.rates?.JPY) {
-            return { ...p, price: forexData.rates.JPY.toFixed(2), change: "-0.08%", up: false };
-          }
+          if (p.symbol === "XAUUSD" && goldData?.price) return { ...p, price: goldData.price.toFixed(2), change: "+0.42%", up: true };
+          if (p.symbol === "XAGUSD" && silverData?.price) return { ...p, price: silverData.price.toFixed(2), change: "-0.15%", up: false };
+          if (p.symbol === "EURUSD" && forexData?.rates?.EUR) return { ...p, price: (1 / forexData.rates.EUR).toFixed(4), change: "+0.05%", up: true };
+          if (p.symbol === "GBPUSD" && forexData?.rates?.GBP) return { ...p, price: (1 / forexData.rates.GBP).toFixed(4), change: "+0.02%", up: true };
+          if (p.symbol === "USDJPY" && forexData?.rates?.JPY) return { ...p, price: forexData.rates.JPY.toFixed(2), change: "-0.08%", up: false };
           return p;
         }));
         
@@ -66,7 +53,6 @@ export const MarketTicker = () => {
     };
 
     fetchMarketData();
-    // Since these are truly free and unlimited, we can poll frequently (every 30s)
     const interval = setInterval(fetchMarketData, 30000); 
     return () => clearInterval(interval);
   }, []);
