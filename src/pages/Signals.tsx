@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { Check, X, Upload, Smartphone, Activity, ArrowRight, Lock } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "../contexts/AuthContext";
+import { useToast } from "../contexts/ToastContext";
 import { Link } from "react-router-dom";
 import { WebinarPromoInline } from "../components/webinars/WebinarPromoInline";
 import { PageMeta } from "../components/site/PageMeta";
@@ -184,6 +185,7 @@ const SignalPreview = () => (
 // ── Payment Modal ──
 const PaymentModal = ({ plan, onClose }: { plan: PricingPlan; onClose: () => void }) => {
   const { user } = useAuth();
+  const { error: toastError } = useToast();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({ name: "", email: "", phone: "", txnId: "" });
   const [uploading, setUploading] = useState(false);
@@ -266,7 +268,7 @@ const PaymentModal = ({ plan, onClose }: { plan: PricingPlan; onClose: () => voi
       setSuccess(true);
     } catch (error) {
       console.error("Error submitting payment:", error);
-      alert("Error submitting payment. Please try again.");
+      toastError("Error submitting payment. Please try again.");
     } finally {
       setUploading(false);
     }

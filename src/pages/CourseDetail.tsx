@@ -5,10 +5,12 @@ import { ArrowLeft, Play, Lock, CheckCircle2, Clock, BookOpen, ShieldCheck } fro
 import { getCourseById, checkUserAccess } from "../services/apiHandlers";
 import { Course, Chapter } from "../types";
 import { useAuth } from "../contexts/AuthContext";
+import { useToast } from "../contexts/ToastContext";
 
 export const CourseDetail = () => {
   const { courseId } = useParams<{ courseId: string }>();
   const { user } = useAuth();
+  const { info } = useToast();
   const navigate = useNavigate();
   const [course, setCourse] = useState<Course | null>(null);
   const [loading, setLoading] = useState(true);
@@ -43,12 +45,12 @@ export const CourseDetail = () => {
 
   const handleEnrollClick = () => {
     if (!user) {
-      alert("Please sign in to enroll in this course.");
+      info("Please sign in to enroll in this course.");
       navigate("/login");
       return;
     }
     // In a real app, this would trigger a payment flow
-    alert(`Redirecting to payment for ${course?.title}...`);
+    info(`Redirecting to payment for ${course?.title}...`);
   };
 
   if (loading) return (

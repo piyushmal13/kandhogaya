@@ -3,6 +3,7 @@ import { motion } from "motion/react";
 import { X, Check, ArrowRight, ShieldCheck, Activity, Zap, HelpCircle, Star, BarChart3, Lock, FileText } from "lucide-react";
 import { Product } from "../../types";
 import { useAuth } from "../../contexts/AuthContext";
+import { useToast } from "../../contexts/ToastContext";
 import { useNavigate } from "react-router-dom";
 
 interface AlgoDetailModalProps {
@@ -14,11 +15,12 @@ interface AlgoDetailModalProps {
 export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalProps) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'performance' | 'reviews' | 'qa' | 'terms'>('overview');
   const { user } = useAuth();
+  const { info } = useToast();
   const navigate = useNavigate();
 
   const handleSubscribeClick = (plan: string) => {
     if (!user) {
-      alert("Please sign in to purchase a subscription.");
+      info("Please sign in to access the institutional terminal and subscribe.");
       navigate("/login");
       return;
     }

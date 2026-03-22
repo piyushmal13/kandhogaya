@@ -226,7 +226,7 @@ async function startServer() {
       .eq('content_type', type || 'blog')
       .eq('status', 'published');
 
-    const searchStr = String(search ?? "");
+    const searchStr = typeof search === 'string' ? search : "";
     if (searchStr.length > 0) {
       query = query.or(`title.ilike.%${searchStr}%,body.ilike.%${searchStr}%`);
     }
@@ -639,7 +639,7 @@ async function startServer() {
 
     // Injected variables into the index.html for dev mode
     app.use(async (req, res, next) => {
-      if (req.method === 'GET' && req.url === '/') {
+      if (req.method === 'GET' && req.headers.accept?.includes('text/html')) {
         try {
           const indexPath = path.join(__dirname, "index.html");
           let html = fs.readFileSync(indexPath, 'utf8');

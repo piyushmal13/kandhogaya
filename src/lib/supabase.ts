@@ -28,8 +28,7 @@ const getSupabaseConfig = () => {
 
 const { url: initialUrl, key: initialKey } = getSupabaseConfig();
 
-// Keep a reference to the active client instance
-let activeClient = createClient(initialUrl || 'https://placeholder.supabase.co', initialKey || 'placeholder', {
+export const supabase = createClient(initialUrl || 'https://placeholder.supabase.co', initialKey || 'placeholder', {
   auth: {
     autoRefreshToken: true,
     persistSession: true,
@@ -42,39 +41,6 @@ let activeClient = createClient(initialUrl || 'https://placeholder.supabase.co',
     }
   }
 });
-
-// Export a Proxy so that consumers always interact with the most current client instance
-export const supabase = new Proxy({} as any, {
-  get: (_, prop) => {
-    const value = (activeClient as any)[prop];
-    return typeof value === 'function' ? value.bind(activeClient) : value;
-  }
-});
-
-// Helper to re-initialize if keys are found later (e.g. after fetching from /api/config)
-export const reinitializeSupabase = (url: string, key: string) => {
-  if (!url || !key || url.includes('placeholder')) return;
-  
-  // Prevent unnecessary re-initialization if the URL and Key haven't changed
-  if ((activeClient as any).supabaseUrl === url && (activeClient as any).supabaseKey === key) {
-    return;
-  }
-
-  console.log("[Supabase]: Initializing with runtime config...");
-  activeClient = createClient(url, key, {
-    auth: {
-      autoRefreshToken: true,
-      persistSession: true,
-      detectSessionInUrl: true
-    },
-    global: {
-      fetch: (fetchUrl, options) => {
-        const signal = options?.signal || (typeof AbortSignal !== 'undefined' && 'timeout' in AbortSignal ? (AbortSignal as any).timeout(10000) : undefined);
-        return fetch(fetchUrl, { ...options, signal });
-      }
-    }
-  });
-};
 
 export const safeQuery = async <T>(query: unknown): Promise<T | []> => {
   try {

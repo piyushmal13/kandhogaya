@@ -8,6 +8,7 @@ import { AlgoDetailModal } from "../components/algorithms/AlgoDetailModal";
 import { getProducts, subscribeToAlgo } from "../services/apiHandlers";
 import { Product } from "../types";
 import { useAuth } from "../contexts/AuthContext";
+import { useToast } from "../contexts/ToastContext";
 import { useNavigate } from "react-router-dom";
 
 export const Marketplace = () => {
@@ -16,6 +17,7 @@ export const Marketplace = () => {
   const [selectedAlgo, setSelectedAlgo] = useState<Product | null>(null);
   const [filter, setFilter] = useState("All");
   const { user } = useAuth();
+  const { success, error: toastError, info } = useToast();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,7 +40,7 @@ export const Marketplace = () => {
 
   const handleSubscribe = async (algo: Product, plan: string) => {
     if (!user) {
-      alert("Please sign in to subscribe.");
+      info("Please sign in to subscribe.");
       navigate("/login");
       return;
     }
@@ -56,14 +58,14 @@ export const Marketplace = () => {
       const result = await subscribeToAlgo(user.id, algo.id, days);
       
       if (result.success) {
-        alert(`Successfully subscribed to ${algo.name} on the ${plan} plan! Your license key: ${result.license?.license_key}`);
+        success(`Successfully subscribed to ${algo.name}! License key: ${result.license?.license_key}`);
         navigate("/dashboard");
       } else {
-        alert("There was an issue processing your subscription. Please try again.");
+        toastError("There was an issue processing your subscription. Please try again.");
       }
     } catch (error) {
       console.error("Subscription error:", error);
-      alert("An unexpected error occurred. Please try again.");
+      toastError("An unexpected error occurred. Please try again.");
     }
   };
 
