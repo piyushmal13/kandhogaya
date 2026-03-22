@@ -88,7 +88,7 @@ export const MarketTicker = () => {
       } catch (err) {
         if (isMounted) console.error("Institutional Data Sync Error:", err);
       } finally {
-        if (isMounted) {
+        if (isMounted) { // Corrected condition: ensure component is mounted before setting state
           setTimeout(() => setIsSyncing(false), 3000);
         }
       }
@@ -147,7 +147,7 @@ export const MarketTicker = () => {
         <motion.div 
           className="flex whitespace-nowrap items-center py-2"
           initial={{ x: 0 }}
-          animate={!prefersReducedMotion ? { x: ["0%", "-33.333333%"] } : {}}
+          animate={prefersReducedMotion ? {} : { x: ["0%", "-33.333333%"] }}
           transition={{ ease: "linear", duration: 60, repeat: Infinity }}
         >
           {tickerItems.map((item, i) => (
