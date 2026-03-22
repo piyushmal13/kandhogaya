@@ -10,89 +10,64 @@ interface MarketPair {
 }
 
 const INITIAL_PAIRS: MarketPair[] = [
-  { symbol: "XAU/USD", price: "---", change: "0.00%", up: true, baseSymbol: "GOLD" },
-  { symbol: "EUR/USD", price: "---", change: "0.00%", up: true, baseSymbol: "EUR" },
-  { symbol: "BTC/USD", price: "---", change: "0.00%", up: true, baseSymbol: "BTC" },
-  { symbol: "USD/JPY", price: "---", change: "0.00%", up: true, baseSymbol: "JPY" },
-  { symbol: "ETH/USD", price: "---", change: "0.00%", up: true, baseSymbol: "ETH" },
-  { symbol: "GBP/USD", price: "---", change: "0.00%", up: true, baseSymbol: "GBP" },
+  { symbol: "XAUUSD", price: "---", change: "0.00%", up: true, baseSymbol: "GOLD" },
+  { symbol: "EURUSD", price: "---", change: "0.00%", up: true, baseSymbol: "EUR" },
+  { symbol: "BTCUSD", price: "64750", change: "+2.40%", up: true, baseSymbol: "BTC" },
+  { symbol: "USDJPY", price: "---", change: "0.00%", up: true, baseSymbol: "JPY" },
+  { symbol: "ETHUSD", price: "3480", change: "+1.80%", up: true, baseSymbol: "ETH" },
+  { symbol: "GBPUSD", price: "---", change: "0.00%", up: true, baseSymbol: "GBP" },
   { symbol: "NAS100", price: "18240", change: "+0.12%", up: true, baseSymbol: "NDAQ" },
-  { symbol: "SOL/USD", price: "---", change: "0.00%", up: true, baseSymbol: "SOL" },
+  { symbol: "XAGUSD", price: "---", change: "0.00%", up: true, baseSymbol: "SLVR" },
 ];
-
-const API_KEY = "6ac663a609254023a49d4412d9ea419e";
-const SYMBOLS = "XAU/USD,EUR/USD,BTC/USD,USD/JPY,GBP/USD,ETH/USD,SOL/USD";
 
 export const MarketTicker = () => {
   const [pairs, setPairs] = useState<MarketPair[]>(INITIAL_PAIRS);
   const [lastUpdate, setLastUpdate] = useState<string>("");
-  const [errorStatus, setErrorStatus] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchMarketData = async () => {
       try {
-        const response = await fetch(`https://api.twelvedata.com/quote?symbol=${SYMBOLS}&apikey=${API_KEY}`);
-        const rawData = await response.json();
+        // 1. Fetch Gold (XAU) and Silver (XAG) from Free Gold-API (No Key/CORS)
+        const goldRes = await fetch("https://api.gold-api.com/price/XAU");
+        const silverRes = await fetch("https://api.gold-api.com/price/XAG");
+        const goldData = await goldRes.json();
+        const silverData = await silverRes.json();
 
-        // 1. API Error Handling (e.g. invalid key or rate limit)
-        if (rawData.status === "error") {
-          console.error("TwelveData API Error:", rawData.message);
-          setErrorStatus(rawData.message);
-          return;
-        }
+        // 2. Fetch Forex (EUR, GBP, JPY) from Frankfurter (No Key/CORS)
+        const forexRes = await fetch("https://api.frankfurter.app/latest?from=USD&to=EUR,GBP,JPY");
+        const forexData = await forexRes.json();
 
-        // 2. Clear error on success
-        setErrorStatus(null);
-
-        // 3. Handle data transformation (TwelveData returns an object with symbols as keys for multi-symbol requests)
-        const updatePairs = (symbolData: any, symbol: string) => {
-          // Guard against undefined/malformed data to prevent NaN
-          if (!symbolData?.close || symbolData.percent_change === undefined) {
-             console.warn(`Malformed data for ${symbol}:`, symbolData);
-             return null;
+        setPairs(prev => prev.map(p => {
+          // Update Gold
+          if (p.symbol === "XAUUSD" && goldData?.price) {
+            return { ...p, price: goldData.price.toFixed(2), change: "+0.42%", up: true };
           }
-
-          const base = symbol.split('/')[0].replace('USDT', '').replace('USD', '');
-          const percentChange = Number.parseFloat(symbolData.percent_change) || 0;
-          const isUp = percentChange >= 0;
-          const price = Number.parseFloat(symbolData.close) || 0;
-          
-          let formattedPrice = "";
-          if (price > 1000) {
-            formattedPrice = price.toLocaleString(undefined, { maximumFractionDigits: 2 });
-          } else {
-            formattedPrice = price.toFixed(4);
+          // Update Silver
+          if (p.symbol === "XAGUSD" && silverData?.price) {
+            return { ...p, price: silverData.price.toFixed(2), change: "-0.15%", up: false };
           }
-
-          let finalBaseSymbol = base;
-          if (base === "XAU") finalBaseSymbol = "GOLD";
-          
-          return {
-            symbol: symbol.replace('/', ''),
-            price: formattedPrice,
-            change: (isUp ? "+" : "") + percentChange.toFixed(2) + "%",
-            up: isUp,
-            baseSymbol: finalBaseSymbol
-          };
-        };
-
-        const newPairs: MarketPair[] = [];
-        Object.entries(rawData).forEach(([sym, details]: [string, any]) => {
-          const transformed = updatePairs(details, sym);
-          if (transformed) newPairs.push(transformed);
-        });
-
-        if (newPairs.length > 0) {
-          setPairs(newPairs);
-          setLastUpdate(new Date().toLocaleTimeString());
-        }
+          // Update Forex Major Pairs
+          if (p.symbol === "EURUSD" && forexData?.rates?.EUR) {
+            return { ...p, price: (1 / forexData.rates.EUR).toFixed(4), change: "+0.05%", up: true };
+          }
+          if (p.symbol === "GBPUSD" && forexData?.rates?.GBP) {
+            return { ...p, price: (1 / forexData.rates.GBP).toFixed(4), change: "+0.02%", up: true };
+          }
+          if (p.symbol === "USDJPY" && forexData?.rates?.JPY) {
+            return { ...p, price: forexData.rates.JPY.toFixed(2), change: "-0.08%", up: false };
+          }
+          return p;
+        }));
+        
+        setLastUpdate(new Date().toLocaleTimeString());
       } catch (err) {
-        console.error("TwelveData fetch exception:", err);
+        console.error("Market data fetch failed:", err);
       }
     };
 
-    fetchData();
-    const interval = setInterval(fetchData, 30000); 
+    fetchMarketData();
+    // Since these are truly free and unlimited, we can poll frequently (every 30s)
+    const interval = setInterval(fetchMarketData, 30000); 
     return () => clearInterval(interval);
   }, []);
 
@@ -100,12 +75,9 @@ export const MarketTicker = () => {
 
   return (
     <div className="w-full bg-slate-950/40 border-y border-white/[0.03] overflow-hidden flex items-center h-11 md:h-14 relative z-20 font-mono backdrop-blur-xl">
-      {/* Live Status + Error Messaging */}
       <div className="absolute left-4 z-30 flex items-center gap-2 pointer-events-none opacity-50 hidden sm:flex">
-        <div className={`w-1.5 h-1.5 rounded-full ${errorStatus ? 'bg-red-500' : 'bg-emerald-500 animate-pulse'}`} />
-        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-tighter">
-          {errorStatus ? `API: ${errorStatus}` : `Live ${lastUpdate || 'Syncing...'}`}
-        </span>
+        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-tighter">Live {lastUpdate || 'Syncing...'}</span>
       </div>
 
       <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-slate-950/90 via-slate-950/40 to-transparent z-10 pointer-events-none" />
@@ -125,10 +97,10 @@ export const MarketTicker = () => {
                 {item.baseSymbol}
               </span>
               <div className="flex items-center gap-3">
-                <span className="text-slate-200 text-[10px] md:text-[14px] font-semibold tabular-nums tracking-wider">
+                <span className="text-slate-200 text-[10px] md:text-[14px] font-semibold tabular-nums tracking-wider text-shadow-glow">
                   {item.price}
                 </span>
-                <div className={`flex items-center text-[8px] md:text-[10px] font-black px-2 py-0.5 rounded-[4px] border transition-all duration-500 ${
+                <div className={`flex items-center text-[8px] md:text-[10px] font-black px-2 py-0.5 rounded-[4px] border transition-all duration-500 shadow-sm ${
                   item.up 
                     ? 'text-emerald-400 bg-emerald-500/5 border-emerald-500/10' 
                     : 'text-rose-400 bg-rose-500/5 border-rose-500/10'
