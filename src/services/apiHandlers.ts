@@ -164,7 +164,7 @@ export const getAgentStats = async (agentId: string) => {
 
   const revenue = (sales || []).reduce((acc, sale) => acc + (sale.sale_amount || 0), 0);
   
-  const { count: referrals, error: refError } = await supabase
+  const { count: referrals } = await supabase
     .from("users")
     .select("*", { count: 'exact', head: true })
     .eq("referred_by", agentId);

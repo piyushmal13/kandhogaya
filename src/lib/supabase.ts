@@ -12,9 +12,9 @@ const getSupabaseConfig = () => {
     return { url: bakedUrl, key: bakedKey };
   }
 
-  if (typeof window !== 'undefined') {
-    const injectedUrl = (window as any)._SUPABASE_URL;
-    const injectedKey = (window as any)._SUPABASE_ANON_KEY;
+  if (typeof globalThis !== 'undefined') {
+    const injectedUrl = (globalThis as any)._SUPABASE_URL;
+    const injectedKey = (globalThis as any)._SUPABASE_ANON_KEY;
     if (injectedUrl && injectedKey && !injectedUrl.includes('placeholder')) {
       return { url: injectedUrl, key: injectedKey };
     }

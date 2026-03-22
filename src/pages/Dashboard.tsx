@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, Link } from "react-router-dom";
 import { Zap, ShieldCheck, Bell, Settings } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { supabase, safeQuery } from "../lib/supabase";
 import { cn } from "../utils/cn";
-import { Link } from "react-router-dom";
 
 interface BotLicense {
   id: string;

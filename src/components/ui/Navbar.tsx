@@ -125,14 +125,14 @@ export const Navbar = () => {
           </div>
 
           <div className="md:hidden flex items-center gap-3">
-            {!user ? (
+            {user ? null : (
               <Link
                 to="/login"
                 className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-white"
               >
                 Sign In
               </Link>
-            ) : null}
+            )}
             <button
               type="button"
               onClick={() => setIsOpen((open) => !open)}

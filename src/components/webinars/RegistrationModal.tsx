@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "motion/react";
-import { X, Check, ArrowRight, ShieldCheck, Activity, BarChart3, TrendingUp, Zap, Calendar, Clock, User, Users } from "lucide-react";
+import { motion } from "motion/react";
+import { X, Check, ArrowRight, Activity, Calendar } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../contexts/AuthContext";
 import { Link } from "react-router-dom";
@@ -8,7 +8,6 @@ import { Link } from "react-router-dom";
 import { Webinar } from '../../types';
 
 interface RegistrationModalProps {
-  isOpen?: boolean;
   webinar: Webinar;
   onClose: () => void;
   onSuccess: () => void;
@@ -65,7 +64,7 @@ export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationM
     );
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError("");
@@ -172,8 +171,9 @@ export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationM
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs text-gray-500 mb-1">Full Name</label>
+                <label className="block text-xs text-gray-500 mb-1" htmlFor="fullName">Full Name</label>
                 <input 
+                  id="fullName"
                   required
                   type="text" 
                   className="w-full bg-black border border-white/10 rounded-lg px-4 py-3 text-white focus:border-emerald-500 outline-none transition-colors"
@@ -183,8 +183,9 @@ export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationM
                 />
               </div>
               <div>
-                <label className="block text-xs text-gray-500 mb-1">Email Address</label>
+                <label className="block text-xs text-gray-500 mb-1" htmlFor="emailAddress">Email Address</label>
                 <input 
+                  id="emailAddress"
                   required
                   type="email" 
                   className="w-full bg-black border border-white/10 rounded-lg px-4 py-3 text-white focus:border-emerald-500 outline-none transition-colors"
@@ -194,8 +195,9 @@ export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationM
                 />
               </div>
               <div>
-                <label className="block text-xs text-gray-500 mb-1">Country</label>
+                <label className="block text-xs text-gray-500 mb-1" htmlFor="country">Country</label>
                 <input 
+                  id="country"
                   required
                   type="text" 
                   className="w-full bg-black border border-white/10 rounded-lg px-4 py-3 text-white focus:border-emerald-500 outline-none transition-colors"

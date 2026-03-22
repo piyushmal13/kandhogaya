@@ -4,7 +4,6 @@ import {
   AreaChart, Area 
 } from "recharts";
 import { Users, ShieldCheck, ShoppingCart, Zap, TrendingUp, DollarSign } from "lucide-react";
-import { supabase } from "../../lib/supabase";
 
 interface OverviewStats {
   total_users?: number;
@@ -42,8 +41,8 @@ export const Overview = ({ stats }: { stats: OverviewStats }) => {
           { label: "Active Subs", value: stats?.active_subscriptions?.toLocaleString() || "0", icon: ShieldCheck, color: "text-emerald-500" },
           { label: "Revenue (MTD)", value: `$${(stats?.revenue_mtd || 0).toLocaleString()}`, icon: ShoppingCart, color: "text-amber-500" },
           { label: "Signal Accuracy", value: stats?.signal_accuracy || "0%", icon: Zap, color: "text-purple-500" },
-        ].map((s, i) => (
-          <div key={i} className="bg-zinc-900 border border-white/10 p-6 rounded-2xl relative overflow-hidden group">
+        ].map((s) => (
+          <div key={s.label} className="bg-zinc-900 border border-white/10 p-6 rounded-2xl relative overflow-hidden group">
             <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
               <s.icon className="w-12 h-12" />
             </div>

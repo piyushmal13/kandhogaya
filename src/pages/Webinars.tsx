@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Calendar, Clock, User, Users, ArrowRight, CheckCircle2, X, Zap, ShieldCheck, Activity } from "lucide-react";
+import { Calendar, Users, ArrowRight, Zap, ShieldCheck } from "lucide-react";
 import { getWebinars } from "../services/apiHandlers";
 import { WebinarCard } from "../components/webinars/WebinarCard";
 import { RegistrationModal } from "../components/webinars/RegistrationModal";
@@ -103,7 +103,7 @@ export const Webinars = () => {
                 <div className="flex items-center gap-3 mb-6">
                   <span className="bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full animate-pulse flex items-center gap-1">
                     <span className="w-2 h-2 bg-white rounded-full animate-ping" />
-                    UP NEXT
+                    {" "}UP NEXT
                   </span>
                   <span className="text-emerald-500 text-xs font-mono tracking-widest uppercase">
                     {new Date(nextWebinar.date_time).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}

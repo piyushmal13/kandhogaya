@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Star, Trash2, Plus, Save, X, MapPin, User, MessageSquare, Image as ImageIcon } from "lucide-react";
+import { Star, Trash2, Plus, Save, X, MapPin } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { Review } from "../../types";
 
@@ -15,7 +15,7 @@ export const ReviewManager = () => {
 
   const fetchReviews = async () => {
     setLoading(true);
-    const { data, error } = await supabase
+    const { data } = await supabase
       .from('reviews')
       .select('*')
       .order('created_at', { ascending: false });
@@ -161,16 +161,18 @@ export const ReviewManager = () => {
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">User Name</label>
+                      <label htmlFor="userName" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">User Name</label>
                       <input 
+                        id="userName"
                         value={editForm.user_name || ""} 
                         onChange={e => setEditForm({...editForm, user_name: e.target.value})}
                         className="w-full bg-black border border-white/10 rounded-xl px-4 py-2 text-white outline-none focus:border-emerald-500"
                       />
                     </div>
                     <div>
-                      <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Region</label>
+                      <label htmlFor="region" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Region</label>
                       <input 
+                        id="region"
                         value={editForm.region || ""} 
                         onChange={e => setEditForm({...editForm, region: e.target.value})}
                         className="w-full bg-black border border-white/10 rounded-xl px-4 py-2 text-white outline-none focus:border-emerald-500"
@@ -180,19 +182,21 @@ export const ReviewManager = () => {
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Rating (1-5)</label>
+                      <label htmlFor="rating" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Rating (1-5)</label>
                       <input 
+                        id="rating"
                         type="number"
                         min="1"
                         max="5"
                         value={editForm.rating || 5} 
-                        onChange={e => setEditForm({...editForm, rating: parseInt(e.target.value)})}
+                        onChange={e => setEditForm({...editForm, rating: Number.parseInt(e.target.value)})}
                         className="w-full bg-black border border-white/10 rounded-xl px-4 py-2 text-white outline-none focus:border-emerald-500"
                       />
                     </div>
                     <div>
-                      <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Image URL</label>
+                      <label htmlFor="imageUrl" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Image URL</label>
                       <input 
+                        id="imageUrl"
                         value={editForm.image_url || ""} 
                         onChange={e => setEditForm({...editForm, image_url: e.target.value})}
                         className="w-full bg-black border border-white/10 rounded-xl px-4 py-2 text-white outline-none focus:border-emerald-500"
@@ -201,8 +205,9 @@ export const ReviewManager = () => {
                   </div>
 
                   <div>
-                    <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Review Text</label>
+                    <label htmlFor="reviewText" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Review Text</label>
                     <textarea 
+                      id="reviewText"
                       value={editForm.text || editForm.comment || ""} 
                       onChange={e => setEditForm({...editForm, text: e.target.value, comment: e.target.value})}
                       rows={3}
@@ -236,12 +241,12 @@ export const ReviewManager = () => {
                       </div>
                       <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                         <button onClick={() => handleEdit(review)} className="text-gray-500 hover:text-white"><Edit2 className="w-4 h-4" /></button>
-                        <button onClick={() => handleDelete(review.id!)} className="text-gray-500 hover:text-red-500"><Trash2 className="w-4 h-4" /></button>
+                        <button onClick={() => handleDelete(review.id)} className="text-gray-500 hover:text-red-500"><Trash2 className="w-4 h-4" /></button>
                       </div>
                     </div>
                     <div className="flex gap-0.5 mb-2">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className={`w-3 h-3 ${i < review.rating ? 'text-amber-500 fill-amber-500' : 'text-gray-700'}`} />
+                      {['star-1', 'star-2', 'star-3', 'star-4', 'star-5'].map((key, i) => (
+                        <Star key={key} className={`w-3 h-3 ${i < review.rating ? 'text-amber-500 fill-amber-500' : 'text-gray-700'}`} />
                       ))}
                     </div>
                     <p className="text-gray-400 text-xs line-clamp-3 italic">"{review.text || review.comment}"</p>

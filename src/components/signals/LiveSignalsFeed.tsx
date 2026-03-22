@@ -16,6 +16,19 @@ interface Signal {
   created_at: string;
 }
 
+function processSignalUpdate(prev: Signal[], payload: any): Signal[] {
+  const isInsert = payload.eventType === "INSERT";
+  const isUpdate = payload.eventType === "UPDATE";
+  
+  if (isInsert) {
+    return [payload.new as Signal, ...prev].slice(0, 5);
+  }
+  if (isUpdate) {
+    return prev.map((s) => (s.id === payload.new.id ? (payload.new as Signal) : s));
+  }
+  return prev.filter((s) => s.id !== payload.old.id);
+}
+
 export const LiveSignalsFeed = () => {
   const [signals, setSignals] = useState<Signal[]>([]);
   const [loading, setLoading] = useState(true);
@@ -29,17 +42,11 @@ export const LiveSignalsFeed = () => {
 
     fetchSignals();
 
-    const subscription = subscribeToSignals((payload: any) => {
-      if (payload.eventType === "INSERT") {
-        setSignals((prev) => [payload.new as Signal, ...prev].slice(0, 5));
-      } else if (payload.eventType === "UPDATE") {
-        setSignals((prev) =>
-          prev.map((s) => (s.id === payload.new.id ? (payload.new as Signal) : s))
-        );
-      } else if (payload.eventType === "DELETE") {
-        setSignals((prev) => prev.filter((s) => s.id !== payload.old.id));
-      }
-    });
+    const handleSignalEvent = (payload: any) => {
+      setSignals((prev) => processSignalUpdate(prev, payload));
+    };
+
+    const subscription = subscribeToSignals(handleSignalEvent);
 
     return () => {
       subscription.unsubscribe();
@@ -66,7 +73,7 @@ export const LiveSignalsFeed = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {loading
-            ? Array.from({ length: 3 }).map((_, i) => <SignalCardSkeleton key={i} />)
+            ? ['skel-1', 'skel-2', 'skel-3'].map(key => <SignalCardSkeleton key={key} />)
             : signals.slice(0, 3).map((signal) => (
                 <motion.div
                   key={signal.id}

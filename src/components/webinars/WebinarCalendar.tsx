@@ -19,9 +19,9 @@ export const WebinarCalendar = ({ webinars }: WebinarCalendarProps) => {
       </h3>
 
       <div className="space-y-4">
-        {sortedWebinars.slice(0, 5).map((webinar, i) => (
+        {sortedWebinars.slice(0, 5).map((webinar) => (
           <motion.div
-            key={i}
+            key={webinar.id}
             whileHover={{ x: 5 }}
             className="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition-colors cursor-pointer group"
           >

@@ -15,7 +15,7 @@ export const ProductManager = () => {
 
   const fetchProducts = async () => {
     setLoading(true);
-    const { data, error } = await supabase
+    const { data } = await supabase
       .from('products')
       .select('*')
       .order('created_at', { ascending: false });
@@ -45,6 +45,7 @@ export const ProductManager = () => {
       try {
         dataToSave.performance_data = JSON.parse(dataToSave.performance_data);
       } catch (e) {
+        console.error("Invalid JSON:", e);
         alert("Performance Data must be valid JSON.");
         setLoading(false);
         return;
@@ -170,16 +171,18 @@ export const ProductManager = () => {
                 <div className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Algo Name</label>
+                      <label htmlFor="algoName" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Algo Name</label>
                       <input 
+                        id="algoName"
                         value={editForm.name || ""} 
                         onChange={e => setEditForm({...editForm, name: e.target.value})}
                         className="w-full bg-black border border-white/10 rounded-xl px-4 py-2 text-white outline-none focus:border-emerald-500"
                       />
                     </div>
                     <div>
-                      <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Category</label>
+                      <label htmlFor="category" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Category</label>
                       <input 
+                        id="category"
                         value={editForm.category || ""} 
                         onChange={e => setEditForm({...editForm, category: e.target.value})}
                         className="w-full bg-black border border-white/10 rounded-xl px-4 py-2 text-white outline-none focus:border-emerald-500"
@@ -189,8 +192,9 @@ export const ProductManager = () => {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Type</label>
+                      <label htmlFor="type" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Type</label>
                       <select 
+                        id="type"
                         value={editForm.type || "algo_bot"} 
                         onChange={e => setEditForm({...editForm, type: e.target.value})}
                         className="w-full bg-black border border-white/10 rounded-xl px-4 py-2 text-white outline-none focus:border-emerald-500"
@@ -201,8 +205,9 @@ export const ProductManager = () => {
                       </select>
                     </div>
                     <div>
-                      <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Performance Data (JSON)</label>
+                      <label htmlFor="performanceData" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Performance Data (JSON)</label>
                       <input 
+                        id="performanceData"
                         value={typeof editForm.performance_data === 'string' ? editForm.performance_data : JSON.stringify(editForm.performance_data || [])} 
                         onChange={e => {
                           try {
@@ -221,8 +226,9 @@ export const ProductManager = () => {
                   </div>
 
                   <div>
-                    <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Description</label>
+                    <label htmlFor="description" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Description</label>
                     <textarea 
+                      id="description"
                       value={editForm.description || ""} 
                       onChange={e => setEditForm({...editForm, description: e.target.value})}
                       rows={3}
@@ -232,25 +238,28 @@ export const ProductManager = () => {
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
-                      <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Price ($/mo)</label>
+                      <label htmlFor="price" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Price ($/mo)</label>
                       <input 
+                        id="price"
                         type="number"
                         value={editForm.price || 0} 
-                        onChange={e => setEditForm({...editForm, price: parseFloat(e.target.value)})}
+                        onChange={e => setEditForm({...editForm, price: Number.parseFloat(e.target.value)})}
                         className="w-full bg-black border border-white/10 rounded-xl px-4 py-2 text-white outline-none focus:border-emerald-500"
                       />
                     </div>
                     <div>
-                      <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Image URL</label>
+                      <label htmlFor="imageUrl" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Image URL</label>
                       <input 
+                        id="imageUrl"
                         value={editForm.image_url || ""} 
                         onChange={e => setEditForm({...editForm, image_url: e.target.value})}
                         className="w-full bg-black border border-white/10 rounded-xl px-4 py-2 text-white outline-none focus:border-emerald-500"
                       />
                     </div>
                     <div>
-                      <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Strategy Graph URL</label>
+                      <label htmlFor="strategyGraphUrl" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Strategy Graph URL</label>
                       <input 
+                        id="strategyGraphUrl"
                         value={editForm.strategy_graph_url || ""} 
                         onChange={e => setEditForm({...editForm, strategy_graph_url: e.target.value})}
                         className="w-full bg-black border border-white/10 rounded-xl px-4 py-2 text-white outline-none focus:border-emerald-500"
@@ -260,8 +269,9 @@ export const ProductManager = () => {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Strategy Details (Institutional)</label>
+                      <label htmlFor="strategyDetails" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Strategy Details (Institutional)</label>
                       <textarea 
+                        id="strategyDetails"
                         value={editForm.strategy_details || ""} 
                         onChange={e => setEditForm({...editForm, strategy_details: e.target.value})}
                         rows={4}
@@ -270,8 +280,9 @@ export const ProductManager = () => {
                       />
                     </div>
                     <div>
-                      <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Risk Profile</label>
+                      <label htmlFor="riskProfile" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Risk Profile</label>
                       <textarea 
+                        id="riskProfile"
                         value={editForm.risk_profile || ""} 
                         onChange={e => setEditForm({...editForm, risk_profile: e.target.value})}
                         rows={4}
@@ -283,16 +294,18 @@ export const ProductManager = () => {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Backtesting Result URL</label>
+                      <label htmlFor="backtestingResultUrl" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Backtesting Result URL</label>
                       <input 
+                        id="backtestingResultUrl"
                         value={editForm.backtesting_result_url || ""} 
                         onChange={e => setEditForm({...editForm, backtesting_result_url: e.target.value})}
                         className="w-full bg-black border border-white/10 rounded-xl px-4 py-2 text-white outline-none focus:border-emerald-500"
                       />
                     </div>
                     <div>
-                      <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Video Explanation URL</label>
+                      <label htmlFor="videoExplanationUrl" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Video Explanation URL</label>
                       <input 
+                        id="videoExplanationUrl"
                         value={editForm.video_explanation_url || ""} 
                         onChange={e => setEditForm({...editForm, video_explanation_url: e.target.value})}
                         className="w-full bg-black border border-white/10 rounded-xl px-4 py-2 text-white outline-none focus:border-emerald-500"
@@ -301,8 +314,9 @@ export const ProductManager = () => {
                   </div>
 
                   <div>
-                    <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Terms & Conditions</label>
+                    <label htmlFor="terms" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Terms & Conditions</label>
                     <textarea 
+                      id="terms"
                       value={editForm.terms_and_conditions || ""} 
                       onChange={e => setEditForm({...editForm, terms_and_conditions: e.target.value})}
                       rows={3}

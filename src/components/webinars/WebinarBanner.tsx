@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "motion/react";
-import { Calendar, Clock, Users, ArrowRight, Zap, Timer } from "lucide-react";
+import { ArrowRight, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
 import { CountdownTimer } from "./CountdownTimer";

@@ -13,9 +13,9 @@ export const WebinarPromo = () => {
     const fetchNearestWebinar = async () => {
       const webinars = await getWebinars();
       if (Array.isArray(webinars) && webinars.length > 0) {
-        const now = new Date().getTime();
+        const now = Date.now();
         const upcoming = webinars.filter((item: any) => new Date(item.date_time).getTime() > now);
-        setWebinar(upcoming.length > 0 ? upcoming[0] : webinars[webinars.length - 1]);
+        setWebinar(upcoming.length > 0 ? upcoming[0] : webinars.at(-1));
       }
     };
 
@@ -38,7 +38,7 @@ export const WebinarPromo = () => {
     const targetDate = new Date(webinar.date_time).getTime();
 
     const timer = setInterval(() => {
-      const now = new Date().getTime();
+      const now = Date.now();
       const distance = targetDate - now;
 
       if (distance < 0) {
@@ -83,7 +83,7 @@ export const WebinarPromo = () => {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
               </span>
-              LIVE MASTERCLASS
+              {' '}LIVE MASTERCLASS
             </motion.div>
 
             <motion.h2
@@ -135,7 +135,7 @@ export const WebinarPromo = () => {
                 <span className="text-[10px] font-mono text-gray-600 uppercase tracking-widest">Sponsored By:</span>
                 <div className="flex gap-4 md:gap-6 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
                   {sponsors.map((sponsor: string, idx: number) => (
-                    <div key={idx} className="flex items-center gap-1.5 md:gap-2">
+                    <div key={`${sponsor}-${idx}`} className="flex items-center gap-1.5 md:gap-2">
                       <ShieldCheck className="w-4 h-4 md:w-5 md:h-5 text-white" />
                       <span className="text-white font-bold tracking-tight text-[10px] md:text-xs">{sponsor}</span>
                     </div>
@@ -170,7 +170,7 @@ export const WebinarPromo = () => {
                   { label: "MINS", value: timeLeft.m },
                   { label: "SECS", value: timeLeft.s },
                 ].map((item, i) => (
-                  <div key={i} className="bg-black border border-white/10 rounded-lg md:rounded-xl py-3 md:py-4 flex flex-col items-center justify-center">
+                  <div key={`${item.label}-${i}`} className="bg-black border border-white/10 rounded-lg md:rounded-xl py-3 md:py-4 flex flex-col items-center justify-center">
                     <span className="text-2xl md:text-3xl font-bold text-white font-mono tracking-tighter">{format(item.value)}</span>
                     <span className="text-[8px] md:text-[10px] text-gray-500 font-mono mt-1">{item.label}</span>
                   </div>

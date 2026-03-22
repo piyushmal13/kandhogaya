@@ -50,7 +50,7 @@ export const Blog = () => {
     fetchPosts();
   }, [page, searchQuery]);
 
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSearch = (e: React.SyntheticEvent) => {
     e.preventDefault();
     setPage(0);
     // Search is handled by the useEffect dependency on searchQuery
@@ -167,8 +167,8 @@ export const Blog = () => {
 
         {loading && posts.length === 0 && (
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <BlogCardSkeleton key={i} />
+            {['skel-1', 'skel-2', 'skel-3', 'skel-4', 'skel-5', 'skel-6'].map(key => (
+              <BlogCardSkeleton key={key} />
             ))}
           </div>
         )}
