@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "motion/react";
-import { ArrowRight, ShieldCheck, Activity } from "lucide-react";
+import { ArrowRight, ShieldCheck, Activity, Users, Target, Zap, ChevronDown } from "lucide-react";
 
 export const HeroSection = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -87,8 +87,47 @@ export const HeroSection = () => {
             <span>View Performance</span>
           </Link>
         </motion.div>
+        
+        {/* --- Stats Strip --- */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.5 }}
+          className="mt-20 md:mt-24 w-full max-w-5xl border-t border-white/5 pt-12 grid grid-cols-1 sm:grid-cols-3 gap-8 md:gap-12"
+        >
+          {[
+            { label: "Active Traders", value: "12,400+", icon: Users, color: "text-emerald-500" },
+            { label: "Win Rate", value: "82.4%", icon: Target, color: "text-cyan-500" },
+            { label: "Avg. Latency", value: "0.15ms", icon: Zap, color: "text-yellow-500" },
+          ].map((stat, i) => (
+            <div key={stat.label} className="flex flex-col items-center group">
+              <div className={`p-2 rounded-lg bg-white/5 mb-3 group-hover:scale-110 transition-transform ${stat.color}`}>
+                <stat.icon className="w-4 h-4" />
+              </div>
+              <div className="text-2xl md:text-3xl font-bold text-white mb-1 tabular-nums">{stat.value}</div>
+              <div className="text-[10px] md:text-xs font-mono text-gray-500 uppercase tracking-widest">{stat.label}</div>
+            </div>
+          ))}
+        </motion.div>
 
       </div>
+
+      {/* --- Scroll Indicator --- */}
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1 }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer group"
+        onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
+      >
+        <span className="text-[10px] font-mono text-gray-500 uppercase tracking-[0.2em] group-hover:text-emerald-500 transition-colors">Explorer</span>
+        <motion.div
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <ChevronDown className="w-4 h-4 text-emerald-500/50 group-hover:text-emerald-500 transition-colors" />
+        </motion.div>
+      </motion.div>
     </section>
   );
 };

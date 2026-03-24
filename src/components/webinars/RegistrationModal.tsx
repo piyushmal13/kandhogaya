@@ -14,7 +14,7 @@ interface RegistrationModalProps {
 }
 
 export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationModalProps) => {
-  const { user } = useAuth();
+  const { user, userProfile } = useAuth();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({ name: "", email: "", country: "" });
   const [loading, setLoading] = useState(false);
@@ -24,11 +24,11 @@ export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationM
     if (user) {
       setFormData(prev => ({
         ...prev,
-        name: user.full_name || "",
+        name: userProfile?.full_name || "",
         email: user.email || ""
       }));
     }
-  }, [user]);
+  }, [user, userProfile]);
 
   if (!user) {
     return (

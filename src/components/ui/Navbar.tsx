@@ -78,11 +78,17 @@ export const Navbar = () => {
                   key={link.path}
                   to={link.path}
                   className={cn(
-                    "text-sm font-medium transition-colors hover:text-white",
-                    location.pathname === link.path ? "text-emerald-200" : "text-slate-400",
+                    "relative text-sm font-medium transition-colors hover:text-white pb-1",
+                    location.pathname === link.path ? "text-emerald-400" : "text-slate-400",
                   )}
                 >
                   {link.name}
+                  {location.pathname === link.path && (
+                    <motion.div 
+                      layoutId="nav-active"
+                      className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]"
+                    />
+                  )}
                 </Link>
               ))}
             </div>

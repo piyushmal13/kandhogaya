@@ -129,7 +129,7 @@ const SignalPreview = () => (
                 className="bg-[#202c33] rounded-lg rounded-tl-none p-3 max-w-[85%] shadow-sm"
               >
                 <div className="text-[#e9edef] text-sm font-mono leading-relaxed">
-                  <span className="font-bold text-emerald-400">✅ TP 1 HIT (+45 Pips){"\n"}</span>
+                  <span className="font-bold text-emerald-400">✅ TP 1 HIT (+45 Pips) </span>{"\n"}
                   Move SL to Breakeven. Secure partial profits.
                 </div>
                 <div className="text-[10px] text-[#8696a0] text-right mt-1 flex items-center justify-end gap-1">
@@ -184,7 +184,7 @@ const SignalPreview = () => (
 
 // ── Payment Modal ──
 const PaymentModal = ({ plan, onClose }: { plan: PricingPlan; onClose: () => void }) => {
-  const { user } = useAuth();
+  const { user, userProfile } = useAuth();
   const { error: toastError } = useToast();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({ name: "", email: "", phone: "", txnId: "" });
@@ -194,9 +194,9 @@ const PaymentModal = ({ plan, onClose }: { plan: PricingPlan; onClose: () => voi
 
   useEffect(() => {
     if (user) {
-      setFormData((prev) => ({ ...prev, name: user.full_name || "", email: user.email || "" }));
+      setFormData((prev) => ({ ...prev, name: userProfile?.full_name || "", email: user.email || "" }));
     }
-  }, [user]);
+  }, [user, userProfile]);
 
   if (!user) {
     return (
@@ -248,7 +248,7 @@ const PaymentModal = ({ plan, onClose }: { plan: PricingPlan; onClose: () => voi
     if (e.target.files?.[0]) setFile(e.target.files[0]);
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     setUploading(true);
     try {

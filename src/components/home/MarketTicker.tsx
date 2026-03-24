@@ -22,8 +22,10 @@ const INITIAL_PAIRS: MarketPair[] = [
   { symbol: "SOL/USD", price: "148.20", change: "+4.12%", up: true, baseSymbol: "SOL" },
 ];
 
-const TWELVE_DATA_KEY = "6ac663a609254023a49d4412d9ea419e";
+
+const TWELVE_DATA_KEY = import.meta.env.VITE_TWELVE_DATA_KEY as string | undefined;
 const SYMBOLS = "XAU/USD,EUR/USD,BTC/USD,USD/JPY,GBP/USD,ETH/USD,SOL/USD,IXIC";
+
 
 export const MarketTicker = () => {
   const [pairs, setPairs] = useState<MarketPair[]>(INITIAL_PAIRS);
@@ -37,6 +39,11 @@ export const MarketTicker = () => {
     
     const fetchData = async () => {
       if (!isMounted) return;
+      // Skip live fetch if API key is not configured — use static fallback data
+      if (!TWELVE_DATA_KEY) {
+        setIsSyncing(false);
+        return;
+      }
       setIsSyncing(true);
       
       try {

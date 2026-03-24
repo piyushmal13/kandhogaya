@@ -10,7 +10,7 @@ import {
   Mail,
   MessageSquare,
   Shield,
-  Video,
+  Users,
 } from "lucide-react";
 
 import { BRANDING } from "../../constants/branding";
@@ -77,7 +77,8 @@ export const Footer = () => (
           <ul className="space-y-4 text-sm text-slate-300">
             <li><Link to="/courses" className="inline-flex items-center gap-2 hover:text-white"><BookOpen className="h-4 w-4 text-emerald-200" /> Academy</Link></li>
             <li><Link to="/blog" className="inline-flex items-center gap-2 hover:text-white"><Activity className="h-4 w-4 text-emerald-200" /> Market Insights</Link></li>
-            <li><Link to="/webinars" className="inline-flex items-center gap-2 hover:text-white"><Video className="h-4 w-4 text-emerald-200" /> Webinars</Link></li>
+            <li><Link to="/about" className="inline-flex items-center gap-2 hover:text-white"><Shield className="h-4 w-4 text-emerald-200" /> About Firm</Link></li>
+            <li><Link to="/hiring" className="inline-flex items-center gap-2 hover:text-white"><Users className="h-4 w-4 text-emerald-200" /> Careers</Link></li>
             <li><Link to="/contact" className="inline-flex items-center gap-2 hover:text-white"><MessageSquare className="h-4 w-4 text-emerald-200" /> Contact Desk</Link></li>
           </ul>
         </div>
@@ -112,7 +113,7 @@ export const Footer = () => (
 
       <div className="mt-12 flex flex-col gap-6 border-t border-white/5 pt-8 md:flex-row md:items-center md:justify-between">
         <div className="flex flex-col gap-4 text-xs text-slate-500 md:flex-row md:items-center">
-          <span>Copyright 2026 {BRANDING.name}. All rights reserved.</span>
+          <span>&copy; 2026 {BRANDING.name}. Institutional Grade Intelligence.</span>
           <span className="hidden h-1 w-1 rounded-full bg-slate-700 md:block" />
           <span>Institutional trading intelligence for modern retail execution.</span>
         </div>

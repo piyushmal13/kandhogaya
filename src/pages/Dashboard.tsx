@@ -1,10 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { Navigate, Link } from "react-router-dom";
-import { Zap, ShieldCheck, Bell, Settings, Target, Video, BookOpen, Clock, Activity, ArrowUpRight } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { 
+  ShieldCheck, 
+  Bell, 
+  Settings, 
+  Target, 
+  Video, 
+  Clock, 
+  Activity, 
+  ArrowUpRight,
+  Zap,
+  BookOpen
+} from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { supabase, safeQuery } from "../lib/supabase";
 import { cn } from "../utils/cn";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
+import { getSignals } from "../services/apiHandlers";
+import { BRANDING } from "../constants/branding";
+import { useToast } from "../contexts/ToastContext";
 
 interface BotLicense {
   id: string;
@@ -18,7 +32,7 @@ interface BotLicense {
 interface UserSignal {
   id: string;
   asset: string;
-  direction: string;
+  direction: "BUY" | "SELL";
   status: string;
   created_at: string;
 }
@@ -27,10 +41,14 @@ interface UserWebinar {
   id: string;
   title: string;
   date_time: string;
+  status: string;
 }
 
 export const Dashboard = () => {
   const { user, userProfile } = useAuth();
+  const navigate = useNavigate();
+  const { error: toastError } = useToast();
+
   const [licenses, setLicenses] = useState<BotLicense[]>([]);
   const [signals, setSignals] = useState<UserSignal[]>([]);
   const [webinars, setWebinars] = useState<UserWebinar[]>([]);
@@ -42,43 +60,56 @@ export const Dashboard = () => {
       const fetchDashboardData = async () => {
         setLoading(true);
         try {
+          // Concurrent fetching for performance
           const [licenseData, signalData, webinarData] = await Promise.all([
             safeQuery<BotLicense[]>(
-              supabase.from('bot_licenses').select('*, algo_bots(name)').eq('user_id', user.id)
+              supabase
+                .from("bot_licenses")
+                .select("*, algo_bots(name)")
+                .eq("user_id", user.id)
             ),
-            safeQuery<UserSignal[]>(
-              supabase.from('signals').select('*').eq('status', 'active').limit(5)
-            ),
-            safeQuery<UserWebinar[]>(
-              supabase.from('webinar_registrations').select('webinars(id, title, date_time)').eq('user_id', user.id).limit(3)
+            getSignals(), // This gets all signals, filtered to top 5 below
+            safeQuery<any[]>(
+              supabase
+                .from("webinar_registrations")
+                .select("webinars(id, title, date_time, status)")
+                .eq("user_id", user.id)
+                .limit(3)
             )
           ]);
-          
+
           setLicenses(Array.isArray(licenseData) ? licenseData : []);
-          setSignals(Array.isArray(signalData) ? signalData : []);
           
-          // Flatten webinar data
-          const flatWebinars = (webinarData as any[] || []).map(w => w.webinars).filter(Boolean);
+          // Filter top 5 active signals
+          const activeSignals = (Array.isArray(signalData) ? signalData : [])
+            .filter(s => s.status === 'active')
+            .slice(0, 5) as UserSignal[];
+          setSignals(activeSignals);
+
+          // Flatten webinar data safely handling foreign key join
+          const flatWebinars = (Array.isArray(webinarData) ? webinarData : [])
+            .map(w => w.webinars)
+            .filter(Boolean) as UserWebinar[];
           setWebinars(flatWebinars);
-          
+
           setDbHealthy(true);
         } catch (err) {
           console.error("Dashboard Fetch Error:", err);
           setDbHealthy(false);
+          toastError("Unable to synchronise console data. Please check connection.");
         } finally {
           setLoading(false);
         }
       };
+      
       fetchDashboardData();
     }
-  }, [user]);
+  }, [user, toastError]);
 
-  if (!user) return <Navigate to="/login" />;
+  if (!user) return null; // Handled by ProtectedRoute but for TS safety
 
-  const isAdmin = userProfile?.role === 'admin' || 
-                  user.email === 'admin@ifxtrades.com' || 
-                  user.email === 'admin@tradinghub.com' || 
-                  user.email === 'piyushmal1301@gmail.com';
+  const isAdmin = userProfile?.role === "admin" || 
+                  ["admin@ifxtrades.com", "admin@tradinghub.com", "piyushmal1301@gmail.com"].includes(user.email || "");
 
   const isPro = userProfile?.isPro === true;
 
@@ -102,8 +133,8 @@ export const Dashboard = () => {
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight">
               Console <span className="text-emerald-500">01</span>
-              <span className="block text-sm font-medium text-gray-400 mt-2">
-                AUTHENTICATED AS: {userProfile?.full_name || user.email?.split('@')[0]}
+              <span className="block text-sm font-medium text-gray-400 mt-2 lowercase">
+                authenticated id: {userProfile?.full_name || user.email?.split('@')[0]}
               </span>
             </h1>
           </motion.div>
@@ -117,7 +148,7 @@ export const Dashboard = () => {
             )}
             <div className={cn(
               "h-12 px-6 rounded-2xl flex items-center border-0 backdrop-blur-xl shadow-xl",
-              isPro ? "bg-emerald-500 text-black" : "bg-white/5 text-gray-400"
+              isPro ? "bg-emerald-500 text-black shadow-emerald-500/10" : "bg-white/5 text-gray-400"
             )}>
               <ShieldCheck className="w-4 h-4 mr-2" />
               <span className="text-xs font-black uppercase tracking-widest">
@@ -161,7 +192,7 @@ export const Dashboard = () => {
                   <Activity className="w-5 h-5 text-emerald-500" />
                   Your Licensed Terminal
                 </h2>
-                <Link to="/marketplace" className="text-xs font-bold text-emerald-500 hover:text-emerald-400">ADD NEW KEY</Link>
+                <Link to="/marketplace" className="text-xs font-bold text-emerald-500 hover:text-emerald-400 transition-colors uppercase tracking-widest">ADD NEW KEY</Link>
               </div>
               
               {loading ? (
@@ -171,33 +202,40 @@ export const Dashboard = () => {
                 </div>
               ) : licenses.length > 0 ? (
                 <div className="grid grid-cols-1 gap-3">
-                  {licenses.map((license) => (
-                    <div key={license.id} className="group relative p-6 rounded-3xl bg-black/40 border border-white/5 hover:border-emerald-500/30 transition-all">
-                      <div className="flex items-center justify-between relative z-10">
-                        <div className="flex items-center gap-5">
-                          <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-black transition-all">
-                            <ShieldCheck className="w-6 h-6" />
-                          </div>
-                          <div>
-                            <div className="text-white font-bold group-hover:text-emerald-400 transition-colors uppercase tracking-tight">
-                              {license.algo_bots?.name || "QUANT ENGINE v2"}
+                  {licenses.map((license) => {
+                    const status = license.is_active ? "ONLINE" : "EXPIRED";
+                    const statusStyles = license.is_active 
+                      ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" 
+                      : "bg-red-500/10 text-red-400 border-red-500/20";
+                      
+                    return (
+                      <div key={license.id} className="group relative p-6 rounded-3xl bg-black/40 border border-white/5 hover:border-emerald-500/30 transition-all">
+                        <div className="flex items-center justify-between relative z-10">
+                          <div className="flex items-center gap-5">
+                            <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-black transition-all">
+                              <ShieldCheck className="w-6 h-6" />
                             </div>
-                            <div className="flex items-center gap-3 mt-1 text-[10px] font-mono text-gray-500">
-                              <span>KEY: {license.license_key}</span>
-                              <span className="w-1 h-1 rounded-full bg-gray-700" />
-                              <span>EXP: {new Date(license.expires_at).toLocaleDateString()}</span>
+                            <div>
+                              <div className="text-white font-bold group-hover:text-emerald-400 transition-colors uppercase tracking-tight">
+                                {license.algo_bots?.name || "QUANT ENGINE v2"}
+                              </div>
+                              <div className="flex items-center gap-3 mt-1 text-[10px] font-mono text-gray-500">
+                                <span>KEY: {license.license_key}</span>
+                                <span className="w-1 h-1 rounded-full bg-gray-700" />
+                                <span>EXP: {new Date(license.expires_at).toLocaleDateString()}</span>
+                              </div>
                             </div>
                           </div>
+                          <span className={cn(
+                            "px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter border",
+                            statusStyles
+                          )}>
+                            {status}
+                          </span>
                         </div>
-                        <span className={cn(
-                          "px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter",
-                          license.is_active ? "bg-emerald-500/20 text-emerald-400" : "bg-red-500/20 text-red-400"
-                        )}>
-                          {license.is_active ? "ONLINE" : "EXPIRED"}
-                        </span>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               ) : (
                 <div className="text-center py-16 border-2 border-dashed border-white/5 rounded-[32px]">
@@ -216,10 +254,10 @@ export const Dashboard = () => {
                   <Zap className="w-5 h-5 text-yellow-500" />
                   Elite Signal Frequency
                 </h2>
-                <Link to="/signals" className="text-xs font-bold text-gray-500 hover:text-white">FULL FEED</Link>
+                <Link to="/signals" className="text-xs font-bold text-gray-500 hover:text-white uppercase tracking-widest">FULL FEED</Link>
               </div>
               <div className="space-y-2">
-                {signals.map(s => (
+                {signals.length > 0 ? signals.map(s => (
                   <div key={s.id} className="p-4 rounded-2xl bg-black/40 flex items-center justify-between border border-white/5">
                     <div className="flex items-center gap-4">
                       <div className={cn("w-2 h-2 rounded-full shadow-[0_0_8px]", s.direction === 'BUY' ? "bg-emerald-500 shadow-emerald-500" : "bg-red-500 shadow-red-500")} />
@@ -232,7 +270,11 @@ export const Dashboard = () => {
                       {new Date(s.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
                   </div>
-                ))}
+                )) : (
+                  <div className="text-center py-8">
+                    <p className="text-gray-500 text-xs italic">Awaiting new trade setups...</p>
+                  </div>
+                )}
               </div>
             </section>
           </div>
@@ -245,49 +287,73 @@ export const Dashboard = () => {
                 <Video className="w-5 h-5 text-emerald-500" />
                 Live Sessions
               </h2>
-              {webinars.length > 0 ? (
-                <div className="space-y-4">
-                  {webinars.map(w => (
-                    <div key={w.id} className="p-4 rounded-2xl bg-black/40 border border-white/5">
-                      <div className="text-sm font-bold text-white mb-2">{w.title}</div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-mono text-emerald-500">{new Date(w.date_time).toLocaleDateString()}</span>
-                        <Link to={`/webinars/${w.id}`} className="p-2 rounded-xl bg-white/5 hover:bg-emerald-500 hover:text-black transition-all">
-                          <ArrowUpRight className="w-4 h-4" />
-                        </Link>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-[10px] uppercase font-bold text-gray-600 tracking-widest text-center py-8">
-                  NO SESSIONS SCHEDULED
-                </div>
-              )}
+              <AnimatePresence>
+                {webinars.length > 0 ? (
+                  <div className="space-y-4">
+                    {webinars.map(w => (
+                      <motion.div 
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        key={w.id} 
+                        className="p-4 rounded-2xl bg-black/40 border border-white/5"
+                      >
+                        <div className="text-sm font-bold text-white mb-2">{w.title}</div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-mono text-emerald-500">{new Date(w.date_time).toLocaleDateString()}</span>
+                          <Link to="/academy" className="p-2 rounded-xl bg-white/5 hover:bg-emerald-500 hover:text-black transition-all">
+                            <ArrowUpRight className="w-4 h-4" />
+                          </Link>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-[10px] uppercase font-bold text-gray-600 tracking-widest text-center py-8">
+                    NO SESSIONS SCHEDULED
+                  </div>
+                )}
+              </AnimatePresence>
             </section>
 
             {/* Quick Actions Card */}
             <section className="p-8 rounded-[36px] bg-white/5 border border-white/10 backdrop-blur-xl group">
               <h2 className="text-lg font-bold text-white mb-8">Quick Control</h2>
               <div className="grid grid-cols-2 gap-3">
-                <button className="flex flex-col items-center gap-3 p-6 rounded-3xl bg-black/40 border border-white/5 hover:border-emerald-500/50 hover:bg-emerald-500/10 transition-all">
-                  <BookOpen className="w-6 h-6 text-emerald-500" />
-                  <span className="text-[10px] font-black uppercase text-gray-500">Academy</span>
-                </button>
-                <button className="flex flex-col items-center gap-3 p-6 rounded-3xl bg-black/40 border border-white/5 hover:border-emerald-500/50 hover:bg-emerald-500/10 transition-all">
-                  <Activity className="w-6 h-6 text-emerald-500" />
-                  <span className="text-[10px] font-black uppercase text-gray-500">Analytics</span>
-                </button>
-                <button className="flex flex-col items-center gap-3 p-6 rounded-3xl bg-black/40 border border-white/5 hover:border-emerald-500/50 hover:bg-emerald-500/10 transition-all">
-                  <Bell className="w-6 h-6 text-emerald-500" />
-                  <span className="text-[10px] font-black uppercase text-gray-500">App Alerts</span>
-                </button>
-                <button className="flex flex-col items-center gap-3 p-6 rounded-3xl bg-black/40 border border-white/5 hover:border-emerald-500/50 hover:bg-emerald-500/10 transition-all">
-                  <Target className="w-6 h-6 text-emerald-500" />
-                  <span className="text-[10px] font-black uppercase text-gray-500">Support</span>
-                </button>
+                {[
+                  { label: "Academy", icon: BookOpen, path: "/academy" },
+                  { label: "Results", icon: Activity, path: "/results" },
+                  { label: "Alerts", icon: Bell, href: BRANDING.whatsappUrl },
+                  { label: "Support", icon: Target, path: "/contact" },
+                ].map((item) => (
+                  <button
+                    key={item.label}
+                    onClick={() => item.path ? navigate(item.path) : window.open(item.href, "_blank")}
+                    className="flex flex-col items-center gap-3 p-6 rounded-3xl bg-black/40 border border-white/5 hover:border-emerald-500/50 hover:bg-emerald-500/10 transition-all group/btn"
+                  >
+                    <item.icon className="w-6 h-6 text-emerald-500 group-hover/btn:scale-110 transition-transform" />
+                    <span className="text-[10px] font-black uppercase text-gray-500 group-hover/btn:text-white transition-colors">{item.label}</span>
+                  </button>
+                ))}
               </div>
             </section>
+
+            {/* Pro Upgrade CTA */}
+            {!isPro && (
+              <section className="p-1 rounded-[36px] bg-gradient-to-br from-emerald-400 to-cyan-500 shadow-lg shadow-emerald-500/20">
+                <div className="p-7 rounded-[34px] bg-black">
+                  <h3 className="text-lg font-bold text-white mb-2">Upgrade to Pro</h3>
+                  <p className="text-xs text-gray-400 mb-6 leading-relaxed">
+                    Unlock institutional strategies, priority signals, and one-on-one sessions.
+                  </p>
+                  <Link 
+                    to="/marketplace" 
+                    className="flex items-center justify-center py-3 rounded-2xl bg-emerald-500 text-black font-black text-[10px] uppercase tracking-widest hover:bg-white transition-all shadow-xl shadow-emerald-500/10"
+                  >
+                    View Pro Algos
+                  </Link>
+                </div>
+              </section>
+            )}
           </div>
         </div>
       </div>

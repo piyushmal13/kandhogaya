@@ -1,22 +1,36 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { motion } from "motion/react";
 import { Activity } from "lucide-react";
 
-// Generate 36 months of random data (mostly positive)
-const monthlyResults = Array.from({ length: 36 }).map((_, i) => {
-  const isPositive = Math.random() > 0.15; // 85% positive months
-  const value = isPositive 
-    ? (Math.random() * 89 + 1).toFixed(1) // 1% to 90%
-    : (Math.random() * -15).toFixed(1); // -0% to -15%
-  
-  return {
-    month: `M${i + 1}`,
-    value: parseFloat(value),
-    isPositive
-  };
-});
+/** Deterministic seed-based pseudo-random — identical every render, no hot-reload drift */
+const seededRandom = (seed: number): number => {
+  const x = Math.sin(seed + 7) * 10000;
+  return x - Math.floor(x);
+};
+
+const MONTH_LABELS = [
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+];
+
+const generateMonthlyResults = () =>
+  Array.from({ length: 36 }).map((_, i) => {
+    const r1 = seededRandom(i * 3);
+    const r2 = seededRandom(i * 3 + 1);
+    const isPositive = r1 > 0.15;
+    const raw = isPositive
+      ? (r2 * 89 + 1).toFixed(1)
+      : (r2 * -15).toFixed(1);
+    return {
+      label: `${MONTH_LABELS[i % 12]} Y${Math.floor(i / 12) + 1}`,
+      value: Number.parseFloat(raw),
+      isPositive,
+    };
+  });
 
 export const PerformanceHistory = () => {
+  const monthlyResults = useMemo(generateMonthlyResults, []);
+
   return (
     <section className="py-12 bg-[#020202] border-t border-white/5 relative overflow-hidden">
       <div className="max-w-6xl mx-auto px-4 relative z-10">
@@ -45,7 +59,7 @@ export const PerformanceHistory = () => {
           <div className="grid grid-cols-6 sm:grid-cols-9 md:grid-cols-12 gap-1.5 md:gap-3">
             {monthlyResults.map((month, i) => (
               <motion.div
-                key={i}
+                key={month.label}
                 initial={{ opacity: 0, scale: 0.8 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
@@ -61,9 +75,8 @@ export const PerformanceHistory = () => {
                   {month.value}%
                 </span>
                 
-                {/* Tooltip */}
                 <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-black border border-white/10 px-3 py-1.5 rounded-lg text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-20 shadow-xl">
-                  Month {i + 1}: <span className={month.isPositive ? 'text-emerald-400' : 'text-red-400'}>{month.value}%</span>
+                  {month.label}: <span className={month.isPositive ? 'text-emerald-400' : 'text-red-400'}>{month.value > 0 ? '+' : ''}{month.value}%</span>
                 </div>
               </motion.div>
             ))}

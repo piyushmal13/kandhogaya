@@ -35,14 +35,14 @@ export const AlgoGreatness = () => {
     });
   }, []);
 
-  const getEmbedUrl = (url?: string) => {
+  const getEmbedUrl = (url?: string): string | null => {
     if (!url) return null;
     if (url.includes('youtube.com/watch?v=')) return url.replace('watch?v=', 'embed/');
     if (url.includes('youtu.be/')) return url.replace('youtu.be/', 'youtube.com/embed/');
     return url;
   };
 
-  const videoUrl = getEmbedUrl((featuredAlgo as any)?.video_url) || "https://www.youtube.com/embed/dQw4w9WgXcQ";
+  const videoUrl = getEmbedUrl((featuredAlgo as any)?.video_explanation_url);
 
   return (
     <div className="py-16 md:py-24 border-t border-white/10 mt-10 md:mt-20">
@@ -57,34 +57,50 @@ export const AlgoGreatness = () => {
         <p className="text-gray-400 max-w-2xl mx-auto text-sm md:text-lg">Experience the architecture behind {featuredAlgo && (featuredAlgo as any).name ? (featuredAlgo as any).name : "our proprietary systems"} and see why institutional traders trust IFXTrades.</p>
       </motion.div>
 
-      {/* Video Section - High Frequency Terminal Style */}
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.98 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
-        className="relative max-w-6xl mx-auto mb-20 md:mb-32 px-4"
-      >
-        <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/20 via-cyan-500/20 to-emerald-500/20 rounded-[2rem] blur-2xl opacity-30"></div>
-        <div className="relative bg-[#050505] border border-white/10 rounded-[2rem] overflow-hidden shadow-[0_0_80px_rgba(0,0,0,1)]">
-          <div className="aspect-video w-full bg-black relative group">
-            <iframe 
-              src={videoUrl}
-              title="Algo Strategy Breakdown"
-              className="w-full h-full border-0 opacity-80 group-hover:opacity-100 transition-opacity"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-            
-            <div className="absolute bottom-6 left-6 right-6 flex justify-between items-center pointer-events-none">
-              <div className="bg-black/80 backdrop-blur-xl border border-white/10 px-4 py-2 rounded-xl flex items-center gap-3">
-                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,1)]" />
-                <span className="text-white font-mono text-[10px] md:text-xs font-bold tracking-widest uppercase">Analysis Core Live</span>
+        {/* Video Section — only rendered when a valid URL exists */}
+      {videoUrl ? (
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.98 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="relative max-w-6xl mx-auto mb-20 md:mb-32 px-4"
+        >
+          <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/20 via-cyan-500/20 to-emerald-500/20 rounded-[2rem] blur-2xl opacity-30"></div>
+          <div className="relative bg-[#050505] border border-white/10 rounded-[2rem] overflow-hidden shadow-[0_0_80px_rgba(0,0,0,1)]">
+            <div className="aspect-video w-full bg-black relative group">
+              <iframe 
+                src={videoUrl}
+                title="Algo Strategy Breakdown"
+                className="w-full h-full border-0 opacity-80 group-hover:opacity-100 transition-opacity"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+              
+              <div className="absolute bottom-6 left-6 right-6 flex justify-between items-center pointer-events-none">
+                <div className="bg-black/80 backdrop-blur-xl border border-white/10 px-4 py-2 rounded-xl flex items-center gap-3">
+                  <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,1)]" />
+                  <span className="text-white font-mono text-[10px] md:text-xs font-bold tracking-widest uppercase">Analysis Core Live</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
+      ) : (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="relative max-w-6xl mx-auto mb-20 md:mb-32 px-4"
+        >
+          <div className="bg-[#050505] border border-white/10 rounded-[2rem] aspect-video flex flex-col items-center justify-center gap-4">
+            <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+              <Activity className="w-8 h-8 text-emerald-500" />
+            </div>
+            <p className="text-gray-500 text-sm font-mono uppercase tracking-widest">Strategy video loading…</p>
+          </div>
+        </motion.div>
+      )}
 
       {/* Features */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-20 md:mb-32 max-w-6xl mx-auto px-4">
@@ -113,7 +129,9 @@ export const AlgoGreatness = () => {
           <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">Verified User Reviews</h3>
           <div className="flex items-center justify-center gap-2">
             <div className="flex">
-              {Array.from({ length: 5 }).map((_, i) => <Star key={`main-star-${i}`} className="w-4 h-4 md:w-6 md:h-6 text-emerald-500 fill-emerald-500" />)}
+              {[1, 2, 3, 4, 5].map((num) => (
+                <Star key={`star-${num}`} className="w-4 h-4 md:w-6 md:h-6 text-emerald-500 fill-emerald-500" />
+              ))}
             </div>
             <span className="text-white font-bold text-lg md:text-xl ml-2">{stats.avg}/5</span>
             <span className="text-gray-500 text-xs md:text-sm ml-2">from {stats.count.toLocaleString()}+ traders</span>

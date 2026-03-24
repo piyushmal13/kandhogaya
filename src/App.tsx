@@ -11,6 +11,7 @@ import { WhatsAppButton } from "./components/ui/WhatsAppButton";
 import { ScrollToTop } from "./components/ScrollToTop";
 import { SiteBackdrop } from "./components/site/SiteBackdrop";
 import { LoadingSpinner } from "./components/ui/LoadingSpinner";
+import { ProtectedRoute } from "./components/ui/ProtectedRoute";
 
 import { useReferral } from "./hooks/useReferral";
 
@@ -75,9 +76,9 @@ const AnimatedRoutes = () => {
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogDetail />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/agent" element={<AgentDashboard />} />
+            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/admin" element={<ProtectedRoute adminOnly><Admin /></ProtectedRoute>} />
+            <Route path="/agent" element={<ProtectedRoute><AgentDashboard /></ProtectedRoute>} />
             <Route path="/hiring" element={<Hiring />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />

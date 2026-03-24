@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { motion } from "motion/react";
 import { Zap, Activity, Clock, AlertCircle, CheckCircle2 } from "lucide-react";
 
-// 3 Active, 1 Pending
+// 3 Active, 1 Pending — static data, no randomness
 const trades = [
   {
     pair: "XAUUSD",
@@ -42,21 +42,39 @@ const trades = [
   }
 ];
 
-// Generate 36 months of random data (mostly positive)
-const monthlyResults = Array.from({ length: 36 }).map((_, i) => {
-  const isPositive = Math.random() > 0.15; // 85% positive months
-  const value = isPositive 
-    ? (Math.random() * 89 + 1).toFixed(1) // 1% to 90%
-    : (Math.random() * -15).toFixed(1); // -0% to -15%
-  
-  return {
-    month: `M${i + 1}`,
-    value: Number.parseFloat(value),
-    isPositive
-  };
-});
+/**
+ * Deterministic seed-based pseudo-random using a linear congruential generator.
+ * Produces the exact same sequence every render — stable across hot-reloads.
+ */
+const seededRandom = (seed: number): number => {
+  const x = Math.sin(seed + 1) * 10000;
+  return x - Math.floor(x);
+};
+
+const generateMonthlyResults = () =>
+  Array.from({ length: 36 }).map((_, i) => {
+    const r1 = seededRandom(i * 2);
+    const r2 = seededRandom(i * 2 + 1);
+    const isPositive = r1 > 0.15; // ~85% positive months
+    const raw = isPositive
+      ? (r2 * 89 + 1).toFixed(1)  // 1% to 90%
+      : (r2 * -15).toFixed(1);    // 0% to -15%
+    return {
+      month: `M${i + 1}`,
+      value: Number.parseFloat(raw),
+      isPositive,
+    };
+  });
 
 export const LiveAlgoTerminal = () => {
+  // Stable across all renders — deterministic RNG
+  const monthlyResults = useMemo(generateMonthlyResults, []);
+
+  // Computed summary stats
+  const positiveCount = useMemo(() => monthlyResults.filter(m => m.isPositive).length, [monthlyResults]);
+  const bestMonth = useMemo(() => Math.max(...monthlyResults.map(m => m.value)), [monthlyResults]);
+  const worstMonth = useMemo(() => Math.min(...monthlyResults.map(m => m.value)), [monthlyResults]);
+
   return (
     <section className="py-12 bg-[#020202] border-t border-white/5 relative overflow-hidden">
       <div className="max-w-6xl mx-auto px-4 relative z-10">
@@ -182,9 +200,27 @@ export const LiveAlgoTerminal = () => {
               ))}
             </div>
 
-            <div className="mt-6 pt-6 border-t border-white/5 flex justify-between items-center text-xs text-gray-500 font-mono">
-              <div>TOTAL RETURN: <span className="text-emerald-400 font-bold">+1,240%</span></div>
-              <div>MAX DRAWDOWN: <span className="text-red-400 font-bold">-8.2%</span></div>
+            <div className="mt-6 pt-6 border-t border-white/5 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs font-mono">
+              <div className="text-gray-500">
+                TOTAL RETURN
+                <div className="text-emerald-400 font-bold text-sm mt-0.5">+1,240%</div>
+              </div>
+              <div className="text-gray-500">
+                MAX DRAWDOWN
+                <div className="text-red-400 font-bold text-sm mt-0.5">-8.2%</div>
+              </div>
+              <div className="text-gray-500">
+                POSITIVE MONTHS
+                <div className="text-emerald-400 font-bold text-sm mt-0.5">{positiveCount}/36</div>
+              </div>
+              <div className="text-gray-500">
+                BEST / WORST
+                <div className="text-sm mt-0.5">
+                  <span className="text-emerald-400 font-bold">+{bestMonth.toFixed(1)}%</span>
+                  <span className="text-gray-600 mx-1">/</span>
+                  <span className="text-red-400 font-bold">{worstMonth.toFixed(1)}%</span>
+                </div>
+              </div>
             </div>
 
           </motion.div>
