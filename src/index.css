@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Cormorant+Garamond:wght@500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;500;600&display=swap");
 @import "tailwindcss";
 
 /* ═══════════════════════════════════════════════════
@@ -8,9 +8,9 @@
    ═══════════════════════════════════════════════════ */
 
 @theme {
-  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
-  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-serif: "DM Serif Display", "Cormorant Garamond", Georgia, serif;
 }
 
 @layer base {
@@ -43,10 +43,10 @@
     --info: #60a5fa;
 
     /* ── Spacing Scale (Section / Content) ── */
-    --space-section: 6rem;
-    --space-section-sm: 4rem;
-    --space-content: 4rem;
-    --space-content-sm: 2rem;
+    --space-section: 12rem;
+    --space-section-sm: 8rem;
+    --space-content: 6rem;
+    --space-content-sm: 4rem;
 
     /* ── Radius Scale ── */
     --radius-card: 1.75rem;
@@ -65,10 +65,10 @@
     --neon-emerald: #10b981;
     --neon-cyan: #06b6d4;
     --neon-purple: #8b5cf6;
-    --glass-bg: rgba(255, 255, 255, 0.03);
-    --glass-border: rgba(255, 255, 255, 0.08);
-    --glass-blur: 12px;
-    --noise-opacity: 0.03;
+    --glass-bg: rgba(255, 255, 255, 0.02);
+    --glass-border: rgba(255, 255, 255, 0.05);
+    --glass-blur: 24px;
+    --noise-opacity: 0.04;
 
     color-scheme: dark;
   }
@@ -121,9 +121,9 @@
     color: var(--text-primary);
   }
 
-  h1 { @apply text-4xl sm:text-6xl md:text-8xl lg:text-[120px] leading-[0.95] tracking-[-0.04em] font-extrabold pb-2; }
-  h2 { @apply text-3xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05] tracking-[-0.03em] font-bold; }
-  h3 { @apply text-2xl sm:text-3xl md:text-4xl leading-tight tracking-[-0.02em]; }
+  h1 { @apply text-4xl sm:text-6xl md:text-8xl lg:text-[140px] leading-[0.9] tracking-[-0.05em] font-extrabold pb-4; }
+  h2 { @apply text-3xl sm:text-5xl md:text-6xl lg:text-8xl leading-[1.0] tracking-[-0.04em] font-bold; }
+  h3 { @apply text-2xl sm:text-3xl md:text-5xl leading-tight tracking-[-0.03em]; }
 
   p {
     color: var(--text-secondary);
@@ -298,7 +298,12 @@
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
     backdrop-filter: blur(var(--glass-blur));
-    @apply transition-all duration-500 rounded-[2rem];
+    @apply transition-all duration-700 rounded-[2.5rem];
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.02);
+  }
+
+  .institutional-title {
+    @apply font-serif italic font-medium;
   }
 
   .glass-card-hover {

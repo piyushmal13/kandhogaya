@@ -24,7 +24,7 @@ export const SuccessShowcase = () => {
   if (reviews.length === 0) return null;
 
   return (
-    <section className="py-20 md:py-32 bg-[#020202] relative overflow-hidden border-t border-white/5">
+    <section className="py-24 md:py-48 bg-[#020202] relative overflow-hidden border-t border-white/5">
       {/* Dynamic Background Effects */}
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/5 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-500/5 rounded-full blur-[120px] pointer-events-none" />
@@ -36,9 +36,11 @@ export const SuccessShowcase = () => {
   viewport = {{ once: true }}
 >
           <span className="text-emerald-500 font-bold text-[10px] md:text-xs uppercase tracking-[0.4em] mb-4 inline-block">Validation</span>
-          <h2 className="text-3xl md:text-6xl font-bold text-white mb-6 tracking-tight">Trusted by Professionals</h2>
-          <p className="text-gray-400 max-w-2xl mx-auto text-sm md:text-lg">
-            Institutional-grade performance verified by traders across the globe.
+          <h2 className="text-4xl md:text-8xl font-bold text-white mb-8 tracking-tighter leading-[0.95]">
+            Trusted by <span className="institutional-title italic font-serif text-emerald-400">Professionals</span>
+          </h2>
+          <p className="text-gray-500 max-w-2xl mx-auto text-base md:text-2xl font-mono leading-relaxed">
+            Institutional-grade performance verified by quant traders across the globe.
           </p>
         </motion.div>
       </div>
@@ -52,7 +54,7 @@ export const SuccessShowcase = () => {
           className="flex gap-4 md:gap-8"
           animate={prefersReducedMotion ? {} : { x: ["0%", "-33.333333%"] }}
           transition={{
-            duration: 40,
+            duration: 60,
             repeat: Infinity,
             ease: "linear",
           }}
@@ -60,7 +62,7 @@ export const SuccessShowcase = () => {
           {scrollItems.map((rev, i) => (
             <div 
               key={`${rev.id || i}-${i}`}
-              className="group relative p-6 md:p-10 rounded-2xl md:rounded-[2.5rem] bg-zinc-900/50 border border-white/5 backdrop-blur-xl transition-all duration-500 hover:border-emerald-500/30 min-w-[300px] md:min-w-[480px] flex flex-col"
+              className="glass-card group relative p-8 md:p-12 border-white/5 backdrop-blur-3xl transition-all duration-700 hover:border-emerald-500/30 min-w-[320px] md:min-w-[560px] flex flex-col"
             >
               <div className="absolute top-6 right-8 opacity-10 group-hover:opacity-20 transition-opacity">
                 <Quote className="w-12 h-12 text-emerald-500" />

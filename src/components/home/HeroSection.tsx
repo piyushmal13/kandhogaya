@@ -27,7 +27,7 @@ export const HeroSection = () => {
   }, []);
 
   return (
-    <section ref={containerRef} className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#000000] pt-32 pb-20 perspective-container">
+    <section ref={containerRef} className="relative min-h-[110vh] flex flex-col items-center justify-center overflow-hidden bg-[#000000] pt-48 pb-32 perspective-container">
       
       {/* ── 200x Institutional Background System ── */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -59,14 +59,14 @@ export const HeroSection = () => {
         
         {/* --- Main Headline --- */}
         <motion.h1 
-          initial={{ opacity: 0, scale: 0.95 }}
+          initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-8 max-w-6xl mx-auto"
+          transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+          className="mb-12 max-w-7xl mx-auto"
         >
-          Institutional Edge. <br className="hidden sm:block" />
+          Institutional <span className="institutional-title text-emerald-300">Edge</span>. <br className="hidden lg:block" />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 via-emerald-500 to-cyan-400">
-            Retail Accessibility.
+            Retail <span className="institutional-title italic font-serif text-cyan-500">Accessibility</span>.
           </span>
         </motion.h1>
         
@@ -87,25 +87,25 @@ export const HeroSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="flex flex-col sm:flex-row justify-center gap-3 md:gap-6 w-full sm:w-auto px-4"
+          className="flex flex-col sm:flex-row justify-center gap-6 w-full sm:w-auto px-4"
         >
           <Link 
             to="/login" 
-            className="group relative px-6 py-3.5 md:px-8 md:py-4 bg-emerald-500 text-black font-bold rounded-xl overflow-hidden flex items-center justify-center gap-2 text-base md:text-lg w-full sm:w-auto hover:shadow-[0_0_40px_rgba(16,185,129,0.4)] transition-shadow duration-500"
+            className="group relative px-10 py-5 bg-emerald-500 text-black font-bold rounded-full overflow-hidden flex items-center justify-center gap-2 text-lg w-full sm:w-auto hover:shadow-[0_0_60px_rgba(16,185,129,0.3)] transition-all duration-700"
           >
-            <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[0.16,1,0.3,1]" />
-            <span className="relative z-10 flex items-center gap-2">
-              Join the Elite (Free)
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+            <div className="absolute inset-0 bg-white/25 translate-y-full group-hover:translate-y-0 transition-transform duration-700 ease-[0.16,1,0.2,1]" />
+            <span className="relative z-10 flex items-center gap-2 tracking-tight">
+              Access Institutional Terminal
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform duration-500" />
             </span>
           </Link>
           
           <Link 
             to="/results" 
-            className="group px-6 py-3.5 md:px-8 md:py-4 bg-white/5 text-white font-medium rounded-xl border border-white/10 hover:border-emerald-500/50 hover:bg-white/10 transition-all duration-500 backdrop-blur-sm flex items-center justify-center gap-2 text-base md:text-lg w-full sm:w-auto"
+            className="group px-10 py-5 bg-white/5 text-white font-medium rounded-full border border-white/10 hover:border-emerald-500/50 hover:bg-white/10 transition-all duration-700 backdrop-blur-3xl flex items-center justify-center gap-2 text-lg w-full sm:w-auto"
           >
             <Activity className="w-5 h-5 text-emerald-500 group-hover:scale-110 transition-transform" />
-            <span>View Performance</span>
+            <span className="tracking-tight">Global Performance</span>
           </Link>
         </motion.div>
         

@@ -59,7 +59,7 @@ export const GlobalReach = () => {
   }, []);
 
   return (
-    <section className="py-16 md:py-24 bg-[#000000] relative overflow-hidden border-t border-white/5">
+    <section className="py-24 md:py-48 bg-[#000000] relative overflow-hidden border-t border-white/5">
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
           
@@ -80,9 +80,9 @@ export const GlobalReach = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tighter mb-6"
+              className="text-4xl sm:text-5xl md:text-7xl font-bold text-white tracking-tighter mb-8 leading-[1.0]"
             >
-              Powering Traders Across the Globe
+              Powering <span className="institutional-title italic font-serif text-emerald-400">Traders</span> Across the Globe
             </motion.h2>
             
             <motion.p 

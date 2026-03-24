@@ -129,31 +129,31 @@ export const MarketTicker = () => {
   return (
     <div 
       ref={containerRef}
-      className="relative w-full h-[52px] md:h-[64px] bg-black border-y border-white/5 overflow-hidden flex items-center z-50 transform-gpu"
+      className="relative w-full h-[64px] md:h-[84px] bg-black border-y border-white/5 overflow-hidden flex items-center z-50 transform-gpu"
     >
       {/* Dynamic Background Overlays */}
-      <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 via-transparent to-cyan-500/5 pointer-events-none" />
-      <div className="absolute inset-0 backdrop-blur-[20px] pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/[0.02] via-transparent to-cyan-500/[0.02] pointer-events-none" />
+      <div className="absolute inset-0 backdrop-blur-3xl pointer-events-none" />
       
       {/* 10k Dashboard: Left Status */}
       <div className="absolute left-0 top-0 bottom-0 z-[60] flex items-center px-4 md:px-8 bg-black/95 border-r border-white/5 shadow-[25px_0_40px_rgba(0,0,0,0.9)]">
         <div className="flex items-center gap-3">
           <div className="relative">
-            <div className={`w-2 h-2 rounded-full transition-all duration-1000 ${marketStatus === "OPEN" ? 'bg-emerald-500 neon-glow-emerald' : 'bg-rose-500 shadow-[0_0_12px_rgba(244,63,94,0.4)]'}`} />
+            <div className={`w-2.5 h-2.5 rounded-full transition-all duration-1000 ${marketStatus === "OPEN" ? 'bg-emerald-500 neon-glow-emerald' : 'bg-rose-500 shadow-[0_0_12px_rgba(244,63,94,0.4)]'}`} />
             {marketStatus === "OPEN" && (
               <motion.div 
-                animate={{ scale: [1, 2.5], opacity: [0.6, 0] }} 
-                transition={{ repeat: Infinity, duration: 1.5 }} 
+                animate={{ scale: [1, 3], opacity: [0.4, 0] }} 
+                transition={{ repeat: Infinity, duration: 2 }} 
                 className="absolute inset-0 bg-emerald-500 rounded-full" 
               />
             )}
           </div>
           <div className="flex flex-col">
-            <span className="text-[10px] font-black text-white uppercase tracking-[0.25em] font-mono leading-none">
-              MARKET {marketStatus}
+            <span className="text-[10px] font-bold text-white uppercase tracking-[0.4em] font-mono leading-none">
+              SYSTEM {marketStatus}
             </span>
-            <span className="text-[8px] text-emerald-500 font-mono mt-1 tracking-tighter uppercase font-bold">
-              {isSyncing ? "SYNCING..." : (lastUpdate || "LIVE")}
+            <span className="text-[8px] text-emerald-500/60 font-mono mt-1.5 tracking-widest uppercase">
+              {isSyncing ? "FETCHING..." : (lastUpdate || "ACTIVE")}
             </span>
           </div>
         </div>

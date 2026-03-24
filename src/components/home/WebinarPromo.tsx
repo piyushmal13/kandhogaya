@@ -66,9 +66,9 @@ export const WebinarPromo = () => {
   const isFree = !webinar.is_paid;
 
   return (
-    <section className="py-16 md:py-24 bg-[#020202] relative overflow-hidden border-t border-white/5">
-      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 pointer-events-none" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[800px] h-[300px] md:h-[800px] bg-emerald-500/5 blur-[80px] md:blur-[120px] rounded-full pointer-events-none" />
+    <section className="py-24 md:py-48 bg-[#020202] relative overflow-hidden border-t border-white/5">
+      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] md:w-[1000px] h-[400px] md:h-[1000px] bg-emerald-500/[0.03] blur-[150px] md:blur-[200px] rounded-full pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-12 items-center">
@@ -91,9 +91,9 @@ export const WebinarPromo = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="text-2xl sm:text-4xl md:text-6xl font-bold text-white mb-4 md:mb-6 tracking-tighter leading-[1.1]"
+              className="text-3xl sm:text-5xl md:text-8xl font-bold text-white mb-6 md:mb-10 tracking-tighter leading-[0.95]"
             >
-              {webinar.title}
+              {webinar.title.split(' ').slice(0, -1).join(' ')} <span className="institutional-title text-emerald-400">{webinar.title.split(' ').slice(-1)}</span>
             </motion.h2>
 
             <motion.p
@@ -168,7 +168,7 @@ export const WebinarPromo = () => {
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="bg-[#0a0a0a] border border-white/10 rounded-2xl md:rounded-3xl p-6 md:p-8 relative overflow-hidden group shadow-2xl"
+              className="glass-card p-8 md:p-12 relative overflow-hidden group border-white/5 shadow-2xl"
             >
               <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
@@ -210,9 +210,11 @@ export const WebinarPromo = () => {
                 </div>
               </div>
 
-              <Link to={`/webinars/${webinar.id}`} className="w-full py-3.5 md:py-4 bg-emerald-500 hover:bg-emerald-400 text-black font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group/btn shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] text-sm md:text-base">
-                {isFree ? "Reserve Free Seat" : `Register for $${webinar.price}`}
-                <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover/btn:translate-x-1 transition-transform" />
+              <Link to={`/webinars/${webinar.id}`} className="w-full py-5 bg-emerald-500 hover:bg-emerald-400 text-black font-bold rounded-full transition-all duration-500 flex items-center justify-center gap-2 group/btn shadow-[0_0_30px_rgba(16,185,129,0.2)] hover:shadow-[0_0_50px_rgba(16,185,129,0.4)] text-base md:text-lg">
+                <span className="relative z-10 flex items-center gap-2 tracking-tight">
+                  {isFree ? "Secure Priority Access" : `Register for $${webinar.price}`}
+                  <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1.5 transition-transform duration-500" />
+                </span>
               </Link>
 
               <div className="text-center mt-4 text-[9px] md:text-[10px] text-gray-600 font-mono">
