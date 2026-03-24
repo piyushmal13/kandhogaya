@@ -12,14 +12,14 @@ interface MarketPair {
 }
 
 const INITIAL_PAIRS: MarketPair[] = [
-  { symbol: "XAU/USD", price: "2,184.20", change: "+0.45%", up: true, baseSymbol: "GOLD" },
-  { symbol: "EUR/USD", price: "1.0942", change: "+0.12%", up: true, baseSymbol: "EUR" },
-  { symbol: "BTC/USD", price: "68,210.50", change: "-1.24%", up: false, baseSymbol: "BTC" },
-  { symbol: "USD/JPY", price: "149.24", change: "+0.08%", up: true, baseSymbol: "JPY" },
-  { symbol: "ETH/USD", price: "3,825.10", change: "+2.15%", up: true, baseSymbol: "ETH" },
-  { symbol: "GBP/USD", price: "1.2842", change: "-0.05%", up: false, baseSymbol: "GBP" },
-  { symbol: "NAS100", price: "18,410.50", change: "+0.15%", up: true, baseSymbol: "NDAQ" },
-  { symbol: "SOL/USD", price: "148.20", change: "+4.12%", up: true, baseSymbol: "SOL" },
+  { symbol: "XAU/USD", price: "2,184.20", change: "+0.45%", up: true, baseSymbol: "GOLD", volume: "1.2B" },
+  { symbol: "EUR/USD", price: "1.0942", change: "+0.12%", up: true, baseSymbol: "EUR", volume: "4.8B" },
+  { symbol: "BTC/USD", price: "68,210.50", change: "-1.24%", up: false, baseSymbol: "BTC", volume: "32.1B" },
+  { symbol: "USD/JPY", price: "149.24", change: "+0.08%", up: true, baseSymbol: "JPY", volume: "2.1B" },
+  { symbol: "ETH/USD", price: "3,825.10", change: "+2.15%", up: true, baseSymbol: "ETH", volume: "12.4B" },
+  { symbol: "GBP/USD", price: "1.2842", change: "-0.05%", up: false, baseSymbol: "GBP", volume: "1.8B" },
+  { symbol: "NAS100", price: "18,410.50", change: "+0.15%", up: true, baseSymbol: "NDAQ", volume: "15.2B" },
+  { symbol: "SOL/USD", price: "148.20", change: "+4.12%", up: true, baseSymbol: "SOL", volume: "4.2B" },
 ];
 
 
@@ -31,9 +31,23 @@ export const MarketTicker = () => {
   const [pairs, setPairs] = useState<MarketPair[]>(INITIAL_PAIRS);
   const [lastUpdate, setLastUpdate] = useState<string>("");
   const [isSyncing, setIsSyncing] = useState(false);
+  const [marketStatus, setMarketStatus] = useState<"OPEN" | "CLOSED">("OPEN");
   const prefersReducedMotion = useReducedMotion();
   const containerRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    const checkMarketStatus = () => {
+      const now = new Date();
+      const day = now.getUTCDay();
+      const hour = now.getUTCHours();
+      // Simple ForeX market (approx 24h Mon-Fri)
+      const isWeekend = day === 0 || day === 6;
+      setMarketStatus(isWeekend ? "CLOSED" : "OPEN");
+    };
+    checkMarketStatus();
+    const statusInterval = setInterval(checkMarketStatus, 60000);
+    return () => clearInterval(statusInterval);
+  }, []);
   useEffect(() => {
     let isMounted = true;
     
@@ -122,24 +136,24 @@ export const MarketTicker = () => {
       <div className="absolute inset-0 backdrop-blur-[20px] pointer-events-none" />
       
       {/* 10k Dashboard: Left Status */}
-      <div className="absolute left-0 top-0 bottom-0 z-[60] flex items-center px-4 md:px-8 bg-black/90 border-r border-white/5 shadow-[25px_0_40px_rgba(0,0,0,0.9)]">
+      <div className="absolute left-0 top-0 bottom-0 z-[60] flex items-center px-4 md:px-8 bg-black/95 border-r border-white/5 shadow-[25px_0_40px_rgba(0,0,0,0.9)]">
         <div className="flex items-center gap-3">
           <div className="relative">
-            <div className={`w-2 h-2 rounded-full transition-all duration-1000 ${isSyncing ? 'bg-cyan-500 shadow-[0_0_20px_rgba(6,182,212,1)] scale-110' : 'bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.4)]'}`} />
-            {isSyncing && (
+            <div className={`w-2 h-2 rounded-full transition-all duration-1000 ${marketStatus === "OPEN" ? 'bg-emerald-500 neon-glow-emerald' : 'bg-rose-500 shadow-[0_0_12px_rgba(244,63,94,0.4)]'}`} />
+            {marketStatus === "OPEN" && (
               <motion.div 
                 animate={{ scale: [1, 2.5], opacity: [0.6, 0] }} 
                 transition={{ repeat: Infinity, duration: 1.5 }} 
-                className="absolute inset-0 bg-cyan-500 rounded-full" 
+                className="absolute inset-0 bg-emerald-500 rounded-full" 
               />
             )}
           </div>
           <div className="flex flex-col">
             <span className="text-[10px] font-black text-white uppercase tracking-[0.25em] font-mono leading-none">
-              Live Terminal
+              MARKET {marketStatus}
             </span>
-            <span className="text-[8px] text-zinc-500 font-mono mt-1 tracking-tighter uppercase">
-              {lastUpdate || "Booting..."}
+            <span className="text-[8px] text-emerald-500 font-mono mt-1 tracking-tighter uppercase font-bold">
+              {isSyncing ? "SYNCING..." : (lastUpdate || "LIVE")}
             </span>
           </div>
         </div>

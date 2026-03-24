@@ -106,6 +106,7 @@ export default function App() {
               Skip to main content
             </a>
             <div className="relative min-h-screen overflow-hidden font-sans selection:bg-emerald-200 selection:text-slate-950">
+              <div className="noise-overlay" />
               <SiteBackdrop />
               <Navbar />
               <main id="main-content" className="relative z-10">

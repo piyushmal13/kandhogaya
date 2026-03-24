@@ -1,46 +1,48 @@
-import React, { useMemo } from "react";
-import { motion } from "motion/react";
-import { Zap, Activity, Clock, AlertCircle, CheckCircle2 } from "lucide-react";
+import React, { useState, useEffect, useMemo } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { Activity, TrendingUp, TrendingDown, Shield } from "lucide-react";
+import { getSignals, subscribeToSignals } from "../../services/apiHandlers";
+import { Signal } from "../../types";
 
 // 3 Active, 1 Pending — static data, no randomness
-const trades = [
-  {
-    pair: "XAUUSD",
-    type: "LONG",
-    entry: "2150.45",
-    status: "ACTIVE",
-    pl: "+0.85%",
-    isProfit: true,
-    time: "12m ago"
-  },
-  {
-    pair: "GBPJPY",
-    type: "SHORT",
-    entry: "189.20",
-    status: "ACTIVE",
-    pl: "+0.42%",
-    isProfit: true,
-    time: "45m ago"
-  },
-  {
-    pair: "US30",
-    type: "LONG",
-    entry: "39150.00",
-    status: "ACTIVE",
-    pl: "+0.91%",
-    isProfit: true,
-    time: "1h ago"
-  },
-  {
-    pair: "NAS100",
-    type: "SHORT",
-    entry: "18100.50",
-    status: "PENDING",
-    pl: "0.00%",
-    isProfit: false,
-    time: "Just now"
-  }
-];
+// const trades = [
+//   {
+//     pair: "XAUUSD",
+//     type: "LONG",
+//     entry: "2150.45",
+//     status: "ACTIVE",
+//     pl: "+0.85%",
+//     isProfit: true,
+//     time: "12m ago"
+//   },
+//   {
+//     pair: "GBPJPY",
+//     type: "SHORT",
+//     entry: "189.20",
+//     status: "ACTIVE",
+//     pl: "+0.42%",
+//     isProfit: true,
+//     time: "45m ago"
+//   },
+//   {
+//     pair: "US30",
+//     type: "LONG",
+//     entry: "39150.00",
+//     status: "ACTIVE",
+//     pl: "+0.91%",
+//     isProfit: true,
+//     time: "1h ago"
+//   },
+//   {
+//     pair: "NAS100",
+//     type: "SHORT",
+//     entry: "18100.50",
+//     status: "PENDING",
+//     pl: "0.00%",
+//     isProfit: false,
+//     time: "Just now"
+//   }
+// ];
 
 /**
  * Deterministic seed-based pseudo-random using a linear congruential generator.
@@ -67,6 +69,39 @@ const generateMonthlyResults = () =>
   });
 
 export const LiveAlgoTerminal = () => {
+  const [activeSignals, setActiveSignals] = useState<Signal[]>([]);
+  const [isScanning, setIsScanning] = useState(false);
+  const [latency, setLatency] = useState(45);
+
+  useEffect(() => {
+    const fetchInitial = async () => {
+      setIsScanning(true);
+      const data = await getSignals();
+      if (data) {
+        setActiveSignals(data.slice(0, 5));
+      }
+      setTimeout(() => setIsScanning(false), 2000);
+    };
+    fetchInitial();
+
+    const channel = subscribeToSignals((payload: any) => {
+      if (payload.eventType === 'INSERT') {
+        setIsScanning(true);
+        setActiveSignals(prev => [payload.new as Signal, ...prev].slice(0, 5));
+        setTimeout(() => setIsScanning(false), 2000);
+      }
+    });
+
+    const latInterval = setInterval(() => {
+      setLatency(30 + Math.floor(Math.random() * 30));
+    }, 3000);
+
+    return () => {
+      channel.unsubscribe();
+      clearInterval(latInterval);
+    };
+  }, []);
+
   // Stable across all renders — deterministic RNG
   const monthlyResults = useMemo(generateMonthlyResults, []);
 
@@ -90,63 +125,75 @@ export const LiveAlgoTerminal = () => {
           >
             {/* Header */}
             <div className="flex items-center justify-between mb-6 border-b border-white/5 pb-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
-                  <Zap className="w-5 h-5 text-emerald-500" />
+              <div className="p-4 bg-black/40 border border-white/5 rounded-2xl flex items-center gap-4">
+                <div className="p-2.5 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                  <Shield className="w-5 h-5" />
                 </div>
                 <div>
-                  <div className="text-white font-bold text-sm">LIVE TERMINAL</div>
-                  <div className="flex items-center gap-1.5 text-[10px] font-mono text-emerald-500">
-                    <span className="relative flex h-1.5 w-1.5 mr-1.5">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
-                    </span>
-                    SYSTEM ONLINE
-                  </div>
+                  <div className="text-[10px] text-gray-500 font-mono uppercase tracking-widest">Global Latency</div>
+                  <div className="text-white font-bold font-mono">{latency}ms <span className="text-[10px] text-emerald-500 ml-1">OPTIONAL</span></div>
                 </div>
-              </div>
-              <div className="text-[10px] font-mono text-gray-500 text-right">
-                <div>LATENCY</div>
-                <div className="text-emerald-500 font-bold">12ms</div>
               </div>
             </div>
 
             {/* Trades List */}
-            <div className="space-y-3 flex-1 overflow-y-auto max-h-[300px] pr-1 custom-scrollbar">
-              {trades.map((trade) => {
-                const isPositive = trade.pl.startsWith('+');
-                const plColor = trade.status === 'PENDING' ? 'text-gray-500' : (isPositive ? 'text-emerald-400' : 'text-red-400');
-                
-                return (
-                  <div key={trade.pair} className="bg-white/[0.02] border border-white/5 rounded-lg p-3 hover:bg-white/[0.04] transition-colors group">
-                    <div className="flex justify-between items-start mb-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-white font-bold text-sm">{trade.pair}</span>
-                        <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${trade.type === 'LONG' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'}`}>
-                          {trade.type}
-                        </span>
-                      </div>
-                      <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1 ${
-                        trade.status === 'ACTIVE' 
-                          ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20' 
-                          : 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20'
+            <div className="flex-1 overflow-y-auto custom-scrollbar space-y-3 pr-2 relative">
+              <AnimatePresence mode="popLayout">
+                {activeSignals.map((signal, idx) => (
+                  <motion.div
+                    key={signal.id}
+                    layout
+                    initial={{ opacity: 0, x: -20, filter: "blur(10px)" }}
+                    animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                    transition={{ duration: 0.5, delay: idx * 0.1 }}
+                    className="flex items-center justify-between p-4 bg-white/[0.02] border border-white/5 rounded-xl hover:bg-white/[0.04] hover:border-emerald-500/20 transition-all group"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center border ${
+                        signal.direction === 'BUY' 
+                          ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' 
+                          : 'bg-rose-500/10 border-rose-500/20 text-rose-400'
                       }`}>
-                        {trade.status === 'ACTIVE' ? <CheckCircle2 className="w-2 h-2" /> : <AlertCircle className="w-2 h-2" />}
-                        {trade.status}
-                      </span>
+                        {signal.direction === 'BUY' ? <TrendingUp className="w-5 h-5" /> : <TrendingDown className="w-5 h-5" />}
+                      </div>
+                      <div>
+                        <div className="text-white font-bold tracking-tight flex items-center gap-2">
+                          {signal.asset}
+                          <span className={`text-[10px] px-1.5 py-0.5 rounded border ${
+                            signal.direction === 'BUY' ? 'bg-emerald-500/20 border-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 border-rose-500/20 text-rose-400'
+                          }`}>
+                            {signal.direction}
+                          </span>
+                        </div>
+                        <div className="text-[10px] text-gray-500 font-mono mt-0.5">
+                          ENTRY: <span className="text-white">{signal.entry_price}</span> 
+                          {!!signal.stop_loss && <span className="ml-2">SL: <span className="text-rose-400">{signal.stop_loss}</span></span>}
+                          {!!signal.take_profit && <span className="ml-2">TP: <span className="text-emerald-400">{signal.take_profit}</span></span>}
+                        </div>
+                      </div>
                     </div>
                     
-                    <div className="flex justify-between items-end">
-                      <div className="text-[10px] text-gray-500 font-mono flex items-center gap-1">
-                        <Clock className="w-2.5 h-2.5" /> {trade.time}
-                      </div>
-                      <div className={`text-sm font-bold font-mono ${plColor}`}>
-                        {trade.pl}
+                    <div className="text-right">
+                      <div className="text-xs font-bold text-white mb-0.5 uppercase">{signal.status || "RUNNING"}</div>
+                      <div className="text-[10px] text-gray-600 font-mono">
+                        {new Date(signal.created_at || "").toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </div>
                     </div>
-                  </div>
-                );
-              })}
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+
+              {/* Matrix Scan Effect */}
+              {isScanning && (
+                <motion.div
+                  initial={{ top: "-10%" }}
+                  animate={{ top: "110%" }}
+                  transition={{ duration: 2, ease: "linear" }}
+                  className="absolute left-0 right-0 h-20 bg-gradient-to-b from-transparent via-emerald-500/20 to-transparent pointer-events-none z-10"
+                >
+                  <div className="absolute top-1/2 w-full h-px bg-emerald-500/50 shadow-[0_0_20px_rgba(16,185,129,0.5)]" />
+                </motion.div>
+              )}
             </div>
           </motion.div>
 

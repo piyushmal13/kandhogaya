@@ -61,6 +61,15 @@
     --shadow-glow: 0 16px 40px rgba(88, 242, 182, 0.18);
     --shadow-float: 0 24px 60px rgba(0, 0, 0, 0.35);
 
+    /* ── 200x Elite Evolution Tokens ── */
+    --neon-emerald: #10b981;
+    --neon-cyan: #06b6d4;
+    --neon-purple: #8b5cf6;
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-blur: 12px;
+    --noise-opacity: 0.03;
+
     color-scheme: dark;
   }
 
@@ -70,13 +79,13 @@
 
   body {
     min-height: 100vh;
-    background-color: var(--bg-base);
+    background-color: #000000;
     background-image:
-      radial-gradient(circle at top, rgba(88, 242, 182, 0.16), transparent 26%),
-      radial-gradient(circle at 82% 18%, rgba(77, 153, 255, 0.14), transparent 24%),
-      linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 16%);
+      radial-gradient(circle at 50% -20%, rgba(16, 185, 129, 0.15), transparent 50%),
+      radial-gradient(circle at 0% 0%, rgba(6, 182, 212, 0.08), transparent 40%),
+      radial-gradient(circle at 100% 100%, rgba(139, 92, 246, 0.08), transparent 40%);
     color: var(--text-primary);
-    @apply antialiased overflow-x-hidden;
+    @apply antialiased overflow-x-hidden selection:bg-emerald-500/30 selection:text-white;
   }
 
   body::before {
@@ -112,9 +121,9 @@
     color: var(--text-primary);
   }
 
-  h1 { @apply text-3xl sm:text-5xl md:text-7xl lg:text-8xl; }
-  h2 { @apply text-2xl sm:text-4xl md:text-5xl lg:text-6xl; }
-  h3 { @apply text-xl sm:text-2xl md:text-3xl; }
+  h1 { @apply text-4xl sm:text-6xl md:text-8xl lg:text-[120px] leading-[0.95] tracking-[-0.04em] font-extrabold pb-2; }
+  h2 { @apply text-3xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05] tracking-[-0.03em] font-bold; }
+  h3 { @apply text-2xl sm:text-3xl md:text-4xl leading-tight tracking-[-0.02em]; }
 
   p {
     color: var(--text-secondary);
@@ -282,6 +291,41 @@
     padding: 0.15rem 0.4rem;
     font-family: var(--font-mono);
     font-size: 0.88em;
+  }
+
+  /* ── 200x Glass & Glow Utilities ── */
+  .glass-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(var(--glass-blur));
+    @apply transition-all duration-500 rounded-[2rem];
+  }
+
+  .glass-card-hover {
+    @apply hover:bg-white/[0.05] hover:border-white/20 hover:shadow-[0_0_50px_rgba(255,255,255,0.05)];
+  }
+
+  .neon-glow-emerald {
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.3), 0 0 40px rgba(16, 185, 129, 0.1);
+  }
+
+  .neon-glow-cyan {
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.3), 0 0 40px rgba(6, 182, 212, 0.1);
+  }
+
+  .noise-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: var(--noise-opacity);
+    background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+    filter: contrast(150%) brightness(150%);
+  }
+
+  .perspective-container {
+    perspective: 2000px;
+    transform-style: preserve-3d;
   }
 
   /* ── Skeleton Loading ── */
