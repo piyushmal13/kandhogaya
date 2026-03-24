@@ -14,11 +14,18 @@ export const AlgoGreatness = () => {
     // Fetch all reviews for landing page
     fetchReviews().then((data: any) => {
       if (data && data.length > 0) {
-        setReviews(data.slice(0, 3));
+        // Filter specifically for Algo reviews
+        const algoKeywords = ['algo', 'algorithm', 'logic', 'hft', 'pattern', 'neural', 'automated', 'system', 'win rate', 'latency'];
+        const filtered = data.filter((rev: any) => 
+          algoKeywords.some(key => rev.role?.toLowerCase().includes(key) || rev.text?.toLowerCase().includes(key))
+        );
+        
+        setReviews(filtered.length > 0 ? filtered.slice(0, 3) : data.slice(0, 3));
         
         // Calculate dynamic stats
-        const totalRating = data.reduce((acc: number, curr: any) => acc + (curr.rating || 5), 0);
-        const avg = totalRating / data.length;
+        const relevantData = filtered.length > 0 ? filtered : data;
+        const totalRating = relevantData.reduce((acc: number, curr: any) => acc + (curr.rating || 5), 0);
+        const avg = totalRating / relevantData.length;
         setStats({
           avg: Number.parseFloat(avg.toFixed(1)),
           count: data.length > 100 ? data.length : 1200 + data.length 
