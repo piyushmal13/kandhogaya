@@ -1,15 +1,21 @@
-import React, { useState, useEffect } from "react";
-import { ShieldCheck, Plus, Search, Trash2, Edit2, Zap, Copy, ExternalLink } from "lucide-react";
+import React, { useState, useEffect, SyntheticEvent } from "react";
+import { ShieldCheck, Search, Trash2, Zap, Copy } from "lucide-react";
 import { supabase } from "../../lib/supabase";
+import { Dialog } from "../../components/ui/Dialog";
 
 export const LicenseManager = () => {
   const [licenseUserId, setLicenseUserId] = useState("");
   const [licenseAlgoId, setLicenseAlgoId] = useState("");
   const [licenseKey, setLicenseKey] = useState("");
   const [loading, setLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
   const [licenses, setLicenses] = useState<any[]>([]);
+  
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [licenseToDelete, setLicenseToDelete] = useState<string | null>(null);
 
   const fetchLicenses = async () => {
+// ... existing fetchLicenses ...
     try {
       const { data: { session } } = await supabase.auth.getSession();
       const res = await fetch("/api/admin/licenses", {
@@ -28,25 +34,35 @@ export const LicenseManager = () => {
     fetchLicenses();
   }, []);
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this license?")) return;
+  const handleDelete = async () => {
+    if (!licenseToDelete) return;
+    setDeleteLoading(true);
     try {
       const { data: { session } } = await supabase.auth.getSession();
-      const res = await fetch(`/api/admin/licenses/${id}`, {
+      const res = await fetch(`/api/admin/licenses/${licenseToDelete}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${session?.access_token}` }
       });
       if (res.ok) {
         fetchLicenses();
+        setIsDeleteDialogOpen(false);
       } else {
         alert("Failed to delete license.");
       }
     } catch (err) {
       console.error("Delete error:", err);
+    } finally {
+      setDeleteLoading(false);
+      setLicenseToDelete(null);
     }
   };
 
-  const handleGenerateLicense = async (e: React.FormEvent) => {
+  const openDeleteDialog = (id: string) => {
+    setLicenseToDelete(id);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleGenerateLicense = async (e: SyntheticEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
@@ -90,8 +106,9 @@ export const LicenseManager = () => {
           <form onSubmit={handleGenerateLicense} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">User ID (UUID)</label>
+                <label htmlFor="userId" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">User ID (UUID)</label>
                 <input 
+                  id="userId"
                   value={licenseUserId} 
                   onChange={e => setLicenseUserId(e.target.value)} 
                   placeholder="Paste Supabase User ID"
@@ -99,8 +116,9 @@ export const LicenseManager = () => {
                 />
               </div>
               <div>
-                <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Algo Bot ID</label>
+                <label htmlFor="algoId" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Algo Bot ID</label>
                 <input 
+                  id="algoId"
                   value={licenseAlgoId} 
                   onChange={e => setLicenseAlgoId(e.target.value)} 
                   placeholder="Paste Bot ID"
@@ -150,7 +168,7 @@ export const LicenseManager = () => {
           <div className="p-4 space-y-4">
             {licenses.map((license) => {
               const isActive = license.is_active && new Date(license.expires_at) > new Date();
-              const daysLeft = Math.ceil((new Date(license.expires_at).getTime() - new Date().getTime()) / (1000 * 3600 * 24));
+              const daysLeft = Math.ceil((new Date(license.expires_at).getTime() - Date.now()) / (1000 * 3600 * 24));
               
               return (
                 <div key={license.id} className="p-4 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between group hover:border-emerald-500/30 transition-all cursor-pointer">
@@ -166,7 +184,7 @@ export const LicenseManager = () => {
                     </div>
                   </div>
                   <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button onClick={() => handleDelete(license.id)} className="p-2 text-gray-500 hover:text-red-500 transition-colors"><Trash2 className="w-4 h-4" /></button>
+                    <button onClick={() => openDeleteDialog(license.id)} className="p-2 text-gray-500 hover:text-red-500 transition-colors"><Trash2 className="w-4 h-4" /></button>
                   </div>
                 </div>
               );
@@ -177,6 +195,16 @@ export const LicenseManager = () => {
           </div>
         </div>
       </div>
+      
+      <Dialog 
+        isOpen={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        onConfirm={handleDelete}
+        isLoading={deleteLoading}
+        title="Revoke License"
+        description="This will permanently revoke the algorithm license for this user. The user will lose access immediately. This action cannot be undone."
+        confirmText="Revoke License"
+      />
     </div>
   );
 };

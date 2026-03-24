@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { Video, Plus, Calendar, Clock, Users, DollarSign, ShieldCheck, Search, Trash2, Edit2 } from "lucide-react";
+import React, { useState, useEffect, SyntheticEvent } from "react";
+import { Video, Plus, Calendar, Search, Trash2, Edit2 } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../contexts/AuthContext";
+import { Dialog } from "../../components/ui/Dialog";
 
 export const WebinarManager = () => {
   const { session } = useAuth();
@@ -22,9 +23,13 @@ export const WebinarManager = () => {
   const [sponsorLogos, setSponsorLogos] = useState("");
   const [maxAttendees, setMaxAttendees] = useState(500);
   const [loading, setLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
   const [recentWebinars, setRecentWebinars] = useState<any[]>([]);
 
   const [editingId, setEditingId] = useState<string | null>(null);
+
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [webinarToDelete, setWebinarToDelete] = useState<string | null>(null);
 
   const fetchRecentWebinars = async () => {
     const { data } = await supabase
@@ -82,7 +87,7 @@ export const WebinarManager = () => {
     setMaxAttendees(500);
   };
 
-  const handlePublish = async (e: React.FormEvent) => {
+  const handlePublish = async (e: SyntheticEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
@@ -147,22 +152,32 @@ export const WebinarManager = () => {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this webinar?")) return;
+  const handleDelete = async () => {
+    if (!webinarToDelete) return;
+    setDeleteLoading(true);
     try {
       if (!session) throw new Error("No active session");
-      const res = await fetch(`/api/admin/webinars/${id}`, {
+      const res = await fetch(`/api/admin/webinars/${webinarToDelete}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${session?.access_token}` }
       });
       if (res.ok) {
         fetchRecentWebinars();
+        setIsDeleteDialogOpen(false);
       } else {
         alert("Failed to delete webinar.");
       }
     } catch (err) {
       console.error("Delete error:", err);
+    } finally {
+      setDeleteLoading(false);
+      setWebinarToDelete(null);
     }
+  };
+
+  const openDeleteDialog = (id: string) => {
+    setWebinarToDelete(id);
+    setIsDeleteDialogOpen(true);
   };
 
   return (
@@ -181,8 +196,9 @@ export const WebinarManager = () => {
           <form onSubmit={handlePublish} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="md:col-span-2">
-                <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Webinar Title</label>
+                <label htmlFor="webinarTitle" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Webinar Title</label>
                 <input 
+                  id="webinarTitle"
                   value={title} 
                   onChange={e => setTitle(e.target.value)} 
                   placeholder="e.g., Institutional Order Flow Masterclass"
@@ -192,8 +208,9 @@ export const WebinarManager = () => {
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Description</label>
+                <label htmlFor="description" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Description</label>
                 <textarea 
+                  id="description"
                   rows={3} 
                   value={description} 
                   onChange={e => setDescription(e.target.value)} 
@@ -204,8 +221,9 @@ export const WebinarManager = () => {
               </div>
 
               <div>
-                <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Date & Time</label>
+                <label htmlFor="dateTime" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Date & Time</label>
                 <input 
+                  id="dateTime"
                   type="datetime-local"
                   value={dateTime} 
                   onChange={e => setDateTime(e.target.value)} 
@@ -215,8 +233,9 @@ export const WebinarManager = () => {
               </div>
 
               <div>
-                <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Duration</label>
+                <label htmlFor="duration" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Duration</label>
                 <input 
+                  id="duration"
                   value={duration} 
                   onChange={e => setDuration(e.target.value)} 
                   placeholder="e.g., 60 mins"
@@ -225,8 +244,9 @@ export const WebinarManager = () => {
               </div>
 
               <div>
-                <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Speaker Name</label>
+                <label htmlFor="speakerName" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Speaker Name</label>
                 <input 
+                  id="speakerName"
                   value={speaker} 
                   onChange={e => setSpeaker(e.target.value)} 
                   placeholder="e.g., Alex Wright"
@@ -236,8 +256,9 @@ export const WebinarManager = () => {
               </div>
 
               <div>
-                <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Speaker Profile Image URL</label>
+                <label htmlFor="speakerProfile" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Speaker Profile Image URL</label>
                 <input 
+                  id="speakerProfile"
                   value={speakerProfileUrl} 
                   onChange={e => setSpeakerProfileUrl(e.target.value)} 
                   placeholder="https://..."
@@ -246,8 +267,9 @@ export const WebinarManager = () => {
               </div>
 
               <div>
-                <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Brand Logo URL</label>
+                <label htmlFor="brandLogo" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Brand Logo URL</label>
                 <input 
+                  id="brandLogo"
                   value={brandLogoUrl} 
                   onChange={e => setBrandLogoUrl(e.target.value)} 
                   placeholder="https://..."
@@ -256,8 +278,9 @@ export const WebinarManager = () => {
               </div>
 
               <div>
-                <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Webinar Main Image URL</label>
+                <label htmlFor="webinarImage" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Webinar Main Image URL</label>
                 <input 
+                  id="webinarImage"
                   value={webinarImageUrl} 
                   onChange={e => setWebinarImageUrl(e.target.value)} 
                   placeholder="https://..."
@@ -266,8 +289,9 @@ export const WebinarManager = () => {
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">About Webinar (Detailed)</label>
+                <label htmlFor="about" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">About Webinar (Detailed)</label>
                 <textarea 
+                  id="about"
                   rows={4} 
                   value={aboutContent} 
                   onChange={e => setAboutContent(e.target.value)} 
@@ -277,8 +301,9 @@ export const WebinarManager = () => {
               </div>
 
               <div>
-                <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Level</label>
+                <label htmlFor="level" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Level</label>
                 <select 
+                  id="level"
                   value={level} 
                   onChange={e => setLevel(e.target.value)} 
                   className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-emerald-500 transition-all"
@@ -291,11 +316,12 @@ export const WebinarManager = () => {
               </div>
 
               <div>
-                <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Max Attendees</label>
+                <label htmlFor="maxAttendees" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Max Attendees</label>
                 <input 
+                  id="maxAttendees"
                   type="number"
                   value={maxAttendees} 
-                  onChange={e => setMaxAttendees(parseInt(e.target.value))} 
+                  onChange={e => setMaxAttendees(Number.parseInt(e.target.value))} 
                   className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-emerald-500 transition-all" 
                   required
                 />
@@ -315,7 +341,7 @@ export const WebinarManager = () => {
                   <input 
                     type="number"
                     value={price} 
-                    onChange={e => setPrice(parseFloat(e.target.value))} 
+                    onChange={e => setPrice(Number.parseFloat(e.target.value))} 
                     placeholder="Price ($)"
                     className="w-32 bg-black border border-white/10 rounded-xl px-4 py-2 text-white outline-none focus:border-emerald-500 transition-all" 
                   />
@@ -335,8 +361,9 @@ export const WebinarManager = () => {
                 {isSponsored && (
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Sponsors (Comma separated)</label>
+                      <label htmlFor="sponsors" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Sponsors (Comma separated)</label>
                       <input 
+                        id="sponsors"
                         value={sponsors} 
                         onChange={e => setSponsors(e.target.value)} 
                         placeholder="e.g., APEX LIQUIDITY, QUANT.AI"
@@ -344,8 +371,9 @@ export const WebinarManager = () => {
                       />
                     </div>
                     <div>
-                      <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Sponsor Logo URLs (Comma separated)</label>
+                      <label htmlFor="sponsorLogos" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Sponsor Logo URLs (Comma separated)</label>
                       <input 
+                        id="sponsorLogos"
                         value={sponsorLogos} 
                         onChange={e => setSponsorLogos(e.target.value)} 
                         placeholder="https://logo1.png, https://logo2.png"
@@ -372,8 +400,17 @@ export const WebinarManager = () => {
                 disabled={loading}
                 className="flex-1 py-4 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all shadow-[0_0_20px_rgba(16,185,129,0.2)] disabled:opacity-50 flex items-center justify-center gap-2"
               >
-                {loading ? "Saving..." : (editingId ? "Update Webinar" : "Publish Webinar")}
-                {!loading && !editingId && <Plus className="w-5 h-5" />}
+                {loading ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" />
+                    <span>Saving...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>{editingId ? "Update Webinar" : "Publish Webinar"}</span>
+                    {!editingId && <Plus className="w-5 h-5" />}
+                  </>
+                )}
               </button>
             </div>
           </form>
@@ -408,7 +445,7 @@ export const WebinarManager = () => {
                 </div>
                 <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button onClick={() => handleEdit(item)} className="p-2 text-gray-500 hover:text-emerald-500 transition-colors"><Edit2 className="w-4 h-4" /></button>
-                  <button onClick={() => handleDelete(item.id)} className="p-2 text-gray-500 hover:text-red-500 transition-colors"><Trash2 className="w-4 h-4" /></button>
+                  <button onClick={() => openDeleteDialog(item.id)} className="p-2 text-gray-500 hover:text-red-500 transition-colors"><Trash2 className="w-4 h-4" /></button>
                 </div>
               </div>
             ))}
@@ -418,6 +455,16 @@ export const WebinarManager = () => {
           </div>
         </div>
       </div>
+
+      <Dialog 
+        isOpen={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        onConfirm={handleDelete}
+        isLoading={deleteLoading}
+        title="Delete Webinar"
+        description="Are you sure you want to delete this webinar? This will remove all registration data and the webinar page itself. This action cannot be undone."
+        confirmText="Delete Webinar"
+      />
     </div>
   );
 };

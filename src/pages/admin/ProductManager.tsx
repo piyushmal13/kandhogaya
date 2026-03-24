@@ -3,13 +3,18 @@ import { Zap, Plus, Trash2, Edit2, Save, X, Image as ImageIcon, BarChart3, HelpC
 import { supabase } from "../../lib/supabase";
 import { Product } from "../../types";
 import { useAuth } from "../../contexts/AuthContext";
+import { Dialog } from "../../components/ui/Dialog";
 
 export const ProductManager = () => {
   const { session } = useAuth();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deleteLoading, setDeleteLoading] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState<Partial<Product>>({});
+  
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [productToDelete, setProductToDelete] = useState<string | null>(null);
 
   useEffect(() => {
     fetchProducts();
@@ -103,12 +108,12 @@ export const ProductManager = () => {
     setLoading(false);
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this algorithm?")) return;
-    
+  const handleDelete = async () => {
+    if (!productToDelete) return;
+    setDeleteLoading(true);
     try {
       if (!session) throw new Error("No active session");
-      const res = await fetch(`/api/admin/products/${id}`, {
+      const res = await fetch(`/api/admin/products/${productToDelete}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${session?.access_token}` }
       });
@@ -119,10 +124,19 @@ export const ProductManager = () => {
       }
       
       fetchProducts();
+      setIsDeleteDialogOpen(false);
     } catch (error: unknown) {
       const err = error as Error;
       alert("Error deleting product: " + err.message);
+    } finally {
+      setDeleteLoading(false);
+      setProductToDelete(null);
     }
+  };
+
+  const openDeleteDialog = (id: string) => {
+    setProductToDelete(id);
+    setIsDeleteDialogOpen(true);
   };
 
   const handleCreate = async () => {
@@ -426,7 +440,7 @@ export const ProductManager = () => {
                           <Edit2 className="w-4 h-4" />
                         </button>
                         <button 
-                          onClick={() => handleDelete(product.id)}
+                          onClick={() => openDeleteDialog(product.id)}
                           className="p-2 bg-white/5 text-gray-400 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -461,6 +475,16 @@ export const ProductManager = () => {
           )}
         </div>
       )}
+
+      <Dialog 
+        isOpen={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        onConfirm={handleDelete}
+        isLoading={deleteLoading}
+        title="Delete Algorithm"
+        description="Are you sure you want to delete this algorithm? This will remove it from the marketplace and all associated data will be lost. This action cannot be undone."
+        confirmText="Delete Algorithm"
+      />
     </div>
   );
 };

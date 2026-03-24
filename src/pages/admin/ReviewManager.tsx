@@ -3,13 +3,18 @@ import { Star, Trash2, Plus, Save, X, MapPin } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { Review } from "../../types";
 import { useAuth } from "../../contexts/AuthContext";
+import { Dialog } from "../../components/ui/Dialog";
 
 export const ReviewManager = () => {
   const { session } = useAuth();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deleteLoading, setDeleteLoading] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState<Partial<Review>>({});
+  
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [reviewToDelete, setReviewToDelete] = useState<string | null>(null);
 
   useEffect(() => {
     fetchReviews();
@@ -73,12 +78,12 @@ export const ReviewManager = () => {
     setLoading(false);
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this review?")) return;
-    
+  const handleDelete = async () => {
+    if (!reviewToDelete) return;
+    setDeleteLoading(true);
     try {
       if (!session) throw new Error("No active session");
-      const res = await fetch(`/api/admin/reviews/${id}`, {
+      const res = await fetch(`/api/admin/reviews/${reviewToDelete}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${session?.access_token}` }
       });
@@ -89,10 +94,19 @@ export const ReviewManager = () => {
       }
       
       fetchReviews();
+      setIsDeleteDialogOpen(false);
     } catch (error: unknown) {
       const err = error as Error;
       alert("Error deleting review: " + err.message);
+    } finally {
+      setDeleteLoading(false);
+      setReviewToDelete(null);
     }
+  };
+
+  const openDeleteDialog = (id: string) => {
+    setReviewToDelete(id || null);
+    setIsDeleteDialogOpen(true);
   };
 
   const handleCreate = async () => {
@@ -240,8 +254,8 @@ export const ReviewManager = () => {
                         </div>
                       </div>
                       <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button onClick={() => handleEdit(review)} className="text-gray-500 hover:text-white"><Edit2 className="w-4 h-4" /></button>
-                        <button onClick={() => handleDelete(review.id)} className="text-gray-500 hover:text-red-500"><Trash2 className="w-4 h-4" /></button>
+                        <button onClick={() => handleEdit(review)} className="text-gray-500 hover:text-white transition-colors"><Edit2 className="w-4 h-4" /></button>
+                        <button onClick={() => openDeleteDialog(review.id)} className="text-gray-500 hover:text-red-500 transition-colors"><Trash2 className="w-4 h-4" /></button>
                       </div>
                     </div>
                     <div className="flex gap-0.5 mb-2">
@@ -257,6 +271,16 @@ export const ReviewManager = () => {
           ))}
         </div>
       )}
+
+      <Dialog 
+        isOpen={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        onConfirm={handleDelete}
+        isLoading={deleteLoading}
+        title="Delete Review"
+        description="Are you sure you want to delete this client review? This will remove it from the public Success Showcase. This action cannot be undone."
+        confirmText="Delete Review"
+      />
     </div>
   );
 };

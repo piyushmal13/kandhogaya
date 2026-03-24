@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, SyntheticEvent } from "react";
 import { Zap, Video, Download, Image as ImageIcon, FileText, Plus, Search, Trash2, Edit2 } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../contexts/AuthContext";
+import { Dialog } from "../../components/ui/Dialog";
 
 export const ContentManager = () => {
   const { session } = useAuth();
@@ -13,8 +14,12 @@ export const ContentManager = () => {
   const [coverImage, setCoverImage] = useState("");
   const [takeaways, setTakeaways] = useState("");
   const [loading, setLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
   const [recentContent, setRecentContent] = useState<any[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
+
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [contentToDelete, setContentToDelete] = useState<string | null>(null);
 
   const fetchRecentContent = async () => {
     const { data } = await supabase
@@ -52,7 +57,7 @@ export const ContentManager = () => {
     setTakeaways("");
   };
 
-  const handlePublish = async (e: React.FormEvent) => {
+  const handlePublish = async (e: SyntheticEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
@@ -107,22 +112,32 @@ export const ContentManager = () => {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this content?")) return;
+  const handleDelete = async () => {
+    if (!contentToDelete) return;
+    setDeleteLoading(true);
     try {
       if (!session) throw new Error("No active session");
-      const res = await fetch(`/api/admin/content/${id}`, {
+      const res = await fetch(`/api/admin/content/${contentToDelete}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${session?.access_token}` }
       });
       if (res.ok) {
         fetchRecentContent();
+        setIsDeleteDialogOpen(false);
       } else {
         alert("Failed to delete content.");
       }
     } catch (err) {
       console.error("Delete error:", err);
+    } finally {
+      setDeleteLoading(false);
+      setContentToDelete(null);
     }
+  };
+
+  const openDeleteDialog = (id: string) => {
+    setContentToDelete(id);
+    setIsDeleteDialogOpen(true);
   };
 
   return (
@@ -141,8 +156,9 @@ export const ContentManager = () => {
           <form onSubmit={handlePublish} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Content Title</label>
+                <label htmlFor="contentTitle" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Content Title</label>
                 <input 
+                  id="contentTitle"
                   value={title} 
                   onChange={e => setTitle(e.target.value)} 
                   placeholder="e.g., Gold Market Outlook"
@@ -150,8 +166,9 @@ export const ContentManager = () => {
                 />
               </div>
               <div>
-                <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Content Type</label>
+                <label htmlFor="contentType" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Content Type</label>
                 <select 
+                  id="contentType"
                   value={type} 
                   onChange={e => setType(e.target.value)} 
                   className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-emerald-500 transition-all"
@@ -164,8 +181,9 @@ export const ContentManager = () => {
             </div>
 
             <div>
-              <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Body / Analysis (Markdown Support)</label>
+              <label htmlFor="contentBody" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Body / Analysis (Markdown Support)</label>
               <textarea 
+                id="contentBody"
                 rows={8} 
                 value={body} 
                 onChange={e => setBody(e.target.value)} 
@@ -179,29 +197,29 @@ export const ContentManager = () => {
                 <div className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Advanced Media Features</div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Video URL</label>
+                    <label htmlFor="videoUrl" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Video URL</label>
                     <div className="relative">
                       <Video className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-                      <input value={videoUrl} onChange={e => setVideoUrl(e.target.value)} className="w-full bg-black border border-white/10 rounded-xl pl-10 pr-4 py-3 text-white outline-none focus:border-emerald-500" placeholder="YouTube/Vimeo link" />
+                      <input id="videoUrl" value={videoUrl} onChange={e => setVideoUrl(e.target.value)} className="w-full bg-black border border-white/10 rounded-xl pl-10 pr-4 py-3 text-white outline-none focus:border-emerald-500" placeholder="YouTube/Vimeo link" />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Download URL</label>
+                    <label htmlFor="downloadUrl" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Download URL</label>
                     <div className="relative">
                       <Download className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-                      <input value={downloadUrl} onChange={e => setDownloadUrl(e.target.value)} className="w-full bg-black border border-white/10 rounded-xl pl-10 pr-4 py-3 text-white outline-none focus:border-emerald-500" placeholder="PDF/Report link" />
+                      <input id="downloadUrl" value={downloadUrl} onChange={e => setDownloadUrl(e.target.value)} className="w-full bg-black border border-white/10 rounded-xl pl-10 pr-4 py-3 text-white outline-none focus:border-emerald-500" placeholder="PDF/Report link" />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Cover Image URL</label>
+                    <label htmlFor="coverImage" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Cover Image URL</label>
                     <div className="relative">
                       <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-                      <input value={coverImage} onChange={e => setCoverImage(e.target.value)} className="w-full bg-black border border-white/10 rounded-xl pl-10 pr-4 py-3 text-white outline-none focus:border-emerald-500" placeholder="https://..." />
+                      <input id="coverImage" value={coverImage} onChange={e => setCoverImage(e.target.value)} className="w-full bg-black border border-white/10 rounded-xl pl-10 pr-4 py-3 text-white outline-none focus:border-emerald-500" placeholder="https://..." />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Key Takeaways (One per line)</label>
-                    <textarea rows={3} value={takeaways} onChange={e => setTakeaways(e.target.value)} className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-emerald-500" placeholder="Support at 2150&#10;Bullish trend..." />
+                    <label htmlFor="takeaways" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Key Takeaways (One per line)</label>
+                    <textarea id="takeaways" rows={3} value={takeaways} onChange={e => setTakeaways(e.target.value)} className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-emerald-500" placeholder="Support at 2150&#10;Bullish trend..." />
                   </div>
                 </div>
               </div>
@@ -257,7 +275,7 @@ export const ContentManager = () => {
                 </div>
                 <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button onClick={() => handleEdit(item)} className="p-2 text-gray-500 hover:text-emerald-500 transition-colors"><Edit2 className="w-4 h-4" /></button>
-                  <button onClick={() => handleDelete(item.id)} className="p-2 text-gray-500 hover:text-red-500 transition-colors"><Trash2 className="w-4 h-4" /></button>
+                  <button onClick={() => openDeleteDialog(item.id)} className="p-2 text-gray-500 hover:text-red-500 transition-colors"><Trash2 className="w-4 h-4" /></button>
                 </div>
               </div>
             ))}
@@ -267,6 +285,16 @@ export const ContentManager = () => {
           </div>
         </div>
       </div>
+
+      <Dialog 
+        isOpen={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        onConfirm={handleDelete}
+        isLoading={deleteLoading}
+        title="Delete Content"
+        description="Are you sure you want to delete this content post? This will remove it from the intelligence hub for all users. This action cannot be undone."
+        confirmText="Delete Content"
+      />
     </div>
   );
 };
