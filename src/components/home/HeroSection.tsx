@@ -116,7 +116,7 @@ export const HeroSection = () => {
           initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-          className="text-5xl sm:text-7xl md:text-8xl font-semibold text-white mb-10 max-w-7xl mx-auto tracking-[-0.05em] leading-[0.9]"
+          className="text-4xl sm:text-7xl md:text-8xl font-semibold text-white mb-8 max-w-7xl mx-auto tracking-[-0.05em] leading-[0.9]"
         >
           Institutional <span className="italic font-serif text-[var(--brand)]">Edge</span>. <br className="hidden lg:block" />
           <span className="opacity-40">Retail</span> <span className="italic font-serif opacity-40">Accessibility</span>.
@@ -140,9 +140,8 @@ export const HeroSection = () => {
           className="flex flex-col sm:flex-row justify-center gap-8 w-full sm:w-auto px-6"
         >
           <Link 
-            to="/login" 
-            aria-label="Access Institutional Trading Terminal"
-            className="group relative px-12 py-6 bg-white text-black font-semibold rounded-full overflow-hidden flex items-center justify-center gap-3 text-lg sm:text-xl w-full sm:w-auto hover:shadow-[0_0_80px_rgba(255,255,255,0.2)] transition-all duration-700 active:scale-95"
+            to="/login"
+            className="group relative px-8 py-4 sm:px-12 sm:py-6 bg-white text-black font-bold rounded-full overflow-hidden transition-all duration-700 hover:scale-105 active:scale-95 shadow-[0_20px_50px_rgba(255,255,255,0.15)] w-full sm:w-auto text-base sm:text-xl"
           >
             <div className="absolute inset-0 bg-[var(--brand)] translate-y-full group-hover:translate-y-0 transition-transform duration-700 ease-[0.16,1,0.2,1]" />
             <span className="relative z-10 flex items-center gap-3 tracking-tight">
@@ -194,13 +193,13 @@ export const HeroSection = () => {
           ].map((stat, i) => (
             <div 
               key={stat.label} 
-              className="group relative flex flex-col items-center p-8 rounded-[2rem] bg-white/[0.02] border border-white/5 hover:border-[var(--brand)]/20 transition-all duration-700 hover:bg-white/[0.04] hover:scale-[1.02]"
+              className="group relative flex flex-col items-center p-4 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] bg-white/[0.02] border border-white/5 hover:border-[#83ffc8]/20 transition-all duration-700 hover:bg-white/[0.04] hover:scale-[1.02]"
             >
-              <div className={`p-4 rounded-2xl bg-white/[0.02] mb-6 group-hover:scale-110 transition-all duration-700 ${stat.color} border border-white/5 group-hover:border-current/20 shadow-2xl`}>
-                <stat.icon className="w-6 h-6" />
+              <div className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-white/[0.02] mb-4 sm:mb-6 group-hover:scale-110 transition-all duration-700 ${stat.color} border border-white/5 group-hover:border-current/20 shadow-2xl`}>
+                <stat.icon className="w-4 h-4 sm:w-6 sm:h-6" />
               </div>
-              <div className="text-5xl md:text-7xl font-sans font-semibold text-white mb-3 tabular-nums tracking-[-0.05em] group-hover:text-emerald-500 transition-colors">{stat.value}</div>
-              <div className="text-[10px] md:text-xs font-sans font-medium text-gray-500 uppercase tracking-[0.4em] opacity-60 group-hover:opacity-100 transition-opacity">{stat.label}</div>
+              <div className="text-3xl sm:text-5xl md:text-7xl font-sans font-semibold text-white mb-2 sm:mb-3 tabular-nums tracking-[-0.05em] group-hover:text-emerald-500 transition-colors">{stat.value}</div>
+              <div className="text-[8px] sm:text-[10px] md:text-xs font-sans font-medium text-gray-500 uppercase tracking-[0.4em] opacity-60 group-hover:opacity-100 transition-opacity">{stat.label}</div>
             </div>
           ))}
         </motion.div>

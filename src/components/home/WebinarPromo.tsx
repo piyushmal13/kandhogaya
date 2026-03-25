@@ -66,7 +66,7 @@ export const WebinarPromo = () => {
   const isFree = !webinar.is_paid;
 
   return (
-    <section className="py-24 md:py-48 bg-[#020202] relative overflow-hidden border-t border-white/5">
+    <section className="py-8 md:py-48 bg-[#020202] relative overflow-hidden border-t border-white/5">
       <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] md:w-[1000px] h-[400px] md:h-[1000px] bg-emerald-500/[0.03] blur-[150px] md:blur-[200px] rounded-full pointer-events-none" />
 
@@ -77,7 +77,7 @@ export const WebinarPromo = () => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2 px-3 py-1 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] md:text-xs font-mono tracking-widest mb-6"
+              className="inline-flex items-center gap-2 px-3 py-1 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] md:text-xs font-mono tracking-widest mb-4"
             >
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -91,7 +91,7 @@ export const WebinarPromo = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="text-3xl sm:text-5xl md:text-8xl font-bold text-white mb-6 md:mb-10 tracking-tighter leading-[0.95]"
+              className="text-2xl sm:text-5xl md:text-8xl font-bold text-white mb-4 md:mb-10 tracking-tighter leading-[0.95]"
             >
               {webinar.title.split(' ').slice(0, -1).join(' ')} <span className="institutional-title text-emerald-400">{webinar.title.split(' ').slice(-1)}</span>
             </motion.h2>

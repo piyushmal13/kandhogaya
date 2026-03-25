@@ -54,9 +54,14 @@ export const AlgoGreatness = () => {
 
   const getEmbedUrl = (url?: string): string | null => {
     if (!url) return null;
-    if (url.includes('youtube.com/watch?v=')) return url.replace('watch?v=', 'embed/');
-    if (url.includes('youtu.be/')) return url.replace('youtu.be/', 'youtube.com/embed/');
-    return url;
+    try {
+      if (url.includes('youtube.com/shorts/')) return url.replace('youtube.com/shorts/', 'youtube.com/embed/');
+      if (url.includes('youtube.com/watch?v=')) return url.replace('watch?v=', 'embed/');
+      if (url.includes('youtu.be/')) return url.replace('youtu.be/', 'youtube.com/embed/');
+      return url;
+    } catch (e) {
+      return url;
+    }
   };
 
   const videoUrl = getEmbedUrl((featuredAlgo as any)?.video_explanation_url);
