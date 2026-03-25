@@ -101,8 +101,7 @@ export const Footer = () => (
              </div>
           </div>
         </div>
-
-
+      </div>
       <div className="mt-24 flex flex-col gap-8 border-t border-white/5 pt-12 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex flex-col gap-4 text-[10px] text-gray-600 font-sans font-medium uppercase tracking-[0.2em] lg:flex-row lg:items-center opacity-60">
           <span>&copy; 2026 {BRANDING.name}. &nbsp; Institutional Grade Execution Surface.</span>
