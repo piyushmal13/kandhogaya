@@ -74,9 +74,9 @@ export const AlgoGreatness = () => {
         viewport={{ once: true }}
         className="text-center mb-16 md:mb-24 px-4"
       >
-        <span className="text-[var(--brand)] font-medium text-[11px] md:text-sm uppercase tracking-[0.3em] mb-6 inline-block opacity-80">Institutional Logic</span>
+        <span className="text-emerald-500 font-medium text-[11px] md:text-sm uppercase tracking-[0.3em] mb-6 inline-block opacity-80">Institutional Logic</span>
         <h2 className="text-4xl md:text-6xl font-semibold text-white mb-6 md:mb-8 tracking-[-0.03em]">How Our Algos <span className="italic font-serif">Dominate</span></h2>
-        <p className="text-gray-400 max-w-2xl mx-auto text-base md:text-xl font-light opacity-80 uppercase tracking-wide">Experience the architecture behind {featuredAlgo && (featuredAlgo as any).name ? (featuredAlgo as any).name : "our proprietary systems"} and see why institutional traders trust IFXTrades.</p>
+        <p className="text-gray-400 max-w-2xl mx-auto text-sm md:text-lg font-light opacity-80 uppercase tracking-wide">Experience the architecture behind {featuredAlgo && (featuredAlgo as any).name ? (featuredAlgo as any).name : "our proprietary systems"} and see why institutional traders trust IFXTrades.</p>
       </motion.div>
 
         {/* Video Section — only rendered when a valid URL exists */}
@@ -101,7 +101,7 @@ export const AlgoGreatness = () => {
               
               <div className="absolute bottom-8 left-8 right-8 flex justify-between items-center pointer-events-none">
                 <div className="bg-black/60 backdrop-blur-2xl border border-white/10 px-6 py-3 rounded-2xl flex items-center gap-4">
-                  <div className="w-2.5 h-2.5 rounded-full bg-[var(--brand)] animate-pulse shadow-[0_0_15px_var(--brand)]" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_15px_var(--brand)]" />
                   <span className="text-white font-sans text-xs font-medium tracking-widest uppercase opacity-80">Analysis Core Active</span>
                 </div>
               </div>
@@ -169,9 +169,9 @@ export const AlgoGreatness = () => {
               initial={{ opacity: 0, y: 20 }} 
               whileInView={{ opacity: 1, y: 0 }} 
               viewport={{ once: true }}
-              className="min-w-[280px] md:min-w-0 bg-[#050505] border border-white/5 p-8 md:p-12 rounded-[2.5rem] relative hover:bg-white/[0.01] hover:border-white/10 transition-all duration-700 group shadow-2xl"
+              className="min-w-[280px] md:min-w-0 bg-[#050505] border border-white/5 p-6 md:p-8 rounded-[2.5rem] relative hover:bg-white/[0.01] hover:border-white/10 transition-all duration-700 group shadow-2xl"
             >
-              <div className="absolute -top-4 right-10 bg-emerald-500/10 border border-emerald-500/20 text-[var(--brand)] text-[10px] md:text-[11px] font-sans font-medium uppercase tracking-[0.2em] px-4 py-1.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-700 transform translate-y-2 group-hover:translate-y-0 backdrop-blur-xl">
+              <div className="absolute -top-4 right-10 bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-[10px] md:text-[11px] font-sans font-medium uppercase tracking-[0.2em] px-4 py-1.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-700 transform translate-y-2 group-hover:translate-y-0 backdrop-blur-xl">
                 Verified System
               </div>
               <div className="flex gap-1.5 mb-8 md:mb-10">
@@ -179,13 +179,13 @@ export const AlgoGreatness = () => {
                   <Star key={`${rev.id || rev.name}-star-${j}`} className="w-4 h-4 text-emerald-400 fill-emerald-400 opacity-60" />
                 ))}
               </div>
-              <p className="text-gray-300 mb-10 md:mb-12 text-base md:text-xl font-light italic leading-[1.8] opacity-90 group-hover:opacity-100 transition-opacity">"{rev.text}"</p>
+              <p className="text-gray-300 mb-10 md:mb-12 text-sm md:text-lg font-light italic leading-[1.8] opacity-90 group-hover:opacity-100 transition-opacity">"{rev.text}"</p>
               <div className="flex items-center gap-4 md:gap-5">
-                <div className="w-12 h-12 md:w-16 md:h-16 bg-white/[0.02] border border-white/5 rounded-full flex items-center justify-center text-[var(--brand)] font-sans font-medium text-xl md:text-2xl group-hover:bg-[var(--brand)]/5 group-hover:border-[var(--brand)]/20 transition-all duration-700">
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-white/[0.02] border border-white/5 rounded-full flex items-center justify-center text-emerald-500 font-sans font-medium text-xl md:text-2xl group-hover:bg-emerald-500/5 group-hover:border-emerald-500/20 transition-all duration-700">
                   {rev.name?.charAt(0) || "U"}
                 </div>
                 <div>
-                  <div className="text-white font-semibold text-base md:text-xl flex items-center gap-2 mb-1">
+                  <div className="text-white font-semibold text-sm md:text-lg flex items-center gap-2 mb-1">
                     {rev.name} <CheckCircle2 className="w-4 h-4 text-emerald-400 opacity-60" />
                   </div>
                   <div className="text-[10px] md:text-[11px] text-gray-500 font-sans font-medium uppercase tracking-[0.2em] opacity-60">{rev.role}</div>

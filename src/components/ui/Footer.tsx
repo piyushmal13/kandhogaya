@@ -24,11 +24,11 @@ export const Footer = () => (
         {/* --- Column 1: Brand --- */}
         <div className="lg:col-span-2">
           <Link to="/" className="flex items-center gap-5 group mb-10">
-            <div className="flex items-center justify-center overflow-hidden rounded-[1.25rem] bg-white/[0.04] p-0 transition-all duration-700 group-hover:bg-white/[0.08] group-hover:scale-105 border border-white/5 group-hover:border-emerald-500/20 shadow-2xl h-12 w-12">
+            <div className="flex items-center justify-center overflow-hidden rounded-2xl bg-white/[0.04] p-0 transition-all duration-700 group-hover:bg-white/[0.08] group-hover:scale-105 border border-white/5 group-hover:border-emerald-500/20 shadow-2xl h-12 w-12">
               <ResizedImage
                 src={BRANDING.logoUrl}
                 alt={`${BRANDING.name} Logo`}
-                className="h-full w-full object-cover"
+                className="h-full w-full object-contain p-2"
               />
             </div>
             <div>
