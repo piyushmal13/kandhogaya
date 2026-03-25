@@ -6,29 +6,29 @@ import { Zap, Cpu, Video, GraduationCap, ArrowUpRight } from "lucide-react";
 const modules = [
   {
     id: "signals",
-    title: "AI Signal Engine",
-    description: "Proprietary HFT algorithms scanning 40+ assets in real-time with exact entry and targets.",
+    title: "AI Signal Intelligence",
+    description: "Multi-layered HFT algorithms processing 40+ asset classes with institutional-grade entry precision.",
     icon: Zap,
     link: "/signals",
   },
   {
     id: "algorithms",
-    title: "Elite Bot Ecosystem",
-    description: "Automated trading execution with low-latency API integration and institutional logic.",
+    title: "Enterprise Execution",
+    description: "Low-latency trading architecture with direct API integration and systematic risk management.",
     icon: Cpu,
     link: "/products",
   },
   {
     id: "webinars",
-    title: "Live Analysis Portal",
-    description: "Daily market breakdowns and real-time trade ideas with our elite analyst team.",
+    title: "Volatility Desk",
+    description: "Live market-flow visualization and strategic trade ideation from senior institutional analysts.",
     icon: Video,
     link: "/signals",
   },
   {
     id: "academy",
-    title: "Elite Academy",
-    description: "Professional-grade mentorship and certified courses for serious retail traders.",
+    title: "Professional Academy",
+    description: "Comprehensive certification tracks and advanced development modules for sophisticated traders.",
     icon: GraduationCap,
     link: "/courses",
   }
@@ -96,21 +96,21 @@ const EcosystemCard = ({ mod, index }: { mod: typeof modules[0], index: number }
       >
         <Link 
           to={mod.link} 
-          className="block relative h-full p-6 md:p-10 rounded-2xl md:rounded-[2.5rem] bg-[#050505] border border-white/5 overflow-hidden transition-colors duration-500 group-hover:bg-[#0a0a0a]"
+          className="block relative h-full p-8 md:p-12 rounded-[2.5rem] bg-[#050505] border border-white/5 overflow-hidden transition-all duration-700 group-hover:bg-[#080808] group-hover:border-white/10 shadow-2xl"
         >
           {/* Spotlight Background Glow */}
           <motion.div
-            className="absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+            className="absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
             style={{
-              background: useMotionTemplate`radial-gradient(600px circle at ${spotlightX}px ${spotlightY}px, rgba(16, 185, 129, 0.05), transparent 40%)`,
+              background: useMotionTemplate`radial-gradient(800px circle at ${spotlightX}px ${spotlightY}px, rgba(131, 255, 200, 0.04), transparent 40%)`,
             }}
           />
           
           {/* Glowing Edge Mask */}
           <motion.div
-            className="absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl md:rounded-[2.5rem]"
+            className="absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none rounded-[2.5rem]"
             style={{
-              background: useMotionTemplate`radial-gradient(400px circle at ${spotlightX}px ${spotlightY}px, rgba(16, 185, 129, 1), transparent 40%)`,
+              background: useMotionTemplate`radial-gradient(600px circle at ${spotlightX}px ${spotlightY}px, rgba(131, 255, 200, 0.4), transparent 40%)`,
               WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
               WebkitMaskComposite: "xor",
               maskComposite: "exclude",
@@ -118,25 +118,25 @@ const EcosystemCard = ({ mod, index }: { mod: typeof modules[0], index: number }
             }}
           />
 
-          {/* 3D Content Container - Pops out due to translateZ */}
+          {/* 3D Content Container */}
           <div 
             className="relative z-10 flex flex-col h-full" 
-            style={{ transform: "translateZ(40px)" }}
+            style={{ transform: "translateZ(60px)" }}
           >
             {/* Top Right Arrow */}
-            <div className="absolute top-0 right-0 w-8 h-8 md:w-12 md:h-12 rounded-full bg-white/[0.02] flex items-center justify-center border border-white/5 group-hover:bg-emerald-500/10 group-hover:border-emerald-500/30 transition-all duration-500 group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(16,185,129,0.2)]">
-              <ArrowUpRight className="w-4 h-4 md:w-6 md:h-6 text-gray-500 group-hover:text-emerald-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-500" />
+            <div className="absolute top-0 right-0 w-10 h-10 md:w-14 md:h-14 rounded-full bg-white/[0.015] flex items-center justify-center border border-white/5 group-hover:bg-[#83ffc8]/5 group-hover:border-[#83ffc8]/20 transition-all duration-700 group-hover:scale-110">
+              <ArrowUpRight className="w-5 h-5 md:w-7 md:h-7 text-white/20 group-hover:text-[#83ffc8] transition-all duration-700" />
             </div>
 
-            <div className="w-12 h-12 md:w-20 md:h-20 rounded-xl md:rounded-3xl bg-white/[0.02] border border-white/5 flex items-center justify-center mb-6 md:mb-10 group-hover:bg-emerald-500/10 group-hover:border-emerald-500/30 group-hover:shadow-[0_0_30px_rgba(16,185,129,0.2)] transition-all duration-500 neon-glow-emerald">
-              <mod.icon className="w-6 h-6 md:w-10 md:h-10 text-gray-400 group-hover:text-emerald-400 group-hover:scale-110 transition-all duration-500" />
+            <div className="w-14 h-14 md:w-20 md:h-20 rounded-2xl md:rounded-[2rem] bg-white/[0.015] border border-white/5 flex items-center justify-center mb-8 md:mb-12 group-hover:bg-[#83ffc8]/5 group-hover:border-[#83ffc8]/20 transition-all duration-700">
+              <mod.icon className="w-7 h-7 md:w-10 md:h-10 text-white/30 group-hover:text-[#83ffc8] transition-all duration-700" />
             </div>
             
-            <h3 className="text-xl md:text-3xl font-bold text-white mb-3 md:mb-6 tracking-tight group-hover:text-emerald-400 transition-all duration-500 uppercase">
+            <h3 className="text-2xl md:text-4xl font-semibold text-white mb-4 md:mb-6 tracking-tight group-hover:text-white transition-all duration-700">
               {mod.title}
             </h3>
             
-            <p className="text-gray-400 text-sm md:text-xl leading-relaxed max-w-md group-hover:text-gray-300 transition-colors duration-500 font-mono italic">
+            <p className="text-gray-400 text-base md:text-xl leading-relaxed max-w-sm group-hover:text-gray-300 transition-colors duration-700 font-sans font-light">
               {mod.description}
             </p>
           </div>
@@ -156,7 +156,7 @@ export const EcosystemSection = () => {
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-mono tracking-[0.2em] uppercase mb-6"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/5 border border-emerald-500/10 text-[#83ffc8] text-[11px] font-sans font-medium tracking-[0.3em] uppercase mb-8"
           >
             Institutional Core
           </motion.div>
@@ -164,15 +164,15 @@ export const EcosystemSection = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-4xl sm:text-5xl md:text-7xl font-bold text-white mb-6 md:mb-10 tracking-tighter"
+            className="text-4xl sm:text-5xl md:text-8xl font-semibold text-white mb-8 md:mb-12 tracking-[-0.04em]"
           >
-            The IFX <span className="gradient-text">Ecosystem</span>
+            The IFX <span className="gradient-text italic font-serif">Ecosystem</span>
           </motion.h2>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-gray-500 max-w-2xl mx-auto text-lg md:text-2xl leading-relaxed font-mono px-4"
+            className="text-gray-400 max-w-3xl mx-auto text-lg md:text-2xl leading-relaxed font-sans font-light px-4 opacity-80"
           >
             Everything you need for serious market execution, integrated into one powerful platform.
           </motion.p>

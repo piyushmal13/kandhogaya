@@ -41,11 +41,11 @@ export const PerformanceHistory = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <span className="text-emerald-500 font-bold text-[10px] md:text-xs uppercase tracking-[0.4em] mb-4 inline-block">Historical Validation</span>
-          <h2 className="text-3xl md:text-6xl font-bold text-white mb-6 tracking-tighter">
-            Institutional <span className="gradient-text">Performance</span>
+                  <span className="text-[#83ffc8] font-medium text-[11px] md:text-sm uppercase tracking-[0.4em] mb-6 inline-block opacity-80">Historical Validation</span>
+          <h2 className="text-4xl md:text-6xl font-semibold text-white mb-8 md:mb-10 tracking-[-0.04em]">
+            Institutional <span className="gradient-text italic font-serif">Performance</span>
           </h2>
-          <p className="text-gray-500 max-w-2xl mx-auto text-sm md:text-lg font-mono">
+          <p className="text-gray-400 max-w-2xl mx-auto text-base md:text-xl font-light opacity-80 uppercase tracking-widest">
             36-month rolling audit of our primary algorithmic execution clusters.
           </p>
         </motion.div>
@@ -56,59 +56,59 @@ export const PerformanceHistory = () => {
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="glass-card p-6 md:p-12 border-white/5 relative overflow-hidden group"
+          className="bg-[#050505] p-8 md:p-14 rounded-[2.5rem] border border-white/5 relative overflow-hidden group shadow-2xl"
         >
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-12 gap-8">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center neon-glow-emerald">
-                <Activity className="w-6 h-6 text-emerald-500" />
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-16 gap-10">
+            <div className="flex items-center gap-6">
+              <div className="w-14 h-14 rounded-2xl bg-emerald-500/5 border border-emerald-500/10 flex items-center justify-center">
+                <Activity className="w-7 h-7 text-emerald-500 opacity-80" />
               </div>
               <div>
-                <h3 className="text-white font-bold text-xl md:text-2xl tracking-tight">System Audit Log</h3>
-                <p className="text-gray-500 text-xs font-mono">3-YEAR PERFORMANCE MATRIX</p>
+                <h3 className="text-white font-semibold text-xl md:text-3xl tracking-tight mb-1">System Audit Log</h3>
+                <p className="text-gray-500 text-[10px] md:text-xs font-sans font-medium uppercase tracking-[0.25em] opacity-60">3-YEAR PERFORMANCE MATRIX</p>
               </div>
             </div>
             
-            <div className="flex gap-10 items-center">
+            <div className="flex gap-12 items-center">
               <div className="flex flex-col">
-                <span className="text-[10px] font-mono text-gray-500 uppercase tracking-widest mb-1">Success Metric</span>
-                <span className="text-2xl md:text-3xl font-mono font-bold text-emerald-500 flex items-center gap-2">
-                  +1,240% <TrendingUp className="w-5 h-5" />
+                <span className="text-[10px] font-sans font-medium text-gray-500 uppercase tracking-widest mb-2 opacity-60">Success Metric</span>
+                <span className="text-3xl md:text-5xl font-sans font-semibold text-[#83ffc8] flex items-center gap-3 tracking-tight">
+                  +1,240% <TrendingUp className="w-6 h-6 opacity-60" />
                 </span>
               </div>
               <div className="flex flex-col">
-                <span className="text-[10px] font-mono text-gray-500 uppercase tracking-widest mb-1">Max Retraction</span>
-                <span className="text-2xl md:text-3xl font-mono font-bold text-rose-500 flex items-center gap-2">
-                  -8.2% <TrendingDown className="w-5 h-5" />
+                <span className="text-[10px] font-sans font-medium text-gray-500 uppercase tracking-widest mb-2 opacity-60">Max Retraction</span>
+                <span className="text-3xl md:text-5xl font-sans font-semibold text-rose-500/80 flex items-center gap-3 tracking-tight">
+                  -8.2% <TrendingDown className="w-6 h-6 opacity-60" />
                 </span>
               </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-9 lg:grid-cols-12 gap-2 md:gap-4">
+          <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-9 lg:grid-cols-12 gap-3 md:gap-5">
             {monthlyResults.map((month, i) => (
               <motion.div
                 key={month.label}
                 initial={{ opacity: 0, scale: 0.8 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.015 }}
+                transition={{ delay: i * 0.01 }}
                 className={`
-                  relative group aspect-square rounded-xl border flex flex-col items-center justify-center cursor-default transition-all duration-500
+                  relative group aspect-square rounded-[1.25rem] border flex flex-col items-center justify-center cursor-default transition-all duration-700
                   ${month.isPositive 
-                    ? 'bg-emerald-500/[0.03] border-emerald-500/10 hover:bg-emerald-500/10 hover:border-emerald-500/30' 
-                    : 'bg-rose-500/[0.03] border-rose-500/10 hover:bg-rose-500/10 hover:border-rose-500/30'}
+                    ? 'bg-emerald-500/[0.02] border-emerald-500/5 hover:bg-emerald-500/10 hover:border-emerald-500/20' 
+                    : 'bg-rose-500/[0.02] border-rose-500/5 hover:bg-rose-500/10 hover:border-rose-500/20'}
                 `}
               >
-                <span className={`text-[10px] md:text-sm font-mono font-bold ${month.isPositive ? 'text-emerald-500' : 'text-rose-500'}`}>
+                <span className={`text-xs md:text-base font-sans font-semibold ${month.isPositive ? 'text-emerald-400' : 'text-rose-400/80'}`}>
                   {month.value > 0 ? '+' : ''}{month.value}%
                 </span>
-                <span className="text-[7px] md:text-[8px] text-gray-600 font-mono mt-1 opacity-60 uppercase">{month.label.split(' ')[0]}</span>
+                <span className="text-[7px] md:text-[9px] text-gray-600 font-sans font-medium mt-1 opacity-60 uppercase tracking-tighter">{month.label.split(' ')[0]}</span>
                 
                 {/* Elite Tooltip */}
-                <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 bg-black/90 backdrop-blur-xl border border-white/10 px-3 py-2 rounded-xl text-[10px] text-white opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap z-30 shadow-2xl scale-75 group-hover:scale-100 flex flex-col items-center">
-                  <div className="text-gray-500 uppercase tracking-widest mb-1">{month.label}</div>
-                  <div className={month.isPositive ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold'}>
+                <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-black/80 backdrop-blur-2xl border border-white/10 px-4 py-2 rounded-2xl text-[10px] text-white opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none whitespace-nowrap z-30 shadow-2xl scale-75 group-hover:scale-100 flex flex-col items-center">
+                  <div className="text-gray-500 uppercase tracking-widest mb-1 font-medium">{month.label}</div>
+                  <div className={month.isPositive ? 'text-[#83ffc8] font-semibold' : 'text-rose-400 font-semibold'}>
                    NET: {month.value > 0 ? '+' : ''}{month.value}%
                   </div>
                 </div>
@@ -116,20 +116,20 @@ export const PerformanceHistory = () => {
             ))}
           </div>
 
-          <div className="mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-            <div className="flex gap-8">
+          <div className="mt-16 pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-end gap-8">
+            <div className="flex gap-12">
               {[
-                { label: "Win Probability", value: "84.2%", color: "text-emerald-400" },
+                { label: "Win Probability", value: "84.2%", color: "text-[#83ffc8]" },
                 { label: "Sharpe Ratio", value: "3.24", color: "text-white" },
                 { label: "Profit Factor", value: "2.1", color: "text-white" }
               ].map(item => (
                 <div key={item.label}>
-                  <div className="text-[10px] font-mono text-gray-500 uppercase tracking-widest mb-1">{item.label}</div>
-                  <div className={`font-mono font-bold ${item.color}`}>{item.value}</div>
+                  <div className="text-[10px] md:text-[11px] font-sans font-medium text-gray-500 uppercase tracking-[0.2em] mb-2 opacity-60">{item.label}</div>
+                  <div className={`font-sans font-semibold text-lg md:text-2xl tracking-tight ${item.color}`}>{item.value}</div>
                 </div>
               ))}
             </div>
-            <div className="text-[10px] text-gray-600 font-mono tracking-tighter text-center md:text-right italic">
+            <div className="text-[10px] md:text-xs text-gray-600 font-sans font-light tracking-wide text-center md:text-right opacity-60">
               *Audit logs verified by proprietary backtesting engine. <br className="hidden md:block"/> 
               Live execution results may vary based on slippage and latency.
             </div>

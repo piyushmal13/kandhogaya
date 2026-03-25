@@ -5,41 +5,51 @@ import { fetchReviews } from "../services/reviewService";
 import { getProducts } from "../services/apiHandlers";
 import { Product } from "../types";
 
+const algoKeywords = ['algo', 'algorithm', 'logic', 'hft', 'pattern', 'neural', 'automated', 'system', 'win rate', 'latency'];
+
+const isAlgoReview = (rev: any) => {
+  const role = rev.role?.toLowerCase() || '';
+  const text = rev.text?.toLowerCase() || '';
+  return algoKeywords.some(key => role.includes(key) || text.includes(key));
+};
+
 export const AlgoGreatness = () => {
   const [reviews, setReviews] = useState<any[]>([]);
   const [featuredAlgo, setFeaturedAlgo] = useState<Product | null>(null);
   const [stats, setStats] = useState({ avg: 4.9, count: 1200 });
 
   useEffect(() => {
-    // Fetch all reviews for landing page
-    fetchReviews().then((data: any) => {
-      if (data && data.length > 0) {
-        // Filter specifically for Algo reviews
-        const algoKeywords = ['algo', 'algorithm', 'logic', 'hft', 'pattern', 'neural', 'automated', 'system', 'win rate', 'latency'];
-        const filtered = data.filter((rev: any) => 
-          algoKeywords.some(key => rev.role?.toLowerCase().includes(key) || rev.text?.toLowerCase().includes(key))
-        );
-        
-        setReviews(filtered.length > 0 ? filtered.slice(0, 3) : data.slice(0, 3));
-        
-        // Calculate dynamic stats
-        const relevantData = filtered.length > 0 ? filtered : data;
-        const totalRating = relevantData.reduce((acc: number, curr: any) => acc + (curr.rating || 5), 0);
-        const avg = totalRating / relevantData.length;
-        setStats({
-          avg: Number.parseFloat(avg.toFixed(1)),
-          count: data.length > 100 ? data.length : 1200 + data.length 
-        });
-      }
-    });
+    const loadData = async () => {
+      try {
+        const [reviewData, products] = await Promise.all([
+          fetchReviews(),
+          getProducts()
+        ]);
 
-    // Fetch Gold Scalper or first algorithm for the video
-    getProducts().then((allProducts: any[]) => {
-      const gold = allProducts?.find(p => p.name.includes("Gold"));
-      const first = allProducts?.[0];
-      if (gold) setFeaturedAlgo(gold);
-      else if (first) setFeaturedAlgo(first);
-    });
+        if (reviewData && reviewData.length > 0) {
+          const filtered = reviewData.filter(isAlgoReview);
+          setReviews(filtered.length > 0 ? filtered.slice(0, 3) : reviewData.slice(0, 3));
+          
+          const relevantData = filtered.length > 0 ? filtered : reviewData;
+          const totalRating = relevantData.reduce((acc: number, curr: any) => acc + (curr.rating || 5), 0);
+          const avg = totalRating / relevantData.length;
+          
+          setStats({
+            avg: Number.parseFloat(avg.toFixed(1)),
+            count: reviewData.length > 100 ? reviewData.length : 1200 + reviewData.length 
+          });
+        }
+
+        if (products && products.length > 0) {
+          const gold = products.find((p: Product) => p.name.includes("Gold"));
+          setFeaturedAlgo(gold || products[0]);
+        }
+      } catch (error) {
+        console.error("Error loading AlgoGreatness data:", error);
+      }
+    };
+
+    loadData();
   }, []);
 
   const getEmbedUrl = (url?: string): string | null => {
@@ -57,11 +67,11 @@ export const AlgoGreatness = () => {
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="text-center mb-10 md:mb-16 px-4"
+        className="text-center mb-16 md:mb-24 px-4"
       >
-        <span className="text-emerald-500 font-bold text-[10px] md:text-xs uppercase tracking-[0.3em] mb-4 inline-block">Institutional Systems</span>
-        <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 md:mb-6 tracking-tight">How Our Algos Dominate</h2>
-        <p className="text-gray-400 max-w-2xl mx-auto text-sm md:text-lg">Experience the architecture behind {featuredAlgo && (featuredAlgo as any).name ? (featuredAlgo as any).name : "our proprietary systems"} and see why institutional traders trust IFXTrades.</p>
+        <span className="text-[#83ffc8] font-medium text-[11px] md:text-sm uppercase tracking-[0.3em] mb-6 inline-block opacity-80">Institutional Logic</span>
+        <h2 className="text-4xl md:text-6xl font-semibold text-white mb-6 md:mb-8 tracking-[-0.03em]">How Our Algos <span className="italic font-serif">Dominate</span></h2>
+        <p className="text-gray-400 max-w-2xl mx-auto text-base md:text-xl font-light opacity-80 uppercase tracking-wide">Experience the architecture behind {featuredAlgo && (featuredAlgo as any).name ? (featuredAlgo as any).name : "our proprietary systems"} and see why institutional traders trust IFXTrades.</p>
       </motion.div>
 
         {/* Video Section — only rendered when a valid URL exists */}
@@ -71,23 +81,23 @@ export const AlgoGreatness = () => {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="relative max-w-6xl mx-auto mb-20 md:mb-32 px-4"
+          className="relative max-w-6xl mx-auto mb-24 md:mb-40 px-4"
         >
-          <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/20 via-cyan-500/20 to-emerald-500/20 rounded-[2rem] blur-2xl opacity-30"></div>
-          <div className="relative bg-[#050505] border border-white/10 rounded-[2rem] overflow-hidden shadow-[0_0_80px_rgba(0,0,0,1)]">
+          <div className="absolute -inset-4 bg-gradient-to-r from-emerald-500/10 via-cyan-500/10 to-emerald-500/10 rounded-[3rem] blur-3xl opacity-20"></div>
+          <div className="relative bg-[#050505] border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl">
             <div className="aspect-video w-full bg-black relative group">
               <iframe 
                 src={videoUrl}
                 title="Algo Strategy Breakdown"
-                className="w-full h-full border-0 opacity-80 group-hover:opacity-100 transition-opacity"
+                className="w-full h-full border-0 opacity-90 group-hover:opacity-100 transition-opacity"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
               />
               
-              <div className="absolute bottom-6 left-6 right-6 flex justify-between items-center pointer-events-none">
-                <div className="bg-black/80 backdrop-blur-xl border border-white/10 px-4 py-2 rounded-xl flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,1)]" />
-                  <span className="text-white font-mono text-[10px] md:text-xs font-bold tracking-widest uppercase">Analysis Core Live</span>
+              <div className="absolute bottom-8 left-8 right-8 flex justify-between items-center pointer-events-none">
+                <div className="bg-black/60 backdrop-blur-2xl border border-white/10 px-6 py-3 rounded-2xl flex items-center gap-4">
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#83ffc8] animate-pulse shadow-[0_0_15px_#83ffc8]" />
+                  <span className="text-white font-sans text-xs font-medium tracking-widest uppercase opacity-80">Analysis Core Active</span>
                 </div>
               </div>
             </div>
@@ -98,80 +108,82 @@ export const AlgoGreatness = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="relative max-w-6xl mx-auto mb-20 md:mb-32 px-4"
+          className="relative max-w-6xl mx-auto mb-24 md:mb-40 px-4"
         >
-          <div className="bg-[#050505] border border-white/10 rounded-[2rem] aspect-video flex flex-col items-center justify-center gap-4">
-            <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
-              <Activity className="w-8 h-8 text-emerald-500" />
+          <div className="bg-[#050505] border border-white/5 rounded-[2.5rem] aspect-video flex flex-col items-center justify-center gap-6">
+            <div className="w-20 h-20 rounded-3xl bg-emerald-500/5 border border-emerald-500/10 flex items-center justify-center">
+              <Activity className="w-10 h-10 text-emerald-500 opacity-50" />
             </div>
-            <p className="text-gray-500 text-sm font-mono uppercase tracking-widest">Strategy video loading…</p>
+            <p className="text-gray-600 text-[11px] font-sans font-medium uppercase tracking-[0.2em]">Strategy Data Syncing…</p>
           </div>
         </motion.div>
       )}
 
       {/* Features */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-20 md:mb-32 max-w-6xl mx-auto px-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mb-24 md:mb-40 max-w-6xl mx-auto px-4">
         {[
-          { icon: Cpu, title: "Neural Pattern Recognition", desc: "Scans 28 pairs simultaneously to identify high-probability order blocks." },
-          { icon: Activity, title: "Dynamic Risk Adjustment", desc: "Automatically scales lot sizes based on account equity and market volatility." },
-          { icon: ShieldCheck, title: "News Protection", desc: "Pauses trading 30 minutes before and after high-impact macroeconomic events." }
+          { icon: Cpu, title: "Neural Logic Engine", desc: "Advanced architectural mapping of order-flow imbalances across 28 global currency pairs." },
+          { icon: Activity, title: "Systemic Risk Protection", desc: "Dynamic equity protection modules that recalibrate position weighting in volatile conditions." },
+          { icon: ShieldCheck, title: "Protocol Hardening", desc: "Hard-coded event protection pausing all execution pipelines during high-impact market shifts." }
         ].map((feat) => (
           <motion.div 
             key={feat.title} 
             initial={{ opacity: 0, y: 20 }} 
             whileInView={{ opacity: 1, y: 0 }} 
             viewport={{ once: true }}
-            className="bg-zinc-900/50 border border-white/5 p-6 md:p-8 rounded-2xl md:rounded-3xl hover:border-emerald-500/30 transition-colors"
+            className="group bg-zinc-900/10 border border-white/5 p-10 md:p-12 rounded-[2.5rem] hover:bg-white/[0.01] hover:border-white/10 transition-all duration-700 shadow-xl"
           >
-            <feat.icon className="w-8 h-8 md:w-10 md:h-10 text-emerald-500 mb-4 md:mb-6" />
-            <h3 className="text-lg md:text-xl font-bold text-white mb-2 md:mb-3">{feat.title}</h3>
-            <p className="text-gray-400 text-sm md:text-base">{feat.desc}</p>
+            <div className="w-16 h-16 rounded-[1.5rem] bg-emerald-500/5 border border-emerald-500/10 flex items-center justify-center mb-8 group-hover:bg-emerald-500/10 group-hover:border-emerald-500/20 transition-all duration-700">
+              <feat.icon className="w-8 h-8 text-emerald-500 group-hover:scale-110 transition-transform duration-700" />
+            </div>
+            <h3 className="text-xl md:text-2xl font-semibold text-white mb-4 tracking-tight">{feat.title}</h3>
+            <p className="text-gray-400 text-sm md:text-lg font-light leading-relaxed group-hover:text-gray-300 transition-colors duration-700">{feat.desc}</p>
           </motion.div>
         ))}
       </div>
 
       {/* Reviews */}
       <div className="max-w-7xl mx-auto px-4">
-        <div className="text-center mb-10 md:mb-12">
-          <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">Verified User Reviews</h3>
-          <div className="flex items-center justify-center gap-2">
-            <div className="flex">
+        <div className="text-center mb-16 md:mb-24">
+          <h3 className="text-3xl md:text-4xl font-semibold text-white mb-6 tracking-tight italic font-serif">Verified User Reviews</h3>
+          <div className="flex items-center justify-center gap-4">
+            <div className="flex gap-1">
               {[1, 2, 3, 4, 5].map((num) => (
-                <Star key={`star-${num}`} className="w-4 h-4 md:w-6 md:h-6 text-emerald-500 fill-emerald-500" />
+                <Star key={`star-${num}`} className="w-5 h-5 md:w-6 md:h-6 text-emerald-400 fill-emerald-400 opacity-80" />
               ))}
             </div>
-            <span className="text-white font-bold text-lg md:text-xl ml-2">{stats.avg}/5</span>
-            <span className="text-gray-500 text-xs md:text-sm ml-2">from {stats.count.toLocaleString()}+ traders</span>
+            <span className="text-white font-semibold text-xl md:text-2xl ml-2">{stats.avg}/5</span>
+            <span className="text-gray-500 text-sm md:text-base ml-2 opacity-60 font-sans tracking-tight">from {stats.count.toLocaleString()}+ traders</span>
           </div>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-10">
           {reviews.map((rev) => (
             <motion.div 
               key={rev.id || rev.name} 
-              initial={{ opacity: 0, scale: 0.95 }} 
-              whileInView={{ opacity: 1, scale: 1 }} 
+              initial={{ opacity: 0, y: 20 }} 
+              whileInView={{ opacity: 1, y: 0 }} 
               viewport={{ once: true }}
-              className="bg-zinc-900 border border-white/10 p-6 md:p-8 rounded-2xl md:rounded-3xl relative hover:border-emerald-500/50 transition-all group"
+              className="bg-[#050505] border border-white/5 p-10 md:p-12 rounded-[2.5rem] relative hover:bg-white/[0.01] hover:border-white/10 transition-all duration-700 group shadow-2xl"
             >
-              <div className="absolute -top-3 right-6 md:-top-4 md:right-8 bg-emerald-500 text-black text-[8px] md:text-[10px] font-bold uppercase px-2 py-0.5 md:px-3 md:py-1 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0">
-                Verified Purchase
+              <div className="absolute -top-4 right-10 bg-emerald-500/10 border border-emerald-500/20 text-[#83ffc8] text-[10px] md:text-[11px] font-sans font-medium uppercase tracking-[0.2em] px-4 py-1.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-700 transform translate-y-2 group-hover:translate-y-0 backdrop-blur-xl">
+                Verified System
               </div>
-              <div className="flex gap-1 mb-4 md:mb-6">
+              <div className="flex gap-1.5 mb-8 md:mb-10">
                 {Array.from({ length: rev.rating || 5 }).map((_, j) => (
-                  <Star key={`${rev.id || rev.name}-star-${j}`} className="w-4 h-4 md:w-5 md:h-5 text-emerald-500 fill-emerald-500" />
+                  <Star key={`${rev.id || rev.name}-star-${j}`} className="w-4 h-4 text-emerald-400 fill-emerald-400 opacity-60" />
                 ))}
               </div>
-              <p className="text-gray-300 mb-6 md:mb-8 text-sm md:text-lg leading-relaxed">"{rev.text}"</p>
-              <div className="flex items-center gap-3 md:gap-4">
-                <div className="w-10 h-10 md:w-12 md:h-12 bg-emerald-500/20 rounded-full flex items-center justify-center text-emerald-500 font-bold text-lg md:text-xl border border-emerald-500/30">
+              <p className="text-gray-300 mb-10 md:mb-12 text-base md:text-xl font-light italic leading-[1.8] opacity-90 group-hover:opacity-100 transition-opacity">"{rev.text}"</p>
+              <div className="flex items-center gap-4 md:gap-5">
+                <div className="w-12 h-12 md:w-16 md:h-16 bg-white/[0.02] border border-white/5 rounded-full flex items-center justify-center text-[#83ffc8] font-sans font-medium text-xl md:text-2xl group-hover:bg-[#83ffc8]/5 group-hover:border-[#83ffc8]/20 transition-all duration-700">
                   {rev.name?.charAt(0) || "U"}
                 </div>
                 <div>
-                  <div className="text-white font-bold text-sm md:text-base flex items-center gap-2">
-                    {rev.name} <CheckCircle2 className="w-3 h-3 md:w-4 md:h-4 text-emerald-500" />
+                  <div className="text-white font-semibold text-base md:text-xl flex items-center gap-2 mb-1">
+                    {rev.name} <CheckCircle2 className="w-4 h-4 text-emerald-400 opacity-60" />
                   </div>
-                  <div className="text-[9px] md:text-xs text-gray-500 uppercase tracking-widest">{rev.role}</div>
+                  <div className="text-[10px] md:text-[11px] text-gray-500 font-sans font-medium uppercase tracking-[0.2em] opacity-60">{rev.role}</div>
                 </div>
               </div>
             </motion.div>

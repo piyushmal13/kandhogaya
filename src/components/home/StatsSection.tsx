@@ -63,18 +63,18 @@ const StatItem = ({ stat, i }: { stat: any, i: number }) => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ delay: i * 0.1, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className="relative p-5 md:p-8 bg-[#050505] hover:bg-white/[0.02] transition-colors duration-500 flex flex-col justify-center"
+      className="relative p-8 md:p-12 bg-[#050505] hover:bg-white/[0.01] transition-all duration-700 flex flex-col justify-start group border-r border-white/5 last:border-r-0"
     >
-      <div className="text-[9px] md:text-[10px] text-gray-500 font-mono uppercase tracking-[0.15em] md:tracking-[0.2em] mb-2 md:mb-4">
+      <div className="text-[10px] md:text-[11px] text-gray-500 font-sans font-medium uppercase tracking-[0.25em] mb-4 md:mb-8 opacity-60 group-hover:opacity-100 transition-opacity">
         {stat.label}
       </div>
       
-      <div className={`text-2xl sm:text-3xl md:text-5xl font-mono font-bold tracking-tighter mb-1 md:mb-2 ${stat.color}`}>
+      <div className={`text-3xl sm:text-4xl md:text-6xl font-sans font-semibold tracking-[-0.04em] mb-2 md:mb-4 transition-all duration-700 group-hover:scale-[1.02] origin-left ${stat.color}`}>
         {prefix}{displayValue.toLocaleString()}{suffix}
       </div>
       
-      <div className="text-[9px] md:text-xs text-gray-400 font-mono flex items-center gap-1.5 md:gap-2">
-        <div className={`w-1 h-1 rounded-full ${stat.color.replace('text-', 'bg-')}`} />
+      <div className="text-[10px] md:text-sm text-gray-500 font-sans font-light flex items-center gap-2 md:gap-3 opacity-80">
+        <div className={`w-1.5 h-1.5 rounded-full ${stat.color.replace('text-', 'bg-')} shadow-[0_0_10px_currentColor]`} />
         {stat.sub}
       </div>
     </motion.div>
@@ -83,9 +83,9 @@ const StatItem = ({ stat, i }: { stat: any, i: number }) => {
 
 export const StatsSection = () => {
   return (
-    <section className="py-16 md:py-24 bg-[#020202] relative overflow-hidden border-t border-white/5">
+    <section className="py-24 md:py-40 bg-[#020202] relative overflow-hidden border-t border-white/5">
       <div className="max-w-7xl mx-auto px-4 relative z-10">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-white/5 border border-white/5 rounded-2xl overflow-hidden">
+        <div className="grid grid-cols-2 lg:grid-cols-4 bg-zinc-900/10 border border-white/5 rounded-[2rem] overflow-hidden">
           {stats.map((stat, i) => (
             <StatItem key={stat.label} stat={stat} i={i} />
           ))}
