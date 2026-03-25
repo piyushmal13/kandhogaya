@@ -1,7 +1,17 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "motion/react";
-import { ArrowRight, ShieldCheck, Activity, Users, Target, Zap, ChevronDown } from "lucide-react";
+import { 
+  ArrowRight, 
+  ShieldCheck, 
+  Activity, 
+  Users, 
+  Target, 
+  Zap, 
+  ChevronDown,
+  Shield,
+  Database
+} from "lucide-react";
 import { supabase } from "../../lib/supabase";
 
 export const HeroSection = () => {
@@ -20,127 +30,136 @@ export const HeroSection = () => {
         if (userCount) {
           setStats(prev => ({ ...prev, traders: `${(userCount + 12000).toLocaleString()}+` }));
         }
-      } catch (err) {
-        console.error("Stats Fetch Error:", err);
+      } catch (e) {
+        console.error("Stats fetch error:", e);
       }
     };
     fetchRealStats();
 
-    // Particle System Initialization
-    const particleCount = 50;
-    const initialParticles = Array.from({ length: particleCount }).map((_, i) => ({
+    // Create background particles
+    const newParticles = Array.from({ length: 40 }).map((_, i) => ({
       id: `p-${i}`,
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
-      vx: (Math.random() - 0.5) * 0.5,
-      vy: (Math.random() - 0.5) * 0.5,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      vx: (Math.random() - 0.5) * 0.05,
+      vy: (Math.random() - 0.5) * 0.05,
       size: Math.random() * 2 + 1,
-      opacity: Math.random() * 0.5 + 0.2
+      opacity: Math.random() * 0.5 + 0.1
     }));
-    setParticles(initialParticles);
+    setParticles(newParticles);
 
-    let animationFrameId: number;
-    const animate = () => {
+    const interval = setInterval(() => {
       setParticles(prev => prev.map(p => ({
         ...p,
-        x: p.x + p.vx,
-        y: p.y + p.vy,
-        vx: p.x < 0 || p.x > window.innerWidth ? -p.vx : p.vx,
-        vy: p.y < 0 || p.y > window.innerHeight ? -p.vy : p.vy
+        x: (p.x + p.vx + 100) % 100,
+        y: (p.y + p.vy + 100) % 100
       })));
-      animationFrameId = requestAnimationFrame(animate);
-    };
-    animationFrameId = requestAnimationFrame(animate);
+    }, 50);
 
-    const handleResize = () => setParticles(initialParticles);
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      cancelAnimationFrame(animationFrameId);
-    };
+    return () => clearInterval(interval);
   }, []);
 
   return (
-    <section ref={containerRef} className="relative min-h-[100vh] flex flex-col items-center justify-center overflow-hidden bg-[#000000] pt-40 pb-24 perspective-container">
-      {/* Particle Background */}
-      <div className="absolute inset-0 pointer-events-none">
-        {particles.map((p) => (
-          <div
-            key={p.id}
-            className="absolute"
-            style={{
-              left: p.x,
-              top: p.y,
-              width: p.size,
-              height: p.size,
-              backgroundColor: 'rgba(131, 255, 200, 0.3)',
-              borderRadius: '50%',
-              opacity: p.opacity
-            }}
-          />
+    <div ref={containerRef} className="relative min-h-screen pt-32 pb-20 flex flex-col items-center justify-center overflow-hidden bg-black selection:bg-emerald-500/30">
+      
+      {/* --- Ambient Background --- */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-emerald-500/10 blur-[120px] rounded-full opacity-40 animate-pulse" />
+        <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+        
+        {/* Animated Grid */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_80%)]" />
+
+        {/* Floating Particles */}
+        {particles.map(p => (
+           <motion.div
+             key={p.id}
+             className="absolute w-1 h-1 bg-emerald-500 rounded-full"
+             animate={{ x: `${p.x}vw`, y: `${p.y}vh` }}
+             style={{ width: p.size, height: p.size, opacity: p.opacity }}
+           />
         ))}
       </div>
-      
-      {/* ── Institutional Background System ── */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Perspective Grid (Floor) */}
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[220%] h-[60%] bg-[linear-gradient(rgba(131,255,200,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(131,255,200,0.05)_1px,transparent_1px)] bg-[size:120px_120px] [transform:rotateX(65deg)_translateZ(0)] [mask-image:linear-gradient(to_top,black,transparent)]" />
-        
-        {/* Ambient Spotlights */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1400px] h-[800px] bg-[var(--brand)]/5 blur-[160px] rounded-full opacity-60" />
-        <div className="absolute -bottom-40 left-0 w-[600px] h-[600px] bg-cyan-500/5 blur-[120px] rounded-full" />
-        <div className="absolute -bottom-40 right-0 w-[600px] h-[600px] bg-emerald-500/5 blur-[120px] rounded-full" />
-        
-        {/* Aura Beam (Centric) */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[2px] h-screen bg-gradient-to-b from-[var(--brand)]/30 via-[var(--brand)]/5 to-transparent shadow-[0_0_30px_rgba(131,255,200,0.3)] opacity-80" />
-      </div>
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10 w-full flex flex-col items-center text-center">
+      <div className="relative z-10 w-full max-w-7xl px-6 text-center">
         
-        {/* --- Trust Badge --- */}
-                <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }} className="flex flex-col gap-6 w-full px-6"> <Link to="/login" className="group relative px-8 py-5 bg-white text-black font-black rounded-full overflow-hidden transition-all duration-700 hover:scale-105 active:scale-95 shadow-[0_20px_60px_rgba(255,255,255,0.2)] w-full text-center text-base uppercase tracking-tighter"> <div className="absolute inset-0 bg-emerald-500 translate-y-full group-hover:translate-y-0 transition-transform duration-700" /> <span className="relative z-10 flex items-center justify-center gap-3"> Access Institutional Terminal <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform duration-500" /> </span> </Link> <button className="text-[10px] font-bold text-gray-500 uppercase tracking-[0.3em] hover:text-white transition-colors"> Global Performance </button> <div className="flex items-center justify-center gap-6 opacity-40 grayscale group hover:grayscale-0 transition-all duration-700"> <div className="flex items-center gap-2"> <Shield className="w-4 h-4 text-emerald-500" /> <div className="flex flex-col"> <span className="text-[9px] font-bold text-white tracking-[0.1em] leading-none uppercase">SSL SECURE</span> <span className="text-[7px] text-emerald-500/60 font-medium">BANK-GRADE</span> </div> </div> </div> </motion.div>
-
-        {/* --- Trust Bar --- */}
-        <motion.div 
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.6 }}
-          className="mt-12 flex flex-wrap justify-center items-center gap-x-12 gap-y-6 opacity-40 hover:opacity-100 transition-opacity duration-700 grayscale hover:grayscale-0"
+        {/* --- Main Headline --- */}
+        <motion.h1 
+          initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+          className="text-4xl sm:text-7xl md:text-8xl font-black text-white mb-6 leading-tight tracking-[-0.05em]"
         >
-          <div className="text-[9px] font-sans font-bold uppercase tracking-[0.4em] text-gray-400">Audited By Institutional Standards</div>
-          <div className="flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-[var(--brand)]" />
-            <span className="text-[10px] text-white font-bold tracking-widest uppercase">SSL SECURE</span>
-          </div>
-          <div className="flex items-center gap-2 border-l border-white/10 pl-12">
-            <Activity className="w-4 h-4 text-cyan-400" />
-            <span className="text-[10px] text-white font-bold tracking-widest uppercase">ISO 27001</span>
+          Institutional <span className="italic font-serif text-emerald-500">Edge</span>. <br className="hidden lg:block" />
+          <span className="opacity-40">Retail</span> <span className="italic font-serif opacity-40">Accessibility</span>.
+        </motion.h1>
+        
+        {/* --- Subheadline --- */}
+        <motion.p 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          className="text-[11px] sm:text-lg md:text-xl text-gray-500 tracking-widest uppercase mb-12 px-8 max-w-3xl mx-auto leading-relaxed"
+        >
+          Access the multi-layered execution protocols, proprietary HFT logic, and global market-flow datasets utilized by elite quantitative funds.
+        </motion.p>
+
+        {/* --- CTA Unit --- */}
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          className="flex flex-col items-center justify-center gap-6 w-full max-w-md mx-auto px-6"
+        >
+          <Link 
+            to="/login"
+            className="group relative px-8 py-5 bg-white text-black font-black rounded-full overflow-hidden transition-all duration-700 hover:scale-105 active:scale-95 shadow-[0_20px_60px_rgba(255,255,255,0.2)] w-full text-center text-base uppercase tracking-tighter"
+          >
+            <div className="absolute inset-0 bg-emerald-500 translate-y-full group-hover:translate-y-0 transition-transform duration-700" />
+            <span className="relative z-10 flex items-center justify-center gap-3">
+              Access Institutional Terminal
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform duration-500" />
+            </span>
+          </Link>
+
+          <div className="flex items-center justify-center gap-8 opacity-40 grayscale group hover:grayscale-0 transition-all duration-700">
+            <div className="flex items-center gap-2">
+              <Shield className="w-4 h-4 text-emerald-500" />
+              <div className="flex flex-col text-left">
+                <span className="text-[9px] font-bold text-white tracking-[0.1em] leading-none uppercase">SSL SECURE</span>
+                <span className="text-[7px] text-emerald-500/60 font-medium">BANK-GRADE</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <Database className="w-4 h-4 text-emerald-500" />
+              <div className="flex flex-col text-left">
+                <span className="text-[9px] font-bold text-white tracking-[0.1em] leading-none uppercase">HFT GRID</span>
+                <span className="text-[7px] text-emerald-500/60 font-medium">PROPRIETARY</span>
+              </div>
+            </div>
           </div>
         </motion.div>
-        
-        {/* --- Stats Strip --- */}
+
+        {/* --- One-Part Dashboard --- */}
         <motion.div 
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-24 md:mt-40 w-full max-w-6xl border-t border-white/5 pt-16 grid grid-cols-1 sm:grid-cols-3 gap-12 md:gap-24"
+          transition={{ duration: 1.5, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="mt-16 md:mt-24 w-full grid grid-cols-3 gap-2 sm:gap-20 max-w-5xl mx-auto px-2 border-t border-white/5 pt-12"
         >
           {[
-            { label: "Active Deployments", value: stats.traders, icon: Users, color: "text-[var(--brand)]" },
-            { label: "Institutional Win Rate", value: stats.winRate, icon: Target, color: "text-cyan-400" },
-            { label: "Execution Pipeline", value: stats.latency, icon: Zap, color: "text-emerald-400" },
+            { label: "Nodes", val: stats.traders, sub: "Live" },
+            { label: "Win Rate", val: stats.winRate, sub: "Audited" },
+            { label: "Latency", val: stats.latency, sub: "Pipeline" }
           ].map((stat, i) => (
-            <div 
-              key={stat.label} 
-              className="group relative flex flex-col items-center p-4 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] bg-white/[0.02] border border-white/5 hover:border-[#83ffc8]/20 transition-all duration-700 hover:bg-white/[0.04] hover:scale-[1.02]"
-            >
-              <div className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-white/[0.02] mb-4 sm:mb-6 group-hover:scale-110 transition-all duration-700 ${stat.color} border border-white/5 group-hover:border-current/20 shadow-2xl`}>
-                <stat.icon className="w-4 h-4 sm:w-6 sm:h-6" />
-              </div>
-              <div className="text-3xl sm:text-5xl md:text-7xl font-sans font-semibold text-white mb-2 sm:mb-3 tabular-nums tracking-[-0.05em] group-hover:text-emerald-500 transition-colors">{stat.value}</div>
-              <div className="text-[8px] sm:text-[10px] md:text-xs font-sans font-medium text-gray-500 uppercase tracking-[0.4em] opacity-60 group-hover:opacity-100 transition-opacity">{stat.label}</div>
+            <div key={i} className="flex flex-col items-center group border-x border-white/5 py-2">
+              <span className="text-xl sm:text-5xl md:text-7xl font-bold text-white mb-1 sm:mb-4 tracking-tighter group-hover:text-emerald-500 transition-colors duration-700">
+                {stat.val}
+              </span>
+              <span className="text-[8px] sm:text-[12px] font-bold text-gray-400 uppercase tracking-[0.15em] mb-0.5 opacity-60 text-center">
+                {stat.label}
+              </span>
+              <span className="text-[7px] text-emerald-500/40 font-medium uppercase tracking-[0.1em]">{stat.sub}</span>
             </div>
           ))}
         </motion.div>
@@ -148,22 +167,18 @@ export const HeroSection = () => {
       </div>
 
       {/* --- Scroll Indicator --- */}
-      <motion.button 
+      <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
-        aria-label="Scroll to Architectural Core"
-        className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 cursor-pointer group bg-transparent border-none appearance-none outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-lg p-2"
+        transition={{ delay: 2, duration: 1 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 opacity-20 hover:opacity-100 transition-opacity cursor-pointer md:block hidden"
         onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
       >
-        <span className="text-[10px] font-sans font-medium text-gray-500 uppercase tracking-[0.3em] group-hover:text-[var(--brand)] transition-colors opacity-60">Architectural Core</span>
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <ChevronDown className="w-5 h-5 text-[var(--brand)]/40 group-hover:text-[var(--brand)] transition-colors" />
-        </motion.div>
-      </motion.button>
-    </section>
+        <span className="text-[10px] font-medium uppercase tracking-[0.4em] text-white rotate-90 mb-8 whitespace-nowrap">Scroll Discovery</span>
+        <div className="w-[1px] h-12 bg-gradient-to-b from-emerald-500 to-transparent" />
+      </motion.div>
+
+    </div>
   );
 };
+ Broadway
