@@ -3,8 +3,6 @@ import { Link } from "react-router-dom";
 import {
   Activity,
   ArrowUpRight,
-  Mail,
-  MessageSquare,
   Shield,
   Globe,
   Database,
