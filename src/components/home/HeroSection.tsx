@@ -63,7 +63,6 @@ export const HeroSection = () => {
     initParticles();
     
     const handleResize = () => {
-      // Reinitialize particles on resize for better distribution
       initParticles();
     };
     
@@ -95,17 +94,17 @@ export const HeroSection = () => {
         ))}
       </div>
       
-      {/* ── 200x Institutional Background System ── */}
+      {/* ── Institutional Background System ── */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* 1. Perspective Grid (Floor) */}
+        {/* Perspective Grid (Floor) */}
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[220%] h-[60%] bg-[linear-gradient(rgba(131,255,200,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(131,255,200,0.05)_1px,transparent_1px)] bg-[size:120px_120px] [transform:rotateX(65deg)_translateZ(0)] [mask-image:linear-gradient(to_top,black,transparent)]" />
         
-        {/* 2. Ambient Spotlights */}
+        {/* Ambient Spotlights */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1400px] h-[800px] bg-[#83ffc8]/5 blur-[160px] rounded-full opacity-60" />
         <div className="absolute -bottom-40 left-0 w-[600px] h-[600px] bg-cyan-500/5 blur-[120px] rounded-full" />
         <div className="absolute -bottom-40 right-0 w-[600px] h-[600px] bg-emerald-500/5 blur-[120px] rounded-full" />
         
-        {/* 3. Aura Beam (Centric) */}
+        {/* Aura Beam (Centric) */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[2px] h-screen bg-gradient-to-b from-[#83ffc8]/30 via-[#83ffc8]/5 to-transparent shadow-[0_0_30px_rgba(131,255,200,0.3)] opacity-80" />
       </div>
 
@@ -140,7 +139,7 @@ export const HeroSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="text-lg sm:text-2xl md:text-3xl text-gray-400 max-w-4xl mx-auto mb-16 md:mb-20 leading-relaxed font-light px-4 opacity-80 uppercase tracking-widest"
+          className="text-base sm:text-lg md:text-xl text-gray-400 max-w-3xl mx-auto mb-16 md:mb-20 leading-relaxed font-light px-4 opacity-80 uppercase tracking-[0.2em]"
         >
           Access the <span className="text-white font-medium">multi-layered execution protocols</span>, proprietary HFT logic, and global market-flow datasets utilized by elite quantitative funds.
         </motion.p>

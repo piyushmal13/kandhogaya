@@ -59,16 +59,15 @@ export const Navbar = () => {
       <nav className="fixed inset-x-0 top-6 z-50 px-6 sm:px-12">
         <div className="mx-auto flex h-20 max-w-7xl items-center justify-between rounded-full border border-white/5 bg-black/40 px-8 shadow-[0_32px_80px_rgba(0,0,0,0.6)] backdrop-blur-3xl transition-all duration-700 hover:border-white/10">
           <Link to="/" className="flex items-center gap-4 group">
-            <div className="flex items-center justify-center overflow-hidden rounded-2xl bg-white/[0.03] p-1.5 transition-all duration-700 group-hover:bg-white/[0.06] group-hover:scale-110">
+            <div className="flex items-center justify-center overflow-hidden rounded-2xl bg-white/[0.04] p-2 transition-all duration-700 group-hover:bg-white/[0.08] group-hover:scale-110 border border-white/5 group-hover:border-[#83ffc8]/20 shadow-2xl">
               <ResizedImage
                 src={BRANDING.logoUrl}
                 alt={`${BRANDING.name} Logo`}
-                className="h-10 w-10 object-contain"
+                className="h-11 w-11 object-contain"
               />
             </div>
             <div className="hidden md:block">
               <div className="text-sm font-semibold tracking-[0.35em] text-white uppercase">{BRANDING.name}</div>
-              <div className="text-[10px] uppercase tracking-[0.45em] text-gray-500 font-sans font-medium mt-1">Institutional Surface</div>
             </div>
           </Link>
 
@@ -126,7 +125,7 @@ export const Navbar = () => {
                 >
                   <div className="absolute inset-0 bg-[#83ffc8] translate-y-full group-hover:translate-y-0 transition-transform duration-700 ease-[0.16,1,0.2,1]" />
                   <span className="relative z-10 flex items-center gap-3">
-                    Terminal
+                    Join Desk
                     <ArrowRight className="h-4 w-4 group-hover:translate-x-1.5 transition-transform duration-500" />
                   </span>
                 </Link>
