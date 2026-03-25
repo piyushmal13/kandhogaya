@@ -134,7 +134,7 @@ export const Navbar = () => {
             {user ? null : (
               <Link
                 to="/login"
-                className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[8px] font-bold text-white uppercase tracking-[0.2em] hover:bg-white/10 transition-colors"
+                className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[8px] font-bold text-white uppercase tracking-[0.4em] hover:bg-white/10 transition-all duration-700"
               >
                 Sign In
               </Link>
