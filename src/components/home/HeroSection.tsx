@@ -1,14 +1,8 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "motion/react";
 import { 
   ArrowRight, 
-  ShieldCheck, 
-  Activity, 
-  Users, 
-  Target, 
-  Zap, 
-  ChevronDown,
   Shield,
   Database
 } from "lucide-react";
@@ -23,21 +17,19 @@ export const HeroSection = () => {
   });
   const [particles, setParticles] = useState<Array<{id: string; x: number; y: number; vx: number; vy: number; size: number; opacity: number}>>([]);
 
-  useEffect(() => {
-    const fetchRealStats = async () => {
-      try {
-        const { count: userCount } = await supabase.from('users').select('*', { count: 'exact', head: true });
-        if (userCount) {
-          setStats(prev => ({ ...prev, traders: `${(userCount + 12000).toLocaleString()}+` }));
-        }
-      } catch (e) {
-        console.error("Stats fetch error:", e);
+  const fetchRealStats = useCallback(async () => {
+    try {
+      const { count: userCount } = await supabase.from('users').select('*', { count: 'exact', head: true });
+      if (userCount) {
+        setStats(prev => ({ ...prev, traders: `${(userCount + 12000).toLocaleString()}+` }));
       }
-    };
-    fetchRealStats();
+    } catch (e) {
+      console.error("Stats fetch error:", e);
+    }
+  }, []);
 
-    // Create background particles
-    const newParticles = Array.from({ length: 40 }).map((_, i) => ({
+  const initParticles = useCallback(() => {
+    return Array.from({ length: 40 }).map((_, i) => ({
       id: `p-${i}`,
       x: Math.random() * 100,
       y: Math.random() * 100,
@@ -46,18 +38,26 @@ export const HeroSection = () => {
       size: Math.random() * 2 + 1,
       opacity: Math.random() * 0.5 + 0.1
     }));
-    setParticles(newParticles);
-
-    const interval = setInterval(() => {
-      setParticles(prev => prev.map(p => ({
-        ...p,
-        x: (p.x + p.vx + 100) % 100,
-        y: (p.y + p.vy + 100) % 100
-      })));
-    }, 50);
-
-    return () => clearInterval(interval);
   }, []);
+
+  const updateParticles = useCallback(() => {
+    setParticles(prev => prev.map(p => ({
+      ...p,
+      x: (p.x + p.vx + 100) % 100,
+      y: (p.y + p.vy + 100) % 100
+    })));
+  }, []);
+
+  useEffect(() => {
+    fetchRealStats();
+    setParticles(initParticles());
+    const interval = setInterval(updateParticles, 50);
+    return () => clearInterval(interval);
+  }, [fetchRealStats, initParticles, updateParticles]);
+
+  const scrollToDiscovery = () => {
+    window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+  };
 
   return (
     <div ref={containerRef} className="relative min-h-screen pt-32 pb-20 flex flex-col items-center justify-center overflow-hidden bg-black selection:bg-emerald-500/30">
@@ -151,8 +151,8 @@ export const HeroSection = () => {
             { label: "Nodes", val: stats.traders, sub: "Live" },
             { label: "Win Rate", val: stats.winRate, sub: "Audited" },
             { label: "Latency", val: stats.latency, sub: "Pipeline" }
-          ].map((stat, i) => (
-            <div key={i} className="flex flex-col items-center group border-x border-white/5 py-2">
+          ].map((stat) => (
+            <div key={stat.label} className="flex flex-col items-center group border-x border-white/5 py-2">
               <span className="text-xl sm:text-5xl md:text-7xl font-bold text-white mb-1 sm:mb-4 tracking-tighter group-hover:text-emerald-500 transition-colors duration-700">
                 {stat.val}
               </span>
@@ -172,7 +172,7 @@ export const HeroSection = () => {
         animate={{ opacity: 1 }}
         transition={{ delay: 2, duration: 1 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 opacity-20 hover:opacity-100 transition-opacity cursor-pointer md:block hidden"
-        onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
+        onClick={scrollToDiscovery}
       >
         <span className="text-[10px] font-medium uppercase tracking-[0.4em] text-white rotate-90 mb-8 whitespace-nowrap">Scroll Discovery</span>
         <div className="w-[1px] h-12 bg-gradient-to-b from-emerald-500 to-transparent" />
@@ -181,4 +181,3 @@ export const HeroSection = () => {
     </div>
   );
 };
- Broadway
