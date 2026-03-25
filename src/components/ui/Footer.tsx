@@ -116,8 +116,6 @@ export const Footer = () => (
         </div>
       </div>
 
-      <div className="mt-12 rounded-3xl border border-white/5 bg-white/[0.01] p-10 text-[11px] leading-relaxed text-gray-600 font-sans font-medium italic opacity-60 text-center lg:text-left">
-        <strong>REGULATORY DATA & RISK NOTICE:</strong> Trading financial instruments, specifically leveraged derivatives and algorithmic execution models, involves significant risk of principal loss. Our signals, automated strategies, and intelligence modules are for informational and educational purposes only. Past performance metrics displayed are audited but not indicative of future market outcomes. IFXTrades is a proprietary strategy provider and does not provide individual investment advice. Please trade with sophisticated institutional oversight and capital managed within strict risk tolerance thresholds.
       </div>
     </div>
   </footer>

@@ -162,14 +162,14 @@ export const AlgoGreatness = () => {
           </div>
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-10">
+        <div className="flex md:grid md:grid-cols-3 gap-6 md:gap-10 overflow-x-auto md:overflow-hidden pb-12 md:pb-0 snap-x snap-mandatory no-scrollbar">
           {reviews.map((rev) => (
             <motion.div 
               key={rev.id || rev.name} 
               initial={{ opacity: 0, y: 20 }} 
               whileInView={{ opacity: 1, y: 0 }} 
               viewport={{ once: true }}
-              className="bg-[#050505] border border-white/5 p-10 md:p-12 rounded-[2.5rem] relative hover:bg-white/[0.01] hover:border-white/10 transition-all duration-700 group shadow-2xl"
+              className="min-w-[280px] md:min-w-0 bg-[#050505] border border-white/5 p-8 md:p-12 rounded-[2.5rem] relative hover:bg-white/[0.01] hover:border-white/10 transition-all duration-700 group shadow-2xl"
             >
               <div className="absolute -top-4 right-10 bg-emerald-500/10 border border-emerald-500/20 text-[var(--brand)] text-[10px] md:text-[11px] font-sans font-medium uppercase tracking-[0.2em] px-4 py-1.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-700 transform translate-y-2 group-hover:translate-y-0 backdrop-blur-xl">
                 Verified System

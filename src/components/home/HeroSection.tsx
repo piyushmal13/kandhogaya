@@ -116,7 +116,7 @@ export const HeroSection = () => {
           initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-          className="text-4xl sm:text-7xl md:text-8xl font-semibold text-white mb-8 max-w-7xl mx-auto tracking-[-0.05em] leading-[0.9]"
+          className="text-3xl sm:text-7xl md:text-8xl font-semibold text-white mb-6 max-w-7xl mx-auto tracking-[-0.05em] leading-[0.95]"
         >
           Institutional <span className="italic font-serif text-[var(--brand)]">Edge</span>. <br className="hidden lg:block" />
           <span className="opacity-40">Retail</span> <span className="italic font-serif opacity-40">Accessibility</span>.
@@ -141,7 +141,7 @@ export const HeroSection = () => {
         >
           <Link 
             to="/login"
-            className="group relative px-8 py-4 sm:px-12 sm:py-6 bg-white text-black font-bold rounded-full overflow-hidden transition-all duration-700 hover:scale-105 active:scale-95 shadow-[0_20px_50px_rgba(255,255,255,0.15)] w-full sm:w-auto text-base sm:text-xl"
+            className="group relative px-6 py-3 sm:px-12 sm:py-6 bg-white text-black font-bold rounded-full overflow-hidden transition-all duration-700 hover:scale-105 active:scale-95 shadow-[0_20px_50px_rgba(255,255,255,0.15)] w-full sm:w-auto text-sm sm:text-xl"
           >
             <div className="absolute inset-0 bg-[var(--brand)] translate-y-full group-hover:translate-y-0 transition-transform duration-700 ease-[0.16,1,0.2,1]" />
             <span className="relative z-10 flex items-center gap-3 tracking-tight">
