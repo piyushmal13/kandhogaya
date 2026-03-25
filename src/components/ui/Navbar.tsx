@@ -55,10 +55,10 @@ export const Navbar = () => {
 
   return (
     <>
-      <nav className="fixed inset-x-0 top-3 z-50 px-4 sm:px-6">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between rounded-full border border-white/10 bg-slate-950/72 px-4 shadow-[0_18px_60px_rgba(0,0,0,0.28)] backdrop-blur-xl sm:px-6">
-          <Link to="/" className="flex items-center gap-3 group">
-            <div className="flex items-center justify-center overflow-hidden rounded-[10px]">
+      <nav className="fixed inset-x-0 top-6 z-50 px-6 sm:px-12">
+        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between rounded-full border border-white/5 bg-black/40 px-8 shadow-[0_32px_80px_rgba(0,0,0,0.6)] backdrop-blur-3xl transition-all duration-700 hover:border-white/10">
+          <Link to="/" className="flex items-center gap-4 group">
+            <div className="flex items-center justify-center overflow-hidden rounded-2xl bg-white/[0.03] p-1.5 transition-all duration-700 group-hover:bg-white/[0.06] group-hover:scale-110">
               <img
                 src={BRANDING.logoUrl}
                 alt={`${BRANDING.name} Logo`}
@@ -66,65 +66,68 @@ export const Navbar = () => {
               />
             </div>
             <div className="hidden md:block">
-              <div className="text-sm font-semibold tracking-[0.22em] text-white">{BRANDING.name}</div>
-              <div className="text-[10px] uppercase tracking-[0.28em] text-slate-400">Institutional Intelligence</div>
+              <div className="text-sm font-semibold tracking-[0.35em] text-white uppercase">{BRANDING.name}</div>
+              <div className="text-[10px] uppercase tracking-[0.45em] text-gray-500 font-sans font-medium mt-1">Institutional Surface</div>
             </div>
           </Link>
 
-          <div className="hidden md:flex items-center gap-8">
-            <div className="flex items-center gap-5">
+          <div className="hidden md:flex items-center gap-12">
+            <div className="flex items-center gap-8">
               {navLinks.map((link) => (
                 <Link
                   key={link.path}
                   to={link.path}
                   className={cn(
-                    "relative text-sm font-medium transition-colors hover:text-white pb-1",
-                    location.pathname === link.path ? "text-emerald-400" : "text-slate-400",
+                    "relative text-xs font-sans font-medium uppercase tracking-[0.25em] transition-all duration-500 hover:text-[#83ffc8]",
+                    location.pathname === link.path ? "text-[#83ffc8]" : "text-gray-400",
                   )}
                 >
                   {link.name}
                   {location.pathname === link.path && (
                     <motion.div 
                       layoutId="nav-active"
-                      className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]"
+                      className="absolute -bottom-2 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#83ffc8] to-transparent opacity-60"
                     />
                   )}
                 </Link>
               ))}
             </div>
 
-            <div className="h-8 w-px bg-white/[0.08]" />
+            <div className="h-6 w-px bg-white/5" />
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-6">
               <Link
                 to="/contact"
-                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-200 hover:border-emerald-200/30 hover:text-white"
+                className="group inline-flex items-center gap-3 rounded-full border border-white/5 bg-white/[0.02] px-6 py-2.5 text-xs font-sans font-medium text-gray-400 tracking-[0.2em] uppercase hover:border-[#83ffc8]/20 hover:text-white transition-all duration-700"
               >
-                <Phone className="h-4 w-4 text-emerald-200" />
-                Contact
+                <div className="w-2 h-2 rounded-full bg-emerald-500/50 group-hover:bg-[#83ffc8] transition-colors" />
+                Desk
               </Link>
 
               {user ? (
-                <>
-                  <Link to="/dashboard" className="text-slate-400 hover:text-white transition-colors">
+                <div className="flex items-center gap-5">
+                  <Link to="/dashboard" className="text-gray-400 hover:text-white transition-all duration-500 hover:scale-110">
                     <LayoutDashboard className="h-5 w-5" />
                   </Link>
                   {isAdmin ? (
-                    <Link to="/admin" className="text-slate-400 hover:text-white transition-colors">
+                    <Link to="/admin" className="text-gray-400 hover:text-white transition-all duration-500 hover:scale-110">
                       <Settings className="h-5 w-5" />
                     </Link>
                   ) : null}
-                  <button type="button" onClick={logout} className="text-slate-400 hover:text-red-300 transition-colors">
+                  <button type="button" onClick={logout} className="text-gray-400 hover:text-rose-400 transition-all duration-500 hover:scale-110">
                     <LogOut className="h-5 w-5" />
                   </button>
-                </>
+                </div>
               ) : (
                 <Link
                   to="/login"
-                  className="inline-flex items-center gap-2 rounded-full bg-emerald-300 px-5 py-2 text-sm font-semibold text-slate-950 shadow-[0_14px_36px_rgba(88,242,182,0.16)] hover:bg-emerald-200"
+                  className="group relative inline-flex items-center gap-3 rounded-full bg-white px-8 py-3 text-xs font-bold text-black uppercase tracking-[0.2em] shadow-[0_12px_40px_rgba(255,255,255,0.1)] hover:shadow-[0_12px_40px_rgba(131,255,200,0.2)] transition-all duration-700 overflow-hidden"
                 >
-                  Access Platform
-                  <ArrowRight className="h-4 w-4" />
+                  <div className="absolute inset-0 bg-[#83ffc8] translate-y-full group-hover:translate-y-0 transition-transform duration-700 ease-[0.16,1,0.2,1]" />
+                  <span className="relative z-10 flex items-center gap-3">
+                    Terminal
+                    <ArrowRight className="h-4 w-4 group-hover:translate-x-1.5 transition-transform duration-500" />
+                  </span>
                 </Link>
               )}
             </div>

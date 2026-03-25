@@ -39,7 +39,6 @@ export const MarketTicker = () => {
     const checkMarketStatus = () => {
       const now = new Date();
       const day = now.getUTCDay();
-      const hour = now.getUTCHours();
       // Simple ForeX market (approx 24h Mon-Fri)
       const isWeekend = day === 0 || day === 6;
       setMarketStatus(isWeekend ? "CLOSED" : "OPEN");
@@ -129,31 +128,31 @@ export const MarketTicker = () => {
   return (
     <div 
       ref={containerRef}
-      className="relative w-full h-[64px] md:h-[84px] bg-black border-y border-white/5 overflow-hidden flex items-center z-50 transform-gpu"
+      className="relative w-full h-[70px] md:h-[90px] bg-[#020202] border-y border-white/5 overflow-hidden flex items-center z-50 transform-gpu"
     >
       {/* Dynamic Background Overlays */}
-      <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/[0.02] via-transparent to-cyan-500/[0.02] pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#83ffc8]/[0.02] via-transparent to-cyan-500/[0.02] pointer-events-none" />
       <div className="absolute inset-0 backdrop-blur-3xl pointer-events-none" />
       
       {/* 10k Dashboard: Left Status */}
-      <div className="absolute left-0 top-0 bottom-0 z-[60] flex items-center px-4 md:px-8 bg-black/95 border-r border-white/5 shadow-[25px_0_40px_rgba(0,0,0,0.9)]">
-        <div className="flex items-center gap-3">
+      <div className="absolute left-0 top-0 bottom-0 z-[60] flex items-center px-6 md:px-10 bg-[#020202]/95 border-r border-white/5 shadow-[30px_0_50px_rgba(0,0,0,1)]">
+        <div className="flex items-center gap-4">
           <div className="relative">
-            <div className={`w-2.5 h-2.5 rounded-full transition-all duration-1000 ${marketStatus === "OPEN" ? 'bg-emerald-500 neon-glow-emerald' : 'bg-rose-500 shadow-[0_0_12px_rgba(244,63,94,0.4)]'}`} />
+            <div className={`w-3 h-3 rounded-full transition-all duration-1000 ${marketStatus === "OPEN" ? 'bg-[#83ffc8] shadow-[0_0_15px_rgba(131,255,200,0.5)]' : 'bg-rose-500 shadow-[0_0_15px_rgba(244,63,94,0.5)]'}`} />
             {marketStatus === "OPEN" && (
               <motion.div 
-                animate={{ scale: [1, 3], opacity: [0.4, 0] }} 
-                transition={{ repeat: Infinity, duration: 2 }} 
-                className="absolute inset-0 bg-emerald-500 rounded-full" 
+                animate={{ scale: [1, 2.5], opacity: [0.3, 0] }} 
+                transition={{ repeat: Infinity, duration: 2.5 }} 
+                className="absolute inset-0 bg-[#83ffc8] rounded-full" 
               />
             )}
           </div>
           <div className="flex flex-col">
-            <span className="text-[10px] font-bold text-white uppercase tracking-[0.4em] font-mono leading-none">
-              SYSTEM {marketStatus}
+            <span className="text-[10px] font-bold text-white uppercase tracking-[0.4em] font-sans leading-none opacity-80">
+              {marketStatus} SURFACE
             </span>
-            <span className="text-[8px] text-emerald-500/60 font-mono mt-1.5 tracking-widest uppercase">
-              {isSyncing ? "FETCHING..." : (lastUpdate || "ACTIVE")}
+            <span className="text-[9px] text-[#83ffc8]/60 font-sans font-medium mt-1.5 tracking-[0.15em] uppercase">
+              {isSyncing ? "SYNCING..." : (lastUpdate || "ACTIVE")}
             </span>
           </div>
         </div>
@@ -162,45 +161,45 @@ export const MarketTicker = () => {
       {/* Scroller Engine */}
       <div className="flex-1 relative h-full flex items-center overflow-hidden">
         {/* Soft Vignettes */}
-        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-black via-transparent to-transparent z-10" />
-        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-black via-transparent to-transparent z-10" />
+        <div className="absolute left-0 top-0 bottom-0 w-40 bg-gradient-to-r from-[#020202] via-transparent to-transparent z-10" />
+        <div className="absolute right-0 top-0 bottom-0 w-40 bg-gradient-to-l from-[#020202] via-transparent to-transparent z-10" />
 
         <motion.div 
           className="flex whitespace-nowrap items-center py-2"
           initial={{ x: 0 }}
           animate={prefersReducedMotion ? {} : { x: ["0%", "-33.333333%"] }}
-          transition={{ ease: "linear", duration: 60, repeat: Infinity }}
+          transition={{ ease: "linear", duration: 75, repeat: Infinity }}
         >
           {tickerItems.map((item, i) => (
             <div 
               key={`${item.symbol}-${i}`} 
-              className="flex items-center gap-10 px-8 hover:bg-white/[0.02] transition-colors group cursor-default"
+              className="flex items-center gap-12 px-10 hover:bg-white/[0.02] transition-colors group cursor-default"
             >
-              <div className="flex items-center gap-5">
+              <div className="flex items-center gap-6">
                 {/* Visual Accent */}
-                <div className={`w-1 h-5 rounded-full ${item.up ? 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.3)]' : 'bg-rose-500 shadow-[0_0_10px_rgba(244,63,94,0.3)]'}`} />
+                <div className={`w-[2px] h-6 rounded-full transition-all duration-700 group-hover:h-8 ${item.up ? 'bg-[#83ffc8] shadow-[0_0_15px_rgba(131,255,200,0.4)]' : 'bg-rose-500 shadow-[0_0_15px_rgba(244,63,94,0.4)]'}`} />
                 
                 <div className="flex flex-col">
-                  <span className="text-white font-black text-xs md:text-[13px] tracking-widest font-mono flex items-center gap-2">
+                  <span className="text-white font-bold text-sm md:text-base tracking-[0.1em] font-sans flex items-center gap-2">
                     {item.baseSymbol}
-                    <span className="text-zinc-700 text-[9px] font-bold">/</span>
-                    <span className="text-zinc-600 text-[9px] font-bold tracking-tighter">USD</span>
+                    <span className="text-gray-700 text-[10px] font-bold">/</span>
+                    <span className="text-gray-500 text-[10px] font-bold tracking-widest">USD</span>
                   </span>
                   {item.volume && (
-                    <span className="text-[8px] text-zinc-500 font-mono font-bold">24H VOL: {item.volume}</span>
+                    <span className="text-[9px] text-gray-500 font-sans font-medium mt-1 tracking-widest uppercase opacity-40 group-hover:opacity-80 transition-opacity">VOL: {item.volume}</span>
                   )}
                 </div>
 
                 <div className="flex flex-col items-end">
-                  <span className="text-white text-sm md:text-base font-bold tabular-nums tracking-wider flex items-center gap-2">
+                  <span className="text-white text-base md:text-lg font-semibold tabular-nums tracking-tight flex items-center gap-3">
                     {item.price}
                     {item.up ? 
-                      <TrendingUp className="w-3 h-3 text-emerald-400" /> : 
-                      <TrendingDown className="w-3 h-3 text-rose-400" />
+                      <TrendingUp className="w-4 h-4 text-[#83ffc8] opacity-80" /> : 
+                      <TrendingDown className="w-4 h-4 text-rose-400 opacity-80" />
                     }
                   </span>
-                  <div className={`text-[9px] font-black rounded-md px-1.5 py-0.5 border ${
-                    item.up ? 'text-emerald-400 bg-emerald-500/5 border-emerald-500/10' : 'text-rose-400 bg-rose-500/5 border-rose-500/10'
+                  <div className={`text-[10px] font-bold rounded-full px-3 py-0.5 border mt-1 tracking-wider ${
+                    item.up ? 'text-[#83ffc8] bg-emerald-500/5 border-emerald-500/10' : 'text-rose-400 bg-rose-500/5 border-rose-500/10'
                   }`}>
                     {item.change}
                   </div>
@@ -208,31 +207,31 @@ export const MarketTicker = () => {
               </div>
               
               {/* Divider Beam */}
-              <div className="h-8 w-px bg-white/5" />
+              <div className="h-10 w-px bg-white/5" />
             </div>
           ))}
         </motion.div>
       </div>
 
       {/* Institutional Hardware: Right Statistics */}
-      <div className="hidden xl:flex absolute right-0 top-0 bottom-0 z-[60] items-center px-8 bg-black/90 border-l border-white/5">
-        <div className="flex items-center gap-8">
-          <div className="flex items-center gap-3">
-            <div className="p-1.5 rounded-lg bg-emerald-500/5 border border-emerald-500/10">
-              <Zap className="w-3.5 h-3.5 text-emerald-500" />
+      <div className="hidden xl:flex absolute right-0 top-0 bottom-0 z-[60] items-center px-10 bg-[#020202]/90 border-l border-white/5 shadow-[-30px_0_50px_rgba(0,0,0,1)]">
+        <div className="flex items-center gap-10">
+          <div className="flex items-center gap-4 group">
+            <div className="p-2 rounded-xl bg-[#83ffc8]/5 border border-[#83ffc8]/10 group-hover:scale-110 transition-transform">
+              <Zap className="w-4 h-4 text-[#83ffc8]" />
             </div>
             <div className="flex flex-col">
-              <span className="text-[9px] text-zinc-500 font-black uppercase tracking-widest">Latency</span>
-              <span className="text-white text-[11px] font-mono font-bold">0.4ms</span>
+              <span className="text-[9px] text-gray-500 font-bold uppercase tracking-[0.3em] opacity-60">LATENCY</span>
+              <span className="text-white text-[11px] font-sans font-semibold mt-0.5 tracking-wider">0.4ms</span>
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="p-1.5 rounded-lg bg-cyan-500/5 border border-cyan-500/10">
-              <Activity className="w-3.5 h-3.5 text-cyan-500" />
+          <div className="flex items-center gap-4 group">
+            <div className="p-2 rounded-xl bg-cyan-500/5 border border-cyan-500/10 group-hover:scale-110 transition-transform">
+              <Activity className="w-4 h-4 text-cyan-500" />
             </div>
             <div className="flex flex-col">
-              <span className="text-[9px] text-zinc-500 font-black uppercase tracking-widest">Engine</span>
-              <span className="text-white text-[11px] font-mono font-bold">99.9%</span>
+              <span className="text-[9px] text-gray-500 font-bold uppercase tracking-[0.3em] opacity-60">ENGINE</span>
+              <span className="text-white text-[11px] font-sans font-semibold mt-0.5 tracking-wider">99.9%</span>
             </div>
           </div>
         </div>
