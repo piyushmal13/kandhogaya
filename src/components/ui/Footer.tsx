@@ -23,7 +23,7 @@ export const Footer = () => (
       <div className="grid gap-12 lg:grid-cols-3">
         <div className="bg-[#050505] p-10 rounded-[2.5rem] border border-white/5 shadow-2xl">
           <Link to="/" className="flex items-center gap-5 group">
-            <div className="flex items-center justify-center overflow-hidden rounded-[1.25rem] bg-white/[0.04] p-0 transition-all duration-700 group-hover:bg-white/[0.08] group-hover:scale-105 border border-white/5 group-hover:border-[#83ffc8]/20 shadow-2xl h-12 w-12 sm:h-14 sm:w-14">
+            <div className="flex items-center justify-center overflow-hidden rounded-[1.25rem] bg-white/[0.04] p-0 transition-all duration-700 group-hover:bg-white/[0.08] group-hover:scale-105 border border-white/5 group-hover:border-[var(--brand)]/20 shadow-2xl h-12 w-12 sm:h-14 sm:w-14">
               <ResizedImage
                 src={BRANDING.logoUrl}
                 alt={`${BRANDING.name} Logo`}
@@ -41,23 +41,23 @@ export const Footer = () => (
               href={BRANDING.whatsappUrl}
               target="_blank"
               rel="noreferrer"
-              className="group flex items-center justify-between rounded-2xl border border-white/5 bg-white/[0.02] px-6 py-4 text-sm text-gray-300 hover:border-[#83ffc8]/20 transition-all duration-700"
+              className="group flex items-center justify-between rounded-2xl border border-white/5 bg-white/[0.02] px-6 py-4 text-sm text-gray-300 hover:border-[var(--brand)]/20 transition-all duration-700"
             >
               <span className="inline-flex items-center gap-3">
-                <MessageSquare className="h-4 w-4 text-[#83ffc8] opacity-60" />
+                <MessageSquare className="h-4 w-4 text-[var(--brand)] opacity-60" />
                 WhatsApp Desk
               </span>
-              <ArrowUpRight className="h-4 w-4 text-gray-600 group-hover:text-[#83ffc8] transition-colors" />
+              <ArrowUpRight className="h-4 w-4 text-gray-600 group-hover:text-[var(--brand)] transition-colors" />
             </a>
             <a
               href={`mailto:${BRANDING.supportEmail}`}
-              className="group flex items-center justify-between rounded-2xl border border-white/5 bg-white/[0.02] px-6 py-4 text-sm text-gray-300 hover:border-[#83ffc8]/20 transition-all duration-700"
+              className="group flex items-center justify-between rounded-2xl border border-white/5 bg-white/[0.02] px-6 py-4 text-sm text-gray-300 hover:border-[var(--brand)]/20 transition-all duration-700"
             >
               <span className="inline-flex items-center gap-3">
-                <Mail className="h-4 w-4 text-[#83ffc8] opacity-60" />
+                <Mail className="h-4 w-4 text-[var(--brand)] opacity-60" />
                 Support
               </span>
-              <ArrowUpRight className="h-4 w-4 text-gray-600 group-hover:text-[#83ffc8] transition-colors" />
+              <ArrowUpRight className="h-4 w-4 text-gray-600 group-hover:text-[var(--brand)] transition-colors" />
             </a>
           </div>
         </div>
@@ -65,20 +65,20 @@ export const Footer = () => (
         <div className="p-4">
           <h4 className="mb-8 text-xs font-semibold uppercase tracking-[0.4em] text-white opacity-40">Execution Protocols</h4>
           <ul className="space-y-6 text-sm text-gray-400 font-sans font-medium uppercase tracking-[0.1em]">
-            <li><Link to="/signals" className="hover:text-[#83ffc8] transition-colors">Live Signals</Link></li>
-            <li><Link to="/marketplace" className="hover:text-[#83ffc8] transition-colors">Algo Marketplace</Link></li>
-            <li><Link to="/results" className="hover:text-[#83ffc8] transition-colors">Performance Audit</Link></li>
-            <li><Link to="/login" className="hover:text-[#83ffc8] transition-colors">Institutional Terminal</Link></li>
+            <li><Link to="/signals" className="hover:text-[var(--brand)] transition-colors">Live Signals</Link></li>
+            <li><Link to="/marketplace" className="hover:text-[var(--brand)] transition-colors">Algo Marketplace</Link></li>
+            <li><Link to="/results" className="hover:text-[var(--brand)] transition-colors">Performance Audit</Link></li>
+            <li><Link to="/login" className="hover:text-[var(--brand)] transition-colors">Institutional Terminal</Link></li>
           </ul>
         </div>
 
         <div className="p-4">
           <h4 className="mb-8 text-xs font-semibold uppercase tracking-[0.4em] text-white opacity-40">Intelligence Desk</h4>
           <ul className="space-y-6 text-sm text-gray-400 font-sans font-medium uppercase tracking-[0.1em]">
-            <li><Link to="/courses" className="flex items-center gap-3 hover:text-[#83ffc8] transition-colors"><BookOpen className="h-4 w-4" /> Advanced Academy</Link></li>
-            <li><Link to="/blog" className="flex items-center gap-3 hover:text-[#83ffc8] transition-colors"><Activity className="h-4 w-4" /> Market Insights</Link></li>
-            <li><Link to="/about" className="flex items-center gap-3 hover:text-[#83ffc8] transition-colors"><Shield className="h-4 w-4" /> About IFX</Link></li>
-            <li><Link to="/hiring" className="flex items-center gap-3 hover:text-[#83ffc8] transition-colors"><Users className="h-4 w-4" /> Join Our Team</Link></li>
+            <li><Link to="/courses" className="flex items-center gap-3 hover:text-[var(--brand)] transition-colors"><BookOpen className="h-4 w-4" /> Advanced Academy</Link></li>
+            <li><Link to="/blog" className="flex items-center gap-3 hover:text-[var(--brand)] transition-colors"><Activity className="h-4 w-4" /> Market Insights</Link></li>
+            <li><Link to="/about" className="flex items-center gap-3 hover:text-[var(--brand)] transition-colors"><Shield className="h-4 w-4" /> About IFX</Link></li>
+            <li><Link to="/hiring" className="flex items-center gap-3 hover:text-[var(--brand)] transition-colors"><Users className="h-4 w-4" /> Join Our Team</Link></li>
           </ul>
         </div>
 

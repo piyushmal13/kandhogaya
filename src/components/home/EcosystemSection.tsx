@@ -124,12 +124,12 @@ const EcosystemCard = ({ mod, index }: { mod: typeof modules[0], index: number }
             style={{ transform: "translateZ(60px)" }}
           >
             {/* Top Right Arrow */}
-            <div className="absolute top-0 right-0 w-10 h-10 md:w-14 md:h-14 rounded-full bg-white/[0.015] flex items-center justify-center border border-white/5 group-hover:bg-[#83ffc8]/5 group-hover:border-[#83ffc8]/20 transition-all duration-700 group-hover:scale-110">
-              <ArrowUpRight className="w-5 h-5 md:w-7 md:h-7 text-white/20 group-hover:text-[#83ffc8] transition-all duration-700" />
+            <div className="absolute top-0 right-0 w-10 h-10 md:w-14 md:h-14 rounded-full bg-white/[0.015] flex items-center justify-center border border-white/5 group-hover:bg-[var(--brand)]/5 group-hover:border-[var(--brand)]/20 transition-all duration-700 group-hover:scale-110">
+              <ArrowUpRight className="w-5 h-5 md:w-7 md:h-7 text-white/20 group-hover:text-[var(--brand)] transition-all duration-700" />
             </div>
 
-            <div className="w-14 h-14 md:w-20 md:h-20 rounded-2xl md:rounded-[2rem] bg-white/[0.015] border border-white/5 flex items-center justify-center mb-8 md:mb-12 group-hover:bg-[#83ffc8]/5 group-hover:border-[#83ffc8]/20 transition-all duration-700">
-              <mod.icon className="w-7 h-7 md:w-10 md:h-10 text-white/30 group-hover:text-[#83ffc8] transition-all duration-700" />
+            <div className="w-14 h-14 md:w-20 md:h-20 rounded-2xl md:rounded-[2rem] bg-white/[0.015] border border-white/5 flex items-center justify-center mb-8 md:mb-12 group-hover:bg-[var(--brand)]/5 group-hover:border-[var(--brand)]/20 transition-all duration-700">
+              <mod.icon className="w-7 h-7 md:w-10 md:h-10 text-white/30 group-hover:text-[var(--brand)] transition-all duration-700" />
             </div>
             
             <h3 className="text-2xl md:text-4xl font-semibold text-white mb-4 md:mb-6 tracking-tight group-hover:text-white transition-all duration-700">
@@ -156,7 +156,7 @@ export const EcosystemSection = () => {
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/5 border border-emerald-500/10 text-[#83ffc8] text-[11px] font-sans font-medium tracking-[0.3em] uppercase mb-8"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/5 border border-emerald-500/10 text-[var(--brand)] text-[11px] font-sans font-medium tracking-[0.3em] uppercase mb-8"
           >
             Institutional Core
           </motion.div>

@@ -56,10 +56,10 @@ export const Navbar = () => {
 
   return (
     <>
-      <nav className="fixed inset-x-0 top-6 z-50 px-6 sm:px-12">
-        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between rounded-full border border-white/5 bg-black/40 px-8 shadow-[0_32px_80px_rgba(0,0,0,0.6)] backdrop-blur-3xl transition-all duration-700 hover:border-white/10">
+      <nav className="fixed inset-x-0 top-4 sm:top-6 z-50 px-4 sm:px-12">
+        <div className="mx-auto flex h-16 sm:h-20 max-w-7xl items-center justify-between rounded-full border border-white/5 bg-black/40 px-6 sm:px-8 shadow-[0_32px_80px_rgba(0,0,0,0.6)] backdrop-blur-3xl transition-all duration-700 hover:border-white/10">
           <Link to="/" className="flex items-center gap-4 group">
-            <div className="flex items-center justify-center overflow-hidden rounded-[1.25rem] bg-white/[0.04] p-0 transition-all duration-700 group-hover:bg-white/[0.08] group-hover:scale-105 border border-white/5 group-hover:border-[#83ffc8]/20 shadow-2xl h-12 w-12 sm:h-14 sm:w-14">
+            <div className="flex items-center justify-center overflow-hidden rounded-[1.25rem] bg-white/[0.04] p-0 transition-all duration-700 group-hover:bg-white/[0.08] group-hover:scale-105 border border-white/5 group-hover:border-[var(--brand)]/20 shadow-2xl h-12 w-12 sm:h-14 sm:w-14">
               <ResizedImage
                 src={BRANDING.logoUrl}
                 alt={`${BRANDING.name} Logo`}
@@ -75,15 +75,15 @@ export const Navbar = () => {
                   key={link.path}
                   to={link.path}
                   className={cn(
-                    "relative text-xs font-sans font-medium uppercase tracking-[0.25em] transition-all duration-500 hover:text-[#83ffc8]",
-                    location.pathname === link.path ? "text-[#83ffc8]" : "text-gray-400",
+                    "relative text-xs font-sans font-medium uppercase tracking-[0.25em] transition-all duration-500 hover:text-[var(--brand)]",
+                    location.pathname === link.path ? "text-[var(--brand)]" : "text-gray-400",
                   )}
                 >
                   {link.name}
                   {location.pathname === link.path && (
                     <motion.div 
                       layoutId="nav-active"
-                      className="absolute -bottom-2 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#83ffc8] to-transparent opacity-60"
+                      className="absolute -bottom-2 left-0 w-full h-px bg-gradient-to-r from-transparent via-[var(--brand)] to-transparent opacity-60"
                     />
                   )}
                 </Link>
@@ -95,9 +95,9 @@ export const Navbar = () => {
             <div className="flex items-center gap-4">
               <Link
                 to="/contact"
-                className="group inline-flex items-center gap-2 rounded-full border border-white/5 bg-white/[0.02] px-3 py-1.5 text-[10px] font-sans font-medium text-gray-400 tracking-[0.2em] uppercase hover:border-[#83ffc8]/20 hover:text-white transition-all duration-700"
+                className="group inline-flex items-center gap-2 rounded-full border border-white/5 bg-white/[0.02] px-3 py-1.5 text-[10px] font-sans font-medium text-gray-400 tracking-[0.2em] uppercase hover:border-[var(--brand)]/20 hover:text-white transition-all duration-700"
               >
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500/50 group-hover:bg-[#83ffc8] transition-colors" />
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500/50 group-hover:bg-[var(--brand)] transition-colors" />
                 Support
               </Link>
 
@@ -111,7 +111,7 @@ export const Navbar = () => {
                       <Settings className="h-5 w-5" />
                     </Link>
                   ) : null}
-                  <button type="button" onClick={logout} className="text-gray-400 hover:text-rose-400 transition-all duration-500 hover:scale-110">
+                  <button type="button" onClick={logout} className="text-gray-400 hover:text-red-400 transition-all duration-500 hover:scale-110">
                     <LogOut className="h-5 w-5" />
                   </button>
                 </div>
@@ -120,7 +120,7 @@ export const Navbar = () => {
                   to="/login"
                   className="group relative inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-[10px] font-bold text-black uppercase tracking-[0.2em] shadow-[0_12px_40px_rgba(255,255,255,0.1)] hover:shadow-[0_12px_40px_rgba(131,255,200,0.2)] transition-all duration-700 overflow-hidden"
                 >
-                  <div className="absolute inset-0 bg-[#83ffc8] translate-y-full group-hover:translate-y-0 transition-transform duration-700 ease-[0.16,1,0.2,1]" />
+                  <div className="absolute inset-0 bg-[var(--brand)] translate-y-full group-hover:translate-y-0 transition-transform duration-700 ease-[0.16,1,0.2,1]" />
                   <span className="relative z-10 flex items-center gap-2">
                     Private Portal
                     <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform duration-500" />
@@ -134,7 +134,7 @@ export const Navbar = () => {
             {user ? null : (
               <Link
                 to="/login"
-                className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-white"
+                className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[9px] font-bold text-white uppercase tracking-[0.2em] hover:bg-white/10 transition-colors"
               >
                 Sign In
               </Link>
@@ -142,10 +142,10 @@ export const Navbar = () => {
             <button
               type="button"
               onClick={() => setIsOpen((open) => !open)}
-              className="rounded-full border border-white/10 bg-white/5 p-2 text-slate-300 transition-colors hover:text-white"
+              className="rounded-full border border-white/10 bg-white/5 p-1.5 text-slate-300 transition-colors hover:text-white"
               aria-label="Toggle menu"
             >
-              {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              {isOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
             </button>
           </div>
         </div>
@@ -172,7 +172,7 @@ export const Navbar = () => {
               <div className="p-6 flex flex-col min-h-full">
                 <div className="flex items-center justify-between mb-8">
                   <Link to="/" onClick={() => setIsOpen(false)} className="flex items-center group">
-                    <div className="flex items-center justify-center overflow-hidden rounded-2xl bg-white/[0.02] p-0 group-hover:bg-white/[0.05] transition-all duration-700 h-12 w-12">
+                    <div className="flex items-center justify-center overflow-hidden rounded-[1.25rem] bg-white/[0.04] p-0 transition-all duration-700 h-10 w-10 border border-white/5">
                       <ResizedImage src={BRANDING.logoUrl} alt="Logo" className="h-full w-full object-cover" />
                     </div>
                   </Link>
@@ -245,7 +245,7 @@ export const Navbar = () => {
                         <Link
                           to="/login"
                           onClick={() => setIsOpen(false)}
-                          className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 px-5 py-4 text-sm font-bold text-slate-950 shadow-[0_10px_30px_rgba(16,185,129,0.2)]"
+                          className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 px-5 py-3 text-sm font-bold text-slate-950 shadow-[0_10px_30px_rgba(16,185,129,0.2)] hover:bg-emerald-400 transition-all"
                         >
                           Access Platform
                           <ArrowRight className="h-4 w-4" />

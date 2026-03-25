@@ -41,7 +41,7 @@ export const PerformanceHistory = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-                  <span className="text-[#83ffc8] font-medium text-[11px] md:text-sm uppercase tracking-[0.4em] mb-6 inline-block opacity-80">Historical Validation</span>
+                  <span className="text-[var(--brand)] font-medium text-[11px] md:text-sm uppercase tracking-[0.4em] mb-6 inline-block opacity-80">Historical Validation</span>
           <h2 className="text-4xl md:text-6xl font-semibold text-white mb-8 md:mb-10 tracking-[-0.04em]">
             Institutional <span className="gradient-text italic font-serif">Performance</span>
           </h2>
@@ -72,13 +72,13 @@ export const PerformanceHistory = () => {
             <div className="flex gap-12 items-center">
               <div className="flex flex-col">
                 <span className="text-[10px] font-sans font-medium text-gray-500 uppercase tracking-widest mb-2 opacity-60">Success Metric</span>
-                <span className="text-3xl md:text-5xl font-sans font-semibold text-[#83ffc8] flex items-center gap-3 tracking-tight">
+                <span className="text-3xl md:text-5xl font-sans font-semibold text-[var(--brand)] flex items-center gap-3 tracking-tight">
                   +1,240% <TrendingUp className="w-6 h-6 opacity-60" />
                 </span>
               </div>
               <div className="flex flex-col">
                 <span className="text-[10px] font-sans font-medium text-gray-500 uppercase tracking-widest mb-2 opacity-60">Max Retraction</span>
-                <span className="text-3xl md:text-5xl font-sans font-semibold text-rose-500/80 flex items-center gap-3 tracking-tight">
+                <span className="text-3xl md:text-5xl font-sans font-semibold text-red-500/80 flex items-center gap-3 tracking-tight">
                   -8.2% <TrendingDown className="w-6 h-6 opacity-60" />
                 </span>
               </div>
@@ -97,10 +97,10 @@ export const PerformanceHistory = () => {
                   relative group aspect-square rounded-[1.25rem] border flex flex-col items-center justify-center cursor-default transition-all duration-700
                   ${month.isPositive 
                     ? 'bg-emerald-500/[0.02] border-emerald-500/5 hover:bg-emerald-500/10 hover:border-emerald-500/20' 
-                    : 'bg-rose-500/[0.02] border-rose-500/5 hover:bg-rose-500/10 hover:border-rose-500/20'}
+                    : 'bg-red-500/[0.02] border-red-500/5 hover:bg-red-500/10 hover:border-red-500/20'}
                 `}
               >
-                <span className={`text-xs md:text-base font-sans font-semibold ${month.isPositive ? 'text-emerald-400' : 'text-rose-400/80'}`}>
+                <span className={`text-xs md:text-base font-sans font-semibold ${month.isPositive ? 'text-emerald-400' : 'text-red-400/80'}`}>
                   {month.value > 0 ? '+' : ''}{month.value}%
                 </span>
                 <span className="text-[7px] md:text-[9px] text-gray-600 font-sans font-medium mt-1 opacity-60 uppercase tracking-tighter">{month.label.split(' ')[0]}</span>
@@ -108,7 +108,7 @@ export const PerformanceHistory = () => {
                 {/* Elite Tooltip */}
                 <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-black/80 backdrop-blur-2xl border border-white/10 px-4 py-2 rounded-2xl text-[10px] text-white opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none whitespace-nowrap z-30 shadow-2xl scale-75 group-hover:scale-100 flex flex-col items-center">
                   <div className="text-gray-500 uppercase tracking-widest mb-1 font-medium">{month.label}</div>
-                  <div className={month.isPositive ? 'text-[#83ffc8] font-semibold' : 'text-rose-400 font-semibold'}>
+                  <div className={month.isPositive ? 'text-[var(--brand)] font-semibold' : 'text-red-400 font-semibold'}>
                    NET: {month.value > 0 ? '+' : ''}{month.value}%
                   </div>
                 </div>
@@ -119,7 +119,7 @@ export const PerformanceHistory = () => {
           <div className="mt-16 pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-end gap-8">
             <div className="flex gap-12">
               {[
-                { label: "Win Probability", value: "84.2%", color: "text-[#83ffc8]" },
+                { label: "Win Probability", value: "84.2%", color: "text-[var(--brand)]" },
                 { label: "Sharpe Ratio", value: "3.24", color: "text-white" },
                 { label: "Profit Factor", value: "2.1", color: "text-white" }
               ].map(item => (

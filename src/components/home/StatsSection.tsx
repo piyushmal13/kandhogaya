@@ -84,7 +84,7 @@ const StatItem = ({ stat, i }: { stat: any, i: number }) => {
       className="relative p-10 md:p-14 bg-transparent transition-all duration-700 flex flex-col justify-start group border-b lg:border-b-0 lg:border-r border-white/5 last:border-r-0 hover:bg-white/[0.01]"
     >
       {/* Hover Shimmer Effect */}
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 bg-gradient-to-tr from-[#83ffc8]/5 via-transparent to-transparent pointer-events-none" />
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 bg-gradient-to-tr from-[var(--brand)]/5 via-transparent to-transparent pointer-events-none" />
       
       <div className="text-[10px] md:text-[11px] font-sans font-medium uppercase tracking-[0.3em] mb-6 md:mb-12 opacity-50 group-hover:opacity-90 transition-all duration-500" style={{ color: 'var(--text-muted)' }}>
         {stat.label}

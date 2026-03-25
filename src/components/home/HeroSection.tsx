@@ -88,12 +88,12 @@ export const HeroSection = () => {
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[220%] h-[60%] bg-[linear-gradient(rgba(131,255,200,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(131,255,200,0.05)_1px,transparent_1px)] bg-[size:120px_120px] [transform:rotateX(65deg)_translateZ(0)] [mask-image:linear-gradient(to_top,black,transparent)]" />
         
         {/* Ambient Spotlights */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1400px] h-[800px] bg-[#83ffc8]/5 blur-[160px] rounded-full opacity-60" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1400px] h-[800px] bg-[var(--brand)]/5 blur-[160px] rounded-full opacity-60" />
         <div className="absolute -bottom-40 left-0 w-[600px] h-[600px] bg-cyan-500/5 blur-[120px] rounded-full" />
         <div className="absolute -bottom-40 right-0 w-[600px] h-[600px] bg-emerald-500/5 blur-[120px] rounded-full" />
         
         {/* Aura Beam (Centric) */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[2px] h-screen bg-gradient-to-b from-[#83ffc8]/30 via-[#83ffc8]/5 to-transparent shadow-[0_0_30px_rgba(131,255,200,0.3)] opacity-80" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[2px] h-screen bg-gradient-to-b from-[var(--brand)]/30 via-[var(--brand)]/5 to-transparent shadow-[0_0_30px_rgba(131,255,200,0.3)] opacity-80" />
       </div>
 
       <div className="max-w-7xl mx-auto px-6 relative z-10 w-full flex flex-col items-center text-center">
@@ -103,9 +103,9 @@ export const HeroSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="inline-flex items-center gap-3 px-6 py-2 rounded-full border border-white/5 bg-white/[0.02] backdrop-blur-2xl mb-12 md:mb-16 group hover:border-[#83ffc8]/20 transition-all cursor-default"
+          className="inline-flex items-center gap-3 px-6 py-2 rounded-full border border-white/5 bg-white/[0.02] backdrop-blur-2xl mb-12 md:mb-16 group hover:border-[var(--brand)]/20 transition-all cursor-default"
         >
-          <ShieldCheck className="w-4 h-4 text-[#83ffc8] opacity-80" />
+          <ShieldCheck className="w-4 h-4 text-[var(--brand)] opacity-80" />
           <span className="text-[10px] md:text-[11px] font-sans font-medium text-gray-400 tracking-[0.3em] uppercase group-hover:text-white transition-colors">
             Institutional Infrastructure for Sophisticated Investors
           </span>
@@ -118,7 +118,7 @@ export const HeroSection = () => {
           transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
           className="text-5xl sm:text-7xl md:text-8xl font-semibold text-white mb-10 max-w-7xl mx-auto tracking-[-0.05em] leading-[0.9]"
         >
-          Institutional <span className="italic font-serif text-[#83ffc8]">Edge</span>. <br className="hidden lg:block" />
+          Institutional <span className="italic font-serif text-[var(--brand)]">Edge</span>. <br className="hidden lg:block" />
           <span className="opacity-40">Retail</span> <span className="italic font-serif opacity-40">Accessibility</span>.
         </motion.h1>
         
@@ -142,9 +142,9 @@ export const HeroSection = () => {
           <Link 
             to="/login" 
             aria-label="Access Institutional Trading Terminal"
-            className="group relative px-12 py-6 bg-white text-black font-semibold rounded-full overflow-hidden flex items-center justify-center gap-3 text-xl w-full sm:w-auto hover:shadow-[0_0_80px_rgba(255,255,255,0.2)] transition-all duration-700 active:scale-95"
+            className="group relative px-12 py-6 bg-white text-black font-semibold rounded-full overflow-hidden flex items-center justify-center gap-3 text-lg sm:text-xl w-full sm:w-auto hover:shadow-[0_0_80px_rgba(255,255,255,0.2)] transition-all duration-700 active:scale-95"
           >
-            <div className="absolute inset-0 bg-[#83ffc8] translate-y-full group-hover:translate-y-0 transition-transform duration-700 ease-[0.16,1,0.2,1]" />
+            <div className="absolute inset-0 bg-[var(--brand)] translate-y-full group-hover:translate-y-0 transition-transform duration-700 ease-[0.16,1,0.2,1]" />
             <span className="relative z-10 flex items-center gap-3 tracking-tight">
               Access Institutional Terminal
               <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform duration-500" />
@@ -154,9 +154,9 @@ export const HeroSection = () => {
           <Link 
             to="/results" 
             aria-label="View Global Trading Performance"
-            className="group px-12 py-6 bg-white/[0.01] text-white font-medium rounded-full border border-white/5 hover:border-[#83ffc8]/30 hover:bg-white/[0.03] transition-all duration-700 backdrop-blur-3xl flex items-center justify-center gap-3 text-xl w-full sm:w-auto active:scale-95"
+            className="group px-12 py-6 bg-white/[0.01] text-white font-medium rounded-full border border-white/5 hover:border-[var(--brand)]/30 hover:bg-white/[0.03] transition-all duration-700 backdrop-blur-3xl flex items-center justify-center gap-3 text-xl w-full sm:w-auto active:scale-95"
           >
-            <Activity className="w-6 h-6 text-[#83ffc8] opacity-60 group-hover:scale-110 transition-transform" />
+            <Activity className="w-6 h-6 text-[var(--brand)] opacity-60 group-hover:scale-110 transition-transform" />
             <span className="tracking-tight opacity-80 group-hover:opacity-100">Global Performance</span>
           </Link>
         </motion.div>
@@ -171,7 +171,7 @@ export const HeroSection = () => {
         >
           <div className="text-[9px] font-sans font-bold uppercase tracking-[0.4em] text-gray-400">Audited By Institutional Standards</div>
           <div className="flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-[#83ffc8]" />
+            <ShieldCheck className="w-4 h-4 text-[var(--brand)]" />
             <span className="text-[10px] text-white font-bold tracking-widest uppercase">SSL SECURE</span>
           </div>
           <div className="flex items-center gap-2 border-l border-white/10 pl-12">
@@ -188,18 +188,18 @@ export const HeroSection = () => {
           className="mt-24 md:mt-40 w-full max-w-6xl border-t border-white/5 pt-16 grid grid-cols-1 sm:grid-cols-3 gap-12 md:gap-24"
         >
           {[
-            { label: "Active Deployments", value: stats.traders, icon: Users, color: "text-[#83ffc8]" },
+            { label: "Active Deployments", value: stats.traders, icon: Users, color: "text-[var(--brand)]" },
             { label: "Institutional Win Rate", value: stats.winRate, icon: Target, color: "text-cyan-400" },
             { label: "Execution Pipeline", value: stats.latency, icon: Zap, color: "text-emerald-400" },
           ].map((stat, i) => (
             <div 
               key={stat.label} 
-              className="group relative flex flex-col items-center p-8 rounded-[2rem] bg-white/[0.02] border border-white/5 hover:border-[#83ffc8]/20 transition-all duration-700 hover:bg-white/[0.04] hover:scale-[1.02]"
+              className="group relative flex flex-col items-center p-8 rounded-[2rem] bg-white/[0.02] border border-white/5 hover:border-[var(--brand)]/20 transition-all duration-700 hover:bg-white/[0.04] hover:scale-[1.02]"
             >
               <div className={`p-4 rounded-2xl bg-white/[0.02] mb-6 group-hover:scale-110 transition-all duration-700 ${stat.color} border border-white/5 group-hover:border-current/20 shadow-2xl`}>
                 <stat.icon className="w-6 h-6" />
               </div>
-              <div className="text-4xl md:text-6xl font-sans font-semibold text-white mb-3 tabular-nums tracking-[-0.05em] group-hover:text-[#83ffc8] transition-colors">{stat.value}</div>
+              <div className="text-5xl md:text-7xl font-sans font-semibold text-white mb-3 tabular-nums tracking-[-0.05em] group-hover:text-emerald-500 transition-colors">{stat.value}</div>
               <div className="text-[10px] md:text-xs font-sans font-medium text-gray-500 uppercase tracking-[0.4em] opacity-60 group-hover:opacity-100 transition-opacity">{stat.label}</div>
             </div>
           ))}
@@ -216,12 +216,12 @@ export const HeroSection = () => {
         className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 cursor-pointer group bg-transparent border-none appearance-none outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-lg p-2"
         onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
       >
-        <span className="text-[10px] font-sans font-medium text-gray-500 uppercase tracking-[0.3em] group-hover:text-[#83ffc8] transition-colors opacity-60">Architectural Core</span>
+        <span className="text-[10px] font-sans font-medium text-gray-500 uppercase tracking-[0.3em] group-hover:text-[var(--brand)] transition-colors opacity-60">Architectural Core</span>
         <motion.div
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
         >
-          <ChevronDown className="w-5 h-5 text-[#83ffc8]/40 group-hover:text-[#83ffc8] transition-colors" />
+          <ChevronDown className="w-5 h-5 text-[var(--brand)]/40 group-hover:text-[var(--brand)] transition-colors" />
         </motion.div>
       </motion.button>
     </section>

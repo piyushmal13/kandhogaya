@@ -10,6 +10,10 @@
   --font-sans: "Inter", "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
   --font-serif: "DM Serif Display", "Cormorant Garamond", Georgia, serif;
+  
+  /* ── Spatial Variables ── */
+  --nav-h: 5rem;
+  --nav-h-mobile: 4rem;
 }
 
 @layer base {
@@ -36,10 +40,13 @@
     --accent-fg: #051119;
 
     /* ── Semantic Colors ── */
+    /* ── Semantic Alignment ── */
     --success: #10b981;
-    --warning: #fbbf24;
+    --warning: #f59e0b;
     --danger: #ef4444;
-    --info: #34d399;
+    --info: #06b6d4;
+    --brand: #10b981;
+    --brand-dark: #065f46;
 
     /* ── Spacing Scale (Section / Content) ── */
     --space-section: 12rem;

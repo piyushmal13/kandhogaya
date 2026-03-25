@@ -148,19 +148,19 @@ export const MarketTicker = () => {
       className="relative w-full h-[70px] md:h-[90px] bg-[#020202] border-y border-white/5 overflow-hidden flex items-center z-50 transform-gpu"
     >
       {/* Dynamic Background Overlays */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#83ffc8]/[0.02] via-transparent to-cyan-500/[0.02] pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[var(--brand)]/[0.02] via-transparent to-cyan-500/[0.02] pointer-events-none" />
       <div className="absolute inset-0 backdrop-blur-3xl pointer-events-none" />
       
       {/* 10k Dashboard: Left Status */}
       <div className="absolute left-0 top-0 bottom-0 z-[60] flex items-center px-6 md:px-10 bg-[#020202]/95 border-r border-white/5 shadow-[30px_0_50px_rgba(0,0,0,1)]">
         <div className="flex items-center gap-4">
           <div className="relative">
-            <div className={`w-3 h-3 rounded-full transition-all duration-1000 ${marketStatus === "OPEN" ? 'bg-[#83ffc8] shadow-[0_0_15px_rgba(131,255,200,0.5)]' : 'bg-rose-500 shadow-[0_0_15px_rgba(244,63,94,0.5)]'}`} />
+            <div className={`w-3 h-3 rounded-full transition-all duration-1000 ${marketStatus === "OPEN" ? 'bg-[var(--brand)] shadow-[0_0_15px_rgba(131,255,200,0.5)]' : 'bg-red-500 shadow-[0_0_15px_rgba(244,63,94,0.5)]'}`} />
             {marketStatus === "OPEN" && (
               <motion.div 
                 animate={{ scale: [1, 2.5], opacity: [0.3, 0] }} 
                 transition={{ repeat: Infinity, duration: 2.5 }} 
-                className="absolute inset-0 bg-[#83ffc8] rounded-full" 
+                className="absolute inset-0 bg-[var(--brand)] rounded-full" 
               />
             )}
           </div>
@@ -168,7 +168,7 @@ export const MarketTicker = () => {
             <span className="text-[10px] font-bold text-white uppercase tracking-[0.4em] font-sans leading-none opacity-80">
               {marketStatus} SURFACE
             </span>
-            <span className="text-[9px] text-[#83ffc8]/60 font-sans font-medium mt-1.5 tracking-[0.15em] uppercase">
+            <span className="text-[9px] text-[var(--brand)]/60 font-sans font-medium mt-1.5 tracking-[0.15em] uppercase">
               {isSyncing ? "SYNCING..." : (lastUpdate || "ACTIVE")}
             </span>
           </div>
@@ -194,7 +194,7 @@ export const MarketTicker = () => {
             >
               <div className="flex items-center gap-6">
                 {/* Visual Accent */}
-                <div className={`w-[2px] h-6 rounded-full transition-all duration-700 group-hover:h-8 ${item.up ? 'bg-[#83ffc8] shadow-[0_0_15px_rgba(131,255,200,0.4)]' : 'bg-rose-500 shadow-[0_0_15px_rgba(244,63,94,0.4)]'}`} />
+                <div className={`w-[2px] h-6 rounded-full transition-all duration-700 group-hover:h-8 ${item.up ? 'bg-[var(--brand)] shadow-[0_0_15px_rgba(131,255,200,0.4)]' : 'bg-red-500 shadow-[0_0_15px_rgba(244,63,94,0.4)]'}`} />
                 
                 <div className="flex flex-col">
                   <span className="text-white font-bold text-sm md:text-base tracking-[0.1em] font-sans flex items-center gap-2">
@@ -211,12 +211,12 @@ export const MarketTicker = () => {
                   <span className="text-white text-base md:text-lg font-semibold tabular-nums tracking-tight flex items-center gap-3">
                     {item.price}
                     {item.up ? 
-                      <TrendingUp className="w-4 h-4 text-[#83ffc8] opacity-80" /> : 
-                      <TrendingDown className="w-4 h-4 text-rose-400 opacity-80" />
+                      <TrendingUp className="w-4 h-4 text-[var(--brand)] opacity-80" /> : 
+                      <TrendingDown className="w-4 h-4 text-red-400 opacity-80" />
                     }
                   </span>
                   <div className={`text-[10px] font-bold rounded-full px-3 py-0.5 border mt-1 tracking-wider ${
-                    item.up ? 'text-[#83ffc8] bg-emerald-500/5 border-emerald-500/10' : 'text-rose-400 bg-rose-500/5 border-rose-500/10'
+                    item.up ? 'text-[var(--brand)] bg-emerald-500/5 border-emerald-500/10' : 'text-red-400 bg-red-500/5 border-red-500/10'
                   }`}>
                     {item.change}
                   </div>
@@ -234,8 +234,8 @@ export const MarketTicker = () => {
       <div className="hidden xl:flex absolute right-0 top-0 bottom-0 z-[60] items-center px-10 bg-[#020202]/90 border-l border-white/5 shadow-[-30px_0_50px_rgba(0,0,0,1)]">
         <div className="flex items-center gap-10">
           <div className="flex items-center gap-4 group">
-            <div className="p-2 rounded-xl bg-[#83ffc8]/5 border border-[#83ffc8]/10 group-hover:scale-110 transition-transform">
-              <Zap className="w-4 h-4 text-[#83ffc8]" />
+            <div className="p-2 rounded-xl bg-[var(--brand)]/5 border border-[var(--brand)]/10 group-hover:scale-110 transition-transform">
+              <Zap className="w-4 h-4 text-[var(--brand)]" />
             </div>
             <div className="flex flex-col">
               <span className="text-[9px] text-gray-500 font-bold uppercase tracking-[0.3em] opacity-60">LATENCY</span>
