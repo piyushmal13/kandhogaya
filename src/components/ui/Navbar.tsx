@@ -68,8 +68,8 @@ export const Navbar = () => {
             </div>
           </Link>
 
-          <div className="hidden md:flex items-center gap-12">
-            <div className="flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-6">
+            <div className="flex items-center gap-4">
               {navLinks.map((link) => (
                 <Link
                   key={link.path}
@@ -92,12 +92,12 @@ export const Navbar = () => {
 
             <div className="h-6 w-px bg-white/5" />
 
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-4">
               <Link
                 to="/contact"
-                className="group inline-flex items-center gap-3 rounded-full border border-white/5 bg-white/[0.02] px-6 py-2.5 text-xs font-sans font-medium text-gray-400 tracking-[0.2em] uppercase hover:border-[#83ffc8]/20 hover:text-white transition-all duration-700"
+                className="group inline-flex items-center gap-2 rounded-full border border-white/5 bg-white/[0.02] px-3 py-1.5 text-[10px] font-sans font-medium text-gray-400 tracking-[0.2em] uppercase hover:border-[#83ffc8]/20 hover:text-white transition-all duration-700"
               >
-                <div className="w-2 h-2 rounded-full bg-emerald-500/50 group-hover:bg-[#83ffc8] transition-colors" />
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500/50 group-hover:bg-[#83ffc8] transition-colors" />
                 Support
               </Link>
 
@@ -118,12 +118,12 @@ export const Navbar = () => {
               ) : (
                 <Link
                   to="/login"
-                  className="group relative inline-flex items-center gap-3 rounded-full bg-white px-8 py-3 text-xs font-bold text-black uppercase tracking-[0.2em] shadow-[0_12px_40px_rgba(255,255,255,0.1)] hover:shadow-[0_12px_40px_rgba(131,255,200,0.2)] transition-all duration-700 overflow-hidden"
+                  className="group relative inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-[10px] font-bold text-black uppercase tracking-[0.2em] shadow-[0_12px_40px_rgba(255,255,255,0.1)] hover:shadow-[0_12px_40px_rgba(131,255,200,0.2)] transition-all duration-700 overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-[#83ffc8] translate-y-full group-hover:translate-y-0 transition-transform duration-700 ease-[0.16,1,0.2,1]" />
-                  <span className="relative z-10 flex items-center gap-3">
+                  <span className="relative z-10 flex items-center gap-2">
                     Private Portal
-                    <ArrowRight className="h-4 w-4 group-hover:translate-x-1.5 transition-transform duration-500" />
+                    <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform duration-500" />
                   </span>
                 </Link>
               )}

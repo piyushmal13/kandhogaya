@@ -74,7 +74,7 @@ export const HeroSection = () => {
   }, []);
 
   return (
-    <section ref={containerRef} className="relative min-h-[110vh] flex flex-col items-center justify-center overflow-hidden bg-[#000000] pt-48 pb-40 perspective-container">
+    <section ref={containerRef} className="relative min-h-[100vh] flex flex-col items-center justify-center overflow-hidden bg-[#000000] pt-40 pb-24 perspective-container">
       {/* Particle Background */}
       <div className="absolute inset-0 pointer-events-none">
         {particles.map((p, i) => (
@@ -128,7 +128,7 @@ export const HeroSection = () => {
           initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-          className="text-5xl sm:text-7xl md:text-9xl font-semibold text-white mb-12 max-w-7xl mx-auto tracking-[-0.05em] leading-[0.9]"
+          className="text-5xl sm:text-7xl md:text-8xl font-semibold text-white mb-10 max-w-7xl mx-auto tracking-[-0.05em] leading-[0.9]"
         >
           Institutional <span className="italic font-serif text-[#83ffc8]">Edge</span>. <br className="hidden lg:block" />
           <span className="opacity-40">Retail</span> <span className="italic font-serif opacity-40">Accessibility</span>.

@@ -6,7 +6,6 @@ import {
   ArrowUpRight,
   BookOpen,
   FileText,
-  Globe,
   Mail,
   MessageSquare,
   Shield,
@@ -21,7 +20,7 @@ export const Footer = () => (
     <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(16,185,129,0.03),transparent_50%)]" />
 
     <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
-      <div className="grid gap-12 lg:grid-cols-[1.5fr_1fr_1fr_1.2fr]">
+      <div className="grid gap-12 lg:grid-cols-3">
         <div className="bg-[#050505] p-10 rounded-[2.5rem] border border-white/5 shadow-2xl">
           <Link to="/" className="flex items-center gap-5 group">
             <div className="flex items-center justify-center overflow-hidden rounded-[1.25rem] bg-white/[0.04] p-0 transition-all duration-700 group-hover:bg-white/[0.08] group-hover:scale-105 border border-white/5 group-hover:border-[#83ffc8]/20 shadow-2xl h-12 w-12 sm:h-14 sm:w-14">
@@ -83,32 +82,6 @@ export const Footer = () => (
           </ul>
         </div>
 
-        <div className="bg-[#050505] p-10 rounded-[2.5rem] border border-white/5 shadow-2xl">
-          <div className="mb-8 flex items-center gap-3">
-            <div className="relative flex h-2.5 w-2.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#83ffc8] opacity-75"></span>
-              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#83ffc8]"></span>
-            </div>
-            <span className="text-xs font-semibold tracking-[0.4em] text-[#83ffc8] uppercase">Nodes Active</span>
-          </div>
-          <div className="space-y-6 text-sm text-gray-400 font-sans font-medium">
-            <div className="flex justify-between items-center border-b border-white/5 pb-4">
-              <span className="uppercase tracking-widest text-[10px] opacity-60">Execution Latency</span>
-              <span className="text-white">12ms</span>
-            </div>
-            <div className="flex justify-between items-center border-b border-white/5 pb-4">
-              <span className="uppercase tracking-widest text-[10px] opacity-60">Uptime Protocol</span>
-              <span className="text-white">99.99%</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="uppercase tracking-widest text-[10px] opacity-60">Region</span>
-              <span className="inline-flex items-center gap-3 text-white"><Globe className="h-4 w-4 text-[#83ffc8] opacity-60" /> Global</span>
-            </div>
-            <div className="mt-8 rounded-2xl border border-white/5 bg-white/[0.02] p-5 text-xs leading-relaxed text-gray-500 font-light italic">
-              Proprietary execution infrastructure optimized for HFT signal generation and algorithmic licensing.
-            </div>
-          </div>
-        </div>
       </div>
 
       <div className="mt-24 flex flex-col gap-8 border-t border-white/5 pt-12 md:flex-row md:items-center md:justify-between">
