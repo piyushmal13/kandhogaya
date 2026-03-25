@@ -11,7 +11,7 @@ export const HeroSection = () => {
     winRate: "82.4%",
     latency: "0.15ms"
   });
-  const [particles, setParticles] = useState<Array<{x: number; y: number; vx: number; vy: number; size: number; opacity: number}>>([]);
+  const [particles, setParticles] = useState<Array<{id: string; x: number; y: number; vx: number; vy: number; size: number; opacity: number}>>([]);
 
   useEffect(() => {
     const fetchRealStats = async () => {
@@ -26,50 +26,38 @@ export const HeroSection = () => {
     };
     fetchRealStats();
 
-    // Initialize particle system for background enhancement
-    const initParticles = () => {
-      const particlesArray = [];
-      const particleCount = 50;
-      
-      for (let i = 0; i < particleCount; i++) {
-        particlesArray.push({
-          x: Math.random() * window.innerWidth,
-          y: Math.random() * window.innerHeight,
-          vx: (Math.random() - 0.5) * 0.5,
-          vy: (Math.random() - 0.5) * 0.5,
-          size: Math.random() * 2 + 1,
-          opacity: Math.random() * 0.5 + 0.2
-        });
-      }
-      
-      setParticles(particlesArray);
-      
-      // Animate particles
-      const animateParticles = () => {
-        setParticles(prev => prev.map(p => ({
-          ...p,
-          x: p.x + p.vx,
-          y: p.y + p.vy,
-          vx: p.x < 0 || p.x > window.innerWidth ? -p.vx : p.vx,
-          vy: p.y < 0 || p.y > window.innerHeight ? -p.vy : p.vy
-        })));
-        
-        requestAnimationFrame(animateParticles);
-      };
-      
-      requestAnimationFrame(animateParticles);
-    };
+    // Particle System Initialization
+    const particleCount = 50;
+    const initialParticles = Array.from({ length: particleCount }).map((_, i) => ({
+      id: `p-${i}`,
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      vx: (Math.random() - 0.5) * 0.5,
+      vy: (Math.random() - 0.5) * 0.5,
+      size: Math.random() * 2 + 1,
+      opacity: Math.random() * 0.5 + 0.2
+    }));
+    setParticles(initialParticles);
 
-    initParticles();
-    
-    const handleResize = () => {
-      initParticles();
+    let animationFrameId: number;
+    const animate = () => {
+      setParticles(prev => prev.map(p => ({
+        ...p,
+        x: p.x + p.vx,
+        y: p.y + p.vy,
+        vx: p.x < 0 || p.x > window.innerWidth ? -p.vx : p.vx,
+        vy: p.y < 0 || p.y > window.innerHeight ? -p.vy : p.vy
+      })));
+      animationFrameId = requestAnimationFrame(animate);
     };
-    
+    animationFrameId = requestAnimationFrame(animate);
+
+    const handleResize = () => setParticles(initialParticles);
     window.addEventListener('resize', handleResize);
-    
+
     return () => {
       window.removeEventListener('resize', handleResize);
+      cancelAnimationFrame(animationFrameId);
     };
   }, []);
 
@@ -77,9 +65,9 @@ export const HeroSection = () => {
     <section ref={containerRef} className="relative min-h-[100vh] flex flex-col items-center justify-center overflow-hidden bg-[#000000] pt-40 pb-24 perspective-container">
       {/* Particle Background */}
       <div className="absolute inset-0 pointer-events-none">
-        {particles.map((p, i) => (
+        {particles.map((p) => (
           <div
-            key={i}
+            key={p.id}
             className="absolute"
             style={{
               left: p.x,
