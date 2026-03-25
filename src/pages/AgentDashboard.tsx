@@ -66,7 +66,7 @@ export const AgentDashboard = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
         {[
-          { label: "Total Referrals", value: stats.referrals, icon: Users, color: "text-blue-500" },
+          { label: "Total Referrals", value: stats.referrals, icon: Users, color: "text-emerald-500" },
           { label: "Total Sales", value: stats.totalSales, icon: ShoppingCart, color: "text-emerald-500" },
           { label: "Revenue Generated", value: `$${stats.revenue.toLocaleString()}`, icon: DollarSign, color: "text-amber-500" },
         ].map((s, i) => (

@@ -65,3 +65,14 @@ export const safeQuery = async <T>(query: unknown): Promise<T | []> => {
     return [];
   }
 };
+
+export const getSupabasePublicUrl = (bucket: string, path: string): string => {
+  if (!path) return "";
+  if (path.startsWith("http")) return path;
+  const bakedUrl = import.meta.env.VITE_SUPABASE_URL;
+  return `${bakedUrl}/storage/v1/object/public/${bucket}/${path}`;
+};
+
+export const getAvatarUrl = (path: string) => getSupabasePublicUrl("avatars", path);
+export const getProductUrl = (path: string) => getSupabasePublicUrl("products", path);
+export const getWebinarUrl = (path: string) => getSupabasePublicUrl("webinars", path);

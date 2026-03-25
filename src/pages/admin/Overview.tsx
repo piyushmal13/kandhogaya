@@ -37,7 +37,7 @@ export const Overview = ({ stats }: { stats: OverviewStats }) => {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         {[
-          { label: "Total Traders", value: stats?.total_users?.toLocaleString() || "0", icon: Users, color: "text-blue-500" },
+          { label: "Total Traders", value: stats?.total_users?.toLocaleString() || "0", icon: Users, color: "text-emerald-500" },
           { label: "Active Subs", value: stats?.active_subscriptions?.toLocaleString() || "0", icon: ShieldCheck, color: "text-emerald-500" },
           { label: "Revenue (MTD)", value: `$${(stats?.revenue_mtd || 0).toLocaleString()}`, icon: ShoppingCart, color: "text-amber-500" },
           { label: "Signal Accuracy", value: stats?.signal_accuracy || "0%", icon: Zap, color: "text-purple-500" },

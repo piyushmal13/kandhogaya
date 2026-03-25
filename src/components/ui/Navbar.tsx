@@ -59,15 +59,12 @@ export const Navbar = () => {
       <nav className="fixed inset-x-0 top-6 z-50 px-6 sm:px-12">
         <div className="mx-auto flex h-20 max-w-7xl items-center justify-between rounded-full border border-white/5 bg-black/40 px-8 shadow-[0_32px_80px_rgba(0,0,0,0.6)] backdrop-blur-3xl transition-all duration-700 hover:border-white/10">
           <Link to="/" className="flex items-center gap-4 group">
-            <div className="flex items-center justify-center overflow-hidden rounded-2xl bg-white/[0.04] p-2 transition-all duration-700 group-hover:bg-white/[0.08] group-hover:scale-110 border border-white/5 group-hover:border-[#83ffc8]/20 shadow-2xl">
+            <div className="flex items-center justify-center overflow-hidden rounded-[1.25rem] bg-white/[0.04] p-0 transition-all duration-700 group-hover:bg-white/[0.08] group-hover:scale-105 border border-white/5 group-hover:border-[#83ffc8]/20 shadow-2xl h-12 w-12 sm:h-14 sm:w-14">
               <ResizedImage
                 src={BRANDING.logoUrl}
                 alt={`${BRANDING.name} Logo`}
-                className="h-11 w-11 object-contain"
+                className="h-full w-full object-cover"
               />
-            </div>
-            <div className="hidden md:block">
-              <div className="text-sm font-semibold tracking-[0.35em] text-white uppercase">{BRANDING.name}</div>
             </div>
           </Link>
 
@@ -101,7 +98,7 @@ export const Navbar = () => {
                 className="group inline-flex items-center gap-3 rounded-full border border-white/5 bg-white/[0.02] px-6 py-2.5 text-xs font-sans font-medium text-gray-400 tracking-[0.2em] uppercase hover:border-[#83ffc8]/20 hover:text-white transition-all duration-700"
               >
                 <div className="w-2 h-2 rounded-full bg-emerald-500/50 group-hover:bg-[#83ffc8] transition-colors" />
-                Desk
+                Support
               </Link>
 
               {user ? (
@@ -125,7 +122,7 @@ export const Navbar = () => {
                 >
                   <div className="absolute inset-0 bg-[#83ffc8] translate-y-full group-hover:translate-y-0 transition-transform duration-700 ease-[0.16,1,0.2,1]" />
                   <span className="relative z-10 flex items-center gap-3">
-                    Join Desk
+                    Private Portal
                     <ArrowRight className="h-4 w-4 group-hover:translate-x-1.5 transition-transform duration-500" />
                   </span>
                 </Link>
@@ -174,13 +171,9 @@ export const Navbar = () => {
             >
               <div className="p-6 flex flex-col min-h-full">
                 <div className="flex items-center justify-between mb-8">
-                  <Link to="/" onClick={() => setIsOpen(false)} className="flex items-center gap-3 group">
-                    <div className="flex items-center justify-center overflow-hidden rounded-2xl bg-white/[0.02] p-2 group-hover:bg-white/[0.05] transition-all duration-700">
-                      <ResizedImage src={BRANDING.logoUrl} alt="IFXTrades Logo" className="h-12 w-12 object-contain" />
-                    </div>
-                    <div>
-                      <div className="text-xs font-bold tracking-[0.22em] text-white uppercase">{BRANDING.shortName}</div>
-                      <div className="text-[9px] uppercase tracking-[0.28em] text-slate-500 font-medium">Trading Surface</div>
+                  <Link to="/" onClick={() => setIsOpen(false)} className="flex items-center group">
+                    <div className="flex items-center justify-center overflow-hidden rounded-2xl bg-white/[0.02] p-0 group-hover:bg-white/[0.05] transition-all duration-700 h-12 w-12">
+                      <ResizedImage src={BRANDING.logoUrl} alt="Logo" className="h-full w-full object-cover" />
                     </div>
                   </Link>
                   <button

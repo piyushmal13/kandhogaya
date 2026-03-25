@@ -118,7 +118,7 @@ const SignalPreview = () => (
                   </span>
                 </div>
                 <div className="text-[10px] text-[#8696a0] text-right mt-1 flex items-center justify-end gap-1">
-                  10:42 AM <Check className="w-3 h-3 text-blue-400" aria-hidden="true" />
+                  10:42 AM <Check className="w-3 h-3 text-emerald-400" aria-hidden="true" />
                 </div>
               </motion.div>
 
@@ -133,7 +133,7 @@ const SignalPreview = () => (
                   Move SL to Breakeven. Secure partial profits.
                 </div>
                 <div className="text-[10px] text-[#8696a0] text-right mt-1 flex items-center justify-end gap-1">
-                  11:15 AM <Check className="w-3 h-3 text-blue-400" aria-hidden="true" />
+                  11:15 AM <Check className="w-3 h-3 text-emerald-400" aria-hidden="true" />
                 </div>
               </motion.div>
             </div>

@@ -172,6 +172,25 @@ export const HeroSection = () => {
             <span className="tracking-tight opacity-80 group-hover:opacity-100">Global Performance</span>
           </Link>
         </motion.div>
+
+        {/* --- Trust Bar --- */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.6 }}
+          className="mt-12 flex flex-wrap justify-center items-center gap-x-12 gap-y-6 opacity-40 hover:opacity-100 transition-opacity duration-700 grayscale hover:grayscale-0"
+        >
+          <div className="text-[9px] font-sans font-bold uppercase tracking-[0.4em] text-gray-400">Audited By Institutional Standards</div>
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="w-4 h-4 text-[#83ffc8]" />
+            <span className="text-[10px] text-white font-bold tracking-widest uppercase">SSL SECURE</span>
+          </div>
+          <div className="flex items-center gap-2 border-l border-white/10 pl-12">
+            <Activity className="w-4 h-4 text-cyan-400" />
+            <span className="text-[10px] text-white font-bold tracking-widest uppercase">ISO 27001</span>
+          </div>
+        </motion.div>
         
         {/* --- Stats Strip --- */}
         <motion.div 
@@ -185,11 +204,14 @@ export const HeroSection = () => {
             { label: "Institutional Win Rate", value: stats.winRate, icon: Target, color: "text-cyan-400" },
             { label: "Execution Pipeline", value: stats.latency, icon: Zap, color: "text-emerald-400" },
           ].map((stat, i) => (
-            <div key={stat.label} className="flex flex-col items-center group">
+            <div 
+              key={stat.label} 
+              className="group relative flex flex-col items-center p-8 rounded-[2rem] bg-white/[0.02] border border-white/5 hover:border-[#83ffc8]/20 transition-all duration-700 hover:bg-white/[0.04] hover:scale-[1.02]"
+            >
               <div className={`p-4 rounded-2xl bg-white/[0.02] mb-6 group-hover:scale-110 transition-all duration-700 ${stat.color} border border-white/5 group-hover:border-current/20 shadow-2xl`}>
                 <stat.icon className="w-6 h-6" />
               </div>
-              <div className="text-4xl md:text-7xl font-sans font-semibold text-white mb-3 tabular-nums tracking-[-0.05em]">{stat.value}</div>
+              <div className="text-4xl md:text-6xl font-sans font-semibold text-white mb-3 tabular-nums tracking-[-0.05em] group-hover:text-[#83ffc8] transition-colors">{stat.value}</div>
               <div className="text-[10px] md:text-xs font-sans font-medium text-gray-500 uppercase tracking-[0.4em] opacity-60 group-hover:opacity-100 transition-opacity">{stat.label}</div>
             </div>
           ))}

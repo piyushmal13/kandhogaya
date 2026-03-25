@@ -24,12 +24,12 @@ export const Footer = () => (
       <div className="grid gap-12 lg:grid-cols-[1.5fr_1fr_1fr_1.2fr]">
         <div className="bg-[#050505] p-10 rounded-[2.5rem] border border-white/5 shadow-2xl">
           <Link to="/" className="flex items-center gap-5 group">
-            <div className="flex items-center justify-center overflow-hidden rounded-2xl bg-white/[0.02] p-2 group-hover:bg-white/[0.05] transition-all duration-700">
-              <ResizedImage src={BRANDING.logoUrl} alt="IFXTrades Logo" className="h-12 w-12 object-contain" />
-            </div>
-            <div>
-              <div className="text-sm font-semibold tracking-[0.3em] text-white uppercase">{BRANDING.name}</div>
-              <div className="text-[10px] uppercase tracking-[0.4em] text-gray-500 font-sans font-medium mt-1">Institutional Surface</div>
+            <div className="flex items-center justify-center overflow-hidden rounded-[1.25rem] bg-white/[0.04] p-0 transition-all duration-700 group-hover:bg-white/[0.08] group-hover:scale-105 border border-white/5 group-hover:border-[#83ffc8]/20 shadow-2xl h-12 w-12 sm:h-14 sm:w-14">
+              <ResizedImage
+                src={BRANDING.logoUrl}
+                alt={`${BRANDING.name} Logo`}
+                className="h-full w-full object-cover"
+              />
             </div>
           </Link>
 

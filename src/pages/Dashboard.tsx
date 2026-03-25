@@ -164,7 +164,7 @@ export const Dashboard = () => {
             { label: "Active Algos", value: licenses.filter(l => l.is_active).length, icon: Activity, color: "text-emerald-500" },
             { label: "Win Rate", value: "82.4%", icon: Target, color: "text-cyan-500" },
             { label: "Signals Today", value: signals.length, icon: Zap, color: "text-yellow-500" },
-            { label: "Uptime", value: "99.99%", icon: Clock, color: "text-blue-500" }
+            { label: "Uptime", value: "99.99%", icon: Clock, color: "text-emerald-500" }
           ].map((stat, i) => (
             <motion.div
               key={stat.label}
