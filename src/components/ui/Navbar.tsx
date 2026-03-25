@@ -58,15 +58,7 @@ export const Navbar = () => {
     <>
       <nav className="fixed inset-x-0 top-3 sm:top-6 z-50 px-3 sm:px-12">
         <div className="mx-auto flex h-14 sm:h-20 max-w-7xl items-center justify-between rounded-full border border-white/5 bg-black/40 px-5 sm:px-8 shadow-[0_32px_80px_rgba(0,0,0,0.6)] backdrop-blur-3xl transition-all duration-700 hover:border-white/10">
-          <Link to="/" className="flex items-center gap-4 group">
-            <div className="flex items-center justify-center overflow-hidden rounded-2xl bg-white/[0.04] p-0 transition-all duration-700 group-hover:bg-white/[0.08] group-hover:scale-105 border border-white/5 group-hover:border-emerald-500/20 shadow-2xl h-10 w-10 sm:h-14 sm:w-14">
-              <ResizedImage
-                src={BRANDING.logoUrl}
-                alt={`${BRANDING.name} Logo`}
-                className="h-full w-full object-contain p-2"
-              />
-            </div>
-          </Link>
+          <Link to="/" className="flex items-center gap-4 group"> <div className="flex items-center justify-center overflow-hidden rounded-xl bg-white p-2 transition-all duration-700 group-hover:scale-105 border border-white/5 shadow-2xl h-10 w-10 sm:h-12 sm:w-12"> <img src={BRANDING.logoUrl} alt={BRANDING.name} className="h-full w-full object-contain" /> </div> </Link>
 
           <div className="hidden md:flex items-center gap-6">
             <div className="flex items-center gap-4">
