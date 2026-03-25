@@ -116,7 +116,7 @@ export const HeroSection = () => {
           initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-          className="text-3xl sm:text-7xl md:text-8xl font-semibold text-white mb-6 max-w-7xl mx-auto tracking-[-0.05em] leading-[0.95]"
+          className="text-2xl sm:text-7xl md:text-8xl font-black text-white mb-4 max-w-7xl mx-auto tracking-[-0.05em] leading-[0.95]"
         >
           Institutional <span className="italic font-serif text-[var(--brand)]">Edge</span>. <br className="hidden lg:block" />
           <span className="opacity-40">Retail</span> <span className="italic font-serif opacity-40">Accessibility</span>.
