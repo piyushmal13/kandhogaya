@@ -105,7 +105,7 @@ export default function App() {
             <a href="#main-content" className="skip-to-content">
               Skip to main content
             </a>
-            <div className="relative min-h-screen overflow-hidden font-sans selection:bg-emerald-200 selection:text-slate-950">
+            <div className="relative min-h-screen overflow-hidden font-sans">
               <div className="noise-overlay" />
               <SiteBackdrop />
               <Navbar />

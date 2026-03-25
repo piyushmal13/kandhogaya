@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { motion } from "motion/react";
+import React, { useState, useEffect, useRef } from "react";
+import { motion, useInView } from "motion/react";
 
 const stats = [
   { 
@@ -28,54 +28,75 @@ const stats = [
   },
 ];
 
-const useCountUp = (end: number, duration: number = 2000) => {
+const useCountUp = (end: number, trigger: boolean, duration: number = 2500) => {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    let start = 0;
-    const increment = end / (duration / 16);
-    const timer = setInterval(() => {
-      start += increment;
-      if (start >= end) {
-        setCount(end);
-        clearInterval(timer);
-      } else {
-        setCount(Math.floor(start));
+    if (!trigger) return;
+
+    let startTime: number | null = null;
+    const animate = (currentTime: number) => {
+      if (!startTime) startTime = currentTime;
+      const progress = Math.min((currentTime - startTime) / duration, 1);
+      
+      // Power3 out easing
+      const easedProgress = 1 - Math.pow(1 - progress, 3);
+      
+      setCount(easedProgress * end);
+      
+      if (progress < 1) {
+        requestAnimationFrame(animate);
       }
-    }, 16);
-    return () => clearInterval(timer);
-  }, [end, duration]);
+    };
+    
+    requestAnimationFrame(animate);
+  }, [end, duration, trigger]);
 
   return count;
 };
 
 const StatItem = ({ stat, i }: { stat: any, i: number }) => {
-  // Simplified logic for "value" parsing to allow CountUp on numbers
-  const numericValue = Number.parseFloat(stat.value.replaceAll(/[^0-9.]/g, '')) || 0;
-  const suffix = stat.value.replaceAll(/[0-9.]/g, '');
-  const prefix = stat.value.startsWith('$') ? '$' : '';
-  const displayValue = useCountUp(numericValue);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
+  
+  // Extract numeric part and decimal places
+  const match = stat.value.match(/(\d+(\.\d+)?)/);
+  const numericValue = match ? Number.parseFloat(match[0]) : 0;
+  const hasDecimal = stat.value.includes('.');
+  
+  const animatedValue = useCountUp(numericValue, isInView, 2500);
+  
+  // Reconstruct the formatted string
+  const prefix = stat.value.match(/^\D+/)?.[0] || '';
+  const suffix = stat.value.match(/\D+$/)?.[0] || '';
+  
+  const formattedCount = hasDecimal 
+    ? animatedValue.toFixed(1) 
+    : Math.floor(animatedValue).toLocaleString();
 
   return (
     <motion.div 
-      key={stat.label}
-      initial={{ opacity: 0, y: 20 }}
+      ref={ref}
+      initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ delay: i * 0.1, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className="relative p-8 md:p-12 bg-[#050505] hover:bg-white/[0.01] transition-all duration-700 flex flex-col justify-start group border-r border-white/5 last:border-r-0"
+      viewport={{ once: true }}
+      transition={{ delay: i * 0.15, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      className="relative p-10 md:p-14 bg-transparent transition-all duration-700 flex flex-col justify-start group border-b lg:border-b-0 lg:border-r border-white/5 last:border-r-0 hover:bg-white/[0.01]"
     >
-      <div className="text-[10px] md:text-[11px] text-gray-500 font-sans font-medium uppercase tracking-[0.25em] mb-4 md:mb-8 opacity-60 group-hover:opacity-100 transition-opacity">
+      {/* Hover Shimmer Effect */}
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 bg-gradient-to-tr from-[#83ffc8]/5 via-transparent to-transparent pointer-events-none" />
+      
+      <div className="text-[10px] md:text-[11px] font-sans font-medium uppercase tracking-[0.3em] mb-6 md:mb-12 opacity-50 group-hover:opacity-90 transition-all duration-500" style={{ color: 'var(--text-muted)' }}>
         {stat.label}
       </div>
       
-      <div className={`text-3xl sm:text-4xl md:text-6xl font-sans font-semibold tracking-[-0.04em] mb-2 md:mb-4 transition-all duration-700 group-hover:scale-[1.02] origin-left ${stat.color}`}>
-        {prefix}{displayValue.toLocaleString()}{suffix}
+      <div className={`text-5xl md:text-8xl font-sans font-bold tracking-tight mb-4 md:mb-6 transition-all duration-700 group-hover:translate-x-1 ${stat.color}`}>
+        <span className="tabular-nums">{prefix}{formattedCount}{suffix}</span>
       </div>
       
-      <div className="text-[10px] md:text-sm text-gray-500 font-sans font-light flex items-center gap-2 md:gap-3 opacity-80">
-        <div className={`w-1.5 h-1.5 rounded-full ${stat.color.replace('text-', 'bg-')} shadow-[0_0_10px_currentColor]`} />
-        {stat.sub}
+      <div className="text-[10px] md:text-sm font-sans font-light flex items-center gap-3 opacity-60 group-hover:opacity-100 transition-all duration-500" style={{ color: 'var(--text-muted)' }}>
+        <div className={`w-1.5 h-1.5 rounded-full ${stat.color.replace('text-', 'bg-')} shadow-[0_0_15px_currentColor] animate-pulse`} />
+        <span className="tracking-wide">{stat.sub}</span>
       </div>
     </motion.div>
   );
@@ -83,9 +104,12 @@ const StatItem = ({ stat, i }: { stat: any, i: number }) => {
 
 export const StatsSection = () => {
   return (
-    <section className="py-24 md:py-40 bg-[#020202] relative overflow-hidden border-t border-white/5">
-      <div className="max-w-7xl mx-auto px-4 relative z-10">
-        <div className="grid grid-cols-2 lg:grid-cols-4 bg-zinc-900/10 border border-white/5 rounded-[2rem] overflow-hidden">
+    <section className="py-24 md:py-56 bg-[#020202] relative overflow-hidden">
+      {/* Ambient Background Glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(131,255,200,0.02),transparent_70%)] pointer-events-none" />
+      
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 site-panel overflow-hidden border-white/5 shadow-[0_40px_100px_rgba(0,0,0,0.4)]">
           {stats.map((stat, i) => (
             <StatItem key={stat.label} stat={stat} i={i} />
           ))}

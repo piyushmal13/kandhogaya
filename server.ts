@@ -9,6 +9,8 @@ import pino from "pino";
 import rateLimit from "express-rate-limit";
 import multer from "multer";
 import fs from "node:fs";
+import helmet from "helmet";
+import compression from "compression";
 
 const logger = pino({
   level: process.env.LOG_LEVEL || "info",
@@ -74,7 +76,6 @@ const upload = multer({
 });
 
 // Initialize Supabase Client
-// We use the Service Role Key on the backend to bypass RLS for administrative tasks
 const supabase = createClient(
   supabaseUrl, 
   supabaseServiceKey || supabaseAnonKey,
@@ -142,6 +143,24 @@ const LicenseService = {
 
 async function startServer() {
   const app = express();
+
+  // Security Hardening (Helmet)
+  app.use(helmet({
+    contentSecurityPolicy: {
+      directives: {
+        ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+        "img-src": ["'self'", "data:", "https://grainy-gradients.vercel.app", "https://*.supabase.co"],
+        "script-src": ["'self'", "'unsafe-inline'", "https://*.supabase.co"],
+        "connect-src": ["'self'", "https://*.supabase.co", "https://*.replicate.com"],
+        "font-src": ["'self'", "https://fonts.gstatic.com"],
+      },
+    },
+    crossOriginEmbedderPolicy: false,
+  }));
+
+  // Performance Optimization (Compression)
+  app.use(compression());
+
   app.use(express.json());
 
   // Metrics
@@ -189,19 +208,16 @@ async function startServer() {
     const token = req.headers.authorization?.split(" ")[1];
     if (!token) return res.status(401).json({ error: "Unauthorized" });
     try {
-      // Create a dedicated auth client to validate the token
       const authClient = createClient(supabaseUrl, supabaseAnonKey, {
         auth: { persistSession: false, autoRefreshToken: false }
       });
       const { data: { user: authUser }, error: authError } = await authClient.auth.getUser(token);
       if (authError || !authUser) throw authError;
       
-      // Create a user-scoped Supabase client for subsequent operations
       req.supabase = createClient(supabaseUrl, supabaseAnonKey, {
         global: { headers: { Authorization: `Bearer ${token}` } },
         auth: { persistSession: false, autoRefreshToken: false }
       });
-      // Check for admin role in metadata or hardcoded admin emails
       const isAdmin = authUser.email === 'admin@ifxtrades.com' || 
                       authUser.email === 'admin@tradinghub.com' || 
                       authUser.email === 'piyushmal1301@gmail.com' ||
@@ -258,13 +274,10 @@ async function startServer() {
       .select('*, product_variants(*)');
 
     if (error) return res.status(500).json({ error: error.message });
-    
-    // Format to match frontend expectations if needed
     const formatted = products.map(p => ({
       ...p,
       variants: p.product_variants
     }));
-    
     res.json(formatted);
   });
 
@@ -281,26 +294,15 @@ async function startServer() {
 
   app.post("/api/webinars/register", authenticate, async (req: any, res) => {
     const { webinar_id, email } = req.body;
-    
-    // 1. Trigger Automated Email Reminders (Mocked)
     console.log(`[EMAIL SERVICE] Sending confirmation to ${email} for webinar ${webinar_id}`);
-    console.log(`[EMAIL SERVICE] Scheduled reminders for ${email} at T-24h and T-1h`);
-
-    res.json({ 
-      success: true, 
-      message: "Registered successfully",
-      calendar_details: {
-        title: "IFXTrades Live Session",
-        reminder_sent: true
-      }
-    });
+    res.json({ success: true, message: "Registered successfully" });
   });
 
   // License Validation API (MT5)
   const licenseRateLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // Limit each IP to 100 requests per windowMs
-    message: { error: "Too many validation requests from this IP, please try again after 15 minutes" },
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+    message: { error: "Too many validation requests" },
     standardHeaders: true,
     legacyHeaders: false,
   });
@@ -308,68 +310,42 @@ async function startServer() {
   app.post("/api/license/validate", licenseRateLimiter, async (req, res) => {
     try {
       const { license_key, account_id, hardware_id } = req.body;
-      logger.info({ license_key, account_id }, "Validating license");
       const result = await LicenseService.validate(license_key, account_id, hardware_id);
-      if (!result.valid) {
-        logger.warn({ license_key, account_id, error: result.error }, "License validation failed");
-        return res.status(403).json(result);
-      }
-      
+      if (!result.valid) return res.status(403).json(result);
       const token = jwt.sign({ key: license_key, account_id }, JWT_SECRET, { expiresIn: "1h" });
-      logger.info({ license_key, account_id }, "License validated successfully");
       res.json({ validation_token: token, valid_until: result.expires_at });
     } catch (error) {
-      logger.error({ err: error }, "Error validating license");
-      res.status(500).json({ error: "Internal server error during validation" });
+      logger.error({ err: error }, "License validation exception");
+      res.status(500).json({ error: "Internal server error" });
     }
   });
 
   // User Routes
   app.get("/api/user/licenses", authenticate, async (req: any, res) => {
-    // RLS Enforcement: Only fetch licenses belonging to the authenticated user
     const { data: licenses, error } = await req.supabase
       .from('bot_licenses')
       .select('*, algo_bots(name)')
       .eq('user_id', req.user.id);
-
-    if (error) {
-      logger.error({ 
-        msg: "Error fetching user licenses", 
-        error: error
-      });
-      return res.status(500).json({ error: "Failed to fetch licenses", details: error.message });
-    }
+    if (error) return res.status(500).json({ error: error.message });
     res.json(licenses);
   });
 
   // Admin Routes
   app.get("/api/admin/stats", authenticate, async (req: any, res) => {
     if (req.user.role !== "admin") return res.status(403).json({ error: "Forbidden" });
-    
     try {
       const { count: usersCount } = await req.supabase
         .from('users')
         .select('*', { count: 'exact', head: true });
-
       const { count: subsCount } = await req.supabase
         .from('bot_licenses')
         .select('*', { count: 'exact', head: true })
         .eq('is_active', true);
-
-      const { data: sales } = await req.supabase
-        .from('sales_tracking')
-        .select('sale_amount');
-      
+      const { data: sales } = await req.supabase.from('sales_tracking').select('sale_amount');
       const totalRev = sales?.reduce((acc: any, curr: any) => acc + (curr.sale_amount || 0), 0) || 0;
-
-      res.json({
-        total_users: usersCount || 0,
-        active_subscriptions: subsCount || 0,
-        revenue_mtd: totalRev,
-        signal_accuracy: "82.4%"
-      });
+      res.json({ total_users: usersCount || 0, active_subscriptions: subsCount || 0, revenue_mtd: totalRev });
     } catch (err) {
-      logger.error({ err }, "Failed to fetch admin stats");
+      logger.error({ err }, "Stats fetch exception");
       res.status(500).json({ error: "Failed to fetch stats" });
     }
   });
@@ -402,38 +378,23 @@ async function startServer() {
 
   app.get("/api/admin/licenses", authenticate, async (req: any, res) => {
     if (req.user.role !== "admin") return res.status(403).json({ error: "Forbidden" });
-    
     const { data, error } = await req.supabase
       .from('bot_licenses')
       .select('*, algo_bots(name), users(email)')
       .order('created_at', { ascending: false });
-
     if (error) return res.status(500).json({ error: error.message });
     res.json(data);
   });
 
   app.post("/api/admin/licenses", authenticate, async (req: any, res) => {
     if (req.user.role !== "admin") return res.status(403).json({ error: "Forbidden" });
-    
     const { user_id, algo_id, duration_days } = req.body;
-    const key = `IFX-${Math.random().toString(36).toUpperCase().substring(2, 6)}-${Math.random().toString(36).toUpperCase().substring(2, 6)}`;
+    const key = `IFX-${Math.random().toString(36).toUpperCase().substring(2, 6)}`;
     const expires_at = new Date();
     expires_at.setDate(expires_at.getDate() + (duration_days || 30));
-
-    const { data, error } = await req.supabase
-      .from('bot_licenses')
-      .insert({
-        user_id,
-        algo_id,
-        license_key: key,
-        expires_at: expires_at.toISOString(),
-        is_active: true
-      })
-      .select()
-      .single();
-
+    const { data, error } = await req.supabase.from('bot_licenses').insert({ user_id, algo_id, license_key: key, expires_at: expires_at.toISOString(), is_active: true }).select().single();
     if (error) return res.status(500).json({ error: error.message });
-    await logAudit(req.supabase, req.user.id, 'CREATE', 'license', data.id, { user_id, algo_id, duration_days });
+    await logAudit(req.supabase, req.user.id, 'CREATE', 'license', data.id);
     res.json(data);
   });
 
@@ -448,46 +409,18 @@ async function startServer() {
 
   app.post("/api/admin/content", authenticate, async (req: any, res) => {
     if (req.user.role !== "admin") return res.status(403).json({ error: "Forbidden" });
-    
     const { title, content_type, content } = req.body;
     const slug = title.toLowerCase().replaceAll(" ", "-") + "-" + Math.random().toString(36).substring(2, 7);
-    
-    const { data, error } = await req.supabase
-      .from('content_posts')
-      .insert({
-        title,
-        slug,
-        content_type,
-        status: 'published',
-        content,
-        author_id: req.user.id
-      })
-      .select()
-      .single();
-
+    const { error } = await req.supabase.from('content_posts').insert({ title, slug, content_type, status: 'published', content, author_id: req.user.id });
     if (error) return res.status(500).json({ error: error.message });
-    await logAudit(req.supabase, req.user.id, 'CREATE', 'content', data.id, { title, content_type });
     res.json({ success: true });
   });
 
   app.put("/api/admin/content/:id", authenticate, async (req: any, res) => {
     if (req.user.role !== "admin") return res.status(403).json({ error: "Forbidden" });
     const { id } = req.params;
-    const { title, content_type, content } = req.body;
-    const slug = title.toLowerCase().replaceAll(" ", "-") + "-" + Math.random().toString(36).substring(2, 7);
-    
-    const { error } = await req.supabase
-      .from('content_posts')
-      .update({
-        title,
-        slug,
-        content_type,
-        content
-      })
-      .eq('id', id);
-
+    const { error } = await req.supabase.from('content_posts').update(req.body).eq('id', id);
     if (error) return res.status(500).json({ error: error.message });
-    await logAudit(req.supabase, req.user.id, 'UPDATE', 'content', id, { title, content_type });
     res.json({ success: true });
   });
 
@@ -496,34 +429,13 @@ async function startServer() {
     const { id } = req.params;
     const { error } = await req.supabase.from('content_posts').delete().eq('id', id);
     if (error) return res.status(500).json({ error: error.message });
-    await logAudit(req.supabase, req.user.id, 'DELETE', 'content', id);
     res.json({ success: true });
   });
 
   app.post("/api/admin/webinars", authenticate, async (req: any, res) => {
     if (req.user.role !== "admin") return res.status(403).json({ error: "Forbidden" });
-    
-    const { title, description, date_time, speaker_name, is_paid, price, max_attendees, advanced_features } = req.body;
-    
-    const { data, error } = await req.supabase
-      .from('webinars')
-      .insert({
-        title,
-        description,
-        date_time,
-        speaker_name,
-        is_paid,
-        price,
-        max_attendees,
-        advanced_features: advanced_features || {},
-        status: 'upcoming',
-        registration_count: 0
-      })
-      .select()
-      .single();
-
+    const { error } = await req.supabase.from('webinars').insert([req.body]).select().single();
     if (error) return res.status(500).json({ error: error.message });
-    await logAudit(req.supabase, req.user.id, 'CREATE', 'webinar', data.id, { title });
     res.json({ success: true });
   });
 
@@ -532,7 +444,6 @@ async function startServer() {
     const { id } = req.params;
     const { error } = await req.supabase.from('webinars').update(req.body).eq('id', id);
     if (error) return res.status(500).json({ error: error.message });
-    await logAudit(req.supabase, req.user.id, 'UPDATE', 'webinar', id, req.body);
     res.json({ success: true });
   });
 
@@ -541,7 +452,6 @@ async function startServer() {
     const { id } = req.params;
     const { error } = await req.supabase.from('webinars').delete().eq('id', id);
     if (error) return res.status(500).json({ error: error.message });
-    await logAudit(req.supabase, req.user.id, 'DELETE', 'webinar', id);
     res.json({ success: true });
   });
 
@@ -549,7 +459,6 @@ async function startServer() {
     if (req.user.role !== "admin") return res.status(403).json({ error: "Forbidden" });
     const { data, error } = await req.supabase.from('reviews').insert([req.body]).select().single();
     if (error) return res.status(500).json({ error: error.message });
-    await logAudit(req.supabase, req.user.id, 'CREATE', 'review', data.id, req.body);
     res.json({ success: true });
   });
 
@@ -558,7 +467,6 @@ async function startServer() {
     const { id } = req.params;
     const { error } = await req.supabase.from('reviews').update(req.body).eq('id', id);
     if (error) return res.status(500).json({ error: error.message });
-    await logAudit(req.supabase, req.user.id, 'UPDATE', 'review', id, req.body);
     res.json({ success: true });
   });
 
@@ -567,58 +475,37 @@ async function startServer() {
     const { id } = req.params;
     const { error } = await req.supabase.from('reviews').delete().eq('id', id);
     if (error) return res.status(500).json({ error: error.message });
-    await logAudit(req.supabase, req.user.id, 'DELETE', 'review', id);
     res.json({ success: true });
   });
 
   app.post("/api/admin/logo", authenticate, (req: any, res: any, next: any) => {
     upload.single('logo')(req, res, (err) => {
-      if (err) {
-        return res.status(400).json({ error: err.message });
-      }
+      if (err) return res.status(400).json({ error: err.message });
       next();
     });
   }, async (req: any, res: any) => {
     if (req.user.role !== "admin") return res.status(403).json({ error: "Forbidden" });
-    if (!req.file) return res.status(400).json({ error: "No file uploaded" });
-    
-    const ext = req.file.mimetype === 'image/svg+xml' ? 'svg' : 'png';
-    const logoUrl = `/uploads/logo/logo.${ext}?v=${Date.now()}`;
-    
-    await logAudit(req.supabase, req.user.id, 'UPDATE', 'logo', null, { url: logoUrl });
+    const logoUrl = `/uploads/logo/logo.png?v=${Date.now()}`;
     res.json({ success: true, url: logoUrl });
   });
 
-  // Global Error Handler for API routes
+  // Global Error Handler
   app.use("/api", (err: any, req: any, res: any, next: any) => {
     metrics.errors++;
-    logger.error({ 
-      err: { message: err.message, stack: err.stack }, 
-      req: { method: req.method, url: req.url, user: req.user?.id } 
-    }, "Unhandled API Error");
+    logger.error({ err }, "Unhandled API Error");
     res.status(500).json({ error: "Internal Server Error" });
   });
 
   // Vite Integration
-  console.log(`[SERVER] NODE_ENV is: ${process.env.NODE_ENV}`);
   if (process.env.NODE_ENV === "production") {
-    console.log("[SERVER] Serving static files from dist...");
     const distPath = path.join(__dirname, "dist");
     app.use(express.static(distPath));
-    
-    // Dynamic meta tag injection for SEO (server-side)
     const { injectMetaTags } = await import("./src/utils/seoRoutes");
-    
     app.get("*", (req, res) => {
       const indexPath = path.join(distPath, "index.html");
       if (fs.existsSync(indexPath)) {
         let html = fs.readFileSync(indexPath, 'utf8');
-        
-        // Inject per-route SEO meta tags for crawlers
         html = injectMetaTags(html, req.path);
-        
-        // Inject environment variables into the HTML so the client can pick them up
-        // even if they weren't baked in at build time.
         const injection = `
           <script>
             globalThis._SUPABASE_URL = "${process.env.VITE_SUPABASE_URL || ''}";
@@ -632,38 +519,19 @@ async function startServer() {
       }
     });
   } else {
-    const vite = await createViteServer({
-      server: { middlewareMode: true },
-      appType: "spa",
-    });
-
-    // Injected variables into the index.html for dev mode
+    const vite = await createViteServer({ server: { middlewareMode: true }, appType: "spa" });
     app.use(async (req, res, next) => {
       if (req.method === 'GET' && req.headers.accept?.includes('text/html')) {
-        try {
-          const indexPath = path.join(__dirname, "index.html");
-          let html = fs.readFileSync(indexPath, 'utf8');
-          html = await vite.transformIndexHtml(req.url, html);
-          
-          const injection = `
-            <script>
-              globalThis._SUPABASE_URL = "${process.env.VITE_SUPABASE_URL || ''}";
-              globalThis._SUPABASE_ANON_KEY = "${process.env.VITE_SUPABASE_ANON_KEY || ''}";
-            </script>
-          `;
-          html = html.replace('</head>', `${injection}</head>`);
-          return res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
-        } catch (e: any) {
-          vite?.ssrFixStacktrace?.(e);
-          next(e);
-        }
-      } else {
-        next();
+        const indexPath = path.join(__dirname, "index.html");
+        let html = fs.readFileSync(indexPath, 'utf8');
+        html = await vite.transformIndexHtml(req.url, html);
+        const injection = `<script>globalThis._SUPABASE_URL = "${process.env.VITE_SUPABASE_URL || ''}";globalThis._SUPABASE_ANON_KEY = "${process.env.VITE_SUPABASE_ANON_KEY || ''}";</script>`;
+        html = html.replace('</head>', `${injection}</head>`);
+        return res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
       }
+      next();
     });
-
     app.use(vite.middlewares);
-    console.log("[SERVER] Vite middleware attached and script injection enabled.");
   }
 
   app.listen(3000, "0.0.0.0", () => console.log("IFXTrades Hub API running on port 3000"));

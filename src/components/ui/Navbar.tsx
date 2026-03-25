@@ -20,6 +20,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { BRANDING } from "../../constants/branding";
 import { useAuth } from "../../contexts/AuthContext";
 import { cn } from "../../utils/cn";
+import { ResizedImage } from "./ResizedImage";
 
 export const Navbar = () => {
   const { user, userProfile, logout } = useAuth();
@@ -59,7 +60,7 @@ export const Navbar = () => {
         <div className="mx-auto flex h-20 max-w-7xl items-center justify-between rounded-full border border-white/5 bg-black/40 px-8 shadow-[0_32px_80px_rgba(0,0,0,0.6)] backdrop-blur-3xl transition-all duration-700 hover:border-white/10">
           <Link to="/" className="flex items-center gap-4 group">
             <div className="flex items-center justify-center overflow-hidden rounded-2xl bg-white/[0.03] p-1.5 transition-all duration-700 group-hover:bg-white/[0.06] group-hover:scale-110">
-              <img
+              <ResizedImage
                 src={BRANDING.logoUrl}
                 alt={`${BRANDING.name} Logo`}
                 className="h-10 w-10 object-contain"
@@ -174,9 +175,9 @@ export const Navbar = () => {
             >
               <div className="p-6 flex flex-col min-h-full">
                 <div className="flex items-center justify-between mb-8">
-                  <Link to="/" onClick={() => setIsOpen(false)} className="flex items-center gap-3">
-                    <div className="flex items-center justify-center overflow-hidden rounded-[10px]">
-                      <img src={BRANDING.logoUrl} alt={BRANDING.name} className="h-11 w-11 object-contain" />
+                  <Link to="/" onClick={() => setIsOpen(false)} className="flex items-center gap-3 group">
+                    <div className="flex items-center justify-center overflow-hidden rounded-2xl bg-white/[0.02] p-2 group-hover:bg-white/[0.05] transition-all duration-700">
+                      <ResizedImage src={BRANDING.logoUrl} alt="IFXTrades Logo" className="h-12 w-12 object-contain" />
                     </div>
                     <div>
                       <div className="text-xs font-bold tracking-[0.22em] text-white uppercase">{BRANDING.shortName}</div>

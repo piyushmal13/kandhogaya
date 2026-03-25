@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 
 import { BRANDING } from "../../constants/branding";
+import { ResizedImage } from "./ResizedImage";
 
 export const Footer = () => (
   <footer className="relative overflow-hidden border-t border-white/5 pt-32 pb-20 bg-[#020202]">
@@ -24,7 +25,7 @@ export const Footer = () => (
         <div className="bg-[#050505] p-10 rounded-[2.5rem] border border-white/5 shadow-2xl">
           <Link to="/" className="flex items-center gap-5 group">
             <div className="flex items-center justify-center overflow-hidden rounded-2xl bg-white/[0.02] p-2 group-hover:bg-white/[0.05] transition-all duration-700">
-              <img src={BRANDING.logoUrl} alt="IFXTrades Logo" className="h-12 w-12 object-contain" />
+              <ResizedImage src={BRANDING.logoUrl} alt="IFXTrades Logo" className="h-12 w-12 object-contain" />
             </div>
             <div>
               <div className="text-sm font-semibold tracking-[0.3em] text-white uppercase">{BRANDING.name}</div>
@@ -63,22 +64,22 @@ export const Footer = () => (
         </div>
 
         <div className="p-4">
-          <h4 className="mb-8 text-xs font-semibold uppercase tracking-[0.4em] text-white opacity-40">Protocols</h4>
+          <h4 className="mb-8 text-xs font-semibold uppercase tracking-[0.4em] text-white opacity-40">Execution Protocols</h4>
           <ul className="space-y-6 text-sm text-gray-400 font-sans font-medium uppercase tracking-[0.1em]">
             <li><Link to="/signals" className="hover:text-[#83ffc8] transition-colors">Live Signals</Link></li>
-            <li><Link to="/marketplace" className="hover:text-[#83ffc8] transition-colors">Algo Matrix</Link></li>
-            <li><Link to="/results" className="hover:text-[#83ffc8] transition-colors">Audit Logs</Link></li>
-            <li><Link to="/login" className="hover:text-[#83ffc8] transition-colors">Terminal Access</Link></li>
+            <li><Link to="/marketplace" className="hover:text-[#83ffc8] transition-colors">Algo Marketplace</Link></li>
+            <li><Link to="/results" className="hover:text-[#83ffc8] transition-colors">Performance Audit</Link></li>
+            <li><Link to="/login" className="hover:text-[#83ffc8] transition-colors">Institutional Terminal</Link></li>
           </ul>
         </div>
 
         <div className="p-4">
-          <h4 className="mb-8 text-xs font-semibold uppercase tracking-[0.4em] text-white opacity-40">Intelligence</h4>
+          <h4 className="mb-8 text-xs font-semibold uppercase tracking-[0.4em] text-white opacity-40">Intelligence Desk</h4>
           <ul className="space-y-6 text-sm text-gray-400 font-sans font-medium uppercase tracking-[0.1em]">
-            <li><Link to="/courses" className="flex items-center gap-3 hover:text-[#83ffc8] transition-colors"><BookOpen className="h-4 w-4" /> Academy</Link></li>
-            <li><Link to="/blog" className="flex items-center gap-3 hover:text-[#83ffc8] transition-colors"><Activity className="h-4 w-4" /> Insights</Link></li>
-            <li><Link to="/about" className="flex items-center gap-3 hover:text-[#83ffc8] transition-colors"><Shield className="h-4 w-4" /> Firm</Link></li>
-            <li><Link to="/hiring" className="flex items-center gap-3 hover:text-[#83ffc8] transition-colors"><Users className="h-4 w-4" /> Lab</Link></li>
+            <li><Link to="/courses" className="flex items-center gap-3 hover:text-[#83ffc8] transition-colors"><BookOpen className="h-4 w-4" /> Advanced Academy</Link></li>
+            <li><Link to="/blog" className="flex items-center gap-3 hover:text-[#83ffc8] transition-colors"><Activity className="h-4 w-4" /> Market Insights</Link></li>
+            <li><Link to="/about" className="flex items-center gap-3 hover:text-[#83ffc8] transition-colors"><Shield className="h-4 w-4" /> About IFX</Link></li>
+            <li><Link to="/hiring" className="flex items-center gap-3 hover:text-[#83ffc8] transition-colors"><Users className="h-4 w-4" /> Join Our Team</Link></li>
           </ul>
         </div>
 

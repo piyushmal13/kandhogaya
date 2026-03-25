@@ -11,6 +11,7 @@ export const HeroSection = () => {
     winRate: "82.4%",
     latency: "0.15ms"
   });
+  const [particles, setParticles] = useState<Array<{x: number; y: number; vx: number; vy: number; size: number; opacity: number}>>([]);
 
   useEffect(() => {
     const fetchRealStats = async () => {
@@ -24,10 +25,75 @@ export const HeroSection = () => {
       }
     };
     fetchRealStats();
+
+    // Initialize particle system for background enhancement
+    const initParticles = () => {
+      const particlesArray = [];
+      const particleCount = 50;
+      
+      for (let i = 0; i < particleCount; i++) {
+        particlesArray.push({
+          x: Math.random() * window.innerWidth,
+          y: Math.random() * window.innerHeight,
+          vx: (Math.random() - 0.5) * 0.5,
+          vy: (Math.random() - 0.5) * 0.5,
+          size: Math.random() * 2 + 1,
+          opacity: Math.random() * 0.5 + 0.2
+        });
+      }
+      
+      setParticles(particlesArray);
+      
+      // Animate particles
+      const animateParticles = () => {
+        setParticles(prev => prev.map(p => ({
+          ...p,
+          x: p.x + p.vx,
+          y: p.y + p.vy,
+          vx: p.x < 0 || p.x > window.innerWidth ? -p.vx : p.vx,
+          vy: p.y < 0 || p.y > window.innerHeight ? -p.vy : p.vy
+        })));
+        
+        requestAnimationFrame(animateParticles);
+      };
+      
+      requestAnimationFrame(animateParticles);
+    };
+
+    initParticles();
+    
+    const handleResize = () => {
+      // Reinitialize particles on resize for better distribution
+      initParticles();
+    };
+    
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   return (
     <section ref={containerRef} className="relative min-h-[110vh] flex flex-col items-center justify-center overflow-hidden bg-[#000000] pt-48 pb-40 perspective-container">
+      {/* Particle Background */}
+      <div className="absolute inset-0 pointer-events-none">
+        {particles.map((p, i) => (
+          <div
+            key={i}
+            className="absolute"
+            style={{
+              left: p.x,
+              top: p.y,
+              width: p.size,
+              height: p.size,
+              backgroundColor: 'rgba(131, 255, 200, 0.3)',
+              borderRadius: '50%',
+              opacity: p.opacity
+            }}
+          />
+        ))}
+      </div>
       
       {/* ── 200x Institutional Background System ── */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -88,7 +154,8 @@ export const HeroSection = () => {
         >
           <Link 
             to="/login" 
-            className="group relative px-12 py-6 bg-white text-black font-semibold rounded-full overflow-hidden flex items-center justify-center gap-3 text-xl w-full sm:w-auto hover:shadow-[0_0_80px_rgba(255,255,255,0.2)] transition-all duration-700"
+            aria-label="Access Institutional Trading Terminal"
+            className="group relative px-12 py-6 bg-white text-black font-semibold rounded-full overflow-hidden flex items-center justify-center gap-3 text-xl w-full sm:w-auto hover:shadow-[0_0_80px_rgba(255,255,255,0.2)] transition-all duration-700 active:scale-95"
           >
             <div className="absolute inset-0 bg-[#83ffc8] translate-y-full group-hover:translate-y-0 transition-transform duration-700 ease-[0.16,1,0.2,1]" />
             <span className="relative z-10 flex items-center gap-3 tracking-tight">
@@ -99,7 +166,8 @@ export const HeroSection = () => {
           
           <Link 
             to="/results" 
-            className="group px-12 py-6 bg-white/[0.01] text-white font-medium rounded-full border border-white/5 hover:border-[#83ffc8]/30 hover:bg-white/[0.03] transition-all duration-700 backdrop-blur-3xl flex items-center justify-center gap-3 text-xl w-full sm:w-auto"
+            aria-label="View Global Trading Performance"
+            className="group px-12 py-6 bg-white/[0.01] text-white font-medium rounded-full border border-white/5 hover:border-[#83ffc8]/30 hover:bg-white/[0.03] transition-all duration-700 backdrop-blur-3xl flex items-center justify-center gap-3 text-xl w-full sm:w-auto active:scale-95"
           >
             <Activity className="w-6 h-6 text-[#83ffc8] opacity-60 group-hover:scale-110 transition-transform" />
             <span className="tracking-tight opacity-80 group-hover:opacity-100">Global Performance</span>
@@ -131,11 +199,12 @@ export const HeroSection = () => {
       </div>
 
       {/* --- Scroll Indicator --- */}
-      <motion.div 
+      <motion.button 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5 }}
-        className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 cursor-pointer group"
+        aria-label="Scroll to Architectural Core"
+        className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 cursor-pointer group bg-transparent border-none appearance-none outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-lg p-2"
         onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
       >
         <span className="text-[10px] font-sans font-medium text-gray-500 uppercase tracking-[0.3em] group-hover:text-[#83ffc8] transition-colors opacity-60">Architectural Core</span>
@@ -145,7 +214,7 @@ export const HeroSection = () => {
         >
           <ChevronDown className="w-5 h-5 text-[#83ffc8]/40 group-hover:text-[#83ffc8] transition-colors" />
         </motion.div>
-      </motion.div>
+      </motion.button>
     </section>
   );
 };

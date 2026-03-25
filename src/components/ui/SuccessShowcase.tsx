@@ -24,7 +24,7 @@ export const SuccessShowcase = () => {
   if (reviews.length === 0) return null;
 
   return (
-    <section className="py-24 md:py-48 bg-[#020202] relative overflow-hidden border-t border-white/5">
+    <section className="py-24 md:py-48 relative overflow-hidden">
       {/* Dynamic Background Effects */}
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/5 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-500/5 rounded-full blur-[120px] pointer-events-none" />
@@ -39,7 +39,7 @@ export const SuccessShowcase = () => {
           <h2 className="text-4xl md:text-8xl font-bold text-white mb-8 tracking-tighter leading-[0.95]">
             Trusted by <span className="institutional-title italic font-serif text-emerald-400">Professionals</span>
           </h2>
-          <p className="text-gray-500 max-w-2xl mx-auto text-base md:text-2xl font-mono leading-relaxed">
+          <p className="max-w-2xl mx-auto text-base md:text-2xl font-mono leading-relaxed opacity-60" style={{ color: 'var(--text-muted)' }}>
             Institutional-grade performance verified by quant traders across the globe.
           </p>
         </motion.div>
@@ -47,8 +47,8 @@ export const SuccessShowcase = () => {
 
       <div className="relative">
         {/* Institutional Grade Gradient Masks */}
-        <div className="absolute inset-y-0 left-0 w-32 md:w-64 bg-gradient-to-r from-[#020202] to-transparent z-20 pointer-events-none" />
-        <div className="absolute inset-y-0 right-0 w-32 md:w-64 bg-gradient-to-l from-[#020202] to-transparent z-20 pointer-events-none" />
+        <div className="absolute inset-y-0 left-0 w-32 md:w-64 bg-gradient-to-r from-[#050816] to-transparent z-20 pointer-events-none" />
+        <div className="absolute inset-y-0 right-0 w-32 md:w-64 bg-gradient-to-l from-[#050816] to-transparent z-20 pointer-events-none" />
 
         <motion.div 
           className="flex gap-4 md:gap-8"
@@ -94,7 +94,7 @@ export const SuccessShowcase = () => {
                     {rev.name}
                     {rev.is_verified !== false && <span className="text-[10px] md:text-xs text-emerald-500/70 font-mono tracking-widest uppercase">Verified</span>}
                   </div>
-                  <div className="text-gray-500 text-[10px] md:text-xs uppercase tracking-widest font-mono">{rev.role || "Trader"}</div>
+                  <div className="text-[10px] md:text-xs uppercase tracking-widest font-mono opacity-50" style={{ color: 'var(--text-muted)' }}>{rev.role || "Trader"}</div>
                 </div>
               </div>
             </div>

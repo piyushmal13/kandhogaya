@@ -35,6 +35,8 @@ const homeFaqs = [
   },
 ];
 
+import { LazySection } from "../components/ui/LazySection";
+
 export const Home = () => (
   <div className="min-h-screen relative overflow-hidden">
     <PageMeta
@@ -50,19 +52,45 @@ export const Home = () => (
         "automated trading",
         "XAUUSD signals",
         "forex trading platform",
+        "trading bot",
       ]}
       structuredData={[organizationSchema(), websiteSchema(), faqSchema(homeFaqs)]}
     />
     <HeroSection />
     <MarketTicker />
-    <WebinarPromo />
-    <EcosystemSection />
-    <GlobalReach />
-    <AlgoGreatness />
-    <BlogSection />
-    <PerformanceHistory />
-    <SuccessShowcase />
-    <SignupForm />
+    
+    <LazySection placeholderHeight="600px">
+      <WebinarPromo />
+    </LazySection>
+
+    <LazySection placeholderHeight="800px">
+      <EcosystemSection />
+    </LazySection>
+
+    <LazySection placeholderHeight="700px">
+      <GlobalReach />
+    </LazySection>
+
+    <LazySection placeholderHeight="600px">
+      <AlgoGreatness />
+    </LazySection>
+
+    <LazySection placeholderHeight="800px">
+      <BlogSection />
+    </LazySection>
+
+    <LazySection placeholderHeight="900px">
+      <PerformanceHistory />
+    </LazySection>
+
+    <LazySection placeholderHeight="600px">
+      <SuccessShowcase />
+    </LazySection>
+
+    <LazySection placeholderHeight="400px">
+      <SignupForm />
+    </LazySection>
+
     <NewsletterPopup />
   </div>
 );
