@@ -104,23 +104,31 @@ export const SuccessShowcase = () => {
 
           {/* Optimized Slim Navigation */}
           <div className="mt-8 flex items-center justify-center gap-6">
-            <button onClick={prevSlide} className="w-10 h-10 rounded-full border border-white/5 bg-white/5 flex items-center justify-center text-white hover:border-[var(--brand)]/30 transition-all">
+            <button onClick={prevSlide} className="w-10 h-10 rounded-full border border-white/5 bg-white/5 flex items-center justify-center text-white hover:border-[var(--brand)]/30 transition-all focus:outline-none">
               <ChevronLeft className="w-4 h-4" />
             </button>
             
             <div className="flex gap-1.5">
-              {reviews.slice(0, Math.ceil(reviews.length / (window.innerWidth >= 1024 ? 3 : 1))).map((_, i) => (
-                <button
-                  key={`dot-page-${i}`}
-                  onClick={() => setIndex(i * (window.innerWidth >= 1024 ? 3 : 1))}
-                  className={`h-1 rounded-full transition-all duration-500 ${
-                    Math.floor(index / (window.innerWidth >= 1024 ? 3 : 1)) === i ? "w-8 bg-[var(--brand)]" : "w-1.5 bg-white/10"
-                  }`}
-                />
-              ))}
+              {(() => {
+                const perPage = globalThis.window !== undefined && globalThis.window.innerWidth >= 1024 ? 3 : 1;
+                const totalPages = Math.ceil(reviews.length / perPage);
+                return Array.from({ length: totalPages }).map((_, i) => {
+                  const startIdx = i * perPage;
+                  const firstRevId = reviews[startIdx]?.id || i;
+                  return (
+                    <button
+                      key={`pg-dot-${firstRevId}-${i}`}
+                      onClick={() => setIndex(startIdx)}
+                      className={`h-1 rounded-full transition-all duration-500 ${
+                        Math.floor(index / perPage) === i ? "w-8 bg-[var(--brand)]" : "w-1.5 bg-white/10"
+                      }`}
+                    />
+                  );
+                });
+              })()}
             </div>
 
-            <button onClick={nextSlide} className="w-10 h-10 rounded-full border border-white/5 bg-white/5 flex items-center justify-center text-white hover:border-[var(--brand)]/30 transition-all">
+            <button onClick={nextSlide} className="w-10 h-10 rounded-full border border-white/5 bg-white/5 flex items-center justify-center text-white hover:border-[var(--brand)]/30 transition-all focus:outline-none">
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
