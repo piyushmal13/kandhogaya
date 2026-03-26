@@ -85,23 +85,23 @@ export const HeroSection = () => {
         
         {/* --- Main Headline --- */}
         <motion.h1 
-          initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          initial={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
+          animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
           transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-          className="font-black text-white mb-6 leading-[1.1] tracking-[-0.05em]"
+          className="font-black text-white mb-6 leading-[1.05] tracking-tight"
         >
-          <span className="text-3xl sm:text-7xl block opacity-60">Institutional <span className="italic font-serif text-[var(--brand)]">Edge</span>.</span>
-          <span className="text-5xl sm:text-8xl text-blue-400 italic font-serif block mt-1 tracking-tight">Retail Accessibility</span>.
+          <span className="text-[2.2rem] sm:text-7xl block opacity-90">Institutional Edge</span>
+          <span className="text-[2.8rem] sm:text-8xl text-blue-400 italic font-serif block mt-1 tracking-[-0.03em]">Retail Accessibility<span className="text-[var(--brand)] not-italic font-black text-5xl sm:text-9xl">.</span></span>
         </motion.h1>
         
-        {/* --- Subheadline --- */}
+        {/* --- High-Fidelity Sub-Headline --- */}
         <motion.p 
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="text-[12px] sm:text-lg md:text-xl text-gray-500 tracking-widest uppercase mb-12 px-8 max-w-3xl mx-auto leading-relaxed font-bold"
+          transition={{ duration: 1.2, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          className="text-[11px] sm:text-lg text-gray-400/60 tracking-[0.4em] uppercase mb-14 px-4 max-w-4xl mx-auto leading-relaxed font-bold"
         >
-          Deploy the proprietary multi-layered execution protocols, high-frequency logic, and global market-flow datasets utilized by elite institutions.
+          Democratizing proprietary execution protocols <br className="hidden sm:block" /> for the elite retail trader.
         </motion.p>
 
         {/* --- CTA Unit --- */}
