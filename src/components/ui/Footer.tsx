@@ -17,11 +17,11 @@ export const Footer = () => (
         {/* --- Column 1: Brand & Identity --- */}
         <div>
           <Link to="/" className="flex items-center gap-6 group mb-10">
-            <div className="flex items-center justify-center overflow-hidden rounded-xl bg-white p-2.5 transition-all duration-700 h-14 w-14 border-2 border-[var(--brand)]/10 group-hover:border-[var(--brand)]/30 group-hover:scale-105 shadow-[0_0_30px_rgba(16,185,129,0.1)]">
+            <div className="flex items-center justify-center transition-all duration-700 h-10 w-10 sm:h-14 sm:w-14 rounded-2xl bg-white/5 border border-white/10 shadow-[0_0_20px_var(--brand-glow-subtle)] overflow-hidden group-hover:scale-105">
               <img
                 src={BRANDING.logoUrl}
                 alt={BRANDING.name}
-                className="h-full w-full object-contain"
+                className="h-full w-full object-contain p-1.5 filter drop-shadow-[0_0_8px_var(--brand-glow)]"
               />
             </div>
             <div className="text-[14px] font-bold tracking-[0.5em] text-white uppercase opacity-90 group-hover:opacity-100 transition-opacity">{BRANDING.name}</div>
@@ -35,10 +35,10 @@ export const Footer = () => (
         <div>
           <h4 className="mb-8 text-[10px] font-bold uppercase tracking-[0.4em] text-white/40">Market Operations</h4>
           <ul className="space-y-4 text-[11px] text-gray-400 font-sans font-bold uppercase tracking-[0.2em]">
-            <li><Link to="/signals" className="hover:text-emerald-500 transition-colors flex items-center justify-between group">Best Gold Signals <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-all" /></Link></li>
-            <li><Link to="/marketplace" className="hover:text-emerald-500 transition-colors flex items-center justify-between group">Custom Trading Bots <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-all" /></Link></li>
-            <li><Link to="/results" className="hover:text-emerald-500 transition-colors flex items-center justify-between group">Strategy Backtesting <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-all" /></Link></li>
-            <li><Link to="/login" className="hover:text-emerald-500 transition-colors flex items-center justify-between group">HFT Dashboard <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-all" /></Link></li>
+            <li><Link to="/signals" className="hover:text-[var(--brand)] transition-colors flex items-center justify-between group">Best Gold Signals <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-all" /></Link></li>
+            <li><Link to="/marketplace" className="hover:text-[var(--brand)] transition-colors flex items-center justify-between group">Custom Trading Bots <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-all" /></Link></li>
+            <li><Link to="/results" className="hover:text-[var(--brand)] transition-colors flex items-center justify-between group">Strategy Backtesting <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-all" /></Link></li>
+            <li><Link to="/login" className="hover:text-[var(--brand)] transition-colors flex items-center justify-between group">HFT Dashboard <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-all" /></Link></li>
           </ul>
         </div>
 
@@ -46,10 +46,10 @@ export const Footer = () => (
         <div>
           <h4 className="mb-8 text-[10px] font-bold uppercase tracking-[0.4em] text-white/40">Trading Academy</h4>
           <ul className="space-y-4 text-[11px] text-gray-400 font-sans font-bold uppercase tracking-[0.2em]">
-            <li><Link to="/academy" className="hover:text-emerald-500 transition-colors">Forex School</Link></li>
-            <li><Link to="/blog" className="hover:text-emerald-500 transition-colors">Market Analysis</Link></li>
-            <li><Link to="/academy" className="hover:text-emerald-500 transition-colors">Risk Management</Link></li>
-            <li><Link to="/webinars" className="hover:text-emerald-500 transition-colors">Live Trading Sessions</Link></li>
+            <li><Link to="/academy" className="hover:text-[var(--brand)] transition-colors">Forex School</Link></li>
+            <li><Link to="/blog" className="hover:text-[var(--brand)] transition-colors">Market Analysis</Link></li>
+            <li><Link to="/academy" className="hover:text-[var(--brand)] transition-colors">Risk Management</Link></li>
+            <li><Link to="/webinars" className="hover:text-[var(--brand)] transition-colors">Live Trading Sessions</Link></li>
           </ul>
         </div>
 
@@ -57,10 +57,10 @@ export const Footer = () => (
         <div>
           <h4 className="mb-8 text-[10px] font-bold uppercase tracking-[0.4em] text-white/40">Services</h4>
           <ul className="space-y-4 text-[11px] text-gray-400 font-sans font-bold uppercase tracking-[0.2em]">
-            <li><Link to="/about" className="hover:text-emerald-500 transition-colors">Our Mission</Link></li>
-            <li><Link to="/contact" className="hover:text-emerald-500 transition-colors">Compliance Desk</Link></li>
-            <li><Link to="/hiring" className="hover:text-emerald-500 transition-colors">Careers</Link></li>
-            <li><Link to="/contact" className="hover:text-emerald-500 transition-colors">Global Support</Link></li>
+            <li><Link to="/about" className="hover:text-[var(--brand)] transition-colors">Our Mission</Link></li>
+            <li><Link to="/contact" className="hover:text-[var(--brand)] transition-colors">Compliance Desk</Link></li>
+            <li><Link to="/hiring" className="hover:text-[var(--brand)] transition-colors">Careers</Link></li>
+            <li><Link to="/contact" className="hover:text-[var(--brand)] transition-colors">Global Support</Link></li>
           </ul>
         </div>
       </div>

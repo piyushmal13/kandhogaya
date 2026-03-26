@@ -16,11 +16,11 @@ export const SuccessShowcase = () => {
   }, []);
 
   const nextSlide = () => {
-    setIndex((prev) => (prev + 1) % Math.max(1, reviews.length - 2));
+    setIndex((prev) => (prev + 1) % reviews.length);
   };
 
   const prevSlide = () => {
-    setIndex((prev) => (prev - 1 + Math.max(1, reviews.length - 2)) % Math.max(1, reviews.length - 2));
+    setIndex((prev) => (prev - 1 + reviews.length) % reviews.length);
   };
 
   if (reviews.length === 0) return null;
@@ -46,7 +46,7 @@ export const SuccessShowcase = () => {
           </motion.div>
         </div>
 
-        {/* Multi-Review Horizontal Scroll - Institutional Grade */}
+        {/* Multi-Review Horizontal Scroll */}
         <div className="relative">
           <div className="flex items-center justify-between mb-12">
              <div className="flex gap-4">
@@ -72,7 +72,12 @@ export const SuccessShowcase = () => {
           <div className="overflow-hidden">
             <motion.div 
               className="flex gap-6"
-              animate={{ x: `calc(-${index * 100}% / 3)` }}
+              animate={{ 
+                x: `calc(-${index} * (100% / (window.innerWidth >= 1024 ? 3 : window.innerWidth >= 640 ? 2 : 1)))` 
+              }}
+              // Correct window check for SSR/Safety
+              initial={false}
+              style={{ paddingLeft: '1px' }} // Edge Fix
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
               {reviews.map((rev, i) => (
@@ -117,19 +122,18 @@ export const SuccessShowcase = () => {
           </div>
         </div>
 
-        <div className="mt-16 flex justify-center gap-2">
-          {Array.from({ length: Math.ceil(reviews.length / 3) }).map((_, i) => {
-            const firstReviewOnPage = reviews[i * 3];
-            return (
-              <button
-                key={`nav-dot-${firstReviewOnPage?.id || i}`}
+        {/* Improved Progress Dots */}
+        <div className="mt-16 flex justify-center flex-wrap gap-2 max-w-2xl mx-auto">
+          {reviews.map((rev, i) => (
+            <button
+              key={`nav-dot-${rev.id || i}`}
               onClick={() => setIndex(i)}
-              className={`h-1 rounded-full transition-all duration-500 ${
-                i === index ? "w-10 bg-[var(--brand)]" : "w-2 bg-white/10"
+              className={`h-1.5 rounded-full transition-all duration-500 ${
+                i === index ? "w-10 bg-[var(--brand)]" : "w-1.5 bg-white/10 hover:bg-white/20"
               }`}
-              />
-            );
-          })}
+              aria-label={`Go to slide ${i + 1}`}
+            />
+          ))}
         </div>
       </div>
     </section>

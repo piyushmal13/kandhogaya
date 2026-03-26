@@ -33,8 +33,8 @@ export const HeroSection = () => {
       id: `p-${i}`,
       x: Math.random() * 100,
       y: Math.random() * 100,
-      vx: (Math.random() - 0.5) * 0.05,
-      vy: (Math.random() - 0.5) * 0.05,
+      vx: (Math.random() - 0.5) * 0.1,
+      vy: (Math.random() - 0.5) * 0.1,
       size: Math.random() * 2 + 1,
       opacity: Math.random() * 0.5 + 0.1
     }));
@@ -88,7 +88,7 @@ export const HeroSection = () => {
           initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-          className="text-4xl sm:text-7xl md:text-8xl font-black text-white mb-6 leading-tight tracking-[-0.05em]"
+          className="text-5xl sm:text-7xl md:text-8xl font-black text-white mb-6 leading-tight tracking-[-0.05em]"
         >
           Institutional <span className="italic font-serif text-[var(--brand)]">Edge</span>. <br className="hidden lg:block" />
           <span className="opacity-40">Retail</span> <span className="italic font-serif opacity-40">Accessibility</span>.
@@ -99,9 +99,9 @@ export const HeroSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="text-[11px] sm:text-lg md:text-xl text-gray-500 tracking-widest uppercase mb-12 px-8 max-w-3xl mx-auto leading-relaxed"
+          className="text-[12px] sm:text-lg md:text-xl text-gray-500 tracking-widest uppercase mb-12 px-8 max-w-3xl mx-auto leading-relaxed font-bold"
         >
-          Access the multi-layered execution protocols, proprietary HFT logic, and global market-flow datasets utilized by elite quantitative funds.
+          Deploy the proprietary multi-layered execution protocols, high-frequency logic, and global market-flow datasets utilized by elite institutions.
         </motion.p>
 
         {/* --- CTA Unit --- */}
@@ -113,7 +113,7 @@ export const HeroSection = () => {
         >
           <Link 
             to="/login"
-            className="group relative px-8 py-5 bg-white text-black font-black rounded-full overflow-hidden transition-all duration-700 hover:scale-105 active:scale-95 shadow-[0_20px_60px_rgba(255,255,255,0.2)] w-full text-center text-base uppercase tracking-tighter"
+            className="group relative px-6 py-4 sm:px-8 sm:py-5 bg-white text-black font-black rounded-full overflow-hidden transition-all duration-700 hover:scale-105 active:scale-95 shadow-[0_20px_60px_rgba(255,255,255,0.2)] w-full text-center text-[10px] sm:text-base uppercase tracking-tighter"
           >
             <div className="absolute inset-0 bg-[var(--brand)] translate-y-full group-hover:translate-y-0 transition-transform duration-700" />
             <span className="relative z-10 flex items-center justify-center gap-3">
