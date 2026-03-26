@@ -75,30 +75,30 @@ export const SuccessShowcase = () => {
               WebkitOverflowScrolling: 'touch'
             }}
           >
-            {reviews.map((rev, i) => (
+              {reviews.map((rev, i) => (
               <div 
                 key={rev.id || i}
                 className="min-w-[85%] sm:min-w-[400px] lg:min-w-[450px] snap-center flex-shrink-0"
               >
-                <div className="glass-card p-8 md:p-12 border-white/5 backdrop-blur-3xl h-full flex flex-col justify-between group/card hover:border-[var(--brand)]/20 transition-all duration-1000 bg-white/[0.02] rounded-3xl">
+                <div className="glass-card p-5 md:p-12 border-white/5 backdrop-blur-3xl h-full flex flex-col justify-between group/card hover:border-[var(--brand)]/20 transition-all duration-1000 bg-white/[0.02] rounded-3xl">
                   <div>
-                    <div className="flex gap-1.5 mb-8">
+                    <div className="flex gap-1.5 mb-6">
                       {Array.from({ length: rev.rating || 5 }).map((_, j) => (
-                        <Star key={`star-${rev.id || i}-${j}`} className="w-3.5 h-3.5 text-[var(--brand)] fill-[var(--brand)]" />
+                        <Star key={`star-${rev.id || i}-${j}`} className="w-3 h-3 text-[var(--brand)] fill-[var(--brand)]" />
                       ))}
                     </div>
-                    <blockquote className="text-white text-base md:text-2xl font-medium leading-relaxed mb-12 opacity-90 text-left italic font-serif tracking-tight">
+                    <blockquote className="text-white text-sm md:text-2xl font-medium leading-relaxed mb-8 opacity-90 text-left italic font-serif tracking-tight">
                       "{rev.text}"
                     </blockquote>
                   </div>
 
-                  <div className="flex items-center gap-5 pt-10 border-t border-white/5">
-                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-white/10 to-transparent flex items-center justify-center text-[var(--brand)] font-black text-2xl border border-white/10 shadow-inner">
+                  <div className="flex items-center gap-4 pt-8 border-t border-white/5">
+                    <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl bg-gradient-to-br from-white/10 to-transparent flex items-center justify-center text-[var(--brand)] font-black text-lg md:text-2xl border border-white/10 shadow-inner">
                       {rev.name?.charAt(0) || "U"}
                     </div>
                     <div className="text-left">
-                      <div className="text-white font-bold text-base md:text-xl tracking-tighter">{rev.name}</div>
-                      <div className="text-[10px] uppercase tracking-[0.25em] font-bold opacity-30 text-[var(--brand)]">{rev.role || "Elite Trader"}</div>
+                      <div className="text-white font-bold text-sm md:text-xl tracking-tighter">{rev.name}</div>
+                      <div className="text-[9px] md:text-[10px] uppercase tracking-[0.25em] font-bold opacity-30 text-[var(--brand)]">{rev.role || "Elite Trader"}</div>
                     </div>
                   </div>
                 </div>
