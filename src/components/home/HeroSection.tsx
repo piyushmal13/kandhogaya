@@ -90,8 +90,8 @@ export const HeroSection = () => {
           transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
           className="text-5xl sm:text-7xl md:text-8xl font-black text-white mb-6 leading-tight tracking-[-0.05em]"
         >
-          Institutional <span className="italic font-serif text-[var(--brand)]">Edge</span>. <br className="hidden lg:block" />
-          <span className="opacity-40">Retail</span> <span className="italic font-serif opacity-40">Accessibility</span>.
+          Institutional <span className="italic font-serif text-[var(--brand)] opacity-60">Edge</span>. <br className="hidden lg:block" />
+          <span className="text-7xl sm:text-7xl md:text-8xl text-blue-400 italic font-serif">Retail Accessibility</span>.
         </motion.h1>
         
         {/* --- Subheadline --- */}
@@ -145,22 +145,22 @@ export const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.5, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-20 md:mt-32 w-full grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-12 md:gap-20 max-w-6xl mx-auto px-6 border-t border-white/5 pt-12 sm:pt-16 pb-12 sm:pb-0"
+          className="mt-20 md:mt-32 w-full grid grid-cols-3 gap-2 sm:gap-12 md:gap-20 max-w-6xl mx-auto px-2 border-t border-white/5 pt-12 sm:pt-16 pb-12 sm:pb-0"
         >
           {[
-            { label: "Institutional Nodes", val: stats.traders, sub: "Validated Live" },
-            { label: "Execution Accuracy", val: stats.winRate, sub: "Real-time Audited" },
-            { label: "Direct Pipeline", val: stats.latency, sub: "Hyper-Low Latency" }
+            { label: "Nodes", val: stats.traders, sub: "Live" },
+            { label: "Win Rate", val: stats.winRate, sub: "Audited" },
+            { label: "Latency", val: stats.latency, sub: "Pipeline" }
           ].map((stat) => (
-            <div key={stat.label} className="flex flex-col items-center group sm:border-x sm:border-white/5 py-4 sm:py-2">
-              <span className="text-4xl sm:text-5xl md:text-7xl font-bold text-white mb-2 sm:mb-4 tracking-tighter group-hover:text-[var(--brand)] transition-colors duration-1000 group-hover:drop-shadow-[0_0_15px_var(--brand-glow)]">
+            <div key={stat.label} className="flex flex-col items-center group sm:border-x sm:border-white/5 py-2">
+              <span className="text-xl sm:text-5xl md:text-7xl font-bold text-white mb-1 sm:mb-4 tracking-tighter group-hover:text-[var(--brand)] transition-colors duration-1000 group-hover:drop-shadow-[0_0_15px_var(--brand-glow)]">
                 {stat.val}
               </span>
-              <div className="flex flex-col items-center gap-1.5">
-                <span className="text-[9px] sm:text-[11px] font-bold text-gray-400 uppercase tracking-[0.25em] opacity-40 group-hover:opacity-80 transition-opacity">
+              <div className="flex flex-col items-center">
+                <span className="text-[7px] sm:text-[11px] font-bold text-gray-400 uppercase tracking-[0.2em] opacity-40 group-hover:opacity-80 transition-opacity">
                   {stat.label}
                 </span>
-                <span className="text-[8px] text-[var(--brand)]/40 font-medium uppercase tracking-[0.1em]">{stat.sub}</span>
+                <span className="text-[6px] sm:text-[9px] text-[var(--brand)]/40 font-medium uppercase tracking-[0.1em]">{stat.sub}</span>
               </div>
             </div>
           ))}
@@ -168,29 +168,17 @@ export const HeroSection = () => {
 
       </div>
 
-      {/* --- Refined Scroll Indicator --- */}
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2, duration: 1.5 }}
-        className="absolute bottom-6 sm:bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 opacity-40 hover:opacity-100 transition-all duration-700 cursor-pointer group scale-75 sm:scale-100 z-30"
+        className="absolute bottom-6 sm:bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 sm:gap-4 opacity-40 hover:opacity-100 transition-all duration-700 cursor-pointer group scale-75 sm:scale-100 z-30"
         onClick={scrollToDiscovery}
       >
-        <div className="relative">
-          <span className="text-[9px] font-bold uppercase tracking-[0.5em] text-[var(--brand)] whitespace-nowrap mb-6 rotate-180 [writing-mode:vertical-lr] opacity-30 group-hover:opacity-100 transition-opacity">
-            Discover Ecosystem
-          </span>
-          <div className="absolute top-0 right-1/2 translate-x-1/2 w-[1px] h-full bg-gradient-to-b from-[var(--brand)] via-[var(--brand)]/20 to-transparent" />
-        </div>
-        
-        {/* Animated Mouse/Dot */}
-        <div className="w-5 h-8 border border-white/20 rounded-full flex justify-center p-1.5 backdrop-blur-sm">
-          <motion.div 
-            animate={{ y: [0, 10, 0] }}
-            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-            className="w-1 h-2 bg-[var(--brand)] rounded-full shadow-[0_0_8px_var(--brand-glow)]"
-          />
-        </div>
+        <span className="text-[8px] sm:text-[9px] font-bold uppercase tracking-[0.5em] text-[var(--brand)] whitespace-nowrap opacity-30 group-hover:opacity-100 transition-opacity">
+          Scroll Discovery
+        </span>
+        <div className="w-[1px] h-8 sm:h-12 bg-gradient-to-b from-[var(--brand)] to-transparent" />
       </motion.div>
 
     </div>

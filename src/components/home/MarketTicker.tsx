@@ -155,10 +155,10 @@ export const MarketTicker = () => {
       <div className="absolute inset-0 bg-gradient-to-r from-[var(--brand)]/[0.02] via-transparent to-cyan-500/[0.02] pointer-events-none" />
       <div className="absolute inset-0 backdrop-blur-3xl pointer-events-none" />
       
-      <div className="absolute left-0 top-0 bottom-0 z-[60] flex items-center px-6 md:px-10 bg-[#020202]/95 border-r border-white/5 shadow-[30px_0_50px_rgba(0,0,0,1)]">
-        <div className="flex items-center gap-4">
+      <div className="absolute left-0 top-0 bottom-0 z-[60] flex items-center px-3 md:px-10 bg-[#020202]/95 border-r border-white/5 shadow-[30px_0_50px_rgba(0,0,0,1)]">
+        <div className="flex items-center gap-2 md:gap-4">
           <div className="relative">
-            <div className={`w-3 h-3 rounded-full transition-all duration-1000 ${marketStatus === "OPEN" ? 'bg-[var(--brand)] shadow-[0_0_15px_var(--brand-glow)]' : 'bg-red-500 shadow-[0_0_15px_rgba(244,63,94,0.5)]'}`} />
+            <div className={`w-2.5 h-2.5 md:w-3 md:h-3 rounded-full transition-all duration-1000 ${marketStatus === "OPEN" ? 'bg-[var(--brand)] shadow-[0_0_15px_var(--brand-glow)]' : 'bg-red-500 shadow-[0_0_15px_rgba(244,63,94,0.5)]'}`} />
             {marketStatus === "OPEN" && (
               <motion.div 
                 animate={{ scale: [1, 2.5], opacity: [0.3, 0] }} 
@@ -168,11 +168,11 @@ export const MarketTicker = () => {
             )}
           </div>
           <div className="flex flex-col">
-            <span className="text-[10px] font-bold text-white uppercase tracking-[0.4em] font-sans leading-none opacity-80">
+            <span className="text-[8px] md:text-[10px] font-bold text-white uppercase tracking-[0.2em] md:tracking-[0.4em] font-sans leading-none opacity-80">
               {marketStatus} SURFACE
             </span>
-            <span className="text-[9px] text-[var(--brand)]/60 font-sans font-medium mt-1.5 tracking-[0.15em] uppercase">
-              {isSyncing ? "SYNCING..." : (lastUpdate || "ACTIVE")}
+            <span className="text-[7px] md:text-[9px] text-[var(--brand)]/60 font-sans font-medium mt-1 md:mt-1.5 tracking-[0.1em] md:tracking-[0.15em] uppercase">
+              {isSyncing ? "SYNC" : (lastUpdate || "LIVE")}
             </span>
           </div>
         </div>
