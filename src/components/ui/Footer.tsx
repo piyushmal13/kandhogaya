@@ -16,15 +16,15 @@ export const Footer = () => (
       <div className="grid gap-12 lg:grid-cols-4 mb-24">
         {/* --- Column 1: Brand & Identity --- */}
         <div>
-          <Link to="/" className="flex items-center gap-4 group mb-8">
-            <div className="flex items-center justify-center overflow-hidden rounded-xl bg-white p-2 transition-all duration-700 h-10 w-10">
+          <Link to="/" className="flex items-center gap-6 group mb-10">
+            <div className="flex items-center justify-center overflow-hidden rounded-xl bg-white p-2.5 transition-all duration-700 h-14 w-14 border-2 border-[var(--brand)]/10 group-hover:border-[var(--brand)]/30 group-hover:scale-105 shadow-[0_0_30px_rgba(16,185,129,0.1)]">
               <img
                 src={BRANDING.logoUrl}
                 alt={BRANDING.name}
                 className="h-full w-full object-contain"
               />
             </div>
-            <div className="text-xs font-bold tracking-[0.4em] text-white uppercase">{BRANDING.name}</div>
+            <div className="text-[14px] font-bold tracking-[0.5em] text-white uppercase opacity-90 group-hover:opacity-100 transition-opacity">{BRANDING.name}</div>
           </Link>
           <p className="text-[12px] leading-relaxed text-gray-500 font-sans font-medium opacity-80 max-w-xs">
             The global benchmark for **Best Forex Signals**, **Gold Trading Algorithms**, and Institutional Market Intelligence. Engineered for elite execution.

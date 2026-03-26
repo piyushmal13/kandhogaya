@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { motion, useReducedMotion } from "motion/react";
-import { Star, CheckCircle2, Quote } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { Star, CheckCircle2, Quote, ChevronLeft, ChevronRight } from "lucide-react";
 import { fetchReviews } from "../../services/reviewService";
 
 export const SuccessShowcase = () => {
   const [reviews, setReviews] = useState<any[]>([]);
-  const prefersReducedMotion = useReducedMotion();
+  const [index, setIndex] = useState(0);
+  const [direction, setDirection] = useState(0);
 
   useEffect(() => {
     fetchReviews().then(data => {
@@ -15,91 +16,156 @@ export const SuccessShowcase = () => {
     });
   }, []);
 
-  // Triple the items for a seamless loop
-  const scrollItems = useMemo(() => {
-    if (reviews.length === 0) return [];
-    return [...reviews, ...reviews, ...reviews];
-  }, [reviews]);
+  const slideVariants = {
+    enter: (direction: number) => ({
+      x: direction > 0 ? 300 : -300,
+      opacity: 0,
+      scale: 0.9,
+      filter: "blur(10px)",
+    }),
+    center: {
+      zIndex: 1,
+      x: 0,
+      opacity: 1,
+      scale: 1,
+      filter: "blur(0px)",
+    },
+    exit: (direction: number) => ({
+      zIndex: 0,
+      x: direction < 0 ? 300 : -300,
+      opacity: 0,
+      scale: 0.9,
+      filter: "blur(10px)",
+    }),
+  };
+
+  const paginate = (newDirection: number) => {
+    setDirection(newDirection);
+    setIndex((prev) => (prev + newDirection + reviews.length) % reviews.length);
+  };
 
   if (reviews.length === 0) return null;
 
+  const currentReview = reviews[index];
+
   return (
-    <section className="py-24 md:py-48 relative overflow-hidden">
+    <section className="py-24 md:py-48 relative overflow-hidden bg-black/40">
       {/* Dynamic Background Effects */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/5 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-500/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[var(--brand)]/5 rounded-full blur-[140px] pointer-events-none animate-pulse" />
+      <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-cyan-500/5 rounded-full blur-[140px] pointer-events-none animate-pulse" style={{ animationDelay: '2s' }} />
 
-      <div className="max-w-7xl mx-auto px-4 relative z-10 mb-16 md:mb-24 text-center">
-        <motion.div
-  initial = {{ opacity: 0, y: 20 }}
-  whileInView = {{ opacity: 1, y: 0 }}
-  viewport = {{ once: true }}
->
-          <span className="text-emerald-500 font-bold text-[10px] md:text-xs uppercase tracking-[0.4em] mb-4 inline-block">Validation</span>
-          <h2 className="text-4xl md:text-8xl font-bold text-white mb-8 tracking-tighter leading-[0.95]">
-            Trusted by <span className="institutional-title italic font-serif text-emerald-400">Professionals</span>
-          </h2>
-          <p className="max-w-2xl mx-auto text-base md:text-2xl font-mono leading-relaxed opacity-60" style={{ color: 'var(--text-muted)' }}>
-            Institutional-grade performance verified by quant traders across the globe.
-          </p>
-        </motion.div>
-      </div>
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+        <div className="text-center mb-16 md:mb-32">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <span className="text-[var(--brand)] font-bold text-[10px] md:text-xs uppercase tracking-[0.5em] mb-6 inline-block opacity-80">Institutional Validation</span>
+            <h2 className="text-4xl md:text-8xl font-black text-white mb-10 tracking-tighter leading-[0.9] uppercase">
+              The Protocol <br/> <span className="italic font-serif text-[var(--brand)] opacity-80">Verified</span>
+            </h2>
+            <p className="max-w-2xl mx-auto text-sm md:text-xl font-medium tracking-tight opacity-40 uppercase" style={{ color: 'var(--text-muted)' }}>
+              Cross-referenced performance audits and real-time execution feedback from our elite global user base.
+            </p>
+          </motion.div>
+        </div>
 
-      <div className="relative">
-        {/* Institutional Grade Gradient Masks */}
-        <div className="absolute inset-y-0 left-0 w-32 md:w-64 bg-gradient-to-r from-[#050816] to-transparent z-20 pointer-events-none" />
-        <div className="absolute inset-y-0 right-0 w-32 md:w-64 bg-gradient-to-l from-[#050816] to-transparent z-20 pointer-events-none" />
-
-        <motion.div 
-          className="flex gap-4 md:gap-8"
-          animate={prefersReducedMotion ? {} : { x: ["0%", "-33.333333%"] }}
-          transition={{
-            duration: 60,
-            repeat: Infinity,
-            ease: "linear",
-          }}
-        >
-          {scrollItems.map((rev, i) => (
-            <div 
-              key={`${rev.id || i}-${i}`}
-              className="glass-card group relative p-8 md:p-12 border-white/5 backdrop-blur-3xl transition-all duration-700 hover:border-emerald-500/30 min-w-[320px] md:min-w-[560px] flex flex-col"
+        {/* Main Slider Area */}
+        <div className="relative max-w-5xl mx-auto min-h-[450px] md:min-h-[550px] flex items-center justify-center">
+          
+          {/* Navigation Controls */}
+          <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between z-30 px-2 md:-mx-20">
+            <button 
+              onClick={() => paginate(-1)}
+              className="w-12 h-12 md:w-16 md:h-16 rounded-full border border-white/10 bg-white/5 backdrop-blur-3xl flex items-center justify-center text-white hover:bg-white/10 hover:border-[var(--brand)]/30 hover:scale-110 transition-all duration-500 group"
             >
-              <div className="absolute top-6 right-8 opacity-10 group-hover:opacity-20 transition-opacity">
-                <Quote className="w-12 h-12 text-emerald-500" />
-              </div>
+              <ChevronLeft className="w-6 h-6 md:w-8 md:h-8 group-hover:-translate-x-1 transition-transform" />
+            </button>
+            <button 
+              onClick={() => paginate(1)}
+              className="w-12 h-12 md:w-16 md:h-16 rounded-full border border-white/10 bg-white/5 backdrop-blur-3xl flex items-center justify-center text-white hover:bg-white/10 hover:border-[var(--brand)]/30 hover:scale-110 transition-all duration-500 group"
+            >
+              <ChevronRight className="w-6 h-6 md:w-8 md:h-8 group-hover:translate-x-1 transition-transform" />
+            </button>
+          </div>
 
-              <div className="flex gap-1 mb-6 md:mb-8">
-                {Array.from({ length: rev.rating || 5 }).map((_, j) => (
-                  <Star key={`${rev.id}-${i}-star-${j}`} className="w-4 h-4 text-emerald-500 fill-emerald-500" />
-                ))}
-              </div>
+          <AnimatePresence initial={false} custom={direction} mode="wait">
+            <motion.div
+              key={index}
+              custom={direction}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{
+                x: { type: "spring", stiffness: 300, damping: 30 },
+                opacity: { duration: 0.6 },
+                scale: { duration: 0.6 },
+                filter: { duration: 0.6 }
+              }}
+              className="w-full absolute"
+            >
+              <div className="glass-card relative p-10 md:p-20 border-white/5 backdrop-blur-3xl overflow-hidden shadow-[0_40px_100px_rgba(0,0,0,0.6)] group">
+                {/* Visual Motif */}
+                <div className="absolute -top-10 -right-10 opacity-5 group-hover:opacity-10 transition-opacity">
+                  <Quote className="w-40 h-40 md:w-60 md:h-60 text-[var(--brand)]" />
+                </div>
 
-              <p className="text-gray-300 text-base md:text-xl leading-relaxed mb-8 md:mb-12 flex-1 font-medium italic">
-                "{rev.text}"
-              </p>
-
-              <div className="flex items-center gap-4 pt-6 md:pt-8 border-t border-white/5 mt-auto">
-                <div className="relative">
-                  <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 font-bold text-lg border border-emerald-500/30">
-                    {rev.name?.charAt(0) || "U"}
+                <div className="relative z-10">
+                  <div className="flex gap-2 mb-10 md:mb-14 justify-center md:justify-start">
+                    {Array.from({ length: currentReview.rating || 5 }).map((_, j) => (
+                      <Star key={`star-${currentReview.id || currentReview.name}-${j}`} className="w-5 h-5 md:w-7 md:h-7 text-[var(--brand)] fill-[var(--brand)] shadow-[0_0_20px_var(--brand-glow)]" />
+                    ))}
                   </div>
-                  {rev.is_verified !== false && (
-                    <div className="absolute -bottom-1 -right-1 bg-black rounded-full p-0.5 border border-white/10">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+
+                  <blockquote className="text-white text-2xl md:text-5xl font-medium leading-[1.2] mb-12 md:mb-20 tracking-tight italic text-center md:text-left">
+                    "{currentReview.text}"
+                  </blockquote>
+
+                  <div className="flex flex-col md:flex-row items-center gap-6 pt-10 md:pt-12 border-t border-white/5">
+                    <div className="relative">
+                      <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-[var(--brand)]/10 flex items-center justify-center text-[var(--brand)] font-black text-2xl md:text-3xl border border-[var(--brand)]/30 shadow-[0_0_30px_var(--brand-glow-subtle)]">
+                        {currentReview.name?.charAt(0) || "U"}
+                      </div>
+                      {currentReview.is_verified !== false && (
+                        <div className="absolute -bottom-1 -right-1 bg-black rounded-full p-1 border border-white/10">
+                          <CheckCircle2 className="w-5 h-5 md:w-6 md:h-6 text-[var(--brand)]" />
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-                <div>
-                  <div className="text-white font-bold text-sm md:text-base flex items-center gap-2">
-                    {rev.name}
-                    {rev.is_verified !== false && <span className="text-[10px] md:text-xs text-emerald-500/70 font-mono tracking-widest uppercase">Verified</span>}
+                    <div className="text-center md:text-left">
+                      <div className="text-white font-black text-lg md:text-2xl flex items-center gap-3 justify-center md:justify-start uppercase tracking-widest leading-none mb-2">
+                        {currentReview.name}
+                        {currentReview.is_verified !== false && (
+                          <span className="text-[10px] md:text-xs text-[var(--brand)]/80 font-black tracking-[0.3em] bg-[var(--brand)]/10 px-3 py-1 rounded-full">CORE VERIFIED</span>
+                        )}
+                      </div>
+                      <div className="text-[10px] md:text-xs uppercase tracking-[0.4em] font-bold opacity-40 text-[var(--text-muted)]">{currentReview.role || "INSTITUTIONAL TRADER"}</div>
+                    </div>
                   </div>
-                  <div className="text-[10px] md:text-xs uppercase tracking-widest font-mono opacity-50" style={{ color: 'var(--text-muted)' }}>{rev.role || "Trader"}</div>
                 </div>
               </div>
-            </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Progress Dots */}
+        <div className="mt-16 md:mt-24 flex justify-center gap-3">
+          {reviews.slice(0, 8).map((rev, i) => (
+            <button
+              key={`dot-${rev.id || i}`}
+              onClick={() => {
+                setDirection(i > index ? 1 : -1);
+                setIndex(i);
+              }}
+              className={`h-1.5 md:h-2 rounded-full transition-all duration-700 ${
+                i === index ? "w-8 md:w-16 bg-[var(--brand)] shadow-[0_0_15px_var(--brand-glow)]" : "w-1.5 md:w-2 bg-white/10 hover:bg-white/30"
+              }`}
+              aria-label={`Go to slide ${i + 1}`}
+            />
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

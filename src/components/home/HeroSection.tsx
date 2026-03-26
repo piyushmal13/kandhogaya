@@ -60,11 +60,11 @@ export const HeroSection = () => {
   };
 
   return (
-    <div ref={containerRef} className="relative min-h-screen pt-32 pb-20 flex flex-col items-center justify-center overflow-hidden bg-black selection:bg-emerald-500/30">
+    <div ref={containerRef} className="relative min-h-screen pt-32 pb-20 flex flex-col items-center justify-center overflow-hidden bg-black selection:bg-[var(--brand)]/30">
       
       {/* --- Ambient Background --- */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-emerald-500/10 blur-[120px] rounded-full opacity-40 animate-pulse" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-[var(--brand)]/10 blur-[120px] rounded-full opacity-40 animate-pulse" />
         <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/5 to-transparent" />
         
         {/* Animated Grid */}
@@ -74,7 +74,7 @@ export const HeroSection = () => {
         {particles.map(p => (
            <motion.div
              key={p.id}
-             className="absolute w-1 h-1 bg-emerald-500 rounded-full"
+             className="absolute w-1 h-1 bg-[var(--brand)] rounded-full"
              animate={{ x: `${p.x}vw`, y: `${p.y}vh` }}
              style={{ width: p.size, height: p.size, opacity: p.opacity }}
            />
@@ -90,7 +90,7 @@ export const HeroSection = () => {
           transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
           className="text-4xl sm:text-7xl md:text-8xl font-black text-white mb-6 leading-tight tracking-[-0.05em]"
         >
-          Institutional <span className="italic font-serif text-emerald-500">Edge</span>. <br className="hidden lg:block" />
+          Institutional <span className="italic font-serif text-[var(--brand)]">Edge</span>. <br className="hidden lg:block" />
           <span className="opacity-40">Retail</span> <span className="italic font-serif opacity-40">Accessibility</span>.
         </motion.h1>
         
@@ -115,7 +115,7 @@ export const HeroSection = () => {
             to="/login"
             className="group relative px-8 py-5 bg-white text-black font-black rounded-full overflow-hidden transition-all duration-700 hover:scale-105 active:scale-95 shadow-[0_20px_60px_rgba(255,255,255,0.2)] w-full text-center text-base uppercase tracking-tighter"
           >
-            <div className="absolute inset-0 bg-emerald-500 translate-y-full group-hover:translate-y-0 transition-transform duration-700" />
+            <div className="absolute inset-0 bg-[var(--brand)] translate-y-full group-hover:translate-y-0 transition-transform duration-700" />
             <span className="relative z-10 flex items-center justify-center gap-3">
               Access Institutional Terminal
               <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform duration-500" />
@@ -124,17 +124,17 @@ export const HeroSection = () => {
 
           <div className="flex items-center justify-center gap-8 opacity-40 grayscale group hover:grayscale-0 transition-all duration-700">
             <div className="flex items-center gap-2">
-              <Shield className="w-4 h-4 text-emerald-500" />
+              <Shield className="w-4 h-4 text-[var(--brand)]" />
               <div className="flex flex-col text-left">
                 <span className="text-[9px] font-bold text-white tracking-[0.1em] leading-none uppercase">SSL SECURE</span>
-                <span className="text-[7px] text-emerald-500/60 font-medium">BANK-GRADE</span>
+                <span className="text-[7px] text-[var(--brand)]/60 font-medium">BANK-GRADE</span>
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <Database className="w-4 h-4 text-emerald-500" />
+              <Database className="w-4 h-4 text-[var(--brand)]" />
               <div className="flex flex-col text-left">
                 <span className="text-[9px] font-bold text-white tracking-[0.1em] leading-none uppercase">HFT GRID</span>
-                <span className="text-[7px] text-emerald-500/60 font-medium">PROPRIETARY</span>
+                <span className="text-[7px] text-[var(--brand)]/60 font-medium">PROPRIETARY</span>
               </div>
             </div>
           </div>
@@ -153,13 +153,13 @@ export const HeroSection = () => {
             { label: "Latency", val: stats.latency, sub: "Pipeline" }
           ].map((stat) => (
             <div key={stat.label} className="flex flex-col items-center group border-x border-white/5 py-2">
-              <span className="text-xl sm:text-5xl md:text-7xl font-bold text-white mb-1 sm:mb-4 tracking-tighter group-hover:text-emerald-500 transition-colors duration-700">
+              <span className="text-xl sm:text-5xl md:text-7xl font-bold text-white mb-1 sm:mb-4 tracking-tighter group-hover:text-[var(--brand)] transition-colors duration-700">
                 {stat.val}
               </span>
               <span className="text-[8px] sm:text-[12px] font-bold text-gray-400 uppercase tracking-[0.15em] mb-0.5 opacity-60 text-center">
                 {stat.label}
               </span>
-              <span className="text-[7px] text-emerald-500/40 font-medium uppercase tracking-[0.1em]">{stat.sub}</span>
+              <span className="text-[7px] text-[var(--brand)]/40 font-medium uppercase tracking-[0.1em]">{stat.sub}</span>
             </div>
           ))}
         </motion.div>
@@ -175,7 +175,7 @@ export const HeroSection = () => {
         onClick={scrollToDiscovery}
       >
         <span className="text-[10px] font-medium uppercase tracking-[0.4em] text-white rotate-90 mb-8 whitespace-nowrap">Scroll Discovery</span>
-        <div className="w-[1px] h-12 bg-gradient-to-b from-emerald-500 to-transparent" />
+        <div className="w-[1px] h-12 bg-gradient-to-b from-[var(--brand)] to-transparent" />
       </motion.div>
 
     </div>

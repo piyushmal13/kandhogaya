@@ -45,8 +45,13 @@
     --warning: #f59e0b;
     --danger: #ef4444;
     --info: #06b6d4;
+    
+    /* ── Single Brand Color System ── */
     --brand: #10b981;
     --brand-dark: #065f46;
+    --brand-subtle: rgba(16, 185, 129, 0.12);
+    --brand-glow: rgba(16, 185, 129, 0.4);
+    --brand-glow-subtle: rgba(16, 185, 129, 0.1);
 
     /* ── Spacing Scale (Section / Content) ── */
     --space-section: 12rem;

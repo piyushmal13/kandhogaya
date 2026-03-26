@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
 import { TrendingUp, TrendingDown, Activity, Zap } from 'lucide-react';
 
@@ -22,10 +22,8 @@ const INITIAL_PAIRS: MarketPair[] = [
   { symbol: "SOL/USD", price: "148.20", change: "+4.12%", up: true, baseSymbol: "SOL", volume: "4.2B" },
 ];
 
-
 const TWELVE_DATA_KEY = import.meta.env.VITE_TWELVE_DATA_KEY as string | undefined;
 const SYMBOLS = "XAU/USD,EUR/USD,BTC/USD,USD/JPY,GBP/USD,ETH/USD,SOL/USD,IXIC";
-
 
 export const MarketTicker = () => {
   const [pairs, setPairs] = useState<MarketPair[]>(INITIAL_PAIRS);
@@ -34,12 +32,111 @@ export const MarketTicker = () => {
   const [marketStatus, setMarketStatus] = useState<"OPEN" | "CLOSED">("OPEN");
   const prefersReducedMotion = useReducedMotion();
   const containerRef = useRef<HTMLDivElement>(null);
+  const isMounted = useRef(true);
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+
+  const simulateData = useCallback(() => {
+    if (!isMounted.current) return;
+    
+    setPairs(prev => prev.map(p => {
+      const currentPrice = Number.parseFloat(p.price.replace(',', ''));
+      const volatility = 0.0005;
+      const change = currentPrice * (Math.random() - 0.5) * volatility;
+      const newPrice = currentPrice + change;
+      
+      const decimals = p.price.includes('.') ? p.price.split('.')[1].length : 2;
+      
+      return {
+        ...p,
+        price: newPrice.toLocaleString(undefined, { 
+          minimumFractionDigits: decimals,
+          maximumFractionDigits: decimals 
+        })
+      };
+    }));
+    setLastUpdate(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+  }, []);
+
+  const fetchData = useCallback(async () => {
+    if (!isMounted.current) return;
+    
+    setIsSyncing(true);
+    
+    if (!TWELVE_DATA_KEY) {
+      simulateData();
+      setTimeout(() => {
+        if (isMounted.current) setIsSyncing(false);
+      }, 800);
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `https://api.twelvedata.com/quote?symbol=${SYMBOLS}&apikey=${TWELVE_DATA_KEY}`
+      );
+      const data = await response.json();
+      const items = data.symbol ? { [data.symbol]: data } : data;
+
+      const newPairs = Object.entries(items).map(([sym, details]: [string, any]) => {
+        if (!details || details.code || details.status === "error" || !details.close) return null;
+
+        const base = sym.split('/')[0];
+        const price = Number.parseFloat(details.close) || 0;
+        const pct = Number.parseFloat(details.percent_change) || 0;
+        
+        const formattedPrice = price.toLocaleString(undefined, { 
+          minimumFractionDigits: price < 10 ? 4 : 2,
+          maximumFractionDigits: price < 10 ? 4 : 2 
+        });
+
+        let displaySymbol = base;
+        if (base === "XAU") displaySymbol = "GOLD";
+        else if (base === "IXIC") displaySymbol = "NAS100";
+
+        return {
+          symbol: sym.replace('/', ''),
+          price: formattedPrice,
+          change: (pct >= 0 ? "+" : "") + pct.toFixed(2) + "%",
+          up: pct >= 0,
+          baseSymbol: displaySymbol,
+          volume: details.volume ? (Number.parseInt(details.volume) / 1000000).toFixed(1) + "M" : undefined
+        };
+      }).filter(p => p !== null) as MarketPair[];
+
+      if (isMounted.current && newPairs.length > 0) {
+        setPairs(newPairs);
+        setLastUpdate(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+      }
+    } catch (err) {
+      if (isMounted.current) {
+        console.error("Institutional Data Sync Error:", err);
+        simulateData();
+      }
+    } finally {
+      if (isMounted.current) {
+        setTimeout(() => {
+          if (isMounted.current) setIsSyncing(false);
+        }, 2000);
+      }
+    }
+  }, [simulateData]);
+
+  useEffect(() => {
+    fetchData();
+    const interval = setInterval(fetchData, TWELVE_DATA_KEY ? 60000 : 5000);
+    return () => clearInterval(interval);
+  }, [fetchData]);
 
   useEffect(() => {
     const checkMarketStatus = () => {
       const now = new Date();
       const day = now.getUTCDay();
-      // Simple ForeX market (approx 24h Mon-Fri)
       const isWeekend = day === 0 || day === 6;
       setMarketStatus(isWeekend ? "CLOSED" : "OPEN");
     };
@@ -47,99 +144,7 @@ export const MarketTicker = () => {
     const statusInterval = setInterval(checkMarketStatus, 60000);
     return () => clearInterval(statusInterval);
   }, []);
-  useEffect(() => {
-    let isMounted = true;
-    
-    // Simulation Logic for when API key is missing
-    const simulateData = () => {
-      if (!isMounted) return;
-      setPairs(prev => prev.map(p => {
-        const currentPrice = Number.parseFloat(p.price.replace(',', ''));
-        const volatility = 0.0005; // 0.05% fluctuation
-        const change = currentPrice * (Math.random() - 0.5) * volatility;
-        const newPrice = currentPrice + change;
-        
-        return {
-          ...p,
-          price: newPrice.toLocaleString(undefined, { 
-            minimumFractionDigits: p.price.includes('.') ? (p.price.split('.')[1].length) : 2,
-            maximumFractionDigits: p.price.includes('.') ? (p.price.split('.')[1].length) : 2 
-          })
-        };
-      }));
-      setLastUpdate(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
-    };
 
-    const fetchData = async () => {
-      if (!isMounted) return;
-      
-      setIsSyncing(true);
-      
-      if (!TWELVE_DATA_KEY) {
-        simulateData();
-        setTimeout(() => setIsSyncing(false), 800);
-        return;
-      }
-
-      try {
-        const response = await fetch(
-          `https://api.twelvedata.com/quote?symbol=${SYMBOLS}&apikey=${TWELVE_DATA_KEY}`
-        );
-        const data = await response.json();
-
-        // Handle both single and multi-symbol responses
-        const items = data.symbol ? { [data.symbol]: data } : data;
-
-        const newPairs = Object.entries(items).map(([sym, details]: [string, any]) => {
-          if (!details || details.code || details.status === "error" || !details.close) return null;
-
-          const base = sym.split('/')[0];
-          const price = Number.parseFloat(details.close) || 0;
-          const pct = Number.parseFloat(details.percent_change) || 0;
-          
-          let formattedPrice = price.toLocaleString(undefined, { 
-            minimumFractionDigits: price < 10 ? 4 : 2,
-            maximumFractionDigits: price < 10 ? 4 : 2 
-          });
-
-          let displaySymbol = base;
-          if (base === "XAU") displaySymbol = "GOLD";
-          else if (base === "IXIC") displaySymbol = "NAS100";
-
-          return {
-            symbol: sym.replace('/', ''),
-            price: formattedPrice,
-            change: (pct >= 0 ? "+" : "") + pct.toFixed(2) + "%",
-            up: pct >= 0,
-            baseSymbol: displaySymbol,
-            volume: details.volume ? (Number.parseInt(details.volume) / 1000000).toFixed(1) + "M" : undefined
-          };
-        }).filter(p => p !== null) as MarketPair[];
-
-        if (isMounted && newPairs.length > 0) {
-          setPairs(newPairs);
-          setLastUpdate(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
-        }
-      } catch (err) {
-        if (isMounted) console.error("Institutional Data Sync Error:", err);
-        // Fallback to simulation on error
-        simulateData();
-      } finally {
-        if (isMounted) { // Corrected condition: ensure component is mounted before setting state
-          setTimeout(() => setIsSyncing(false), 2000);
-        }
-      }
-    };
-
-    fetchData();
-    const interval = setInterval(fetchData, TWELVE_DATA_KEY ? 60000 : 5000); // 1 minute interval for maximum stability
-    return () => {
-      isMounted = false;
-      clearInterval(interval);
-    };
-  }, []);
-
-  // Triple the pairs for a truly seamless infinite loop
   const tickerItems = useMemo(() => [...pairs, ...pairs, ...pairs], [pairs]);
 
   return (
@@ -147,15 +152,13 @@ export const MarketTicker = () => {
       ref={containerRef}
       className="relative w-full h-[70px] md:h-[90px] bg-[#020202] border-y border-white/5 overflow-hidden flex items-center z-50 transform-gpu"
     >
-      {/* Dynamic Background Overlays */}
       <div className="absolute inset-0 bg-gradient-to-r from-[var(--brand)]/[0.02] via-transparent to-cyan-500/[0.02] pointer-events-none" />
       <div className="absolute inset-0 backdrop-blur-3xl pointer-events-none" />
       
-      {/* 10k Dashboard: Left Status */}
       <div className="absolute left-0 top-0 bottom-0 z-[60] flex items-center px-6 md:px-10 bg-[#020202]/95 border-r border-white/5 shadow-[30px_0_50px_rgba(0,0,0,1)]">
         <div className="flex items-center gap-4">
           <div className="relative">
-            <div className={`w-3 h-3 rounded-full transition-all duration-1000 ${marketStatus === "OPEN" ? 'bg-[var(--brand)] shadow-[0_0_15px_rgba(131,255,200,0.5)]' : 'bg-red-500 shadow-[0_0_15px_rgba(244,63,94,0.5)]'}`} />
+            <div className={`w-3 h-3 rounded-full transition-all duration-1000 ${marketStatus === "OPEN" ? 'bg-[var(--brand)] shadow-[0_0_15px_var(--brand-glow)]' : 'bg-red-500 shadow-[0_0_15px_rgba(244,63,94,0.5)]'}`} />
             {marketStatus === "OPEN" && (
               <motion.div 
                 animate={{ scale: [1, 2.5], opacity: [0.3, 0] }} 
@@ -175,9 +178,7 @@ export const MarketTicker = () => {
         </div>
       </div>
 
-      {/* Scroller Engine */}
       <div className="flex-1 relative h-full flex items-center overflow-hidden">
-        {/* Soft Vignettes */}
         <div className="absolute left-0 top-0 bottom-0 w-40 bg-gradient-to-r from-[#020202] via-transparent to-transparent z-10" />
         <div className="absolute right-0 top-0 bottom-0 w-40 bg-gradient-to-l from-[#020202] via-transparent to-transparent z-10" />
 
@@ -193,8 +194,7 @@ export const MarketTicker = () => {
               className="flex items-center gap-12 px-10 hover:bg-white/[0.02] transition-colors group cursor-default"
             >
               <div className="flex items-center gap-6">
-                {/* Visual Accent */}
-                <div className={`w-[2px] h-6 rounded-full transition-all duration-700 group-hover:h-8 ${item.up ? 'bg-[var(--brand)] shadow-[0_0_15px_rgba(131,255,200,0.4)]' : 'bg-red-500 shadow-[0_0_15px_rgba(244,63,94,0.4)]'}`} />
+                <div className={`w-[2px] h-6 rounded-full transition-all duration-700 group-hover:h-8 ${item.up ? 'bg-[var(--brand)] shadow-[0_0_15px_var(--brand-glow)]' : 'bg-red-500 shadow-[0_0_15px_rgba(244,63,94,0.4)]'}`} />
                 
                 <div className="flex flex-col">
                   <span className="text-white font-bold text-sm md:text-base tracking-[0.1em] font-sans flex items-center gap-2">
@@ -216,21 +216,19 @@ export const MarketTicker = () => {
                     }
                   </span>
                   <div className={`text-[10px] font-bold rounded-full px-3 py-0.5 border mt-1 tracking-wider ${
-                    item.up ? 'text-[var(--brand)] bg-emerald-500/5 border-emerald-500/10' : 'text-red-400 bg-red-500/5 border-red-500/10'
+                    item.up ? 'text-[var(--brand)] bg-[var(--brand)]/5 border-[var(--brand)]/10' : 'text-red-400 bg-red-500/5 border-red-500/10'
                   }`}>
                     {item.change}
                   </div>
                 </div>
               </div>
               
-              {/* Divider Beam */}
               <div className="h-10 w-px bg-white/5" />
             </div>
           ))}
         </motion.div>
       </div>
 
-      {/* Institutional Hardware: Right Statistics */}
       <div className="hidden xl:flex absolute right-0 top-0 bottom-0 z-[60] items-center px-10 bg-[#020202]/90 border-l border-white/5 shadow-[-30px_0_50px_rgba(0,0,0,1)]">
         <div className="flex items-center gap-10">
           <div className="flex items-center gap-4 group">
@@ -256,5 +254,3 @@ export const MarketTicker = () => {
     </div>
   );
 };
-
-

@@ -58,7 +58,11 @@ export const Navbar = () => {
     <>
       <nav className="fixed inset-x-0 top-3 sm:top-6 z-50 px-3 sm:px-12">
         <div className="mx-auto flex h-14 sm:h-20 max-w-7xl items-center justify-between rounded-full border border-white/5 bg-black/40 px-5 sm:px-8 shadow-[0_32px_80px_rgba(0,0,0,0.6)] backdrop-blur-3xl transition-all duration-700 hover:border-white/10">
-          <Link to="/" className="flex items-center gap-4 group"> <div className="flex items-center justify-center overflow-hidden rounded-xl bg-white p-2 transition-all duration-700 group-hover:scale-105 border-2 border-emerald-500/20 shadow-[0_0_30px_rgba(16,185,129,0.3)] h-12 w-12 sm:h-14 sm:w-14"> <img src={BRANDING.logoUrl} alt={BRANDING.name} className="h-full w-full object-contain" /> </div> </Link>
+          <Link to="/" className="flex items-center gap-4 group">
+            <div className="flex items-center justify-center overflow-hidden rounded-xl bg-white p-2.5 transition-all duration-700 group-hover:scale-105 border-2 border-[var(--brand)]/20 shadow-[0_0_40px_rgba(16,185,129,0.3)] h-14 w-14 sm:h-18 sm:w-18">
+              <img src={BRANDING.logoUrl} alt={BRANDING.name} className="h-full w-full object-contain" />
+            </div>
+          </Link>
 
           <div className="hidden md:flex items-center gap-6">
             <div className="flex items-center gap-4">
@@ -126,7 +130,7 @@ export const Navbar = () => {
             {user ? null : (
               <Link
                 to="/login"
-                className="rounded-full border border-white/10 bg-white/5 px-6 py-2.5 text-[10px] font-black text-white uppercase tracking-[0.2em] bg-emerald-500/10 border border-emerald-500/30 rounded-full hover:bg-emerald-500/20 transition-all duration-500"
+                className="rounded-full border border-white/10 bg-white/5 px-6 py-2.5 text-[10px] font-black text-white uppercase tracking-[0.2em] bg-[var(--brand)]/10 border-[var(--brand)]/30 rounded-full hover:bg-[var(--brand)]/20 transition-all duration-500"
               >
                 Sign In
               </Link>
@@ -164,8 +168,8 @@ export const Navbar = () => {
               <div className="p-6 flex flex-col min-h-full">
                 <div className="flex items-center justify-between mb-8">
                   <Link to="/" onClick={() => setIsOpen(false)} className="flex items-center group">
-                    <div className="flex items-center justify-center overflow-hidden rounded-2xl bg-white/[0.04] p-0 transition-all duration-700 h-8 w-8 border border-white/5">
-                      <ResizedImage src={BRANDING.logoUrl} alt="Logo" className="h-full w-full object-contain p-2" />
+                    <div className="flex items-center justify-center overflow-hidden rounded-2xl bg-white p-1 transition-all duration-700 h-12 w-12 border-2 border-[var(--brand)]/20 shadow-[0_0_20px_var(--brand-glow-subtle)]">
+                      <ResizedImage src={BRANDING.logoUrl} alt="Logo" className="h-full w-full object-contain p-1" />
                     </div>
                   </Link>
                   <button
@@ -189,7 +193,7 @@ export const Navbar = () => {
                           className={cn(
                             "flex items-center gap-4 rounded-xl border px-4 py-3.5 transition-all duration-300",
                             location.pathname === link.path
-                              ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-400"
+                              ? "border-[var(--brand)]/20 bg-[var(--brand)]/10 text-[var(--brand)]"
                               : "border-white/[0.03] bg-white/[0.02] text-slate-400 hover:border-white/[0.1] hover:bg-white/[0.05]",
                           )}
                         >
@@ -237,7 +241,7 @@ export const Navbar = () => {
                         <Link
                           to="/login"
                           onClick={() => setIsOpen(false)}
-                          className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 px-5 py-3 text-sm font-bold text-slate-950 shadow-[0_10px_30px_rgba(16,185,129,0.2)] hover:bg-emerald-400 transition-all"
+                          className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--brand)] px-5 py-3 text-sm font-bold text-slate-950 shadow-[0_10px_30px_rgba(16,185,129,0.2)] hover:bg-[var(--brand)]/80 transition-all"
                         >
                           Access Platform
                           <ArrowRight className="h-4 w-4" />
@@ -262,8 +266,8 @@ export const Navbar = () => {
                     </button>
                   ) : null}
 
-                  <div className="mt-6 p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/10">
-                    <div className="text-[9px] font-bold text-emerald-500 uppercase tracking-[0.2em] mb-1">Status: Operational</div>
+                  <div className="mt-6 p-4 rounded-xl bg-[var(--brand)]/5 border border-[var(--brand)]/10">
+                    <div className="text-[9px] font-bold text-[var(--brand)] uppercase tracking-[0.2em] mb-1">Status: Operational</div>
                     <div className="text-[10px] text-slate-500 leading-relaxed font-medium">
                       Market protocols and institutional access layers are currently online for your region.
                     </div>
