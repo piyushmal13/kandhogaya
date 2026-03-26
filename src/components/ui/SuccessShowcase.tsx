@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Star, CheckCircle2, Quote, ChevronLeft, ChevronRight } from "lucide-react";
 import { fetchReviews } from "../../services/reviewService";
@@ -6,7 +6,6 @@ import { fetchReviews } from "../../services/reviewService";
 export const SuccessShowcase = () => {
   const [reviews, setReviews] = useState<any[]>([]);
   const [index, setIndex] = useState(0);
-  const [direction, setDirection] = useState(0);
 
   useEffect(() => {
     fetchReviews().then(data => {
@@ -16,153 +15,116 @@ export const SuccessShowcase = () => {
     });
   }, []);
 
-  const slideVariants = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? 300 : -300,
-      opacity: 0,
-      scale: 0.9,
-      filter: "blur(10px)",
-    }),
-    center: {
-      zIndex: 1,
-      x: 0,
-      opacity: 1,
-      scale: 1,
-      filter: "blur(0px)",
-    },
-    exit: (direction: number) => ({
-      zIndex: 0,
-      x: direction < 0 ? 300 : -300,
-      opacity: 0,
-      scale: 0.9,
-      filter: "blur(10px)",
-    }),
+  const nextSlide = () => {
+    setIndex((prev) => (prev + 1) % Math.max(1, reviews.length - 2));
   };
 
-  const paginate = (newDirection: number) => {
-    setDirection(newDirection);
-    setIndex((prev) => (prev + newDirection + reviews.length) % reviews.length);
+  const prevSlide = () => {
+    setIndex((prev) => (prev - 1 + Math.max(1, reviews.length - 2)) % Math.max(1, reviews.length - 2));
   };
 
   if (reviews.length === 0) return null;
 
-  const currentReview = reviews[index];
-
   return (
-    <section className="py-24 md:py-48 relative overflow-hidden bg-black/40">
-      {/* Dynamic Background Effects */}
-      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[var(--brand)]/5 rounded-full blur-[140px] pointer-events-none animate-pulse" />
-      <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-cyan-500/5 rounded-full blur-[140px] pointer-events-none animate-pulse" style={{ animationDelay: '2s' }} />
-
+    <section className="py-24 md:py-40 relative overflow-hidden bg-black/20">
+      <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[var(--brand)]/5 rounded-full blur-[140px] pointer-events-none" />
+      
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="text-center mb-16 md:mb-32">
+        <div className="text-center mb-16 md:mb-24">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <span className="text-[var(--brand)] font-bold text-[10px] md:text-xs uppercase tracking-[0.5em] mb-6 inline-block opacity-80">Institutional Validation</span>
-            <h2 className="text-4xl md:text-8xl font-black text-white mb-10 tracking-tighter leading-[0.9] uppercase">
-              The Protocol <br/> <span className="italic font-serif text-[var(--brand)] opacity-80">Verified</span>
+            <span className="text-[var(--brand)] font-bold text-[10px] md:text-xs uppercase tracking-[0.5em] mb-6 inline-block opacity-60">Success Audit</span>
+            <h2 className="text-4xl md:text-7xl font-bold text-white mb-8 tracking-tighter leading-none">
+              Institutional <span className="italic font-serif text-[var(--brand)]">Feedback</span>
             </h2>
-            <p className="max-w-2xl mx-auto text-sm md:text-xl font-medium tracking-tight opacity-40 uppercase" style={{ color: 'var(--text-muted)' }}>
-              Cross-referenced performance audits and real-time execution feedback from our elite global user base.
+            <p className="max-w-xl mx-auto text-xs md:text-sm font-medium tracking-widest opacity-30 uppercase">
+              Real-time sentiment from 12,000+ active trading nodes.
             </p>
           </motion.div>
         </div>
 
-        {/* Main Slider Area */}
-        <div className="relative max-w-5xl mx-auto min-h-[450px] md:min-h-[550px] flex items-center justify-center">
-          
-          {/* Navigation Controls */}
-          <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between z-30 px-2 md:-mx-20">
-            <button 
-              onClick={() => paginate(-1)}
-              className="w-12 h-12 md:w-16 md:h-16 rounded-full border border-white/10 bg-white/5 backdrop-blur-3xl flex items-center justify-center text-white hover:bg-white/10 hover:border-[var(--brand)]/30 hover:scale-110 transition-all duration-500 group"
-            >
-              <ChevronLeft className="w-6 h-6 md:w-8 md:h-8 group-hover:-translate-x-1 transition-transform" />
-            </button>
-            <button 
-              onClick={() => paginate(1)}
-              className="w-12 h-12 md:w-16 md:h-16 rounded-full border border-white/10 bg-white/5 backdrop-blur-3xl flex items-center justify-center text-white hover:bg-white/10 hover:border-[var(--brand)]/30 hover:scale-110 transition-all duration-500 group"
-            >
-              <ChevronRight className="w-6 h-6 md:w-8 md:h-8 group-hover:translate-x-1 transition-transform" />
-            </button>
+        {/* Multi-Review Horizontal Scroll - Institutional Grade */}
+        <div className="relative">
+          <div className="flex items-center justify-between mb-12">
+             <div className="flex gap-4">
+               <button 
+                 onClick={prevSlide}
+                 className="w-12 h-12 rounded-full border border-white/5 bg-white/5 flex items-center justify-center text-white hover:bg-white/10 hover:border-[var(--brand)]/30 transition-all"
+               >
+                 <ChevronLeft className="w-5 h-5" />
+               </button>
+               <button 
+                 onClick={nextSlide}
+                 className="w-12 h-12 rounded-full border border-white/5 bg-white/5 flex items-center justify-center text-white hover:bg-white/10 hover:border-[var(--brand)]/30 transition-all"
+               >
+                 <ChevronRight className="w-5 h-5" />
+               </button>
+             </div>
+             <div className="hidden md:flex items-center gap-4">
+                <div className="h-px w-24 bg-gradient-to-r from-[var(--brand)]/50 to-transparent" />
+                <span className="text-[10px] font-bold text-white/20 tracking-widest uppercase">Live Transmission</span>
+             </div>
           </div>
 
-          <AnimatePresence initial={false} custom={direction} mode="wait">
-            <motion.div
-              key={index}
-              custom={direction}
-              variants={slideVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={{
-                x: { type: "spring", stiffness: 300, damping: 30 },
-                opacity: { duration: 0.6 },
-                scale: { duration: 0.6 },
-                filter: { duration: 0.6 }
-              }}
-              className="w-full absolute"
+          <div className="overflow-hidden">
+            <motion.div 
+              className="flex gap-6"
+              animate={{ x: `calc(-${index * 100}% / 3)` }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
-              <div className="glass-card relative p-10 md:p-20 border-white/5 backdrop-blur-3xl overflow-hidden shadow-[0_40px_100px_rgba(0,0,0,0.6)] group">
-                {/* Visual Motif */}
-                <div className="absolute -top-10 -right-10 opacity-5 group-hover:opacity-10 transition-opacity">
-                  <Quote className="w-40 h-40 md:w-60 md:h-60 text-[var(--brand)]" />
-                </div>
-
-                <div className="relative z-10">
-                  <div className="flex gap-2 mb-10 md:mb-14 justify-center md:justify-start">
-                    {Array.from({ length: currentReview.rating || 5 }).map((_, j) => (
-                      <Star key={`star-${currentReview.id || currentReview.name}-${j}`} className="w-5 h-5 md:w-7 md:h-7 text-[var(--brand)] fill-[var(--brand)] shadow-[0_0_20px_var(--brand-glow)]" />
-                    ))}
-                  </div>
-
-                  <blockquote className="text-white text-2xl md:text-5xl font-medium leading-[1.2] mb-12 md:mb-20 tracking-tight italic text-center md:text-left">
-                    "{currentReview.text}"
-                  </blockquote>
-
-                  <div className="flex flex-col md:flex-row items-center gap-6 pt-10 md:pt-12 border-t border-white/5">
-                    <div className="relative">
-                      <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-[var(--brand)]/10 flex items-center justify-center text-[var(--brand)] font-black text-2xl md:text-3xl border border-[var(--brand)]/30 shadow-[0_0_30px_var(--brand-glow-subtle)]">
-                        {currentReview.name?.charAt(0) || "U"}
+              {reviews.map((rev, i) => (
+                <div 
+                  key={rev.id || i}
+                  className="min-w-full sm:min-w-[calc(50%-12px)] lg:min-w-[calc(33.333%-16px)]"
+                >
+                  <div className="glass-card p-8 md:p-10 border-white/5 backdrop-blur-2xl h-full flex flex-col justify-between group hover:border-[var(--brand)]/20 transition-all duration-700">
+                    <div>
+                      <div className="flex gap-1 mb-6">
+                        {Array.from({ length: rev.rating || 5 }).map((_, j) => (
+                          <Star key={`star-${rev.id || i}-${j}`} className="w-3.5 h-3.5 text-[var(--brand)] fill-[var(--brand)]" />
+                        ))}
                       </div>
-                      {currentReview.is_verified !== false && (
-                        <div className="absolute -bottom-1 -right-1 bg-black rounded-full p-1 border border-white/10">
-                          <CheckCircle2 className="w-5 h-5 md:w-6 md:h-6 text-[var(--brand)]" />
-                        </div>
-                      )}
+                      <blockquote className="text-white text-base md:text-lg font-medium leading-relaxed mb-8 opacity-80 line-clamp-4">
+                        "{rev.text}"
+                      </blockquote>
                     </div>
-                    <div className="text-center md:text-left">
-                      <div className="text-white font-black text-lg md:text-2xl flex items-center gap-3 justify-center md:justify-start uppercase tracking-widest leading-none mb-2">
-                        {currentReview.name}
-                        {currentReview.is_verified !== false && (
-                          <span className="text-[10px] md:text-xs text-[var(--brand)]/80 font-black tracking-[0.3em] bg-[var(--brand)]/10 px-3 py-1 rounded-full">CORE VERIFIED</span>
+
+                    <div className="flex items-center gap-4 pt-6 border-t border-white/5">
+                      <div className="relative">
+                        <div className="w-10 h-10 rounded-full bg-[var(--brand)]/10 flex items-center justify-center text-[var(--brand)] font-black text-sm border border-[var(--brand)]/20">
+                          {rev.name?.charAt(0) || "U"}
+                        </div>
+                        {rev.is_verified !== false && (
+                          <div className="absolute -bottom-1 -right-1 bg-black rounded-full p-0.5 border border-white/10">
+                            <CheckCircle2 className="w-3 h-3 text-[var(--brand)]" />
+                          </div>
                         )}
                       </div>
-                      <div className="text-[10px] md:text-xs uppercase tracking-[0.4em] font-bold opacity-40 text-[var(--text-muted)]">{currentReview.role || "INSTITUTIONAL TRADER"}</div>
+                      <div>
+                        <div className="text-white font-bold text-xs md:text-sm flex items-center gap-2">
+                          {rev.name}
+                        </div>
+                        <div className="text-[8px] uppercase tracking-[0.2em] font-medium opacity-30">{rev.role || "Elite Trader"}</div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              ))}
             </motion.div>
-          </AnimatePresence>
+          </div>
         </div>
 
-        {/* Progress Dots */}
-        <div className="mt-16 md:mt-24 flex justify-center gap-3">
-          {reviews.slice(0, 8).map((rev, i) => (
+        <div className="mt-16 flex justify-center gap-2">
+          {Array.from({ length: Math.ceil(reviews.length / 3) }).map((_, i) => (
             <button
-              key={`dot-${rev.id || i}`}
-              onClick={() => {
-                setDirection(i > index ? 1 : -1);
-                setIndex(i);
-              }}
-              className={`h-1.5 md:h-2 rounded-full transition-all duration-700 ${
-                i === index ? "w-8 md:w-16 bg-[var(--brand)] shadow-[0_0_15px_var(--brand-glow)]" : "w-1.5 md:w-2 bg-white/10 hover:bg-white/30"
+              key={`dot-${i}`}
+              onClick={() => setIndex(i)}
+              className={`h-1 rounded-full transition-all duration-500 ${
+                i === index ? "w-10 bg-[var(--brand)]" : "w-2 bg-white/10"
               }`}
-              aria-label={`Go to slide ${i + 1}`}
             />
           ))}
         </div>

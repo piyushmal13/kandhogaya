@@ -140,42 +140,57 @@ export const HeroSection = () => {
           </div>
         </motion.div>
 
-        {/* --- One-Part Dashboard --- */}
+        {/* --- Institutional Stats Dashboard --- */}
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.5, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-16 md:mt-24 w-full grid grid-cols-3 gap-2 sm:gap-20 max-w-5xl mx-auto px-2 border-t border-white/5 pt-12"
+          className="mt-20 md:mt-32 w-full grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-12 md:gap-20 max-w-6xl mx-auto px-6 border-t border-white/5 pt-12 sm:pt-16 pb-12 sm:pb-0"
         >
           {[
-            { label: "Nodes", val: stats.traders, sub: "Live" },
-            { label: "Win Rate", val: stats.winRate, sub: "Audited" },
-            { label: "Latency", val: stats.latency, sub: "Pipeline" }
+            { label: "Institutional Nodes", val: stats.traders, sub: "Validated Live" },
+            { label: "Execution Accuracy", val: stats.winRate, sub: "Real-time Audited" },
+            { label: "Direct Pipeline", val: stats.latency, sub: "Hyper-Low Latency" }
           ].map((stat) => (
-            <div key={stat.label} className="flex flex-col items-center group border-x border-white/5 py-2">
-              <span className="text-xl sm:text-5xl md:text-7xl font-bold text-white mb-1 sm:mb-4 tracking-tighter group-hover:text-[var(--brand)] transition-colors duration-700">
+            <div key={stat.label} className="flex flex-col items-center group sm:border-x sm:border-white/5 py-4 sm:py-2">
+              <span className="text-4xl sm:text-5xl md:text-7xl font-bold text-white mb-2 sm:mb-4 tracking-tighter group-hover:text-[var(--brand)] transition-colors duration-1000 group-hover:drop-shadow-[0_0_15px_var(--brand-glow)]">
                 {stat.val}
               </span>
-              <span className="text-[8px] sm:text-[12px] font-bold text-gray-400 uppercase tracking-[0.15em] mb-0.5 opacity-60 text-center">
-                {stat.label}
-              </span>
-              <span className="text-[7px] text-[var(--brand)]/40 font-medium uppercase tracking-[0.1em]">{stat.sub}</span>
+              <div className="flex flex-col items-center gap-1.5">
+                <span className="text-[9px] sm:text-[11px] font-bold text-gray-400 uppercase tracking-[0.25em] opacity-40 group-hover:opacity-80 transition-opacity">
+                  {stat.label}
+                </span>
+                <span className="text-[8px] text-[var(--brand)]/40 font-medium uppercase tracking-[0.1em]">{stat.sub}</span>
+              </div>
             </div>
           ))}
         </motion.div>
 
       </div>
 
-      {/* --- Scroll Indicator --- */}
+      {/* --- Refined Scroll Indicator --- */}
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 2, duration: 1 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 opacity-20 hover:opacity-100 transition-opacity cursor-pointer md:block hidden"
+        transition={{ delay: 2, duration: 1.5 }}
+        className="absolute bottom-6 sm:bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 opacity-40 hover:opacity-100 transition-all duration-700 cursor-pointer group scale-75 sm:scale-100 z-30"
         onClick={scrollToDiscovery}
       >
-        <span className="text-[10px] font-medium uppercase tracking-[0.4em] text-white rotate-90 mb-8 whitespace-nowrap">Scroll Discovery</span>
-        <div className="w-[1px] h-12 bg-gradient-to-b from-[var(--brand)] to-transparent" />
+        <div className="relative">
+          <span className="text-[9px] font-bold uppercase tracking-[0.5em] text-[var(--brand)] whitespace-nowrap mb-6 rotate-180 [writing-mode:vertical-lr] opacity-30 group-hover:opacity-100 transition-opacity">
+            Discover Ecosystem
+          </span>
+          <div className="absolute top-0 right-1/2 translate-x-1/2 w-[1px] h-full bg-gradient-to-b from-[var(--brand)] via-[var(--brand)]/20 to-transparent" />
+        </div>
+        
+        {/* Animated Mouse/Dot */}
+        <div className="w-5 h-8 border border-white/20 rounded-full flex justify-center p-1.5 backdrop-blur-sm">
+          <motion.div 
+            animate={{ y: [0, 10, 0] }}
+            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+            className="w-1 h-2 bg-[var(--brand)] rounded-full shadow-[0_0_8px_var(--brand-glow)]"
+          />
+        </div>
       </motion.div>
 
     </div>
