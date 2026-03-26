@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "motion/react";
-import { Star, CheckCircle2, Quote, ChevronLeft, ChevronRight } from "lucide-react";
+import { motion } from "motion/react";
+import { Star, CheckCircle2, ChevronLeft, ChevronRight } from "lucide-react";
 import { fetchReviews } from "../../services/reviewService";
 
 export const SuccessShowcase = () => {
@@ -118,15 +118,18 @@ export const SuccessShowcase = () => {
         </div>
 
         <div className="mt-16 flex justify-center gap-2">
-          {Array.from({ length: Math.ceil(reviews.length / 3) }).map((_, i) => (
-            <button
-              key={`dot-${i}`}
+          {Array.from({ length: Math.ceil(reviews.length / 3) }).map((_, i) => {
+            const firstReviewOnPage = reviews[i * 3];
+            return (
+              <button
+                key={`nav-dot-${firstReviewOnPage?.id || i}`}
               onClick={() => setIndex(i)}
               className={`h-1 rounded-full transition-all duration-500 ${
                 i === index ? "w-10 bg-[var(--brand)]" : "w-2 bg-white/10"
               }`}
-            />
-          ))}
+              />
+            );
+          })}
         </div>
       </div>
     </section>
