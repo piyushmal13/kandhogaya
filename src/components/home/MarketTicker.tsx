@@ -168,11 +168,11 @@ export const MarketTicker = () => {
             )}
           </div>
           <div className="flex flex-col">
-            <span className="text-[8px] md:text-[10px] font-bold text-white uppercase tracking-[0.2em] md:tracking-[0.4em] font-sans leading-none opacity-80">
-              {marketStatus} SURFACE
+            <span className="text-[10px] md:text-xs font-bold text-white tracking-[0.2em] font-sans leading-none opacity-80">
+              {lastUpdate || "LIVE TRANS"}
             </span>
-            <span className="text-[7px] md:text-[9px] text-[var(--brand)]/60 font-sans font-medium mt-1 md:mt-1.5 tracking-[0.1em] md:tracking-[0.15em] uppercase">
-              {isSyncing ? "SYNC" : (lastUpdate || "LIVE")}
+            <span className="text-[8px] md:text-[9px] text-[var(--brand)]/60 font-sans font-medium mt-1 tracking-[0.1em] uppercase">
+              {isSyncing ? "SYNC" : "DATAFEED"}
             </span>
           </div>
         </div>

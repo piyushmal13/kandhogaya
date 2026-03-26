@@ -88,10 +88,10 @@ export const HeroSection = () => {
           initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-          className="text-5xl sm:text-7xl md:text-8xl font-black text-white mb-6 leading-tight tracking-[-0.05em]"
+          className="text-4xl sm:text-7xl md:text-8xl font-black text-white mb-6 leading-tight tracking-[-0.05em]"
         >
           Institutional <span className="italic font-serif text-[var(--brand)] opacity-60">Edge</span>. <br className="hidden lg:block" />
-          <span className="text-7xl sm:text-7xl md:text-8xl text-blue-400 italic font-serif">Retail Accessibility</span>.
+          <span className="text-5xl sm:text-7xl md:text-8xl text-blue-400 italic font-serif block mt-2">Retail Accessibility</span>.
         </motion.h1>
         
         {/* --- Subheadline --- */}
