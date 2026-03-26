@@ -4,10 +4,8 @@ import { Calendar, Users, ArrowRight, Zap, ShieldCheck } from "lucide-react";
 import { getWebinars } from "../services/apiHandlers";
 import { WebinarCard } from "../components/webinars/WebinarCard";
 import { RegistrationModal } from "../components/webinars/RegistrationModal";
-import { AttendeeFeed } from "../components/webinars/AttendeeFeed";
 import { WebinarCalendar } from "../components/webinars/WebinarCalendar";
 import { CountdownTimer } from "../components/webinars/CountdownTimer";
-import { ExitIntentPopup } from "../components/webinars/ExitIntentPopup";
 import { PageHero } from "../components/site/PageHero";
 import { PageMeta } from "../components/site/PageMeta";
 import { PageSection } from "../components/site/PageSection";
@@ -44,8 +42,6 @@ export const Webinars = () => {
         path="/webinars"
         keywords={["trading webinars", "live market analysis", "forex webinar"]}
       />
-
-      <AttendeeFeed />
 
       <PageHero
         eyebrow="Live Trading Education"
@@ -110,7 +106,7 @@ export const Webinars = () => {
                   </span>
                 </div>
 
-                <h2 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight tracking-tighter">
+                <h2 className="text-3xl md:text-5xl font-bold text-white mb-6 leading-tight tracking-tighter max-w-2xl">
                   {nextWebinar.title}
                 </h2>
                 
@@ -245,11 +241,6 @@ export const Webinars = () => {
           />
         )}
       </AnimatePresence>
-
-      <ExitIntentPopup 
-        onRegister={() => setSelectedWebinar(nextWebinar)} 
-        webinarTitle={nextWebinar?.title}
-      />
     </div>
   );
 };
