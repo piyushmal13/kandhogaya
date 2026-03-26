@@ -33,8 +33,8 @@ export const HeroSection = () => {
       id: `p-${i}`,
       x: Math.random() * 100,
       y: Math.random() * 100,
-      vx: (Math.random() - 0.5) * 0.1,
-      vy: (Math.random() - 0.5) * 0.1,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
       size: Math.random() * 2 + 1,
       opacity: Math.random() * 0.5 + 0.1
     }));
@@ -88,10 +88,10 @@ export const HeroSection = () => {
           initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-          className="text-4xl sm:text-7xl md:text-8xl font-black text-white mb-6 leading-tight tracking-[-0.05em]"
+          className="text-4xl sm:text-8xl font-black text-white mb-6 leading-tight tracking-[-0.05em]"
         >
           Institutional <span className="italic font-serif text-[var(--brand)] opacity-60">Edge</span>. <br className="hidden lg:block" />
-          <span className="text-5xl sm:text-7xl md:text-8xl text-blue-400 italic font-serif block mt-2">Retail Accessibility</span>.
+          <span className="text-5xl sm:text-8xl text-blue-400 italic font-serif block mt-2 px-2 break-all overflow-hidden">Retail Accessibility</span>.
         </motion.h1>
         
         {/* --- Subheadline --- */}
@@ -145,22 +145,22 @@ export const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.5, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-20 md:mt-32 w-full grid grid-cols-3 gap-2 sm:gap-12 md:gap-20 max-w-6xl mx-auto px-2 border-t border-white/5 pt-12 sm:pt-16 pb-12 sm:pb-0"
+          className="mt-16 md:mt-24 w-full grid grid-cols-3 gap-0 max-w-5xl mx-auto border-t border-white/5 pt-12 pb-12 sm:pb-0"
         >
           {[
             { label: "Nodes", val: stats.traders, sub: "Live" },
             { label: "Win Rate", val: stats.winRate, sub: "Audited" },
             { label: "Latency", val: stats.latency, sub: "Pipeline" }
           ].map((stat) => (
-            <div key={stat.label} className="flex flex-col items-center group sm:border-x sm:border-white/5 py-2">
-              <span className="text-xl sm:text-5xl md:text-7xl font-bold text-white mb-1 sm:mb-4 tracking-tighter group-hover:text-[var(--brand)] transition-colors duration-1000 group-hover:drop-shadow-[0_0_15px_var(--brand-glow)]">
+            <div key={stat.label} className="flex flex-col items-center group py-2">
+              <span className="text-lg sm:text-6xl font-black text-white mb-2 tracking-tighter transition-colors duration-1000 group-hover:text-[var(--brand)]">
                 {stat.val}
               </span>
               <div className="flex flex-col items-center">
-                <span className="text-[7px] sm:text-[11px] font-bold text-gray-400 uppercase tracking-[0.2em] opacity-40 group-hover:opacity-80 transition-opacity">
+                <span className="text-[7px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em] opacity-40 group-hover:opacity-100 transition-opacity">
                   {stat.label}
                 </span>
-                <span className="text-[6px] sm:text-[9px] text-[var(--brand)]/40 font-medium uppercase tracking-[0.1em]">{stat.sub}</span>
+                <span className="text-[6px] sm:text-[8px] text-[var(--brand)]/30 font-bold uppercase tracking-widest">{stat.sub}</span>
               </div>
             </div>
           ))}

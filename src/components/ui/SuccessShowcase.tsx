@@ -1,18 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import React, { useState, useEffect, useRef } from "react";
 import { Star, ChevronLeft, ChevronRight } from "lucide-react";
 import { fetchReviews } from "../../services/reviewService";
 
 export const SuccessShowcase = () => {
   const [reviews, setReviews] = useState<any[]>([]);
-  const [index, setIndex] = useState(0);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetchReviews().then(data => {
       if (data && data.length > 0) {
         setReviews(data);
       } else {
-        // Fallback robust mock data if DB connection is empty
         setReviews([
           { id: 1, name: "Alexander V.", text: "The execution speed is unmatched. Institutional grade signals that actually hit.", role: "Prop Trader", rating: 5 },
           { id: 2, name: "Sarah K.", text: "Finally, a platform that respects retail traders with elite-level datasets.", role: "Quant Analyst", rating: 5 },
@@ -24,116 +22,112 @@ export const SuccessShowcase = () => {
     });
   }, []);
 
-  const nextSlide = () => setIndex((prev) => (prev + 1) % reviews.length);
-  const prevSlide = () => setIndex((prev) => (prev - 1 + reviews.length) % reviews.length);
-
-  const onDragEnd = (event: any, info: any) => {
-    const shift = info.offset.x;
-    if (shift < -50) nextSlide();
-    else if (shift > 50) prevSlide();
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollRef.current) {
+      const { scrollLeft, clientWidth } = scrollRef.current;
+      const scrollAmount = clientWidth * 0.8;
+      scrollRef.current.scrollTo({
+        left: direction === 'left' ? scrollLeft - scrollAmount : scrollLeft + scrollAmount,
+        behavior: 'smooth'
+      });
+    }
   };
 
   if (reviews.length === 0) return null;
 
   return (
-    <section className="py-16 md:py-24 relative overflow-hidden bg-black/10">
-      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[var(--brand)]/5 rounded-full blur-[120px] pointer-events-none" />
+    <section className="py-20 md:py-32 relative overflow-hidden bg-black/40">
+      {/* Institutional Glow Backdrop */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-[var(--brand)]/10 blur-[130px] rounded-full pointer-events-none opacity-40" />
       
       <div className="max-w-7xl mx-auto px-6 relative z-10 text-center">
-        <div className="mb-12 md:mb-16">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-          >
-            <span className="text-[var(--brand)] font-bold text-[9px] uppercase tracking-[0.4em] mb-4 inline-block opacity-50">Global Audit</span>
-            <h2 className="text-3xl md:text-5xl font-bold text-white mb-6 tracking-tighter leading-none">
+        <div className="mb-12 md:mb-20">
+            <span className="text-[var(--brand)] font-bold text-[10px] uppercase tracking-[0.5em] mb-4 inline-block opacity-60">Global Success Audit</span>
+            <h2 className="text-4xl md:text-7xl font-bold text-white mb-6 tracking-tighter leading-none">
               Institutional <span className="italic font-serif text-[var(--brand)]">Sentiment</span>
             </h2>
-          </motion.div>
+            <p className="max-w-2xl mx-auto text-[10px] md:text-sm font-medium tracking-[0.2em] opacity-30 uppercase">
+              Real-time intelligence from 12,000+ active quantitative nodes.
+            </p>
         </div>
 
-        <div className="relative group/carousel max-w-5xl mx-auto">
-          {/* Truly Swipeable Area */}
-          <div className="overflow-visible cursor-grab active:cursor-grabbing">
-            <motion.div 
-              className="flex gap-4 items-stretch"
-              drag="x"
-              dragConstraints={{ left: 0, right: 0 }}
-              onDragEnd={onDragEnd}
-              animate={{ 
-                x: `calc(-${index} * (100% / (window.innerWidth >= 1024 ? 3 : window.innerWidth >= 768 ? 2 : 1)))` 
-              }}
-              transition={{ type: "spring", stiffness: 200, damping: 25 }}
-            >
-              {reviews.map((rev, i) => (
-                <motion.div 
-                  key={rev.id || i}
-                  className="min-w-[100%] sm:min-w-[calc(50%-8px)] lg:min-w-[calc(33.333%-11px)] flex"
-                  animate={{ 
-                    opacity: i === index || (window.innerWidth >= 1024 && (i === index+1 || i === index+2)) ? 1 : 0.3,
-                    scale: i === index ? 1 : 0.95,
-                  }}
-                >
-                  <div className="glass-card p-6 md:p-8 border-white/5 backdrop-blur-2xl h-full flex flex-col justify-between group/card hover:border-[var(--brand)]/20 transition-all duration-700 w-full text-left">
-                    <div>
-                      <div className="flex gap-1 mb-6">
-                        {Array.from({ length: rev.rating || 5 }).map((_, j) => (
-                          <Star key={`star-${rev.id || i}-${j}`} className="w-3 h-3 text-[var(--brand)] fill-[var(--brand)]" />
-                        ))}
-                      </div>
-                      <blockquote className="text-white text-sm md:text-base font-medium leading-relaxed mb-8 opacity-80 line-clamp-4 italic">
-                        "{rev.text}"
-                      </blockquote>
-                    </div>
-
-                    <div className="flex items-center gap-4 pt-6 border-t border-white/5">
-                      <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-[var(--brand)] font-black text-sm border border-white/10">
-                        {rev.name?.charAt(0) || "U"}
-                      </div>
-                      <div>
-                        <div className="text-white font-bold text-xs tracking-tight">{rev.name}</div>
-                        <div className="text-[8px] uppercase tracking-[0.2em] font-medium opacity-30 text-[var(--brand)]">{rev.role || "Trader"}</div>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
+        {/* --- High-Fidelity Native Swipe Carousel --- */}
+        <div className="relative group">
+          {/* Custom Navigation */}
+          <div className="absolute top-1/2 -left-4 -translate-y-1/2 z-20 hidden md:block">
+            <button onClick={() => scroll('left')} className="w-14 h-14 rounded-full border border-white/5 bg-black/50 backdrop-blur-3xl flex items-center justify-center text-white hover:border-[var(--brand)]/40 transition-all shadow-2xl">
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+          </div>
+          <div className="absolute top-1/2 -right-4 -translate-y-1/2 z-20 hidden md:block">
+            <button onClick={() => scroll('right')} className="w-14 h-14 rounded-full border border-white/5 bg-black/50 backdrop-blur-3xl flex items-center justify-center text-white hover:border-[var(--brand)]/40 transition-all shadow-2xl">
+              <ChevronRight className="w-6 h-6" />
+            </button>
           </div>
 
-          {/* Optimized Slim Navigation */}
-          <div className="mt-8 flex items-center justify-center gap-6">
-            <button onClick={prevSlide} className="w-10 h-10 rounded-full border border-white/5 bg-white/5 flex items-center justify-center text-white hover:border-[var(--brand)]/30 transition-all focus:outline-none">
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-            
-            <div className="flex gap-1.5">
-              {(() => {
-                const perPage = globalThis.window !== undefined && globalThis.window.innerWidth >= 1024 ? 3 : 1;
-                const totalPages = Math.ceil(reviews.length / perPage);
-                return Array.from({ length: totalPages }).map((_, i) => {
-                  const startIdx = i * perPage;
-                  const firstRevId = reviews[startIdx]?.id || i;
-                  return (
-                    <button
-                      key={`pg-dot-${firstRevId}-${i}`}
-                      onClick={() => setIndex(startIdx)}
-                      className={`h-1 rounded-full transition-all duration-500 ${
-                        Math.floor(index / perPage) === i ? "w-8 bg-[var(--brand)]" : "w-1.5 bg-white/10"
-                      }`}
-                    />
-                  );
-                });
-              })()}
-            </div>
+          {/* Swipeable Container using Native CSS Snapping */}
+          <div 
+            ref={scrollRef}
+            className="flex gap-4 md:gap-8 overflow-x-auto snap-x snap-mandatory scrollbar-none pb-12 px-2 mask-linear-edges"
+            style={{ 
+              msOverflowStyle: 'none', 
+              scrollbarWidth: 'none',
+              WebkitOverflowScrolling: 'touch'
+            }}
+          >
+            {reviews.map((rev, i) => (
+              <div 
+                key={rev.id || i}
+                className="min-w-[85%] sm:min-w-[400px] lg:min-w-[450px] snap-center flex-shrink-0"
+              >
+                <div className="glass-card p-8 md:p-12 border-white/5 backdrop-blur-3xl h-full flex flex-col justify-between group/card hover:border-[var(--brand)]/20 transition-all duration-1000 bg-white/[0.02] rounded-3xl">
+                  <div>
+                    <div className="flex gap-1.5 mb-8">
+                      {Array.from({ length: rev.rating || 5 }).map((_, j) => (
+                        <Star key={`star-${rev.id || i}-${j}`} className="w-3.5 h-3.5 text-[var(--brand)] fill-[var(--brand)]" />
+                      ))}
+                    </div>
+                    <blockquote className="text-white text-base md:text-2xl font-medium leading-relaxed mb-12 opacity-90 text-left italic font-serif tracking-tight">
+                      "{rev.text}"
+                    </blockquote>
+                  </div>
 
-            <button onClick={nextSlide} className="w-10 h-10 rounded-full border border-white/5 bg-white/5 flex items-center justify-center text-white hover:border-[var(--brand)]/30 transition-all focus:outline-none">
-              <ChevronRight className="w-4 h-4" />
-            </button>
+                  <div className="flex items-center gap-5 pt-10 border-t border-white/5">
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-white/10 to-transparent flex items-center justify-center text-[var(--brand)] font-black text-2xl border border-white/10 shadow-inner">
+                      {rev.name?.charAt(0) || "U"}
+                    </div>
+                    <div className="text-left">
+                      <div className="text-white font-bold text-base md:text-xl tracking-tighter">{rev.name}</div>
+                      <div className="text-[10px] uppercase tracking-[0.25em] font-bold opacity-30 text-[var(--brand)]">{rev.role || "Elite Trader"}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Institutional Scroll Progress Visualizer */}
+          <div className="mt-8 h-1 w-full max-w-[200px] mx-auto bg-white/5 rounded-full overflow-hidden relative">
+             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[var(--brand)] to-transparent w-1/3 animate-shimmer" />
           </div>
         </div>
       </div>
+
+      <style>{`
+        .mask-linear-edges {
+          mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+        }
+        @keyframes shimmer {
+          from { transform: translateX(-100%); }
+          to { transform: translateX(300%); }
+        }
+        .animate-shimmer {
+          animation: shimmer 5s infinite linear;
+        }
+        .scrollbar-none::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
     </section>
   );
 };
