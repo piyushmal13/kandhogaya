@@ -17,11 +17,11 @@ export const Footer = () => (
         {/* --- Column 1: Brand & Identity --- */}
         <div>
           <Link to="/" className="flex items-center gap-6 group mb-10">
-            <div className="flex items-center justify-center transition-all duration-700 h-10 w-10 sm:h-14 sm:w-14 rounded-2xl bg-white/5 border border-white/10 shadow-[0_0_20px_var(--brand-glow-subtle)] overflow-hidden group-hover:scale-105">
+            <div className="flex items-center justify-center transition-all duration-700 h-10 w-10 sm:h-14 sm:w-14 rounded-xl overflow-hidden group-hover:scale-105">
               <img
                 src={BRANDING.logoUrl}
                 alt={BRANDING.name}
-                className="h-full w-full object-contain p-1.5 filter drop-shadow-[0_0_8px_var(--brand-glow)]"
+                className="h-full w-full object-contain"
               />
             </div>
             <div className="text-[14px] font-bold tracking-[0.5em] text-white uppercase opacity-90 group-hover:opacity-100 transition-opacity">{BRANDING.name}</div>
@@ -68,7 +68,7 @@ export const Footer = () => (
       {/* --- Minimalist Footer Base --- */}
       <div className="pt-12 border-t border-white/5 flex flex-col lg:flex-row items-center justify-between gap-8">
         <div className="text-[10px] font-bold text-gray-600 uppercase tracking-[0.3em]">
-          &copy; 2026 {BRANDING.name} SYSTEMS AG
+          &copy; 2026 {BRANDING.name}
         </div>
 
         <div className="flex flex-wrap items-center justify-center gap-8 text-[10px] font-bold text-gray-500 uppercase tracking-[0.3em] opacity-60">

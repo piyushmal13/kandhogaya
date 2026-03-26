@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { motion } from "motion/react";
+import { motion, useMotionValue } from "framer-motion";
 import { Star, ChevronLeft, ChevronRight } from "lucide-react";
 import { fetchReviews } from "../../services/reviewService";
 
 export const SuccessShowcase = () => {
   const [reviews, setReviews] = useState<any[]>([]);
   const [index, setIndex] = useState(0);
+  const x = useMotionValue(0);
 
   useEffect(() => {
     fetchReviews().then(data => {
@@ -15,17 +16,17 @@ export const SuccessShowcase = () => {
     });
   }, []);
 
+  const nextSlide = () => setIndex((prev) => (prev + 1) % reviews.length);
+  const prevSlide = () => setIndex((prev) => (prev - 1 + reviews.length) % reviews.length);
+
   const onDragEnd = (event: any, info: any) => {
     const shift = info.offset.x;
     if (shift < -50) {
-      setIndex(prev => Math.min(prev + 1, reviews.length - 1));
+       nextSlide();
     } else if (shift > 50) {
-      setIndex(prev => Math.max(prev - 1, 0));
+       prevSlide();
     }
   };
-
-  const nextSlide = () => setIndex((prev) => (prev + 1) % reviews.length);
-  const prevSlide = () => setIndex((prev) => (prev - 1 + reviews.length) % reviews.length);
 
   if (reviews.length === 0) return null;
 
@@ -50,52 +51,49 @@ export const SuccessShowcase = () => {
           </motion.div>
         </div>
 
-        <div className="relative group/carousel">
-          <div className="flex items-center justify-between mb-8 px-4">
-             <div className="flex gap-4">
-               <button onClick={prevSlide} className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/5 bg-white/5 flex items-center justify-center text-white hover:border-[var(--brand)]/30 transition-all focus:outline-none">
-                 <ChevronLeft className="w-5 h-5" />
-               </button>
-               <button onClick={nextSlide} className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/5 bg-white/5 flex items-center justify-center text-white hover:border-[var(--brand)]/30 transition-all focus:outline-none">
-                 <ChevronRight className="w-5 h-5" />
-               </button>
-             </div>
-          </div>
-
+        <div className="relative group/carousel px-4">
+          {/* Main Display Area */}
           <div className="overflow-visible cursor-grab active:cursor-grabbing">
             <motion.div 
-              className="flex gap-4 md:gap-6"
+              className="flex gap-4 md:gap-8 items-stretch"
               drag="x"
               dragConstraints={{ left: 0, right: 0 }}
               onDragEnd={onDragEnd}
-              animate={{ x: `calc(-${index} * (100% / (window.innerWidth >= 1024 ? 3 : window.innerWidth >= 768 ? 2 : 1.15)))` }}
-              transition={{ type: "spring", stiffness: 300, damping: 35 }}
+              animate={{ 
+                x: `calc(-${index} * (100% / (window.innerWidth >= 1024 ? 3 : window.innerWidth >= 768 ? 2 : 1)))` 
+              }}
+              transition={{ type: "spring", stiffness: 200, damping: 25 }}
             >
               {reviews.map((rev, i) => (
                 <motion.div 
                   key={rev.id || i}
-                  className="min-w-[85%] sm:min-w-[calc(50%-12px)] lg:min-w-[calc(33.333%-16px)]"
-                  animate={{ opacity: Math.abs(index - i) < 3 ? 1 : 0.2, scale: index === i ? 1 : 0.95 }}
+                  className="min-w-[100%] sm:min-w-[calc(50%-16px)] lg:min-w-[calc(33.333%-22px)] flex"
+                  initial={false}
+                  animate={{ 
+                    opacity: 1,
+                    scale: i === index ? 1 : 0.95,
+                    filter: i === index ? "blur(0px)" : "blur(1px)"
+                  }}
                 >
-                  <div className="glass-card p-6 md:p-10 border-white/5 backdrop-blur-3xl h-full flex flex-col justify-between group/card hover:border-[var(--brand)]/20 transition-all duration-700">
+                  <div className="glass-card p-8 md:p-12 border-white/5 backdrop-blur-3xl h-full flex flex-col justify-between group/card hover:border-[var(--brand)]/20 transition-all duration-700 w-full text-left">
                     <div>
-                      <div className="flex gap-1 mb-6">
+                      <div className="flex gap-1 mb-8">
                         {Array.from({ length: rev.rating || 5 }).map((_, j) => (
-                          <Star key={`star-${rev.id || i}-${j}`} className="w-3.5 h-3.5 text-[var(--brand)] fill-[var(--brand)]" />
+                          <Star key={`star-${rev.id || i}-${j}`} className="w-4 h-4 text-[var(--brand)] fill-[var(--brand)]" />
                         ))}
                       </div>
-                      <blockquote className="text-white text-sm md:text-lg font-medium leading-relaxed mb-8 opacity-80 text-left line-clamp-4">
+                      <blockquote className="text-white text-base md:text-xl font-medium leading-relaxed mb-12 opacity-80 line-clamp-6 italic font-serif">
                         "{rev.text}"
                       </blockquote>
                     </div>
 
-                    <div className="flex items-center gap-4 pt-6 border-t border-white/5">
-                      <div className="w-10 h-10 rounded-full bg-[var(--brand)]/10 flex items-center justify-center text-[var(--brand)] font-black text-sm border border-[var(--brand)]/20 shadow-[0_0_15px_var(--brand-glow-subtle)]">
+                    <div className="flex items-center gap-5 pt-8 border-t border-white/5">
+                      <div className="w-14 h-14 rounded-xl bg-white/5 flex items-center justify-center text-[var(--brand)] font-black text-xl border border-white/10 shadow-[0_0_20px_rgba(255,255,255,0.05)]">
                         {rev.name?.charAt(0) || "U"}
                       </div>
-                      <div className="text-left">
-                        <div className="text-white font-bold text-xs md:text-sm">{rev.name}</div>
-                        <div className="text-[8px] uppercase tracking-[0.2em] font-medium opacity-30">{rev.role || "Elite Trader"}</div>
+                      <div>
+                        <div className="text-white font-bold text-sm md:text-lg tracking-tight">{rev.name}</div>
+                        <div className="text-[10px] uppercase tracking-[0.2em] font-medium opacity-30 text-[var(--brand)]">{rev.role || "Elite Trader"}</div>
                       </div>
                     </div>
                   </div>
@@ -104,16 +102,29 @@ export const SuccessShowcase = () => {
             </motion.div>
           </div>
 
-          <div className="mt-12 flex justify-center flex-wrap gap-1.5 px-4">
-            {reviews.map((rev, i) => (
-              <button
-                key={`dot-nav-${rev.id || i}`}
-                onClick={() => setIndex(i)}
-                className={`h-1 rounded-full transition-all duration-500 ${
-                  i === index ? "w-8 bg-[var(--brand)]" : "w-1.5 bg-white/10 hover:bg-white/30"
-                }`}
-              />
-            ))}
+          {/* Navigation Controls */}
+          <div className="mt-16 flex flex-col md:flex-row items-center justify-center gap-12">
+            <div className="flex gap-4">
+               <button onClick={prevSlide} className="w-14 h-14 rounded-full border border-white/5 bg-white/10 flex items-center justify-center text-white hover:border-[var(--brand)]/30 hover:bg-white/15 transition-all shadow-xl backdrop-blur-md">
+                 <ChevronLeft className="w-6 h-6" />
+               </button>
+               <button onClick={nextSlide} className="w-14 h-14 rounded-full border border-white/5 bg-white/10 flex items-center justify-center text-white hover:border-[var(--brand)]/30 hover:bg-white/15 transition-all shadow-xl backdrop-blur-md">
+                 <ChevronRight className="w-6 h-6" />
+               </button>
+            </div>
+
+            <div className="flex flex-wrap justify-center gap-2 max-w-xl">
+              {reviews.map((rev, i) => (
+                <button
+                  key={`dot-nav-${rev.id || i}`}
+                  onClick={() => setIndex(i)}
+                  className={`h-1.5 rounded-full transition-all duration-700 ${
+                    i === index ? "w-12 bg-[var(--brand)] shadow-[0_0_15px_var(--brand-glow)]" : "w-1.5 bg-white/10 hover:bg-white/30"
+                  }`}
+                  aria-label={`Go to slide ${i + 1}`}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
