@@ -313,6 +313,27 @@ export const subscribeToNewsletter = async (email: string) => {
   }
 };
 
+export const submitPaymentProof = async (userId: string, plan: string, amount: number, screenshotUrl: string) => {
+  try {
+    const { error } = await supabase
+      .from("payment_proofs")
+      .insert([{
+        user_id: userId,
+        plan,
+        amount,
+        screenshot_url: screenshotUrl,
+        status: "pending"
+      }]);
+
+    if (error) throw error;
+
+    return { success: true };
+  } catch (err) {
+    console.error("Institutional Payment Proof Signal: Submission failed.", err);
+    return { success: false };
+  }
+};
+
 export const registerForWebinar = async (webinarId: string, userId: string, email: string) => {
   try {
     const { data: existing } = await supabase
@@ -353,36 +374,6 @@ export const registerForWebinar = async (webinarId: string, userId: string, emai
   }
 };
 
-export const submitPaymentProof = async (userId: string, amount: number, proofUrl: string) => {
-  try {
-    const res = await safeExecute(() =>
-      withTimeout(
-        supabase
-          .from("payment-proofs")
-          .insert([{ 
-            user_id: userId, 
-            amount: amount, 
-            proof_url: proofUrl, 
-            status: "pending" 
-          }])
-          .select()
-          .maybeSingle()
-      )
-    );
-
-    const data = res?.data ?? null;
-
-    return {
-      success: true,
-      data: data ?? null
-    };
-  } catch {
-    return {
-      success: false,
-      error: "Something went wrong. Please try again."
-    };
-  }
-};
 
 // --- MARKET DATA ---
 

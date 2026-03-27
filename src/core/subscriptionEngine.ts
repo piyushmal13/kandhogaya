@@ -1,6 +1,6 @@
 export type SubscriptionPlan = 'basic' | 'pro' | 'elite';
 
-export const getPlanAccess = (plan: SubscriptionPlan | string): string[] => {
+export const getPlanAccess = (plan: SubscriptionPlan): string[] => {
   const mapping: Record<string, string[]> = {
     basic: ['signals'],
     pro: ['signals', 'academy'],
@@ -13,7 +13,7 @@ export const getPlanAccess = (plan: SubscriptionPlan | string): string[] => {
 /**
  * Institutional Entitlement Generation: Plan -> Feature Capability Mapping
  */
-export const generateEntitlements = (userId: string, plan: SubscriptionPlan | string, expiresAt: string | null) => {
+export const generateEntitlements = (userId: string, plan: SubscriptionPlan, expiresAt: string | null) => {
   const features = getPlanAccess(plan);
 
   return features.map(f => ({
