@@ -71,10 +71,16 @@ export const HeroSection = () => {
     
     fetchData();
 
+    // Institutional Signal listeners for session transitions
+    globalThis.addEventListener("app:login", fetchData);
+    globalThis.addEventListener("app:logout", fetchData);
+
     const interval = setInterval(updateParticles, 50);
     return () => {
       isMounted = false;
       clearInterval(interval);
+      globalThis.removeEventListener("app:login", fetchData);
+      globalThis.removeEventListener("app:logout", fetchData);
     };
   }, [fetchRealStats, initParticles, updateParticles]);
 

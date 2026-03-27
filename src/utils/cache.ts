@@ -3,7 +3,7 @@ type CacheEntry = {
   expiry: number;
 };
 
-const cacheStore: Record<string, CacheEntry> = {};
+let cacheStore: Record<string, CacheEntry> = {};
 
 export const getCache = (key: string) => {
   const entry = cacheStore[key];
@@ -23,4 +23,8 @@ export const setCache = (key: string, data: any, ttl = 30000) => {
     data,
     expiry: Date.now() + ttl,
   };
+};
+
+export const clearCache = () => {
+  cacheStore = {};
 };

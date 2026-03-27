@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/lib/supabase";
 import { 
   Check, 
@@ -62,24 +62,34 @@ export const Pricing = () => {
   const [loading, setLoading] = useState(true);
   const [selectedPlan, setSelectedPlan] = useState<{ plan: string, amount: number } | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [algoRes, webinarRes] = await Promise.all([
-          supabase.from("algo_products").select("*").limit(3),
-          supabase.from("webinars").select("*").gte("date", new Date().toISOString()).limit(3)
-        ]);
-        
-        setAlgos(algoRes.data || []);
-        setWebinars(webinarRes.data || []);
-      } catch (err) {
-        console.error("Institutional Pricing Discovery Error:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const [algoRes, webinarRes] = await Promise.all([
+        supabase.from("algo_products").select("*").limit(3),
+        supabase.from("webinars").select("*").gte("date", new Date().toISOString()).limit(3)
+      ]);
+      
+      setAlgos(algoRes.data || []);
+      setWebinars(webinarRes.data || []);
+    } catch (err) {
+      console.error("Institutional Pricing Discovery Error:", err);
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    fetchData();
+
+    globalThis.addEventListener("app:login", fetchData);
+    globalThis.addEventListener("app:logout", fetchData);
+
+    return () => {
+      globalThis.removeEventListener("app:login", fetchData);
+      globalThis.removeEventListener("app:logout", fetchData);
+    };
+  }, [fetchData]);
 
   return (
     <div className="min-h-screen bg-[#050505] text-white pt-24 pb-32 overflow-hidden selection:bg-emerald-500 selection:text-black">

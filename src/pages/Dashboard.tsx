@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { 
   ShieldCheck, 
@@ -55,35 +55,39 @@ export const Dashboard = () => {
   const [dbHealthy, setDbHealthy] = useState(true);
 
 
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await supabase.from("signals").select("*");
+      console.log("SUPABASE RAW:", res);
+
+      setSignals(res.data || []);
+      setDbHealthy(true);
+    } catch (err) {
+      console.error("Institutional Discovery Error:", err);
+      setDbHealthy(false);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
-    let isMounted = true;
-
     if (user) {
-      const fetchData = async () => {
-        setLoading(true);
-        try {
-          const res = await supabase.from("signals").select("*");
-          console.log("SUPABASE RAW:", res);
-
-          if (!isMounted) return;
-
-          setSignals(res.data || []);
-          setDbHealthy(true);
-        } catch (err) {
-          console.error("Debug Fetch Error:", err);
-          if (isMounted) setDbHealthy(false);
-        } finally {
-          if (isMounted) setLoading(false);
-        }
-      };
-
       fetchData();
     }
 
-    return () => {
-      isMounted = false;
+    const refetch = () => {
+      if (user) fetchData();
     };
-  }, [user]);
+
+    globalThis.addEventListener("app:login", refetch);
+    globalThis.addEventListener("app:logout", refetch);
+
+    return () => {
+      globalThis.removeEventListener("app:login", refetch);
+      globalThis.removeEventListener("app:logout", refetch);
+    };
+  }, [user, fetchData]);
 
   if (!user) return null; // Handled by ProtectedRoute but for TS safety
 

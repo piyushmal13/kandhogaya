@@ -2,6 +2,7 @@ import React, { useState, useEffect, createContext, useContext, useMemo, useRef,
 import { supabase } from "../lib/supabase";
 import type { User, Session } from "@supabase/supabase-js";
 import { getAccess, Entitlement } from "../core/accessEngine";
+import { clearCache } from "../utils/cache";
 
 // ── Strict Types ─────────────────────────────────────────────────────────────
 
@@ -203,6 +204,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, newSession) => {
       if (!isMountedRef.current) return;
 
+      // Institutional Signal Orchestration: Discovery events for data-sensitive surfaces
+      // Institutional Signal Orchestration: Discovery events for data-sensitive surfaces
+      if (event === 'SIGNED_IN') {
+        clearCache();
+        globalThis.dispatchEvent(new Event("app:login"));
+      } else if (event === 'SIGNED_OUT') {
+        clearCache();
+        globalThis.dispatchEvent(new Event("app:logout"));
+      }
+
       // Force refresh on critical events
       if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
         lastFetchedId.current = null; // Reset lock to allow fresh fetch
@@ -216,6 +227,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         fetchUserProfile(currentUser.id, currentUser.email);
       } else {
         setUserProfile(null);
+        setEntitlements([]);
         lastFetchedId.current = null;
       }
     });
