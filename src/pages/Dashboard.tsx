@@ -16,6 +16,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { supabase } from "../lib/supabase";
 import { cn } from "../utils/cn";
 import { motion, AnimatePresence } from "motion/react";
+import { getAccess } from "@/utils/accessControl";
 import { BRANDING } from "../constants/branding";
 
 interface BotLicense {
@@ -89,6 +90,7 @@ export const Dashboard = () => {
   const isAdmin = userProfile?.role === "admin";
 
   const isPro = userProfile?.isPro === true;
+  const access = getAccess(userProfile);
 
   return (
     <div className="relative min-h-screen bg-black pt-28 pb-32 px-4">
@@ -172,56 +174,66 @@ export const Dashboard = () => {
                 <Link to="/marketplace" className="text-xs font-bold text-emerald-500 hover:text-emerald-400 transition-colors uppercase tracking-widest">ADD NEW KEY</Link>
               </div>
               
-              {loading ? (
-                <div className="space-y-4">
-                  <div className="h-20 bg-white/5 rounded-3xl animate-pulse" />
-                  <div className="h-20 bg-white/5 rounded-3xl animate-pulse" />
-                </div>
-              ) : licenses.length > 0 ? (
-                <div className="grid grid-cols-1 gap-3">
-                  {licenses.map((license) => {
-                    const status = license.is_active ? "ONLINE" : "EXPIRED";
-                    const statusStyles = license.is_active 
-                      ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" 
-                      : "bg-red-500/10 text-red-400 border-red-500/20";
-                      
-                    return (
-                      <div key={license.id} className="group relative p-6 rounded-3xl bg-black/40 border border-white/5 hover:border-emerald-500/30 transition-all">
-                        <div className="flex items-center justify-between relative z-10">
-                          <div className="flex items-center gap-5">
-                            <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-black transition-all">
-                              <ShieldCheck className="w-6 h-6" />
-                            </div>
-                            <div>
-                              <div className="text-white font-bold group-hover:text-emerald-400 transition-colors uppercase tracking-tight">
-                                {license.algo_bots?.name || "QUANT ENGINE v2"}
+              {(() => {
+                if (loading) {
+                  return (
+                    <div className="space-y-4">
+                      <div className="h-20 bg-white/5 rounded-3xl animate-pulse" />
+                      <div className="h-20 bg-white/5 rounded-3xl animate-pulse" />
+                    </div>
+                  );
+                }
+                
+                if (licenses.length > 0) {
+                  return (
+                    <div className="grid grid-cols-1 gap-3">
+                      {licenses.map((license) => {
+                        const status = license.is_active ? "ONLINE" : "EXPIRED";
+                        const statusStyles = license.is_active 
+                          ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" 
+                          : "bg-red-500/10 text-red-400 border-red-500/20";
+                          
+                        return (
+                          <div key={license.id} className="group relative p-6 rounded-3xl bg-black/40 border border-white/5 hover:border-emerald-500/30 transition-all">
+                            <div className="flex items-center justify-between relative z-10">
+                              <div className="flex items-center gap-5">
+                                <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-black transition-all">
+                                  <ShieldCheck className="w-6 h-6" />
+                                </div>
+                                <div>
+                                  <div className="text-white font-bold group-hover:text-emerald-400 transition-colors uppercase tracking-tight">
+                                    {license.algo_bots?.name || "QUANT ENGINE v2"}
+                                  </div>
+                                  <div className="flex items-center gap-3 mt-1 text-[10px] font-mono text-gray-500">
+                                    <span>KEY: {license.license_key}</span>
+                                    <span className="w-1 h-1 rounded-full bg-gray-700" />
+                                    <span>EXP: {new Date(license.expires_at).toLocaleDateString()}</span>
+                                  </div>
+                                </div>
                               </div>
-                              <div className="flex items-center gap-3 mt-1 text-[10px] font-mono text-gray-500">
-                                <span>KEY: {license.license_key}</span>
-                                <span className="w-1 h-1 rounded-full bg-gray-700" />
-                                <span>EXP: {new Date(license.expires_at).toLocaleDateString()}</span>
-                              </div>
+                              <span className={cn(
+                                "px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter border",
+                                statusStyles
+                              )}>
+                                {status}
+                              </span>
                             </div>
                           </div>
-                          <span className={cn(
-                            "px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter border",
-                            statusStyles
-                          )}>
-                            {status}
-                          </span>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              ) : (
-                <div className="text-center py-16 border-2 border-dashed border-white/5 rounded-[32px]">
-                  <p className="text-gray-500 text-sm mb-6">No licensed algorithms detected on this account.</p>
-                  <Link to="/marketplace" className="inline-flex items-center px-8 py-3 rounded-2xl bg-emerald-500 text-black font-black text-xs uppercase tracking-widest hover:scale-105 transition-all">
-                    Initialize Setup
-                  </Link>
-                </div>
-              )}
+                        );
+                      })}
+                    </div>
+                  );
+                }
+
+                return (
+                  <div className="text-center py-16 border-2 border-dashed border-white/5 rounded-[32px]">
+                    <p className="text-gray-500 text-sm mb-6">No licensed algorithms detected on this account.</p>
+                    <Link to="/marketplace" className="inline-flex items-center px-8 py-3 rounded-2xl bg-emerald-500 text-black font-black text-xs uppercase tracking-widest hover:scale-105 transition-all">
+                      Initialize Setup
+                    </Link>
+                  </div>
+                );
+              })()}
             </section>
 
             {/* Quick Signals Feed */}
@@ -234,22 +246,37 @@ export const Dashboard = () => {
                 <Link to="/signals" className="text-xs font-bold text-gray-500 hover:text-white uppercase tracking-widest">FULL FEED</Link>
               </div>
               <div className="space-y-2">
-                {signals.length > 0 ? signals.map(s => (
-                  <div key={s.id} className="p-4 rounded-2xl bg-black/40 flex items-center justify-between border border-white/5">
-                    <div className="flex items-center gap-4">
-                      <div className={cn("w-2 h-2 rounded-full shadow-[0_0_8px]", s.direction === 'BUY' ? "bg-emerald-500 shadow-emerald-500" : "bg-red-500 shadow-red-500")} />
-                      <span className="text-sm font-bold text-white">{s.asset}</span>
-                      <span className={cn("text-[10px] font-black tracking-widest px-2 py-0.5 rounded", s.direction === 'BUY' ? "bg-emerald-500/10 text-emerald-500" : "bg-red-500/10 text-red-500")}>
-                        {s.direction}
-                      </span>
+                {access.signals ? (
+                  signals.length > 0 ? (
+                    signals.map(s => (
+                      <div key={s.id} className="p-4 rounded-2xl bg-black/40 flex items-center justify-between border border-white/5">
+                        <div className="flex items-center gap-4">
+                          <div className={cn("w-2 h-2 rounded-full shadow-[0_0_8px]", s.direction === 'BUY' ? "bg-emerald-500 shadow-emerald-500" : "bg-red-500 shadow-red-500")} />
+                          <span className="text-sm font-bold text-white">{s.asset}</span>
+                          <span className={cn("text-[10px] font-black tracking-widest px-2 py-0.5 rounded", s.direction === 'BUY' ? "bg-emerald-500/10 text-emerald-500" : "bg-red-500/10 text-red-500")}>
+                            {s.direction}
+                          </span>
+                        </div>
+                        <span className="text-[10px] font-mono text-gray-600">
+                          {new Date(s.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </span>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-8">
+                      <p className="text-gray-500 text-xs italic">Awaiting new trade setups...</p>
                     </div>
-                    <span className="text-[10px] font-mono text-gray-600">
-                      {new Date(s.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </span>
-                  </div>
-                )) : (
-                  <div className="text-center py-8">
-                    <p className="text-gray-500 text-xs italic">Awaiting new trade setups...</p>
+                  )
+                ) : (
+                  <div className="p-10 border border-white/5 bg-black/40 rounded-3xl text-center space-y-4">
+                    <ShieldCheck className="w-12 h-12 text-gray-700 mx-auto" />
+                    <div className="space-y-1">
+                      <h3 className="text-white font-bold tracking-tight">Access Restricted</h3>
+                      <p className="text-xs text-gray-500 max-w-[200px] mx-auto">Upgrade to a Pro subscription to unlock real-time institutional signals.</p>
+                    </div>
+                    <Link to="/marketplace" className="inline-flex px-6 py-2 bg-emerald-500 text-black font-black text-[10px] uppercase tracking-widest rounded-xl hover:scale-105 transition-all">
+                      Upgrade Console
+                    </Link>
                   </div>
                 )}
               </div>
