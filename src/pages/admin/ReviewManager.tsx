@@ -27,7 +27,7 @@ export const ReviewManager = () => {
       .order('created_at', { ascending: false });
     
     if (res?.data) {
-      setCache(cacheKey, res.data);
+      setCache(cacheKey, res.data, 30000);
       setReviews(res.data);
     }
     setLoading(false);
@@ -53,7 +53,7 @@ export const ReviewManager = () => {
       if (!isMounted) return;
 
       if (res?.data) {
-        setCache(cacheKey, res.data);
+        setCache(cacheKey, res.data, 30000);
         setReviews(res.data);
       }
       setLoading(false);

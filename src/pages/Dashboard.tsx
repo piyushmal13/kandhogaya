@@ -111,7 +111,7 @@ export const Dashboard = () => {
             licenses: Array.isArray(licenseData) ? licenseData : [],
             signals: activeSignals,
             webinars: flatWebinars
-          });
+          }, 10000);
 
           setLicenses(Array.isArray(licenseData) ? licenseData : []);
           setSignals(activeSignals);

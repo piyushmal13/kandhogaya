@@ -41,7 +41,7 @@ export const WebinarManager = () => {
       .order('date_time', { ascending: true })
       .limit(10);
     if (res?.data) {
-      setCache(cacheKey, res.data);
+      setCache(cacheKey, res.data, 30000);
       setRecentWebinars(res.data);
     }
   };
@@ -65,7 +65,7 @@ export const WebinarManager = () => {
       if (!isMounted) return;
 
       if (res?.data) {
-        setCache(cacheKey, res.data);
+        setCache(cacheKey, res.data, 30000);
         setRecentWebinars(res.data);
       }
     };

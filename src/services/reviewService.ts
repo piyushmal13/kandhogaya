@@ -13,6 +13,6 @@ export const fetchReviews = async () => {
     .order('created_at', { ascending: false });
     
   const data = res?.data ?? [];
-  setCache(cacheKey, data);
+  setCache(cacheKey, data, 30000);
   return data;
 };

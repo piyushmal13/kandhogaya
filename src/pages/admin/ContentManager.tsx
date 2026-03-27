@@ -31,7 +31,7 @@ export const ContentManager = () => {
       .order('created_at', { ascending: false })
       .limit(10);
     if (res?.data) {
-      setCache(cacheKey, res.data);
+      setCache(cacheKey, res.data, 60000);
       setRecentContent(res.data);
     }
   };
@@ -55,7 +55,7 @@ export const ContentManager = () => {
       if (!isMounted) return;
 
       if (res?.data) {
-        setCache(cacheKey, res.data);
+        setCache(cacheKey, res.data, 60000);
         setRecentContent(res.data);
       }
     };

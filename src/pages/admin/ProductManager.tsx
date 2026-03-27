@@ -27,7 +27,7 @@ export const ProductManager = () => {
     
     if (res?.data) {
       const data = res.data;
-      setCache(cacheKey, data);
+      setCache(cacheKey, data, 30000);
       setProducts(data);
     }
     setLoading(false);
@@ -55,7 +55,7 @@ export const ProductManager = () => {
 
       if (res?.data) {
         const data = res.data;
-        setCache(cacheKey, data);
+        setCache(cacheKey, data, 30000);
         setProducts(data);
       }
       setLoading(false);

@@ -31,7 +31,7 @@ export const HeroSection = () => {
       const { count: userCount } = await supabase.from('users').select('*', { count: 'exact', head: true });
       if (userCount !== null) {
         const newStats = { ...stats, traders: `${(userCount + 12000).toLocaleString()}+` };
-        setCache(cacheKey, newStats);
+        setCache(cacheKey, newStats, 60000);
         setStats(newStats);
       }
     } catch (e) {

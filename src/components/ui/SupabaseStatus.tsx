@@ -27,7 +27,7 @@ export const SupabaseStatus = () => {
           console.warn("[Supabase] Connection check failed:", error.message);
           setStatus('error');
         } else {
-          setCache(cacheKey, 'connected');
+          setCache(cacheKey, 'connected', 60000);
           setStatus('connected');
         }
       } catch (err) {
