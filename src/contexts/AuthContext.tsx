@@ -118,6 +118,30 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       );
       const entitlementData = entitlementRes?.data || [];
 
+      // High-fidelity real-time entitlement synchronization
+      supabase
+        .channel(`entitlements_${userId}`)
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'user_entitlements',
+            filter: `user_id=eq.${userId}`
+          },
+          async () => {
+            const { data: updated } = await supabase
+              .from("user_entitlements")
+              .select("*")
+              .eq("user_id", userId);
+
+            if (updated && isMountedRef.current) {
+              setEntitlements(updated);
+            }
+          }
+        )
+        .subscribe();
+
       // 5. Safe state updates
       if (isMountedRef.current) {
         const base = userData || { id: userId, email, role: "user" as const };
