@@ -299,7 +299,7 @@ export const subscribeToNewsletter = async (email: string) => {
   try {
     await safeExecute(() =>
       withTimeout(
-        supabase.from("newsletter_subs").insert([{ email }])
+        supabase.from("leads").insert([{ email }])
       )
     );
     return {

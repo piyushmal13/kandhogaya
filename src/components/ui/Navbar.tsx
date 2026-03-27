@@ -48,11 +48,7 @@ export const Navbar = () => {
     { name: "Insights", path: "/blog", icon: MessageSquare },
   ];
 
-  const isAdmin =
-    userProfile?.role === "admin" ||
-    user?.email === "admin@ifxtrades.com" ||
-    user?.email === "admin@tradinghub.com" ||
-    user?.email === "piyushmal1301@gmail.com";
+  const isAdmin = userProfile?.role === "admin";
 
   return (
     <>

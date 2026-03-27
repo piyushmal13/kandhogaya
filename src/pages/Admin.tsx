@@ -48,10 +48,7 @@ export const Admin = () => {
   }, []);
 
   // Security Check: Only allow admins
-  const isAdmin = userProfile?.role === 'admin' || 
-                  user?.email === 'admin@ifxtrades.com' || 
-                  user?.email === 'admin@tradinghub.com' || 
-                  user?.email === 'piyushmal1301@gmail.com';
+  const isAdmin = userProfile?.role === 'admin';
 
   if (!user || !isAdmin) return <Navigate to="/dashboard" />;
 

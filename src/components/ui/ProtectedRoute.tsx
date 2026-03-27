@@ -11,7 +11,6 @@ interface ProtectedRouteProps {
   adminOnly?: boolean;
 }
 
-const ADMIN_EMAILS = new Set(["admin@ifxtrades.com", "admin@tradinghub.com", "piyushmal1301@gmail.com"]);
 
 /**
  * ProtectedRoute — wraps a route element to require authentication.
@@ -46,9 +45,7 @@ export const ProtectedRoute = ({
 
   // Admin guard
   if (adminOnly) {
-    const isAdmin =
-      userProfile?.role === "admin" ||
-      (user.email && ADMIN_EMAILS.has(user.email));
+    const isAdmin = userProfile?.role === "admin";
 
     if (!isAdmin) {
       return <Navigate to="/dashboard" replace />;

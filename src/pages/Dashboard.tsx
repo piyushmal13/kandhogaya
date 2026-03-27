@@ -139,8 +139,7 @@ export const Dashboard = () => {
 
   if (!user) return null; // Handled by ProtectedRoute but for TS safety
 
-  const isAdmin = userProfile?.role === "admin" || 
-                  ["admin@ifxtrades.com", "admin@tradinghub.com", "piyushmal1301@gmail.com"].includes(user.email || "");
+  const isAdmin = userProfile?.role === "admin";
 
   const isPro = userProfile?.isPro === true;
 
