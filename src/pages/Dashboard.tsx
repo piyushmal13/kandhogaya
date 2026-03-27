@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { 
-  ShieldCheck, 
-  Bell, 
-  Settings, 
-  Target, 
-  Video, 
-  Clock, 
-  Activity, 
+import {
+  ShieldCheck,
+  Bell,
+  Settings,
+  Target,
+  Video,
+  Clock,
+  Activity,
   ArrowUpRight,
   Zap,
-  BookOpen
+  BookOpen,
+  Lock
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { supabase } from "../lib/supabase";
@@ -18,6 +19,7 @@ import { cn } from "../utils/cn";
 import { motion, AnimatePresence } from "motion/react";
 import { getAccess } from "@/utils/accessControl";
 import { BRANDING } from "../constants/branding";
+import { PurchaseModal } from "@/components/payments/PurchaseModal";
 
 interface BotLicense {
   id: string;
@@ -53,6 +55,7 @@ export const Dashboard = () => {
   const [webinars] = useState<UserWebinar[]>([]);
   const [loading, setLoading] = useState(true);
   const [dbHealthy, setDbHealthy] = useState(true);
+  const [selectedPlan, setSelectedPlan] = useState<{ plan: string, amount: number } | null>(null);
 
 
   const fetchData = useCallback(async () => {
@@ -105,6 +108,32 @@ export const Dashboard = () => {
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
+        {/* Institutional Fulfillment Discovery Banner */}
+        {!isPro && (
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-10 p-5 bg-gradient-to-r from-emerald-500/10 via-emerald-500/20 to-emerald-500/10 border border-emerald-500/20 rounded-[32px] flex items-center justify-between group overflow-hidden relative"
+          >
+            <div className="absolute inset-0 bg-emerald-500/5 animate-pulse" />
+            <div className="flex items-center gap-6 relative z-10 px-4">
+              <div className="w-10 h-10 bg-emerald-500 text-black rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                <ShieldCheck className="w-6 h-6" />
+              </div>
+              <div>
+                <h3 className="text-sm font-black text-white uppercase tracking-widest">Enroll in Institutional Tiers</h3>
+                <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">🚀 Upgrade your plan to unlock full trading and execution power</p>
+              </div>
+            </div>
+            <button 
+              onClick={() => setSelectedPlan({ plan: "pro", amount: 99 })}
+              className="relative z-10 px-8 py-3 bg-white text-black font-black text-[10px] uppercase tracking-widest rounded-xl hover:scale-105 transition-all shadow-xl"
+            >
+              Unlock Pro Access
+            </button>
+          </motion.div>
+        )}
+
         {/* Header Block */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
@@ -166,10 +195,32 @@ export const Dashboard = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Feed */}
           <div className="lg:col-span-2 space-y-6">
-            <section className="p-8 rounded-[36px] bg-white/5 border border-white/10 backdrop-blur-xl overflow-hidden relative">
-              <div className="absolute top-0 right-0 p-8 text-emerald-500/10 pointer-events-none">
+            <section className={cn("p-8 rounded-[36px] bg-white/5 border border-white/10 backdrop-blur-xl overflow-hidden relative group", !access.algo && "min-h-[400px]")}>
+              <div className="absolute top-0 right-0 p-8 text-emerald-500/10 pointer-events-none group-hover:text-emerald-500/20 transition-colors">
                 <Target className="w-32 h-32 rotate-12" />
               </div>
+
+              {!access.algo && (
+                <div className="absolute inset-0 z-50 flex items-center justify-center p-6 bg-black/60 backdrop-blur-[6px] rounded-[36px] animate-in fade-in duration-500">
+                  <div className="text-center space-y-4 max-w-xs">
+                    <div className="w-20 h-20 bg-emerald-500/10 border border-emerald-500/20 rounded-[32px] flex items-center justify-center mx-auto text-emerald-500 shadow-2xl">
+                      <Lock className="w-8 h-8" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-black text-white uppercase tracking-tighter italic">Algo Discovery Locked</h3>
+                      <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest leading-relaxed mt-2">
+                        Upgrade to <span className="text-emerald-500">ELITE</span> to unlock institutional algorithmic execution.
+                      </p>
+                    </div>
+                    <button 
+                      onClick={() => setSelectedPlan({ plan: "elite", amount: 249 })}
+                      className="px-10 py-4 bg-emerald-500 text-black font-black text-[10px] uppercase tracking-[0.2em] rounded-2xl hover:scale-110 active:scale-95 transition-all shadow-2xl shadow-emerald-500/20"
+                    >
+                      Unlock Algo Terminal
+                    </button>
+                  </div>
+                </div>
+              )}
               <div className="flex items-center justify-between mb-8">
                 <h2 className="text-xl font-bold text-white flex items-center gap-2">
                   <Activity className="w-5 h-5 text-emerald-500" />
@@ -241,46 +292,47 @@ export const Dashboard = () => {
             </section>
 
             {/* Quick Signals Feed */}
-            <section className="p-8 rounded-[36px] bg-white/5 border border-white/10 backdrop-blur-xl">
-              <div className="flex items-center justify-between mb-8">
+            <section className="p-8 rounded-[36px] bg-white/5 border border-white/10 backdrop-blur-xl relative overflow-hidden group">
+              <div className="flex items-center justify-between mb-8 opacity-100 group-hover:opacity-100 transition-opacity">
                 <h2 className="text-xl font-bold text-white flex items-center gap-2">
                   <Zap className="w-5 h-5 text-yellow-500" />
                   Elite Signal Frequency
                 </h2>
                 <Link to="/signals" className="text-xs font-bold text-gray-500 hover:text-white uppercase tracking-widest">FULL FEED</Link>
               </div>
-              <div className="space-y-2">
-                {access.signals ? (
-                  signals.length > 0 ? (
-                    signals.map(s => (
-                      <div key={s.id} className="p-4 rounded-2xl bg-black/40 flex items-center justify-between border border-white/5">
-                        <div className="flex items-center gap-4">
-                          <div className={cn("w-2 h-2 rounded-full shadow-[0_0_8px]", s.direction === 'BUY' ? "bg-emerald-500 shadow-emerald-500" : "bg-red-500 shadow-red-500")} />
-                          <span className="text-sm font-bold text-white">{s.asset}</span>
-                          <span className={cn("text-[10px] font-black tracking-widest px-2 py-0.5 rounded", s.direction === 'BUY' ? "bg-emerald-500/10 text-emerald-500" : "bg-red-500/10 text-red-500")}>
-                            {s.direction}
-                          </span>
-                        </div>
-                        <span className="text-[10px] font-mono text-gray-600">
-                          {new Date(s.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+
+              {!access.signals && (
+                <div className="absolute inset-0 z-50 flex flex-col items-center justify-center p-6 bg-black/60 backdrop-blur-[6px] rounded-[36px] animate-in fade-in duration-500">
+                  <Lock className="w-12 h-12 text-emerald-500 mb-4" />
+                  <h3 className="text-white font-black uppercase tracking-tighter text-lg mb-2">Signals Locked</h3>
+                  <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest text-center mb-6">Upgrade to PRO for real-time institutional signals.</p>
+                  <button 
+                    onClick={() => setSelectedPlan({ plan: "pro", amount: 99 })}
+                    className="px-8 py-3 bg-emerald-500 text-black font-black text-[10px] uppercase tracking-widest rounded-xl hover:scale-105 transition-all"
+                  >
+                    Unlock Signals
+                  </button>
+                </div>
+              )}
+              <div className={cn("space-y-2 relative transition-all duration-700", !access.signals && "blur-[8px] select-none pointer-events-none")}>
+                {signals.length > 0 ? (
+                  signals.map(s => (
+                    <div key={s.id} className="p-4 rounded-2xl bg-black/40 flex items-center justify-between border border-white/5">
+                      <div className="flex items-center gap-4">
+                        <div className={cn("w-2 h-2 rounded-full shadow-[0_0_8px]", s.direction === 'BUY' ? "bg-emerald-500 shadow-emerald-500" : "bg-red-500 shadow-red-500")} />
+                        <span className="text-sm font-bold text-white">{s.asset}</span>
+                        <span className={cn("text-[10px] font-black tracking-widest px-2 py-0.5 rounded", s.direction === 'BUY' ? "bg-emerald-500/10 text-emerald-500" : "bg-red-500/10 text-red-500")}>
+                          {s.direction}
                         </span>
                       </div>
-                    ))
-                  ) : (
-                    <div className="text-center py-8">
-                      <p className="text-gray-500 text-xs italic">Awaiting new trade setups...</p>
+                      <span className="text-[10px] font-mono text-gray-600">
+                        {new Date(s.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </span>
                     </div>
-                  )
+                  ))
                 ) : (
-                  <div className="p-10 border border-white/5 bg-black/40 rounded-3xl text-center space-y-4">
-                    <ShieldCheck className="w-12 h-12 text-gray-700 mx-auto" />
-                    <div className="space-y-1">
-                      <h3 className="text-white font-bold tracking-tight">Access Restricted</h3>
-                      <p className="text-xs text-gray-500 max-w-[200px] mx-auto">Upgrade to a Pro subscription to unlock real-time institutional signals.</p>
-                    </div>
-                    <Link to="/marketplace" className="inline-flex px-6 py-2 bg-emerald-500 text-black font-black text-[10px] uppercase tracking-widest rounded-xl hover:scale-105 transition-all">
-                      Upgrade Console
-                    </Link>
+                  <div className="text-center py-8">
+                    <p className="text-gray-500 text-xs italic uppercase tracking-widest">Awaiting new trade setups...</p>
                   </div>
                 )}
               </div>
@@ -290,11 +342,26 @@ export const Dashboard = () => {
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Upcoming Webinars */}
-            <section className="p-8 rounded-[36px] bg-emerald-500/5 border border-emerald-500/10 backdrop-blur-xl">
+            <section className="p-8 rounded-[36px] bg-emerald-500/5 border border-emerald-500/10 backdrop-blur-xl relative overflow-hidden group">
               <h2 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
                 <Video className="w-5 h-5 text-emerald-500" />
                 Live Sessions
               </h2>
+
+              {!access.webinars && (
+                <div className="absolute inset-0 z-50 flex flex-col items-center justify-center p-6 bg-black/80 backdrop-blur-[4px] rounded-[36px] text-center">
+                  <Lock className="w-8 h-8 text-emerald-500/50 mb-3" />
+                  <div className="text-[10px] font-black uppercase tracking-widest text-white mb-4 leading-relaxed">
+                    Elite Tier Required <br/> For Live Webinars
+                  </div>
+                  <button 
+                    onClick={() => setSelectedPlan({ plan: "elite", amount: 249 })}
+                    className="px-6 py-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 font-black text-[8px] uppercase tracking-[0.2em] rounded-lg hover:bg-emerald-500 hover:text-black transition-all"
+                  >
+                    Upgrade Now
+                  </button>
+                </div>
+              )}
               <AnimatePresence>
                 {webinars.length > 0 ? (
                   <div className="space-y-4">
@@ -365,6 +432,14 @@ export const Dashboard = () => {
           </div>
         </div>
       </div>
+
+      {selectedPlan && (
+        <PurchaseModal 
+          plan={selectedPlan.plan}
+          amount={selectedPlan.amount}
+          onClose={() => setSelectedPlan(null)}
+        />
+      )}
     </div>
   );
 };
