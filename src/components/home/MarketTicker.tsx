@@ -119,14 +119,15 @@ export const MarketTicker = () => {
 
       setPairs(prev => {
         const updated = [...prev];
-        Object.values(updates).forEach(newItem => {
+        const updateAsset = (newItem: MarketPair) => {
           const index = updated.findIndex(p => p.symbol === newItem.symbol);
           if (index >= 0) {
             updated[index] = newItem;
           } else {
             updated.push(newItem);
           }
-        });
+        };
+        Object.values(updates).forEach(updateAsset);
         pairsRef.current = updated;
         return updated;
       });
@@ -140,6 +141,10 @@ export const MarketTicker = () => {
   useEffect(() => {
     fetchData();
     
+    globalThis.addEventListener("supabase:refresh", fetchData);
+    globalThis.addEventListener("app:login", fetchData);
+    globalThis.addEventListener("app:logout", fetchData);
+
     const channel = subscribeToMarketData((payload: any) => {
       const isUpdate = payload.eventType === 'UPDATE' || payload.eventType === 'INSERT';
       if (!isUpdate) return;

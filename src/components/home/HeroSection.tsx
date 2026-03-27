@@ -74,6 +74,7 @@ export const HeroSection = () => {
     // Institutional Signal listeners for session transitions
     globalThis.addEventListener("app:login", fetchData);
     globalThis.addEventListener("app:logout", fetchData);
+    globalThis.addEventListener("supabase:refresh", fetchData);
 
     const interval = setInterval(updateParticles, 50);
     return () => {
@@ -81,6 +82,7 @@ export const HeroSection = () => {
       clearInterval(interval);
       globalThis.removeEventListener("app:login", fetchData);
       globalThis.removeEventListener("app:logout", fetchData);
+      globalThis.removeEventListener("supabase:refresh", fetchData);
     };
   }, [fetchRealStats, initParticles, updateParticles]);
 

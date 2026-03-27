@@ -91,10 +91,12 @@ export const Dashboard = () => {
 
     globalThis.addEventListener("app:login", refetch);
     globalThis.addEventListener("app:logout", refetch);
+    globalThis.addEventListener("supabase:refresh", refetch);
 
     return () => {
       globalThis.removeEventListener("app:login", refetch);
       globalThis.removeEventListener("app:logout", refetch);
+      globalThis.removeEventListener("supabase:refresh", refetch);
     };
   }, [user, fetchData]);
 

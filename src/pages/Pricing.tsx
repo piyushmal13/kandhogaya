@@ -84,10 +84,12 @@ export const Pricing = () => {
 
     globalThis.addEventListener("app:login", fetchData);
     globalThis.addEventListener("app:logout", fetchData);
+    globalThis.addEventListener("supabase:refresh", fetchData);
 
     return () => {
       globalThis.removeEventListener("app:login", fetchData);
       globalThis.removeEventListener("app:logout", fetchData);
+      globalThis.removeEventListener("supabase:refresh", fetchData);
     };
   }, [fetchData]);
 
