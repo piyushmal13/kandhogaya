@@ -314,7 +314,25 @@ export const subscribeToNewsletter = async (email: string) => {
 };
 
 export const submitPaymentProof = async (userId: string, plan: string, amount: number, screenshotUrl: string) => {
+  // 1. Structural Signal Validation
+  if (!userId || !plan || !screenshotUrl || amount <= 0) {
+    return { success: false, error: "Invalid payment signal. All fields are required." };
+  }
+
   try {
+    // 2. Performance Discovery: Prevent Spam Toggles
+    const { data: existing } = await supabase
+      .from("payment_proofs")
+      .select("id")
+      .eq("user_id", userId)
+      .eq("status", "pending")
+      .maybeSingle();
+
+    if (existing) {
+      return { success: false, error: "Active fulfillment signal already exists. Awaiting institutional approval." };
+    }
+
+    // 3. Fulfill Discovery: Register Proof Signal
     const { error } = await supabase
       .from("payment_proofs")
       .insert([{
@@ -330,7 +348,7 @@ export const submitPaymentProof = async (userId: string, plan: string, amount: n
     return { success: true };
   } catch (err) {
     console.error("Institutional Payment Proof Signal: Submission failed.", err);
-    return { success: false };
+    return { success: false, error: "Communication signal lost. Please retry artifact discovery." };
   }
 };
 

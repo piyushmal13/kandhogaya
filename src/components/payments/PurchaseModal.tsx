@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { 
   X, 
-  Upload, 
   CheckCircle2, 
   Loader2, 
   AlertCircle,
@@ -13,7 +12,6 @@ import {
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
 import { submitPaymentProof } from "@/services/apiHandlers";
-import { cn } from "@/utils/cn";
 
 interface PurchaseModalProps {
   plan: string;
