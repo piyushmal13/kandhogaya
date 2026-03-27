@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import React, { lazy, Suspense, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -94,7 +94,13 @@ const AnimatedRoutes = () => {
   );
 };
 
+import { loadSystem } from "./core/systemLoader";
+
 export default function App() {
+  useEffect(() => {
+    loadSystem();
+  }, []);
+
   return (
     <ErrorBoundary>
       <ToastProvider>
