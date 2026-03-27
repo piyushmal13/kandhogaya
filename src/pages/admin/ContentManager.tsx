@@ -3,6 +3,9 @@ import { Zap, Video, Download, Image as ImageIcon, FileText, Plus, Search, Trash
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../contexts/AuthContext";
 import { Dialog } from "../../components/ui/Dialog";
+import { getCache, setCache } from "@/utils/cache";
+
+const cacheKey = "content_list";
 
 export const ContentManager = () => {
   const { session } = useAuth();
@@ -22,16 +25,46 @@ export const ContentManager = () => {
   const [contentToDelete, setContentToDelete] = useState<string | null>(null);
 
   const fetchRecentContent = async () => {
-    const { data } = await supabase
+    const res = await supabase
       .from('content_posts')
       .select('*')
       .order('created_at', { ascending: false })
       .limit(10);
-    if (data) setRecentContent(data);
+    if (res?.data) {
+      setCache(cacheKey, res.data);
+      setRecentContent(res.data);
+    }
   };
 
   useEffect(() => {
-    fetchRecentContent();
+    let isMounted = true;
+
+    const initFetch = async () => {
+      const cached = getCache(cacheKey);
+      if (cached) {
+        setRecentContent(cached);
+        return;
+      }
+
+      const res = await supabase
+        .from('content_posts')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(10);
+      
+      if (!isMounted) return;
+
+      if (res?.data) {
+        setCache(cacheKey, res.data);
+        setRecentContent(res.data);
+      }
+    };
+
+    initFetch();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const handleEdit = (item: any) => {

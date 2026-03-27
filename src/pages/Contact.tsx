@@ -6,7 +6,7 @@ import { PageMeta } from "../components/site/PageMeta";
 import { PageSection, SectionHeading } from "../components/site/PageSection";
 import { Reveal } from "../components/site/Reveal";
 import { BRANDING } from "../constants/branding";
-import { supabase } from "../lib/supabase";
+import { sendContactMessage } from "../services/apiHandlers";
 
 type ContactStatus = "idle" | "loading" | "success" | "error";
 
@@ -30,19 +30,14 @@ export const Contact = () => {
     setStatus("loading");
 
     try {
-      const { error } = await supabase.from("contact_messages").insert([
-        {
-          full_name: formData.name,
-          email: formData.email,
-          subject: formData.subject,
-          message: formData.message,
-          created_at: new Date().toISOString(),
-        },
-      ]);
+      const { success, error } = await sendContactMessage(
+        formData.name,
+        formData.email,
+        formData.subject,
+        formData.message
+      );
 
-      if (error) {
-        throw error;
-      }
+      if (!success) throw new Error(error);
 
       setStatus("success");
       setFormData(initialFormState);

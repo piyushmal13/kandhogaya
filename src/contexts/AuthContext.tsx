@@ -56,110 +56,139 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const [connectionError, setConnectionError] = useState(false);
 
-  // Ref prevents stale-closure bug in the safety timeout
+  // Safety and Optimization Refs
   const loadingRef = useRef(true);
+  const isFetchingRef = useRef(false);
+  const lastFetchedId = useRef<string | null>(null);
+  const isMountedRef = useRef(true);
 
   const fetchUserProfile = useCallback(async (userId: string, email?: string) => {
+    // 1. Execution lock - prevent concurrent fetches for same user
+    if (isFetchingRef.current) return;
+    if (lastFetchedId.current === userId) return;
+
+    isFetchingRef.current = true;
+    lastFetchedId.current = userId;
+
+    const retry = async (fn: () => Promise<any>, attempts = 2) => {
+      try {
+        return await fn();
+      } catch (err) {
+        if (attempts > 0) return retry(fn, attempts - 1);
+        return null;
+      }
+    };
+
     try {
-      const { data: userData } = await supabase
-        .from("users")
-        .select("*")
-        .eq("id", userId)
-        .maybeSingle();
+      // 2. Core user fetch
+      const userRes = await retry(() =>
+        Promise.resolve(
+          supabase
+            .from("users")
+            .select("*")
+            .eq("id", userId)
+            .maybeSingle()
+        )
+      );
 
-      const [subResult, signalSubResult, licenseResult, webinarResult, courseResult] =
-        await Promise.all([
-          supabase.from("subscriptions").select("id").eq("user_id", userId).eq("status", "active").limit(1),
-          supabase.from("signal_subscriptions").select("id").eq("user_id", userId).eq("status", "active").limit(1),
-          supabase.from("bot_licenses").select("id").eq("user_id", userId).eq("is_active", true).limit(1),
-          supabase.from("webinar_registrations").select("id").eq("user_id", userId).limit(1),
-          supabase.from("user_access").select("id").eq("user_id", userId).limit(1),
-        ]);
+      const userData = userRes?.data || null;
 
-      const hasAccess =
-        (subResult.data?.length ?? 0) > 0 ||
-        (signalSubResult.data?.length ?? 0) > 0 ||
-        (licenseResult.data?.length ?? 0) > 0 ||
-        (webinarResult.data?.length ?? 0) > 0 ||
-        (courseResult.data?.length ?? 0) > 0;
+      // 3. Metadata sweep (decentralized)
+      const metadataQueries = [
+        () => Promise.resolve(supabase.from("subscriptions").select("id").eq("user_id", userId).eq("status", "active").limit(1)),
+        () => Promise.resolve(supabase.from("signal_subscriptions").select("id").eq("user_id", userId).eq("status", "active").limit(1)),
+        () => Promise.resolve(supabase.from("bot_licenses").select("id").eq("user_id", userId).eq("is_active", true).limit(1)),
+        () => Promise.resolve(supabase.from("webinar_registrations").select("id").eq("user_id", userId).limit(1)),
+        () => Promise.resolve(supabase.from("user_access").select("id").eq("user_id", userId).limit(1)),
+      ];
 
-      const base = userData || { id: userId, email, role: "user" as const };
-      setUserProfile({ ...base, role: base.role ?? "user", isPro: hasAccess });
-    } catch (err) {
-      console.error("Error fetching user profile:", err);
-      setUserProfile({ id: userId, email, role: "user", isPro: false });
+      const results = await Promise.allSettled(metadataQueries.map(q => retry(q)));
+
+      const hasAccess = results.some(
+        (res) => res.status === "fulfilled" && res.value?.data && res.value.data.length > 0
+      );
+
+      // 4. Safe state updates
+      if (isMountedRef.current) {
+        const base = userData || { id: userId, email, role: "user" as const };
+        setUserProfile({
+          ...base,
+          role: base.role ?? "user",
+          isPro: hasAccess,
+        });
+      }
+    } catch {
+      if (isMountedRef.current) {
+        setUserProfile({ id: userId, email, role: "user", isPro: false });
+      }
+    } finally {
+      isFetchingRef.current = false;
     }
   }, []);
 
   useEffect(() => {
-    const checkSession = async () => {
-      // Connection health check
-      try {
-        const { error: healthError } = await supabase.from("products").select("id").limit(1);
-        if (healthError) {
-          console.error("[Supabase Health Check Failed]:", healthError.message);
-          if (healthError.message.includes("Failed to fetch")) {
-            setConnectionError(true);
-          }
-        } else {
-          setConnectionError(false);
-        }
-      } catch (e) {
-        console.error("[Supabase Health Check Exception]:", e);
-      }
+    // Component lifecycle tracking
+    isMountedRef.current = true;
 
-      // Safety timeout — uses ref to avoid stale closure
+    const checkSession = async () => {
       const timeoutId = setTimeout(() => {
-        if (loadingRef.current) {
-          console.warn("Auth initialization timed out.");
+        if (loadingRef.current && isMountedRef.current) {
           loadingRef.current = false;
           setLoading(false);
         }
       }, 4000);
 
       try {
-        const {
-          data: { session: currentSession },
-          error: sessionError,
-        } = await supabase.auth.getSession();
+        const { data: { session: currentSession } } = await supabase.auth.getSession();
+        
+        if (isMountedRef.current) {
+          const currentUser = currentSession?.user ?? null;
+          setSession(currentSession);
+          setUser(currentUser);
 
-        if (sessionError) throw sessionError;
-
-        const currentUser = currentSession?.user ?? null;
-        setSession(currentSession);
-        setUser(currentUser);
-
-        if (currentUser) {
-          await fetchUserProfile(currentUser.id, currentUser.email);
+          if (currentUser) {
+            await fetchUserProfile(currentUser.id, currentUser.email);
+          }
         }
       } catch (err) {
         console.error("Auth initialization error:", err);
       } finally {
         clearTimeout(timeoutId);
-        loadingRef.current = false;
-        setLoading(false);
+        if (loadingRef.current && isMountedRef.current) {
+          loadingRef.current = false;
+          setLoading(false);
+        }
       }
     };
 
     checkSession();
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, newSession) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, newSession) => {
+      if (!isMountedRef.current) return;
+
+      // Force refresh on critical events
+      if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+        lastFetchedId.current = null; // Reset lock to allow fresh fetch
+      }
+
       setSession(newSession);
       const currentUser = newSession?.user ?? null;
       setUser(currentUser);
+
       if (currentUser) {
         fetchUserProfile(currentUser.id, currentUser.email);
       } else {
         setUserProfile(null);
+        lastFetchedId.current = null;
       }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      isMountedRef.current = false;
+      subscription.unsubscribe();
+    };
   }, [fetchUserProfile]);
 
-  // Stable function refs — defined with useCallback outside useMemo
   const login = useCallback(async (email: string, password: string): Promise<AuthResult> => {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) return { success: false, error: error.message };
@@ -177,6 +206,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const logout = useCallback(async (): Promise<void> => {
+    lastFetchedId.current = null;
     await supabase.auth.signOut();
   }, []);
 

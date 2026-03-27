@@ -1,28 +1,48 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "../../lib/supabase";
 import { Database } from "lucide-react";
+import { getCache, setCache } from "@/utils/cache";
 
 export const SupabaseStatus = () => {
   const [status, setStatus] = useState<'checking' | 'connected' | 'error'>('checking');
 
   useEffect(() => {
+    let isMounted = true;
+
     const checkConnection = async () => {
+      const cacheKey = "supabase_status";
+      const cachedResult = getCache(cacheKey);
+      if (cachedResult === 'connected') {
+        setStatus('connected');
+        return;
+      }
+      
       try {
         // Simple query to check connectivity
         const { error } = await supabase.from('webinars').select('id', { count: 'exact', head: true });
+        
+        if (!isMounted) return;
+
         if (error) {
           console.warn("[Supabase] Connection check failed:", error.message);
           setStatus('error');
         } else {
+          setCache(cacheKey, 'connected');
           setStatus('connected');
         }
       } catch (err) {
-        console.error("[Supabase] Connection exception:", err);
-        setStatus('error');
+        if (isMounted) {
+          console.error("[Supabase] Connection exception:", err);
+          setStatus('error');
+        }
       }
     };
 
     checkConnection();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   if (status === 'checking') return null;

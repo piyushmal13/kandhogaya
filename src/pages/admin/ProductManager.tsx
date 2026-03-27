@@ -4,6 +4,7 @@ import { supabase } from "../../lib/supabase";
 import { Product } from "../../types";
 import { useAuth } from "../../contexts/AuthContext";
 import { Dialog } from "../../components/ui/Dialog";
+import { getCache, setCache } from "@/utils/cache";
 
 export const ProductManager = () => {
   const { session } = useAuth();
@@ -16,20 +17,56 @@ export const ProductManager = () => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [productToDelete, setProductToDelete] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
   const fetchProducts = async () => {
+    const cacheKey = "products_list";
     setLoading(true);
-    const { data } = await supabase
+    const res = await supabase
       .from('products')
       .select('*')
       .order('created_at', { ascending: false });
     
-    if (data) setProducts(data);
+    if (res?.data) {
+      const data = res.data;
+      setCache(cacheKey, data);
+      setProducts(data);
+    }
     setLoading(false);
   };
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const initFetch = async () => {
+      const cacheKey = "products_list";
+      const cached = getCache(cacheKey);
+      if (cached) {
+        setProducts(cached);
+        setLoading(false);
+        return;
+      }
+
+      setLoading(true);
+      const res = await supabase
+        .from('products')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (!isMounted) return;
+
+      if (res?.data) {
+        const data = res.data;
+        setCache(cacheKey, data);
+        setProducts(data);
+      }
+      setLoading(false);
+    };
+
+    initFetch();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const handleEdit = (product: Product) => {
     setEditingId(product.id);

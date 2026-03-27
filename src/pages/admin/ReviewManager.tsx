@@ -4,6 +4,9 @@ import { supabase } from "../../lib/supabase";
 import { Review } from "../../types";
 import { useAuth } from "../../contexts/AuthContext";
 import { Dialog } from "../../components/ui/Dialog";
+import { getCache, setCache } from "@/utils/cache";
+
+const cacheKey = "reviews_list";
 
 export const ReviewManager = () => {
   const { session } = useAuth();
@@ -16,20 +19,52 @@ export const ReviewManager = () => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [reviewToDelete, setReviewToDelete] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchReviews();
-  }, []);
-
   const fetchReviews = async () => {
     setLoading(true);
-    const { data } = await supabase
+    const res = await supabase
       .from('reviews')
       .select('*')
       .order('created_at', { ascending: false });
     
-    if (data) setReviews(data);
+    if (res?.data) {
+      setCache(cacheKey, res.data);
+      setReviews(res.data);
+    }
     setLoading(false);
   };
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const initFetch = async () => {
+      const cached = getCache(cacheKey);
+      if (cached) {
+        setReviews(cached);
+        setLoading(false);
+        return;
+      }
+
+      setLoading(true);
+      const res = await supabase
+        .from('reviews')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (!isMounted) return;
+
+      if (res?.data) {
+        setCache(cacheKey, res.data);
+        setReviews(res.data);
+      }
+      setLoading(false);
+    };
+
+    initFetch();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const handleEdit = (review: Review) => {
     setEditingId(review.id || null);

@@ -71,14 +71,14 @@ export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationM
 
     try {
       // 1. Check if already registered
-      const { data: existing } = await supabase
+      const res = await supabase
         .from('webinar_registrations')
         .select('id')
         .eq('webinar_id', webinar.id)
         .eq('user_id', user.id)
         .maybeSingle();
 
-      if (existing) {
+      if (res?.data) {
         setStep(3); // Already registered success
         setLoading(false);
         return;

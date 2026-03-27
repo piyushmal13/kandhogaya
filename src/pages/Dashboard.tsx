@@ -13,7 +13,7 @@ import {
   BookOpen
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
-import { supabase, safeQuery } from "../lib/supabase";
+import { supabase } from "../lib/supabase";
 import { cn } from "../utils/cn";
 import { motion, AnimatePresence } from "motion/react";
 import { getSignals } from "../services/apiHandlers";
@@ -44,6 +44,8 @@ interface UserWebinar {
   status: string;
 }
 
+import { getCache, setCache } from "@/utils/cache";
+
 export const Dashboard = () => {
   const { user, userProfile } = useAuth();
   const navigate = useNavigate();
@@ -55,55 +57,84 @@ export const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [dbHealthy, setDbHealthy] = useState(true);
 
+
   useEffect(() => {
+    let isMounted = true;
+
     if (user) {
+      const cacheKey = `dashboard_${user.id}`;
+      const cached = getCache(cacheKey);
+      
+      if (cached) {
+        const { licenses, signals, webinars } = cached;
+        setLicenses(licenses);
+        setSignals(signals);
+        setWebinars(webinars);
+        setLoading(false);
+        return;
+      }
+
       const fetchDashboardData = async () => {
         setLoading(true);
         try {
           // Concurrent fetching for performance
-          const [licenseData, signalData, webinarData] = await Promise.all([
-            safeQuery<BotLicense[]>(
-              supabase
-                .from("bot_licenses")
-                .select("*, algo_bots(name)")
-                .eq("user_id", user.id)
-            ),
-            getSignals(), // This gets all signals, filtered to top 5 below
-            safeQuery<any[]>(
-              supabase
-                .from("webinar_registrations")
-                .select("webinars(id, title, date_time, status)")
-                .eq("user_id", user.id)
-                .limit(3)
-            )
+          const [licenseRes, signalData, webinarRes] = await Promise.all([
+            supabase
+              .from("bot_licenses")
+              .select("*, algo_bots(name)")
+              .eq("user_id", user.id),
+            getSignals(), 
+            supabase
+              .from("webinar_registrations")
+              .select("webinars(id, title, date_time, status)")
+              .eq("user_id", user.id)
+              .limit(3)
           ]);
 
-          setLicenses(Array.isArray(licenseData) ? licenseData : []);
-          
+          if (!isMounted) return;
+
+          const licenseData = licenseRes?.data ?? [];
+          const webinarData = (webinarRes?.data || []) as any[];
+
           // Filter top 5 active signals
           const activeSignals = (Array.isArray(signalData) ? signalData : [])
             .filter(s => s.status === 'active')
             .slice(0, 5) as UserSignal[];
-          setSignals(activeSignals);
 
           // Flatten webinar data safely handling foreign key join
-          const flatWebinars = (Array.isArray(webinarData) ? webinarData : [])
+          const flatWebinars = webinarData
             .map(w => w.webinars)
             .filter(Boolean) as UserWebinar[];
+          
+          const cacheKey = `dashboard_${user.id}`;
+          setCache(cacheKey, {
+            licenses: Array.isArray(licenseData) ? licenseData : [],
+            signals: activeSignals,
+            webinars: flatWebinars
+          });
+
+          setLicenses(Array.isArray(licenseData) ? licenseData : []);
+          setSignals(activeSignals);
           setWebinars(flatWebinars);
 
           setDbHealthy(true);
         } catch (err) {
           console.error("Dashboard Fetch Error:", err);
-          setDbHealthy(false);
-          toastError("Unable to synchronise console data. Please check connection.");
+          if (isMounted) {
+            setDbHealthy(false);
+            toastError("Unable to synchronise console data. Please check connection.");
+          }
         } finally {
-          setLoading(false);
+          if (isMounted) setLoading(false);
         }
       };
       
       fetchDashboardData();
     }
+
+    return () => {
+      isMounted = false;
+    };
   }, [user, toastError]);
 
   if (!user) return null; // Handled by ProtectedRoute but for TS safety

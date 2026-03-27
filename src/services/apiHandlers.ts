@@ -4,10 +4,36 @@ import {
 } from "../types";
 
 /**
- * API Handlers Service
- * Centralizes all database interactions for the IFXTrades platform.
- * Ensures defensive checks and consistent data structures.
+ * Institutional Reliability Wrappers
  */
+const withTimeout = async <T>(promise: PromiseLike<T>, ms = 5000): Promise<T> => {
+  let timeoutId: any;
+
+  const timeout = new Promise<never>((_, reject) => {
+    timeoutId = setTimeout(() => reject(new Error("timeout")), ms);
+  });
+
+  return Promise.race([
+    Promise.resolve(promise).finally(() => clearTimeout(timeoutId)),
+    timeout,
+  ]);
+};
+
+const safeExecute = async (
+  fn: () => PromiseLike<any> | Promise<any>,
+  retries = 1
+): Promise<any> => {
+  try {
+    const res = await fn();
+
+    if (res?.error) throw res.error;
+
+    return res;
+  } catch {
+    if (retries > 0) return safeExecute(fn, retries - 1);
+    throw new Error("Operation failed");
+  }
+};
 
 // --- WEBINARS ---
 
@@ -28,7 +54,6 @@ export const getWebinarById = async (id: string) => {
     .single();
   
   if (error) {
-    console.error(`Error fetching webinar ${id}:`, error);
     return null;
   }
   return data as Webinar;
@@ -43,7 +68,6 @@ export const checkWebinarRegistration = async (webinarId: string, userId: string
     .maybeSingle();
 
   if (error) {
-    console.error("Error checking registration:", error);
     return false;
   }
   return !!data;
@@ -79,30 +103,41 @@ export const getProductById = async (id: string) => {
     .single();
   
   if (error) {
-    console.error(`Error fetching product ${id}:`, error);
     return null;
   }
   return data as Product;
 };
 
 export const subscribeToAlgo = async (userId: string, algoId: string, durationDays: number) => {
-  const key = `IFX-${Math.random().toString(36).toUpperCase().substring(2, 6)}-${Math.random().toString(36).toUpperCase().substring(2, 6)}`;
-  const expiresAt = new Date();
-  expiresAt.setDate(expiresAt.getDate() + durationDays);
+  try {
+    const key = `IFX-${Math.random().toString(36).toUpperCase().substring(2, 6)}-${Math.random().toString(36).toUpperCase().substring(2, 6)}`;
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + durationDays);
 
-  const { data, error } = await supabase.from('bot_licenses').insert({
-    user_id: userId,
-    algo_id: algoId,
-    license_key: key,
-    is_active: true,
-    expires_at: expiresAt.toISOString()
-  }).select().single();
+    const res = await safeExecute(() =>
+      withTimeout(
+        supabase.from('bot_licenses').insert({
+          user_id: userId,
+          algo_id: algoId,
+          license_key: key,
+          is_active: true,
+          expires_at: expiresAt.toISOString()
+        }).select().maybeSingle()
+      )
+    );
 
-  if (error) {
-    console.error("Error creating license:", error);
-    return { success: false, error };
+    const data = res?.data ?? null;
+
+    return {
+      success: true,
+      data: data ?? null
+    };
+  } catch {
+    return {
+      success: false,
+      error: "Something went wrong. Please try again."
+    };
   }
-  return { success: true, license: data };
 };
 
 // --- BLOG / CONTENT ---
@@ -130,7 +165,6 @@ export const getBlogPostBySlug = async (slug: string) => {
     .single();
   
   if (error) {
-    console.error(`Error fetching blog post ${slug}:`, error);
     return null;
   }
   return data as Blog;
@@ -155,7 +189,6 @@ export const getCourseById = async (id: string) => {
     .single();
   
   if (error) {
-    console.error(`Error fetching course ${id}:`, error);
     return null;
   }
   return data as Course;
@@ -214,14 +247,141 @@ export const getAgentStats = async (agentId: string) => {
 };
 
 export const trackSale = async (agentId: string, userId: string, productId: string, amount: number) => {
-  return supabase
-    .from("sales_tracking")
-    .insert({
-      agent_id: agentId,
-      user_id: userId,
-      product_id: productId,
-      sale_amount: amount
-    });
+  try {
+    const res = await safeExecute(() =>
+      withTimeout(
+        supabase
+          .from("sales_tracking")
+          .insert({
+            agent_id: agentId,
+            user_id: userId,
+            product_id: productId,
+            sale_amount: amount
+          }).select().maybeSingle()
+      )
+    );
+
+    const data = res?.data ?? null;
+
+    return {
+      success: true,
+      data: data ?? null
+    };
+  } catch {
+    return {
+      success: false,
+      error: "Something went wrong. Please try again."
+    };
+  }
+};
+
+export const sendContactMessage = async (name: string, email: string, subject: string, message: string) => {
+  try {
+    await safeExecute(() =>
+      withTimeout(
+        supabase.from("contact_messages").insert([
+          { full_name: name, email, subject, message }
+        ])
+      )
+    );
+    return {
+      success: true
+    };
+  } catch {
+    return {
+      success: false,
+      error: "Something went wrong. Please try again."
+    };
+  }
+};
+
+export const subscribeToNewsletter = async (email: string) => {
+  try {
+    await safeExecute(() =>
+      withTimeout(
+        supabase.from("newsletter_subs").insert([{ email }])
+      )
+    );
+    return {
+      success: true
+    };
+  } catch {
+    return {
+      success: false,
+      error: "Something went wrong. Please try again."
+    };
+  }
+};
+
+export const registerForWebinar = async (webinarId: string, userId: string, email: string) => {
+  try {
+    const { data: existing } = await supabase
+      .from('webinar_registrations')
+      .select('id')
+      .eq('webinar_id', webinarId)
+      .eq('user_id', userId)
+      .maybeSingle();
+
+    if (existing) return { success: true, alreadyRegistered: true };
+
+    await safeExecute(() =>
+      withTimeout(
+        supabase
+          .from('webinar_registrations')
+          .insert([{
+            webinar_id: webinarId,
+            user_id: userId,
+            email,
+            attended: false,
+            payment_status: 'completed'
+          }])
+      )
+    );
+
+    safeExecute(() =>
+      supabase.rpc('increment_webinar_registrations', { webinar_id: webinarId })
+    ).catch(() => {});
+
+    return {
+      success: true
+    };
+  } catch {
+    return {
+      success: false,
+      error: "Something went wrong. Please try again."
+    };
+  }
+};
+
+export const submitPaymentProof = async (userId: string, amount: number, proofUrl: string) => {
+  try {
+    const res = await safeExecute(() =>
+      withTimeout(
+        supabase
+          .from("payment-proofs")
+          .insert([{ 
+            user_id: userId, 
+            amount: amount, 
+            proof_url: proofUrl, 
+            status: "pending" 
+          }])
+          .select()
+          .maybeSingle()
+      )
+    );
+
+    const data = res?.data ?? null;
+
+    return {
+      success: true,
+      data: data ?? null
+    };
+  } catch {
+    return {
+      success: false,
+      error: "Something went wrong. Please try again."
+    };
+  }
 };
 
 // --- MARKET DATA ---

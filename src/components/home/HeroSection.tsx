@@ -8,6 +8,8 @@ import {
 } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 
+import { getCache, setCache } from "@/utils/cache";
+
 export const HeroSection = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [stats, setStats] = useState({
@@ -18,15 +20,24 @@ export const HeroSection = () => {
   const [particles, setParticles] = useState<Array<{id: string; x: number; y: number; vx: number; vy: number; size: number; opacity: number}>>([]);
 
   const fetchRealStats = useCallback(async () => {
+    const cacheKey = "hero_stats";
+    const cached = getCache(cacheKey);
+    if (cached) {
+      setStats(cached);
+      return;
+    }
+
     try {
       const { count: userCount } = await supabase.from('users').select('*', { count: 'exact', head: true });
-      if (userCount) {
-        setStats(prev => ({ ...prev, traders: `${(userCount + 12000).toLocaleString()}+` }));
+      if (userCount !== null) {
+        const newStats = { ...stats, traders: `${(userCount + 12000).toLocaleString()}+` };
+        setCache(cacheKey, newStats);
+        setStats(newStats);
       }
     } catch (e) {
       console.error("Stats fetch error:", e);
     }
-  }, []);
+  }, [stats]);
 
   const initParticles = useCallback(() => {
     return Array.from({ length: 40 }).map((_, i) => ({
@@ -49,10 +60,22 @@ export const HeroSection = () => {
   }, []);
 
   useEffect(() => {
-    fetchRealStats();
-    setParticles(initParticles());
+    let isMounted = true;
+
+    const fetchData = async () => {
+      await fetchRealStats();
+      if (isMounted) {
+        setParticles(initParticles());
+      }
+    };
+    
+    fetchData();
+
     const interval = setInterval(updateParticles, 50);
-    return () => clearInterval(interval);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
   }, [fetchRealStats, initParticles, updateParticles]);
 
   const scrollToDiscovery = () => {

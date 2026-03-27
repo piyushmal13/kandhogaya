@@ -1,10 +1,18 @@
-import { supabase, safeQuery } from '../lib/supabase';
+import { supabase } from '../lib/supabase';
+import { getCache, setCache } from '@/utils/cache';
+
+const cacheKey = "service_reviews";
 
 export const fetchReviews = async () => {
-  return safeQuery<any[]>(
-    supabase
-      .from('reviews')
-      .select('*')
-      .order('created_at', { ascending: false })
-  );
+  const cached = getCache(cacheKey);
+  if (cached) return cached;
+
+  const res = await supabase
+    .from('reviews')
+    .select('*')
+    .order('created_at', { ascending: false });
+    
+  const data = res?.data ?? [];
+  setCache(cacheKey, data);
+  return data;
 };

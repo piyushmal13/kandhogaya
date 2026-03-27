@@ -3,6 +3,9 @@ import { Video, Plus, Calendar, Search, Trash2, Edit2 } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../contexts/AuthContext";
 import { Dialog } from "../../components/ui/Dialog";
+import { getCache, setCache } from "@/utils/cache";
+
+const cacheKey = "webinars_list";
 
 export const WebinarManager = () => {
   const { session } = useAuth();
@@ -32,16 +35,46 @@ export const WebinarManager = () => {
   const [webinarToDelete, setWebinarToDelete] = useState<string | null>(null);
 
   const fetchRecentWebinars = async () => {
-    const { data } = await supabase
+    const res = await supabase
       .from('webinars')
       .select('*')
       .order('date_time', { ascending: true })
       .limit(10);
-    if (data) setRecentWebinars(data);
+    if (res?.data) {
+      setCache(cacheKey, res.data);
+      setRecentWebinars(res.data);
+    }
   };
 
   useEffect(() => {
-    fetchRecentWebinars();
+    let isMounted = true;
+
+    const initFetch = async () => {
+      const cached = getCache(cacheKey);
+      if (cached) {
+        setRecentWebinars(cached);
+        return;
+      }
+
+      const res = await supabase
+        .from('webinars')
+        .select('*')
+        .order('date_time', { ascending: true })
+        .limit(10);
+      
+      if (!isMounted) return;
+
+      if (res?.data) {
+        setCache(cacheKey, res.data);
+        setRecentWebinars(res.data);
+      }
+    };
+
+    initFetch();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const handleEdit = (webinar: any) => {
