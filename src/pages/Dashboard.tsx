@@ -16,9 +16,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { supabase } from "../lib/supabase";
 import { cn } from "../utils/cn";
 import { motion, AnimatePresence } from "motion/react";
-import { getSignals } from "../services/apiHandlers";
 import { BRANDING } from "../constants/branding";
-import { useToast } from "../contexts/ToastContext";
 
 interface BotLicense {
   id: string;
@@ -44,16 +42,14 @@ interface UserWebinar {
   status: string;
 }
 
-import { getCache, setCache } from "@/utils/cache";
 
 export const Dashboard = () => {
   const { user, userProfile } = useAuth();
   const navigate = useNavigate();
-  const { error: toastError } = useToast();
 
-  const [licenses, setLicenses] = useState<BotLicense[]>([]);
+  const [licenses] = useState<BotLicense[]>([]);
   const [signals, setSignals] = useState<UserSignal[]>([]);
-  const [webinars, setWebinars] = useState<UserWebinar[]>([]);
+  const [webinars] = useState<UserWebinar[]>([]);
   const [loading, setLoading] = useState(true);
   const [dbHealthy, setDbHealthy] = useState(true);
 
@@ -62,80 +58,31 @@ export const Dashboard = () => {
     let isMounted = true;
 
     if (user) {
-      const cacheKey = `dashboard_${user.id}`;
-      const cached = getCache(cacheKey);
-      
-      if (cached) {
-        const { licenses, signals, webinars } = cached;
-        setLicenses(licenses);
-        setSignals(signals);
-        setWebinars(webinars);
-        setLoading(false);
-        return;
-      }
-
-      const fetchDashboardData = async () => {
+      const fetchData = async () => {
         setLoading(true);
         try {
-          // Concurrent fetching for performance
-          const [licenseRes, signalData, webinarRes] = await Promise.all([
-            supabase
-              .from("bot_licenses")
-              .select("*, algo_bots(name)")
-              .eq("user_id", user.id),
-            getSignals(), 
-            supabase
-              .from("webinar_registrations")
-              .select("webinars(id, title, date_time, status)")
-              .eq("user_id", user.id)
-              .limit(3)
-          ]);
+          const res = await supabase.from("signals").select("*");
+          console.log("SUPABASE RAW:", res);
 
           if (!isMounted) return;
 
-          const licenseData = licenseRes?.data ?? [];
-          const webinarData = (webinarRes?.data || []) as any[];
-
-          // Filter top 5 active signals
-          const activeSignals = (Array.isArray(signalData) ? signalData : [])
-            .filter(s => s.status === 'active')
-            .slice(0, 5) as UserSignal[];
-
-          // Flatten webinar data safely handling foreign key join
-          const flatWebinars = webinarData
-            .map(w => w.webinars)
-            .filter(Boolean) as UserWebinar[];
-          
-          const cacheKey = `dashboard_${user.id}`;
-          setCache(cacheKey, {
-            licenses: Array.isArray(licenseData) ? licenseData : [],
-            signals: activeSignals,
-            webinars: flatWebinars
-          }, 10000);
-
-          setLicenses(Array.isArray(licenseData) ? licenseData : []);
-          setSignals(activeSignals);
-          setWebinars(flatWebinars);
-
+          setSignals(res.data || []);
           setDbHealthy(true);
         } catch (err) {
-          console.error("Dashboard Fetch Error:", err);
-          if (isMounted) {
-            setDbHealthy(false);
-            toastError("Unable to synchronise console data. Please check connection.");
-          }
+          console.error("Debug Fetch Error:", err);
+          if (isMounted) setDbHealthy(false);
         } finally {
           if (isMounted) setLoading(false);
         }
       };
-      
-      fetchDashboardData();
+
+      fetchData();
     }
 
     return () => {
       isMounted = false;
     };
-  }, [user, toastError]);
+  }, [user]);
 
   if (!user) return null; // Handled by ProtectedRoute but for TS safety
 
