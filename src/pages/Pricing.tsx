@@ -4,13 +4,8 @@ import {
   Check, 
   X, 
   Zap, 
-  Star, 
-  ShieldCheck, 
-  TrendingUp, 
-  Users, 
   Clock,
   ArrowRight,
-  TrendingDown,
   Monitor
 } from "lucide-react";
 import { cn } from "@/utils/cn";
@@ -97,6 +92,13 @@ export const Pricing = () => {
 
       <div className="container relative z-10 px-6 mx-auto">
         
+        {/* Urgency Signal: High-Conversion Orchestration */}
+        <div className="mb-12 flex justify-center animate-in slide-in-from-top-4 duration-700">
+          <div className="px-8 py-3 bg-red-500/10 border border-red-500/20 rounded-full text-red-500 text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-red-500/5">
+            ⚡ Institutional Alert: Limited Time Offer – Prices Increasing Soon
+          </div>
+        </div>
+        
         {/* Header Discovery: Urgency Signal */}
         <div className="text-center max-w-3xl mx-auto mb-20 space-y-6">
           <div className="inline-flex items-center gap-3 px-6 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-500 text-[10px] font-black uppercase tracking-[0.3em] animate-in slide-in-from-top-4 duration-700">
@@ -133,15 +135,15 @@ export const Pricing = () => {
             <div 
               key={plan.id}
               className={cn(
-                "group relative p-10 rounded-[48px] border transition-all duration-500 hover:scale-[1.02] active:scale-[0.98]",
+                "group relative p-10 rounded-[48px] border transition-all duration-500 hover:scale-[1.05] active:scale-[0.98] hover:shadow-2xl hover:bg-white/[0.07]",
                 plan.popular 
-                  ? "bg-white/5 border-emerald-500/50 shadow-2xl shadow-emerald-500/10" 
+                  ? "bg-white/5 border-emerald-500/50 shadow-2xl shadow-emerald-500/20 scale-105 z-20" 
                   : "bg-white/5 border-white/10 hover:border-white/20"
               )}
             >
               {plan.popular && (
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 px-6 py-2 bg-emerald-500 text-black text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg">
-                  Most Pro Signal
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 px-6 py-2 bg-emerald-500 text-black text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg z-30">
+                  🔥 MOST POPULAR
                 </div>
               )}
 
@@ -176,13 +178,17 @@ export const Pricing = () => {
               <button 
                 onClick={() => setSelectedPlan({ plan: plan.id, amount: plan.price })}
                 className={cn(
-                  "w-full py-5 rounded-[24px] text-[10px] font-black uppercase tracking-[0.4em] transition-all flex items-center justify-center gap-3 group/btn",
+                  "w-full py-5 rounded-[24px] text-[10px] font-black uppercase tracking-[0.4em] transition-all flex items-center justify-center gap-3 group/btn hover:shadow-[0_0_30px_rgba(16,185,129,0.3)]",
                   plan.popular 
                     ? "bg-emerald-500 text-black hover:bg-white active:bg-emerald-600 shadow-xl shadow-emerald-500/20" 
                     : "bg-white/5 border border-white/10 text-white hover:bg-white hover:text-black"
                 )}
               >
-                Enroll Plan
+                {(() => {
+                  if (plan.id === 'basic') return "Unlock Signals";
+                  if (plan.id === 'pro') return "Join Pro Traders";
+                  return "Start Earning Now";
+                })()}
                 <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
               </button>
             </div>
@@ -284,6 +290,28 @@ export const Pricing = () => {
           </table>
         </div>
 
+        {/* Guarantee Signal Discovery */}
+        <div className="mb-32 flex flex-col items-center gap-4 text-gray-500 animate-pulse">
+            <div className="flex flex-wrap justify-center gap-8 text-[10px] font-black uppercase tracking-widest">
+              <div className="flex items-center gap-2"><Check className="w-4 h-4 text-emerald-500" /> Secure Payment Verification</div>
+              <div className="flex items-center gap-2"><Check className="w-4 h-4 text-emerald-500" /> Instant Access After Approval</div>
+              <div className="flex items-center gap-2"><Check className="w-4 h-4 text-emerald-500" /> Trusted by 1000+ Traders</div>
+            </div>
+        </div>
+
+        {/* Testimonial Discovery Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-32">
+          {[
+            { text: "Made my first profit in 7 days. High-fidelity signals are institutional grade.", author: "Elite Trader" },
+            { text: "Best signals platform in the ecosystem. Absolute execution clarity.", author: "Pro Member" },
+            { text: "Highly accurate trades. The algo discovery is a game changer.", author: "Institutional User" }
+          ].map(t => (
+            <div key={t.author} className="p-10 bg-white/5 border border-white/10 rounded-[40px] italic text-sm text-gray-400 leading-relaxed hover:border-emerald-500/20 transition-all">
+              "{t.text}"
+              <span className="block not-italic text-[10px] font-black uppercase tracking-widest text-emerald-500 mt-6">— {t.author}</span>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Fulfillment Trigger */}
