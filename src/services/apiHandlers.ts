@@ -1,7 +1,6 @@
 import { supabase, safeQuery } from "../lib/supabase";
 import {
-  Webinar, Signal, Product, Review, Blog, Course,
-  Lesson, BotLicense, ProductVariant, WebinarRegistration
+  Webinar, Signal, Product, Blog, Course
 } from "../types";
 
 /**
@@ -143,7 +142,7 @@ export const getCourses = async () => {
   return safeQuery<Course[]>(
     supabase
       .from("courses")
-      .select("*")
+      .select("*, chapters:lessons(*)")
       .order("created_at", { ascending: false })
   );
 };
@@ -223,4 +222,33 @@ export const trackSale = async (agentId: string, userId: string, productId: stri
       product_id: productId,
       sale_amount: amount
     });
+};
+
+// --- MARKET DATA ---
+
+export const getMarketData = async () => {
+  return safeQuery<any[]>(
+    supabase
+      .from("market_data")
+      .select("*")
+      .order("symbol", { ascending: true })
+  );
+};
+
+export const subscribeToMarketData = (callback: (payload: any) => void) => {
+  return supabase
+    .channel('public:market_data')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'market_data' }, callback)
+    .subscribe();
+};
+
+// --- PERFORMANCE RESULTS ---
+
+export const getPerformanceResults = async () => {
+  return safeQuery<any[]>(
+    supabase
+      .from("performance_results")
+      .select("*")
+      .order("created_at", { ascending: true })
+  );
 };

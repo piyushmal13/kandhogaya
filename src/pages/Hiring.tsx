@@ -57,13 +57,12 @@ export const Hiring = () => (
               <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-slate-300">{role.type}</span>
               <span className="rounded-full border border-emerald-300/20 bg-emerald-300/10 px-3 py-1 text-emerald-100">{role.dept}</span>
             </div>
-            <button
-              type="button"
-              onClick={() => alert("Application form opening...")}
+            <a
+              href={`mailto:${BRANDING.careersEmail}`}
               className="mt-6 inline-flex w-full items-center justify-center rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white hover:bg-white/10"
             >
               Apply Now
-            </button>
+            </a>
           </Reveal>
         ))}
       </div>

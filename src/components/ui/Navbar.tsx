@@ -43,7 +43,7 @@ export const Navbar = () => {
     { name: "Signals", path: "/signals", icon: Zap },
     { name: "Algos", path: "/marketplace", icon: BarChart3 },
     { name: "Results", path: "/results", icon: Target },
-    { name: "Academy", path: "/courses", icon: BookOpen },
+    { name: "Academy", path: "/academy", icon: BookOpen },
     { name: "Webinars", path: "/webinars", icon: Video },
     { name: "Insights", path: "/blog", icon: MessageSquare },
   ];

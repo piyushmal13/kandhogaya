@@ -2,6 +2,8 @@ import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { motion, useReducedMotion } from 'motion/react';
 import { TrendingUp, TrendingDown, Activity, Zap } from 'lucide-react';
 
+import { getMarketData, subscribeToMarketData } from "../../services/apiHandlers";
+
 interface MarketPair {
   symbol: string;
   price: string;
@@ -11,22 +13,8 @@ interface MarketPair {
   volume?: string;
 }
 
-const INITIAL_PAIRS: MarketPair[] = [
-  { symbol: "XAU/USD", price: "2,184.20", change: "+0.45%", up: true, baseSymbol: "GOLD", volume: "1.2B" },
-  { symbol: "EUR/USD", price: "1.0942", change: "+0.12%", up: true, baseSymbol: "EUR", volume: "4.8B" },
-  { symbol: "BTC/USD", price: "68,210.50", change: "-1.24%", up: false, baseSymbol: "BTC", volume: "32.1B" },
-  { symbol: "USD/JPY", price: "149.24", change: "+0.08%", up: true, baseSymbol: "JPY", volume: "2.1B" },
-  { symbol: "ETH/USD", price: "3,825.10", change: "+2.15%", up: true, baseSymbol: "ETH", volume: "12.4B" },
-  { symbol: "GBP/USD", price: "1.2842", change: "-0.05%", up: false, baseSymbol: "GBP", volume: "1.8B" },
-  { symbol: "NAS100", price: "18,410.50", change: "+0.15%", up: true, baseSymbol: "NDAQ", volume: "15.2B" },
-  { symbol: "SOL/USD", price: "148.20", change: "+4.12%", up: true, baseSymbol: "SOL", volume: "4.2B" },
-];
-
-const TWELVE_DATA_KEY = import.meta.env.VITE_TWELVE_DATA_KEY as string | undefined;
-const SYMBOLS = "XAU/USD,EUR/USD,BTC/USD,USD/JPY,GBP/USD,ETH/USD,SOL/USD,IXIC";
-
 export const MarketTicker = () => {
-  const [pairs, setPairs] = useState<MarketPair[]>(INITIAL_PAIRS);
+  const [pairs, setPairs] = useState<MarketPair[]>([]);
   const [lastUpdate, setLastUpdate] = useState<string>("");
   const [isSyncing, setIsSyncing] = useState(false);
   const [marketStatus, setMarketStatus] = useState<"OPEN" | "CLOSED">("OPEN");
@@ -41,96 +29,76 @@ export const MarketTicker = () => {
     };
   }, []);
 
-  const simulateData = useCallback(() => {
-    if (!isMounted.current) return;
-    
-    setPairs(prev => prev.map(p => {
-      const currentPrice = Number.parseFloat(p.price.replace(',', ''));
-      const volatility = 0.0005;
-      const change = currentPrice * (Math.random() - 0.5) * volatility;
-      const newPrice = currentPrice + change;
-      
-      const decimals = p.price.includes('.') ? p.price.split('.')[1].length : 2;
-      
-      return {
-        ...p,
-        price: newPrice.toLocaleString(undefined, { 
-          minimumFractionDigits: decimals,
-          maximumFractionDigits: decimals 
-        })
-      };
-    }));
-    setLastUpdate(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
-  }, []);
-
   const fetchData = useCallback(async () => {
     if (!isMounted.current) return;
-    
     setIsSyncing(true);
     
-    if (!TWELVE_DATA_KEY) {
-      simulateData();
-      setTimeout(() => {
-        if (isMounted.current) setIsSyncing(false);
-      }, 800);
-      return;
-    }
-
     try {
-      const response = await fetch(
-        `https://api.twelvedata.com/quote?symbol=${SYMBOLS}&apikey=${TWELVE_DATA_KEY}`
-      );
-      const data = await response.json();
-      const items = data.symbol ? { [data.symbol]: data } : data;
+      const data = await getMarketData();
+      if (!isMounted.current || !data) return;
 
-      const newPairs = Object.entries(items).map(([sym, details]: [string, any]) => {
-        if (!details || details.code || details.status === "error" || !details.close) return null;
-
-        const base = sym.split('/')[0];
-        const price = Number.parseFloat(details.close) || 0;
-        const pct = Number.parseFloat(details.percent_change) || 0;
-        
-        const formattedPrice = price.toLocaleString(undefined, { 
-          minimumFractionDigits: price < 10 ? 4 : 2,
-          maximumFractionDigits: price < 10 ? 4 : 2 
-        });
-
-        let displaySymbol = base;
-        if (base === "XAU") displaySymbol = "GOLD";
-        else if (base === "IXIC") displaySymbol = "NAS100";
+      const formatted = data.map(item => {
+        let baseSymbol = item.symbol.substring(0, 3);
+        if (item.symbol === 'XAUUSD') baseSymbol = 'GOLD';
+        else if (item.symbol === 'NASDAQ') baseSymbol = 'NAS100';
 
         return {
-          symbol: sym.replace('/', ''),
-          price: formattedPrice,
-          change: (pct >= 0 ? "+" : "") + pct.toFixed(2) + "%",
-          up: pct >= 0,
-          baseSymbol: displaySymbol,
-          volume: details.volume ? (Number.parseInt(details.volume) / 1000000).toFixed(1) + "M" : undefined
+          symbol: item.symbol,
+          price: item.price,
+          change: item.change,
+          up: item.up,
+          baseSymbol,
+          volume: item.volume
         };
-      }).filter(p => p !== null) as MarketPair[];
-
-      if (isMounted.current && newPairs.length > 0) {
-        setPairs(newPairs);
-        setLastUpdate(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
-      }
+      });
+      
+      setPairs(formatted);
+      setLastUpdate(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
     } catch (err) {
-      if (isMounted.current) {
-        console.error("Institutional Data Sync Error:", err);
-        simulateData();
-      }
+      console.error("Market Data Sync Error:", err);
     } finally {
       if (isMounted.current) {
-        setTimeout(() => {
-          if (isMounted.current) setIsSyncing(false);
-        }, 2000);
+        setTimeout(() => setIsSyncing(false), 1000);
       }
     }
-  }, [simulateData]);
+  }, []);
 
   useEffect(() => {
     fetchData();
-    const interval = setInterval(fetchData, TWELVE_DATA_KEY ? 60000 : 5000);
-    return () => clearInterval(interval);
+    
+    const channel = subscribeToMarketData((payload: any) => {
+      const isUpdate = payload.eventType === 'UPDATE' || payload.eventType === 'INSERT';
+      if (!isUpdate) return;
+
+      setPairs(prev => {
+        const updated = [...prev];
+        const index = updated.findIndex(p => p.symbol === payload.new.symbol);
+        
+        let baseSymbol = payload.new.symbol.substring(0, 3);
+        if (payload.new.symbol === 'XAUUSD') baseSymbol = 'GOLD';
+        else if (payload.new.symbol === 'NASDAQ') baseSymbol = 'NAS100';
+
+        const newItem = {
+          symbol: payload.new.symbol,
+          price: payload.new.price,
+          change: payload.new.change,
+          up: payload.new.up,
+          baseSymbol,
+          volume: payload.new.volume
+        };
+        
+        if (index >= 0) {
+          updated[index] = newItem;
+          return updated;
+        }
+        return [...updated, newItem];
+      });
+      setLastUpdate(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+    });
+
+    return () => {
+      channel.unsubscribe();
+    };
   }, [fetchData]);
 
   useEffect(() => {
