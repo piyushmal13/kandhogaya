@@ -66,7 +66,7 @@ export const Pricing = () => {
     setLoading(true);
     try {
       const [algoRes, webinarRes] = await Promise.all([
-        supabase.from("algo_products").select("*").limit(3),
+        supabase.from("algo_bots").select("*").limit(3),
         supabase.from("webinars").select("*").gte("date", new Date().toISOString()).limit(3)
       ]);
       

@@ -50,9 +50,9 @@ export const Dashboard = () => {
   const { user, userProfile } = useAuth();
   const navigate = useNavigate();
 
-  const [licenses] = useState<BotLicense[]>([]);
+  const [licenses, setLicenses] = useState<BotLicense[]>([]);
   const [signals, setSignals] = useState<UserSignal[]>([]);
-  const [webinars] = useState<UserWebinar[]>([]);
+  const [webinars, setWebinars] = useState<UserWebinar[]>([]);
   const [loading, setLoading] = useState(true);
   const [dbHealthy, setDbHealthy] = useState(true);
   const [selectedPlan, setSelectedPlan] = useState<{ plan: string, amount: number } | null>(null);
@@ -61,10 +61,16 @@ export const Dashboard = () => {
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await supabase.from("signals").select("*");
-      console.log("SUPABASE RAW:", res);
+      // Institutional Signal Discovery: Unified fulfillment re-discovery
+      const [signalsRes, licenseRes, webinarRes] = await Promise.all([
+        supabase.from("signals").select("*").limit(5),
+        supabase.from("bot_licenses").select("*, algo_bots(name)").eq("user_id", user?.id),
+        supabase.from("webinars").select("*").gte("date_time", new Date().toISOString()).limit(3)
+      ]);
 
-      setSignals(res.data || []);
+      setSignals(signalsRes.data || []);
+      setLicenses(licenseRes.data || []);
+      setWebinars(webinarRes.data || []);
       setDbHealthy(true);
     } catch (err) {
       console.error("Institutional Discovery Error:", err);

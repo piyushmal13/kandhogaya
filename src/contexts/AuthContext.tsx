@@ -208,6 +208,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       // Institutional Signal Orchestration: Discovery events for data-sensitive surfaces
       if (event === 'SIGNED_IN') {
         clearCache();
+        await supabase.auth.getSession(); // Force sync
+        await new Promise(r => setTimeout(r, 300)); // Temporal discovery buffer
         globalThis.dispatchEvent(new Event("app:login"));
       } else if (event === 'SIGNED_OUT') {
         clearCache();
