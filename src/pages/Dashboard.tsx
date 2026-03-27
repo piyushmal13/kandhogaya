@@ -231,7 +231,8 @@ export const Dashboard = () => {
                 <Link to="/marketplace" className="text-[10px] font-black text-emerald-500 hover:text-emerald-400 transition-colors uppercase tracking-[0.2em]">ADD NEW KEY</Link>
               </div>
               
-              {loading ? (
+              <div className={cn("transition-all duration-700", !access.algo && "blur-xl select-none pointer-events-none")}>
+                {loading ? (
                 <div className="space-y-4">
                   <div className="h-24 bg-white/5 rounded-3xl animate-pulse" />
                   <div className="h-24 bg-white/5 rounded-3xl animate-pulse" />
@@ -275,10 +276,11 @@ export const Dashboard = () => {
                     Initialize Setup
                   </Link>
                 </div>
-              )}
+                )}
+              </div>
             </section>
 
-            <section className="p-10 rounded-[48px] bg-white/5 border border-white/10 backdrop-blur-3xl relative overflow-hidden group">
+            <section className="p-10 rounded-[48px] bg-white/5 border border-white/10 backdrop-blur-3xl relative group">
               <div className="flex items-center justify-between mb-10">
                 <h2 className="text-2xl font-black text-white flex items-center gap-3 uppercase tracking-tighter italic">
                   <Zap className="w-6 h-6 text-yellow-500" />
@@ -330,7 +332,7 @@ export const Dashboard = () => {
           </div>
 
           <div className="space-y-8">
-            <section className="p-10 rounded-[48px] bg-emerald-500/5 border border-emerald-500/10 backdrop-blur-3xl relative overflow-hidden group">
+            <section className="p-10 rounded-[48px] bg-emerald-500/5 border border-emerald-500/10 backdrop-blur-3xl relative group">
               <h2 className="text-xl font-black text-white mb-8 flex items-center gap-3 uppercase tracking-tighter italic">
                 <Video className="w-6 h-6 text-emerald-500" />
                 Live Sessions
@@ -351,8 +353,9 @@ export const Dashboard = () => {
                 </div>
               )}
               
-              <AnimatePresence>
-                {webinars.length > 0 ? (
+              <div className={cn("transition-all duration-700", !access.webinars && "blur-xl select-none pointer-events-none")}>
+                <AnimatePresence>
+                  {webinars.length > 0 ? (
                   <div className="space-y-4">
                     {webinars.map(w => (
                       <motion.div 
@@ -377,8 +380,9 @@ export const Dashboard = () => {
                   <div className="text-[10px] uppercase font-black text-gray-700 tracking-[0.2em] text-center py-12 italic">
                     NO SESSIONS SCHEDULED
                   </div>
-                )}
-              </AnimatePresence>
+                  )}
+                </AnimatePresence>
+              </div>
             </section>
 
             <section className="p-10 rounded-[48px] bg-white/5 border border-white/10 backdrop-blur-3xl group">
