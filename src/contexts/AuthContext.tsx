@@ -33,6 +33,7 @@ interface AuthContextValue {
   user: User | null;
   userProfile: UserProfile | null;
   session: Session | null;
+  sessionReady: boolean;
   loading: boolean;
   entitlements: Entitlement[];
   access: ReturnType<typeof getAccess>;
@@ -57,19 +58,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [session, setSession] = useState<Session | null>(null);
+  const [sessionReady, setSessionReady] = useState(false);
   const [entitlements, setEntitlements] = useState<Entitlement[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Safety and Optimization Refs
-  const loadingRef = useRef(true);
   const isFetchingRef = useRef(false);
   const lastFetchedId = useRef<string | null>(null);
   const isMountedRef = useRef(true);
 
   const fetchUserProfile = useCallback(async (userId: string, email?: string) => {
-    // 1. Execution lock - prevent concurrent fetches for same user
-    if (isFetchingRef.current) return;
-    if (lastFetchedId.current === userId) return;
+    if (isFetchingRef.current || lastFetchedId.current === userId) return;
 
     isFetchingRef.current = true;
     lastFetchedId.current = userId;
@@ -78,134 +77,77 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       try {
         return await fn();
       } catch (err) {
-        console.error("Institutional Fetch Signal: Retry attempt failed.", err);
         if (attempts > 0) return retry(fn, attempts - 1);
         return null;
       }
     };
 
     try {
-      // 2. Core user fetch
       const userRes = await retry(() =>
-        Promise.resolve(
-          supabase
-            .from("users")
-            .select("*")
-            .eq("id", userId)
-            .maybeSingle()
-        )
+        supabase.from("users").select("*").eq("id", userId).maybeSingle()
       );
 
       const userData = userRes?.data || null;
 
-      // 3. Metadata sweep (decentralized)
-      const metadataQueries = [
-        () => Promise.resolve(supabase.from("subscriptions").select("id").eq("user_id", userId).eq("status", "active").limit(1)),
-        () => Promise.resolve(supabase.from("signal_subscriptions").select("id").eq("user_id", userId).eq("status", "active").limit(1)),
-        () => Promise.resolve(supabase.from("bot_licenses").select("id").eq("user_id", userId).eq("is_active", true).limit(1)),
-        () => Promise.resolve(supabase.from("webinar_registrations").select("id").eq("user_id", userId).limit(1)),
-        () => Promise.resolve(supabase.from("user_access").select("id").eq("user_id", userId).limit(1)),
-      ];
-
-      const results = await Promise.allSettled(metadataQueries.map(q => retry(q)));
-
-      const hasAccess = results.some(
-        (res) => res.status === "fulfilled" && res.value?.data && res.value.data.length > 0
-      );
-
-      // 4. Entitlement Discovery
+      // Entitlement Discovery
       const entitlementRes = await retry(() => 
-        Promise.resolve(supabase.from("user_entitlements").select("*").eq("user_id", userId))
+        supabase.from("user_entitlements").select("*").eq("user_id", userId)
       );
       const entitlementData = entitlementRes?.data || [];
 
-      // High-fidelity real-time entitlement synchronization
-      supabase
-        .channel(`entitlements_${userId}`)
-        .on(
-          'postgres_changes',
-          {
-            event: '*',
-            schema: 'public',
-            table: 'user_entitlements',
-            filter: `user_id=eq.${userId}`
-          },
-          async () => {
-            const { data: updated } = await supabase
-              .from("user_entitlements")
-              .select("*")
-              .eq("user_id", userId);
-
-            if (updated && isMountedRef.current) {
-              setEntitlements(updated);
-            }
-          }
-        )
-        .subscribe();
-
-      // 5. Safe state updates
       if (isMountedRef.current) {
         const base = userData || { id: userId, email, role: "user" as const };
-        
         setEntitlements(entitlementData);
         setUserProfile({
           ...base,
           role: base.role ?? "user",
-          isPro: hasAccess,
+          isPro: entitlementData.some(e => e.active),
         });
       }
-    } catch {
-      if (isMountedRef.current) {
-        setUserProfile({ id: userId, email, role: "user", isPro: false });
-        setEntitlements([]);
-      }
+    } catch (err) {
+      console.error("Institutional Identity Discovery Error:", err);
     } finally {
       isFetchingRef.current = false;
     }
   }, []);
 
   useEffect(() => {
-    // Component lifecycle tracking
     isMountedRef.current = true;
 
-    const checkSession = async () => {
-      const timeoutId = setTimeout(() => {
-        if (loadingRef.current && isMountedRef.current) {
-          loadingRef.current = false;
-          setLoading(false);
-        }
-      }, 4000);
-
+    const initializeAuth = async () => {
       try {
         const { data: { session: currentSession } } = await supabase.auth.getSession();
         
         if (isMountedRef.current) {
-          const currentUser = currentSession?.user ?? null;
           setSession(currentSession);
+          const currentUser = currentSession?.user ?? null;
           setUser(currentUser);
 
           if (currentUser) {
             await fetchUserProfile(currentUser.id, currentUser.email);
+            setTimeout(() => {
+              if (isMountedRef.current) {
+                setSessionReady(true);
+                globalThis.dispatchEvent(new Event("supabase:ready"));
+              }
+            }, 300);
+          } else {
+            setSessionReady(true);
+            globalThis.dispatchEvent(new Event("supabase:ready"));
           }
         }
       } catch (err) {
         console.error("Auth initialization error:", err);
       } finally {
-        clearTimeout(timeoutId);
-        if (loadingRef.current && isMountedRef.current) {
-          loadingRef.current = false;
-          setLoading(false);
-        }
+        if (isMountedRef.current) setLoading(false);
       }
     };
 
-    checkSession();
+    initializeAuth();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, newSession) => {
       if (!isMountedRef.current) return;
 
-      // Institutional Signal Orchestration: Discovery events for data-sensitive surfaces
-      // Institutional Signal Orchestration: Discovery events for data-sensitive surfaces
       if (event === 'SIGNED_IN') {
         clearCache();
         const { data: sessionData } = await supabase.auth.getSession();
@@ -215,29 +157,32 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             refresh_token: sessionData.session.refresh_token,
           });
         }
-        await new Promise(r => setTimeout(r, 300)); // Temporal discovery buffer
+        await new Promise(r => setTimeout(r, 300));
         globalThis.dispatchEvent(new Event("app:login"));
         globalThis.dispatchEvent(new Event("supabase:refresh"));
+        
+        // Re-calculate user profile on login
+        if (newSession?.user) {
+          await fetchUserProfile(newSession.user.id, newSession.user.email);
+        }
+
+        setTimeout(() => {
+          if (isMountedRef.current) {
+            setSessionReady(true);
+            globalThis.dispatchEvent(new Event("supabase:ready"));
+          }
+        }, 100);
       } else if (event === 'SIGNED_OUT') {
         clearCache();
-        globalThis.dispatchEvent(new Event("app:logout"));
-      }
-
-      // Force refresh on critical events
-      if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-        lastFetchedId.current = null; // Reset lock to allow fresh fetch
-      }
-
-      setSession(newSession);
-      const currentUser = newSession?.user ?? null;
-      setUser(currentUser);
-
-      if (currentUser) {
-        fetchUserProfile(currentUser.id, currentUser.email);
-      } else {
+        setSessionReady(false);
+        setUser(null);
+        setSession(null);
         setUserProfile(null);
         setEntitlements([]);
         lastFetchedId.current = null;
+        globalThis.dispatchEvent(new Event("app:logout"));
+      } else if (event === 'TOKEN_REFRESHED') {
+        setSession(newSession);
       }
     });
 
@@ -247,46 +192,38 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
   }, [fetchUserProfile]);
 
-  const login = useCallback(async (email: string, password: string): Promise<AuthResult> => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) return { success: false, error: error.message };
-    return { success: true };
+  const logout = useCallback(async () => {
+    lastFetchedId.current = null;
+    await supabase.auth.signOut();
   }, []);
 
-  const signup = useCallback(async (email: string, password: string): Promise<SignupResult> => {
+  const login = useCallback(async (email: string, password: string) => {
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    return error ? { success: false, error: error.message } : { success: true };
+  }, []);
+
+  const signup = useCallback(async (email: string, password: string) => {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: { emailRedirectTo: `${globalThis.location.origin}/dashboard` },
     });
-    if (error) return { success: false, error: error.message };
-    return { success: true, needsEmailConfirmation: !data.session };
+    return error ? { success: false, error: error.message } : { success: true, needsEmailConfirmation: !data.session };
   }, []);
 
-  const logout = useCallback(async (): Promise<void> => {
-    lastFetchedId.current = null;
-    await supabase.auth.signOut();
-  }, []);
-
-  const signInWithOtp = useCallback(async (email: string): Promise<AuthResult> => {
+  const signInWithOtp = useCallback(async (email: string) => {
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: {
-        shouldCreateUser: true,
-        emailRedirectTo: `${globalThis.location.origin}/dashboard`,
-      },
+      options: { shouldCreateUser: true, emailRedirectTo: `${globalThis.location.origin}/dashboard` },
     });
-    if (error) return { success: false, error: error.message };
-    return { success: true };
+    return error ? { success: false, error: error.message } : { success: true };
   }, []);
 
-  const verifyOtp = useCallback(async (email: string, token: string): Promise<OtpVerifyResult> => {
+  const verifyOtp = useCallback(async (email: string, token: string) => {
     const types = ["signup", "magiclink", "email"] as const;
     for (const type of types) {
       const { data, error } = await supabase.auth.verifyOtp({ email, token, type });
-      if (!error && data.session) {
-        return { success: true, session: data.session };
-      }
+      if (!error && data.session) return { success: true, session: data.session };
     }
     return { success: false, error: "Invalid or expired verification code." };
   }, []);
@@ -294,14 +231,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const access = useMemo(() => getAccess(userProfile, entitlements), [userProfile, entitlements]);
 
   const value = useMemo<AuthContextValue>(
-    () => ({ user, userProfile, session, login, signup, logout, loading, signInWithOtp, verifyOtp, entitlements, access }),
-    [user, userProfile, session, login, signup, logout, loading, signInWithOtp, verifyOtp, entitlements, access]
+    () => ({ user, userProfile, session, sessionReady, loading, login, signup, logout, signInWithOtp, verifyOtp, entitlements, access }),
+    [user, userProfile, session, sessionReady, loading, login, signup, logout, signInWithOtp, verifyOtp, entitlements, access]
   );
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

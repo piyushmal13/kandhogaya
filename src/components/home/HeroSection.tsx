@@ -9,6 +9,7 @@ import {
 import { supabase } from "../../lib/supabase";
 
 import { getCache, setCache } from "@/utils/cache";
+import { useAuth } from "@/contexts/AuthContext";
 
 export const HeroSection = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -59,10 +60,13 @@ export const HeroSection = () => {
     })));
   }, []);
 
+  const { sessionReady } = useAuth();
+
   useEffect(() => {
     let isMounted = true;
 
     const fetchData = async () => {
+      if (!sessionReady) return;
       await fetchRealStats();
       if (isMounted) {
         setParticles(initParticles());
@@ -75,6 +79,7 @@ export const HeroSection = () => {
     globalThis.addEventListener("app:login", fetchData);
     globalThis.addEventListener("app:logout", fetchData);
     globalThis.addEventListener("supabase:refresh", fetchData);
+    globalThis.addEventListener("supabase:ready", fetchData);
 
     const interval = setInterval(updateParticles, 50);
     return () => {
@@ -83,8 +88,9 @@ export const HeroSection = () => {
       globalThis.removeEventListener("app:login", fetchData);
       globalThis.removeEventListener("app:logout", fetchData);
       globalThis.removeEventListener("supabase:refresh", fetchData);
+      globalThis.removeEventListener("supabase:ready", fetchData);
     };
-  }, [fetchRealStats, initParticles, updateParticles]);
+  }, [sessionReady, fetchRealStats, initParticles, updateParticles]);
 
   const scrollToDiscovery = () => {
     window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });

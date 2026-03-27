@@ -3,6 +3,7 @@ import { motion, useReducedMotion } from 'motion/react';
 import { TrendingUp, TrendingDown, Activity, Zap } from 'lucide-react';
 
 import { getMarketData, subscribeToMarketData } from "../../services/apiHandlers";
+import { useAuth } from "../../contexts/AuthContext";
 
 interface MarketPair {
   symbol: string;
@@ -55,6 +56,7 @@ const TickerItem = memo(({ item, i }: { item: MarketPair, i: number }) => (
 TickerItem.displayName = "TickerItem";
 
 export const MarketTicker = () => {
+  const { sessionReady } = useAuth();
   const [pairs, setPairs] = useState<MarketPair[]>([]);
   const [lastUpdate, setLastUpdate] = useState<string>("");
   const [isSyncing, setIsSyncing] = useState(false);
@@ -139,9 +141,11 @@ export const MarketTicker = () => {
   }, []);
 
   useEffect(() => {
+    if (!sessionReady) return;
     fetchData();
     
     globalThis.addEventListener("supabase:refresh", fetchData);
+    globalThis.addEventListener("supabase:ready", fetchData);
     globalThis.addEventListener("app:login", fetchData);
     globalThis.addEventListener("app:logout", fetchData);
 

@@ -11,6 +11,8 @@ import {
 import { cn } from "@/utils/cn";
 import { PurchaseModal } from "@/components/payments/PurchaseModal";
 
+import { useAuth } from "@/contexts/AuthContext";
+
 interface AlgoProduct {
   id: string;
   name: string;
@@ -57,12 +59,14 @@ const SIGNAL_PLANS = [
 ];
 
 export const Pricing = () => {
+  const { sessionReady } = useAuth();
   const [algos, setAlgos] = useState<AlgoProduct[]>([]);
   const [webinars, setWebinars] = useState<Webinar[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedPlan, setSelectedPlan] = useState<{ plan: string, amount: number } | null>(null);
 
   const fetchData = useCallback(async () => {
+    if (!sessionReady) return;
     setLoading(true);
     try {
       const [algoRes, webinarRes] = await Promise.all([
@@ -82,14 +86,17 @@ export const Pricing = () => {
   useEffect(() => {
     fetchData();
 
-    globalThis.addEventListener("app:login", fetchData);
-    globalThis.addEventListener("app:logout", fetchData);
-    globalThis.addEventListener("supabase:refresh", fetchData);
+    const refetch = () => fetchData();
+    globalThis.addEventListener("app:login", refetch);
+    globalThis.addEventListener("app:logout", refetch);
+    globalThis.addEventListener("supabase:refresh", refetch);
+    globalThis.addEventListener("supabase:ready", refetch);
 
     return () => {
-      globalThis.removeEventListener("app:login", fetchData);
-      globalThis.removeEventListener("app:logout", fetchData);
-      globalThis.removeEventListener("supabase:refresh", fetchData);
+      globalThis.removeEventListener("app:login", refetch);
+      globalThis.removeEventListener("app:logout", refetch);
+      globalThis.removeEventListener("supabase:refresh", refetch);
+      globalThis.removeEventListener("supabase:ready", refetch);
     };
   }, [fetchData]);
 
