@@ -67,9 +67,10 @@ export const Dashboard = () => {
         supabase.from("webinars").select("*").gte("date_time", new Date().toISOString()).limit(3)
       ]);
 
-      setSignals(signalsRes.data || []);
-      setLicenses(licenseRes.data || []);
-      setWebinars(webinarRes.data || []);
+      console.log("Institutional Discovery DATA:", { signals: signalsRes.data, licenses: licenseRes.data, webinars: webinarRes.data });
+      setSignals(signalsRes.data ?? []);
+      setLicenses(licenseRes.data ?? []);
+      setWebinars(webinarRes.data ?? []);
       setDbHealthy(true);
     } catch (err) {
       console.error("Institutional Discovery Error:", err);

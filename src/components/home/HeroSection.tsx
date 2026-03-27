@@ -29,7 +29,9 @@ export const HeroSection = () => {
     }
 
     try {
-      const { count: userCount } = await supabase.from('users').select('*', { count: 'exact', head: true });
+      const res = await supabase.from('users').select('*', { count: 'exact', head: true });
+      console.log("Institutional Hero DATA:", res.data);
+      const userCount = res.count;
       if (userCount !== null) {
         const newStats = { ...stats, traders: `${(userCount + 12000).toLocaleString()}+` };
         setCache(cacheKey, newStats, 60000);

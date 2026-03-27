@@ -74,8 +74,9 @@ export const Pricing = () => {
         supabase.from("webinars").select("*").gte("date", new Date().toISOString()).limit(3)
       ]);
       
-      setAlgos(algoRes.data || []);
-      setWebinars(webinarRes.data || []);
+      console.log("Institutional Pricing DATA:", { algos: algoRes.data, webinars: webinarRes.data });
+      setAlgos(algoRes.data ?? []);
+      setWebinars(webinarRes.data ?? []);
     } catch (err) {
       console.error("Institutional Pricing Discovery Error:", err);
     } finally {

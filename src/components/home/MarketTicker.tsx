@@ -81,10 +81,11 @@ export const MarketTicker = () => {
     setIsSyncing(true);
     
     try {
-      const data = await getMarketData();
-      if (!isMounted.current || !data) return;
+      const res = await getMarketData();
+      console.log("Institutional Ticker DATA:", res);
+      if (!isMounted.current || !res) return;
 
-      const formatted = data.map(item => {
+      const formatted = res.map((item: any) => {
         let baseSymbol = item.symbol.substring(0, 3);
         if (item.symbol === 'XAUUSD') baseSymbol = 'GOLD';
         else if (item.symbol === 'NASDAQ') baseSymbol = 'NAS100';
