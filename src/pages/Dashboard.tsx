@@ -107,11 +107,13 @@ export const Dashboard = () => {
   const isAdmin = userProfile?.role === "admin";
   const isPro = userProfile?.isPro === true;
   const access = getAccess(userProfile, entitlements);
+  const isElite = access.algo;
+  const isProOnly = access.signals && !isElite;
 
   return (
     <div className="relative min-h-screen bg-black pt-28 pb-32 px-4 selection:bg-emerald-500/30">
       <div className="max-w-7xl mx-auto relative z-10">
-        {!isPro && (
+        {!isElite && (
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -123,15 +125,19 @@ export const Dashboard = () => {
                 <ShieldCheck className="w-6 h-6" />
               </div>
               <div>
-                <h3 className="text-sm font-black text-white uppercase tracking-widest">Enroll in Institutional Tiers</h3>
-                <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">🚀 Upgrade your plan to unlock full trading and execution power</p>
+                <h3 className="text-sm font-black text-white uppercase tracking-widest">
+                  {isProOnly ? "Institutional Tier Expansion" : "Enroll in Institutional Tiers"}
+                </h3>
+                <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">
+                  {isProOnly ? "🚀 Upgrade to ELITE to unlock institutional algorithmic execution" : "🚀 Upgrade your plan to unlock full trading and execution power"}
+                </p>
               </div>
             </div>
             <button 
-              onClick={() => setSelectedPlan({ plan: "pro", amount: 99 })}
+              onClick={() => setSelectedPlan({ plan: isProOnly ? "elite" : "pro", amount: isProOnly ? 249 : 99 })}
               className="relative z-10 px-8 py-3 bg-white text-black font-black text-[10px] uppercase tracking-widest rounded-xl hover:scale-105 transition-all shadow-xl"
             >
-              Unlock Pro Access
+              {isProOnly ? "Join Elite" : "Unlock Pro Access"}
             </button>
           </motion.div>
         )}
@@ -196,22 +202,23 @@ export const Dashboard = () => {
           <div className="lg:col-span-2 space-y-8">
             <section className={cn("p-10 rounded-[48px] bg-white/5 border border-white/10 backdrop-blur-3xl overflow-hidden relative group", !access.algo && "min-h-[440px]")}>
               {!access.algo && (
-                <div className="absolute inset-0 z-50 flex items-center justify-center p-8 bg-black/60 backdrop-blur-md rounded-[48px] animate-in fade-in duration-700">
+                <div className="absolute inset-0 z-50 flex items-center justify-center p-8 bg-black/80 backdrop-blur-xl rounded-[48px] animate-in fade-in duration-1000">
                   <div className="text-center space-y-6 max-w-sm">
-                    <div className="w-24 h-24 bg-emerald-500/10 border border-emerald-500/20 rounded-[40px] flex items-center justify-center mx-auto text-emerald-500 shadow-2xl">
+                    <div className="w-24 h-24 bg-emerald-500/10 border border-emerald-500/20 rounded-[40px] flex items-center justify-center mx-auto text-emerald-500 shadow-2xl relative">
                       <Lock className="w-10 h-10" />
+                      <div className="absolute inset-0 bg-emerald-500/20 blur-xl rounded-full animate-pulse" />
                     </div>
                     <div>
                       <h3 className="text-2xl font-black text-white uppercase tracking-tighter italic">Algo Discovery Locked</h3>
                       <p className="text-xs text-gray-500 font-bold uppercase tracking-widest leading-relaxed mt-4">
-                        Upgrade to <span className="text-emerald-500">ELITE</span> to unlock institutional algorithmic execution.
+                        {isProOnly ? "Upgrade to ELITE and gain access to institutional algorithmic execution." : "Elite Tier Required for institutional algorithmic signals."}
                       </p>
                     </div>
                     <button 
                       onClick={() => setSelectedPlan({ plan: "elite", amount: 249 })}
                       className="px-12 py-5 bg-emerald-500 text-black font-black text-[11px] uppercase tracking-[0.3em] rounded-3xl hover:scale-110 active:scale-95 transition-all shadow-2xl shadow-emerald-500/40"
                     >
-                      Unlock Algo Terminal
+                      Unlock Elite Terminal
                     </button>
                   </div>
                 </div>
@@ -281,15 +288,18 @@ export const Dashboard = () => {
               </div>
 
               {!access.signals && (
-                <div className="absolute inset-0 z-50 flex flex-col items-center justify-center p-8 bg-black/60 backdrop-blur-md rounded-[48px] animate-in fade-in duration-700">
-                  <Lock className="w-14 h-14 text-emerald-500 mb-6" />
+                <div className="absolute inset-0 z-50 flex flex-col items-center justify-center p-8 bg-black/80 backdrop-blur-xl rounded-[48px] animate-in fade-in duration-1000">
+                  <div className="w-20 h-20 bg-emerald-500/10 border border-emerald-500/20 rounded-[32px] flex items-center justify-center mb-6 text-emerald-500 shadow-2xl relative">
+                    <Lock className="w-10 h-10" />
+                    <div className="absolute inset-0 bg-emerald-500/20 blur-xl rounded-full animate-pulse" />
+                  </div>
                   <h3 className="text-2xl font-black text-white uppercase tracking-tighter italic mb-2">Signals Locked</h3>
-                  <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest text-center mb-8">Upgrade to PRO for real-time institutional signals.</p>
+                  <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest text-center mb-8">Upgrade to PRO or ELITE for real-time institutional signals.</p>
                   <button 
                     onClick={() => setSelectedPlan({ plan: "pro", amount: 99 })}
                     className="px-10 py-4 bg-emerald-500 text-black font-black text-[10px] uppercase tracking-[0.2em] rounded-2xl hover:scale-110 transition-all shadow-xl shadow-emerald-500/20"
                   >
-                    Unlock Signals
+                    Unlock Discovery Feed
                   </button>
                 </div>
               )}
