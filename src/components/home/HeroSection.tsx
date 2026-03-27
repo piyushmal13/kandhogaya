@@ -9,7 +9,7 @@ import {
 import { supabase } from "../../lib/supabase";
 
 import { getCache, setCache } from "@/utils/cache";
-import { useAuth } from "@/contexts/AuthContext";
+
 
 export const HeroSection = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -40,7 +40,7 @@ export const HeroSection = () => {
     } catch (e) {
       console.error("Stats fetch error:", e);
     }
-  }, [stats]);
+  }, []);
 
   const initParticles = useCallback(() => {
     return Array.from({ length: 40 }).map((_, i) => ({
@@ -62,37 +62,24 @@ export const HeroSection = () => {
     })));
   }, []);
 
-  const { sessionReady } = useAuth();
+  useEffect(() => {
+    setParticles(initParticles());
+    fetchRealStats();
+    console.log("RENDER HERO STATS:", stats);
+  }, []);
 
   useEffect(() => {
-    let isMounted = true;
-
-    const fetchData = async () => {
-      if (!sessionReady) return;
-      await fetchRealStats();
-      if (isMounted) {
-        setParticles(initParticles());
-      }
-    };
-    
-    fetchData();
-
     // Institutional Signal listeners for session transitions
-    globalThis.addEventListener("app:login", fetchData);
-    globalThis.addEventListener("app:logout", fetchData);
-    globalThis.addEventListener("supabase:refresh", fetchData);
-    globalThis.addEventListener("supabase:ready", fetchData);
+    globalThis.addEventListener("app:login", fetchRealStats);
+    globalThis.addEventListener("supabase:refresh", fetchRealStats);
 
     const interval = setInterval(updateParticles, 50);
     return () => {
-      isMounted = false;
       clearInterval(interval);
-      globalThis.removeEventListener("app:login", fetchData);
-      globalThis.removeEventListener("app:logout", fetchData);
-      globalThis.removeEventListener("supabase:refresh", fetchData);
-      globalThis.removeEventListener("supabase:ready", fetchData);
+      globalThis.removeEventListener("app:login", fetchRealStats);
+      globalThis.removeEventListener("supabase:refresh", fetchRealStats);
     };
-  }, [sessionReady, fetchRealStats, initParticles, updateParticles]);
+  }, [fetchRealStats, updateParticles]);
 
   const scrollToDiscovery = () => {
     window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });

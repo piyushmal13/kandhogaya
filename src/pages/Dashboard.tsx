@@ -46,7 +46,7 @@ interface UserWebinar {
 }
 
 export const Dashboard = () => {
-  const { user, userProfile, sessionReady, entitlements } = useAuth();
+  const { user, userProfile, entitlements } = useAuth();
   const navigate = useNavigate();
 
   const [licenses, setLicenses] = useState<BotLicense[]>([]);
@@ -57,59 +57,203 @@ export const Dashboard = () => {
   const [selectedPlan, setSelectedPlan] = useState<{ plan: string, amount: number } | null>(null);
 
   const fetchData = useCallback(async () => {
-    if (!sessionReady) return;
-    
+    if (!user?.id) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     try {
       const [signalsRes, licenseRes, webinarRes] = await Promise.all([
         supabase.from("signals").select("*").limit(5).order("created_at", { ascending: false }),
-        supabase.from("bot_licenses").select("*, algo_bots(name)").eq("user_id", user?.id),
+        supabase.from("bot_licenses").select("*, algo_bots(name)").eq("user_id", user.id),
         supabase.from("webinars").select("*").gte("date_time", new Date().toISOString()).limit(3)
       ]);
 
-      console.log("Institutional Discovery DATA:", { signals: signalsRes.data, licenses: licenseRes.data, webinars: webinarRes.data });
+      console.log("Institutional Dashboard DATA:", { signals: signalsRes.data, licenses: licenseRes.data, webinars: webinarRes.data });
       setSignals(signalsRes.data ?? []);
       setLicenses(licenseRes.data ?? []);
       setWebinars(webinarRes.data ?? []);
       setDbHealthy(true);
     } catch (err) {
-      console.error("Institutional Discovery Error:", err);
+      console.error("Institutional Dashboard Error:", err);
       setDbHealthy(false);
     } finally {
       setLoading(false);
     }
-  }, [sessionReady, user?.id]);
+  }, [user?.id]);
 
   useEffect(() => {
     fetchData();
+    console.log("RENDER DASHBOARD DATA:", { licenses, signals, webinars });
+  }, []);
 
+  useEffect(() => {
     const refetch = () => fetchData();
-    globalThis.addEventListener("app:login", refetch);
-    globalThis.addEventListener("app:logout", refetch);
     globalThis.addEventListener("supabase:refresh", refetch);
-    globalThis.addEventListener("supabase:ready", refetch);
+    globalThis.addEventListener("app:login", refetch);
 
     return () => {
-      globalThis.removeEventListener("app:login", refetch);
-      globalThis.removeEventListener("app:logout", refetch);
       globalThis.removeEventListener("supabase:refresh", refetch);
-      globalThis.removeEventListener("supabase:ready", refetch);
+      globalThis.removeEventListener("app:login", refetch);
     };
   }, [fetchData]);
-
-  if (!user || !sessionReady) {
-     return (
-       <div className="min-h-screen bg-black flex items-center justify-center">
-         <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
-       </div>
-     );
-  }
 
   const isAdmin = userProfile?.role === "admin";
   const isPro = userProfile?.isPro === true;
   const access = getAccess(userProfile, entitlements);
   const isElite = access.algo;
   const isProOnly = access.signals && !isElite;
+
+  const renderStats = () => {
+    const statsConfig = [
+      { label: "Active Algos", value: licenses.filter(l => l.is_active).length, icon: Activity, color: "text-emerald-500" },
+      { label: "Win Rate", value: "82.4%", icon: Target, color: "text-cyan-500" },
+      { label: "Signals Today", value: signals.length, icon: Zap, color: "text-yellow-500" },
+      { label: "Uptime", value: "99.99%", icon: Clock, color: "text-emerald-500" }
+    ];
+
+    return (
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+        {statsConfig.map((stat, i) => (
+          <motion.div
+            key={stat.label}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.1 }}
+            className="p-6 rounded-[32px] bg-white/5 border border-white/10 backdrop-blur-md hover:bg-white/10 transition-colors"
+          >
+            <stat.icon className={cn("w-5 h-5 mb-4", stat.color)} />
+            <div className="text-3xl font-bold text-white mb-1 tracking-tight tabular-nums">{stat.value}</div>
+            <div className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500">{stat.label}</div>
+          </motion.div>
+        ))}
+      </div>
+    );
+  };
+
+  const renderLicenses = () => {
+    if (loading) {
+      return (
+        <div className="space-y-4">
+          <div className="h-24 bg-white/5 rounded-3xl animate-pulse" />
+          <div className="h-24 bg-white/5 rounded-3xl animate-pulse" />
+        </div>
+      );
+    }
+
+    if (licenses.length > 0) {
+      return (
+        <div className="grid grid-cols-1 gap-4">
+          {licenses.map((license) => (
+            <div key={license.id} className="group relative p-8 rounded-[36px] bg-black/40 border border-white/5 hover:border-emerald-500/30 transition-all">
+              <div className="flex items-center justify-between relative z-10">
+                <div className="flex items-center gap-6">
+                  <div className="w-16 h-16 rounded-[28px] bg-emerald-500/10 flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-black transition-all">
+                    <ShieldCheck className="w-8 h-8" />
+                  </div>
+                  <div>
+                    <div className="text-xl font-black text-white group-hover:text-emerald-400 transition-colors uppercase tracking-tight italic">
+                      {license.algo_bots?.name || "QUANT ENGINE v2"}
+                    </div>
+                    <div className="flex items-center gap-4 mt-2 text-[10px] font-mono text-gray-500">
+                      <span className="bg-white/5 px-2 py-0.5 rounded uppercase">ID: {license.license_key.slice(0, 8)}...</span>
+                      <span className="flex items-center gap-2">
+                        <Clock className="w-3 h-3" />
+                        EXP: {new Date(license.expires_at).toLocaleDateString()}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <span className={cn(
+                  "px-5 py-2 rounded-full text-[9px] font-black uppercase tracking-widest border",
+                  license.is_active ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" : "bg-red-500/10 text-red-400 border-red-500/20"
+                )}>
+                  {license.is_active ? "ONLINE" : "EXPIRED"}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    return (
+      <div className="text-center py-20 border-2 border-dashed border-white/5 rounded-[48px] bg-black/20">
+        <p className="text-gray-500 text-sm font-bold uppercase tracking-widest mb-8">No licensed algorithms detected on this account.</p>
+        <Link to="/marketplace" className="inline-flex items-center px-10 py-4 rounded-2xl bg-emerald-500 text-black font-black text-[10px] uppercase tracking-[0.2em] hover:scale-105 transition-all shadow-xl shadow-emerald-500/20">
+          Initialize Setup
+        </Link>
+      </div>
+    );
+  };
+
+  const renderSignals = () => {
+    if (signals.length === 0) {
+      return (
+        <div className="text-center py-12">
+          <p className="text-gray-500 text-xs font-black uppercase tracking-[0.2em] italic">Awaiting new trade setups...</p>
+        </div>
+      );
+    }
+
+    return signals.map(s => (
+      <div key={s.id} className="p-6 rounded-3xl bg-black/40 flex items-center justify-between border border-white/5 hover:bg-white/5 transition-colors">
+        <div className="flex items-center gap-6">
+          <div className={cn("w-3 h-3 rounded-full shadow-[0_0_12px]", s.direction === 'BUY' ? "bg-emerald-500 shadow-emerald-500" : "bg-red-500 shadow-red-500")} />
+          <span className="text-lg font-bold text-white tracking-tight">{s.asset}</span>
+          <span className={cn("text-[9px] font-black tracking-[0.2em] px-3 py-1 rounded-lg", s.direction === 'BUY' ? "bg-emerald-500/10 text-emerald-500" : "bg-red-500/10 text-red-500")}>
+            {s.direction}
+          </span>
+        </div>
+        <span className="text-[11px] font-mono text-gray-600 font-black">
+          {new Date(s.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+        </span>
+      </div>
+    ));
+  };
+
+  const renderWebinars = () => {
+    if (webinars.length === 0) {
+      return (
+        <div className="text-[10px] uppercase font-black text-gray-700 tracking-[0.2em] text-center py-12 italic">
+          NO SESSIONS SCHEDULED
+        </div>
+      );
+    }
+
+    return (
+      <AnimatePresence>
+        <div className="space-y-4">
+          {webinars.map(w => (
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              key={w.id} 
+              className="p-6 rounded-[32px] bg-black/40 border border-white/5 hover:border-emerald-500/30 transition-all"
+            >
+              <div className="text-sm font-black text-white mb-4 uppercase tracking-tight leading-snug">{w.title}</div>
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest bg-emerald-500/5 px-3 py-1 rounded-lg font-mono">
+                  {new Date(w.date_time).toLocaleDateString()}
+                </span>
+                <Link to="/academy" className="w-10 h-10 rounded-2xl bg-white/5 flex items-center justify-center hover:bg-emerald-500 hover:text-black transition-all">
+                  <ArrowUpRight className="w-5 h-5" />
+                </Link>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </AnimatePresence>
+    );
+  };
+
+  if (!user) {
+     return (
+       <div className="min-h-screen bg-black flex items-center justify-center">
+         <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
+       </div>
+     );
+  }
 
   return (
     <div className="relative min-h-screen bg-black pt-28 pb-32 px-4 selection:bg-emerald-500/30">
@@ -178,26 +322,7 @@ export const Dashboard = () => {
           </motion.div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-          {[
-            { label: "Active Algos", value: licenses.filter(l => l.is_active).length, icon: Activity, color: "text-emerald-500" },
-            { label: "Win Rate", value: "82.4%", icon: Target, color: "text-cyan-500" },
-            { label: "Signals Today", value: signals.length, icon: Zap, color: "text-yellow-500" },
-            { label: "Uptime", value: "99.99%", icon: Clock, color: "text-emerald-500" }
-          ].map((stat, i) => (
-            <motion.div
-              key={stat.label}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-              className="p-6 rounded-[32px] bg-white/5 border border-white/10 backdrop-blur-md hover:bg-white/10 transition-colors"
-            >
-              <stat.icon className={cn("w-5 h-5 mb-4", stat.color)} />
-              <div className="text-3xl font-bold text-white mb-1 tracking-tight tabular-nums">{stat.value}</div>
-              <div className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500">{stat.label}</div>
-            </motion.div>
-          ))}
-        </div>
+        {renderStats()}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-8">
@@ -233,51 +358,7 @@ export const Dashboard = () => {
               </div>
               
               <div className={cn("transition-all duration-700", !access.algo && "blur-xl select-none pointer-events-none")}>
-                {loading ? (
-                <div className="space-y-4">
-                  <div className="h-24 bg-white/5 rounded-3xl animate-pulse" />
-                  <div className="h-24 bg-white/5 rounded-3xl animate-pulse" />
-                </div>
-              ) : licenses.length > 0 ? (
-                <div className="grid grid-cols-1 gap-4">
-                  {licenses.map((license) => (
-                    <div key={license.id} className="group relative p-8 rounded-[36px] bg-black/40 border border-white/5 hover:border-emerald-500/30 transition-all">
-                      <div className="flex items-center justify-between relative z-10">
-                        <div className="flex items-center gap-6">
-                          <div className="w-16 h-16 rounded-[28px] bg-emerald-500/10 flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-black transition-all">
-                            <ShieldCheck className="w-8 h-8" />
-                          </div>
-                          <div>
-                            <div className="text-xl font-black text-white group-hover:text-emerald-400 transition-colors uppercase tracking-tight italic">
-                              {license.algo_bots?.name || "QUANT ENGINE v2"}
-                            </div>
-                            <div className="flex items-center gap-4 mt-2 text-[10px] font-mono text-gray-500">
-                              <span className="bg-white/5 px-2 py-0.5 rounded uppercase">ID: {license.license_key.slice(0, 8)}...</span>
-                              <span className="flex items-center gap-2">
-                                <Clock className="w-3 h-3" />
-                                EXP: {new Date(license.expires_at).toLocaleDateString()}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                        <span className={cn(
-                          "px-5 py-2 rounded-full text-[9px] font-black uppercase tracking-widest border",
-                          license.is_active ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" : "bg-red-500/10 text-red-400 border-red-500/20"
-                        )}>
-                          {license.is_active ? "ONLINE" : "EXPIRED"}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-20 border-2 border-dashed border-white/5 rounded-[48px] bg-black/20">
-                  <p className="text-gray-500 text-sm font-bold uppercase tracking-widest mb-8">No licensed algorithms detected on this account.</p>
-                  <Link to="/marketplace" className="inline-flex items-center px-10 py-4 rounded-2xl bg-emerald-500 text-black font-black text-[10px] uppercase tracking-[0.2em] hover:scale-105 transition-all shadow-xl shadow-emerald-500/20">
-                    Initialize Setup
-                  </Link>
-                </div>
-                )}
+                {renderLicenses()}
               </div>
             </section>
 
@@ -308,26 +389,7 @@ export const Dashboard = () => {
               )}
               
               <div className={cn("space-y-3 relative transition-all duration-700", !access.signals && "blur-[12px] select-none pointer-events-none")}>
-                {signals.length > 0 ? (
-                  signals.map(s => (
-                    <div key={s.id} className="p-6 rounded-3xl bg-black/40 flex items-center justify-between border border-white/5 hover:bg-white/5 transition-colors">
-                      <div className="flex items-center gap-6">
-                        <div className={cn("w-3 h-3 rounded-full shadow-[0_0_12px]", s.direction === 'BUY' ? "bg-emerald-500 shadow-emerald-500" : "bg-red-500 shadow-red-500")} />
-                        <span className="text-lg font-bold text-white tracking-tight">{s.asset}</span>
-                        <span className={cn("text-[9px] font-black tracking-[0.2em] px-3 py-1 rounded-lg", s.direction === 'BUY' ? "bg-emerald-500/10 text-emerald-500" : "bg-red-500/10 text-red-500")}>
-                          {s.direction}
-                        </span>
-                      </div>
-                      <span className="text-[11px] font-mono text-gray-600 font-black">
-                        {new Date(s.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </span>
-                    </div>
-                  ))
-                ) : (
-                  <div className="text-center py-12">
-                    <p className="text-gray-500 text-xs font-black uppercase tracking-[0.2em] italic">Awaiting new trade setups...</p>
-                  </div>
-                )}
+                {renderSignals()}
               </div>
             </section>
           </div>
@@ -355,34 +417,7 @@ export const Dashboard = () => {
               )}
               
               <div className={cn("transition-all duration-700", !access.webinars && "blur-xl select-none pointer-events-none")}>
-                <AnimatePresence>
-                  {webinars.length > 0 ? (
-                  <div className="space-y-4">
-                    {webinars.map(w => (
-                      <motion.div 
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        key={w.id} 
-                        className="p-6 rounded-[32px] bg-black/40 border border-white/5 hover:border-emerald-500/30 transition-all"
-                      >
-                        <div className="text-sm font-black text-white mb-4 uppercase tracking-tight leading-snug">{w.title}</div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest bg-emerald-500/5 px-3 py-1 rounded-lg font-mono">
-                            {new Date(w.date_time).toLocaleDateString()}
-                          </span>
-                          <Link to="/academy" className="w-10 h-10 rounded-2xl bg-white/5 flex items-center justify-center hover:bg-emerald-500 hover:text-black transition-all">
-                            <ArrowUpRight className="w-5 h-5" />
-                          </Link>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-[10px] uppercase font-black text-gray-700 tracking-[0.2em] text-center py-12 italic">
-                    NO SESSIONS SCHEDULED
-                  </div>
-                  )}
-                </AnimatePresence>
+                {renderWebinars()}
               </div>
             </section>
 

@@ -3,7 +3,7 @@ import { motion, useReducedMotion } from 'motion/react';
 import { TrendingUp, TrendingDown, Activity, Zap } from 'lucide-react';
 
 import { getMarketData, subscribeToMarketData } from "../../services/apiHandlers";
-import { useAuth } from "../../contexts/AuthContext";
+
 
 interface MarketPair {
   symbol: string;
@@ -56,7 +56,7 @@ const TickerItem = memo(({ item, i }: { item: MarketPair, i: number }) => (
 TickerItem.displayName = "TickerItem";
 
 export const MarketTicker = () => {
-  const { sessionReady } = useAuth();
+
   const [pairs, setPairs] = useState<MarketPair[]>([]);
   const [lastUpdate, setLastUpdate] = useState<string>("");
   const [isSyncing, setIsSyncing] = useState(false);
@@ -112,44 +112,52 @@ export const MarketTicker = () => {
     }
   }, []);
 
+  const processUpdates = useCallback(() => {
+    if (Object.keys(pendingUpdates.current).length === 0) return;
+
+    const updates = Object.values({ ...pendingUpdates.current });
+    pendingUpdates.current = {};
+
+    setPairs(prev => {
+      const updated = [...prev];
+      for (const newItem of updates) {
+        const index = updated.findIndex(p => p.symbol === newItem.symbol);
+        if (index >= 0) {
+          updated[index] = newItem;
+        } else {
+          updated.push(newItem);
+        }
+      }
+      pairsRef.current = updated;
+      return updated;
+    });
+    
+    setLastUpdate(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+  }, [setPairs]);
+
   // Throttle processor: Flushes pending updates every 500ms
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (Object.keys(pendingUpdates.current).length === 0) return;
-
-      const updates = { ...pendingUpdates.current };
-      pendingUpdates.current = {};
-
-      setPairs(prev => {
-        const updated = [...prev];
-        const updateAsset = (newItem: MarketPair) => {
-          const index = updated.findIndex(p => p.symbol === newItem.symbol);
-          if (index >= 0) {
-            updated[index] = newItem;
-          } else {
-            updated.push(newItem);
-          }
-        };
-        Object.values(updates).forEach(updateAsset);
-        pairsRef.current = updated;
-        return updated;
-      });
-      
-      setLastUpdate(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
-    }, 500);
-
+    const interval = setInterval(processUpdates, 500);
     return () => clearInterval(interval);
+  }, [processUpdates]);
+
+  useEffect(() => {
+    fetchData();
+    console.log("RENDER MARKET TICKER DATA:", pairs);
   }, []);
 
   useEffect(() => {
-    if (!sessionReady) return;
-    fetchData();
-    
-    globalThis.addEventListener("supabase:refresh", fetchData);
-    globalThis.addEventListener("supabase:ready", fetchData);
-    globalThis.addEventListener("app:login", fetchData);
-    globalThis.addEventListener("app:logout", fetchData);
+    const refetch = () => fetchData();
+    globalThis.addEventListener("supabase:refresh", refetch);
+    globalThis.addEventListener("app:login", refetch);
 
+    return () => {
+      globalThis.removeEventListener("supabase:refresh", refetch);
+      globalThis.removeEventListener("app:login", refetch);
+    };
+  }, [fetchData]);
+
+  useEffect(() => {
     const channel = subscribeToMarketData((payload: any) => {
       const isUpdate = payload.eventType === 'UPDATE' || payload.eventType === 'INSERT';
       if (!isUpdate) return;
@@ -174,7 +182,7 @@ export const MarketTicker = () => {
     return () => {
       channel.unsubscribe();
     };
-  }, [fetchData]);
+  }, []);
 
   useEffect(() => {
     const checkMarketStatus = () => {
