@@ -1,6 +1,7 @@
 import React, { useState, useEffect, createContext, useContext, useMemo, useRef, useCallback } from "react";
 import { supabase } from "../lib/supabase";
 import type { User, Session } from "@supabase/supabase-js";
+import { getAccess, Entitlement } from "../core/accessEngine";
 
 // ── Strict Types ─────────────────────────────────────────────────────────────
 
@@ -32,6 +33,8 @@ interface AuthContextValue {
   userProfile: UserProfile | null;
   session: Session | null;
   loading: boolean;
+  entitlements: Entitlement[];
+  access: ReturnType<typeof getAccess>;
   login: (email: string, password: string) => Promise<AuthResult>;
   signup: (email: string, password: string) => Promise<SignupResult>;
   logout: () => Promise<void>;
@@ -53,8 +56,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [session, setSession] = useState<Session | null>(null);
+  const [entitlements, setEntitlements] = useState<Entitlement[]>([]);
   const [loading, setLoading] = useState(true);
-  const [connectionError, setConnectionError] = useState(false);
 
   // Safety and Optimization Refs
   const loadingRef = useRef(true);
@@ -74,6 +77,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       try {
         return await fn();
       } catch (err) {
+        console.error("Institutional Fetch Signal: Retry attempt failed.", err);
         if (attempts > 0) return retry(fn, attempts - 1);
         return null;
       }
@@ -108,9 +112,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         (res) => res.status === "fulfilled" && res.value?.data && res.value.data.length > 0
       );
 
-      // 4. Safe state updates
+      // 4. Entitlement Discovery
+      const entitlementRes = await retry(() => 
+        Promise.resolve(supabase.from("user_entitlements").select("*").eq("user_id", userId))
+      );
+      const entitlementData = entitlementRes?.data || [];
+
+      // 5. Safe state updates
       if (isMountedRef.current) {
         const base = userData || { id: userId, email, role: "user" as const };
+        
+        setEntitlements(entitlementData);
         setUserProfile({
           ...base,
           role: base.role ?? "user",
@@ -120,6 +132,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } catch {
       if (isMountedRef.current) {
         setUserProfile({ id: userId, email, role: "user", isPro: false });
+        setEntitlements([]);
       }
     } finally {
       isFetchingRef.current = false;
@@ -233,29 +246,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return { success: false, error: "Invalid or expired verification code." };
   }, []);
 
+  const access = useMemo(() => getAccess(userProfile, entitlements), [userProfile, entitlements]);
+
   const value = useMemo<AuthContextValue>(
-    () => ({ user, userProfile, session, login, signup, logout, loading, signInWithOtp, verifyOtp }),
-    [user, userProfile, session, login, signup, logout, loading, signInWithOtp, verifyOtp]
+    () => ({ user, userProfile, session, login, signup, logout, loading, signInWithOtp, verifyOtp, entitlements, access }),
+    [user, userProfile, session, login, signup, logout, loading, signInWithOtp, verifyOtp, entitlements, access]
   );
 
   return (
     <AuthContext.Provider value={value}>
       {children}
 
-      {connectionError && (
-        <div className="fixed bottom-4 right-4 z-[9999] max-w-xs p-6 bg-red-500/10 border border-red-500/20 rounded-3xl backdrop-blur-md shadow-2xl">
-          <p className="text-[10px] text-red-400 font-mono uppercase tracking-widest leading-relaxed mb-4">
-            Connection Error: Unable to reach Supabase. <br />
-            Please ensure VITE_SUPABASE_URL is correctly set.
-          </p>
-          <button
-            onClick={() => globalThis.location.reload()}
-            className="px-4 py-2 bg-red-500 text-white text-[10px] font-bold uppercase tracking-widest rounded-xl hover:bg-red-400 transition-all w-full"
-          >
-            Retry Connection
-          </button>
-        </div>
-      )}
     </AuthContext.Provider>
   );
 };
