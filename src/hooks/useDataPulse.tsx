@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, createContext, useContext, useMemo } from 'react';
 import { supabase } from '../lib/supabase';
+import { useAuth } from '../contexts/AuthContext';
 import { Signal, Webinar } from '../types';
 
 interface DataPulseContextValue {
@@ -36,12 +37,14 @@ export const DataPulseProvider = ({ children }: { children: React.ReactNode }) =
     }
   }, []);
 
+  const { user } = useAuth();
+
   useEffect(() => {
     fetchData();
-    // Refresh every 5 minutes for public discovery pulse
+    // Refresh discovery pulse on identity transition or pulse tick
     const interval = setInterval(fetchData, 300000);
     return () => clearInterval(interval);
-  }, [fetchData]);
+  }, [fetchData, user?.id]);
 
   const contextValue = useMemo(() => ({
     signals,

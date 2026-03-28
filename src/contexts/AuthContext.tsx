@@ -189,8 +189,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [fetchUserProfile]);
 
   const logout = useCallback(async () => {
-    lastFetchedId.current = null;
-    await supabase.auth.signOut();
+    try {
+      lastFetchedId.current = null;
+      await supabase.auth.signOut();
+      
+      // Strict State Purge
+      setUser(null);
+      setSession(null);
+      setUserProfile(null);
+      setEntitlements([]);
+      clearCache();
+      
+      globalThis.dispatchEvent(new Event("app:logout"));
+      globalThis.location.href = "/login"; // Force full state purge
+    } catch (err) {
+      console.error("Institutional Session Termination Failure:", err);
+      // Fallback redirect
+      globalThis.location.href = "/login";
+    }
   }, []);
 
   const login = useCallback(async (email: string, password: string) => {
