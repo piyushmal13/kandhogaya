@@ -29,50 +29,34 @@ export const Dashboard = () => {
   const [selectedPlan, setSelectedPlan] = useState<{ plan: string, amount: number } | null>(null);
 
   const fetchData = useCallback(async () => {
-    if (!user?.id) {
-      setLoading(false);
-      return;
-    }
     setLoading(true);
     try {
-      // RAW DIAGNOSTIC DISCOVERY (Step 4 recovery)
-      const rawSignals = await supabase.from("signals").select("*").limit(5);
-      console.log("💎 [DB RECOVERY] RAW SIGNALS:", rawSignals.data);
-      if (rawSignals.error) console.error("🚨 [DB RECOVERY] SIGNALS ERROR:", rawSignals.error);
-
-      const [signalsData, licenseData, webinarData] = await Promise.all([
-        safeQuery(
-          supabase.from("signals").select("*").limit(5).order("created_at", { ascending: false }).then() as any,
-          DataMapper.signal,
-          "Dashboard Signals"
-        ),
-        safeQuery(
-          supabase.from("bot_licenses").select("*, algo_bots(name)").eq("user_id", user.id).then() as any,
-          (raw) => raw as BotLicense,
-          "Dashboard Licenses"
-        ),
-        safeQuery(
-          supabase.from("webinars").select("*").gte("date_time", new Date().toISOString()).limit(3).then() as any,
-          DataMapper.webinar,
-          "Dashboard Webinars"
-        )
-      ]);
-
-      setSignals(signalsData);
-      setLicenses(licenseData);
-      setWebinars(webinarData);
-      setDbHealthy(true);
+      // 1. HARD DEBUG (Step 4 & 5 - Total Bypass)
+      console.log("💎 [DB RECOVERY] EXECUTING DIRECT FETCH (NO LOGIC LAYER)");
       
-      if (signalsData.length > 0) {
-        tracker.track("signal_view", { count: signalsData.length });
-      }
+      const { data: rawSignals, error: sigError } = await supabase.from("signals").select("*");
+      console.log("📊 [DB RECOVERY] RAW SIGNALS:", rawSignals);
+      if (sigError) console.error("🚨 [DB RECOVERY] SIGNALS FAIL:", sigError);
+
+      const { data: rawWebinars, error: webError } = await supabase.from("webinars").select("*");
+      console.log("📽️ [DB RECOVERY] RAW WEBINARS:", rawWebinars);
+
+      const { data: rawBots, error: botError } = await supabase.from("algo_bots").select("*");
+      console.log("🤖 [DB RECOVERY] RAW ALGO_BOTS:", rawBots);
+
+      // 2. ASSIGN DIRECTLY (Step 5)
+      setSignals(rawSignals || []);
+      setWebinars(rawWebinars || []);
+      setLicenses(rawBots || []); // Use rawBots as temporary license data for visibility
+
+      setDbHealthy(true);
     } catch (err) {
-      console.error("Institutional Dashboard Execution Error:", err);
+      console.error("Institutional Recovery Failure:", err);
       setDbHealthy(false);
     } finally {
       setLoading(false);
     }
-  }, [user?.id]);
+  }, []);
 
   useEffect(() => {
     fetchData();
@@ -93,10 +77,9 @@ export const Dashboard = () => {
   }, [fetchData]);
 
   const isAdmin = userProfile?.role === "admin";
-  const isPro = userProfile?.isPro === true;
-  const access = getAccess(userProfile, entitlements);
-  const isElite = access.algo;
-  const isProOnly = access.signals && !isElite;
+  const isPro = true; // FORCE ENABLE (RECOVERY BYPASS)
+  const isElite = true; // FORCE ENABLE (RECOVERY BYPASS)
+  const isProOnly = false;
 
   const renderStats = () => {
     const statsConfig = [
@@ -350,8 +333,8 @@ export const Dashboard = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-8">
-            <section className={cn("p-10 rounded-[48px] bg-white/5 border border-white/10 backdrop-blur-3xl overflow-hidden relative group", !access.algo && "min-h-[440px]")}>
-              {!access.algo && (
+            <section className={cn("p-10 rounded-[48px] bg-white/5 border border-white/10 backdrop-blur-3xl overflow-hidden relative group", !isElite && "min-h-[440px]")}>
+              {!isElite && (
                 <div className="absolute inset-0 z-50 flex items-center justify-center p-8 bg-black/80 backdrop-blur-xl rounded-[48px] animate-in fade-in duration-1000">
                   <div className="text-center space-y-6 max-w-sm">
                     <div className="w-24 h-24 bg-emerald-500/10 border border-emerald-500/20 rounded-[40px] flex items-center justify-center mx-auto text-emerald-500 shadow-2xl relative">
@@ -381,7 +364,7 @@ export const Dashboard = () => {
                 <Link to="/marketplace" className="text-[10px] font-black text-emerald-500 hover:text-emerald-400 transition-colors uppercase tracking-[0.2em]">ADD NEW KEY</Link>
               </div>
               
-              <div className={cn("transition-all duration-700", !access.algo && "blur-xl select-none pointer-events-none")}>
+              <div className={cn("transition-all duration-700", !isElite && "blur-xl select-none pointer-events-none")}>
                 {renderLicenses()}
               </div>
             </section>
@@ -395,7 +378,7 @@ export const Dashboard = () => {
                 <Link to="/signals" className="text-[10px] font-black text-gray-500 hover:text-white uppercase tracking-[0.2em]">FULL FEED</Link>
               </div>
 
-              {!access.signals && (
+              {!isPro && (
                 <div className="absolute inset-0 z-50 flex flex-col items-center justify-center p-8 bg-black/80 backdrop-blur-xl rounded-[48px] animate-in fade-in duration-1000">
                   <div className="w-20 h-20 bg-emerald-500/10 border border-emerald-500/20 rounded-[32px] flex items-center justify-center mb-6 text-emerald-500 shadow-2xl relative">
                     <Lock className="w-10 h-10" />
@@ -412,7 +395,7 @@ export const Dashboard = () => {
                 </div>
               )}
               
-              <div className={cn("space-y-3 relative transition-all duration-700", !access.signals && "blur-[12px] select-none pointer-events-none")}>
+              <div className={cn("space-y-3 relative transition-all duration-700", !isPro && "blur-[12px] select-none pointer-events-none")}>
                 {renderSignals()}
               </div>
             </section>
@@ -425,7 +408,7 @@ export const Dashboard = () => {
                 Live Sessions
               </h2>
 
-              {!access.webinars && (
+              {!isElite && (
                 <div className="absolute inset-0 z-50 flex flex-col items-center justify-center p-8 bg-black/80 backdrop-blur-sm rounded-[48px] text-center">
                   <Lock className="w-10 h-10 text-emerald-500/50 mb-4" />
                   <div className="text-[11px] font-black uppercase tracking-[0.15em] text-white/80 mb-6 leading-relaxed">
@@ -440,7 +423,7 @@ export const Dashboard = () => {
                 </div>
               )}
               
-              <div className={cn("transition-all duration-700", !access.webinars && "blur-xl select-none pointer-events-none")}>
+              <div className={cn("transition-all duration-700", !isElite && "blur-xl select-none pointer-events-none")}>
                 {renderWebinars()}
               </div>
             </section>

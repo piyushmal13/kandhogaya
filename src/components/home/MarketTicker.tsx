@@ -2,7 +2,8 @@ import React, { useState, useEffect, useMemo, useRef, useCallback, memo } from '
 import { motion, useReducedMotion } from 'motion/react';
 import { TrendingUp, TrendingDown, Activity, Zap } from 'lucide-react';
 
-import { getMarketData, subscribeToMarketData } from "../../services/apiHandlers";
+import { supabase } from "../../lib/supabase";
+import { subscribeToMarketData } from "../../services/apiHandlers";
 
 
 interface MarketPair {
@@ -77,38 +78,27 @@ export const MarketTicker = () => {
   }, []);
 
   const fetchData = useCallback(async () => {
-    if (!isMounted.current) return;
-    setIsSyncing(true);
-    
     try {
-      const res = await getMarketData();
-      console.log("Institutional Ticker DATA:", res);
-      if (!isMounted.current || !res) return;
+      // 1. HARD DEBUG (Step 1 - Total Bypass)
+      const { data, error } = await supabase.from("market_data").select("*");
+      console.log("🚀 [DB RECOVERY] MARKET RAW:", data, error);
 
-      const formatted = res.map((item: any) => {
-        let baseSymbol = item.symbol.substring(0, 3);
-        if (item.symbol === 'XAUUSD') baseSymbol = 'GOLD';
-        else if (item.symbol === 'NASDAQ') baseSymbol = 'NAS100';
+      if (error) throw error;
 
-        return {
-          symbol: item.symbol,
-          price: item.price,
-          change: item.change,
-          up: item.up,
-          baseSymbol,
-          volume: item.volume
-        };
-      });
-      
-      pairsRef.current = formatted;
+      // 2. DIRECT MAPPING (Zero Logic)
+      const formatted = (data || []).map((item: any) => ({
+        symbol: item.symbol,
+        price: item.price,
+        change: item.change,
+        up: item.up || false,
+        baseSymbol: item.symbol.substring(0, 3).toUpperCase(),
+        volume: item.volume || "0"
+      }));
+
       setPairs(formatted);
-      setLastUpdate(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+      setLastUpdate(new Date().toLocaleTimeString());
     } catch (err) {
-      console.error("Market Data Sync Error:", err);
-    } finally {
-      if (isMounted.current) {
-        setTimeout(() => setIsSyncing(false), 1000);
-      }
+      console.error("Market Ticker Recovery Failure:", err);
     }
   }, []);
 
