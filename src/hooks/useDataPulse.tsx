@@ -14,22 +14,40 @@ interface DataPulseContextValue {
 const DataPulseContext = createContext<DataPulseContextValue | null>(null);
 
 export const DataPulseProvider = ({ children }: { children: React.ReactNode }) => {
-  const [signals, setSignals] = useState<Signal[]>([]);
-  const [webinars, setWebinars] = useState<Webinar[]>([]);
-  const [marketData, setMarketData] = useState<any[]>([]);
+  const [signals, setSignals] = useState<Signal[]>(() => {
+    const cached = localStorage.getItem('pulse_signals');
+    return cached ? JSON.parse(cached) : [];
+  });
+  const [webinars, setWebinars] = useState<Webinar[]>(() => {
+    const cached = localStorage.getItem('pulse_webinars');
+    return cached ? JSON.parse(cached) : [];
+  });
+  const [marketData, setMarketData] = useState<any[]>(() => {
+    const cached = localStorage.getItem('pulse_market');
+    return cached ? JSON.parse(cached) : [];
+  });
   const [loading, setLoading] = useState(true);
 
   const fetchData = useCallback(async () => {
     try {
+      // 🚀 [IT TEAM] SWR Protocol - background revalidation
       const [sigRes, webRes, markRes] = await Promise.all([
         supabase.from("signals").select("*").order("created_at", { ascending: false }).limit(6),
         supabase.from("webinars").select("*").order("date_time", { ascending: true }).limit(3),
         supabase.from("market_data").select("*").order("symbol", { ascending: true })
       ]);
 
-      setSignals(sigRes.data || []);
-      setWebinars(webRes.data || []);
-      setMarketData(markRes.data || []);
+      const sigData = sigRes.data || [];
+      const webData = webRes.data || [];
+      const markData = markRes.data || [];
+
+      setSignals(sigData);
+      setWebinars(webData);
+      setMarketData(markData);
+
+      localStorage.setItem('pulse_signals', JSON.stringify(sigData));
+      localStorage.setItem('pulse_webinars', JSON.stringify(webData));
+      localStorage.setItem('pulse_market', JSON.stringify(markData));
     } catch (err) {
       console.error("[DataPulse] Discovery Failure:", err);
     } finally {
