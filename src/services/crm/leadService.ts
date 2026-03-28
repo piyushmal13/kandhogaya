@@ -9,6 +9,8 @@ export interface Lead {
   created_at: string;
   revenue_mtd: number;
   ltv_projected: number;
+  last_active_symbol?: string;
+  engagement_score?: number;
 }
 
 /**
