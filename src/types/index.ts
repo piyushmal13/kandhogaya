@@ -255,6 +255,20 @@ export interface BotLicense {
   created_at: string;
 }
 
+export interface Lead {
+  id: string;
+  name: string;
+  email: string;
+  status: 'cold' | 'warm' | 'hot' | 'active' | 'churned';
+  source?: string;
+  created_at: string;
+  revenue_mtd: number;
+  ltv_projected: number;
+  last_active_symbol?: string;
+  engagement_score?: number;
+  metadata?: Record<string, any>;
+}
+
 export interface WebinarRegistration {
   id: string;
   webinar_id: string;

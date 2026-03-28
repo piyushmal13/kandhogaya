@@ -41,6 +41,20 @@ export const mapWebinar = (raw: any): Webinar => ({
   sponsor_logos: Array.isArray(raw.sponsor_logos) ? raw.sponsor_logos : [],
 });
 
+export const mapLead = (raw: any): any => ({
+  id: raw.id,
+  name: raw.name || 'Anonymous Prospect',
+  email: raw.email || '',
+  status: raw.status || 'cold',
+  source: raw.source || 'Direct',
+  created_at: raw.created_at,
+  revenue_mtd: Number(raw.revenue_mtd) || 0,
+  ltv_projected: Number(raw.ltv_projected) || 0,
+  last_active_symbol: raw.last_active_symbol || null,
+  engagement_score: Number(raw.engagement_score) || 0,
+  metadata: typeof raw.metadata === 'string' ? JSON.parse(raw.metadata) : (raw.metadata || {}),
+});
+
 export const mapMarketTicker = (raw: any): any => ({
   id: raw.id,
   symbol: raw.symbol?.toUpperCase() || '',

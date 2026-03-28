@@ -35,11 +35,17 @@ export const supabase = createClient(url || 'https://placeholder.supabase.co', k
 });
 
 // Dedicated client for public Data Pulse (bypasses Auth-state RLS locking)
+// Storage disabled to prevent collision with primary Auth client
 export const publicSupabase = createClient(url || 'https://placeholder.supabase.co', key || 'placeholder', {
   auth: {
     persistSession: false,
     autoRefreshToken: false,
-    detectSessionInUrl: false
+    detectSessionInUrl: false,
+    storage: {
+      getItem: () => null,
+      setItem: () => {},
+      removeItem: () => {},
+    }
   }
 });
 
