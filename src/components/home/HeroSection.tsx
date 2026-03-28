@@ -149,24 +149,25 @@ export const HeroSection = () => {
           <form 
             onSubmit={async (e) => {
                e.preventDefault();
-               const email = (e.currentTarget.elements.namedItem("email") as HTMLInputElement).value;
+               const emailInput = e.currentTarget.elements.namedItem("email") as HTMLInputElement;
+               const email = emailInput?.value;
                if (email) {
                  await supabase.from("leads").insert([{ email, source: "hero_terminal" }]);
                  globalThis.location.href = "/login";
                }
             }}
-            className="relative group p-2 bg-white/5 border border-white/10 rounded-[32px] flex items-center gap-2 hover:border-[var(--brand)]/30 transition-all duration-700"
+            className="relative group p-1.5 sm:p-2 bg-white/5 border border-white/10 rounded-2xl sm:rounded-[32px] flex flex-col sm:flex-row items-stretch sm:items-center gap-2 hover:border-[var(--brand)]/30 transition-all duration-700"
           >
             <input 
               name="email"
               type="email"
               placeholder="ENTER INSTITUTIONAL EMAIL..."
               required
-              className="flex-1 bg-transparent px-6 py-4 text-[10px] sm:text-xs font-black tracking-widest text-white outline-none uppercase placeholder:text-gray-600"
+              className="flex-1 bg-transparent px-6 py-4 text-[11px] sm:text-xs font-black tracking-widest text-white outline-none uppercase placeholder:text-gray-600 w-full"
             />
             <button 
               type="submit"
-              className="px-6 py-4 bg-white text-black font-black rounded-[24px] overflow-hidden transition-all duration-500 hover:bg-[var(--brand)] hover:scale-[1.02] active:scale-95 text-[10px] sm:text-xs uppercase tracking-tighter flex items-center gap-3 whitespace-nowrap shadow-xl"
+              className="px-8 py-5 sm:py-4 bg-white text-black font-black rounded-xl sm:rounded-[24px] overflow-hidden transition-all duration-500 hover:bg-[var(--brand)] hover:scale-[1.02] active:scale-95 text-[11px] sm:text-xs uppercase tracking-widest flex items-center justify-center gap-3 whitespace-nowrap shadow-xl"
             >
               Access Terminal
               <ArrowRight className="w-4 h-4" />
