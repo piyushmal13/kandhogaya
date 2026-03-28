@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback, memo } from 'react';
 import { motion } from 'motion/react';
 import { TrendingUp, TrendingDown, Activity, Zap } from 'lucide-react';
 
-import { supabase } from "../../lib/supabase";
+import { useDataPulse } from "@/hooks/useDataPulse";
 import { subscribeToMarketData } from "../../services/apiHandlers";
 
 
@@ -58,9 +58,11 @@ TickerItem.displayName = "TickerItem";
 
 export const MarketTicker = () => {
 
+  const { marketData, loading: pulseLoading } = useDataPulse();
   const [pairs, setPairs] = useState<MarketPair[]>([]);
   const [lastUpdate, setLastUpdate] = useState<string>("");
   const [marketStatus, setMarketStatus] = useState<"OPEN" | "CLOSED">("OPEN");
+  
   const containerRef = useRef<HTMLDivElement>(null);
   const isMounted = useRef(true);
   
@@ -75,16 +77,10 @@ export const MarketTicker = () => {
     };
   }, []);
 
-  const fetchData = useCallback(async () => {
-    try {
-      // 1. HARD DEBUG (Step 1 - Total Bypass)
-      const { data, error } = await supabase.from("market_data").select("*");
-      console.log("🚀 [DB RECOVERY] MARKET RAW:", data, error);
-
-      if (error) throw error;
-
-      // 2. DIRECT MAPPING (Zero Logic)
-      const formatted = (data || []).map((item: any) => ({
+  useEffect(() => {
+    // 🚀 [DB RECOVERY] SYNCING MARKET DATA FROM GLOBAL PULSE
+    if (marketData.length > 0) {
+      const formatted = marketData.map((item: any) => ({
         symbol: item.symbol,
         price: item.price,
         change: item.change,
@@ -92,13 +88,11 @@ export const MarketTicker = () => {
         baseSymbol: item.symbol.substring(0, 3).toUpperCase(),
         volume: item.volume || "0"
       }));
-
       setPairs(formatted);
+      pairsRef.current = formatted;
       setLastUpdate(new Date().toLocaleTimeString());
-    } catch (err) {
-      console.error("Market Ticker Recovery Failure:", err);
     }
-  }, []);
+  }, [marketData]);
 
   const processUpdates = useCallback(() => {
     if (Object.keys(pendingUpdates.current).length === 0) return;
@@ -130,11 +124,7 @@ export const MarketTicker = () => {
   }, [processUpdates]);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
-
-  useEffect(() => {
-    const refetch = () => fetchData();
+    const refetch = () => {};
     globalThis.addEventListener("supabase:refresh", refetch);
     globalThis.addEventListener("app:login", refetch);
 
@@ -142,7 +132,7 @@ export const MarketTicker = () => {
       globalThis.removeEventListener("supabase:refresh", refetch);
       globalThis.removeEventListener("app:login", refetch);
     };
-  }, [fetchData]);
+  }, []);
 
   useEffect(() => {
     const channel = subscribeToMarketData((payload: any) => {

@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "motion/react";
 
 import { ErrorBoundary } from "./components/ui/ErrorBoundary";
 import { AuthProvider } from "./contexts/AuthContext";
+import { DataPulseProvider } from "./hooks/useDataPulse";
 import { ToastProvider } from "./contexts/ToastContext";
 import { Navbar } from "./components/ui/Navbar";
 import { Footer } from "./components/ui/Footer";
@@ -105,9 +106,10 @@ export default function App() {
     <ErrorBoundary>
       <ToastProvider>
         <AuthProvider>
-          <Router>
-            <ScrollToTop />
-            <ReferralHandler />
+          <DataPulseProvider>
+            <Router>
+              <ScrollToTop />
+              <ReferralHandler />
             <a href="#main-content" className="skip-to-content">
               Skip to main content
             </a>
@@ -122,8 +124,9 @@ export default function App() {
               <WhatsAppButton />
             </div>
           </Router>
-        </AuthProvider>
-      </ToastProvider>
-    </ErrorBoundary>
-  );
+        </DataPulseProvider>
+      </AuthProvider>
+    </ToastProvider>
+  </ErrorBoundary>
+);
 }

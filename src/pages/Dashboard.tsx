@@ -12,46 +12,34 @@ import { motion, AnimatePresence } from "motion/react";
 import { BRANDING } from "../constants/branding";
 import { PurchaseModal } from "@/components/payments/PurchaseModal";
 import { tracker } from "@/core/tracker";
-import { BotLicense, Signal, Webinar } from "@/types";
+import { useDataPulse } from "@/hooks/useDataPulse";
+import { BotLicense } from "@/types";
 import { ActivityPulse } from "@/components/dashboard/ActivityPulse";
 
 export const Dashboard = () => {
   const { user, userProfile } = useAuth();
   const navigate = useNavigate();
+  const { signals, webinars, loading: pulseLoading } = useDataPulse();
 
   const [licenses, setLicenses] = useState<BotLicense[]>([]);
-  const [signals, setSignals] = useState<Signal[]>([]);
-  const [webinars, setWebinars] = useState<Webinar[]>([]);
   const [loading, setLoading] = useState(true);
   const [dbHealthy, setDbHealthy] = useState(true);
   const [selectedPlan, setSelectedPlan] = useState<{ plan: string, amount: number } | null>(null);
 
   const fetchData = useCallback(async () => {
+    if (!user?.id) {
+       setLoading(false);
+       return;
+    }
+
     setLoading(true);
     try {
-      // 1. RECOVERY (Step 1 - Total Concurrent Bypass)
-      console.log("💎 [DB RECOVERY] EXECUTING CONCURRENT FETCH");
-      
-      const [sigRes, webRes] = await Promise.all([
-        supabase.from("signals").select("*").order("created_at", { ascending: false }).limit(5),
-        supabase.from("webinars").select("*").order("date_time", { ascending: true }).limit(3)
-      ]);
-
-      // FOR PRIVATE DATA (LICENSES), WE NEED USER ID
-      let rawLicenses = [];
-      if (user?.id) {
-          const { data: licenseData } = await supabase.from("bot_licenses").select("*, algo_bots(name)").eq("user_id", user.id);
-          rawLicenses = licenseData || [];
-      }
-
-      // 2. ASSIGN DIRECTLY
-      setSignals(sigRes.data || []);
-      setWebinars(webRes.data || []);
-      setLicenses(rawLicenses || []);
-
+      console.log("💎 [DB RECOVERY] FETCHING PRIVATE LICENSES");
+      const { data: licenseData } = await supabase.from("bot_licenses").select("*, algo_bots(name)").eq("user_id", user.id);
+      setLicenses(licenseData as any || []);
       setDbHealthy(true);
     } catch (err) {
-      console.error("Institutional Recovery Failure:", err);
+      console.error("Institutional Private Discovery Failure:", err);
       setDbHealthy(false);
     } finally {
       setLoading(false);
