@@ -1,8 +1,6 @@
-import { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import { Zap } from "lucide-react";
-
-import { getSignals, subscribeToSignals } from "../../services/apiHandlers";
+import { useDataPulse } from "../../hooks/useDataPulse";
 import { SignalCardSkeleton } from "../ui/Skeleton";
 
 interface Signal {
@@ -16,42 +14,11 @@ interface Signal {
   created_at: string;
 }
 
-function processSignalUpdate(prev: Signal[], payload: any): Signal[] {
-  const isInsert = payload.eventType === "INSERT";
-  const isUpdate = payload.eventType === "UPDATE";
-  
-  if (isInsert) {
-    return [payload.new as Signal, ...prev].slice(0, 5);
-  }
-  if (isUpdate) {
-    return prev.map((s) => (s.id === payload.new.id ? (payload.new as Signal) : s));
-  }
-  return prev.filter((s) => s.id !== payload.old.id);
-}
-
 export const LiveSignalsFeed = () => {
-  const [signals, setSignals] = useState<Signal[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { signals, loading } = useDataPulse();
 
-  useEffect(() => {
-    const fetchSignals = async () => {
-      const data = await getSignals();
-      if (data) setSignals(data as Signal[]);
-      setLoading(false);
-    };
-
-    fetchSignals();
-
-    const handleSignalEvent = (payload: any) => {
-      setSignals((prev) => processSignalUpdate(prev, payload));
-    };
-
-    const subscription = subscribeToSignals(handleSignalEvent);
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, []);
+  // Cast signals to the internal interface for UI compatibility
+  const feedSignals = (signals as any[]) || [];
 
   return (
     <section className="py-12 border-b border-[var(--border-default)]" style={{ background: "var(--bg-base)" }}>
@@ -74,7 +41,7 @@ export const LiveSignalsFeed = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {loading
             ? ['skel-1', 'skel-2', 'skel-3'].map(key => <SignalCardSkeleton key={key} />)
-            : signals.slice(0, 3).map((signal) => (
+            : signals.slice(0, 3).map((signal: Signal) => (
                 <motion.div
                   key={signal.id}
                   initial={{ opacity: 0, y: 20 }}

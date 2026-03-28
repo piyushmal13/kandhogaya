@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Calendar, Users, ArrowRight, Zap, ShieldCheck } from "lucide-react";
-import { getWebinars } from "../services/apiHandlers";
 import { WebinarCard } from "../components/webinars/WebinarCard";
 import { RegistrationModal } from "../components/webinars/RegistrationModal";
 import { WebinarCalendar } from "../components/webinars/WebinarCalendar";
@@ -10,26 +9,14 @@ import { PageHero } from "../components/site/PageHero";
 import { PageMeta } from "../components/site/PageMeta";
 import { PageSection } from "../components/site/PageSection";
 import { Webinar } from "../types";
+import { useDataPulse } from "../hooks/useDataPulse";
 
 export const Webinars = () => {
-  const [webinars, setWebinars] = useState<Webinar[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { webinars, loading } = useDataPulse();
   const [selectedWebinar, setSelectedWebinar] = useState<Webinar | null>(null);
-
-  useEffect(() => {
-    fetchWebinars();
-  }, []);
 
   const handleRegisterClick = (webinar: Webinar) => {
     setSelectedWebinar(webinar);
-  };
-
-  const fetchWebinars = async () => {
-    const data = await getWebinars();
-    if (Array.isArray(data)) {
-      setWebinars(data);
-    }
-    setLoading(false);
   };
 
   const nextWebinar = webinars[0];
@@ -231,13 +218,11 @@ export const Webinars = () => {
         </div>
       </PageSection>
 
-      {/* --- Registration Modal --- */}
       <AnimatePresence>
         {selectedWebinar && (
           <RegistrationModal 
             webinar={selectedWebinar} 
             onClose={() => setSelectedWebinar(null)} 
-            onSuccess={fetchWebinars} 
           />
         )}
       </AnimatePresence>

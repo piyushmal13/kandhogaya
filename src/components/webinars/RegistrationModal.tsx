@@ -11,7 +11,7 @@ import { Webinar } from '../../types';
 interface RegistrationModalProps {
   webinar: Webinar;
   onClose: () => void;
-  onSuccess: () => void;
+  onSuccess?: () => void;
 }
 
 export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationModalProps) => {
