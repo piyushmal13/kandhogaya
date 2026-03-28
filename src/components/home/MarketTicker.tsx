@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo, useRef, useCallback, memo } from 'react';
-import { motion, useReducedMotion } from 'motion/react';
+import React, { useState, useEffect, useRef, useCallback, memo } from 'react';
+import { motion } from 'motion/react';
 import { TrendingUp, TrendingDown, Activity, Zap } from 'lucide-react';
 
 import { supabase } from "../../lib/supabase";
@@ -60,9 +60,7 @@ export const MarketTicker = () => {
 
   const [pairs, setPairs] = useState<MarketPair[]>([]);
   const [lastUpdate, setLastUpdate] = useState<string>("");
-  const [isSyncing, setIsSyncing] = useState(false);
   const [marketStatus, setMarketStatus] = useState<"OPEN" | "CLOSED">("OPEN");
-  const prefersReducedMotion = useReducedMotion();
   const containerRef = useRef<HTMLDivElement>(null);
   const isMounted = useRef(true);
   
@@ -185,7 +183,6 @@ export const MarketTicker = () => {
     return () => clearInterval(statusInterval);
   }, []);
 
-  const tickerItems = useMemo(() => [...pairs, ...pairs, ...pairs], [pairs]);
 
   return (
     <div 
@@ -212,7 +209,7 @@ export const MarketTicker = () => {
               {lastUpdate || "LIVE TRANS"}
             </span>
             <span className="text-[8px] md:text-[9px] text-[var(--brand)]/60 font-sans font-medium mt-1 tracking-[0.1em] uppercase">
-              {isSyncing ? "SYNC" : "DATAFEED"}
+              DATAFEED
             </span>
           </div>
         </div>

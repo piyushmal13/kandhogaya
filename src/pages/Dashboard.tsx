@@ -9,16 +9,14 @@ import { useAuth } from "../contexts/AuthContext";
 import { supabase } from "../lib/supabase";
 import { cn } from "../utils/cn";
 import { motion, AnimatePresence } from "motion/react";
-import { getAccess } from "@/core/accessEngine";
 import { BRANDING } from "../constants/branding";
 import { PurchaseModal } from "@/components/payments/PurchaseModal";
-import { DataMapper, safeQuery } from "@/core/dataMapper";
 import { tracker } from "@/core/tracker";
 import { BotLicense, Signal, Webinar } from "@/types";
 import { ActivityPulse } from "@/components/dashboard/ActivityPulse";
 
 export const Dashboard = () => {
-  const { user, userProfile, entitlements } = useAuth();
+  const { user, userProfile } = useAuth();
   const navigate = useNavigate();
 
   const [licenses, setLicenses] = useState<BotLicense[]>([]);
