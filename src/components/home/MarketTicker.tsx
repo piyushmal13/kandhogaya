@@ -133,8 +133,7 @@ export const MarketTicker = () => {
 
   useEffect(() => {
     fetchData();
-    console.log("RENDER MARKET TICKER DATA:", pairs);
-  }, []);
+  }, [fetchData]);
 
   useEffect(() => {
     const refetch = () => fetchData();
