@@ -117,6 +117,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     isMountedRef.current = true;
 
     const initializeAuth = async () => {
+      if (sessionReady && user) return; // Guard against roaming refreshes
+      
       try {
         const { data: { session: currentSession } } = await supabase.auth.getSession();
         
@@ -127,12 +129,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
           if (currentUser) {
             await fetchUserProfile(currentUser.id, currentUser.email);
-            setTimeout(() => {
-              if (isMountedRef.current) {
-                setSessionReady(true);
-                globalThis.dispatchEvent(new Event("supabase:ready"));
-              }
-            }, 300);
+            setSessionReady(true);
+            globalThis.dispatchEvent(new Event("supabase:ready"));
           } else {
             setSessionReady(true);
             globalThis.dispatchEvent(new Event("supabase:ready"));
@@ -152,14 +150,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (event === 'SIGNED_IN') {
         clearCache();
-        const { data: sessionData } = await supabase.auth.getSession();
-        if (sessionData?.session) {
-          await supabase.auth.setSession({
-            access_token: sessionData.session.access_token,
-            refresh_token: sessionData.session.refresh_token,
-          });
+        // Skip manual setSession if onAuthStateChange already provided it
+        if (!user && newSession?.user) {
+          setUser(newSession.user);
+          setSession(newSession);
         }
-        await new Promise(r => setTimeout(r, 300));
         globalThis.dispatchEvent(new Event("app:login"));
         globalThis.dispatchEvent(new Event("supabase:refresh"));
         

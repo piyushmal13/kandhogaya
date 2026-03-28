@@ -20,7 +20,7 @@ export const supabase = createClient(url || 'https://placeholder.supabase.co', k
   auth: {
     persistSession: true,
     autoRefreshToken: true,
-    detectSessionInUrl: false
+    detectSessionInUrl: true // Required for Google/OAuth redirection
   }
 });
 
