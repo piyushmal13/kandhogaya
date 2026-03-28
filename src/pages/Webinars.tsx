@@ -10,12 +10,20 @@ import { PageMeta } from "../components/site/PageMeta";
 import { PageSection } from "../components/site/PageSection";
 import { Webinar } from "../types";
 import { useDataPulse } from "../hooks/useDataPulse";
+import { useAccess } from "../hooks/useAccess";
+import { UpgradeModal } from "../components/ui/UpgradeModal";
 
 export const Webinars = () => {
   const { webinars, loading } = useDataPulse();
+  const { isPro } = useAccess();
   const [selectedWebinar, setSelectedWebinar] = useState<Webinar | null>(null);
+  const [showUpgrade, setShowUpgrade] = useState(false);
 
   const handleRegisterClick = (webinar: Webinar) => {
+    if (webinar.is_paid && !isPro) {
+      setShowUpgrade(true);
+      return;
+    }
     setSelectedWebinar(webinar);
   };
 
@@ -226,6 +234,14 @@ export const Webinars = () => {
           />
         )}
       </AnimatePresence>
+
+      <UpgradeModal 
+        isOpen={showUpgrade} 
+        onClose={() => setShowUpgrade(false)} 
+        requiredPlan="pro"
+        title="Pro Webinar Locked"
+        description="Active institutional Masterclasses and premium trading sessions require Pro-tier credentials. Upgrade currently to unlock the research desk's live feeds."
+      />
     </div>
   );
 };
