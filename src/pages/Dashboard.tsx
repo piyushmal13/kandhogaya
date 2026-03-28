@@ -19,7 +19,7 @@ import { ActivityPulse } from "@/components/dashboard/ActivityPulse";
 export const Dashboard = () => {
   const { user, userProfile } = useAuth();
   const navigate = useNavigate();
-  const { signals, webinars, loading: pulseLoading } = useDataPulse();
+  const { signals, webinars } = useDataPulse();
 
   const [licenses, setLicenses] = useState<BotLicense[]>([]);
   const [loading, setLoading] = useState(true);

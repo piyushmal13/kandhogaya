@@ -58,7 +58,7 @@ TickerItem.displayName = "TickerItem";
 
 export const MarketTicker = () => {
 
-  const { marketData, loading: pulseLoading } = useDataPulse();
+  const { marketData } = useDataPulse();
   const [pairs, setPairs] = useState<MarketPair[]>([]);
   const [lastUpdate, setLastUpdate] = useState<string>("");
   const [marketStatus, setMarketStatus] = useState<"OPEN" | "CLOSED">("OPEN");

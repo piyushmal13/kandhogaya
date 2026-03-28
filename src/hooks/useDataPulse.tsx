@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, createContext, useContext } from 'react';
+import { useState, useEffect, useCallback, createContext, useContext, useMemo } from 'react';
 import { supabase } from '../lib/supabase';
 import { Signal, Webinar } from '../types';
 
@@ -43,8 +43,16 @@ export const DataPulseProvider = ({ children }: { children: React.ReactNode }) =
     return () => clearInterval(interval);
   }, [fetchData]);
 
+  const contextValue = useMemo(() => ({
+    signals,
+    webinars,
+    marketData,
+    loading,
+    refresh: fetchData
+  }), [signals, webinars, marketData, loading, fetchData]);
+
   return (
-    <DataPulseContext.Provider value={{ signals, webinars, marketData, loading, refresh: fetchData }}>
+    <DataPulseContext.Provider value={contextValue}>
       {children}
     </DataPulseContext.Provider>
   );
