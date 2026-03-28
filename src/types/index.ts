@@ -32,8 +32,9 @@ export interface Webinar {
   id: string;
   title: string;
   description?: string;
-  date_time: string;          // timestamptz — exact column name in DB
-  speaker_name?: string;
+  date_time: string;          // timestamptz
+  speaker: string;            // normalized field
+  speaker_name?: string;      // legacy DB field
   status: 'upcoming' | 'live' | 'past';
   is_paid?: boolean;
   price?: number;
@@ -48,6 +49,7 @@ export interface Webinar {
   advanced_features?: Record<string, unknown>; // jsonb object
   max_attendees: number;
   registration_count: number;
+  metadata?: Record<string, any>;
 }
 
 // ---------------------------------------------------------------------------
@@ -55,13 +57,19 @@ export interface Webinar {
 // ---------------------------------------------------------------------------
 export interface Signal {
   id: string;
-  asset: string;
-  direction: 'BUY' | 'SELL';
-  entry_price?: number;
+  type?: 'TRADE' | 'ANALYSIS' | 'NEWS';
+  symbol: string;
+  asset?: string;             // legacy DB field
+  direction?: 'BUY' | 'SELL';
+  entry?: number;
+  entry_price?: number;       // legacy DB field
   stop_loss?: number;
   take_profit?: number;
-  status: 'active' | 'closed' | 'cancelled';
+  status: 'active' | 'closed' | 'cancelled' | 'pending';
   created_at: string;
+  metadata?: Record<string, any>;
+  result?: 'WIN' | 'LOSS' | 'BREAKEVEN' | null;
+  pips?: number;
 }
 
 // ---------------------------------------------------------------------------

@@ -43,18 +43,22 @@ export const publicSupabase = createClient(url || 'https://placeholder.supabase.
   }
 });
 
-// Build Recovery: Restore safeQuery for dependency resolution
-export const safeQuery = async <T>(query: unknown): Promise<T | []> => {
+/**
+ * safeQuery - Institutional Data Error Boundary
+ * Wraps Supabase query execution to ensure predictable return shapes. 
+ * Prevents logic-level exceptions from ever reaching the UI layer.
+ */
+export const safeQuery = async <T>(query: any): Promise<T | []> => {
   try {
-    const { data, error } = await (query as Promise<{data: T, error: any}>);
+    const { data, error } = await query;
     if (error) {
-      console.error("[Supabase Error]:", error.message);
-      return [];
+      console.warn("[Institutional Data Audit]: Query suppressed via safeQuery:", error.message);
+      return [] as any;
     }
-    return data || [];
+    return (data || []) as T;
   } catch (err: unknown) {
-    console.error("[Database Exception]:", err);
-    return [];
+    console.error("[Institutional Data Crash]: Exception trapped in safeQuery:", err);
+    return [] as any;
   }
 };
 
