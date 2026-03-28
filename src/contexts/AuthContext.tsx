@@ -68,50 +68,47 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const lastFetchedId = useRef<string | null>(null);
   const isMountedRef = useRef(true);
 
-  const fetchUserProfile = useCallback(async (userId: string, email?: string) => {
-    if (isFetchingRef.current || lastFetchedId.current === userId) return;
+    const fetchUserProfile = useCallback(async (userId: string, email?: string) => {
+      if (isFetchingRef.current || lastFetchedId.current === userId) return;
 
-    isFetchingRef.current = true;
-    lastFetchedId.current = userId;
+      isFetchingRef.current = true;
+      lastFetchedId.current = userId;
 
-    const retry = async (fn: () => Promise<any>, attempts = 2) => {
+      const retry = async (fn: () => Promise<any>, attempts = 2) => {
+        try {
+          return await fn();
+        } catch (err) {
+          console.error(`[Auth] Discovery Retry Failure (Attempts: ${attempts}):`, err);
+          if (attempts > 0) return retry(fn, attempts - 1);
+          return null;
+        }
+      };
+
       try {
-        return await fn();
+        // CONCURRENT Artifact Discovery
+        const [userRes, entitlementRes] = await Promise.all([
+          retry(async () => await supabase.from("users").select("*").eq("id", userId).maybeSingle()),
+          retry(async () => await supabase.from("user_entitlements").select("*").eq("user_id", userId))
+        ]);
+
+        const userData = userRes?.data || null;
+        const entitlementData = entitlementRes?.data || [];
+
+        if (isMountedRef.current) {
+          const base = userData || { id: userId, email, role: "user" as const };
+          setEntitlements(entitlementData);
+          setUserProfile({
+            ...base,
+            role: base.role ?? "user",
+            isPro: entitlementData.some(e => e.active),
+          });
+        }
       } catch (err) {
-        console.error(`[Auth] Discovery Retry Failure (Attempts: ${attempts}):`, err);
-        if (attempts > 0) return retry(fn, attempts - 1);
-        return null;
+        console.error("Institutional Identity Discovery Error:", err);
+      } finally {
+        isFetchingRef.current = false;
       }
-    };
-
-    try {
-      const userRes = await retry(async () =>
-        await supabase.from("users").select("*").eq("id", userId).maybeSingle()
-      );
-
-      const userData = userRes?.data || null;
-
-      // Entitlement Discovery
-      const entitlementRes = await retry(async () => 
-        await supabase.from("user_entitlements").select("*").eq("user_id", userId)
-      );
-      const entitlementData = entitlementRes?.data || [];
-
-      if (isMountedRef.current) {
-        const base = userData || { id: userId, email, role: "user" as const };
-        setEntitlements(entitlementData);
-        setUserProfile({
-          ...base,
-          role: base.role ?? "user",
-          isPro: entitlementData.some(e => e.active),
-        });
-      }
-    } catch (err) {
-      console.error("Institutional Identity Discovery Error:", err);
-    } finally {
-      isFetchingRef.current = false;
-    }
-  }, []);
+    }, []);
 
   useEffect(() => {
     isMountedRef.current = true;

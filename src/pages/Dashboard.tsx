@@ -29,11 +29,13 @@ export const Dashboard = () => {
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      // 1. HARD DEBUG (Step 4 & 5 - Total Bypass)
-      console.log("💎 [DB RECOVERY] EXECUTING DIRECT FETCH (NO LOGIC LAYER)");
+      // 1. RECOVERY (Step 1 - Total Concurrent Bypass)
+      console.log("💎 [DB RECOVERY] EXECUTING CONCURRENT FETCH");
       
-      const { data: rawSignals } = await supabase.from("signals").select("*").order("created_at", { ascending: false }).limit(5);
-      const { data: rawWebinars } = await supabase.from("webinars").select("*").order("date_time", { ascending: true }).limit(3);
+      const [sigRes, webRes] = await Promise.all([
+        supabase.from("signals").select("*").order("created_at", { ascending: false }).limit(5),
+        supabase.from("webinars").select("*").order("date_time", { ascending: true }).limit(3)
+      ]);
 
       // FOR PRIVATE DATA (LICENSES), WE NEED USER ID
       let rawLicenses = [];
@@ -43,8 +45,8 @@ export const Dashboard = () => {
       }
 
       // 2. ASSIGN DIRECTLY
-      setSignals(rawSignals || []);
-      setWebinars(rawWebinars || []);
+      setSignals(sigRes.data || []);
+      setWebinars(webRes.data || []);
       setLicenses(rawLicenses || []);
 
       setDbHealthy(true);
