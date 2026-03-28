@@ -41,8 +41,9 @@ export const DataPulseProvider = ({ children }: { children: React.ReactNode }) =
 
   useEffect(() => {
     fetchData();
-    // Refresh discovery pulse on identity transition or pulse tick
-    const interval = setInterval(fetchData, 300000);
+
+    // 🚀 [IT TEAM] High-frequency heartbeat for discovery (60s)
+    const interval = setInterval(fetchData, 60000);
     return () => clearInterval(interval);
   }, [fetchData, user?.id]);
 
