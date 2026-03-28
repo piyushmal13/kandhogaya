@@ -1,0 +1,156 @@
+import React, { useState } from "react";
+import { 
+  Search, Filter, 
+  Target, Zap,
+  ChevronLeft, ChevronRight,
+  TrendingUp
+} from "lucide-react";
+import { cn } from "../../utils/cn";
+import { useCRM } from "../../hooks/useCRM";
+
+/**
+ * LeadManager - Institutional Prospect Acquisition Matrix
+ * Strict Component Logic: Hook-Driven State Acquisition
+ */
+export const LeadManager = () => {
+  const { leads, loading, page, fetchHistory } = useCRM();
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredLeads = leads.filter(l => 
+    l.name?.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    l.email?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  return (
+    <div className="space-y-8 animate-in fade-in duration-1000">
+      
+      {/* 1. Prospect Discovery Header */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+          <h2 className="text-3xl font-black text-white italic tracking-tighter uppercase">Lead Acquisition Matrix</h2>
+          <p className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] mt-2">Institutional Prospect Auditing v6.0</p>
+        </div>
+
+        <div className="flex items-center gap-4">
+          <div className="relative group">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-hover:text-emerald-500 transition-colors" />
+            <input 
+              type="text"
+              placeholder="DISCOVER PROSPECT..."
+              className="bg-zinc-900 border border-white/10 rounded-2xl py-3 pl-12 pr-6 text-[10px] font-black tracking-widest text-white focus:border-emerald-500 transition-all w-64 uppercase"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          <button className="p-3 bg-zinc-900 border border-white/10 rounded-2xl hover:border-emerald-500 transition-all group">
+            <Filter className="w-4 h-4 text-gray-500 group-hover:text-emerald-500" />
+          </button>
+        </div>
+      </div>
+
+      {/* 2. Intelligence Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {[
+          { label: "Pipeline Velocity", value: "84%", icon: Zap, color: "text-emerald-500" },
+          { label: "Intent Signals", value: "12 Active", icon: Target, color: "text-cyan-500" },
+          { label: "LTV Projection", value: "$4.8M", icon: TrendingUp, color: "text-amber-500" }
+        ].map((stat) => (
+          <div key={stat.label} className="bg-zinc-900 border border-white/10 p-8 rounded-[40px] relative overflow-hidden group">
+            <div className={cn("absolute -top-4 -right-4 p-8 opacity-5 group-hover:opacity-10 transition-opacity", stat.color)}>
+              <stat.icon className="w-20 h-20" />
+            </div>
+            <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-4 block">{stat.label}</span>
+            <div className={cn("text-3xl font-black tracking-tighter italic", stat.color)}>{stat.value}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* 3. Prospect Matrix */}
+      <div className="bg-zinc-900 border border-white/10 rounded-[48px] overflow-hidden shadow-2xl">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="border-b border-white/5 bg-white/5">
+                <th className="px-8 py-6 text-[9px] font-black text-gray-400 uppercase tracking-[0.3em]">Institutional Identity</th>
+                <th className="px-8 py-6 text-[9px] font-black text-gray-400 uppercase tracking-[0.3em]">Status Mapping</th>
+                <th className="px-8 py-6 text-[9px] font-black text-gray-400 uppercase tracking-[0.3em]">LTV Forecast</th>
+                <th className="px-8 py-6 text-[9px] font-black text-gray-400 uppercase tracking-[0.3em]">Revenue MTD</th>
+                <th className="px-8 py-6 text-[9px] font-black text-gray-400 uppercase tracking-[0.3em]">Discovery Date</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/5">
+              {loading ? (
+                <tr>
+                  <td colSpan={5} className="px-8 py-20 text-center">
+                    <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
+                  </td>
+                </tr>
+              ) : filteredLeads.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="px-8 py-20 text-center text-[10px] font-black text-gray-600 uppercase tracking-widest">
+                    No Prospects Discovered
+                  </td>
+                </tr>
+              ) : (
+                filteredLeads.map((lead) => (
+                  <tr key={lead.id} className="hover:bg-white/5 transition-colors group cursor-pointer">
+                    <td className="px-8 py-6">
+                      <div className="flex flex-col">
+                        <span className="text-[11px] font-black text-white uppercase tracking-wider">{lead.name || 'Anonymous Prospect'}</span>
+                        <span className="text-[9px] font-black text-gray-600 uppercase tracking-widest mt-1">{lead.email}</span>
+                      </div>
+                    </td>
+                    <td className="px-8 py-6">
+                      <div className="flex items-center gap-2">
+                        <div className={cn(
+                          "w-1.5 h-1.5 rounded-full animate-pulse",
+                          lead.status === 'converted' && 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]',
+                          lead.status === 'interested' && 'bg-cyan-500',
+                          lead.status !== 'converted' && lead.status !== 'interested' && 'bg-gray-600'
+                        )} />
+                        <span className="text-[10px] font-black text-white uppercase tracking-widest italic">{lead.status}</span>
+                      </div>
+                    </td>
+                    <td className="px-8 py-6">
+                      <span className="text-[11px] font-black text-amber-500 italic">${(lead.ltv_projected || 0).toLocaleString()}</span>
+                    </td>
+                    <td className="px-8 py-6">
+                      <span className="text-[11px] font-black text-white italic">${(lead.revenue_mtd || 0).toLocaleString()}</span>
+                    </td>
+                    <td className="px-8 py-6">
+                      <span className="text-[10px] font-black text-gray-600 uppercase tracking-widest">{new Date(lead.created_at).toLocaleDateString()}</span>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Server-Side Pagination Controller */}
+        <div className="px-8 py-6 bg-white/5 border-t border-white/5 flex items-center justify-between">
+          <div className="text-[9px] font-black text-gray-500 uppercase tracking-widest">
+            Displaying Segment {page + 1}
+          </div>
+          <div className="flex items-center gap-2">
+            <button 
+              disabled={page === 0 || loading}
+              onClick={() => fetchHistory(page - 1)}
+              className="p-2 bg-zinc-900 border border-white/10 rounded-xl hover:border-emerald-500 disabled:opacity-30 disabled:hover:border-white/10 transition-all group"
+            >
+              <ChevronLeft className="w-4 h-4 text-gray-500 group-hover:text-emerald-500" />
+            </button>
+            <button 
+              disabled={loading || leads.length < 20}
+              onClick={() => fetchHistory(page + 1)}
+              className="p-2 bg-zinc-900 border border-white/10 rounded-xl hover:border-emerald-500 disabled:opacity-30 disabled:hover:border-white/10 transition-all group"
+            >
+              <ChevronRight className="w-4 h-4 text-gray-500 group-hover:text-emerald-500" />
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  );
+};

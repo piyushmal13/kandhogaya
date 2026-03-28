@@ -115,13 +115,21 @@ export interface ProductVariant {
 // ---------------------------------------------------------------------------
 export interface Review {
   id?: string;
-  name: string;
-  user_name?: string;
+  user_id?: string;    // References auth.users(id)
+  name: string;        // Fallback for anonymous or custom name
+  user_name?: string;  // Internal identifier
   rating: number;
-  text: string;       // exact DB column
+  text: string;
   role?: string;
   image_url?: string;
-  region?: string;
+  region?: string;     // e.g. IN, US, EU
+  source?: string;     // e.g. web, referral, campaign
+  status: 'pending' | 'approved' | 'rejected' | 'hidden';
+  priority?: number;   // show best first
+  rejection_reason?: string;
+  flagged?: boolean;    // for spam/fraud detection
+  ip_address?: string;
+  metadata?: Record<string, unknown>;
   created_at?: string;
 }
 

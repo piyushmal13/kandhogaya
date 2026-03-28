@@ -70,28 +70,28 @@ export const tracker = {
       const userId = session?.user?.id || null;
 
       const payload = {
-        event_type: event,
+        event: event,
         user_id: userId,
-        session_id: sessionId,
-        source,
-        agent_code: agent,
-        device,
-        path: globalThis.location.pathname,
-        timestamp,
         metadata: {
           ...metadata,
+          session_id: sessionId,
+          source,
+          agent_code: agent,
+          device,
+          path: globalThis.location.pathname,
           userAgent: globalThis.navigator.userAgent,
           language: globalThis.navigator.language,
           timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
           referrer: globalThis.document.referrer,
           screenResolution: `${globalThis.screen.width}x${globalThis.screen.height}`
-        }
+        },
+        timestamp
       };
 
       console.log(`[BehavioralEngine] Captured Signal: ${event}`, payload);
 
-      // Async persistence
-      supabase.from("user_events").insert(payload).then(({ error }) => {
+      // Async persistence in standardized analytics_events
+      supabase.from("analytics_events").insert(payload).then(({ error }) => {
         if (error) console.error(`[BehavioralEngine] Signal Sync Error (${event}):`, error);
       });
 
@@ -110,12 +110,31 @@ export const tracker = {
   },
 
   async syncActivity(userId: string) {
+    const now = new Date();
+    
+    // 1. Fetch current status to determine delta
+    const { data: pipeline } = await supabase
+      .from("sales_pipeline")
+      .select("last_active_at")
+      .eq("user_id", userId)
+      .single();
+
+    let status = "active";
+    if (pipeline?.last_active_at) {
+      const lastActive = new Date(pipeline.last_active_at);
+      const diffDays = (now.getTime() - lastActive.getTime()) / (1000 * 60 * 60 * 24);
+      
+      if (diffDays > 7) status = "churned";
+      else if (diffDays > 2) status = "at_risk";
+    }
+
     const { error } = await supabase
       .from("sales_pipeline")
       .upsert({ 
         user_id: userId, 
-        last_active_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        last_active_at: now.toISOString(),
+        retention_status: status,
+        updated_at: now.toISOString()
       }, { onConflict: "user_id" });
     
     if (error) console.error("[BehavioralEngine] Activity Sync Error:", error);

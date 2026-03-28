@@ -35,6 +35,11 @@ export const Dashboard = () => {
     }
     setLoading(true);
     try {
+      // RAW DIAGNOSTIC DISCOVERY (Step 4 recovery)
+      const rawSignals = await supabase.from("signals").select("*").limit(5);
+      console.log("💎 [DB RECOVERY] RAW SIGNALS:", rawSignals.data);
+      if (rawSignals.error) console.error("🚨 [DB RECOVERY] SIGNALS ERROR:", rawSignals.error);
+
       const [signalsData, licenseData, webinarData] = await Promise.all([
         safeQuery(
           supabase.from("signals").select("*").limit(5).order("created_at", { ascending: false }).then() as any,

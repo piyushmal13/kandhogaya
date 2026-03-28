@@ -13,6 +13,7 @@ interface DialogProps {
   cancelText?: string;
   variant?: "danger" | "warning" | "info";
   isLoading?: boolean;
+  children?: React.ReactNode;
 }
 
 export const Dialog = ({
@@ -25,6 +26,7 @@ export const Dialog = ({
   cancelText = "Cancel",
   variant = "danger",
   isLoading = false,
+  children
 }: DialogProps) => {
   return (
     <AnimatePresence>
@@ -65,6 +67,9 @@ export const Dialog = ({
               <p className="mb-8 text-sm leading-6 text-gray-400">
                 {description}
               </p>
+
+              {/* Custom Acquisition Layer */}
+              {children && <div className="w-full mb-8">{children}</div>}
 
               <div className="flex w-full gap-3">
                 <button

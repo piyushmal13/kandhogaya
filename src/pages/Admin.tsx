@@ -4,20 +4,21 @@ import { BarChart3, Zap, ShieldCheck, Users, Video, Settings, Star, ShoppingCart
 import { useAuth } from "../contexts/AuthContext";
 import { cn } from "../utils/cn";
 
-// Sub-components
-import { ContentManager } from "./admin/ContentManager";
-import { LicenseManager } from "./admin/LicenseManager";
-import { AgentManager } from "./admin/AgentManager";
-import { WebinarManager } from "./admin/WebinarManager";
-import { ProductManager } from "./admin/ProductManager";
-import { ReviewManager } from "./admin/ReviewManager";
-import { RevenueAnalytics } from "./admin/RevenueAnalytics";
-import { FulfillmentManager } from "./admin/FulfillmentManager";
-import { RetentionHub } from "./admin/RetentionHub";
-import { AgentSystem } from "./admin/AgentSystem";
-import { LeadManager } from "./admin/LeadManager";
-import { CEOPanel } from "./admin/CEOPanel";
-import { SettingsManager } from "./admin/SettingsManager";
+// Sub-components (Modularized)
+import { ContentManager } from "../modules/admin/ContentManager";
+import { LicenseManager } from "../modules/admin/LicenseManager";
+import { AgentManager } from "../modules/admin/AgentManager";
+import { WebinarManager } from "../modules/admin/WebinarManager";
+import { ProductManager } from "../modules/admin/ProductManager";
+import { ReviewManager } from "../modules/admin/ReviewManager";
+import { RevenueAnalytics } from "../modules/admin/RevenueAnalytics";
+import { FulfillmentManager } from "../modules/admin/FulfillmentManager";
+import { RetentionHub } from "../modules/admin/RetentionHub";
+import { AgentSystem } from "../modules/admin/AgentSystem";
+import { LeadManager } from "../modules/admin/LeadManager";
+import { CEOPanel } from "../modules/admin/CEOPanel";
+import { SettingsManager } from "../modules/admin/SettingsManager";
+import { ErrorViewer } from "../modules/admin/ErrorViewer";
 
 /**
  * Master Admin CRM Dashboard
@@ -53,6 +54,7 @@ export const Admin = () => {
     { id: "algos", name: "Algos", icon: Zap },
     { id: "webinars", name: "Webinars", icon: Video },
     { id: "reviews", name: "Reviews", icon: Star },
+    { id: "health", name: "System Health", icon: Activity },
     { id: "settings", name: "Settings", icon: Settings },
   ];
 
@@ -99,6 +101,7 @@ export const Admin = () => {
         {activeTab === "agents" && <AgentManager />}
         {activeTab === "webinars" && <WebinarManager />}
         {activeTab === "reviews" && <ReviewManager />}
+        {activeTab === "health" && <ErrorViewer />}
         {activeTab === "settings" && <SettingsManager />}
       </div>
     </div>

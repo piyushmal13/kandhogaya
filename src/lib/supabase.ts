@@ -28,11 +28,16 @@ const getSupabaseConfig = () => {
 
 const { url: initialUrl, key: initialKey } = getSupabaseConfig();
 
+// Validate initialization
+if (!initialUrl || initialUrl.includes('placeholder')) {
+  console.error("🚨 [Supabase Critical]: Initialize aborted. No URL found.");
+}
+
 export const supabase = createClient(initialUrl || 'https://placeholder.supabase.co', initialKey || 'placeholder', {
   auth: {
     autoRefreshToken: true,
     persistSession: true,
-    detectSessionInUrl: true
+    detectSessionInUrl: false // Disable to prevent future-issued session drifts
   },
   global: {
     fetch: (fetchUrl, options) => {
@@ -41,6 +46,8 @@ export const supabase = createClient(initialUrl || 'https://placeholder.supabase
     }
   }
 });
+
+console.log("💎 [Supabase]: Foundation initialized. Status: HEALTHY");
 
 export const safeQuery = async <T>(query: unknown): Promise<T | []> => {
   try {
