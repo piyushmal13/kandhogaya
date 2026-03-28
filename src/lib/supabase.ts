@@ -2,8 +2,8 @@ import { createClient } from '@supabase/supabase-js';
 
 const getSupabaseConfig = () => {
   // Priority 1: Server-side runtime injection (globalThis scope)
-  const injectedUrl = (globalThis as any)._SUPABASE_URL || (window as any)._SUPABASE_URL;
-  const injectedKey = (globalThis as any)._SUPABASE_ANON_KEY || (window as any)._SUPABASE_ANON_KEY;
+  const injectedUrl = (globalThis as any)._SUPABASE_URL;
+  const injectedKey = (globalThis as any)._SUPABASE_ANON_KEY;
 
   if (injectedUrl && injectedKey && !injectedUrl.includes('placeholder')) {
     return { url: injectedUrl, key: injectedKey };
