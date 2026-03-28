@@ -499,7 +499,18 @@ async function startServer() {
   // Vite Integration
   if (process.env.NODE_ENV === "production") {
     const distPath = path.join(__dirname, "dist");
-    app.use(express.static(distPath));
+    // Serve static assets first with absolute path resolution
+    app.use(express.static(distPath, {
+      index: false,
+      maxAge: '1y',
+      immutable: true,
+      fallthrough: true
+    }));
+
+    // Prevent MIME type mismatch (text/html) for missing JS/CSS chunks
+    app.get(/.*\.(js|css|png|jpg|jpeg|gif|svg|ico|json|map|webmanifest)/, (req: any, res: any) => {
+      res.status(404).json({ error: "Asset not found" });
+    });
     const { injectMetaTags } = await import("./src/utils/seoRoutes");
     app.get("*", (req, res) => {
       const indexPath = path.join(distPath, "index.html");
