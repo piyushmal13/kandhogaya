@@ -225,10 +225,11 @@ export const MarketTicker = () => {
         <motion.div 
           className="flex whitespace-nowrap items-center py-2"
           initial={{ x: 0 }}
-          animate={prefersReducedMotion ? {} : { x: ["0%", "-33.333333%"] }}
-          transition={{ ease: "linear", duration: 75, repeat: Infinity }}
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{ ease: "linear", duration: 30, repeat: Infinity }}
         >
-          {tickerItems.map((item, i) => (
+          {/* Replicate items for seamless loop */}
+          {[...pairs, ...pairs, ...pairs, ...pairs].map((item, i) => (
             <TickerItem key={`${item.symbol}-${i}`} item={item} i={i} />
           ))}
         </motion.div>

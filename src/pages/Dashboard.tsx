@@ -34,20 +34,20 @@ export const Dashboard = () => {
       // 1. HARD DEBUG (Step 4 & 5 - Total Bypass)
       console.log("💎 [DB RECOVERY] EXECUTING DIRECT FETCH (NO LOGIC LAYER)");
       
-      const { data: rawSignals, error: sigError } = await supabase.from("signals").select("*");
-      console.log("📊 [DB RECOVERY] RAW SIGNALS:", rawSignals);
-      if (sigError) console.error("🚨 [DB RECOVERY] SIGNALS FAIL:", sigError);
+      const { data: rawSignals } = await supabase.from("signals").select("*").order("created_at", { ascending: false }).limit(5);
+      const { data: rawWebinars } = await supabase.from("webinars").select("*").order("date_time", { ascending: true }).limit(3);
 
-      const { data: rawWebinars, error: webError } = await supabase.from("webinars").select("*");
-      console.log("📽️ [DB RECOVERY] RAW WEBINARS:", rawWebinars);
+      // FOR PRIVATE DATA (LICENSES), WE NEED USER ID
+      let rawLicenses = [];
+      if (user?.id) {
+          const { data: licenseData } = await supabase.from("bot_licenses").select("*, algo_bots(name)").eq("user_id", user.id);
+          rawLicenses = licenseData || [];
+      }
 
-      const { data: rawBots, error: botError } = await supabase.from("algo_bots").select("*");
-      console.log("🤖 [DB RECOVERY] RAW ALGO_BOTS:", rawBots);
-
-      // 2. ASSIGN DIRECTLY (Step 5)
+      // 2. ASSIGN DIRECTLY
       setSignals(rawSignals || []);
       setWebinars(rawWebinars || []);
-      setLicenses(rawBots || []); // Use rawBots as temporary license data for visibility
+      setLicenses(rawLicenses || []);
 
       setDbHealthy(true);
     } catch (err) {
@@ -56,7 +56,7 @@ export const Dashboard = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [user?.id]);
 
   useEffect(() => {
     fetchData();
