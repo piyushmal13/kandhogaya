@@ -1,7 +1,8 @@
 import React, { useState, useEffect, SyntheticEvent } from "react";
-import { ShieldCheck, Search, Trash2, Zap, Copy } from "lucide-react";
+import { ShieldCheck, Search, Trash2, Zap, Copy, Clock, User } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { Dialog } from "../../components/ui/Dialog";
+import { cn } from "../../utils/cn";
 
 export const LicenseManager = () => {
   const [licenseUserId, setLicenseUserId] = useState("");
@@ -15,7 +16,6 @@ export const LicenseManager = () => {
   const [licenseToDelete, setLicenseToDelete] = useState<string | null>(null);
 
   const fetchLicenses = async () => {
-// ... existing fetchLicenses ...
     try {
       const { data: { session } } = await supabase.auth.getSession();
       const res = await fetch("/api/admin/licenses", {
@@ -23,10 +23,11 @@ export const LicenseManager = () => {
       });
       if (res.ok) {
         const data = await res.json();
+        console.log("[Admin] Licenses Discovered:", data.length);
         setLicenses(data);
       }
     } catch (err) {
-      console.error("Error fetching licenses:", err);
+      console.error("Institutional License Discovery Error:", err);
     }
   };
 
@@ -46,11 +47,9 @@ export const LicenseManager = () => {
       if (res.ok) {
         fetchLicenses();
         setIsDeleteDialogOpen(false);
-      } else {
-        alert("Failed to delete license.");
       }
     } catch (err) {
-      console.error("Delete error:", err);
+      console.error("Institutional License Erasure Error:", err);
     } finally {
       setDeleteLoading(false);
       setLicenseToDelete(null);
@@ -78,63 +77,60 @@ export const LicenseManager = () => {
       if (res.ok) {
         const data = await res.json();
         setLicenseKey(data.license_key);
-        alert("License Generated!");
         fetchLicenses();
-      } else {
-        const err = await res.json();
-        alert(`Error: ${err.error}`);
       }
     } catch (err) {
-      console.error("License generation error:", err);
-      alert("An unexpected error occurred.");
+      console.error("Institutional License Orchestration Error:", err);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-      <div className="lg:col-span-6">
-        <div className="bg-zinc-900 border border-white/10 rounded-3xl p-8 shadow-xl">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 bg-emerald-500/10 rounded-xl flex items-center justify-center text-emerald-500">
-              <ShieldCheck className="w-5 h-5" />
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="lg:col-span-12 xl:col-span-5">
+        <div className="bg-zinc-900 border border-white/10 rounded-[40px] p-10 shadow-2xl relative overflow-hidden group">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500 opacity-30 group-hover:opacity-100 transition-opacity" />
+          
+          <div className="flex items-center gap-4 mb-10">
+            <div className="w-12 h-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-500">
+              <ShieldCheck className="w-6 h-6" />
             </div>
-            <h2 className="text-xl font-bold text-white tracking-tight">Generate Bot License</h2>
+            <div>
+              <h2 className="text-2xl font-black text-white uppercase tracking-tighter italic">Generate Key</h2>
+              <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">Institutional Entitlement Issuance</p>
+            </div>
           </div>
 
-          <form onSubmit={handleGenerateLicense} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label htmlFor="userId" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">User ID (UUID)</label>
+          <form onSubmit={handleGenerateLicense} className="space-y-8">
+            <div className="space-y-6">
+              <div className="space-y-2">
+                <label className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 px-1">Trader ID (UUID)</label>
                 <input 
-                  id="userId"
-                  value={licenseUserId} 
-                  onChange={e => setLicenseUserId(e.target.value)} 
+                  value={licenseUserId} onChange={e => setLicenseUserId(e.target.value)} 
                   placeholder="Paste Supabase User ID"
-                  className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-emerald-500 transition-all" 
+                  className="w-full bg-black border border-white/5 focus:border-emerald-500/50 rounded-2xl p-4 text-white text-sm outline-none transition-all" 
                 />
               </div>
-              <div>
-                <label htmlFor="algoId" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Algo Bot ID</label>
+              <div className="space-y-2">
+                <label className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 px-1">Target Engine ID</label>
                 <input 
-                  id="algoId"
-                  value={licenseAlgoId} 
-                  onChange={e => setLicenseAlgoId(e.target.value)} 
+                  value={licenseAlgoId} onChange={e => setLicenseAlgoId(e.target.value)} 
                   placeholder="Paste Bot ID"
-                  className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-emerald-500 transition-all" 
+                  className="w-full bg-black border border-white/5 focus:border-emerald-500/50 rounded-2xl p-4 text-white text-sm outline-none transition-all" 
                 />
               </div>
             </div>
 
             {licenseKey && (
-              <div className="p-6 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl relative group">
-                <div className="text-[10px] text-emerald-500 font-bold uppercase mb-2 tracking-widest">Generated Key (Send via WhatsApp)</div>
-                <div className="flex items-center justify-between">
-                  <div className="text-white font-mono font-bold select-all text-lg">{licenseKey}</div>
+              <div className="p-8 bg-emerald-500/5 border border-emerald-500/10 rounded-3xl relative group/key">
+                <div className="text-[9px] text-emerald-500 font-black uppercase mb-4 tracking-[0.2em]">Generated Secure Key</div>
+                <div className="flex items-center justify-between gap-4">
+                  <div className="text-white font-mono font-black select-all text-xl tracking-tighter italic">{licenseKey}</div>
                   <button 
+                    type="button"
                     onClick={() => navigator.clipboard.writeText(licenseKey)}
-                    className="p-2 text-emerald-500 hover:text-emerald-400 transition-colors"
+                    className="w-12 h-12 rounded-xl bg-emerald-500 text-black flex items-center justify-center hover:scale-110 transition-all shadow-lg"
                   >
                     <Copy className="w-5 h-5" />
                   </button>
@@ -143,54 +139,60 @@ export const LicenseManager = () => {
             )}
 
             <button 
-              disabled={loading}
-              className="w-full py-4 bg-white text-black font-bold rounded-xl hover:bg-emerald-500 transition-all flex items-center justify-center gap-2 shadow-lg shadow-white/10 disabled:opacity-50"
+              type="submit" disabled={loading}
+              className="w-full py-5 bg-emerald-500 hover:bg-emerald-400 text-black font-black text-[10px] uppercase tracking-[0.3em] rounded-2xl shadow-2xl shadow-emerald-500/10 transition-all disabled:opacity-50"
             >
-              {loading ? <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" /> : <ShieldCheck className="w-5 h-5" />}
-              Generate & Save License
+              {loading ? "Generating Signal..." : "Execute Issuance"}
             </button>
           </form>
         </div>
       </div>
 
-      <div className="lg:col-span-6">
-        <div className="bg-zinc-900 border border-white/10 rounded-3xl overflow-hidden shadow-xl h-full">
-          <div className="p-6 border-b border-white/5 flex justify-between items-center">
-            <h3 className="text-white font-bold flex items-center gap-2">
-              <Zap className="w-4 h-4 text-emerald-500" />
-              Active Licenses
-            </h3>
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3 h-3 text-gray-500" />
-              <input type="text" placeholder="Search..." className="bg-black border border-white/10 rounded-lg pl-8 pr-3 py-1 text-xs text-white outline-none focus:border-emerald-500" />
+      <div className="lg:col-span-12 xl:col-span-7">
+        <div className="bg-zinc-900 border border-white/10 rounded-[40px] overflow-hidden shadow-2xl h-full flex flex-col">
+          <div className="p-8 border-b border-white/5 flex justify-between items-center bg-black/20">
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 bg-cyan-500/10 rounded-xl flex items-center justify-center text-cyan-500">
+                <Zap className="w-5 h-5" />
+              </div>
+              <h3 className="text-lg font-black text-white uppercase tracking-tighter italic">Live Entitlements</h3>
             </div>
           </div>
-          <div className="p-4 space-y-4">
+          <div className="p-8 space-y-4 overflow-y-auto max-h-[600px]">
             {licenses.map((license) => {
-              const isActive = license.is_active && new Date(license.expires_at) > new Date();
-              const daysLeft = Math.ceil((new Date(license.expires_at).getTime() - Date.now()) / (1000 * 3600 * 24));
+              const expiresDate = new Date(license.expires_at);
+              const isActive = license.is_active && expiresDate > new Date();
+              const daysLeft = Math.ceil((expiresDate.getTime() - Date.now()) / (1000 * 3600 * 24));
               
               return (
-                <div key={license.id} className="p-4 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between group hover:border-emerald-500/30 transition-all cursor-pointer">
-                  <div className="flex items-center gap-4">
-                    <div className={`w-10 h-10 rounded-xl bg-black flex items-center justify-center font-bold text-xs ${isActive ? 'text-emerald-500' : 'text-red-500'}`}>
+                <div key={license.id} className="p-6 rounded-3xl bg-black/40 border border-white/5 flex items-center justify-between group hover:border-emerald-500/30 transition-all">
+                  <div className="flex items-center gap-6">
+                    <div className={cn(
+                      "w-12 h-12 rounded-2xl flex items-center justify-center font-black text-[10px] shrink-0 font-mono",
+                      isActive ? "bg-emerald-500/10 text-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.1)]" : "bg-red-500/10 text-red-500"
+                    )}>
                       {isActive ? 'ACT' : 'EXP'}
                     </div>
                     <div>
-                      <div className="text-white font-bold text-sm line-clamp-1">{license.license_key}</div>
-                      <div className="text-[10px] text-gray-500 uppercase font-bold tracking-widest mt-1">
-                        User: {license.users?.email || license.user_id} • {isActive ? `Expires in ${daysLeft} days` : 'Expired'}
+                      <div className="text-white font-mono font-black text-sm tracking-tight select-all">{license.license_key}</div>
+                      <div className="flex items-center gap-4 mt-2">
+                        <span className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-gray-500">
+                          <User className="w-3 h-3 text-cyan-500" /> {license.users?.email || "Unknown Discovery"}
+                        </span>
+                        <span className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-gray-500">
+                          <Clock className="w-3 h-3 text-emerald-500" /> {isActive ? `${daysLeft}d Remaining` : "Entitlement Expired"}
+                        </span>
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button onClick={() => openDeleteDialog(license.id)} className="p-2 text-gray-500 hover:text-red-500 transition-colors"><Trash2 className="w-4 h-4" /></button>
-                  </div>
+                  <button onClick={() => openDeleteDialog(license.id)} className="p-3 rounded-xl bg-white/5 text-gray-500 hover:bg-red-500 hover:text-white transition-all opacity-0 group-hover:opacity-100"><Trash2 className="w-4 h-4" /></button>
                 </div>
               );
             })}
             {licenses.length === 0 && (
-              <div className="text-center text-gray-500 py-8">No licenses found.</div>
+              <div className="text-center py-20 bg-black/20 rounded-[32px] border-2 border-dashed border-white/5 uppercase font-black text-gray-700 text-[10px] tracking-widest">
+                No active entitlements discovered.
+              </div>
             )}
           </div>
         </div>
@@ -199,12 +201,20 @@ export const LicenseManager = () => {
       <Dialog 
         isOpen={isDeleteDialogOpen}
         onClose={() => setIsDeleteDialogOpen(false)}
-        onConfirm={handleDelete}
-        isLoading={deleteLoading}
-        title="Revoke License"
-        description="This will permanently revoke the algorithm license for this user. The user will lose access immediately. This action cannot be undone."
-        confirmText="Revoke License"
-      />
+        title="Revoke Entitlement?"
+      >
+        <div className="p-8 text-center">
+          <p className="text-gray-400 text-sm font-medium leading-relaxed mb-8 italic">
+            "Execute permanent revocation of this algorithmic license? The trader will lose institutional terminal access immediately."
+          </p>
+          <div className="flex gap-4">
+            <button onClick={() => setIsDeleteDialogOpen(false)} className="flex-1 py-4 bg-white/5 text-white font-black text-[10px] uppercase tracking-widest rounded-2xl hover:bg-white/10 transition-all">Abort</button>
+            <button onClick={handleDelete} disabled={deleteLoading} className="flex-1 py-4 bg-red-500 text-white font-black text-[10px] uppercase tracking-widest rounded-2xl hover:bg-red-400 shadow-xl shadow-red-500/20 transition-all">
+              {deleteLoading ? "Revoking..." : "Execute Erasure"}
+            </button>
+          </div>
+        </div>
+      </Dialog>
     </div>
   );
 };

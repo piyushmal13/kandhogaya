@@ -4,6 +4,7 @@ import { X, Check, ArrowRight, Activity, Calendar } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../contexts/AuthContext";
 import { Link } from "react-router-dom";
+import { tracker } from "../../core/tracker";
 
 import { Webinar } from '../../types';
 
@@ -114,6 +115,7 @@ export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationM
 
         if (updateError) console.error("Could not update count:", updateError);
 
+        tracker.track("webinar_register", { webinar_id: webinar.id, title: webinar.title });
         setLoading(false);
         setStep(3); // Success
       }

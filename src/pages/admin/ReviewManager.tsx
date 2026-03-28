@@ -1,327 +1,226 @@
-import React, { useState, useEffect } from "react";
-import { Star, Trash2, Plus, Save, X, MapPin } from "lucide-react";
+import React, { useState, useEffect, SyntheticEvent } from "react";
+import { Star, Plus, Trash2, Edit2, Search, User, Globe } from "lucide-react";
 import { supabase } from "../../lib/supabase";
-import { Review } from "../../types";
-import { useAuth } from "../../contexts/AuthContext";
 import { Dialog } from "../../components/ui/Dialog";
-import { getCache, setCache } from "@/utils/cache";
-
-const cacheKey = "reviews_list";
+import { cn } from "../../utils/cn";
+import { Review } from "@/types";
 
 export const ReviewManager = () => {
-  const { session } = useAuth();
   const [reviews, setReviews] = useState<Review[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [editForm, setEditForm] = useState<Partial<Review>>({});
-  
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [reviewToDelete, setReviewToDelete] = useState<string | null>(null);
+  
+  // Form State
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [name, setName] = useState("");
+  const [rating, setRating] = useState(5);
+  const [text, setText] = useState("");
+  const [role, setRole] = useState("");
+  const [region, setRegion] = useState("");
 
   const fetchReviews = async () => {
-    setLoading(true);
-    const res = await supabase
-      .from('reviews')
-      .select('*')
-      .order('created_at', { ascending: false });
-    
-    if (res?.data) {
-      setCache(cacheKey, res.data, 30000);
-      setReviews(res.data);
-    }
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    let isMounted = true;
-
-    const initFetch = async () => {
-      const cached = getCache(cacheKey);
-      if (cached) {
-        setReviews(cached);
-        setLoading(false);
-        return;
-      }
-
-      setLoading(true);
-      const res = await supabase
+    try {
+      const { data, error } = await supabase
         .from('reviews')
         .select('*')
         .order('created_at', { ascending: false });
       
-      if (!isMounted) return;
+      if (error) throw error;
+      console.log("[Admin] Reviews Discovered:", data?.length);
+      setReviews(data || []);
+    } catch (err) {
+      console.error("Institutional Review Discovery Error:", err);
+    }
+  };
 
-      if (res?.data) {
-        setCache(cacheKey, res.data, 30000);
-        setReviews(res.data);
-      }
-      setLoading(false);
-    };
-
-    initFetch();
-
-    return () => {
-      isMounted = false;
-    };
+  useEffect(() => {
+    fetchReviews();
   }, []);
+
+  const resetForm = () => {
+    setEditingId(null);
+    setName("");
+    setRating(5);
+    setText("");
+    setRole("");
+    setRegion("");
+  };
 
   const handleEdit = (review: Review) => {
     setEditingId(review.id || null);
-    setEditForm(review);
+    setName(review.name || "");
+    setRating(review.rating || 5);
+    setText(review.text || "");
+    setRole(review.role || "");
+    setRegion(review.region || "");
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleCancel = () => {
-    setEditingId(null);
-    setEditForm({});
-  };
-
-  const handleSave = async () => {
-    if (!editingId) return;
-    
+  const handleSubmit = async (e: SyntheticEvent) => {
+    e.preventDefault();
     setLoading(true);
     try {
-      if (!session) throw new Error("No active session");
-      const res = await fetch(`/api/admin/reviews/${editingId}`, {
-        method: "PUT",
-        headers: { 
-          "Authorization": `Bearer ${session?.access_token}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          name: editForm.name || editForm.user_name,
-          user_name: editForm.user_name,
-          rating: editForm.rating,
-          text: editForm.text,
-          image_url: editForm.image_url,
-          region: editForm.region,
-          role: editForm.role
-        })
-      });
-      
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || "Failed to update review");
+      const payload = {
+        name,
+        rating,
+        text,
+        role,
+        region,
+        created_at: new Date().toISOString()
+      };
+
+      if (editingId) {
+        const { error } = await supabase.from('reviews').update(payload).eq('id', editingId);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase.from('reviews').insert([payload]);
+        if (error) throw error;
       }
-      
-      setEditingId(null);
+
+      resetForm();
       fetchReviews();
-    } catch (error: unknown) {
-      const err = error as Error;
-      alert("Error updating review: " + err.message);
+    } catch (err) {
+      console.error("Institutional Review Orchestration Error:", err);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleDelete = async () => {
     if (!reviewToDelete) return;
     setDeleteLoading(true);
     try {
-      if (!session) throw new Error("No active session");
-      const res = await fetch(`/api/admin/reviews/${reviewToDelete}`, {
-        method: "DELETE",
-        headers: { "Authorization": `Bearer ${session?.access_token}` }
-      });
-      
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || "Failed to delete review");
-      }
-      
-      fetchReviews();
+      const { error } = await supabase.from('reviews').delete().eq('id', reviewToDelete);
+      if (error) throw error;
       setIsDeleteDialogOpen(false);
-    } catch (error: unknown) {
-      const err = error as Error;
-      alert("Error deleting review: " + err.message);
+      setReviewToDelete(null);
+      fetchReviews();
+    } catch (err) {
+      console.error("Institutional Review Erasure Error:", err);
     } finally {
       setDeleteLoading(false);
-      setReviewToDelete(null);
-    }
-  };
-
-  const openDeleteDialog = (id: string) => {
-    setReviewToDelete(id || null);
-    setIsDeleteDialogOpen(true);
-  };
-
-  const handleCreate = async () => {
-    const newReview = {
-      name: "New Client",
-      user_name: "New Client",
-      rating: 5,
-      comment: "Excellent service!",
-      text: "Excellent service!",
-      region: "Global",
-      role: "Trader",
-      image_url: "https://picsum.photos/seed/user/200/200"
-    };
-
-    try {
-      if (!session) throw new Error("No active session");
-      const res = await fetch(`/api/admin/reviews`, {
-        method: "POST",
-        headers: { 
-          "Authorization": `Bearer ${session?.access_token}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(newReview)
-      });
-      
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || "Failed to create review");
-      }
-      
-      fetchReviews();
-    } catch (error: unknown) {
-      const err = error as Error;
-      alert("Error creating review: " + err.message);
     }
   };
 
   return (
-    <div className="space-y-8">
-      <div className="flex justify-between items-center">
-        <h2 className="text-xl font-bold text-white flex items-center gap-2">
-          <Star className="w-5 h-5 text-emerald-500" />
-          Client Reviews Management
-        </h2>
-        <button 
-          onClick={handleCreate}
-          className="flex items-center gap-2 px-4 py-2 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all"
-        >
-          <Plus className="w-4 h-4" />
-          Add Manual Review
-        </button>
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="bg-zinc-900 border border-white/10 p-10 rounded-[40px] shadow-2xl relative overflow-hidden group">
+        <div className="flex items-center gap-4 mb-10">
+          <div className="w-12 h-12 bg-amber-500/10 rounded-2xl flex items-center justify-center text-amber-500">
+            <Star className="w-6 h-6 fill-current" />
+          </div>
+          <div>
+            <h2 className="text-2xl font-black text-white uppercase tracking-tighter italic">
+              {editingId ? "Modify Review" : "Publish Testimonial"}
+            </h2>
+            <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">Institutional Sentiment Management</p>
+          </div>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-6">
+              <div className="space-y-2">
+                <label className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 px-1">Trader Name</label>
+                <input 
+                  type="text" value={name} onChange={(e) => setName(e.target.value)} required
+                  className="w-full bg-black border border-white/5 focus:border-amber-500/50 rounded-2xl p-4 text-white text-sm outline-none transition-all"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 px-1">Rating (1-5)</label>
+                  <input type="number" min="1" max="5" value={rating} onChange={(e) => setRating(Number(e.target.value))} className="w-full bg-black border border-white/5 rounded-2xl p-4 text-white text-sm outline-none" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 px-1">Global Region</label>
+                  <input type="text" value={region} onChange={(e) => setRegion(e.target.value)} placeholder="e.g. United Kingdom" className="w-full bg-black border border-white/5 rounded-2xl p-4 text-white text-sm outline-none" />
+                </div>
+              </div>
+            </div>
+            <div className="space-y-6">
+              <div className="space-y-2">
+                <label className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 px-1">Testimonial Content</label>
+                <textarea 
+                  value={text} onChange={(e) => setText(e.target.value)} required rows={4}
+                  className="w-full bg-black border border-white/5 focus:border-amber-500/50 rounded-2xl p-4 text-white text-sm outline-none transition-all resize-none"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 px-1">Trader Role/Title</label>
+                <input type="text" value={role} onChange={(e) => setRole(e.target.value)} placeholder="e.g. Master Trader" className="w-full bg-black border border-white/5 rounded-2xl p-4 text-white text-sm outline-none" />
+              </div>
+            </div>
+          </div>
+
+          <div className="flex gap-4">
+            <button type="submit" disabled={loading} className="px-10 py-4 bg-amber-500 hover:bg-amber-400 text-black font-black text-[10px] uppercase tracking-[0.2em] rounded-2xl shadow-xl shadow-amber-500/10 transition-all disabled:opacity-50">
+              {loading ? "Publishing..." : editingId ? "Save Amendment" : "Execute Publication"}
+            </button>
+            {editingId && (
+              <button type="button" onClick={resetForm} className="px-10 py-4 bg-white/5 text-gray-400 font-black text-[10px] uppercase tracking-[0.2em] rounded-2xl transition-all">Cancel</button>
+            )}
+          </div>
+        </form>
       </div>
 
-      {loading && reviews.length === 0 ? (
-        <div className="flex justify-center py-20">
-          <div className="w-10 h-10 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin" />
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {reviews.map((review) => (
-            <div 
-              key={review.id} 
-              className="bg-zinc-900 border border-white/10 rounded-3xl p-6 hover:border-emerald-500/30 transition-all group"
-            >
-              {editingId === review.id ? (
-                <div className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label htmlFor="userName" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">User Name</label>
-                      <input 
-                        id="userName"
-                        value={editForm.user_name || ""} 
-                        onChange={e => setEditForm({...editForm, user_name: e.target.value})}
-                        className="w-full bg-black border border-white/10 rounded-xl px-4 py-2 text-white outline-none focus:border-emerald-500"
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="region" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Region</label>
-                      <input 
-                        id="region"
-                        value={editForm.region || ""} 
-                        onChange={e => setEditForm({...editForm, region: e.target.value})}
-                        className="w-full bg-black border border-white/10 rounded-xl px-4 py-2 text-white outline-none focus:border-emerald-500"
-                      />
-                    </div>
-                  </div>
+      <div className="bg-zinc-900 border border-white/10 p-10 rounded-[40px] shadow-2xl">
+        <h3 className="text-xl font-black text-white mb-10 flex items-center gap-4 uppercase tracking-tighter italic">
+          <Globe className="w-6 h-6 text-cyan-500" />
+          Sentiment Feed
+        </h3>
 
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label htmlFor="rating" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Rating (1-5)</label>
-                      <input 
-                        id="rating"
-                        type="number"
-                        min="1"
-                        max="5"
-                        value={editForm.rating || 5} 
-                        onChange={e => setEditForm({...editForm, rating: Number.parseInt(e.target.value)})}
-                        className="w-full bg-black border border-white/10 rounded-xl px-4 py-2 text-white outline-none focus:border-emerald-500"
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="imageUrl" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Image URL</label>
-                      <input 
-                        id="imageUrl"
-                        value={editForm.image_url || ""} 
-                        onChange={e => setEditForm({...editForm, image_url: e.target.value})}
-                        className="w-full bg-black border border-white/10 rounded-xl px-4 py-2 text-white outline-none focus:border-emerald-500"
-                      />
-                    </div>
+        <div className="space-y-4">
+          {reviews.map((r) => (
+            <div key={r.id} className="p-8 rounded-[32px] bg-black/40 border border-white/5 flex items-center justify-between group hover:border-amber-500/30 transition-all">
+              <div className="flex items-center gap-8">
+                <div className="w-16 h-16 rounded-[24px] bg-white/5 flex items-center justify-center text-amber-500 shrink-0">
+                  <User className="w-8 h-8" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-3 mb-1">
+                    <h4 className="text-lg font-black text-white italic tracking-tight">{r.name}</h4>
+                    <span className="px-3 py-1 bg-amber-500/10 text-amber-500 text-[8px] font-black uppercase tracking-widest rounded-lg">
+                      {Array(r.rating).fill('★').join('')}
+                    </span>
                   </div>
-
-                  <div>
-                    <label htmlFor="reviewText" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Review Text</label>
-                    <textarea 
-                      id="reviewText"
-                      value={editForm.text || ""} 
-                      onChange={e => setEditForm({...editForm, text: e.target.value})}
-                      rows={3}
-                      className="w-full bg-black border border-white/10 rounded-xl px-4 py-2 text-white outline-none focus:border-emerald-500"
-                    />
-                  </div>
-
-                  <div className="flex justify-end gap-3 pt-2">
-                    <button onClick={handleCancel} className="p-2 text-gray-500 hover:text-white"><X className="w-5 h-5" /></button>
-                    <button onClick={handleSave} className="p-2 text-emerald-500 hover:text-emerald-400"><Save className="w-5 h-5" /></button>
+                  <p className="text-sm text-gray-500 font-medium line-clamp-1 italic">"{r.text}"</p>
+                  <div className="flex items-center gap-4 mt-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-600">
+                    <span>{r.role || "Retail Trader"}</span>
+                    <span>•</span>
+                    <span>{r.region || "Global"}</span>
                   </div>
                 </div>
-              ) : (
-                <div className="flex gap-4">
-                  <div className="w-16 h-16 rounded-full overflow-hidden bg-black border border-white/5 shrink-0">
-                    <img 
-                      src={review.image_url || `https://picsum.photos/seed/${review.id}/200/200`} 
-                      alt={review.user_name}
-                      className="w-full h-full object-cover"
-                      referrerPolicy="no-referrer"
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex justify-between items-start mb-2">
-                      <div>
-                        <h3 className="text-white font-bold text-sm">{review.user_name}</h3>
-                        <div className="flex items-center gap-1 text-emerald-500 text-[10px] font-bold uppercase tracking-widest">
-                          <MapPin className="w-3 h-3" />
-                          {review.region || "Global"}
-                        </div>
-                      </div>
-                      <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button onClick={() => handleEdit(review)} className="text-gray-500 hover:text-white transition-colors"><Edit2 className="w-4 h-4" /></button>
-                        <button onClick={() => openDeleteDialog(review.id)} className="text-gray-500 hover:text-red-500 transition-colors"><Trash2 className="w-4 h-4" /></button>
-                      </div>
-                    </div>
-                    <div className="flex gap-0.5 mb-2">
-                      {['star-1', 'star-2', 'star-3', 'star-4', 'star-5'].map((key, i) => (
-                        <Star key={key} className={`w-3 h-3 ${i < review.rating ? 'text-amber-500 fill-amber-500' : 'text-gray-700'}`} />
-                      ))}
-                    </div>
-                    <p className="text-gray-400 text-xs line-clamp-3 italic">"{review.text}"</p>
-                  </div>
-                </div>
-              )}
+              </div>
+              <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all">
+                <button onClick={() => handleEdit(r)} className="p-3 rounded-xl bg-white/5 text-gray-400 hover:bg-amber-500 hover:text-black transition-all"><Edit2 className="w-4 h-4" /></button>
+                <button onClick={() => { setReviewToDelete(r.id!); setIsDeleteDialogOpen(true); }} className="p-3 rounded-xl bg-white/5 text-gray-400 hover:bg-red-500 hover:text-white transition-all"><Trash2 className="w-4 h-4" /></button>
+              </div>
             </div>
           ))}
+          {reviews.length === 0 && (
+            <div className="text-center py-20 bg-black/20 rounded-[32px] border-2 border-dashed border-white/5 uppercase font-black text-gray-700 text-[10px] tracking-widest italic">
+              Awaiting institutional feedback signals.
+            </div>
+          )}
         </div>
-      )}
+      </div>
 
-      <Dialog 
-        isOpen={isDeleteDialogOpen}
-        onClose={() => setIsDeleteDialogOpen(false)}
-        onConfirm={handleDelete}
-        isLoading={deleteLoading}
-        title="Delete Review"
-        description="Are you sure you want to delete this client review? This will remove it from the public Success Showcase. This action cannot be undone."
-        confirmText="Delete Review"
-      />
+      <Dialog isOpen={isDeleteDialogOpen} onClose={() => setIsDeleteDialogOpen(false)} title="Destroy Review?">
+        <div className="p-8 text-center">
+          <p className="text-gray-400 text-sm font-medium leading-relaxed mb-8 italic">
+            "Are you certain you want to erase this sentiment signal from the public discovery stream?"
+          </p>
+          <div className="flex gap-4">
+            <button onClick={() => setIsDeleteDialogOpen(false)} className="flex-1 py-4 bg-white/5 text-white font-black text-[10px] uppercase tracking-widest rounded-2xl hover:bg-white/10 transition-all">Abort</button>
+            <button onClick={handleDelete} disabled={deleteLoading} className="flex-1 py-4 bg-red-500 text-white font-black text-[10px] uppercase tracking-widest rounded-2xl hover:bg-red-400 shadow-xl shadow-red-500/20 transition-all">
+              {deleteLoading ? "Erasing..." : "Execute Destruction"}
+            </button>
+          </div>
+        </div>
+      </Dialog>
     </div>
   );
 };
-
-const Edit2 = ({ className }: { className?: string }) => (
-  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-  </svg>
-);

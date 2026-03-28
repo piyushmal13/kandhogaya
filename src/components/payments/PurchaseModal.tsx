@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { 
   X, 
   CheckCircle2, 
@@ -12,6 +12,7 @@ import {
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
 import { submitPaymentProof } from "@/services/apiHandlers";
+import { tracker } from "@/core/tracker";
 
 interface PurchaseModalProps {
   plan: string;
@@ -30,6 +31,10 @@ export const PurchaseModal = ({ plan, amount, onClose }: PurchaseModalProps) => 
   const [error, setError] = useState<string | null>(null);
 
   const upiId = "piyushmal13@okaxis"; // Institutional UPI Signal
+
+  useEffect(() => {
+    tracker.track("purchase_attempt", { plan, amount });
+  }, []);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(upiId);
@@ -71,7 +76,11 @@ export const PurchaseModal = ({ plan, amount, onClose }: PurchaseModalProps) => 
       // 3. Fulfillment Signal: Register Proof
       const { success } = await submitPaymentProof(user.id, plan, amount, publicUrl);
 
-      if (!success) throw new Error("Fulfillment signal failed. Institutional audit required.");
+      if (success) {
+        tracker.track("payment_uploaded", { plan, amount, url: publicUrl });
+      } else {
+        throw new Error("Fulfillment signal failed. Institutional audit required.");
+      }
 
       setStep("success");
     } catch (err: any) {

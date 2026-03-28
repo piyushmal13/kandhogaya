@@ -1,17 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  ShieldCheck,
-  Bell,
-  Settings,
-  Target,
-  Video,
-  Clock,
-  Activity,
-  ArrowUpRight,
-  Zap,
-  BookOpen,
-  Lock
+import { 
+  ShieldCheck, Bell, Settings, Target, Video, 
+  Clock, Activity, ArrowUpRight, Zap, BookOpen, 
+  Lock, ListChecks 
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { supabase } from "../lib/supabase";
@@ -20,38 +12,18 @@ import { motion, AnimatePresence } from "motion/react";
 import { getAccess } from "@/core/accessEngine";
 import { BRANDING } from "../constants/branding";
 import { PurchaseModal } from "@/components/payments/PurchaseModal";
-
-interface BotLicense {
-  id: string;
-  user_id: string;
-  expires_at: string;
-  license_key: string;
-  is_active: boolean;
-  algo_bots?: { name: string };
-}
-
-interface UserSignal {
-  id: string;
-  asset: string;
-  direction: "BUY" | "SELL";
-  status: string;
-  created_at: string;
-}
-
-interface UserWebinar {
-  id: string;
-  title: string;
-  date_time: string;
-  status: string;
-}
+import { DataMapper, safeQuery } from "@/core/dataMapper";
+import { tracker } from "@/core/tracker";
+import { BotLicense, Signal, Webinar } from "@/types";
+import { ActivityPulse } from "@/components/dashboard/ActivityPulse";
 
 export const Dashboard = () => {
   const { user, userProfile, entitlements } = useAuth();
   const navigate = useNavigate();
 
   const [licenses, setLicenses] = useState<BotLicense[]>([]);
-  const [signals, setSignals] = useState<UserSignal[]>([]);
-  const [webinars, setWebinars] = useState<UserWebinar[]>([]);
+  const [signals, setSignals] = useState<Signal[]>([]);
+  const [webinars, setWebinars] = useState<Webinar[]>([]);
   const [loading, setLoading] = useState(true);
   const [dbHealthy, setDbHealthy] = useState(true);
   const [selectedPlan, setSelectedPlan] = useState<{ plan: string, amount: number } | null>(null);
@@ -63,19 +35,34 @@ export const Dashboard = () => {
     }
     setLoading(true);
     try {
-      const [signalsRes, licenseRes, webinarRes] = await Promise.all([
-        supabase.from("signals").select("*").limit(5).order("created_at", { ascending: false }),
-        supabase.from("bot_licenses").select("*, algo_bots(name)").eq("user_id", user.id),
-        supabase.from("webinars").select("*").gte("date_time", new Date().toISOString()).limit(3)
+      const [signalsData, licenseData, webinarData] = await Promise.all([
+        safeQuery(
+          supabase.from("signals").select("*").limit(5).order("created_at", { ascending: false }).then() as any,
+          DataMapper.signal,
+          "Dashboard Signals"
+        ),
+        safeQuery(
+          supabase.from("bot_licenses").select("*, algo_bots(name)").eq("user_id", user.id).then() as any,
+          (raw) => raw as BotLicense,
+          "Dashboard Licenses"
+        ),
+        safeQuery(
+          supabase.from("webinars").select("*").gte("date_time", new Date().toISOString()).limit(3).then() as any,
+          DataMapper.webinar,
+          "Dashboard Webinars"
+        )
       ]);
 
-      console.log("Institutional Dashboard DATA:", { signals: signalsRes.data, licenses: licenseRes.data, webinars: webinarRes.data });
-      setSignals(signalsRes.data ?? []);
-      setLicenses(licenseRes.data ?? []);
-      setWebinars(webinarRes.data ?? []);
+      setSignals(signalsData);
+      setLicenses(licenseData);
+      setWebinars(webinarData);
       setDbHealthy(true);
+      
+      if (signalsData.length > 0) {
+        tracker.track("signal_view", { count: signalsData.length });
+      }
     } catch (err) {
-      console.error("Institutional Dashboard Error:", err);
+      console.error("Institutional Dashboard Execution Error:", err);
       setDbHealthy(false);
     } finally {
       setLoading(false);
@@ -84,8 +71,10 @@ export const Dashboard = () => {
 
   useEffect(() => {
     fetchData();
-    console.log("RENDER DASHBOARD DATA:", { licenses, signals, webinars });
+    tracker.track("page_view", { surface: "dashboard" });
   }, []);
+
+  console.log("RENDER DASHBOARD DATA:", { licenses, signals, webinars });
 
   useEffect(() => {
     const refetch = () => fetchData();
@@ -147,13 +136,13 @@ export const Dashboard = () => {
           {licenses.map((license) => (
             <div key={license.id} className="group relative p-8 rounded-[36px] bg-black/40 border border-white/5 hover:border-emerald-500/30 transition-all">
               <div className="flex items-center justify-between relative z-10">
-                <div className="flex items-center gap-6">
+                <div className="flex items-center gap-4">
                   <div className="w-16 h-16 rounded-[28px] bg-emerald-500/10 flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-black transition-all">
                     <ShieldCheck className="w-8 h-8" />
                   </div>
                   <div>
                     <div className="text-xl font-black text-white group-hover:text-emerald-400 transition-colors uppercase tracking-tight italic">
-                      {license.algo_bots?.name || "QUANT ENGINE v2"}
+                      {(license as any).algo_bots?.name || "QUANT ENGINE v2"}
                     </div>
                     <div className="flex items-center gap-4 mt-2 text-[10px] font-mono text-gray-500">
                       <span className="bg-white/5 px-2 py-0.5 rounded uppercase">ID: {license.license_key.slice(0, 8)}...</span>
@@ -324,6 +313,36 @@ export const Dashboard = () => {
 
         {renderStats()}
 
+        {/* --- Daily Trader Checklist --- */}
+        <section className="mb-12 p-10 rounded-[48px] bg-gradient-to-br from-emerald-500/10 via-black to-black border border-emerald-500/20 shadow-2xl relative overflow-hidden group">
+           <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none group-hover:opacity-10 transition-opacity">
+              <ListChecks className="w-32 h-32 text-emerald-500" />
+           </div>
+           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-10 relative z-10">
+              <div className="flex-1">
+                 <h2 className="text-3xl font-black text-white uppercase tracking-tighter italic mb-4">Daily Precision Tasks</h2>
+                 <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest max-w-xl">Complete your daily institutional preparation to maintain high-density execution standards.</p>
+              </div>
+              <div className="flex flex-wrap items-center gap-6">
+                 {[
+                   { id: "signal", label: "Review Daily Signal", done: signals.length > 0 },
+                   { id: "bot", label: "Verify Bot Sync", done: licenses.some(l => l.is_active) },
+                   { id: "academy", label: "Scan Academy", done: false }
+                 ].map((task) => (
+                    <div key={task.id} className={cn(
+                      "flex items-center gap-4 px-6 py-4 rounded-3xl border transition-all",
+                      task.done ? "bg-emerald-500/10 border-emerald-500/40 text-emerald-500" : "bg-white/5 border-white/10 text-gray-500"
+                    )}>
+                       <div className={cn("w-6 h-6 rounded-full flex items-center justify-center border-2", task.done ? "border-emerald-500 bg-emerald-500 text-black" : "border-gray-800 bg-black/40")}>
+                          {task.done && <ShieldCheck className="w-3.5 h-3.5" />}
+                       </div>
+                       <span className="text-[10px] font-black uppercase tracking-widest">{task.label}</span>
+                    </div>
+                 ))}
+              </div>
+           </div>
+        </section>
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-8">
             <section className={cn("p-10 rounded-[48px] bg-white/5 border border-white/10 backdrop-blur-3xl overflow-hidden relative group", !access.algo && "min-h-[440px]")}>
@@ -441,6 +460,8 @@ export const Dashboard = () => {
                 ))}
               </div>
             </section>
+
+            <ActivityPulse />
 
             {!isPro && (
               <section className="p-1.5 rounded-[52px] bg-gradient-to-br from-emerald-400 to-cyan-500 shadow-2xl shadow-emerald-500/20 mt-4">

@@ -3,6 +3,7 @@ import { supabase } from "../lib/supabase";
 import type { User, Session } from "@supabase/supabase-js";
 import { getAccess, Entitlement } from "../core/accessEngine";
 import { clearCache } from "../utils/cache";
+import { tracker } from "../core/tracker";
 
 // ── Strict Types ─────────────────────────────────────────────────────────────
 
@@ -77,21 +78,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       try {
         return await fn();
       } catch (err) {
+        console.error(`[Auth] Discovery Retry Failure (Attempts: ${attempts}):`, err);
         if (attempts > 0) return retry(fn, attempts - 1);
         return null;
       }
     };
 
     try {
-      const userRes = await retry(() =>
-        supabase.from("users").select("*").eq("id", userId).maybeSingle()
+      const userRes = await retry(async () =>
+        await supabase.from("users").select("*").eq("id", userId).maybeSingle()
       );
 
       const userData = userRes?.data || null;
 
       // Entitlement Discovery
-      const entitlementRes = await retry(() => 
-        supabase.from("user_entitlements").select("*").eq("user_id", userId)
+      const entitlementRes = await retry(async () => 
+        await supabase.from("user_entitlements").select("*").eq("user_id", userId)
       );
       const entitlementData = entitlementRes?.data || [];
 
@@ -163,6 +165,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         
         // Re-calculate user profile on login
         if (newSession?.user) {
+          tracker.track("login", { protocol: "institutional" });
           await fetchUserProfile(newSession.user.id, newSession.user.email);
         }
 
@@ -180,6 +183,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUserProfile(null);
         setEntitlements([]);
         lastFetchedId.current = null;
+        tracker.track("logout", { session: "terminated" });
         globalThis.dispatchEvent(new Event("app:logout"));
       } else if (event === 'TOKEN_REFRESHED') {
         setSession(newSession);
@@ -208,6 +212,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       password,
       options: { emailRedirectTo: `${globalThis.location.origin}/dashboard` },
     });
+    if (!error && data.user) {
+      tracker.track("signup", { email });
+    }
     return error ? { success: false, error: error.message } : { success: true, needsEmailConfirmation: !data.session };
   }, []);
 

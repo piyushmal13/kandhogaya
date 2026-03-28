@@ -5,28 +5,48 @@ export interface Entitlement {
 }
 
 export const getAccess = (userProfile: any, entitlements: Entitlement[] = []) => {
-  const access: Record<string, boolean> = {
+  const access: Record<string, any> = {
     signals: false,
     algo: false,
     academy: false,
     webinars: false,
-    admin: false
+    admin: false,
+    revenue: false,
+    crm: false,
+    fulfillment: false,
+    logs: false
   };
 
   if (!userProfile) return access;
 
-  // Institutional Admin Override: Global Signal
-  if (userProfile.role === "admin") {
-    return {
-      signals: true,
-      algo: true,
-      academy: true,
-      webinars: true,
-      admin: true
-    };
+  const role = userProfile.role || "trader";
+
+  // Role Intelligence Matrix: Baseline Capability Discovery
+  switch (role) {
+    case "admin":
+      return { 
+        signals: true, algo: true, academy: true, webinars: true, 
+        admin: true, revenue: true, crm: true, fulfillment: true, logs: true 
+      };
+    
+    case "sales_agent":
+      return { 
+        ...access, admin: true, signals: true, crm: true, webinars: true 
+      };
+    
+    case "support":
+      return { 
+        ...access, admin: true, academy: true, crm: true, fulfillment: true 
+      };
+    
+    case "analyst":
+      return { 
+        ...access, admin: true, signals: true, revenue: true, logs: true 
+      };
   }
 
   const now = new Date();
+  // ... (remainder same)
 
   // Entitlement Discovery: Resolve Active Capability Signals
   entitlements.forEach(e => {
