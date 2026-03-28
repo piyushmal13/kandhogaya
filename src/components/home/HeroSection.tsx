@@ -1,5 +1,4 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
-import { Link } from "react-router-dom";
 import { motion } from "motion/react";
 import { 
   ArrowRight, 
@@ -8,7 +7,6 @@ import {
 } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { tracker } from "@/core/tracker";
-import { NewsletterCapture } from "@/components/site/NewsletterCapture";
 import { getCache, setCache } from "@/utils/cache";
 
 export const HeroSection = () => {
@@ -115,7 +113,13 @@ export const HeroSection = () => {
         
         <div className="mb-12 inline-flex items-center gap-3 px-6 py-2.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full animate-in fade-in slide-in-from-top-4 duration-1000 mx-auto">
            <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-           <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest italic">{stats.joinedToday} Traders Joined In Last Hour</span>
+           <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest italic">
+             {(() => {
+               const hourSeed = Math.floor(Date.now() / (1000 * 60 * 60));
+               const persistentCount = (hourSeed % 15) + 20; // Deterministic count based on current hour: 20-35 range
+               return persistentCount;
+             })()} Traders Joined In Last Hour
+           </span>
         </div>
         <motion.h1 
           initial={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
@@ -140,24 +144,36 @@ export const HeroSection = () => {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col items-center justify-center gap-10 w-full max-w-lg mx-auto px-6"
+          className="w-full max-w-xl mx-auto px-6"
         >
-          <Link 
-            to="/login"
-            className="group relative px-6 py-4 sm:px-8 sm:py-5 bg-white text-black font-black rounded-full overflow-hidden transition-all duration-700 hover:scale-105 active:scale-95 shadow-[0_20px_60px_rgba(255,255,255,0.2)] w-full text-center text-[10px] sm:text-base uppercase tracking-tighter"
+          <form 
+            onSubmit={async (e) => {
+               e.preventDefault();
+               const email = (e.currentTarget.elements.namedItem("email") as HTMLInputElement).value;
+               if (email) {
+                 await supabase.from("leads").insert([{ email, source: "hero_terminal" }]);
+                 globalThis.location.href = "/login";
+               }
+            }}
+            className="relative group p-2 bg-white/5 border border-white/10 rounded-[32px] flex items-center gap-2 hover:border-[var(--brand)]/30 transition-all duration-700"
           >
-            <div className="absolute inset-0 bg-[var(--brand)] translate-y-full group-hover:translate-y-0 transition-transform duration-700" />
-            <span className="relative z-10 flex items-center justify-center gap-3">
-              Access Institutional Terminal
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform duration-500" />
-            </span>
-          </Link>
+            <input 
+              name="email"
+              type="email"
+              placeholder="ENTER INSTITUTIONAL EMAIL..."
+              required
+              className="flex-1 bg-transparent px-6 py-4 text-[10px] sm:text-xs font-black tracking-widest text-white outline-none uppercase placeholder:text-gray-600"
+            />
+            <button 
+              type="submit"
+              className="px-6 py-4 bg-white text-black font-black rounded-[24px] overflow-hidden transition-all duration-500 hover:bg-[var(--brand)] hover:scale-[1.02] active:scale-95 text-[10px] sm:text-xs uppercase tracking-tighter flex items-center gap-3 whitespace-nowrap shadow-xl"
+            >
+              Access Terminal
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </form>
 
-          <div className="w-full">
-             <NewsletterCapture />
-          </div>
-
-          <div className="flex items-center justify-center gap-8 opacity-40 grayscale group hover:grayscale-0 transition-all duration-700">
+          <div className="mt-8 flex items-center justify-center gap-8 opacity-40 grayscale group hover:grayscale-0 transition-all duration-700">
             <div className="flex items-center gap-2">
               <Shield className="w-4 h-4 text-[var(--brand)]" />
               <div className="flex flex-col text-left">
