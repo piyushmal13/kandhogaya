@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, createContext, useContext, useMemo } from 'react';
-import { supabase } from '../lib/supabase';
+import { publicSupabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { Signal, Webinar } from '../types';
 
@@ -30,11 +30,11 @@ export const DataPulseProvider = ({ children }: { children: React.ReactNode }) =
 
   const fetchData = useCallback(async () => {
     try {
-      // 🚀 [IT TEAM] SWR Protocol - background revalidation
+      // 🚀 [IT TEAM] SWR Protocol via Public Instance (RLS Bypass)
       const [sigRes, webRes, markRes] = await Promise.all([
-        supabase.from("signals").select("*").order("created_at", { ascending: false }).limit(6),
-        supabase.from("webinars").select("*").order("date_time", { ascending: true }).limit(3),
-        supabase.from("market_data").select("*").order("symbol", { ascending: true })
+        publicSupabase.from("signals").select("*").order("created_at", { ascending: false }).limit(6),
+        publicSupabase.from("webinars").select("*").order("date_time", { ascending: true }).limit(3),
+        publicSupabase.from("market_data").select("*").order("symbol", { ascending: true })
       ]);
 
       const sigData = sigRes.data || [];

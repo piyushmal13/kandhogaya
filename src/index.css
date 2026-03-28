@@ -91,10 +91,6 @@
   body {
     min-height: 100vh;
     background-color: #000000;
-    background-image:
-      radial-gradient(circle at 50% -20%, rgba(16, 185, 129, 0.15), transparent 50%),
-      radial-gradient(circle at 0% 0%, rgba(6, 182, 212, 0.08), transparent 40%),
-      radial-gradient(circle at 100% 100%, rgba(139, 92, 246, 0.08), transparent 40%);
     color: var(--text-primary);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -102,22 +98,8 @@
   }
 
   body::selection {
-    background-color: rgba(16, 185, 129, 0.3);
+    background-color: var(--brand);
     color: white;
-  }
-
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    opacity: 0.4;
-    background-image:
-      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-    background-size: 56px 56px;
-    mask-image: radial-gradient(circle at center, black, transparent 82%);
   }
 
   #root {
@@ -207,9 +189,7 @@
   .site-panel {
     border: 1px solid var(--border-emphasis);
     border-radius: var(--radius-card);
-    background:
-      linear-gradient(180deg, rgba(15, 25, 40, 0.82), rgba(6, 12, 22, 0.92)),
-      linear-gradient(135deg, rgba(88, 242, 182, 0.08), transparent 40%);
+    background: rgba(10, 17, 32, 0.85);
     box-shadow: var(--shadow-card);
     backdrop-filter: blur(24px);
   }
@@ -337,14 +317,7 @@
   }
 
   .noise-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    pointer-events: none;
-    opacity: var(--noise-opacity);
-    /* Decoupled from unstable external origins to ensure absolute resource resolution */
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-    filter: contrast(170%) brightness(100%);
+    display: none;
   }
 
   .perspective-container {

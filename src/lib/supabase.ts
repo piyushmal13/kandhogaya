@@ -1,6 +1,15 @@
 import { createClient } from '@supabase/supabase-js';
 
 const getSupabaseConfig = () => {
+  // Priority 1: Server-side runtime injection (globalThis scope)
+  const injectedUrl = (globalThis as any)._SUPABASE_URL || (window as any)._SUPABASE_URL;
+  const injectedKey = (globalThis as any)._SUPABASE_ANON_KEY || (window as any)._SUPABASE_ANON_KEY;
+
+  if (injectedUrl && injectedKey && !injectedUrl.includes('placeholder')) {
+    return { url: injectedUrl, key: injectedKey };
+  }
+
+  // Priority 2: Build-time baked variables
   const bakedUrl = import.meta.env.VITE_SUPABASE_URL;
   const bakedKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
@@ -8,6 +17,7 @@ const getSupabaseConfig = () => {
     return { url: bakedUrl, key: bakedKey };
   }
 
+  // Fallback: Environment variables (for Node/Vite fallback contexts)
   return {
     url: process.env.VITE_SUPABASE_URL || '',
     key: process.env.VITE_SUPABASE_ANON_KEY || ''
@@ -20,7 +30,16 @@ export const supabase = createClient(url || 'https://placeholder.supabase.co', k
   auth: {
     persistSession: true,
     autoRefreshToken: true,
-    detectSessionInUrl: true // Required for Google/OAuth redirection
+    detectSessionInUrl: true 
+  }
+});
+
+// Dedicated client for public Data Pulse (bypasses Auth-state RLS locking)
+export const publicSupabase = createClient(url || 'https://placeholder.supabase.co', key || 'placeholder', {
+  auth: {
+    persistSession: false,
+    autoRefreshToken: false,
+    detectSessionInUrl: false
   }
 });
 
@@ -51,4 +70,4 @@ export const getProductUrl = (path: string) => getSupabasePublicUrl("products", 
 export const getWebinarUrl = (path: string) => getSupabasePublicUrl("webinars", path);
 
 // HARD DEBUG LOG (Step 4 recovery)
-console.log("💎 [DB RECOVERY] CLIENT INITIALIZED - PERSISTENT SESSION ACTIVE");
+// Initialized with high-fidelity resilience
