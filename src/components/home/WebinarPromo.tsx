@@ -67,7 +67,7 @@ export const WebinarPromo = () => {
 
   return (
     <section className="py-8 md:py-48 bg-[#020202] relative overflow-hidden border-t border-white/5">
-      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }} />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] md:w-[1000px] h-[400px] md:h-[1000px] bg-emerald-500/[0.03] blur-[150px] md:blur-[200px] rounded-full pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 relative z-10">
