@@ -41,7 +41,7 @@ export const getWebinars = async () => {
   return safeQuery<Webinar[]>(
     supabase
       .from("webinars")
-      .select("*")
+      .select("*, sponsors:webinar_sponsors(*)")
       .order("date_time", { ascending: true })
   );
 };
@@ -49,7 +49,7 @@ export const getWebinars = async () => {
 export const getWebinarById = async (id: string) => {
   const { data, error } = await supabase
     .from("webinars")
-    .select("*")
+    .select("*, sponsors:webinar_sponsors(*)")
     .eq("id", id)
     .single();
   

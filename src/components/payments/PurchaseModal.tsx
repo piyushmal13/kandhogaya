@@ -86,6 +86,8 @@ export const PurchaseModal = ({ plan, amount, productId, onClose }: PurchaseModa
       if (uploadError) throw uploadError;
 
       // 2. DISCOVERY: Register Metadata Signal
+      const refCode = localStorage.getItem("ifx_referral_code");
+      
       const { error: dbError } = await supabase
         .from("manual_payment_receipts")
         .insert({
@@ -94,6 +96,7 @@ export const PurchaseModal = ({ plan, amount, productId, onClose }: PurchaseModa
           amount: amount,
           storage_path: filePath,
           whatsapp_number: whatsappNumber,
+          referred_by_code: refCode,
           status: 'pending'
         });
 
@@ -105,8 +108,9 @@ export const PurchaseModal = ({ plan, amount, productId, onClose }: PurchaseModa
         `👤 *Client:* ${user.email}\n` +
         `📱 *Contact:* ${whatsappNumber}\n` +
         `📦 *Asset:* ${plan}\n` +
-        `💰 *Amount:* $${amount}\n\n` +
-        `🔓 *Audit Required:* Please check the Admin Terminal for verification.`
+        `💰 *Amount:* $${amount}\n` +
+        (refCode ? `🔗 *Referral:* ${refCode}\n` : "") +
+        `\n🔓 *Audit Required:* Please check the Admin Terminal for verification.`
       );
       
       const whatsappUrl = `https://wa.me/919934661831?text=${encodedMsg}`;

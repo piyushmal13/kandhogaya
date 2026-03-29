@@ -1,21 +1,36 @@
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
+import { tracker } from "../core/tracker";
 
 /**
- * useReferral Hook
- * Captures the 'agent' parameter from the URL and stores it in session storage.
- * This allows the platform to track which agent referred the user during signup/purchase.
+ * Institutional Referral Tracking Hook
+ * Captures ?ref=CODE from URL and persists it in localStorage for institutional attribution.
+ * Used at the root level (App.tsx) for whole-session coverage.
  */
 export const useReferral = () => {
-  const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const refCode = searchParams.get("ref");
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const agentId = params.get("agent");
+    if (refCode) {
+      // 1. Persistence Layer: Survival through page refreshes and navigations
+      localStorage.setItem("ifx_referral_code", refCode);
+      
+      // 2. Intelligence Tracking: Register the attribution signal
+      tracker.track("referral_capture", {
+        code: refCode,
+        timestamp: new Date().toISOString(),
+        protocol: "growth_engine_sprint4"
+      });
 
-    if (agentId) {
-      console.log(`[REFERRAL] Captured Agent ID: ${agentId}`);
-      sessionStorage.setItem("ifx_referral_agent", agentId);
+      console.log(`[Attribution] Referral signal captured: ${refCode}`);
     }
-  }, [location]);
+  }, [refCode]);
+};
+
+/**
+ * Utility to extract the active referral signal for form submissions
+ */
+export const getActiveReferralCode = (): string | null => {
+  return localStorage.getItem("ifx_referral_code");
 };

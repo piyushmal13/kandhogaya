@@ -14,7 +14,7 @@ export const webinarService = {
     try {
       const query = supabase
         .from("webinars")
-        .select("*")
+        .select("*, sponsors:webinar_sponsors(*)")
         .order("date_time", { ascending: true });
 
       const rawData = await safeQuery<any[]>(query);
@@ -36,7 +36,7 @@ export const webinarService = {
     try {
       const { data, error } = await supabase
         .from("webinars")
-        .select("*")
+        .select("*, sponsors:webinar_sponsors(*)")
         .eq("id", id)
         .single();
       

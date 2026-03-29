@@ -196,10 +196,10 @@ export const MarketTicker = () => {
           </div>
           <div className="flex flex-col">
             <span className="text-[10px] md:text-xs font-bold text-white tracking-[0.2em] font-sans leading-none opacity-80">
-              {lastUpdate || "LIVE TRANS"}
+              DEMO MODE
             </span>
             <span className="text-[8px] md:text-[9px] text-[var(--brand)]/60 font-sans font-medium mt-1 tracking-[0.1em] uppercase">
-              DATAFEED
+              EDUCATIONAL FEEDS
             </span>
           </div>
         </div>
@@ -229,8 +229,8 @@ export const MarketTicker = () => {
               <Zap className="w-4 h-4 text-[var(--brand)]" />
             </div>
             <div className="flex flex-col">
-              <span className="text-[9px] text-gray-500 font-bold uppercase tracking-[0.3em] opacity-60">LATENCY</span>
-              <span className="text-white text-[11px] font-sans font-semibold mt-0.5 tracking-wider">0.4ms</span>
+              <span className="text-[9px] text-gray-500 font-bold uppercase tracking-[0.3em] opacity-60">COVERAGE</span>
+              <span className="text-white text-[11px] font-sans font-semibold mt-0.5 tracking-wider">24/7 GLOBALLY</span>
             </div>
           </div>
           <div className="flex items-center gap-4 group">
@@ -238,8 +238,8 @@ export const MarketTicker = () => {
               <Activity className="w-4 h-4 text-cyan-500" />
             </div>
             <div className="flex flex-col">
-              <span className="text-[9px] text-gray-500 font-bold uppercase tracking-[0.3em] opacity-60">ENGINE</span>
-              <span className="text-white text-[11px] font-sans font-semibold mt-0.5 tracking-wider">99.9%</span>
+              <span className="text-[9px] text-gray-500 font-bold uppercase tracking-[0.3em] opacity-60">EDUCATION</span>
+              <span className="text-white text-[11px] font-sans font-semibold mt-0.5 tracking-wider">10K+ ALUMNI</span>
             </div>
           </div>
         </div>

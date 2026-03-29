@@ -91,6 +91,8 @@ export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationM
         setLoading(false);
       } else {
         // 2. Insert registration
+        const refCode = localStorage.getItem("ifx_referral_code");
+        
         const { error: insertError } = await supabase
           .from('webinar_registrations')
           .insert([
@@ -99,7 +101,8 @@ export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationM
               user_id: user.id,
               email: formData.email,
               attended: false,
-              payment_status: 'completed'
+              payment_status: 'completed',
+              referred_by_code: refCode
             }
           ]);
 

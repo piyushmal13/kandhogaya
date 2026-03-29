@@ -28,6 +28,15 @@ export interface User {
 // ---------------------------------------------------------------------------
 // webinars
 // ---------------------------------------------------------------------------
+export interface WebinarSponsor {
+  id: string;
+  webinar_id: string;
+  name: string;
+  tier: 'Headline' | 'Partner' | 'Supporter';
+  logo_url: string;
+  website_url?: string;
+}
+
 export interface Webinar {
   id: string;
   title: string;
@@ -50,6 +59,7 @@ export interface Webinar {
   max_attendees: number;
   registration_count: number;
   metadata?: Record<string, any>;
+  sponsors?: WebinarSponsor[];
 }
 
 // ---------------------------------------------------------------------------
@@ -81,6 +91,18 @@ export interface LongPlanOffer {
   discount: string;   // e.g. "20% Off"
 }
 
+export interface PerformanceResult {
+  id: string;
+  product_id: string;
+  win_rate: number;
+  monthly_return: number;
+  drawdown: number;
+  total_trades: number;
+  is_live: boolean;
+  equity_curve: number[];
+  last_updated: string;
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -98,9 +120,11 @@ export interface Product {
   video_explanation_url?: string;
   long_plan_offers: LongPlanOffer[]; // jsonb
   category?: string;
+  supported_assets?: string[];
   // joined via query
   product_variants?: ProductVariant[];
   reviews?: Review[];
+  performance?: PerformanceResult;
 }
 
 // ---------------------------------------------------------------------------

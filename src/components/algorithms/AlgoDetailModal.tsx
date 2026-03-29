@@ -1,10 +1,17 @@
 import React, { useState } from "react";
 import { motion } from "motion/react";
-import { X, Check, ArrowRight, ShieldCheck, Activity, Zap, HelpCircle, Star, BarChart3, Lock, FileText } from "lucide-react";
+import { 
+  X, Check, ArrowRight, ShieldCheck, 
+  Activity, Zap, HelpCircle, Star, 
+  BarChart3, Lock, FileText, TrendingUp 
+} from "lucide-react";
 import { Product } from "../../types";
 import { useAuth } from "../../contexts/AuthContext";
 import { useToast } from "../../contexts/ToastContext";
 import { useNavigate } from "react-router-dom";
+import { Sparkline } from "../ui/Sparkline";
+import { ResizedImage } from "../ui/ResizedImage";
+import { cn } from "../../utils/cn";
 
 interface AlgoDetailModalProps {
   algo: Product;
@@ -17,6 +24,15 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
   const { user } = useAuth();
   const { info } = useToast();
   const navigate = useNavigate();
+
+  const performance = algo.performance || {
+    win_rate: 0,
+    monthly_return: 0,
+    drawdown: 0,
+    total_trades: 0,
+    is_live: false,
+    equity_curve: [0, 0, 0, 0, 0]
+  };
 
   const handleSubscribeClick = (plan: string) => {
     if (!user) {
@@ -123,20 +139,55 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
             )}
 
             {activeTab === 'performance' && (
-              <div className="space-y-8">
-                <div className="bg-white/5 rounded-2xl p-6 border border-white/5">
-                  <h4 className="text-white font-bold mb-6 flex items-center gap-2">
-                    <BarChart3 className="w-5 h-5 text-emerald-500" />
-                    Strategy Equity Curve
-                  </h4>
-                  <img src={algo.strategy_graph_url || `https://picsum.photos/seed/${algo.id}graph/800/400`} alt="Strategy Graph" className="w-full h-auto rounded-xl opacity-80" referrerPolicy="no-referrer" />
+              <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                {/* Real-time Intelligence Grid */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                   <div className="p-6 rounded-[2rem] bg-emerald-500/5 border border-emerald-500/10 text-center flex flex-col items-center justify-center">
+                      <div className="text-[10px] font-black text-emerald-500 uppercase tracking-widest mb-2 font-mono">Win Rate</div>
+                      <div className="text-2xl font-black text-white italic">{performance.win_rate}%</div>
+                   </div>
+                   <div className="p-6 rounded-[2rem] bg-emerald-500/5 border border-emerald-500/10 text-center flex flex-col items-center justify-center">
+                      <div className="text-[10px] font-black text-emerald-500 uppercase tracking-widest mb-2 font-mono">Return (Mo)</div>
+                      <div className="text-2xl font-black text-emerald-500 italic">+{performance.monthly_return}%</div>
+                   </div>
+                   <div className="p-6 rounded-[2rem] bg-red-500/5 border border-red-500/10 text-center flex flex-col items-center justify-center">
+                      <div className="text-[10px] font-black text-red-500 uppercase tracking-widest mb-2 font-mono">Max Drawdown</div>
+                      <div className="text-2xl font-black text-white italic">-{performance.drawdown}%</div>
+                   </div>
+                   <div className="p-6 rounded-[2rem] bg-white/[0.02] border border-white/5 text-center flex flex-col items-center justify-center">
+                      <div className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 font-mono">Total Trades</div>
+                      <div className="text-2xl font-black text-white italic">{performance.total_trades}</div>
+                   </div>
                 </div>
-                <div className="bg-white/5 rounded-2xl p-6 border border-white/5">
-                  <h4 className="text-white font-bold mb-6 flex items-center gap-2">
-                    <Activity className="w-5 h-5 text-emerald-500" />
-                    Backtesting Results
+
+                <div className="bg-white/[0.02] rounded-[3rem] p-10 border border-white/5 relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 p-10 opacity-10 blur-2xl pointer-events-none">
+                     <BarChart3 className="w-64 h-64 text-emerald-500" />
+                  </div>
+                  <h4 className="text-xl font-black text-white mb-8 uppercase italic flex items-center gap-3">
+                    <TrendingUp className="w-6 h-6 text-emerald-500" />
+                    Institutional Equity Curve
                   </h4>
-                  <img src={algo.backtesting_result_url || `https://picsum.photos/seed/${algo.id}backtest/800/400`} alt="Backtest Result" className="w-full h-auto rounded-xl opacity-80" referrerPolicy="no-referrer" />
+                  <div className="h-[200px] flex items-center justify-center relative z-10">
+                    <Sparkline 
+                        data={performance.equity_curve} 
+                        color="#10b981" 
+                        width={600} 
+                        height={180} 
+                    />
+                  </div>
+                </div>
+
+                <div className="bg-white/[0.02] rounded-[3rem] p-10 border border-white/5">
+                  <h4 className="text-xl font-black text-white mb-8 uppercase italic flex items-center gap-3">
+                    <Activity className="w-6 h-6 text-emerald-500" />
+                    Backtesting Verification
+                  </h4>
+                  <ResizedImage 
+                    src={algo.backtesting_result_url || `https://picsum.photos/seed/${algo.id}backtest/800/400`} 
+                    alt="Backtest Result" 
+                    className="w-full h-auto rounded-3xl opacity-80" 
+                  />
                 </div>
               </div>
             )}

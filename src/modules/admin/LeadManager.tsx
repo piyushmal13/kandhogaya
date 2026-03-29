@@ -32,6 +32,24 @@ export const LeadManager = () => {
         </div>
 
         <div className="flex items-center gap-4">
+          <button 
+            onClick={() => {
+              const csv = [
+                ["ID", "Name", "Email", "Status", "Source", "Referrer", "Discovery Date"],
+                ...filteredLeads.map(l => [l.id, l.name || 'Anonymous', l.email, l.status, l.source || 'Direct', l.referred_by_code || 'None', new Date(l.created_at).toLocaleDateString()])
+              ].map(e => e.join(",")).join("\n");
+              const blob = new Blob([csv], { type: 'text/csv' });
+              const url = globalThis.URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.setAttribute('href', url);
+              a.setAttribute('download', `leads_export_${new Date().toISOString().split('T')[0]}.csv`);
+              a.click();
+            }}
+            className="px-8 py-3 bg-white/5 border border-white/10 rounded-2xl text-[9px] font-black text-gray-400 uppercase tracking-widest hover:text-white hover:bg-white/10 transition-all flex items-center gap-2"
+          >
+            <TrendingUp className="w-3 h-3 text-emerald-500" />
+            Export CSV
+          </button>
           <div className="relative group">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-hover:text-emerald-500 transition-colors" />
             <input 
@@ -73,9 +91,10 @@ export const LeadManager = () => {
               <tr className="border-b border-white/5 bg-white/5">
                 <th className="px-8 py-6 text-[9px] font-black text-gray-400 uppercase tracking-[0.3em]">Institutional Identity</th>
                 <th className="px-8 py-6 text-[9px] font-black text-gray-400 uppercase tracking-[0.3em]">Status Mapping</th>
-                <th className="px-8 py-6 text-[9px] font-black text-gray-400 uppercase tracking-[0.3em]">LTV Forecast</th>
-                <th className="px-8 py-6 text-[9px] font-black text-gray-400 uppercase tracking-[0.3em]">Revenue MTD</th>
-                <th className="px-8 py-6 text-[9px] font-black text-gray-400 uppercase tracking-[0.3em]">Discovery Date</th>
+                 <th className="px-8 py-6 text-[9px] font-black text-gray-400 uppercase tracking-[0.3em]">LTV Forecast</th>
+                 <th className="px-8 py-6 text-[9px] font-black text-gray-400 uppercase tracking-[0.3em]">Revenue MTD</th>
+                 <th className="px-8 py-6 text-[9px] font-black text-gray-400 uppercase tracking-[0.3em]">Referral Signal</th>
+                 <th className="px-8 py-6 text-[9px] font-black text-gray-400 uppercase tracking-[0.3em]">Discovery Date</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
@@ -102,12 +121,17 @@ export const LeadManager = () => {
                     </td>
                     <td className="px-8 py-6">
                       <div className="flex items-center gap-2">
-                        <div className={cn(
-                          "w-1.5 h-1.5 rounded-full animate-pulse",
-                          lead.status === 'converted' && 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]',
-                          lead.status === 'interested' && 'bg-cyan-500',
-                          lead.status !== 'converted' && lead.status !== 'interested' && 'bg-gray-600'
-                        )} />
+                        {(() => {
+                           let color = 'bg-gray-600';
+                           let glow = '';
+                           if (lead.status === 'converted') {
+                             color = 'bg-emerald-500';
+                             glow = 'shadow-[0_0_8px_rgba(16,185,129,0.5)]';
+                           } else if (lead.status === 'interested' || lead.status === 'HIGH_INTENT') {
+                             color = 'bg-cyan-500';
+                           }
+                           return <div className={cn("w-1.5 h-1.5 rounded-full animate-pulse", color, glow)} />;
+                        })()}
                         <span className="text-[10px] font-black text-white uppercase tracking-widest italic">{lead.status}</span>
                       </div>
                     </td>
@@ -116,6 +140,16 @@ export const LeadManager = () => {
                     </td>
                     <td className="px-8 py-6">
                       <span className="text-[11px] font-black text-white italic">${(lead.revenue_mtd || 0).toLocaleString()}</span>
+                    </td>
+                    <td className="px-8 py-6">
+                      {lead.referred_by_code ? (
+                        <div className="flex flex-col">
+                           <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest italic">{lead.referred_by_code}</span>
+                           <span className="text-[8px] font-bold text-gray-600 uppercase tracking-widest mt-1">Affiliate Signal</span>
+                        </div>
+                      ) : (
+                        <span className="text-[10px] font-black text-gray-700 uppercase tracking-widest italic">Direct</span>
+                      )}
                     </td>
                     <td className="px-8 py-6">
                       <span className="text-[10px] font-black text-gray-600 uppercase tracking-widest">{new Date(lead.created_at).toLocaleDateString()}</span>

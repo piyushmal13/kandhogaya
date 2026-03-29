@@ -18,8 +18,11 @@ export const Marketplace = () => {
   const [selectedAlgo, setSelectedAlgo] = useState<Product | null>(null);
   const [purchaseDetails, setPurchaseDetails] = useState<{ plan: string, amount: number, productId: string } | null>(null);
   const [filter, setFilter] = useState("All");
+  const [assetFilter, setAssetFilter] = useState("All");
+  const [riskFilter, setRiskFilter] = useState("All");
+
   const { user } = useAuth();
-  const { success, error: toastError, info } = useToast();
+  const { info } = useToast();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,9 +32,6 @@ export const Marketplace = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      // Smart Pricing Intelligence
-      const views = Number.parseInt(localStorage.getItem("ifx_pricing_views") || "0") + 1;
-      localStorage.setItem("ifx_pricing_views", views.toString());
       const data = await productService.getProducts();
       setProducts(data || []);
     } catch (error) {
@@ -40,8 +40,6 @@ export const Marketplace = () => {
       setLoading(false);
     }
   };
-
-  const filteredProducts = filter === "All" ? products : products.filter((product) => (product.category || "").includes(filter));
 
   const handleSubscribe = async (algo: Product, plan: string) => {
     if (!user) {
@@ -65,7 +63,7 @@ export const Marketplace = () => {
       productId: algo.id
     });
     
-    setSelectedAlgo(null); // Close detail modal
+    setSelectedAlgo(null);
   };
 
   const ref = useRef(null);
@@ -75,6 +73,13 @@ export const Marketplace = () => {
   });
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
   const opacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
+
+  const filteredProducts = products.filter((product) => {
+    const matchesAsset = assetFilter === "All" || (product.supported_assets || []).some(a => a.includes(assetFilter));
+    const matchesRisk = riskFilter === "All" || (product.risk_profile || "Medium") === riskFilter;
+    const matchesCategory = filter === "All" || (product.category || "").includes(filter);
+    return matchesAsset && matchesRisk && matchesCategory;
+  });
 
   return (
     <div className="min-h-screen bg-[#020202]">
@@ -91,72 +96,78 @@ export const Marketplace = () => {
           <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:120px_120px] [mask-image:radial-gradient(ellipse_at_center,black_70%,transparent_100%)]" />
         </motion.div>
 
-        {/* Floating background elements */}
-        <div className="absolute inset-0 max-w-7xl mx-auto pointer-events-none hidden md:block">
-          <motion.div
-            animate={{ y: [0, -20, 0], rotate: [0, 5, 0] }}
-            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute left-10 top-1/4 w-32 h-32 bg-emerald-500/5 rounded-full blur-3xl"
-          />
-          <motion.div
-            animate={{ y: [0, 20, 0], rotate: [0, -5, 0] }}
-            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-            className="absolute right-10 bottom-1/4 w-40 h-40 bg-cyan-500/5 rounded-full blur-3xl"
-          />
-        </div>
-
         <div className="max-w-7xl mx-auto px-4 text-center relative z-10">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono tracking-widest mb-6">
             <Zap className="w-3 h-3" />
             ALGO MARKETPLACE
           </motion.div>
 
-          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.1 }} className="text-5xl md:text-8xl font-bold text-white mb-8 tracking-tighter leading-tight">
-            Professional Trading <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">Algorithms</span>
+          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.1 }} className="text-5xl md:text-8xl font-black text-white mb-8 tracking-tighter leading-tight uppercase italic">
+            Professional <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">Trading Algos</span>
           </motion.h1>
 
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="text-lg md:text-2xl text-gray-400 max-w-3xl mx-auto leading-relaxed mb-12 font-light">
-            Automated strategies designed by the IFXTrades quantitative research desk. Execute disciplined strategies based on strict market structure and probabilistic models.
+          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed mb-12 font-light">
+            Automated intelligence designed by the IFXTrades quant desk. Execute disciplined strategies based on strict market structure and institutional models.
           </motion.p>
 
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.3 }} className="flex flex-wrap justify-center gap-4">
-            {["All", "Scalping", "Swing", "Low Risk", "High Risk"].map((label) => {
-              const isActive = 
-                filter === label || 
-                (label === "Low Risk" && filter === "Low") || 
-                (label === "High Risk" && filter === "High") || 
-                (label === "Scalping" && filter === "High-Frequency Scalping") || 
-                (label === "Swing" && filter === "Swing Trading");
-
-              return (
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.3 }} className="space-y-8">
+            {/* Strategy Filter */}
+            <div className="flex flex-wrap justify-center gap-3">
+              {["All", "Scalping", "Swing", "Trend Following", "Event-Driven"].map((label) => (
                 <button
                   key={label}
-                  onClick={() => {
-                    if (label === "Low Risk") setFilter("Low");
-                    else if (label === "High Risk") setFilter("High");
-                    else if (label === "Scalping") setFilter("High-Frequency Scalping");
-                    else if (label === "Swing") setFilter("Swing Trading");
-                    else setFilter(label);
-                  }}
-                  className={`px-8 py-3 rounded-2xl text-sm font-bold transition-all duration-300 ${
-                    isActive
-                      ? "bg-emerald-500 text-black shadow-[0_0_30px_rgba(16,185,129,0.4)] scale-105"
-                      : "bg-[#111820]/80 backdrop-blur-xl text-gray-400 hover:bg-white/10 hover:text-white border border-white/10"
+                  onClick={() => setFilter(label)}
+                  className={`px-6 py-2 rounded-xl text-[10px] font-black tracking-widest uppercase transition-all duration-300 ${
+                    filter === label
+                      ? "bg-emerald-500 text-black shadow-[0_0_20px_rgba(16,185,129,0.3)]"
+                      : "bg-white/5 text-gray-400 hover:text-white border border-white/5"
                   }`}
                 >
                   {label}
                 </button>
-              );
-            })}
+              ))}
+            </div>
+
+            {/* Asset & Risk Filter */}
+            <div className="flex flex-wrap justify-center gap-8 pt-6 border-t border-white/5">
+              <div className="flex items-center gap-4">
+                <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest font-mono">Asset Class:</span>
+                <div className="flex gap-4">
+                  {["All", "Forex", "Crypto", "Indices", "Gold"].map(a => (
+                    <button 
+                      key={a}
+                      onClick={() => setAssetFilter(a)}
+                      className={`text-[10px] font-black uppercase tracking-widest transition-colors ${assetFilter === a ? 'text-emerald-500' : 'text-gray-600 hover:text-gray-400'}`}
+                    >
+                      {a}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest font-mono">Risk Level:</span>
+                <div className="flex gap-4">
+                  {["All", "Low", "Medium", "High"].map(r => (
+                    <button 
+                      key={r}
+                      onClick={() => setRiskFilter(r)}
+                      className={`text-[10px] font-black uppercase tracking-widest transition-colors ${riskFilter === r ? 'text-emerald-500' : 'text-gray-600 hover:text-gray-400'}`}
+                    >
+                      {r}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
           </motion.div>
         </div>
       </section>
 
-      <section className="max-w-7xl mx-auto px-4 pb-24 relative z-20 -mt-10">
+      <section className="max-w-7xl mx-auto px-4 pb-24 relative z-20 -mt-20">
         {loading ? (
-          <div className="flex items-center justify-center py-20">
-            <div className="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin" />
+          <div className="flex items-center justify-center py-40">
+            <div className="w-16 h-16 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin" />
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -175,42 +186,47 @@ export const Marketplace = () => {
         )}
 
         {!loading && filteredProducts.length === 0 ? (
-          <div className="text-center py-20 text-gray-500">
-            No algorithms found matching your criteria.
+          <div className="bg-[#0a0a0a] border border-white/5 rounded-[3rem] p-20 text-center">
+             <div className="text-xl font-black text-gray-600 uppercase italic">No Algorithms Match Your Criteria</div>
+             <p className="text-[10px] font-black text-gray-700 uppercase tracking-[0.3em] mt-3">Try adjusting your institutional filters.</p>
           </div>
         ) : null}
       </section>
 
-      <section className="border-t border-white/5 bg-[#020202] py-24">
-        <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-          <motion.div whileHover={{ y: -5 }} className="p-8 bg-[#0a0a0a] rounded-3xl border border-white/5">
-            <div className="w-16 h-16 bg-emerald-500/10 rounded-2xl flex items-center justify-center mx-auto mb-6 text-emerald-500 border border-emerald-500/20">
-              <ShieldCheck className="w-6 h-6" />
+      <section className="bg-[#050505] py-32 border-t border-white/5">
+        <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-12">
+          <div className="space-y-6">
+            <div className="w-16 h-16 bg-emerald-500/10 rounded-3xl flex items-center justify-center text-emerald-500 border border-emerald-500/10">
+              <ShieldCheck className="w-8 h-8" />
             </div>
-            <h3 className="text-xl text-white font-bold mb-3">Verified Strategy</h3>
-            <p className="text-gray-400 text-sm leading-relaxed">Every algorithm passes rigorous backtesting and forward-testing phases.</p>
-          </motion.div>
-          <motion.div whileHover={{ y: -5 }} className="p-8 bg-[#0a0a0a] rounded-3xl border border-white/5">
-            <div className="w-16 h-16 bg-emerald-500/10 rounded-2xl flex items-center justify-center mx-auto mb-6 text-emerald-500 border border-emerald-500/20">
-              <Activity className="w-6 h-6" />
+            <h3 className="text-xl text-white font-black uppercase italic tracking-tighter">Verified Integrity</h3>
+            <p className="text-gray-500 text-sm leading-relaxed">Every algorithm passes rigorous institutional backtesting and forward-testing phases on real exchange tick data.</p>
+          </div>
+          <div className="space-y-6">
+            <div className="w-16 h-16 bg-emerald-500/10 rounded-3xl flex items-center justify-center text-emerald-500 border border-emerald-500/10">
+              <Activity className="w-8 h-8" />
             </div>
-            <h3 className="text-xl text-white font-bold mb-3">Backtested Performance</h3>
-            <p className="text-gray-400 text-sm leading-relaxed">Transparent performance metrics based on historical tick data.</p>
-          </motion.div>
-          <motion.div whileHover={{ y: -5 }} className="p-8 bg-[#0a0a0a] rounded-3xl border border-white/5">
-            <div className="w-16 h-16 bg-emerald-500/10 rounded-2xl flex items-center justify-center mx-auto mb-6 text-emerald-500 border border-emerald-500/20">
-              <TrendingUp className="w-6 h-6" />
+            <h3 className="text-xl text-white font-black uppercase italic tracking-tighter">Live Performance</h3>
+            <p className="text-gray-500 text-sm leading-relaxed">View real-time win rates and monthly returns directly within the marketplace. Transparency is our baseline.</p>
+          </div>
+          <div className="space-y-6">
+            <div className="w-16 h-16 bg-emerald-500/10 rounded-3xl flex items-center justify-center text-emerald-500 border border-emerald-500/10">
+              <TrendingUp className="w-8 h-8" />
             </div>
-            <h3 className="text-xl text-white font-bold mb-3">Institutional Desk</h3>
-            <p className="text-gray-400 text-sm leading-relaxed">Built by the same quantitative team managing our proprietary capital.</p>
-          </motion.div>
+            <h3 className="text-xl text-white font-black uppercase italic tracking-tighter">Quant Desk Origin</h3>
+            <p className="text-gray-500 text-sm leading-relaxed">Built by the same quantitative team managing proprietary capital. These are not tools; they are assets.</p>
+          </div>
         </div>
       </section>
 
       <AnimatePresence>
-        {selectedAlgo ? (
-          <AlgoDetailModal algo={selectedAlgo} onClose={() => setSelectedAlgo(null)} onSubscribe={handleSubscribe} />
-        ) : null}
+        {selectedAlgo && (
+          <AlgoDetailModal 
+            algo={selectedAlgo} 
+            onClose={() => setSelectedAlgo(null)} 
+            onSubscribe={handleSubscribe} 
+          />
+        )}
       </AnimatePresence>
 
       {purchaseDetails && (

@@ -39,6 +39,7 @@ export const mapWebinar = (raw: any): Webinar => ({
   created_at: raw.created_at,
   speaker_images: Array.isArray(raw.speaker_images) ? raw.speaker_images : [],
   sponsor_logos: Array.isArray(raw.sponsor_logos) ? raw.sponsor_logos : [],
+  sponsors: Array.isArray(raw.sponsors) ? raw.sponsors : [],
 });
 
 export const mapLead = (raw: any): any => ({

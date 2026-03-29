@@ -9,8 +9,10 @@ import {
 import { getWebinarById, checkWebinarRegistration } from "../services/apiHandlers";
 import { RegistrationModal } from "../components/webinars/RegistrationModal";
 import { CountdownTimer } from "../components/webinars/CountdownTimer";
+import { WebinarSponsors } from "../components/webinars/WebinarSponsors";
 import { PageMeta } from "../components/site/PageMeta";
 import { useAuth } from "../contexts/AuthContext";
+import { ResizedImage } from "../components/ui/ResizedImage";
 
 export const WebinarDetail = () => {
   const { id } = useParams();
@@ -132,6 +134,13 @@ export const WebinarDetail = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-8">
+        {/* Presented By Section */}
+        {webinar.sponsors && webinar.sponsors.length > 0 && (
+          <div className="mb-12">
+            <WebinarSponsors sponsors={webinar.sponsors} />
+          </div>
+        )}
+
         {isUpcoming && (
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -244,7 +253,11 @@ export const WebinarDetail = () => {
                 }
                 return (
                   <>
-                    <img src={webinar.webinar_image_url || "https://picsum.photos/seed/webinar/1280/720"} alt="Cover" className="w-full h-full object-cover opacity-40" />
+                    <ResizedImage 
+                      src={webinar.webinar_image_url || "https://picsum.photos/seed/webinar/1280/720"} 
+                      alt="Cover" 
+                      className="w-full h-full object-cover opacity-40" 
+                    />
                     <div className="absolute inset-0 flex items-center justify-center">
                       <button className="w-20 h-20 bg-emerald-500 text-black rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-[0_0_40px_rgba(16,185,129,0.4)]">
                         <Play className="w-8 h-8 fill-current ml-1" />

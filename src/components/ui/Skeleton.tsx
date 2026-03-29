@@ -69,3 +69,28 @@ export const CourseCardSkeleton = () => (
     </div>
   </div>
 );
+
+export const WebinarCardSkeleton = () => (
+  <div className="rounded-[2.5rem] bg-white/5 border border-white/10 p-8 space-y-6" aria-hidden="true">
+    <div className="flex justify-between items-start">
+      <Skeleton height="24px" width="120px" className="rounded-full" />
+      <Skeleton height="20px" width="60px" />
+    </div>
+    <div className="space-y-3">
+      <Skeleton height="32px" />
+      <Skeleton height="32px" width="60%" />
+    </div>
+    <div className="flex gap-4">
+      <Skeleton height="48px" className="flex-1 rounded-2xl" />
+      <Skeleton height="48px" width="48px" className="rounded-2xl" />
+    </div>
+  </div>
+);
+
+export const MediaSkeleton = ({ aspect = "video" }: { aspect?: "video" | "square" | "portrait" }) => {
+  let aspectClass = "aspect-video";
+  if (aspect === "square") aspectClass = "aspect-square";
+  if (aspect === "portrait") aspectClass = "aspect-[3/4]";
+  
+  return <Skeleton className={cn(aspectClass, "rounded-2xl w-full")} />;
+};

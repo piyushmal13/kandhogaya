@@ -190,6 +190,26 @@ export const Webinars = () => {
               <div className="flex items-center justify-center py-20">
                 <div className="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin" />
               </div>
+            ) : webinars.length <= 1 ? (
+              <div className="bg-[#0a0a0a] border border-white/5 rounded-[2.5rem] p-12 text-center space-y-8">
+                <div className="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto border border-emerald-500/20">
+                  <Calendar className="w-10 h-10 text-emerald-500" />
+                </div>
+                <div className="space-y-4">
+                  <h3 className="text-3xl font-bold text-white tracking-tight">Access Institutional Schedule</h3>
+                  <p className="text-gray-400 max-w-md mx-auto leading-relaxed">
+                    Our current live masterclass cycle is fully booked. Join the institutional waitlist to receive priority access to our upcoming Q4 schedule.
+                  </p>
+                </div>
+                <div className="flex flex-col sm:flex-row justify-center gap-4 pt-4">
+                  <button className="px-10 py-4 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all shadow-[0_0_30px_rgba(16,185,129,0.3)]">
+                    Join Waitlist
+                  </button>
+                  <button className="px-10 py-4 bg-white/5 text-white font-bold rounded-xl border border-white/10 hover:bg-white/10">
+                    View Replays
+                  </button>
+                </div>
+              </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {webinars.slice(1).map((webinar, i) => (

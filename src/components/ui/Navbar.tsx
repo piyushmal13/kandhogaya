@@ -4,6 +4,7 @@ import {
   ArrowRight,
   BarChart3,
   BookOpen,
+  Home,
   LayoutDashboard,
   LogOut,
   Menu,
@@ -11,6 +12,7 @@ import {
   Phone,
   Settings,
   Target,
+  Users,
   Video,
   X,
   Zap,
@@ -40,12 +42,14 @@ export const Navbar = () => {
   }, [isOpen]);
 
   const navLinks = [
-    { name: "Signals", path: "/signals", icon: Zap },
+    { name: "Home", path: "/", icon: Home },
+    { name: "About", path: "/about", icon: Target },
+    { name: "Courses", path: "/academy", icon: BookOpen },
     { name: "Algos", path: "/marketplace", icon: BarChart3 },
-    { name: "Results", path: "/results", icon: Target },
-    { name: "Academy", path: "/academy", icon: BookOpen },
-    { name: "Webinars", path: "/webinars", icon: Video },
-    { name: "Insights", path: "/blog", icon: MessageSquare },
+    { name: "Signals", path: "/signals", icon: Zap },
+    { name: "Blog", path: "/blog", icon: MessageSquare },
+    { name: "Community", path: "/community", icon: Users },
+    { name: "Contact", path: "/contact", icon: Phone },
   ];
 
   const isAdmin = userProfile?.role === "admin";
