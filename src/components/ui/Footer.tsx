@@ -2,7 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowUpRight,
-  ShieldCheck
+  ShieldCheck,
+  Star
 } from "lucide-react";
 
 import { BRANDING } from "../../constants/branding";
@@ -27,9 +28,17 @@ export const Footer = () => (
             </div>
             <div className="text-[14px] font-bold tracking-[0.5em] text-white uppercase opacity-90 group-hover:opacity-100 transition-opacity">{BRANDING.name}</div>
           </Link>
-          <p className="text-[12px] leading-relaxed text-gray-500 font-sans font-medium opacity-80 max-w-xs mb-8">
+          <p className="text-[12px] leading-relaxed text-gray-500 font-sans font-medium opacity-80 max-w-xs mb-6">
             The global benchmark for **Best Forex Signals**, **Gold Trading Algorithms**, and Institutional Market Intelligence. Engineered for elite education & execution.
           </p>
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-full mb-8">
+             <div className="flex items-center gap-1">
+               {[1,2,3,4,5].map(i => <Star key={i} className="w-2.5 h-2.5 text-emerald-500 fill-emerald-500" />)}
+             </div>
+             <span className="text-[9px] font-black text-white uppercase tracking-widest italic border-l border-white/20 pl-2">
+               Rated 4.9/5 by 10k+ Traders
+             </span>
+          </div>
           <div className="flex flex-col gap-2 text-[10px] font-bold text-emerald-500/80 uppercase tracking-[0.2em]">
              <div className="flex items-center gap-2">
                <ShieldCheck className="w-4 h-4" /> Est. 2018

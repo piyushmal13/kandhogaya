@@ -3,7 +3,8 @@ import { motion } from "motion/react";
 import { 
   ArrowRight, 
   Shield,
-  Database
+  Database,
+  Star
 } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { tracker } from "@/core/tracker";
@@ -110,11 +111,21 @@ export const HeroSection = () => {
 
       <div className="relative z-10 w-full max-w-7xl px-6 text-center">
         
-        <div className="mb-12 inline-flex items-center gap-3 px-6 py-2.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full animate-in fade-in slide-in-from-top-4 duration-1000 mx-auto">
-           <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-           <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest italic">
-             Pure Education & Licensing
-           </span>
+        <div className="mb-12 flex flex-wrap justify-center items-center gap-4">
+          <div className="inline-flex items-center gap-3 px-6 py-2.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full animate-in fade-in slide-in-from-top-4 duration-1000">
+             <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+             <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest italic">
+               Pure Education & Licensing
+             </span>
+          </div>
+          <div className="inline-flex items-center gap-2 px-6 py-2.5 bg-white/5 border border-white/10 rounded-full animate-in fade-in slide-in-from-top-4 duration-1000 delay-100">
+             <div className="flex items-center gap-1">
+               {[1,2,3,4,5].map(i => <Star key={i} className="w-3 h-3 text-emerald-500 fill-emerald-500" />)}
+             </div>
+             <span className="text-[10px] font-black text-white uppercase tracking-widest italic border-l border-white/20 pl-2">
+               Rated 4.9/5 by 10k+ Traders
+             </span>
+          </div>
         </div>
         <motion.h1 
           initial={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
