@@ -1,12 +1,20 @@
+import React, { useEffect } from "react";
 import { motion } from "motion/react";
 import { Zap, ShieldCheck } from "lucide-react";
 import { useDataPulse } from "../../hooks/useDataPulse";
 import { SignalCardSkeleton } from "../ui/Skeleton";
 import { BlurGate } from "../ui/BlurGate";
 import { Signal } from "../../types";
+import { tracker } from "../../core/tracker";
 
 export const LiveSignalsFeed = () => {
   const { signals, loading } = useDataPulse();
+
+  useEffect(() => {
+    if (signals.length > 0) {
+      tracker.track("signal_view", { count: signals.length });
+    }
+  }, [signals.length]);
 
   return (
     <section className="py-12 border-b border-white/5 bg-[#050816]">

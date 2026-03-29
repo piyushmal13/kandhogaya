@@ -4,6 +4,7 @@ import { Activity, TrendingUp, TrendingDown, Shield, Lock, ArrowRight } from "lu
 import { useDataPulse } from "../../hooks/useDataPulse";
 import { useAccess } from "../../hooks/useAccess";
 import { UpgradeModal } from "../ui/UpgradeModal";
+import { tracker } from "../../core/tracker";
 import { Signal } from "../../types";
 
 /**
@@ -128,7 +129,10 @@ export const LiveAlgoTerminal = () => {
               {!isElite && (
                 <div className="absolute inset-x-0 bottom-0 top-1/2 bg-gradient-to-t from-[#050505] via-[#050505]/80 to-transparent z-20 flex items-end justify-center pb-8 p-6">
                    <button 
-                    onClick={() => setShowUpgrade(true)}
+                    onClick={() => {
+                      tracker.track("algo_click", { context: "terminal_locked" });
+                      setShowUpgrade(true);
+                    }}
                     className="w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-black font-bold rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 shadow-[0_0_40px_rgba(16,185,129,0.2)]"
                    >
                      <Lock className="w-4 h-4" />

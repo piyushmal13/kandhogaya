@@ -26,6 +26,7 @@ const getSupabaseConfig = () => {
 
 const { url, key } = getSupabaseConfig();
 
+// Standard Institutional Client
 export const supabase = createClient(url || 'https://placeholder.supabase.co', key || 'placeholder', {
   auth: {
     persistSession: true,
@@ -34,20 +35,8 @@ export const supabase = createClient(url || 'https://placeholder.supabase.co', k
   }
 });
 
-// Dedicated client for public Data Pulse (bypasses Auth-state RLS locking)
-// Storage disabled to prevent collision with primary Auth client
-export const publicSupabase = createClient(url || 'https://placeholder.supabase.co', key || 'placeholder', {
-  auth: {
-    persistSession: false,
-    autoRefreshToken: false,
-    detectSessionInUrl: false,
-    storage: {
-      getItem: () => null,
-      setItem: () => {},
-      removeItem: () => {},
-    }
-  }
-});
+// Alias for public data usage (used for backwards compatibility in existing hooks)
+export const publicSupabase = supabase;
 
 /**
  * safeQuery - Institutional Data Error Boundary
@@ -58,7 +47,12 @@ export const safeQuery = async <T>(query: any): Promise<T | []> => {
   try {
     const { data, error } = await query;
     if (error) {
-      console.warn("[Institutional Data Audit]: Query suppressed via safeQuery:", error.message);
+      console.error(`[Institutional Data Error] [${new Date().toISOString()}]:`, {
+        message: error.message,
+        code: error.code,
+        details: error.details,
+        hint: error.hint
+      });
       return [] as any;
     }
     return (data || []) as T;

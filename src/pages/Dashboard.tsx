@@ -6,18 +6,19 @@ import {
   Lock, ListChecks 
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
-import { supabase } from "../lib/supabase";
 import { cn } from "../utils/cn";
 import { motion, AnimatePresence } from "motion/react";
 import { BRANDING } from "../constants/branding";
 import { PurchaseModal } from "@/components/payments/PurchaseModal";
 import { tracker } from "@/core/tracker";
 import { useDataPulse } from "@/hooks/useDataPulse";
+import { productService } from "@/services/productService";
 import { BotLicense } from "@/types";
 import { ActivityPulse } from "@/components/dashboard/ActivityPulse";
+import { UrgencyBanner } from "@/components/ui/UrgencyBanner";
 
 export const Dashboard = () => {
-  const { user, userProfile } = useAuth();
+  const { user, userProfile, access } = useAuth();
   const navigate = useNavigate();
   const { signals, webinars } = useDataPulse();
 
@@ -33,13 +34,14 @@ export const Dashboard = () => {
     }
 
     setLoading(true);
+    console.log("💎 [DASHBOARD FETCH] START");
     try {
-      console.log("💎 [DB RECOVERY] FETCHING PRIVATE LICENSES");
-      const { data: licenseData } = await supabase.from("bot_licenses").select("*, algo_bots(name)").eq("user_id", user.id);
-      setLicenses(licenseData as any || []);
+      const licenseData = await productService.getUserLicenses(user.id);
+      console.log("💎 [DASHBOARD FETCH] RESPONSE", licenseData.length, "licenses");
+      setLicenses(licenseData);
       setDbHealthy(true);
     } catch (err) {
-      console.error("Institutional Private Discovery Failure:", err);
+      console.error("💎 [DASHBOARD FETCH] ERROR", err);
       setDbHealthy(false);
     } finally {
       setLoading(false);
@@ -64,10 +66,10 @@ export const Dashboard = () => {
     };
   }, [fetchData]);
 
-  const isAdmin = userProfile?.role === "admin";
-  const isPro = true; // FORCE ENABLE (RECOVERY BYPASS)
-  const isElite = true; // FORCE ENABLE (RECOVERY BYPASS)
-  const isProOnly = false;
+  const isAdmin = access.admin;
+  const isPro = access.signals || access.algo;
+  const isElite = access.algo && access.webinars; 
+  const isProOnly = isPro && !isElite;
 
   const renderStats = () => {
     const statsConfig = [
@@ -222,6 +224,7 @@ export const Dashboard = () => {
 
   return (
     <div className="relative min-h-screen bg-black pt-28 pb-32 px-4 selection:bg-emerald-500/30">
+      <UrgencyBanner />
       <div className="max-w-7xl mx-auto relative z-10">
         {!isElite && (
           <motion.div 

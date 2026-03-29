@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback, createContext, useContext, useMemo } from 'react';
-import { publicSupabase, safeQuery } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { Signal, Webinar } from '../types';
-import { mapSignal, mapWebinar, mapMarketTicker } from '../utils/dataMapper';
+import { signalService } from '../services/signalService';
+import { webinarService } from '../services/webinarService';
+import { marketService } from '../services/marketService';
 
 interface DataPulseContextValue {
   signals: Signal[];
@@ -30,17 +31,14 @@ export const DataPulseProvider = ({ children }: { children: React.ReactNode }) =
   const [loading, setLoading] = useState(true);
 
   const fetchData = useCallback(async () => {
+    console.log("🔄 [DATA PULSE REFRESH] STARTING CONCURRENT DISCOVERY");
     try {
-      // 🚀 [IT TEAM] Phase 2 - Institutional Data Layer (SWR via safeQuery)
-      const [rawSignals, rawWebinars, rawMarket] = await Promise.all([
-        safeQuery<any[]>(publicSupabase.from("signals").select("*").order("created_at", { ascending: false }).limit(6)),
-        safeQuery<any[]>(publicSupabase.from("webinars").select("*").order("date_time", { ascending: true }).limit(3)),
-        safeQuery<any[]>(publicSupabase.from("market_data").select("*").order("symbol", { ascending: true }))
+      // 🚀 [IT TEAM] Phase 3 - Service-Driven Data Layer (Unified Flow)
+      const [sigData, webData, markData] = await Promise.all([
+        signalService.getSignals(),
+        webinarService.getWebinars(),
+        marketService.getMarketPairs()
       ]);
-
-      const sigData = (rawSignals as any[]).map(mapSignal);
-      const webData = (rawWebinars as any[]).map(mapWebinar);
-      const markData = (rawMarket as any[]).map(mapMarketTicker);
 
       setSignals(sigData);
       setWebinars(webData);
@@ -49,6 +47,7 @@ export const DataPulseProvider = ({ children }: { children: React.ReactNode }) =
       localStorage.setItem('pulse_signals', JSON.stringify(sigData));
       localStorage.setItem('pulse_webinars', JSON.stringify(webData));
       localStorage.setItem('pulse_market', JSON.stringify(markData));
+      console.log("🔄 [DATA PULSE REFRESH] DISCOVERY COMPLETE", { signals: sigData.length, webinars: webData.length, market: markData.length });
     } catch (err) {
       console.error("[DataPulse] Institutional Recovery Crash:", err);
     } finally {

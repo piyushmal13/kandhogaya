@@ -12,6 +12,7 @@ import { Webinar } from "../types";
 import { useDataPulse } from "../hooks/useDataPulse";
 import { useAccess } from "../hooks/useAccess";
 import { UpgradeModal } from "../components/ui/UpgradeModal";
+import { tracker } from "../core/tracker";
 
 export const Webinars = () => {
   const { webinars, loading } = useDataPulse();
@@ -20,6 +21,7 @@ export const Webinars = () => {
   const [showUpgrade, setShowUpgrade] = useState(false);
 
   const handleRegisterClick = (webinar: Webinar) => {
+    tracker.track("webinar_register", { title: webinar.title, is_paid: webinar.is_paid });
     if (webinar.is_paid && !isPro) {
       setShowUpgrade(true);
       return;

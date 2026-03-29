@@ -1,17 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { supabase } from "@/lib/supabase";
-import { 
-  Check, 
-  X, 
-  Zap, 
-  Clock,
-  ArrowRight,
-  Monitor
-} from "lucide-react";
+import { productService } from "@/services/productService";
+import { webinarService } from "@/services/webinarService";
+import { Check, X, Zap, Clock, ArrowRight, Monitor } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { PurchaseModal } from "@/components/payments/PurchaseModal";
-import { DataMapper, safeQuery } from "@/core/dataMapper";
 import { Product, Webinar } from "@/types";
 import { tracker } from "@/core/tracker";
 
@@ -53,24 +46,18 @@ export const Pricing = () => {
 
   const fetchData = useCallback(async () => {
     setLoading(true);
+    console.log("💰 [PRICING FETCH] START");
     try {
       const [algoData, webinarData] = await Promise.all([
-        safeQuery(
-          supabase.from("algo_bots").select("*").limit(3).then() as any,
-          DataMapper.product,
-          "Pricing Algos"
-        ),
-        safeQuery(
-          supabase.from("webinars").select("*").gte("date_time", new Date().toISOString()).limit(3).then() as any,
-          DataMapper.webinar,
-          "Pricing Webinars"
-        )
+        productService.getAlgoBots(3),
+        webinarService.getWebinars()
       ]);
       
+      console.log("💰 [PRICING FETCH] RESPONSE", { algos: algoData.length, webinars: webinarData.length });
       setAlgos(algoData);
-      setWebinars(webinarData);
+      setWebinars(webinarData.slice(0, 3)); // Match the limit(3) from original logic
     } catch (err) {
-      console.error("Institutional Pricing Discovery Error:", err);
+      console.error("💰 [PRICING FETCH] ERROR:", err);
     } finally {
       setLoading(false);
     }
@@ -83,7 +70,7 @@ export const Pricing = () => {
     tracker.track("page_view", { surface: "pricing" });
     
     // Smart Pricing Intelligence
-    const views = parseInt(localStorage.getItem("ifx_pricing_views") || "0") + 1;
+    const views = Number.parseInt(localStorage.getItem("ifx_pricing_views") || "0") + 1;
     localStorage.setItem("ifx_pricing_views", views.toString());
     setPricingViews(views);
   }, []);

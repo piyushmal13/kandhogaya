@@ -5,7 +5,7 @@ import { Zap, ShieldCheck, Activity, TrendingUp } from "lucide-react";
 import { PageMeta } from "../components/site/PageMeta";
 import { AlgoCard } from "../components/algorithms/AlgoCard";
 import { AlgoDetailModal } from "../components/algorithms/AlgoDetailModal";
-import { getProducts, subscribeToAlgo } from "../services/apiHandlers";
+import { productService } from "../services/productService";
 import { Product } from "../types";
 import { useAuth } from "../contexts/AuthContext";
 import { useToast } from "../contexts/ToastContext";
@@ -27,7 +27,10 @@ export const Marketplace = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const data = await getProducts();
+      // Smart Pricing Intelligence
+      const views = Number.parseInt(localStorage.getItem("ifx_pricing_views") || "0") + 1;
+      localStorage.setItem("ifx_pricing_views", views.toString());
+      const data = await productService.getProducts();
       setProducts(data || []);
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -55,10 +58,10 @@ export const Marketplace = () => {
       
       const days = durationMap[plan] || 30;
       
-      const result = await subscribeToAlgo(user.id, algo.id, days);
+      const result = await productService.subscribeToAlgo(user.id, algo.id, days);
       
       if (result.success) {
-        success(`Successfully subscribed to ${algo.name}! License key: ${result.license?.license_key}`);
+        success(`Successfully subscribed to ${algo.name}! License key: ${result.data?.license_key}`);
         navigate("/dashboard");
       } else {
         toastError("There was an issue processing your subscription. Please try again.");

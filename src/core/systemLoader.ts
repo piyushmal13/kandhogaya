@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabase";
 import { setFlags } from "./featureFlags";
+import { retentionEngine } from "../services/crm/retentionEngine";
 
 export const loadSystem = async () => {
   try {
@@ -8,7 +9,11 @@ export const loadSystem = async () => {
       setFlags(data);
     }
 
-    // High-fidelity real-time feature signal synchronization
+    // 1. CRM Retention Pulse (Phase 5)
+    // Run inactivity detection silently in background
+    retentionEngine.detectInactivity().catch();
+
+    // 2. High-fidelity real-time feature signal synchronization
     supabase
       .channel('feature_flags_changes')
       .on(

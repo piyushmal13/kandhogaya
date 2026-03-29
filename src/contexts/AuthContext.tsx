@@ -69,26 +69,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const isMountedRef = useRef(true);
 
     const fetchUserProfile = useCallback(async (userId: string, email?: string) => {
-      if (isFetchingRef.current || lastFetchedId.current === userId) return;
+      // Logic Audit: Only block if ALREADY FETECHED (lastFetchedId) AND active
+      if (isFetchingRef.current || (lastFetchedId.current === userId && userProfile)) return;
 
       isFetchingRef.current = true;
       lastFetchedId.current = userId;
 
-      const retry = async (fn: () => Promise<any>, attempts = 2) => {
-        try {
-          return await fn();
-        } catch (err) {
-          console.error(`[Auth] Discovery Retry Failure (Attempts: ${attempts}):`, err);
-          if (attempts > 0) return retry(fn, attempts - 1);
-          return null;
-        }
-      };
-
       try {
-        // CONCURRENT Artifact Discovery
+        // CONCURRENT Artifact Discovery (Direct Select without retry wrapper for speed)
         const [userRes, entitlementRes] = await Promise.all([
-          retry(async () => await supabase.from("users").select("*").eq("id", userId).maybeSingle()),
-          retry(async () => await supabase.from("user_entitlements").select("*").eq("user_id", userId))
+          supabase.from("users").select("*").eq("id", userId).maybeSingle(),
+          supabase.from("user_entitlements").select("*").eq("user_id", userId)
         ]);
 
         const userData = userRes?.data || null;
@@ -99,16 +90,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           setEntitlements(entitlementData);
           setUserProfile({
             ...base,
-            role: base.role ?? "user",
+            role: (base.role as any) ?? "user",
             isPro: entitlementData.some(e => e.active),
           });
         }
       } catch (err) {
-        console.error("Institutional Identity Discovery Error:", err);
+        console.error("Institutional Identity Discovery Error (Recovery Active):", err);
+        // Fallback to basic user profile to unblock UI
+        if (isMountedRef.current) {
+           setUserProfile({ id: userId, email, role: "user", isPro: false });
+        }
       } finally {
         isFetchingRef.current = false;
+        // CRITICAL: Ensure loading is cleared regardless of fetch outcome
+        if (isMountedRef.current) {
+           setLoading(false);
+           setSessionReady(true);
+        }
       }
-    }, []);
+    }, [userProfile]);
 
   useEffect(() => {
     isMountedRef.current = true;
@@ -145,28 +145,27 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, newSession) => {
       if (!isMountedRef.current) return;
 
-      if (event === 'SIGNED_IN') {
+      if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
         clearCache();
-        // Skip manual setSession if onAuthStateChange already provided it
-        if (!user && newSession?.user) {
-          setUser(newSession.user);
-          setSession(newSession);
-        }
-        globalThis.dispatchEvent(new Event("app:login"));
-        globalThis.dispatchEvent(new Event("supabase:refresh"));
         
-        // Re-calculate user profile on login
         if (newSession?.user) {
-          tracker.track("login", { protocol: "institutional" });
-          await fetchUserProfile(newSession.user.id, newSession.user.email);
+          const userId = newSession.user.id;
+          
+          // Cross-session identification (anon -> user)
+          tracker.identify(userId);
+          
+          if (!user) {
+            setUser(newSession.user);
+            setSession(newSession);
+          }
+          
+          tracker.track(event === 'SIGNED_IN' ? "login" : "session_restore", { protocol: "institutional" });
+          await fetchUserProfile(userId, newSession.user.email || undefined);
         }
 
-        setTimeout(() => {
-          if (isMountedRef.current) {
-            setSessionReady(true);
-            globalThis.dispatchEvent(new Event("supabase:ready"));
-          }
-        }, 100);
+        globalThis.dispatchEvent(new Event("app:login"));
+        globalThis.dispatchEvent(new Event("supabase:ready"));
+        setSessionReady(true);
       } else if (event === 'SIGNED_OUT') {
         clearCache();
         setSessionReady(false);

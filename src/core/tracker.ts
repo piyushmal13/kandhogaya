@@ -1,165 +1,116 @@
 import { supabase } from "../lib/supabase";
-import { v4 as uuidv4 } from "uuid";
+import { leadPipeline } from "../services/crm/leadPipeline";
 
 /**
- * Institutional Behavioral Intelligence Engine
- * Standardized signal capture with session persistence and source attribution.
+ * Institutional Behavioral Tracking Engine (v1.24)
+ * Refined for Phase 4 CRM intelligence.
+ * Silent, async, and non-blocking intent capture.
  */
 
-// Persistence Layer for Session Persistence
-const SESSION_KEY = "ifx_behavioral_session";
-const SOURCE_KEY = "ifx_discovery_source";
-const AGENT_KEY = "ifx_agent_referral";
+export type EventPriority = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 
-const getSessionId = () => {
-  let sessionId = sessionStorage.getItem(SESSION_KEY);
-  if (!sessionId) {
-    sessionId = uuidv4();
-    sessionStorage.setItem(SESSION_KEY, sessionId);
+export interface TrackingEvent {
+  event_type: string;
+  priority?: EventPriority;
+  metadata?: Record<string, any>;
+}
+
+const STORAGE_KEY = 'ifx_anon_id';
+
+class Tracker {
+  private anonId: string;
+
+  constructor() {
+    this.anonId = this.initializeAnonId();
   }
-  return sessionId;
-};
 
-const getSource = () => {
-  const urlParams = new URLSearchParams(globalThis.location.search);
-  const utmSource = urlParams.get("utm_source");
-  const agentRef = urlParams.get("ref");
-  
-  if (utmSource) {
-    localStorage.setItem(SOURCE_KEY, utmSource);
+  private initializeAnonId(): string {
+    if (typeof window === 'undefined') return 'server';
+    let id = localStorage.getItem(STORAGE_KEY);
+    if (!id) {
+      id = `anon_${Math.random().toString(36).substring(2, 11)}_${Date.now()}`;
+      localStorage.setItem(STORAGE_KEY, id);
+    }
+    return id;
   }
-  if (agentRef) {
-    localStorage.setItem(AGENT_KEY, agentRef);
-  }
-  
-  return {
-    source: utmSource || localStorage.getItem(SOURCE_KEY) || "direct",
-    agent: agentRef || localStorage.getItem(AGENT_KEY) || null
-  };
-};
 
-const getDevice = () => {
-  const ua = globalThis.navigator.userAgent;
-  if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) return "tablet";
-  if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(ua)) return "mobile";
-  return "desktop";
-};
-
-// Deduplication Cache (In-Memory)
-const eventCache = new Set<string>();
-
-export const tracker = {
   /**
-   * Capture a behavioral signal.
-   * Includes session, source, and device fingerprinting.
+   * Captures a behavioral event silently.
+   * Decisions: UI Emits -> tracker.ts captures -> CRM Pipeline processes.
    */
-  async track(event: string, metadata: any = {}) {
-    const sessionId = getSessionId();
-    const { source, agent } = getSource();
-    const device = getDevice();
+  async track(eventType: string, metadata: any = {}) {
+    // 1. Audit status
+    const priority = this.inferPriority(eventType);
     const timestamp = new Date().toISOString();
-
-    // Deduplication Logic (Debounce same event within 500ms)
-    const eventSlug = `${event}-${JSON.stringify(metadata)}`;
-    if (eventCache.has(eventSlug)) return;
-    eventCache.add(eventSlug);
-    setTimeout(() => eventCache.delete(eventSlug), 500);
 
     try {
       const { data: { session } } = await supabase.auth.getSession();
       const userId = session?.user?.id || null;
 
       const payload = {
-        event: event,
         user_id: userId,
+        anon_id: this.anonId,
+        event_type: eventType,
+        priority,
         metadata: {
           ...metadata,
-          session_id: sessionId,
-          source,
-          agent_code: agent,
-          device,
-          path: globalThis.location.pathname,
-          userAgent: globalThis.navigator.userAgent,
-          language: globalThis.navigator.language,
-          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-          referrer: globalThis.document.referrer,
-          screenResolution: `${globalThis.screen.width}x${globalThis.screen.height}`
+          path: typeof window !== 'undefined' ? window.location.pathname : '',
+          referrer: typeof document !== 'undefined' ? document.referrer : '',
+          timestamp
         },
-        timestamp
+        event_at: timestamp
       };
 
-      console.log(`[BehavioralEngine] Captured Signal: ${event}`, payload);
+      // 2. Async Persistence (Standardized table: user_events)
+      supabase
+        .from('user_events')
+        .insert([payload])
+        .then(({ error }) => {
+           if (error) console.warn(`[CRM] Behavioral Error (${eventType}):`, error.message);
+        });
 
-      // Async persistence in standardized analytics_events
-      supabase.from("analytics_events").insert(payload).then(({ error }) => {
-        if (error) console.error(`[BehavioralEngine] Signal Sync Error (${event}):`, error);
-      });
+      // 3. Automated CRM Lifecycle Logic (Non-blocking)
+      leadPipeline.processEvent(userId, this.anonId, eventType).then();
 
-      // Automated Activity Sync for Retention Engine
-      if (userId) {
-        this.syncActivity(userId);
-      }
-
-      // Automated Sales Funnel Progression
-      if (userId && ["pricing_click", "purchase_attempt", "payment_uploaded", "webinar_register", "algo_click"].includes(event)) {
-        this.advancePipeline(userId, event);
-      }
     } catch (err) {
-      console.error("[BehavioralEngine] Global Lifecycle Exception:", err);
+      console.error("[CRM] Tracking Life-cycle Exception:", err);
     }
-  },
-
-  async syncActivity(userId: string) {
-    const now = new Date();
-    
-    // 1. Fetch current status to determine delta
-    const { data: pipeline } = await supabase
-      .from("sales_pipeline")
-      .select("last_active_at")
-      .eq("user_id", userId)
-      .single();
-
-    let status = "active";
-    if (pipeline?.last_active_at) {
-      const lastActive = new Date(pipeline.last_active_at);
-      const diffDays = (now.getTime() - lastActive.getTime()) / (1000 * 60 * 60 * 24);
-      
-      if (diffDays > 7) status = "churned";
-      else if (diffDays > 2) status = "at_risk";
-    }
-
-    const { error } = await supabase
-      .from("sales_pipeline")
-      .upsert({ 
-        user_id: userId, 
-        last_active_at: now.toISOString(),
-        retention_status: status,
-        updated_at: now.toISOString()
-      }, { onConflict: "user_id" });
-    
-    if (error) console.error("[BehavioralEngine] Activity Sync Error:", error);
-  },
-
-  async advancePipeline(userId: string, event: string) {
-    let stage = "new";
-    if (["pricing_click", "algo_click"].includes(event)) stage = "interested";
-    if (event === "webinar_register") stage = "interested";
-    if (event === "purchase_attempt") stage = "payment_pending";
-    if (event === "payment_uploaded") stage = "converted";
-
-    const { source, agent } = getSource();
-
-    const { error } = await supabase
-      .from("sales_pipeline")
-      .upsert({ 
-        user_id: userId, 
-        stage, 
-        last_event: event,
-        attribution_source: source,
-        agent_code: agent,
-        updated_at: new Date().toISOString()
-      }, { onConflict: "user_id" });
-
-    if (error) console.error("[BehavioralEngine] Pipeline Sync Error:", error);
   }
-};
+
+  private inferPriority(type: string): EventPriority {
+    const HIGH = ['purchase_attempt', 'algo_click', 'form_submit', 'signup'];
+    const MEDIUM = ['pricing_click', 'signal_view', 'webinar_register', 'login'];
+    const CRITICAL = ['payment_uploaded'];
+    
+    if (CRITICAL.includes(type)) return 'CRITICAL';
+    if (HIGH.includes(type)) return 'HIGH';
+    if (MEDIUM.includes(type)) return 'MEDIUM';
+    return 'LOW';
+  }
+
+  /**
+   * Cross-visit identification logic.
+   * Merges anon legacy data with authenticated account.
+   */
+  async identify(userId: string) {
+    if (!userId) return;
+    
+    // Retroactive intelligence: link anon journey to this user
+    supabase
+      .from('user_events')
+      .update({ user_id: userId })
+      .eq('anon_id', this.anonId)
+      .is('user_id', null)
+      .then();
+
+    // Link in lead table
+    supabase
+      .from('leads')
+      .update({ user_id: userId })
+      .eq('anon_id', this.anonId)
+      .is('user_id', null)
+      .then();
+  }
+}
+
+export const tracker = new Tracker(); 
