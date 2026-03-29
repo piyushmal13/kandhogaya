@@ -14,13 +14,11 @@ export interface PageMetaProps {
 }
 
 const DEFAULT_KEYWORDS = [
-  "algo trading",
-  "algorithmic trading",
-  "forex signals",
-  "gold trading",
-  "trading academy",
-  "market intelligence",
-  "retail trader infrastructure",
+  "IFX Trades",
+  "forex education Asia",
+  "best algo trading course Dubai India",
+  "institutional macro research",
+  "trading academy"
 ];
 
 const getAbsoluteUrl = (path: string) => {

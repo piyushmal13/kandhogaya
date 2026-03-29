@@ -1,5 +1,8 @@
 User-agent: *
 Allow: /
+Allow: /academy
+Allow: /marketplace
+Allow: /signals
 Disallow: /admin
 Disallow: /agent
 Disallow: /dashboard

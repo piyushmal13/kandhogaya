@@ -10,28 +10,28 @@ import { WebinarPromo } from "../components/home/WebinarPromo";
 import { NewsletterPopup } from "../components/ui/NewsletterPopup";
 import { SignupForm } from "../components/ui/SignupForm";
 import { SuccessShowcase } from "../components/ui/SuccessShowcase";
-import { organizationSchema, websiteSchema, faqSchema } from "../utils/structuredData";
+import { educationalOrganizationSchema, websiteSchema, faqSchema, goldAlgoCourseSchema } from "../utils/structuredData";
 
 const homeFaqs = [
   {
-    question: "What is IFXTrades?",
+    question: "What is IFX Trades?",
     answer:
-      "IFXTrades is an institutional-grade trading intelligence platform providing live forex and gold signals, automated trading algorithms, a structured trading academy, and live webinars for serious retail traders.",
+      "IFX Trades is an institutional forex education platform providing proprietary macro research, the Gold Algo Masterclass, and execution training for retail traders.",
   },
   {
-    question: "How do I receive trading signals?",
+    question: "How do I access the Gold Algo Masterclass?",
     answer:
-      "Signals are delivered instantly via our private WhatsApp channel with exact entry zones, stop loss, and take profit levels for gold (XAUUSD) and major forex pairs.",
+      "The Masterclass is available via our academy portal. It covers advanced quantitative analysis and automated execution infrastructure.",
   },
   {
-    question: "What markets do your algorithms cover?",
+    question: "What markets are covered in your research?",
     answer:
-      "Our algorithms cover XAUUSD (Gold), major forex pairs (EURUSD, GBPUSD, USDJPY), and select indices. Each strategy is backtested and forward-tested before release.",
+      "Our macro research focuses heavily on XAUUSD (Gold), major forex pairs, and key global indices.",
   },
   {
-    question: "Is there a free trial?",
+    question: "Are you a broker?",
     answer:
-      "Yes, you can sign up for free to access the platform overview, live market ticker, and selected educational content. Signal subscriptions start at $20/month.",
+      "No. IFX Trades is strictly an education and research organization. We do not accept deposits, execute trades, or hold client funds.",
   },
 ];
 
@@ -40,21 +40,17 @@ import { LazySection } from "../components/ui/LazySection";
 export const Home = () => (
   <div className="min-h-screen relative overflow-hidden">
     <PageMeta
-      title="IFXTrades | Institutional Trading Intelligence"
-      description="Institutional-grade algorithmic trading, live signals, trader education, and market intelligence for serious retail execution. Join 12,000+ traders."
+      title="IFX Trades | Institutional Forex Education & Macro Research"
+      description="Asia's leading institutional forex education platform. Master quantitative analysis with the best algo trading course in Dubai and India. Professional macro research."
       path="/"
       keywords={[
-        "IFXTrades",
-        "algo trading platform",
-        "forex signals",
-        "trading academy",
-        "gold signals",
-        "automated trading",
-        "XAUUSD signals",
-        "forex trading platform",
-        "trading bot",
+        "IFX Trades",
+        "forex education Asia",
+        "best algo trading course Dubai India",
+        "institutional macro research",
+        "trading academy"
       ]}
-      structuredData={[organizationSchema(), websiteSchema(), faqSchema(homeFaqs)]}
+      structuredData={[educationalOrganizationSchema(), websiteSchema(), goldAlgoCourseSchema(), faqSchema(homeFaqs)]}
     />
     <HeroSection />
     <MarketTicker />

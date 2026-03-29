@@ -23,6 +23,29 @@ export const organizationSchema = () => ({
   sameAs: [BRANDING.whatsappUrl],
 });
 
+export const educationalOrganizationSchema = () => ({
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  name: "IFX Trades",
+  url: "https://ifxtrades.com",
+  logo: "https://ifxtrades.com/logo.png",
+  description: "Asia's leading institutional forex education platform. Master quantitative analysis with the best algo trading course in Dubai and India.",
+  sameAs: [BRANDING.whatsappUrl],
+  address: [
+    {
+      "@type": "PostalAddress",
+      addressLocality: "Dubai",
+      addressCountry: "AE"
+    },
+    {
+      "@type": "PostalAddress",
+      addressLocality: "Greater Noida",
+      addressRegion: "Uttar Pradesh",
+      addressCountry: "IN"
+    }
+  ]
+});
+
 export const websiteSchema = () => ({
   "@context": "https://schema.org",
   "@type": "WebSite",
@@ -67,6 +90,26 @@ export const courseSchema = (course: {
   },
   educationalLevel: course.level || "Beginner",
   timeRequired: course.duration || "Self-paced",
+});
+
+export const goldAlgoCourseSchema = () => ({
+  "@context": "https://schema.org",
+  "@type": "Course",
+  name: "Gold Algo Masterclass",
+  description: "Master institutional algorithmic trading for Gold. Advanced quantitative analysis, risk management, and Python-based execution infrastructure.",
+  provider: {
+    "@type": "EducationalOrganization",
+    name: "IFX Trades",
+    url: "https://ifxtrades.com"
+  },
+  educationalLevel: "Advanced",
+  hasCourseInstance: {
+    "@type": "CourseInstance",
+    courseMode: "Online",
+    location: {
+      "@type": "VirtualLocation"
+    }
+  }
 });
 
 export const articleSchema = (article: {
