@@ -7,7 +7,6 @@ import { cn } from "../utils/cn";
 // Sub-components (Modularized)
 import { ContentManager } from "../modules/admin/ContentManager";
 import { LicenseManager } from "../modules/admin/LicenseManager";
-import { AgentManager } from "../modules/admin/AgentManager";
 import { WebinarManager } from "../modules/admin/WebinarManager";
 import { ProductManager } from "../modules/admin/ProductManager";
 import { ReviewManager } from "../modules/admin/ReviewManager";
@@ -98,7 +97,6 @@ export const Admin = () => {
         {activeTab === "content" && <ContentManager />}
         {activeTab === "licenses" && <LicenseManager />}
         {activeTab === "algos" && <ProductManager />}
-        {activeTab === "agents" && <AgentManager />}
         {activeTab === "webinars" && <WebinarManager />}
         {activeTab === "reviews" && <ReviewManager />}
         {activeTab === "health" && <ErrorViewer />}

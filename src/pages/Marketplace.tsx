@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "motion/react";
 import { Zap, ShieldCheck, Activity, TrendingUp } from "lucide-react";
+import { PurchaseModal } from "../components/payments/PurchaseModal";
 
 import { PageMeta } from "../components/site/PageMeta";
 import { AlgoCard } from "../components/algorithms/AlgoCard";
@@ -15,6 +16,7 @@ export const Marketplace = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedAlgo, setSelectedAlgo] = useState<Product | null>(null);
+  const [purchaseDetails, setPurchaseDetails] = useState<{ plan: string, amount: number, productId: string } | null>(null);
   const [filter, setFilter] = useState("All");
   const { user } = useAuth();
   const { success, error: toastError, info } = useToast();
@@ -48,28 +50,22 @@ export const Marketplace = () => {
       return;
     }
 
-    try {
-      const durationMap: Record<string, number> = {
-        'Monthly': 30,
-        'Quarterly': 90,
-        'Yearly': 365,
-        'Lifetime': 36500
-      };
-      
-      const days = durationMap[plan] || 30;
-      
-      const result = await productService.subscribeToAlgo(user.id, algo.id, days);
-      
-      if (result.success) {
-        success(`Successfully subscribed to ${algo.name}! License key: ${result.data?.license_key}`);
-        navigate("/dashboard");
-      } else {
-        toastError("There was an issue processing your subscription. Please try again.");
-      }
-    } catch (error) {
-      console.error("Subscription error:", error);
-      toastError("An unexpected error occurred. Please try again.");
-    }
+    const priceMap: Record<string, number> = {
+      'Monthly': algo.price,
+      'Quarterly': algo.long_plan_offers?.find(o => o.duration === 'Quarterly')?.price || (algo.price * 3 * 0.8),
+      'Yearly': algo.long_plan_offers?.find(o => o.duration === 'Yearly')?.price || (algo.price * 12 * 0.7),
+      'Lifetime': algo.long_plan_offers?.find(o => o.duration === 'Lifetime')?.price || (algo.price * 50)
+    };
+
+    const amount = priceMap[plan] || algo.price;
+    
+    setPurchaseDetails({
+      plan: `${algo.name} (${plan})`,
+      amount,
+      productId: algo.id
+    });
+    
+    setSelectedAlgo(null); // Close detail modal
   };
 
   const ref = useRef(null);
@@ -216,6 +212,15 @@ export const Marketplace = () => {
           <AlgoDetailModal algo={selectedAlgo} onClose={() => setSelectedAlgo(null)} onSubscribe={handleSubscribe} />
         ) : null}
       </AnimatePresence>
+
+      {purchaseDetails && (
+        <PurchaseModal 
+          plan={purchaseDetails.plan}
+          amount={purchaseDetails.amount}
+          productId={purchaseDetails.productId}
+          onClose={() => setPurchaseDetails(null)}
+        />
+      )}
     </div>
   );
 };

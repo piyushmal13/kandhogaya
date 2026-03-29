@@ -25,7 +25,7 @@ export const Dashboard = () => {
   const [licenses, setLicenses] = useState<BotLicense[]>([]);
   const [loading, setLoading] = useState(true);
   const [dbHealthy, setDbHealthy] = useState(true);
-  const [selectedPlan, setSelectedPlan] = useState<{ plan: string, amount: number } | null>(null);
+  const [selectedPlan, setSelectedPlan] = useState<{ plan: string, amount: number, productId?: string } | null>(null);
 
   const fetchData = useCallback(async () => {
     if (!user?.id) {
@@ -270,7 +270,11 @@ export const Dashboard = () => {
               </div>
             </div>
             <button 
-              onClick={() => setSelectedPlan({ plan: isProOnly ? "elite" : "pro", amount: isProOnly ? 249 : 99 })}
+              onClick={() => setSelectedPlan({ 
+                plan: isProOnly ? "elite" : "pro", 
+                amount: isProOnly ? 249 : 99,
+                productId: isProOnly ? 'b2b2b2b2-b2b2-b2b2-b2b2-b2b2b2b2b2b2' : 'a1a1a1a1-a1a1-a1a1-a1a1-a1a1a1a1a1a1'
+              })}
               className="relative z-10 px-8 py-3 bg-white text-black font-black text-[10px] uppercase tracking-widest rounded-xl hover:scale-105 transition-all shadow-xl"
             >
               {isProOnly ? "Join Elite" : "Unlock Pro Access"}
@@ -401,7 +405,7 @@ export const Dashboard = () => {
                   <h3 className="text-2xl font-black text-white uppercase tracking-tighter italic mb-2">Signals Locked</h3>
                   <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest text-center mb-8">Upgrade to PRO or ELITE for real-time institutional signals.</p>
                   <button 
-                    onClick={() => setSelectedPlan({ plan: "pro", amount: 99 })}
+                    onClick={() => setSelectedPlan({ plan: "pro", amount: 99, productId: 'a1a1a1a1-a1a1-a1a1-a1a1-a1a1a1a1a1a1' })}
                     className="px-10 py-4 bg-emerald-500 text-black font-black text-[10px] uppercase tracking-[0.2em] rounded-2xl hover:scale-110 transition-all shadow-xl shadow-emerald-500/20"
                   >
                     Unlock Discovery Feed
@@ -489,6 +493,7 @@ export const Dashboard = () => {
         <PurchaseModal 
           plan={selectedPlan.plan}
           amount={selectedPlan.amount}
+          productId={(selectedPlan as any).productId}
           onClose={() => setSelectedPlan(null)}
         />
       )}
