@@ -3,7 +3,9 @@ import { Link } from "react-router-dom";
 import {
   ArrowUpRight,
   ShieldCheck,
-  Star
+  Star,
+  Instagram,
+  Linkedin
 } from "lucide-react";
 
 import { BRANDING } from "../../constants/branding";
@@ -49,6 +51,15 @@ export const Footer = () => (
              <div className="flex items-center gap-2">
                <ShieldCheck className="w-4 h-4" /> Dubai HQ & Greater Noida Roots
              </div>
+          </div>
+          
+          <div className="flex items-center gap-4 mt-8">
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="p-2 border border-white/5 rounded-full bg-white/5 text-gray-400 hover:text-white hover:bg-[var(--brand)]/10 transition-colors">
+              <Instagram className="w-4 h-4" />
+            </a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="p-2 border border-white/5 rounded-full bg-white/5 text-gray-400 hover:text-white hover:bg-[var(--brand)]/10 transition-colors">
+              <Linkedin className="w-4 h-4" />
+            </a>
           </div>
         </div>
 

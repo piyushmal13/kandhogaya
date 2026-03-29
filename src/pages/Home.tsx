@@ -11,6 +11,7 @@ import { NewsletterPopup } from "../components/ui/NewsletterPopup";
 import { SignupForm } from "../components/ui/SignupForm";
 import { SuccessShowcase } from "../components/ui/SuccessShowcase";
 import { ReviewPromptModal } from "../components/ui/ReviewPromptModal";
+import { ExitIntentModal } from "../components/ui/ExitIntentModal";
 import { SocialProof } from "../components/home/SocialProof";
 import { educationalOrganizationSchema, websiteSchema, faqSchema, goldAlgoCourseSchema } from "../utils/structuredData";
 import { useState, useEffect } from "react";
@@ -54,6 +55,7 @@ export const Home = () => {
   return (
   <div className="min-h-screen relative overflow-hidden">
     <ReviewPromptModal isOpen={showReviewModal} onClose={() => setShowReviewModal(false)} />
+    <ExitIntentModal />
     <PageMeta
       title="IFX Trades | Institutional Forex Education & Macro Research"
       description="Asia's leading institutional forex education platform. Master quantitative analysis with the best algo trading course in Dubai and India. Professional macro research."

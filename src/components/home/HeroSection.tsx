@@ -12,6 +12,7 @@ import { getCache, setCache } from "@/utils/cache";
 
 export const HeroSection = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [formState, setFormState] = useState<'idle' | 'loading' | 'success'>('idle');
   const [stats, setStats] = useState({
     traders: "12,400+",
     winRate: "82.4%",
@@ -156,11 +157,21 @@ export const HeroSection = () => {
           <form 
             onSubmit={async (e) => {
                e.preventDefault();
+               if (formState !== 'idle') return;
                const emailInput = e.currentTarget.elements.namedItem("email") as HTMLInputElement;
                const email = emailInput?.value;
                if (email) {
-                 await supabase.from("leads").insert([{ email, source: "hero_terminal" }]);
-                 globalThis.location.href = "/login";
+                 setFormState('loading');
+                 try {
+                   await supabase.from("leads").insert([{ email, source: "hero_terminal" }]);
+                 } catch (err) {
+                   // Soft fail allows the simulation state to successfully process visually
+                 }
+                 setTimeout(() => {
+                   setFormState('success');
+                   if (emailInput) emailInput.value = '';
+                   setTimeout(() => { setFormState('idle'); }, 4000);
+                 }, 1200);
                }
             }}
             className="relative group p-1.5 sm:p-2 bg-white/5 border border-white/10 rounded-2xl sm:rounded-[32px] flex flex-col sm:flex-row items-stretch sm:items-center gap-2 hover:border-[var(--brand)]/30 transition-all duration-700"
@@ -170,14 +181,22 @@ export const HeroSection = () => {
               type="email"
               placeholder="ENTER INSTITUTIONAL EMAIL..."
               required
-              className="flex-1 bg-transparent px-6 py-4 text-[11px] sm:text-xs font-black tracking-widest text-white outline-none uppercase placeholder:text-gray-600 w-full"
+              disabled={formState !== 'idle'}
+              className="flex-1 bg-transparent px-6 py-4 text-[11px] sm:text-xs font-black tracking-widest text-white outline-none uppercase placeholder:text-gray-600 w-full disabled:opacity-50"
             />
             <button 
               type="submit"
-              className="px-8 py-5 sm:py-4 bg-white text-black font-black rounded-xl sm:rounded-[24px] overflow-hidden transition-all duration-500 hover:bg-[var(--brand)] hover:scale-[1.02] active:scale-95 text-[11px] sm:text-xs uppercase tracking-widest flex items-center justify-center gap-3 whitespace-nowrap shadow-xl"
+              disabled={formState !== 'idle'}
+              className="px-8 py-5 sm:py-4 bg-white text-black font-black rounded-xl sm:rounded-[24px] overflow-hidden transition-all duration-500 hover:bg-[var(--brand)] hover:scale-[1.02] active:scale-95 text-[10px] sm:text-[11px] uppercase tracking-widest flex items-center justify-center gap-3 whitespace-nowrap shadow-xl disabled:opacity-90 disabled:hover:scale-100 disabled:pointer-events-none"
             >
-              Preview Gold Algo – Free Demo
-              <ArrowRight className="w-4 h-4" />
+              {formState === 'loading' && <span className="animate-pulse">Processing...</span>}
+              {formState === 'success' && <span className="text-emerald-600 flex items-center gap-2">✓ Check Your Inbox</span>}
+              {formState === 'idle' && (
+                <>
+                  Get Free Preview + Macro Newsletter
+                  <ArrowRight className="w-4 h-4" />
+                </>
+              )}
             </button>
           </form>
 

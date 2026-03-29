@@ -5,7 +5,9 @@ import {
   BarChart3,
   BookOpen,
   Home,
+  Instagram,
   LayoutDashboard,
+  Linkedin,
   LogOut,
   Menu,
   MessageSquare,
@@ -13,7 +15,6 @@ import {
   Settings,
   Target,
   Users,
-  Video,
   X,
   Zap,
 } from "lucide-react";
@@ -94,6 +95,14 @@ export const Navbar = () => {
                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500/50 group-hover:bg-[var(--brand)] transition-colors" />
                 Support
               </Link>
+              <div className="flex items-center gap-3 border-r border-white/5 pr-4 mr-2">
+                 <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
+                    <Instagram className="w-3.5 h-3.5" />
+                 </a>
+                 <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white border-white/5 transition-colors">
+                    <Linkedin className="w-3.5 h-3.5" />
+                 </a>
+              </div>
 
               {user ? (
                 <div className="flex items-center gap-5">
@@ -263,6 +272,15 @@ export const Navbar = () => {
                       <span>Terminate Session</span>
                     </button>
                   ) : null}
+
+                  <div className="mt-8 flex items-center justify-center gap-6">
+                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 border border-white/10 rounded-full text-slate-400 hover:text-white transition-colors">
+                       <Instagram className="w-4 h-4" />
+                    </a>
+                    <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 border border-white/10 rounded-full text-slate-400 hover:text-white transition-colors">
+                       <Linkedin className="w-4 h-4" />
+                    </a>
+                  </div>
 
                   <div className="mt-6 p-4 rounded-xl bg-[var(--brand)]/5 border border-[var(--brand)]/10">
                     <div className="text-[9px] font-bold text-[var(--brand)] uppercase tracking-[0.2em] mb-1">Status: Operational</div>
