@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import { leadService, Lead } from "../services/crm/leadService";
+import { leadService } from "../services/crm/leadService";
+import { Lead } from "../types";
 
 /**
  * useCRM Hook

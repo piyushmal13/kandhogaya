@@ -12,11 +12,8 @@ export const AgentManager = () => {
   const fetchAgents = async () => {
     setLoading(true);
     try {
-      const data = await safeQuery(
-        supabase.from('agent_accounts').select('*, users(full_name, email)'),
-        (raw) => raw,
-        "Admin Agent Discovery"
-      );
+      const { data, error } = await supabase.from('agent_accounts').select('*, users(full_name, email)');
+      if (error) throw error;
       setAgents(data);
     } catch (err) {
       console.error("Institutional Agent Discovery Error:", err);

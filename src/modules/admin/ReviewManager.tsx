@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { 
   Star, Trash2, Globe, CheckCircle, XCircle, 
   BarChart, ChevronLeft, ChevronRight, Activity,
-  ShieldOff, TrendingUp, CheckSquare, AlertTriangle, Flag, Square
+  ShieldOff, TrendingUp, TrendingDown, CheckSquare, AlertTriangle, Flag, Square
 } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useReviews } from "../../hooks/useReviews";

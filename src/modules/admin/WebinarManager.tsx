@@ -38,13 +38,14 @@ export const WebinarManager = () => {
   const [webinarToDelete, setWebinarToDelete] = useState<string | null>(null);
 
   const fetchRecentWebinars = async () => {
-    const data = await safeQuery(
-      supabase.from('webinars').select('*').order('date_time', { ascending: true }).limit(10),
-      DataMapper.webinar,
-      "Admin Webinar Discovery"
-    );
-    setCache(cacheKey, data, 30000);
-    setRecentWebinars(data);
+    const { data, error } = await supabase.from('webinars').select('*').order('date_time', { ascending: true }).limit(10);
+    if (error) {
+       console.error("Admin Webinar Discovery error", error);
+       return;
+    }
+    const mappedData = data.map(DataMapper.webinar);
+    setCache(cacheKey, mappedData, 30000);
+    setRecentWebinars(mappedData);
   };
 
   useEffect(() => {
