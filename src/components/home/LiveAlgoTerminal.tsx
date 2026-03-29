@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Activity, TrendingUp, TrendingDown, Shield, Lock, ArrowRight } from "lucide-react";
+import { Activity, TrendingUp, TrendingDown, Shield, Lock } from "lucide-react";
 import { useDataPulse } from "../../hooks/useDataPulse";
 import { useAccess } from "../../hooks/useAccess";
 import { UpgradeModal } from "../ui/UpgradeModal";
 import { tracker } from "../../core/tracker";
-import { Signal } from "../../types";
 
 /**
  * Deterministic seed-based pseudo-random using a linear congruential generator.
@@ -31,7 +30,7 @@ const generateMonthlyResults = () =>
   });
 
 export const LiveAlgoTerminal = () => {
-  const { signals, loading } = useDataPulse();
+  const { signals } = useDataPulse();
   const { isElite } = useAccess();
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [isScanning, setIsScanning] = useState(false);
@@ -51,7 +50,7 @@ export const LiveAlgoTerminal = () => {
   const positiveCount = useMemo(() => monthlyResults.filter(m => m.isPositive).length, [monthlyResults]);
   const bestMonth = useMemo(() => Math.max(...monthlyResults.map(m => m.value)), [monthlyResults]);
 
-  const activeSignals = (signals as Signal[]).slice(0, 5);
+  const activeSignals = signals.slice(0, 5);
 
   return (
     <section className="py-24 md:py-32 bg-[#020202] border-t border-white/5 relative overflow-hidden">
@@ -75,8 +74,8 @@ export const LiveAlgoTerminal = () => {
                   <Shield className="w-6 h-6" />
                 </div>
                 <div>
-                  <div className="text-[10px] text-[#64748b] font-mono font-bold uppercase tracking-[0.3em]">Educational Demo</div>
-                  <div className="text-white font-bold font-mono text-xl">Market Insights <span className="text-[10px] text-emerald-400 ml-2 tracking-widest uppercase opacity-80 animate-pulse">Feed</span></div>
+                  <div className="text-[10px] text-[#64748b] font-mono font-bold uppercase tracking-[0.3em]">Institutional Protocol</div>
+                  <div className="text-white font-bold font-mono text-xl">Systematic Flow <span className="text-[10px] text-emerald-400 ml-2 tracking-widest uppercase opacity-80 animate-pulse">Live</span></div>
                 </div>
               </div>
             </div>

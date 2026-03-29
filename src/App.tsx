@@ -115,7 +115,7 @@ export default function App() {
             <a href="#main-content" className="skip-to-content">
               Skip to main content
             </a>
-            <div className="relative min-h-screen overflow-hidden font-sans pb-[60px]">
+            <div className="relative min-h-screen overflow-hidden font-sans">
               <div className="noise-overlay" />
               <SiteBackdrop />
               <Navbar />
@@ -123,13 +123,17 @@ export default function App() {
                 <AnimatedRoutes />
               </main>
               <Footer />
-              <div
-                className="fixed bottom-0 left-0 w-full bg-[#991b1b] text-white text-center p-3 text-sm font-medium z-[9999] shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]"
-              >
-                <strong>CRITICAL NOTICE:</strong> IFX Trades is strictly an education & research platform. We license algorithms, deliver courses, and provide macro analysis. 
-                <strong> WE ARE NOT A BROKER.</strong> We do not accept deposits, execute trades, or handle client funds. Trading involves significant risk.
-              </div>
               <WhatsAppButton />
+              
+              {/* Institutional Accountability: Relative Bottom Notice */}
+              <div 
+                id="regulatory-notice"
+                className="relative w-full bg-[#991b1b] text-white text-center p-8 md:p-12 text-[10px] md:text-sm font-black uppercase tracking-[0.2em] z-50 border-t border-white/10"
+              >
+                <div className="max-w-7xl mx-auto px-4">
+                  <span className="opacity-50">CRITICAL INSTITUTIONAL NOTICE:</span> IFX Trades is strictly an education & research platform. We license algorithms, deliver courses, and provide macro analysis. <strong className="text-white underline">WE ARE NOT A BROKER.</strong> We do not accept deposits, execute trades, or handle client funds. Trading involves significant risk.
+                </div>
+              </div>
             </div>
           </Router>
         </DataPulseProvider>
