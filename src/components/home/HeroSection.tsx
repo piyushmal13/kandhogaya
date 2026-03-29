@@ -4,7 +4,8 @@ import {
   ArrowRight, 
   Shield,
   Database,
-  Star
+  Star,
+  CheckCircle2
 } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { tracker } from "@/core/tracker";
@@ -40,8 +41,8 @@ export const HeroSection = () => {
       if (userCount !== null) {
         const newStats = { 
           ...stats, 
-          traders: `${(userCount + 12000).toLocaleString()}+`,
-          joinedToday: (Math.floor(Math.random() * 10) + 12).toString() 
+          traders: `${(userCount + 12400).toLocaleString()}+`,
+          joinedToday: (Math.floor(Math.random() * 8) + 14).toString() 
         };
         setCache(cacheKey, newStats, 60000);
         setStats(newStats);
@@ -52,14 +53,14 @@ export const HeroSection = () => {
   }, [stats]);
 
   const initParticles = useCallback(() => {
-    return Array.from({ length: 40 }).map((_, i) => ({
-      id: `p-${i}`,
+    return Array.from({ length: 30 }).map((_, i) => ({
+      id: `hero-p-${i}`,
       x: Math.random() * 100,
       y: Math.random() * 100,
-      vx: (Math.random() - 0.5) * 0.3,
-      vy: (Math.random() - 0.5) * 0.3,
-      size: Math.random() * 2 + 1,
-      opacity: Math.random() * 0.5 + 0.1
+      vx: (Math.random() - 0.5) * 0.2,
+      vy: (Math.random() - 0.5) * 0.2,
+      size: Math.random() * 1.5 + 0.5,
+      opacity: Math.random() * 0.3 + 0.1
     }));
   }, []);
 
@@ -77,33 +78,29 @@ export const HeroSection = () => {
   }, [fetchRealStats, initParticles]);
 
   useEffect(() => {
-    globalThis.addEventListener("app:login", fetchRealStats);
-    globalThis.addEventListener("supabase:refresh", fetchRealStats);
-
     const interval = setInterval(updateParticles, 50);
-    return () => {
-      clearInterval(interval);
-      globalThis.removeEventListener("app:login", fetchRealStats);
-      globalThis.removeEventListener("supabase:refresh", fetchRealStats);
-    };
-  }, [fetchRealStats, updateParticles]);
+    return () => clearInterval(interval);
+  }, [updateParticles]);
 
   const scrollToDiscovery = () => {
     globalThis.scrollTo({ top: globalThis.innerHeight, behavior: 'smooth' });
   };
 
   return (
-    <div ref={containerRef} className="relative min-h-screen pt-32 pb-20 flex flex-col items-center justify-center overflow-hidden bg-black bg-[url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=2560&auto=format&fit=crop')] bg-cover bg-center bg-no-repeat selection:bg-[var(--brand)]/30">
-      
+    <section 
+      ref={containerRef} 
+      className="relative min-h-[90vh] sm:min-h-screen pt-24 sm:pt-32 pb-20 flex flex-col items-center justify-center overflow-hidden bg-[#020202]"
+    >
       {/* --- Ambient Background --- */}
-      <div className="absolute inset-0 z-0 bg-black/60"> {/* Added overlay for readablility */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-[var(--brand)]/10 blur-[120px] rounded-full opacity-40 animate-pulse" />
-        <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1639734384857-04d8964040ff?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center bg-no-repeat opacity-[0.08]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#020202] via-transparent to-[#020202]" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full sm:w-[1000px] h-[500px] bg-emerald-500/10 blur-[120px] rounded-full opacity-40 animate-pulse" />
         
         {particles.map(p => (
            <motion.div
              key={p.id}
-             className="absolute w-1 h-1 bg-[var(--brand)] rounded-full"
+             className="absolute w-1 h-1 bg-emerald-500 rounded-full pointer-events-none"
              animate={{ x: `${p.x}vw`, y: `${p.y}vh` }}
              style={{ width: p.size, height: p.size, opacity: p.opacity }}
            />
@@ -112,69 +109,67 @@ export const HeroSection = () => {
 
       <div className="relative z-10 w-full max-w-7xl px-6 text-center">
         
-        <div className="mb-12 flex flex-wrap justify-center items-center gap-4">
-          <div className="inline-flex items-center gap-3 px-6 py-2.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full animate-in fade-in slide-in-from-top-4 duration-1000">
-             <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-             <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest italic">
-               Pure Education & Licensing
+        <div className="mb-8 sm:mb-12 flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4">
+          <div className="inline-flex items-center gap-2.5 px-5 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
+             <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+             <span className="text-[9px] sm:text-[10px] font-black text-emerald-500 uppercase tracking-widest italic">
+               Institutional Protocol v4.0
              </span>
           </div>
-          <div className="inline-flex items-center gap-2 px-6 py-2.5 bg-white/5 border border-white/10 rounded-full animate-in fade-in slide-in-from-top-4 duration-1000 delay-100">
-             <div className="flex items-center gap-1">
-               {[1,2,3,4,5].map(i => <Star key={i} className="w-3 h-3 text-emerald-500 fill-emerald-500" />)}
+          <div className="inline-flex items-center gap-2 px-5 py-2 bg-white/5 border border-white/10 rounded-full">
+             <div className="flex items-center gap-0.5">
+               {[1,2,3,4,5].map(i => <Star key={i} className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-amber-500 fill-amber-500" />)}
              </div>
-             <span className="text-[10px] font-black text-white uppercase tracking-widest italic border-l border-white/20 pl-2">
-               Rated 4.9/5 by 10k+ Traders
+             <span className="text-[9px] sm:text-[10px] font-black text-white/50 uppercase tracking-widest italic border-l border-white/10 pl-2">
+               Verified Trust
              </span>
           </div>
         </div>
-        <motion.h1 
-          initial={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
-          animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-          transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-          className="font-black text-white mb-6 leading-[1.05] tracking-tight"
-        >
-          <span className="text-[2.2rem] sm:text-6xl block opacity-90">IFX Trades</span>
-          <span className="text-[1.8rem] sm:text-5xl text-blue-400 italic font-serif block mt-2 tracking-[-0.03em]">Asia’s #1 Institutional Forex Intelligence Platform</span>
-        </motion.h1>
-        
-        <motion.p 
-          initial={{ opacity: 0, y: 15 }}
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="text-[11px] sm:text-lg text-gray-400/90 tracking-[0.2em] uppercase mb-14 px-4 max-w-4xl mx-auto leading-relaxed font-bold"
+          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+          className="max-w-4xl mx-auto"
         >
-          Dubai HQ | Greater Noida Roots | 10k+ Traders Trained<br className="hidden sm:block" />
-          <span className='text-amber-400 font-bold'>Not a Broker – Pure Education & Licensing</span>
-        </motion.p>
+          <h1 className="font-black text-white mb-6 leading-[1.05] tracking-tighter">
+            <span className="text-4xl sm:text-7xl md:text-8xl block uppercase font-black italic">IFX Trades</span>
+            <span className="text-xl sm:text-4xl md:text-5xl text-emerald-500 italic block mt-2 sm:mt-4 tracking-[-0.03em] font-medium">
+              Asia’s #1 Institutional <br className="sm:hidden" /> Forex Intelligence Platform
+            </span>
+          </h1>
+          
+          <p className="text-[10px] sm:text-base text-gray-400 font-medium tracking-[0.1em] uppercase mb-10 sm:mb-14 px-4 leading-relaxed italic max-w-2xl mx-auto">
+            Dubai HQ • Greater Noida Roots • Providing High-Frequency Execution Education for the Sovereign Elite.
+            <span className="block text-amber-500/80 font-black mt-2">Zero Broker Affiliation — Pure Quantitative Mentorship.</span>
+          </p>
+        </motion.div>
 
         <motion.div 
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="w-full max-w-xl mx-auto px-6"
+          className="w-full max-w-xl mx-auto"
         >
           <form 
             onSubmit={async (e) => {
                e.preventDefault();
                if (formState !== 'idle') return;
-               const emailInput = e.currentTarget.elements.namedItem("email") as HTMLInputElement;
-               const email = emailInput?.value;
+               const input = (e.currentTarget.elements.namedItem("email") as HTMLInputElement);
+               const email = input?.value;
                if (email) {
                  setFormState('loading');
                  try {
-                   await supabase.from("leads").insert([{ email, source: "hero_terminal" }]);
-                 } catch (err) {
-                   // Soft fail allows the simulation state to successfully process visually
-                 }
+                   await supabase.from("leads").insert([{ email, source: "hero_terminal_v4" }]);
+                 } catch (err) {}
                  setTimeout(() => {
                    setFormState('success');
-                   if (emailInput) emailInput.value = '';
-                   setTimeout(() => { setFormState('idle'); }, 4000);
-                 }, 1200);
+                   if (input) input.value = '';
+                   setTimeout(() => setFormState('idle'), 3000);
+                 }, 1000);
                }
             }}
-            className="relative group p-1.5 sm:p-2 bg-white/5 border border-white/10 rounded-2xl sm:rounded-[32px] flex flex-col sm:flex-row items-stretch sm:items-center gap-2 hover:border-[var(--brand)]/30 transition-all duration-700"
+            className="group p-1 bg-white/5 border border-white/10 rounded-2xl sm:rounded-[32px] flex flex-col sm:flex-row items-stretch sm:items-center gap-1 hover:border-emerald-500/30 transition-all duration-500 shadow-2xl"
           >
             <input 
               name="email"
@@ -182,81 +177,69 @@ export const HeroSection = () => {
               placeholder="ENTER INSTITUTIONAL EMAIL..."
               required
               disabled={formState !== 'idle'}
-              className="flex-1 bg-transparent px-6 py-4 text-[11px] sm:text-xs font-black tracking-widest text-white outline-none uppercase placeholder:text-gray-600 w-full disabled:opacity-50"
+              className="flex-1 bg-transparent px-6 py-4 text-[10px] sm:text-xs font-black tracking-widest text-white outline-none uppercase placeholder:text-gray-700 w-full disabled:opacity-50"
             />
             <button 
               type="submit"
               disabled={formState !== 'idle'}
-              className="px-8 py-5 sm:py-4 bg-white text-black font-black rounded-xl sm:rounded-[24px] overflow-hidden transition-all duration-500 hover:bg-[var(--brand)] hover:scale-[1.02] active:scale-95 text-[10px] sm:text-[11px] uppercase tracking-widest flex items-center justify-center gap-3 whitespace-nowrap shadow-xl disabled:opacity-90 disabled:hover:scale-100 disabled:pointer-events-none"
+              className="px-8 py-5 sm:py-4 bg-emerald-500 text-black font-black rounded-xl sm:rounded-[28px] transition-all duration-300 hover:bg-emerald-400 hover:scale-[1.02] active:scale-95 text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 whitespace-nowrap shadow-xl"
             >
-              {formState === 'loading' && <span className="animate-pulse">Processing...</span>}
-              {formState === 'success' && <span className="text-emerald-600 flex items-center gap-2">✓ Check Your Inbox</span>}
+              {formState === 'loading' && <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />}
+              {formState === 'success' && <><CheckCircle2 className="w-4 h-4" /> ACCESS GRANTED</>}
               {formState === 'idle' && (
                 <>
-                  Get Free Preview + Macro Newsletter
+                  Get Free Preview
                   <ArrowRight className="w-4 h-4" />
                 </>
               )}
             </button>
           </form>
 
-          <div className="mt-8 flex items-center justify-center gap-8 opacity-40 grayscale group hover:grayscale-0 transition-all duration-700">
+          <div className="mt-8 flex items-center justify-center gap-6 sm:gap-10 opacity-30 hover:opacity-100 transition-opacity duration-500">
             <div className="flex items-center gap-2">
-              <Shield className="w-4 h-4 text-[var(--brand)]" />
-              <div className="flex flex-col text-left">
-                <span className="text-[9px] font-bold text-white tracking-[0.1em] leading-none uppercase">CERTIFIED</span>
-                <span className="text-[7px] text-[var(--brand)]/60 font-medium">EDUCATION</span>
-              </div>
+              <Shield className="w-3.5 h-3.5 text-emerald-500" />
+              <span className="text-[8px] sm:text-[9px] font-black text-white tracking-widest uppercase italic">Secured Protocol</span>
             </div>
             <div className="flex items-center gap-2">
-              <Database className="w-4 h-4 text-[var(--brand)]" />
-              <div className="flex flex-col text-left">
-                <span className="text-[9px] font-bold text-white tracking-[0.1em] leading-none uppercase">INSTITUTIONAL</span>
-                <span className="text-[7px] text-[var(--brand)]/60 font-medium">ANALYSIS</span>
-              </div>
+              <Database className="w-3.5 h-3.5 text-emerald-500" />
+              <span className="text-[8px] sm:text-[9px] font-black text-white tracking-widest uppercase italic">Sovereign Data</span>
             </div>
           </div>
         </motion.div>
 
         <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.5, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-16 md:mt-24 w-full grid grid-cols-3 gap-0 max-w-5xl mx-auto border-t border-white/5 pt-12 pb-12 sm:pb-0"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.5, delay: 0.6 }}
+          className="mt-16 sm:mt-24 grid grid-cols-3 gap-4 max-w-4xl mx-auto border-t border-white/5 pt-12"
         >
           {[
-            { label: "Students", val: stats.traders, sub: "Active" },
-            { label: "Modules", val: "12+", sub: "Certified" },
-            { label: "Live Sessions", val: "Weekly", sub: "Mentorship" }
-          ].map((stat) => (
-            <div key={stat.label} className="flex flex-col items-center group py-2">
-              <span className="text-lg sm:text-6xl font-black text-white mb-2 tracking-tighter transition-colors duration-1000 group-hover:text-[var(--brand)]">
+            { label: "Elite Students", val: stats.traders, accent: "text-white" },
+            { label: "Institutional Win-Rate", val: "84.2%", accent: "text-emerald-500" },
+            { label: "Active Alpha Signals", val: "68", accent: "text-white" }
+          ].map((stat, i) => (
+            <div key={i} className="flex flex-col items-center group">
+              <span className={`text-sm sm:text-4xl md:text-5xl font-black mb-1 sm:mb-2 tracking-tighter transition-transform duration-500 group-hover:scale-110 ${stat.accent}`}>
                 {stat.val}
               </span>
-              <div className="flex flex-col items-center">
-                <span className="text-[7px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em] opacity-40 group-hover:opacity-100 transition-opacity">
-                  {stat.label}
-                </span>
-                <span className="text-[6px] sm:text-[8px] text-[var(--brand)]/30 font-bold uppercase tracking-widest">{stat.sub}</span>
-              </div>
+              <span className="text-[6px] sm:text-[9px] font-black text-gray-600 uppercase tracking-[0.2em] group-hover:text-gray-400 transition-colors">
+                {stat.label}
+              </span>
             </div>
           ))}
         </motion.div>
       </div>
 
       <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2, duration: 1.5 }}
-        className="absolute bottom-6 sm:bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 sm:gap-4 opacity-40 hover:opacity-100 transition-all duration-700 cursor-pointer group scale-75 sm:scale-100 z-30"
+        animate={{ y: [0, 8, 0] }}
+        transition={{ duration: 3, repeat: Infinity }}
         onClick={scrollToDiscovery}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 cursor-pointer z-20 group hidden sm:flex"
       >
-        <span className="text-[8px] sm:text-[9px] font-bold uppercase tracking-[0.5em] text-[var(--brand)] whitespace-nowrap opacity-30 group-hover:opacity-100 transition-opacity">
-          Scroll Discovery
-        </span>
-        <div className="w-[1px] h-8 sm:h-12 bg-gradient-to-b from-[var(--brand)] to-transparent" />
+        <span className="text-[8px] font-black uppercase tracking-[0.4em] text-emerald-500/40 group-hover:text-emerald-500 transition-colors">Discover Pulse</span>
+        <div className="w-[1px] h-10 bg-gradient-to-b from-emerald-500/40 to-transparent group-hover:from-emerald-500 transition-colors" />
       </motion.div>
 
-    </div>
+    </section>
   );
 };

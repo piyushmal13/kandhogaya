@@ -1,125 +1,126 @@
-import { useState, useEffect, useCallback, createContext, useContext, useMemo } from 'react';
-import { Signal, Webinar } from '../types';
-import { signalService } from '../services/signalService';
-import { webinarService } from '../services/webinarService';
-import { marketService } from '../services/marketService';
-import { supabase } from '../lib/supabase';
+import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
+import { signalService } from "../services/signalService";
+import { webinarService } from "../services/webinarService";
+import { marketService } from "../services/marketService";
+import { supabase } from "../lib/supabase";
+import { Signal, Webinar, MarketPair } from "../types";
 
-interface DataPulseContextValue {
+export interface DashboardStats {
+  winRate: string;
+  totalPips: number;
+}
+
+interface DataPulseContextType {
   signals: Signal[];
   webinars: Webinar[];
-  marketData: any[];
-  performanceStats: {
-    winRate: string;
-    profitFactor: string;
-    totalPips: number;
-  };
+  marketData: MarketPair[];
+  performanceStats: DashboardStats;
   loading: boolean;
   refresh: () => Promise<void>;
 }
 
-const DataPulseContext = createContext<DataPulseContextValue | null>(null);
+const DataPulseContext = createContext<DataPulseContextType | undefined>(undefined);
 
-export const DataPulseProvider = ({ children }: { children: React.ReactNode }) => {
-  const [signals, setSignals] = useState<Signal[]>(() => {
-    const cached = localStorage.getItem('pulse_signals');
-    return cached ? JSON.parse(cached) : [];
-  });
-  const [webinars, setWebinars] = useState<Webinar[]>(() => {
-    const cached = localStorage.getItem('pulse_webinars');
-    return cached ? JSON.parse(cached) : [];
-  });
-  const [marketData, setMarketData] = useState<any[]>(() => {
-    const cached = localStorage.getItem('pulse_market');
-    return cached ? JSON.parse(cached) : [];
-  });
-  const [performanceStats, setPerformanceStats] = useState({
-    winRate: "82.4%",
-    profitFactor: "3.24",
-    totalPips: 4200
-  });
+export const DataPulseProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [loading, setLoading] = useState(true);
+  
+  const [signals, setSignals] = useState<Signal[]>(() => {
+    try {
+      const cached = localStorage.getItem('pulse_signals');
+      return cached ? JSON.parse(cached) : [];
+    } catch { return []; }
+  });
+
+  const [webinars, setWebinars] = useState<Webinar[]>(() => {
+    try {
+      const cached = localStorage.getItem('pulse_webinars');
+      return cached ? JSON.parse(cached) : [];
+    } catch { return []; }
+  });
+
+  const [marketData, setMarketData] = useState<MarketPair[]>(() => {
+    try {
+      const cached = localStorage.getItem('pulse_market');
+      return cached ? JSON.parse(cached) : [];
+    } catch { return []; }
+  });
+
+  const [performanceStats, setPerformanceStats] = useState<DashboardStats>({
+    winRate: "78%",
+    totalPips: 12450
+  });
 
   const fetchData = useCallback(async () => {
+    console.log("🌐 [DATA PULSE] INITIATING DISCOVERY...");
+    // Only show loader if we have no cached data to show
+    if (signals.length === 0 && webinars.length === 0 && marketData.length === 0) {
+      setLoading(true);
+    }
+    
     try {
-      // Parallel high-fidelity fetch
+      // Parallel resilient fetch
       const [sigData, webData, markData, perfResult] = await Promise.all([
-        signalService.getSignals(),
-        webinarService.getWebinars(),
-        marketService.getMarketPairs(),
-        supabase.from('performance_results').select('*').eq('is_featured', true).single()
+        signalService.getSignals().catch(e => { console.error("Signals Fetch Failed", e); return []; }),
+        webinarService.getWebinars().catch(e => { console.error("Webinars Fetch Failed", e); return []; }),
+        marketService.getMarketPairs().catch(e => { console.error("Market Fetch Failed", e); return []; }),
+        supabase.from('performance_results').select('*').eq('is_featured', true).maybeSingle().catch(() => ({ data: null }))
       ]);
 
       setSignals(sigData || []);
       setWebinars(webData || []);
       setMarketData(markData || []);
 
-      if (perfResult.data) {
+      if (perfResult && (perfResult as any).data) {
+        const d = (perfResult as any).data;
         setPerformanceStats({
-          winRate: `${perfResult.data.win_rate}%`,
-          profitFactor: perfResult.data.profit_factor,
-          totalPips: perfResult.data.pips
+          winRate: d.win_rate || "74%",
+          totalPips: d.total_pips || 12000
         });
       }
 
+      // Preserve institutional state for offline/latency scenarios
       localStorage.setItem('pulse_signals', JSON.stringify(sigData || []));
       localStorage.setItem('pulse_webinars', JSON.stringify(webData || []));
       localStorage.setItem('pulse_market', JSON.stringify(markData || []));
+
     } catch (err) {
       console.error("[DataPulse] Institutional Recovery Crash:", err);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [signals.length, webinars.length, marketData.length]);
 
   useEffect(() => {
     fetchData();
-
-    // 🚀 [ELITE POD] REALTIME ENGAGEMENT
-    // We are subscribing to the core asset tables to ensure zero-lag updates.
-    const signalChannel = supabase
-      .channel('schema-db-changes')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'signals' },
-        () => {
-          console.log("⚡ [REALTIME] SIGNALS UPDATE DETECTED");
-          fetchData();
-        }
-      )
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'market_data' },
-        () => {
-          console.log("⚡ [REALTIME] MARKET DATA UPDATE DETECTED");
-          fetchData();
-        }
-      )
-      .subscribe();
+    
+    // Subscribe to changes if needed
+    const signalSub = signalService.subscribe(() => fetchData());
+    const webinarSub = webinarService.subscribe(() => fetchData());
 
     return () => {
-      supabase.removeChannel(signalChannel);
+      signalSub.unsubscribe();
+      webinarSub.unsubscribe();
     };
   }, [fetchData]);
 
-  const contextValue = useMemo(() => ({
-    signals,
-    webinars,
-    marketData,
-    performanceStats,
-    loading,
-    refresh: fetchData
-  }), [signals, webinars, marketData, performanceStats, loading, fetchData]);
-
   return (
-    <DataPulseContext.Provider value={contextValue}>
+    <DataPulseContext.Provider value={{
+      signals,
+      webinars,
+      marketData,
+      performanceStats,
+      loading,
+      refresh: fetchData
+    }}>
       {children}
     </DataPulseContext.Provider>
   );
 };
 
 export const useDataPulse = () => {
-  const ctx = useContext(DataPulseContext);
-  if (!ctx) throw new Error("useDataPulse must be used within DataPulseProvider");
-  return ctx;
+  const context = useContext(DataPulseContext);
+  if (context === undefined) {
+    throw new Error("useDataPulse must be used within a DataPulseProvider");
+  }
+  return context;
 };

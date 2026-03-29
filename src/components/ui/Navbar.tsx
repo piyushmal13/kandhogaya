@@ -20,7 +20,6 @@ import { BRANDING } from "../../constants/branding";
 import { useAuth } from "../../contexts/AuthContext";
 import { cn } from "../../utils/cn";
 import { ResizedImage } from "./ResizedImage";
-import { InstagramIcon, LinkedinIcon } from "./Icons";
 
 export const Navbar = () => {
   const { user, userProfile, logout } = useAuth();
@@ -82,41 +81,25 @@ export const Navbar = () => {
 
             <div className="h-6 w-px bg-white/5" />
 
-            <div className="flex items-center gap-4">
-              <Link
-                to="/webinars"
-                className="group inline-flex items-center gap-2 rounded-full border border-white/5 bg-white/[0.02] px-3 py-1.5 text-[10px] font-sans font-medium text-gray-400 tracking-[0.2em] uppercase hover:border-[var(--brand)]/20 hover:text-white transition-all duration-700"
-              >
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500/50 group-hover:bg-[var(--brand)] transition-colors" />
-                Live Broadcasts
-              </Link>
-              <div className="flex items-center gap-3 border-r border-white/5 pr-4 mr-2">
-                 <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
-                    <InstagramIcon className="w-3.5 h-3.5" />
-                 </a>
-                 <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white border-white/5 transition-colors">
-                    <LinkedinIcon className="w-3.5 h-3.5" />
-                 </a>
-              </div>
-
+            <div className="flex items-center gap-5">
               {user ? (
                 <div className="flex items-center gap-5">
-                  <Link to="/dashboard" className="text-gray-400 hover:text-white transition-all duration-500 hover:scale-110">
+                  <Link to="/dashboard" className="text-gray-400 hover:text-white transition-all duration-500 hover:scale-110 p-2">
                     <LayoutDashboard className="h-5 w-5" />
                   </Link>
                   {isAdmin ? (
-                    <Link to="/admin" className="text-gray-400 hover:text-white transition-all duration-500 hover:scale-110">
+                    <Link to="/admin" className="text-[var(--brand)] hover:scale-110 transition-all p-2 bg-[var(--brand)]/10 border border-[var(--brand)]/20 rounded-xl">
                       <Settings className="h-5 w-5" />
                     </Link>
                   ) : null}
-                  <button type="button" onClick={logout} className="text-gray-400 hover:text-red-400 transition-all duration-500 hover:scale-110">
+                  <button type="button" onClick={logout} className="text-gray-400 hover:text-red-400 transition-all duration-500 hover:scale-110 p-2">
                     <LogOut className="h-5 w-5" />
                   </button>
                 </div>
               ) : (
                 <Link
                   to="/login"
-                  className="group relative inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-[10px] font-bold text-black uppercase tracking-[0.2em] shadow-[0_12px_40px_rgba(255,255,255,0.1)] hover:shadow-[0_12px_40px_rgba(131,255,200,0.2)] transition-all duration-700 overflow-hidden"
+                  className="group relative inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-[10px] font-bold text-black uppercase tracking-[0.2em] shadow-[0_12px_40px_rgba(255,255,255,0.1)] hover:shadow-[0_12px_40px_rgba(131,255,200,0.2)] transition-all duration-700 overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-[var(--brand)] translate-y-full group-hover:translate-y-0 transition-transform duration-700 ease-[0.16,1,0.2,1]" />
                   <span className="relative z-10 flex items-center gap-2">
@@ -128,11 +111,23 @@ export const Navbar = () => {
             </div>
           </div>
 
+          {/* Mobile Logic - Optimized Density */}
           <div className="md:hidden flex items-center gap-3">
-            {user ? null : (
+            {user ? (
+              <div className="flex items-center gap-2">
+                 {isAdmin && (
+                    <Link to="/admin" className="p-2.5 bg-[var(--brand)]/10 border border-[var(--brand)]/20 rounded-xl text-[var(--brand)]">
+                       <Settings className="h-4 w-4" />
+                    </Link>
+                 )}
+                 <Link to="/dashboard" className="p-2.5 bg-white/5 border border-white/10 rounded-xl text-white">
+                    <LayoutDashboard className="h-4 w-4" />
+                 </Link>
+              </div>
+            ) : (
               <Link
                 to="/login"
-                className="rounded-full border border-white/10 bg-white/5 px-6 py-2.5 text-[10px] font-black text-white uppercase tracking-[0.2em] bg-[var(--brand)]/10 border-[var(--brand)]/30 rounded-full hover:bg-[var(--brand)]/20 transition-all duration-500"
+                className="rounded-full bg-[var(--brand)]/10 border border-[var(--brand)]/30 px-5 py-2.5 text-[10px] font-black text-white uppercase tracking-[0.2em] hover:bg-[var(--brand)]/20 transition-all duration-500"
               >
                 Sign In
               </Link>
@@ -140,7 +135,7 @@ export const Navbar = () => {
             <button
               type="button"
               onClick={() => setIsOpen((open) => !open)}
-              className="rounded-full border border-white/10 bg-white/5 p-1.5 text-slate-300 transition-colors hover:text-white"
+              className="rounded-xl border border-white/10 bg-white/5 p-2.5 text-slate-300 transition-colors hover:text-white"
               aria-label="Toggle menu"
             >
               {isOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
@@ -185,7 +180,7 @@ export const Navbar = () => {
 
                 <div className="space-y-6">
                   <div>
-                    <div className="px-2 mb-4 text-[10px] font-bold uppercase tracking-[0.3em] text-emerald-500/60">Core Access</div>
+                    <div className="px-2 mb-4 text-[10px] font-bold uppercase tracking-[0.3em] text-emerald-500/60 font-mono italic">Core Discovery</div>
                     <div className="grid grid-cols-1 gap-2">
                       {navLinks.map((link) => (
                         <Link
@@ -193,49 +188,40 @@ export const Navbar = () => {
                           to={link.path}
                           onClick={() => setIsOpen(false)}
                           className={cn(
-                            "flex items-center gap-4 rounded-xl border px-4 py-3.5 transition-all duration-300",
+                            "flex items-center gap-4 rounded-xl border px-4 py-4 transition-all duration-300",
                             location.pathname === link.path
-                              ? "border-[var(--brand)]/20 bg-[var(--brand)]/10 text-[var(--brand)]"
+                              ? "border-[var(--brand)]/20 bg-[var(--brand)]/10 text-[var(--brand)] shadow-[0_0_20px_rgba(16,185,129,0.05)]"
                               : "border-white/[0.03] bg-white/[0.02] text-slate-400 hover:border-white/[0.1] hover:bg-white/[0.05]",
                           )}
                         >
                           <link.icon className="h-4 w-4" />
-                          <span className="text-sm font-bold tracking-tight">{link.name}</span>
+                          <span className="text-sm font-black uppercase tracking-widest">{link.name}</span>
                         </Link>
                       ))}
                     </div>
                   </div>
 
                   <div>
-                    <div className="px-2 mb-4 text-[10px] font-bold uppercase tracking-[0.3em] text-slate-600">Account Control</div>
+                    <div className="px-2 mb-4 text-[10px] font-bold uppercase tracking-[0.3em] text-slate-600 font-mono italic">Client Control</div>
                     <div className="grid grid-cols-1 gap-2">
-                      <Link
-                        to="/webinars"
-                        onClick={() => setIsOpen(false)}
-                        className="flex items-center gap-4 rounded-xl border border-white/[0.03] bg-white/[0.02] px-4 py-3.5 text-slate-400 hover:border-white/[0.1] hover:bg-white/[0.05]"
-                      >
-                        <Video className="h-4 w-4" />
-                        <span className="text-sm font-bold tracking-tight">Institutional Webinars</span>
-                      </Link>
-
                       {user ? (
                         <>
                           <Link
                             to="/dashboard"
                             onClick={() => setIsOpen(false)}
-                            className="flex items-center gap-4 rounded-xl border border-white/[0.03] bg-white/[0.02] px-4 py-3.5 text-slate-400 hover:border-white/[0.1] hover:bg-white/[0.05]"
+                            className="flex items-center gap-4 rounded-xl border border-white/[0.03] bg-white/[0.02] px-4 py-4 text-slate-400 hover:border-white/[0.1] hover:bg-white/[0.05]"
                           >
                             <LayoutDashboard className="h-4 w-4" />
-                            <span className="text-sm font-bold tracking-tight">Dashboard</span>
+                            <span className="text-sm font-black uppercase tracking-widest">Master Console</span>
                           </Link>
                           {isAdmin ? (
                             <Link
                               to="/admin"
                               onClick={() => setIsOpen(false)}
-                              className="flex items-center gap-4 rounded-xl border border-white/[0.03] bg-white/[0.02] px-4 py-3.5 text-slate-400 hover:border-white/[0.1] hover:bg-white/[0.05]"
+                              className="flex items-center gap-4 rounded-xl border border-[var(--brand)]/20 bg-[var(--brand)]/10 px-4 py-4 text-[var(--brand)] hover:bg-[var(--brand)]/20"
                             >
                               <Settings className="h-4 w-4" />
-                              <span className="text-sm font-bold tracking-tight">Admin Master</span>
+                              <span className="text-sm font-black uppercase tracking-widest">Admin Terminal</span>
                             </Link>
                           ) : null}
                         </>
@@ -243,17 +229,17 @@ export const Navbar = () => {
                         <Link
                           to="/login"
                           onClick={() => setIsOpen(false)}
-                          className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--brand)] px-5 py-3 text-sm font-bold text-slate-950 shadow-[0_10px_30px_rgba(16,185,129,0.2)] hover:bg-[var(--brand)]/80 transition-all"
+                          className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--brand)] px-5 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-950 shadow-[0_10px_30px_rgba(16,185,129,0.2)] hover:bg-white transition-all"
                         >
-                          Access Platform
-                          <ArrowRight className="h-4 w-4" />
+                          Access Portal
+                          <ArrowRight className="h-3 w-3" />
                         </Link>
                       )}
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-auto pt-8">
+                <div className="mt-auto pt-10">
                   {user ? (
                     <button
                       type="button"
@@ -261,26 +247,17 @@ export const Navbar = () => {
                         logout();
                         setIsOpen(false);
                       }}
-                      className="flex w-full items-center justify-center gap-3 rounded-xl border border-red-500/10 bg-red-500/5 px-5 py-4 text-sm font-bold text-red-400 transition-colors hover:bg-red-500/10"
+                      className="flex w-full items-center justify-center gap-3 rounded-xl border border-red-500/10 bg-red-500/5 px-5 py-4 text-[10px] font-black text-red-400 uppercase tracking-widest transition-colors hover:bg-red-500/10"
                     >
                       <LogOut className="h-4 w-4" />
                       <span>Terminate Session</span>
                     </button>
                   ) : null}
 
-                  <div className="mt-8 flex items-center justify-center gap-6">
-                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 border border-white/10 rounded-full text-slate-400 hover:text-white transition-colors">
-                       <InstagramIcon className="w-4 h-4" />
-                    </a>
-                    <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 border border-white/10 rounded-full text-slate-400 hover:text-white transition-colors">
-                       <LinkedinIcon className="w-4 h-4" />
-                    </a>
-                  </div>
-
-                  <div className="mt-6 p-4 rounded-xl bg-[var(--brand)]/5 border border-[var(--brand)]/10">
-                    <div className="text-[9px] font-bold text-[var(--brand)] uppercase tracking-[0.2em] mb-1">Status: Operational</div>
-                    <div className="text-[10px] text-slate-500 leading-relaxed font-medium">
-                      Market protocols and institutional access layers are currently online for your region.
+                  <div className="mt-8 p-6 rounded-2xl bg-[var(--brand)]/5 border border-[var(--brand)]/10 text-center">
+                    <div className="text-[9px] font-black text-[var(--brand)] uppercase tracking-[0.3em] mb-2">Operational Integrity</div>
+                    <div className="text-[10px] text-slate-500 leading-relaxed font-bold uppercase tracking-widest">
+                      Session secured via <br/> IFX Protocol v2.4
                     </div>
                   </div>
                 </div>
