@@ -4,11 +4,10 @@ import {
   ArrowUpRight,
   ShieldCheck,
   Star,
-  Instagram,
-  Linkedin
 } from "lucide-react";
 
 import { BRANDING } from "../../constants/branding";
+import { InstagramIcon, LinkedinIcon } from "./Icons";
 
 export const Footer = () => (
   <footer className="relative overflow-hidden border-t border-white/5 pt-32 bg-[#020202]">
@@ -21,7 +20,7 @@ export const Footer = () => (
         {/* --- Column 1: Brand & Identity --- */}
         <div>
           <Link to="/" className="flex items-center gap-6 group mb-10">
-            <div className="flex items-center justify-center transition-all duration-700 h-10 w-10 sm:h-14 sm:w-14 rounded-xl overflow-hidden group-hover:scale-105">
+            <div className="flex items-center justify-center transition-all duration-700 h-10 w-10 sm:h-14 sm:w-14 rounded-xl overflow-hidden group-hover:scale-110">
               <img
                 src={BRANDING.logoUrl}
                 alt={BRANDING.name}
@@ -55,10 +54,10 @@ export const Footer = () => (
           
           <div className="flex items-center gap-4 mt-8">
             <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="p-2 border border-white/5 rounded-full bg-white/5 text-gray-400 hover:text-white hover:bg-[var(--brand)]/10 transition-colors">
-              <Instagram className="w-4 h-4" />
+              <InstagramIcon className="w-4 h-4" />
             </a>
             <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="p-2 border border-white/5 rounded-full bg-white/5 text-gray-400 hover:text-white hover:bg-[var(--brand)]/10 transition-colors">
-              <Linkedin className="w-4 h-4" />
+              <LinkedinIcon className="w-4 h-4" />
             </a>
           </div>
         </div>
@@ -89,10 +88,10 @@ export const Footer = () => (
         <div>
           <h4 className="mb-8 text-[10px] font-bold uppercase tracking-[0.4em] text-white/40">Services</h4>
           <ul className="space-y-4 text-[11px] text-gray-400 font-sans font-bold uppercase tracking-[0.2em]">
-            <li><Link to="/about" className="hover:text-[var(--brand)] transition-colors">Our Mission</Link></li>
+            <li><Link to="/about" className="hover:text-[var(--brand)] transition-colors">Global Headquarters</Link></li>
             <li><Link to="/contact" className="hover:text-[var(--brand)] transition-colors">Compliance Desk</Link></li>
-            <li><Link to="/hiring" className="hover:text-[var(--brand)] transition-colors">Careers</Link></li>
-            <li><Link to="/contact" className="hover:text-[var(--brand)] transition-colors">Global Support</Link></li>
+            <li><Link to="/webinars" className="hover:text-[var(--brand)] transition-colors">Institutional Webinars</Link></li>
+            <li><Link to="/hiring" className="hover:text-[var(--brand)] transition-colors">Executive Careers</Link></li>
           </ul>
         </div>
       </div>
@@ -110,12 +109,6 @@ export const Footer = () => (
            <Link to="/cookies" className="hover:text-white transition-colors">Cookies</Link>
         </div>
       </div>
-    </div>
-    
-    {/* Phase 2: Natively embedded red compliance banner */}
-    <div className="w-full bg-[#991b1b] text-white text-center p-3 text-sm font-medium">
-      <strong>CRITICAL NOTICE:</strong> IFX Trades is education & research only. We license algos, deliver courses, signals & macro analysis.
-      <strong> We are NOT a broker</strong> – no deposits, no client funds. Trading involves risk.
     </div>
   </footer>
 );

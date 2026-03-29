@@ -5,16 +5,12 @@ import {
   BarChart3,
   BookOpen,
   Home,
-  Instagram,
   LayoutDashboard,
-  Linkedin,
   LogOut,
   Menu,
   MessageSquare,
-  Phone,
   Settings,
-  Target,
-  Users,
+  Video,
   X,
   Zap,
 } from "lucide-react";
@@ -24,6 +20,7 @@ import { BRANDING } from "../../constants/branding";
 import { useAuth } from "../../contexts/AuthContext";
 import { cn } from "../../utils/cn";
 import { ResizedImage } from "./ResizedImage";
+import { InstagramIcon, LinkedinIcon } from "./Icons";
 
 export const Navbar = () => {
   const { user, userProfile, logout } = useAuth();
@@ -44,13 +41,11 @@ export const Navbar = () => {
 
   const navLinks = [
     { name: "Home", path: "/", icon: Home },
-    { name: "About", path: "/about", icon: Target },
     { name: "Courses", path: "/academy", icon: BookOpen },
     { name: "Algos", path: "/marketplace", icon: BarChart3 },
     { name: "Signals", path: "/signals", icon: Zap },
+    { name: "Webinars", path: "/webinars", icon: Video },
     { name: "Blog", path: "/blog", icon: MessageSquare },
-    { name: "Community", path: "/community", icon: Users },
-    { name: "Contact", path: "/contact", icon: Phone },
   ];
 
   const isAdmin = userProfile?.role === "admin";
@@ -89,18 +84,18 @@ export const Navbar = () => {
 
             <div className="flex items-center gap-4">
               <Link
-                to="/contact"
+                to="/webinars"
                 className="group inline-flex items-center gap-2 rounded-full border border-white/5 bg-white/[0.02] px-3 py-1.5 text-[10px] font-sans font-medium text-gray-400 tracking-[0.2em] uppercase hover:border-[var(--brand)]/20 hover:text-white transition-all duration-700"
               >
                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500/50 group-hover:bg-[var(--brand)] transition-colors" />
-                Support
+                Live Broadcasts
               </Link>
               <div className="flex items-center gap-3 border-r border-white/5 pr-4 mr-2">
                  <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
-                    <Instagram className="w-3.5 h-3.5" />
+                    <InstagramIcon className="w-3.5 h-3.5" />
                  </a>
                  <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white border-white/5 transition-colors">
-                    <Linkedin className="w-3.5 h-3.5" />
+                    <LinkedinIcon className="w-3.5 h-3.5" />
                  </a>
               </div>
 
@@ -215,12 +210,12 @@ export const Navbar = () => {
                     <div className="px-2 mb-4 text-[10px] font-bold uppercase tracking-[0.3em] text-slate-600">Account Control</div>
                     <div className="grid grid-cols-1 gap-2">
                       <Link
-                        to="/contact"
+                        to="/webinars"
                         onClick={() => setIsOpen(false)}
                         className="flex items-center gap-4 rounded-xl border border-white/[0.03] bg-white/[0.02] px-4 py-3.5 text-slate-400 hover:border-white/[0.1] hover:bg-white/[0.05]"
                       >
-                        <Phone className="h-4 w-4" />
-                        <span className="text-sm font-bold tracking-tight">Contact Desk</span>
+                        <Video className="h-4 w-4" />
+                        <span className="text-sm font-bold tracking-tight">Institutional Webinars</span>
                       </Link>
 
                       {user ? (
@@ -275,10 +270,10 @@ export const Navbar = () => {
 
                   <div className="mt-8 flex items-center justify-center gap-6">
                     <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 border border-white/10 rounded-full text-slate-400 hover:text-white transition-colors">
-                       <Instagram className="w-4 h-4" />
+                       <InstagramIcon className="w-4 h-4" />
                     </a>
                     <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 border border-white/10 rounded-full text-slate-400 hover:text-white transition-colors">
-                       <Linkedin className="w-4 h-4" />
+                       <LinkedinIcon className="w-4 h-4" />
                     </a>
                   </div>
 

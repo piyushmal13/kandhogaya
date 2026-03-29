@@ -283,13 +283,14 @@ export interface Lead {
   id: string;
   name: string;
   email: string;
-  status: 'cold' | 'warm' | 'hot' | 'active' | 'churned';
+  status: 'cold' | 'warm' | 'hot' | 'active' | 'churned' | 'converted' | 'interested' | 'HIGH_INTENT';
   source?: string;
   created_at: string;
   revenue_mtd: number;
   ltv_projected: number;
   last_active_symbol?: string;
   engagement_score?: number;
+  referred_by_code?: string;
   metadata?: Record<string, any>;
 }
 

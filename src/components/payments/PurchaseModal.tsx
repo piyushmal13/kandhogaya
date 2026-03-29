@@ -13,6 +13,7 @@ import {
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
 import { tracker } from "@/core/tracker";
+import { ReviewPromptModal } from "../ui/ReviewPromptModal";
 
 interface PurchaseModalProps {
   plan: string;
@@ -31,6 +32,7 @@ export const PurchaseModal = ({ plan, amount, productId, onClose }: PurchaseModa
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showReviewPrompt, setShowReviewPrompt] = useState(false);
 
   const upiId = "piyushmal13@okaxis"; 
 
@@ -121,6 +123,7 @@ export const PurchaseModal = ({ plan, amount, productId, onClose }: PurchaseModa
       window.open(whatsappUrl, '_blank');
       
       setStep("success");
+      setTimeout(() => setShowReviewPrompt(true), 2000);
     } catch (err: any) {
       console.error("Institutional Failsafe: Purchase Fulfillment Signal Failed.", err);
       setError(err.message || "Institutional connectivity error. Fulfillment discovery halted.");
@@ -283,6 +286,7 @@ export const PurchaseModal = ({ plan, amount, productId, onClose }: PurchaseModa
                 <CheckCircle2 className="w-12 h-12" />
               </div>
               <div className="space-y-4">
+                <ReviewPromptModal isOpen={showReviewPrompt} onClose={() => setShowReviewPrompt(false)} />
                 <h2 className="text-3xl font-black text-white uppercase tracking-tighter italic">Signal Acknowledged</h2>
                 <p className="text-gray-500 text-[11px] font-bold uppercase tracking-widest max-w-xs mx-auto leading-relaxed">Your artifact has been uploaded. An institutional auditor will verify and fulfill your subscription shortly.</p>
               </div>

@@ -45,11 +45,7 @@ export const Home = () => {
   const [showReviewModal, setShowReviewModal] = useState(false);
 
   useEffect(() => {
-    // Simulator trigger: review prompt simulates a user finishing a preview
-    const timer = setTimeout(() => {
-      setShowReviewModal(true);
-    }, 15000);
-    return () => clearTimeout(timer);
+    // Audit: Removed simulator trigger. Reviews now trigger on purchase fulfillment.
   }, []);
 
   return (
