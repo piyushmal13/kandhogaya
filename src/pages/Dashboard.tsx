@@ -20,7 +20,7 @@ import { UrgencyBanner } from "@/components/ui/UrgencyBanner";
 export const Dashboard = () => {
   const { user, userProfile, access } = useAuth();
   const navigate = useNavigate();
-  const { signals, webinars } = useDataPulse();
+  const { signals, webinars, performanceStats, marketData } = useDataPulse();
 
   const [licenses, setLicenses] = useState<BotLicense[]>([]);
   const [loading, setLoading] = useState(true);
@@ -74,9 +74,9 @@ export const Dashboard = () => {
   const renderStats = () => {
     const statsConfig = [
       { label: "Active Algos", value: licenses.filter(l => l.is_active).length, icon: Activity, color: "text-emerald-500" },
-      { label: "Win Rate", value: "82.4%", icon: Target, color: "text-cyan-500" },
+      { label: "Win Rate", value: performanceStats.winRate, icon: Target, color: "text-cyan-500" },
       { label: "Signals Today", value: signals.length, icon: Zap, color: "text-yellow-500" },
-      { label: "Uptime", value: "99.99%", icon: Clock, color: "text-emerald-500" }
+      { label: "Total Pips", value: performanceStats.totalPips.toLocaleString(), icon: Clock, color: "text-emerald-500" }
     ];
 
     return (
@@ -94,6 +94,28 @@ export const Dashboard = () => {
             <div className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500">{stat.label}</div>
           </motion.div>
         ))}
+      </div>
+    );
+  };
+  const renderMarketPulse = () => {
+    if (marketData.length === 0) return null;
+
+    return (
+      <div className="mb-12 overflow-hidden py-4 -mx-4 px-4 bg-white/5 border-y border-white/10 backdrop-blur-md">
+        <div className="flex items-center gap-12 whitespace-nowrap animate-ticker">
+          {[...marketData, ...marketData].map((item, i) => (
+            <div key={`${item.symbol}-${i}`} className="flex items-center gap-3">
+              <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">{item.symbol}</span>
+              <span className="text-sm font-bold text-white tabular-nums">${item.price}</span>
+              <span className={cn(
+                "text-[10px] font-bold px-2 py-0.5 rounded",
+                item.up ? "bg-emerald-500/10 text-emerald-500" : "bg-red-500/10 text-red-500"
+              )}>
+                {item.change}
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
     );
   };
@@ -226,6 +248,7 @@ export const Dashboard = () => {
     <div className="relative min-h-screen bg-black pt-28 pb-32 px-4 selection:bg-emerald-500/30">
       <UrgencyBanner />
       <div className="max-w-7xl mx-auto relative z-10">
+        {renderMarketPulse()}
         {!isElite && (
           <motion.div 
             initial={{ opacity: 0, y: -20 }}

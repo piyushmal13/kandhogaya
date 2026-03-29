@@ -339,8 +339,23 @@
   }
 
   @keyframes skeleton-shimmer {
-    0% { background-position: 200% 0; }
     100% { background-position: -200% 0; }
+  }
+
+  /* ── Market Ticker Engine ── */
+  @keyframes ticker-scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .animate-ticker {
+    display: flex;
+    width: fit-content;
+    animation: ticker-scroll 30s linear infinite;
+  }
+
+  .animate-ticker:hover {
+    animation-play-state: paused;
   }
 }
 
