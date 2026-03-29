@@ -1,5 +1,5 @@
 import React, { useState, useEffect, SyntheticEvent } from "react";
-import { Zap, Video, Download, Image as ImageIcon, FileText, Plus, Search, Trash2, Edit2, Globe } from "lucide-react";
+import { Zap, FileText, Plus, Search, Trash2, Edit2, Globe } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../contexts/AuthContext";
 import { Dialog } from "../../components/ui/Dialog";
@@ -18,7 +18,6 @@ export const ContentManager = () => {
   const [coverImage, setCoverImage] = useState("");
   const [takeaways, setTakeaways] = useState("");
   const [loading, setLoading] = useState(false);
-  const [deleteLoading, setDeleteLoading] = useState(false);
   const [recentContent, setRecentContent] = useState<any[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
 
@@ -26,7 +25,7 @@ export const ContentManager = () => {
   const [contentToDelete, setContentToDelete] = useState<string | null>(null);
 
   const fetchRecentContent = async () => {
-    const { data, error } = await supabase
+    const { data } = await supabase
       .from('content_posts')
       .select('*, author:users(full_name)')
       .order('created_at', { ascending: false })
@@ -76,7 +75,7 @@ export const ContentManager = () => {
     setLoading(true);
 
     try {
-      const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      const slug = title.toLowerCase().replaceAll(/[^a-z0-9]+/g, '-').replaceAll(/(^-|-$)/g, '');
       const payload = { 
         title, 
         slug,
@@ -110,7 +109,7 @@ export const ContentManager = () => {
 
   const handleDelete = async () => {
     if (!contentToDelete) return;
-    setDeleteLoading(true);
+    setLoading(true);
     try {
       const { error } = await supabase.from('content_posts').delete().eq('id', contentToDelete);
       if (error) throw error;
@@ -120,7 +119,7 @@ export const ContentManager = () => {
     } catch (err) {
       console.error("Institutional Erasure Error:", err);
     } finally {
-      setDeleteLoading(false);
+      setLoading(false);
     }
   };
 
@@ -148,16 +147,18 @@ export const ContentManager = () => {
             <form onSubmit={handleSubmit} className="space-y-8 relative z-10">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-2">
-                  <label className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1 italic">Intelligence Title</label>
+                  <label htmlFor="intel-title" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1 italic">Intelligence Title</label>
                   <input 
+                    id="intel-title"
                     value={title} onChange={e => setTitle(e.target.value)} required
                     placeholder="e.g. Gold Macro Structure"
                     className="w-full bg-black border border-white/5 rounded-2xl p-4 text-white text-sm outline-none focus:border-emerald-500/50 transition-all italic" 
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1 italic">Content Category</label>
+                  <label htmlFor="intel-category" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1 italic">Content Category</label>
                   <select 
+                    id="intel-category"
                     value={type} onChange={e => setType(e.target.value)} 
                     className="w-full bg-black border border-white/5 rounded-2xl p-4 text-white text-sm outline-none focus:border-emerald-500/50 transition-all uppercase font-black"
                   >
@@ -169,8 +170,9 @@ export const ContentManager = () => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1 italic">Analysis Matrix (Markdown)</label>
+                <label htmlFor="intel-matrix" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1 italic">Analysis Matrix (Markdown)</label>
                 <textarea 
+                  id="intel-matrix"
                   rows={8} value={body} onChange={e => setBody(e.target.value)} required
                   placeholder="Deploy institutional data here..."
                   className="w-full bg-black border border-white/5 rounded-3xl p-6 text-white text-sm outline-none focus:border-emerald-500/50 transition-all font-mono resize-none" 
@@ -181,12 +183,12 @@ export const ContentManager = () => {
                 <div className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.3em] italic">Media Integration Layer</div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-2">
-                    <label className="text-[9px] font-black text-gray-600 uppercase tracking-widest px-1">Cover Image Source</label>
-                    <input value={coverImage} onChange={e => setCoverImage(e.target.value)} className="w-full bg-black/40 border border-white/5 rounded-xl p-3 text-xs text-white outline-none focus:border-cyan-500/50" placeholder="https://..." />
+                    <label htmlFor="intel-cover" className="text-[9px] font-black text-gray-600 uppercase tracking-widest px-1">Cover Image Source</label>
+                    <input id="intel-cover" value={coverImage} onChange={e => setCoverImage(e.target.value)} className="w-full bg-black/40 border border-white/5 rounded-xl p-3 text-xs text-white outline-none focus:border-cyan-500/50" placeholder="https://..." />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[9px] font-black text-gray-600 uppercase tracking-widest px-1">Webinar/Video Probe</label>
-                    <input value={videoUrl} onChange={e => setVideoUrl(e.target.value)} className="w-full bg-black/40 border border-white/5 rounded-xl p-3 text-xs text-white outline-none focus:border-cyan-500/50" placeholder="Stream URL" />
+                    <label htmlFor="intel-video" className="text-[9px] font-black text-gray-600 uppercase tracking-widest px-1">Webinar/Video Probe</label>
+                    <input id="intel-video" value={videoUrl} onChange={e => setVideoUrl(e.target.value)} className="w-full bg-black/40 border border-white/5 rounded-xl p-3 text-xs text-white outline-none focus:border-cyan-500/50" placeholder="Stream URL" />
                   </div>
                 </div>
               </div>
@@ -255,6 +257,7 @@ export const ContentManager = () => {
         isOpen={isDeleteDialogOpen}
         onClose={() => setIsDeleteDialogOpen(false)}
         onConfirm={handleDelete}
+        isLoading={loading}
         title="Destroy Intelligence?"
         variant="danger"
         confirmText="Execute Destruction"
