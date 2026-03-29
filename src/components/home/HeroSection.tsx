@@ -91,14 +91,13 @@ export const HeroSection = () => {
   };
 
   return (
-    <div ref={containerRef} className="relative min-h-screen pt-32 pb-20 flex flex-col items-center justify-center overflow-hidden bg-black selection:bg-[var(--brand)]/30">
+    <div ref={containerRef} className="relative min-h-screen pt-32 pb-20 flex flex-col items-center justify-center overflow-hidden bg-black bg-[url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=2560&auto=format&fit=crop')] bg-cover bg-center bg-no-repeat selection:bg-[var(--brand)]/30">
       
       {/* --- Ambient Background --- */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 bg-black/60"> {/* Added overlay for readablility */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-[var(--brand)]/10 blur-[120px] rounded-full opacity-40 animate-pulse" />
         <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/5 to-transparent" />
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_80%)]" />
-
+        
         {particles.map(p => (
            <motion.div
              key={p.id}
@@ -114,11 +113,7 @@ export const HeroSection = () => {
         <div className="mb-12 inline-flex items-center gap-3 px-6 py-2.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full animate-in fade-in slide-in-from-top-4 duration-1000 mx-auto">
            <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
            <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest italic">
-             {(() => {
-               const hourSeed = Math.floor(Date.now() / (1000 * 60 * 60));
-               const persistentCount = (hourSeed % 15) + 20; // Deterministic count based on current hour: 20-35 range
-               return persistentCount;
-             })()} Traders Joined In Last Hour
+             Pure Education & Licensing
            </span>
         </div>
         <motion.h1 
@@ -127,17 +122,18 @@ export const HeroSection = () => {
           transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
           className="font-black text-white mb-6 leading-[1.05] tracking-tight"
         >
-          <span className="text-[2.2rem] sm:text-7xl block opacity-90">Institutional Edge</span>
-          <span className="text-[2.8rem] sm:text-8xl text-blue-400 italic font-serif block mt-1 tracking-[-0.03em]">Retail Accessibility<span className="text-[var(--brand)] not-italic font-black text-5xl sm:text-9xl">.</span></span>
+          <span className="text-[2.2rem] sm:text-6xl block opacity-90">IFX Trades</span>
+          <span className="text-[1.8rem] sm:text-5xl text-blue-400 italic font-serif block mt-2 tracking-[-0.03em]">Asia’s #1 Institutional Forex Intelligence Platform</span>
         </motion.h1>
         
         <motion.p 
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="text-[11px] sm:text-lg text-gray-400/60 tracking-[0.4em] uppercase mb-14 px-4 max-w-4xl mx-auto leading-relaxed font-bold"
+          className="text-[11px] sm:text-lg text-gray-400/90 tracking-[0.2em] uppercase mb-14 px-4 max-w-4xl mx-auto leading-relaxed font-bold"
         >
-          Democratizing proprietary execution protocols <br className="hidden sm:block" /> for the elite retail trader.
+          Dubai HQ | Greater Noida Roots | 10k+ Traders Trained<br className="hidden sm:block" />
+          <span className='text-amber-400 font-bold'>Not a Broker – Pure Education & Licensing</span>
         </motion.p>
 
         <motion.div 
@@ -169,7 +165,7 @@ export const HeroSection = () => {
               type="submit"
               className="px-8 py-5 sm:py-4 bg-white text-black font-black rounded-xl sm:rounded-[24px] overflow-hidden transition-all duration-500 hover:bg-[var(--brand)] hover:scale-[1.02] active:scale-95 text-[11px] sm:text-xs uppercase tracking-widest flex items-center justify-center gap-3 whitespace-nowrap shadow-xl"
             >
-              Access Terminal
+              Preview Gold Algo – Free Demo
               <ArrowRight className="w-4 h-4" />
             </button>
           </form>
@@ -178,15 +174,15 @@ export const HeroSection = () => {
             <div className="flex items-center gap-2">
               <Shield className="w-4 h-4 text-[var(--brand)]" />
               <div className="flex flex-col text-left">
-                <span className="text-[9px] font-bold text-white tracking-[0.1em] leading-none uppercase">SSL SECURE</span>
-                <span className="text-[7px] text-[var(--brand)]/60 font-medium">BANK-GRADE</span>
+                <span className="text-[9px] font-bold text-white tracking-[0.1em] leading-none uppercase">CERTIFIED</span>
+                <span className="text-[7px] text-[var(--brand)]/60 font-medium">EDUCATION</span>
               </div>
             </div>
             <div className="flex items-center gap-2">
               <Database className="w-4 h-4 text-[var(--brand)]" />
               <div className="flex flex-col text-left">
-                <span className="text-[9px] font-bold text-white tracking-[0.1em] leading-none uppercase">HFT GRID</span>
-                <span className="text-[7px] text-[var(--brand)]/60 font-medium">PROPRIETARY</span>
+                <span className="text-[9px] font-bold text-white tracking-[0.1em] leading-none uppercase">INSTITUTIONAL</span>
+                <span className="text-[7px] text-[var(--brand)]/60 font-medium">ANALYSIS</span>
               </div>
             </div>
           </div>
@@ -199,9 +195,9 @@ export const HeroSection = () => {
           className="mt-16 md:mt-24 w-full grid grid-cols-3 gap-0 max-w-5xl mx-auto border-t border-white/5 pt-12 pb-12 sm:pb-0"
         >
           {[
-            { label: "Nodes", val: stats.traders, sub: "Live" },
-            { label: "Win Rate", val: stats.winRate, sub: "Audited" },
-            { label: "Latency", val: stats.latency, sub: "Pipeline" }
+            { label: "Students", val: stats.traders, sub: "Active" },
+            { label: "Modules", val: "12+", sub: "Certified" },
+            { label: "Live Sessions", val: "Weekly", sub: "Mentorship" }
           ].map((stat) => (
             <div key={stat.label} className="flex flex-col items-center group py-2">
               <span className="text-lg sm:text-6xl font-black text-white mb-2 tracking-tighter transition-colors duration-1000 group-hover:text-[var(--brand)]">

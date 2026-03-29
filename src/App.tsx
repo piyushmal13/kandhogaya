@@ -40,6 +40,7 @@ const PrivacyPolicy = lazy(() => import("./pages/legal/PrivacyPolicy").then(m =>
 const TermsOfService = lazy(() => import("./pages/legal/TermsOfService").then(m => ({ default: m.TermsOfService })));
 const RiskDisclosure = lazy(() => import("./pages/legal/RiskDisclosure").then(m => ({ default: m.RiskDisclosure })));
 const CookiePolicy = lazy(() => import("./pages/legal/CookiePolicy").then(m => ({ default: m.CookiePolicy })));
+const AffiliateHub = lazy(() => import("./pages/AffiliateHub").then(m => ({ default: m.AffiliateHub })));
 
 const PageLoader = () => (
   <div className="flex min-h-[60vh] items-center justify-center">
@@ -80,6 +81,7 @@ const AnimatedRoutes = () => {
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/admin" element={<ProtectedRoute adminOnly><Admin /></ProtectedRoute>} />
             <Route path="/agent" element={<ProtectedRoute><AgentDashboard /></ProtectedRoute>} />
+            <Route path="/affiliate" element={<ProtectedRoute><AffiliateHub /></ProtectedRoute>} />
             <Route path="/hiring" element={<Hiring />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
@@ -113,7 +115,7 @@ export default function App() {
             <a href="#main-content" className="skip-to-content">
               Skip to main content
             </a>
-            <div className="relative min-h-screen overflow-hidden font-sans">
+            <div className="relative min-h-screen overflow-hidden font-sans pb-[60px]">
               <div className="noise-overlay" />
               <SiteBackdrop />
               <Navbar />
@@ -121,6 +123,12 @@ export default function App() {
                 <AnimatedRoutes />
               </main>
               <Footer />
+              <div
+                className="fixed bottom-0 left-0 w-full bg-[#991b1b] text-white text-center p-3 text-sm font-medium z-[9999] shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]"
+              >
+                <strong>CRITICAL NOTICE:</strong> IFX Trades is strictly an education & research platform. We license algorithms, deliver courses, and provide macro analysis. 
+                <strong> WE ARE NOT A BROKER.</strong> We do not accept deposits, execute trades, or handle client funds. Trading involves significant risk.
+              </div>
               <WhatsAppButton />
             </div>
           </Router>

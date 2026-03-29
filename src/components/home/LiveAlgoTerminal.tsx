@@ -34,21 +34,15 @@ export const LiveAlgoTerminal = () => {
   const { signals, loading } = useDataPulse();
   const { isElite } = useAccess();
   const [showUpgrade, setShowUpgrade] = useState(false);
-  const [latency, setLatency] = useState(45);
   const [isScanning, setIsScanning] = useState(false);
 
   useEffect(() => {
-    const latInterval = setInterval(() => {
-      setLatency(30 + Math.floor(Math.random() * 30));
-    }, 3000);
-
     const scanInterval = setInterval(() => {
        setIsScanning(true);
        setTimeout(() => setIsScanning(false), 2000);
     }, 8000);
 
     return () => {
-      clearInterval(latInterval);
       clearInterval(scanInterval);
     };
   }, []);
@@ -81,8 +75,8 @@ export const LiveAlgoTerminal = () => {
                   <Shield className="w-6 h-6" />
                 </div>
                 <div>
-                  <div className="text-[10px] text-[#64748b] font-mono font-bold uppercase tracking-[0.3em]">Latency Cluster</div>
-                  <div className="text-white font-bold font-mono text-xl">{latency}ms <span className="text-[10px] text-emerald-400 ml-2 tracking-widest uppercase opacity-80 animate-pulse">Live</span></div>
+                  <div className="text-[10px] text-[#64748b] font-mono font-bold uppercase tracking-[0.3em]">Educational Demo</div>
+                  <div className="text-white font-bold font-mono text-xl">Market Insights <span className="text-[10px] text-emerald-400 ml-2 tracking-widest uppercase opacity-80 animate-pulse">Feed</span></div>
                 </div>
               </div>
             </div>
@@ -136,7 +130,7 @@ export const LiveAlgoTerminal = () => {
                     className="w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-black font-bold rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 shadow-[0_0_40px_rgba(16,185,129,0.2)]"
                    >
                      <Lock className="w-4 h-4" />
-                     <span>Unlock Terminal</span>
+                     <span>Unlock Educational Access</span>
                    </button>
                 </div>
               )}
@@ -166,7 +160,7 @@ export const LiveAlgoTerminal = () => {
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-12 gap-6">
               <h3 className="text-white font-bold text-3xl flex items-center gap-4 tracking-[-0.03em]">
                 <Activity className="w-8 h-8 text-emerald-400 border border-emerald-500/20 p-1.5 rounded-xl bg-emerald-500/5" />
-                Institutional Audit (36M)
+                Educational Audit (36M)
               </h3>
               <div className="flex gap-8 text-[10px] font-mono font-bold uppercase tracking-[0.3em]">
                 <div className="flex items-center gap-2 text-emerald-400">
@@ -231,7 +225,7 @@ export const LiveAlgoTerminal = () => {
         isOpen={showUpgrade} 
         onClose={() => setShowUpgrade(false)} 
         requiredPlan="elite"
-        title="Elite Terminal Locked"
+        title="Educational Access Locked"
         description="Exploiting proprietary institutional liquidity clusters requires Elite-tier execution credentials. Upgrade currently to unlock full systematic control."
       />
     </section>
