@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { 
   Star, Trash2, Globe, CheckCircle, XCircle, 
-  BarChart, ChevronLeft, ChevronRight, Activity,
-  ShieldOff, TrendingUp, TrendingDown, CheckSquare, AlertTriangle, Flag, Square
+  ChevronLeft, ChevronRight, Activity,
+  ShieldOff, TrendingUp, TrendingDown, CheckSquare, Flag, Square
 } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useReviews } from "../../hooks/useReviews";
@@ -166,30 +166,36 @@ export const ReviewManager = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
-              {loading ? (
-                <tr>
-                   <td colSpan={6} className="px-8 py-20 text-center">
-                      <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500"></div>
-                   </td>
-                </tr>
-              ) : reviews.length === 0 ? (
-                <tr>
-                   <td colSpan={6} className="px-8 py-20 text-center text-[10px] font-black text-gray-600 uppercase tracking-widest">
-                      Zero Sentiment Signals Discovered
-                   </td>
-                </tr>
-              ) : (
-                reviews.map((r) => (
+              {(() => {
+                if (loading) {
+                  return (
+                    <tr>
+                       <td colSpan={6} className="px-8 py-20 text-center">
+                          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500"></div>
+                       </td>
+                    </tr>
+                  );
+                }
+                if (reviews.length === 0) {
+                  return (
+                    <tr>
+                       <td colSpan={6} className="px-8 py-20 text-center text-[10px] font-black text-gray-600 uppercase tracking-widest">
+                          Zero Sentiment Signals Discovered
+                       </td>
+                    </tr>
+                  );
+                }
+                return reviews.map((r) => (
                   <tr key={r.id} className={cn("transition-colors group", r.flagged ? "bg-red-500/[0.03]" : "hover:bg-white/[0.02]")}>
                     <td className="px-8 py-6">
                       <button 
-                        onClick={() => toggleSelection(r.id!)}
+                        onClick={() => toggleSelection(r.id)}
                         className={cn(
                           "w-5 h-5 rounded border transition-all flex items-center justify-center",
-                          selectedIds.includes(r.id!) ? "bg-amber-500 border-amber-500 text-black shadow-lg shadow-amber-500/20" : "bg-white/5 border-white/10 hover:border-amber-500/50"
+                          selectedIds.includes(r.id) ? "bg-amber-500 border-amber-500 text-black shadow-lg shadow-amber-500/20" : "bg-white/5 border-white/10 hover:border-amber-500/50"
                         )}
                       >
-                        {selectedIds.includes(r.id!) && <CheckSquare className="w-3 h-3" />}
+                        {selectedIds.includes(r.id) && <CheckSquare className="w-3 h-3" />}
                       </button>
                     </td>
                     <td className="px-8 py-6">
@@ -197,7 +203,7 @@ export const ReviewManager = () => {
                          <div className="flex items-center gap-2">
                            <div className="flex gap-0.5">
                              {new Array(5).fill(0).map((_, i) => (
-                               <Star key={i} className={cn("w-2.5 h-2.5", i < (r.rating || 0) ? "text-amber-500 fill-amber-500" : "text-gray-800")} />
+                               <Star key={`${r.id}-star-${i}`} className={cn("w-2.5 h-2.5", i < (r.rating || 0) ? "text-amber-500 fill-amber-500" : "text-gray-800")} />
                              ))}
                            </div>
                            {r.flagged && (
@@ -239,20 +245,20 @@ export const ReviewManager = () => {
                       <div className="flex items-center justify-end gap-2">
                         {r.status === 'pending' && (
                           <button 
-                            onClick={() => handleApprove(r.id!)}
+                            onClick={() => handleApprove(r.id)}
                             className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-500 hover:bg-emerald-500 hover:text-black transition-all shadow-xl shadow-emerald-500/10"
                           >
                             <CheckCircle className="w-4.4 h-4.4" />
                           </button>
                         )}
                         <button 
-                          onClick={() => { setReviewToReject(r.id!); setIsRejectDialogOpen(true); }}
+                          onClick={() => { setReviewToReject(r.id); setIsRejectDialogOpen(true); }}
                           className="p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-red-500 hover:bg-red-500 hover:text-white transition-all shadow-xl shadow-red-500/10"
                         >
                           <XCircle className="w-4.4 h-4.4" />
                         </button>
                         <button 
-                             onClick={() => { if(confirm('Permanently erase sentiment?')) deleteReview(r.id!, userProfile?.id || '') }}
+                             onClick={() => { if(confirm('Permanently erase sentiment?')) deleteReview(r.id, userProfile?.id || '') }}
                              className="p-3 bg-zinc-800 border border-white/10 rounded-xl text-gray-500 hover:bg-white hover:text-black transition-all"
                         >
                            <Trash2 className="w-4.4 h-4.4" />
@@ -260,8 +266,8 @@ export const ReviewManager = () => {
                       </div>
                     </td>
                   </tr>
-                ))
-              )}
+                ));
+              })()}
             </tbody>
           </table>
         </div>

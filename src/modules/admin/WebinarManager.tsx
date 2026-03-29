@@ -1,16 +1,14 @@
 import React, { useState, useEffect, SyntheticEvent } from "react";
-import { Video, Plus, Calendar, Search, Trash2, Edit2, Clock } from "lucide-react";
+import { Video, Calendar, Search, Trash2, Edit2, Clock } from "lucide-react";
 import { supabase } from "../../lib/supabase";
-import { useAuth } from "../../contexts/AuthContext";
 import { Dialog } from "../../components/ui/Dialog";
 import { getCache, setCache } from "@/utils/cache";
-import { DataMapper, safeQuery } from "@/core/dataMapper";
+import { DataMapper } from "@/core/dataMapper";
 import { Webinar } from "@/types";
 
 const cacheKey = "webinars_list";
 
 export const WebinarManager = () => {
-  const { session } = useAuth();
   
   // Form State
   const [title, setTitle] = useState("");
@@ -178,39 +176,39 @@ export const WebinarManager = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-6">
               <div className="space-y-2">
-                <label className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 px-1">Session Title</label>
+                <label htmlFor="title" className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 px-1">Session Title</label>
                 <input 
-                  type="text" value={title} onChange={(e) => setTitle(e.target.value)} required
+                  id="title" type="text" value={title} onChange={(e) => setTitle(e.target.value)} required
                   placeholder="e.g., Institutional Macro Structure v4"
                   className="w-full bg-black border border-white/5 focus:border-emerald-500/50 rounded-2xl p-4 text-white text-sm outline-none transition-all placeholder:text-zinc-700"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 px-1">Institutional Date/Time</label>
+                <label htmlFor="dateTime" className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 px-1">Institutional Date/Time</label>
                 <input 
-                  type="datetime-local" value={dateTime} onChange={(e) => setDateTime(e.target.value)} required
+                  id="dateTime" type="datetime-local" value={dateTime} onChange={(e) => setDateTime(e.target.value)} required
                   className="w-full bg-black border border-white/5 focus:border-emerald-500/50 rounded-2xl p-4 text-white text-sm outline-none transition-all"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 px-1">Speaker Name</label>
-                  <input type="text" value={speaker} onChange={(e) => setSpeaker(e.target.value)} className="w-full bg-black border border-white/5 rounded-2xl p-4 text-white text-sm outline-none" />
+                  <label htmlFor="speaker" className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 px-1">Speaker Name</label>
+                  <input id="speaker" type="text" value={speaker} onChange={(e) => setSpeaker(e.target.value)} className="w-full bg-black border border-white/5 rounded-2xl p-4 text-white text-sm outline-none" />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 px-1">Max Capacity</label>
-                  <input type="number" value={maxAttendees} onChange={(e) => setMaxAttendees(Number(e.target.value))} className="w-full bg-black border border-white/5 rounded-2xl p-4 text-white text-sm outline-none" />
+                  <label htmlFor="maxAttendees" className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 px-1">Max Capacity</label>
+                  <input id="maxAttendees" type="number" value={maxAttendees} onChange={(e) => setMaxAttendees(Number(e.target.value))} className="w-full bg-black border border-white/5 rounded-2xl p-4 text-white text-sm outline-none" />
                 </div>
               </div>
             </div>
 
             <div className="space-y-6">
               <div className="space-y-2">
-                <label className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 px-1">Strategy Narrative</label>
+                <label htmlFor="description" className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 px-1">Strategy Narrative</label>
                 <textarea 
-                  value={description} onChange={(e) => setDescription(e.target.value)} required rows={4}
+                  id="description" value={description} onChange={(e) => setDescription(e.target.value)} required rows={4}
                   className="w-full bg-black border border-white/5 focus:border-emerald-500/50 rounded-2xl p-4 text-white text-sm outline-none transition-all resize-none"
                 />
               </div>
@@ -235,7 +233,11 @@ export const WebinarManager = () => {
               type="submit" disabled={loading}
               className="px-10 py-4 bg-emerald-500 hover:bg-emerald-400 text-black font-black text-[10px] uppercase tracking-[0.2em] rounded-2xl shadow-xl shadow-emerald-500/10 transition-all disabled:opacity-50"
             >
-              {loading ? "Discovering..." : editingId ? "Save Amendment" : "Execute Schedule"}
+              {(() => {
+                if (loading) return "Discovering...";
+                if (editingId) return "Save Amendment";
+                return "Execute Schedule";
+              })()}
             </button>
             {editingId && (
               <button 

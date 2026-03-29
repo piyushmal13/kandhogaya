@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Users, Plus, Search, ExternalLink, Copy, Zap, TrendingUp, DollarSign } from "lucide-react";
+import { Plus, Search, Copy, TrendingUp, DollarSign } from "lucide-react";
 import { supabase } from "../../lib/supabase";
-import { safeQuery } from "@/core/dataMapper";
 import { cn } from "../../utils/cn";
 
 export const AgentManager = () => {
