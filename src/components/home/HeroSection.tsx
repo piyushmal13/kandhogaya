@@ -137,8 +137,8 @@ export const HeroSection = () => {
           </h1>
           
           <p className="text-[10px] sm:text-base text-gray-400 font-medium tracking-[0.1em] uppercase mb-10 sm:mb-14 px-4 leading-relaxed max-w-3xl mx-auto">
-            Global HQ: Dubai &bull; Institutional-Grade Quantitative Education &bull; Macro Intelligence for the Sovereign Elite.
-            <span className="block text-amber-500/80 font-black mt-2">Zero Broker Affiliation — Pure Quantitative Mentorship.</span>
+            Global HQ: Dubai &bull; Institutional-Grade Quantitative Research &bull; Macro Intelligence for the Sovereign Elite.
+            <span className="block text-emerald-500 font-black mt-2 tracking-[0.2em]">Zero Broker Affiliation — Pure Institutional Education.</span>
           </p>
         </motion.div>
 
@@ -195,11 +195,11 @@ export const HeroSection = () => {
           <div className="mt-8 flex items-center justify-center gap-6 sm:gap-10 opacity-30 hover:opacity-100 transition-opacity duration-500">
             <div className="flex items-center gap-2">
               <Shield className="w-3.5 h-3.5 text-emerald-500" />
-              <span className="text-[8px] sm:text-[9px] font-black text-white tracking-widest uppercase italic">Secured Protocol</span>
+              <span className="text-[8px] sm:text-[9px] font-black text-white tracking-widest uppercase">Secured Protocol</span>
             </div>
             <div className="flex items-center gap-2">
               <Database className="w-3.5 h-3.5 text-emerald-500" />
-              <span className="text-[8px] sm:text-[9px] font-black text-white tracking-widest uppercase italic">Sovereign Data</span>
+              <span className="text-[8px] sm:text-[9px] font-black text-white tracking-widest uppercase">Sovereign Data</span>
             </div>
           </div>
         </motion.div>

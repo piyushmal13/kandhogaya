@@ -89,7 +89,7 @@ export const SocialProof = () => {
                      <Verified className="w-5 h-5 text-blue-400 opacity-80" />
                   </div>
                   
-                  <p className="text-sm md:text-base text-gray-400 font-sans font-medium italic leading-relaxed mb-8">
+                  <p className="text-sm md:text-base text-gray-400 font-sans font-medium leading-relaxed mb-8">
                      "{review.text}"
                   </p>
                   

@@ -76,11 +76,11 @@ export const AlgoGreatness = () => {
         className="text-center mb-16 md:mb-24 px-4"
       >
         <span className="text-[var(--brand)] font-medium text-[11px] md:text-sm uppercase tracking-[0.3em] mb-6 inline-block opacity-80">Institutional Logic</span>
-        <h2 className="text-4xl md:text-6xl font-semibold text-white mb-6 md:mb-8 tracking-[-0.03em]">How Our Algos <span className="italic font-serif text-[var(--brand)]">Dominate</span></h2>
-        <p className="text-gray-400 max-w-2xl mx-auto text-sm md:text-lg font-light opacity-80 uppercase tracking-wide">Experience the architecture behind {featuredAlgo && (featuredAlgo as any).name ? (featuredAlgo as any).name : "our proprietary systems"} and see why institutional traders trust IFXTrades.</p>
+        <h2 className="text-4xl md:text-6xl font-semibold text-white mb-6 md:mb-8 tracking-[-0.03em]">How Our Algos <span className="font-serif text-[var(--brand)]">Dominate</span></h2>
+        <p className="text-gray-400 max-w-2xl mx-auto text-sm md:text-lg font-light opacity-80 uppercase tracking-wide">Experience the architecture behind {featuredAlgo && (featuredAlgo as any).name ? (featuredAlgo as any).name : "our proprietary systems"} and see why institutional traders trust IFX Trades.</p>
       </motion.div>
 
-        {/* Video Section — only rendered when a valid URL exists */}
+      {/* Video Section — only rendered when a valid URL exists */}
       {videoUrl ? (
         <motion.div 
           initial={{ opacity: 0, scale: 0.98 }}
@@ -151,7 +151,7 @@ export const AlgoGreatness = () => {
       {/* Reviews */}
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-16 md:mb-24">
-          <h3 className="text-3xl md:text-4xl font-semibold text-white mb-6 tracking-tight italic font-serif underline decoration-[var(--brand)]/30">Verified User Reviews</h3>
+          <h3 className="text-3xl md:text-4xl font-semibold text-white mb-6 tracking-tight font-serif underline decoration-[var(--brand)]/30">Verified User Reviews</h3>
           <div className="flex items-center justify-center gap-4">
             <div className="flex gap-1">
               {[1, 2, 3, 4, 5].map((num) => (
@@ -180,7 +180,7 @@ export const AlgoGreatness = () => {
                   <Star key={`${rev.id || rev.name}-star-${j}`} className="w-4 h-4 text-[var(--brand)] fill-[var(--brand)] opacity-60" />
                 ))}
               </div>
-              <p className="text-gray-300 mb-10 md:mb-12 text-sm md:text-lg font-light italic leading-[1.8] opacity-90 group-hover:opacity-100 transition-opacity">"{rev.text}"</p>
+              <p className="text-gray-300 mb-10 md:mb-12 text-sm md:text-lg font-light leading-[1.8] opacity-90 group-hover:opacity-100 transition-opacity">"{rev.text}"</p>
               <div className="flex items-center gap-4 md:gap-5">
                 <div className="w-10 h-10 md:w-12 md:h-12 bg-white/[0.02] border border-white/5 rounded-full flex items-center justify-center text-[var(--brand)] font-sans font-medium text-xl md:text-2xl group-hover:bg-[var(--brand)]/5 group-hover:border-[var(--brand)]/20 transition-all duration-700">
                   {rev.name?.charAt(0) || "U"}

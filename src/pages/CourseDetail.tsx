@@ -96,7 +96,13 @@ export const CourseDetail = () => {
                 </div>
               ) : (
                 <iframe 
-                  src={activeChapter.video_url.includes('youtube.com') ? activeChapter.video_url.replace('watch?v=', 'embed/') : activeChapter.video_url} 
+                  src={
+                    activeChapter.video_url.includes('youtu.be') 
+                      ? `https://www.youtube.com/embed/${activeChapter.video_url.split('/').pop()?.split('?')[0]}`
+                      : activeChapter.video_url.includes('youtube.com') 
+                        ? activeChapter.video_url.replace('watch?v=', 'embed/').split('&')[0]
+                        : activeChapter.video_url
+                  } 
                   className="w-full h-full"
                   allowFullScreen
                 />

@@ -11,10 +11,10 @@ export const productService = {
   getProducts: async (): Promise<Product[]> => {
     console.log("📦 [PRODUCT FETCH] START (Intelligence Deep Join Strategy)");
     try {
-      const query = supabase
-        .from("products")
-        .select("*, performance:performance_results(*)")
-        .order("created_at", { ascending: false });
+        const query = supabase
+          .from("products")
+          .select("*")
+          .order("created_at", { ascending: false });
 
       const products = await safeQuery<Product[]>(query);
       console.log("📦 [PRODUCT FETCH] RESPONSE", products.length, "products joined with performance results");

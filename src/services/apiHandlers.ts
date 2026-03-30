@@ -184,7 +184,7 @@ export const getCourses = async () => {
 export const getCourseById = async (id: string) => {
   const { data, error } = await supabase
     .from("courses")
-    .select("*")
+    .select("*, chapters:lessons(*)")
     .eq("id", id)
     .single();
   
