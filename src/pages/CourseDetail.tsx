@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { motion } from "motion/react";
 import { ArrowLeft, Play, Lock, CheckCircle2, Clock, BookOpen, ShieldCheck } from "lucide-react";
 import { getCourseById, checkUserAccess } from "../services/apiHandlers";
 import { Course, Chapter } from "../types";
@@ -16,6 +15,18 @@ export const CourseDetail = () => {
   const [loading, setLoading] = useState(true);
   const [activeChapter, setActiveChapter] = useState<Chapter | null>(null);
   const [hasAccess, setHasAccess] = useState(false);
+
+  const videoUrl = useMemo(() => {
+    if (!activeChapter?.video_url) return "";
+    const url = activeChapter.video_url;
+    if (url.includes('youtu.be')) {
+      return `https://www.youtube.com/embed/${url.split('/').pop()?.split('?')[0]}`;
+    }
+    if (url.includes('youtube.com')) {
+      return url.replace('watch?v=', 'embed/').split('&')[0];
+    }
+    return url;
+  }, [activeChapter]);
 
   useEffect(() => {
     const fetchCourseData = async () => {
@@ -71,6 +82,8 @@ export const CourseDetail = () => {
     return !hasAccess;
   };
 
+
+
   return (
     <div className="pt-32 pb-20 px-4 max-w-7xl mx-auto min-h-screen">
       <Link to="/academy" className="inline-flex items-center gap-2 text-emerald-500 font-bold mb-8 hover:translate-x-[-4px] transition-transform">
@@ -81,37 +94,40 @@ export const CourseDetail = () => {
         {/* Left: Video Player & Content */}
         <div className="lg:col-span-8">
           <div className="aspect-video bg-black rounded-3xl overflow-hidden border border-white/10 relative mb-8 group">
-            {activeChapter ? (
-              isChapterLocked(activeChapter) ? (
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-zinc-900/80 backdrop-blur-sm p-8 text-center">
-                  <Lock className="w-16 h-16 text-emerald-500 mb-6" />
-                  <h3 className="text-2xl font-bold text-white mb-4">This module is locked</h3>
-                  <p className="text-gray-400 mb-8 max-w-md">Enroll in this course to unlock all premium chapters and institutional trading strategies.</p>
-                  <button 
-                    onClick={handleEnrollClick}
-                    className="px-8 py-4 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)]"
-                  >
-                    Enroll in Course {course.price > 0 && `($${course.price})`}
-                  </button>
-                </div>
-              ) : (
+            {(() => {
+              if (!activeChapter) {
+                return (
+                  <div className="absolute inset-0 flex items-center justify-center text-gray-500">
+                    Select a module to start watching
+                  </div>
+                );
+              }
+
+              if (isChapterLocked(activeChapter)) {
+                return (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-zinc-900/80 backdrop-blur-sm p-8 text-center">
+                    <Lock className="w-16 h-16 text-emerald-500 mb-6" />
+                    <h3 className="text-2xl font-bold text-white mb-4">This module is locked</h3>
+                    <p className="text-gray-400 mb-8 max-w-md">Enroll in this course to unlock all premium chapters and institutional trading strategies.</p>
+                    <button 
+                      onClick={handleEnrollClick}
+                      className="px-8 py-4 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)]"
+                    >
+                      Enroll in Course {course.price > 0 ? `($${course.price})` : ""}
+                    </button>
+                  </div>
+                );
+              }
+
+              return (
                 <iframe 
-                  src={
-                    activeChapter.video_url.includes('youtu.be') 
-                      ? `https://www.youtube.com/embed/${activeChapter.video_url.split('/').pop()?.split('?')[0]}`
-                      : activeChapter.video_url.includes('youtube.com') 
-                        ? activeChapter.video_url.replace('watch?v=', 'embed/').split('&')[0]
-                        : activeChapter.video_url
-                  } 
+                  src={videoUrl} 
+                  title={`IFX Academy Masterclass: ${activeChapter.title}`}
                   className="w-full h-full"
                   allowFullScreen
                 />
-              )
-            ) : (
-              <div className="absolute inset-0 flex items-center justify-center text-gray-500">
-                Select a module to start watching
-              </div>
-            )}
+              );
+            })()}
           </div>
 
           <div className="mb-12">

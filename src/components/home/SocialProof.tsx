@@ -77,7 +77,7 @@ export const SocialProof = () => {
             className="flex gap-6 w-max px-6"
          >
             {[...reviews, ...reviews].map((review, i) => (
-               <div key={i} className="w-[350px] md:w-[450px] shrink-0 bg-[#050505] border border-white/5 rounded-[32px] p-8 relative overflow-hidden group hover:border-emerald-500/20 transition-all duration-500">
+               <div key={`institutional-review-v2-${review.id || i}-${i}`} className="w-[350px] md:w-[450px] shrink-0 bg-[#050505] border border-white/5 rounded-[32px] p-8 relative overflow-hidden group hover:border-emerald-500/20 transition-all duration-500">
                   <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   
                   <div className="flex items-center justify-between mb-6">

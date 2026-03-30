@@ -3,8 +3,8 @@ import { useParams, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { 
   Users, ArrowRight,
-  MessageSquare, Send, Share2, Download, 
-  Play, Volume2, Maximize2, Star, Zap, ShieldCheck, BarChart3, Check
+  MessageSquare, Send, Share2, 
+  Play, Star, Zap, ShieldCheck, BarChart3, Check
 } from "lucide-react";
 import { getWebinarById, checkWebinarRegistration } from "../services/apiHandlers";
 import { RegistrationModal } from "../components/webinars/RegistrationModal";
@@ -25,6 +25,7 @@ export const WebinarDetail = () => {
   const [activeTab, setActiveTab] = useState("overview"); // chat, agenda, resources
   const chatEndRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
+  const particles = React.useMemo(() => new Array(20).fill(null).map((_, i) => ({ id: `particle-${i}` })), []);
 
   useEffect(() => {
     const fetchWebinar = async () => {
@@ -106,7 +107,7 @@ export const WebinarDetail = () => {
               <div className="flex items-center gap-2 mb-1">
                 {isLive && (
                   <span className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-red-500/10 border border-red-500/20 text-red-500 text-[10px] font-bold uppercase animate-pulse">
-                    <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-red-500" />{" "}
                     LIVE SESSION
                   </span>
                 )}
@@ -195,9 +196,9 @@ export const WebinarDetail = () => {
                           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-emerald-500/10 rounded-full blur-[120px]" 
                         />
                         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20" />
-                        {new Array(20).fill(null).map((_, i) => (
+                        {particles.map((p) => (
                           <motion.div
-                            key={`p-${i}`}
+                            key={`institutional-alpha-${p.id}`}
                             initial={{ x: Math.random() * 1000 - 500, y: Math.random() * 1000 - 500, opacity: 0 }}
                             animate={{ y: [0, -100, 0], opacity: [0, 0.5, 0] }}
                             transition={{ duration: 3 + Math.random() * 5, repeat: Infinity, delay: Math.random() * 5 }}

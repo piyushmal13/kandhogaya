@@ -137,7 +137,7 @@ export const HeroSection = () => {
           </h1>
           
           <p className="text-[10px] sm:text-base text-gray-400 font-medium tracking-[0.1em] uppercase mb-10 sm:mb-14 px-4 leading-relaxed max-w-3xl mx-auto">
-            Global HQ: Dubai &bull; Institutional-Grade Quantitative Research &bull; Macro Intelligence for the Sovereign Elite.
+            Global HQ: Dubai &bull; Institutional-Grade Quantitative Research &bull; Macro Intelligence for the Sovereign Elite.{" "}
             <span className="block text-emerald-500 font-black mt-2 tracking-[0.2em]">Zero Broker Affiliation — Pure Institutional Education.</span>
           </p>
         </motion.div>
@@ -158,7 +158,9 @@ export const HeroSection = () => {
                  setFormState('loading');
                  try {
                    await supabase.from("leads").insert([{ email, source: "hero_terminal_v4" }]);
-                 } catch (err) {}
+                 } catch (err) {
+                   console.error("Institutional Lead Acquisition Signal Offline:", err);
+                 }
                  setTimeout(() => {
                    setFormState('success');
                    if (input) input.value = '';
