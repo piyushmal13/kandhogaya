@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { 
   Users, ArrowRight,
   MessageSquare, Send, Share2, Download, 
-  Play, Volume2, Maximize2, Star, Zap, ShieldCheck, BarChart3
+  Play, Volume2, Maximize2, Star, Zap, ShieldCheck, BarChart3, Check
 } from "lucide-react";
 import { getWebinarById, checkWebinarRegistration } from "../services/apiHandlers";
 import { RegistrationModal } from "../components/webinars/RegistrationModal";
@@ -213,7 +213,7 @@ export const WebinarDetail = () => {
                         >
                           <BarChart3 className="w-12 h-12 text-emerald-500" />
                         </motion.div>
-                        <h2 className="text-4xl md:text-6xl font-black text-white mb-6 tracking-tighter uppercase italic leading-none">
+                        <h2 className="text-4xl md:text-6xl font-black text-white mb-6 tracking-tighter uppercase leading-none">
                           Institutional Alpha <br/>
                           <span className="text-emerald-500">Successfully Unlocked</span>
                         </h2>
@@ -300,7 +300,7 @@ export const WebinarDetail = () => {
                               <Check className="w-4 h-4 text-emerald-500 mt-0.5" />
                               <span>{point}</span>
                             </li>
-                          )) || <li className="text-gray-500 italic">No learning points specified.</li>}
+                          )) || <li className="text-gray-500">No learning points specified.</li>}
                         </ul>
                       </div>
                       <div className="p-6 rounded-2xl bg-white/5 border border-white/5">
@@ -361,11 +361,5 @@ export const WebinarDetail = () => {
 const Lock = ({ className }: { className?: string }) => (
   <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-  </svg>
-);
-
-const Check = ({ className }: { className?: string }) => (
-  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
   </svg>
 );
