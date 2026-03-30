@@ -301,7 +301,7 @@
   }
 
   .institutional-title {
-    @apply font-serif italic font-medium;
+    @apply font-serif font-medium;
   }
 
   .glass-card-hover {

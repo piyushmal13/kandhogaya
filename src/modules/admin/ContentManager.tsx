@@ -137,7 +137,7 @@ export const ContentManager = () => {
                 <Plus className="w-6 h-6" />
               </div>
               <div>
-                <h2 className="text-2xl font-black text-white uppercase tracking-tighter italic">
+                <h2 className="text-2xl font-black text-white uppercase tracking-tighter">
                   {editingId ? "Amend Intel" : "Publish Discovery"}
                 </h2>
                 <p className="text-[10px] text-gray-500 font-bold uppercase tracking-[0.3em] mt-1">Content Orchestration v4.2</p>
@@ -147,16 +147,16 @@ export const ContentManager = () => {
             <form onSubmit={handleSubmit} className="space-y-8 relative z-10">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-2">
-                  <label htmlFor="intel-title" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1 italic">Intelligence Title</label>
+                  <label htmlFor="intel-title" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Intelligence Title</label>
                   <input 
                     id="intel-title"
                     value={title} onChange={e => setTitle(e.target.value)} required
                     placeholder="e.g. Gold Macro Structure"
-                    className="w-full bg-black border border-white/5 rounded-2xl p-4 text-white text-sm outline-none focus:border-emerald-500/50 transition-all italic" 
+                    className="w-full bg-black border border-white/5 rounded-2xl p-4 text-white text-sm outline-none focus:border-emerald-500/50 transition-all" 
                   />
                 </div>
                 <div className="space-y-2">
-                  <label htmlFor="intel-category" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1 italic">Content Category</label>
+                  <label htmlFor="intel-category" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Content Category</label>
                   <select 
                     id="intel-category"
                     value={type} onChange={e => setType(e.target.value)} 
@@ -170,7 +170,7 @@ export const ContentManager = () => {
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="intel-matrix" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1 italic">Analysis Matrix (Markdown)</label>
+                <label htmlFor="intel-matrix" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Analysis Matrix (Markdown)</label>
                 <textarea 
                   id="intel-matrix"
                   rows={8} value={body} onChange={e => setBody(e.target.value)} required
@@ -180,7 +180,7 @@ export const ContentManager = () => {
               </div>
 
               <div className="p-8 bg-black/40 border border-white/5 rounded-3xl space-y-8">
-                <div className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.3em] italic">Media Integration Layer</div>
+                <div className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.3em]">Media Integration Layer</div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-2">
                     <label htmlFor="intel-cover" className="text-[9px] font-black text-gray-600 uppercase tracking-widest px-1">Cover Image Source</label>
@@ -213,7 +213,7 @@ export const ContentManager = () => {
           <section className="bg-zinc-900 border border-white/10 rounded-[40px] overflow-hidden shadow-2xl h-full flex flex-col">
             <div className="p-8 border-b border-white/5 flex justify-between items-center bg-black/20">
               <div>
-                <h3 className="text-white font-black uppercase tracking-tighter italic flex items-center gap-3">
+                <h3 className="text-white heading tracking-tighter flex items-center gap-3">
                   <Globe className="w-4 h-4 text-emerald-500" /> Discovery Feed
                 </h3>
               </div>
@@ -231,7 +231,7 @@ export const ContentManager = () => {
                       {item.content_type.substring(0, 3)}
                     </div>
                     <div>
-                      <div className="text-white font-black text-[11px] uppercase tracking-tight italic line-clamp-1">{item.title}</div>
+                      <div className="text-white font-black text-[11px] uppercase tracking-tight line-clamp-1">{item.title}</div>
                       <div className="text-[8px] text-gray-600 uppercase font-black tracking-widest mt-1.5 flex items-center gap-2">
                         <span>{new Date(item.created_at).toLocaleDateString()}</span>
                         <span className="w-1 h-1 rounded-full bg-gray-800" />
@@ -246,7 +246,7 @@ export const ContentManager = () => {
                 </div>
               ))}
               {recentContent.length === 0 && (
-                <div className="text-center py-20 border-2 border-dashed border-white/5 rounded-3xl uppercase font-black text-gray-800 text-[10px] tracking-widest italic">Zero intelligence discovered in feed.</div>
+                <div className="text-center py-20 border-2 border-dashed border-white/5 rounded-3xl uppercase font-black text-gray-800 text-[10px] tracking-widest">Zero intelligence discovered in feed.</div>
               )}
             </div>
           </section>
@@ -262,7 +262,7 @@ export const ContentManager = () => {
         variant="danger"
         confirmText="Execute Destruction"
       >
-        <p className="text-gray-400 text-sm font-medium leading-relaxed italic text-center p-6">
+        <p className="text-gray-400 text-sm font-medium leading-relaxed text-center p-6">
           "Are you certain you want to erase this intelligence post? This action is non-reversible and will remove data from the global discovery hub."
         </p>
       </Dialog>

@@ -52,15 +52,15 @@ export const SocialProof = () => {
           <Star className="w-3 h-3 text-emerald-500 fill-emerald-500" />
           <span className="text-[10px] uppercase font-bold text-emerald-500 tracking-widest">Global Trust Engine</span>
         </div>
-        <h2 className="text-3xl md:text-5xl font-black text-white italic tracking-tight mb-4">
+        <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight mb-4">
           Rated <span className="text-emerald-500">4.9/5</span> by <br className="md:hidden" />10k+ Elite Traders
         </h2>
         
         <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mt-8">
-            <div className="h-10 px-6 rounded border border-white/10 bg-white/5 flex items-center gap-2 text-[10px] font-bold text-white/50 uppercase tracking-[0.2em] italic">
+            <div className="h-10 px-6 rounded border border-white/10 bg-white/5 flex items-center gap-2 text-[10px] font-bold text-white/50 uppercase tracking-[0.2em]">
                <Verified className="w-3.5 h-3.5" /> SECURE AUDIT: TRUSTPILOT
             </div>
-            <div className="h-10 px-6 rounded border border-white/10 bg-white/5 flex items-center gap-2 text-[10px] font-bold text-white/50 uppercase tracking-[0.2em] italic">
+            <div className="h-10 px-6 rounded border border-white/10 bg-white/5 flex items-center gap-2 text-[10px] font-bold text-white/50 uppercase tracking-[0.2em]">
                <Verified className="w-3.5 h-3.5" /> VERIFIED: GOOGLE MERCHANT
             </div>
         </div>

@@ -112,7 +112,7 @@ export const HeroSection = () => {
         <div className="mb-8 sm:mb-12 flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4">
           <div className="inline-flex items-center gap-2.5 px-5 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
              <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-             <span className="text-[9px] sm:text-[10px] font-black text-emerald-500 uppercase tracking-widest italic">
+             <span className="text-[9px] sm:text-[10px] font-black text-emerald-500 uppercase tracking-widest">
                Institutional Protocol v4.0
              </span>
           </div>
@@ -120,7 +120,7 @@ export const HeroSection = () => {
              <div className="flex items-center gap-0.5">
                {[1,2,3,4,5].map(i => <Star key={i} className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-amber-500 fill-amber-500" />)}
              </div>
-             <span className="text-[9px] sm:text-[10px] font-black text-white/50 uppercase tracking-widest italic border-l border-white/10 pl-2">
+             <span className="text-[9px] sm:text-[10px] font-black text-white/50 uppercase tracking-widest border-l border-white/10 pl-2">
                Verified Trust
              </span>
           </div>
@@ -132,15 +132,12 @@ export const HeroSection = () => {
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
           className="max-w-4xl mx-auto"
         >
-          <h1 className="font-black text-white mb-6 leading-[1.05] tracking-tighter">
-            <span className="text-4xl sm:text-7xl md:text-8xl block uppercase font-black italic">IFX Trades</span>
-            <span className="text-xl sm:text-4xl md:text-5xl text-emerald-500 italic block mt-2 sm:mt-4 tracking-[-0.03em] font-medium">
-              Asia’s #1 Institutional <br className="sm:hidden" /> Forex Intelligence Platform
-            </span>
+          <h1 className="font-black text-white mb-6 leading-[1.05] tracking-tighter uppercase">
+            <span className="text-4xl sm:text-7xl md:text-8xl block font-black">IFX Trades</span>
           </h1>
           
-          <p className="text-[10px] sm:text-base text-gray-400 font-medium tracking-[0.1em] uppercase mb-10 sm:mb-14 px-4 leading-relaxed italic max-w-2xl mx-auto">
-            Dubai HQ • Greater Noida Roots • Providing High-Frequency Execution Education for the Sovereign Elite.
+          <p className="text-[10px] sm:text-base text-gray-400 font-medium tracking-[0.1em] uppercase mb-10 sm:mb-14 px-4 leading-relaxed max-w-3xl mx-auto">
+            Global HQ: Dubai &bull; Institutional-Grade Quantitative Education &bull; Macro Intelligence for the Sovereign Elite.
             <span className="block text-amber-500/80 font-black mt-2">Zero Broker Affiliation — Pure Quantitative Mentorship.</span>
           </p>
         </motion.div>
@@ -207,18 +204,25 @@ export const HeroSection = () => {
           </div>
         </motion.div>
 
-        <motion.div 
+         <motion.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.5, delay: 0.6 }}
           className="mt-16 sm:mt-24 grid grid-cols-3 gap-4 max-w-4xl mx-auto border-t border-white/5 pt-12"
         >
+          <div className="col-span-3 mb-8">
+            <span className="text-[10px] sm:text-xs text-emerald-500 font-bold uppercase tracking-[0.3em] block mb-2">Platform Accolade</span>
+            <span className="text-xl sm:text-3xl md:text-4xl text-white block tracking-[-0.03em] font-black uppercase">
+              Asia’s #1 Institutional Forex Intelligence Platform
+            </span>
+          </div>
+
           {[
             { label: "Elite Students", val: stats.traders, accent: "text-white" },
             { label: "Institutional Win-Rate", val: "84.2%", accent: "text-emerald-500" },
             { label: "Active Alpha Signals", val: "68", accent: "text-white" }
           ].map((stat, i) => (
-            <div key={i} className="flex flex-col items-center group">
+            <div key={stat.label} className="flex flex-col items-center group">
               <span className={`text-sm sm:text-4xl md:text-5xl font-black mb-1 sm:mb-2 tracking-tighter transition-transform duration-500 group-hover:scale-110 ${stat.accent}`}>
                 {stat.val}
               </span>
