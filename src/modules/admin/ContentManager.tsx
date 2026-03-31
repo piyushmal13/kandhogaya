@@ -30,7 +30,7 @@ const CONTENT_TYPES = [
 const STATUSES = ["published", "draft", "archived"];
 
 const slugify = (str: string) =>
-  str.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  str.toLowerCase().replaceAll(/[^a-z0-9]+/g, "-").replaceAll(/(^-|-$)/g, "");
 
 export const ContentManager = () => {
   const { userProfile } = useAuth();
@@ -177,6 +177,73 @@ export const ContentManager = () => {
     archived:  "bg-gray-500/10 text-gray-500 border-gray-500/20",
   };
 
+  const renderContentList = () => {
+    if (fetching) {
+      return Array.from({ length: 4 }).map((_, i) => (
+        <div key={`skeleton-${i}`} className="h-16 bg-white/5 rounded-2xl animate-pulse" />
+      ));
+    }
+
+    if (filteredPosts.length === 0) {
+      return (
+        <div className="text-center py-20 border-2 border-dashed border-white/5 rounded-3xl uppercase font-black text-gray-700 text-[10px] tracking-widest">
+          {search || filterType !== "all" ? "No matching content found." : "No content published yet."}
+        </div>
+      );
+    }
+
+    return filteredPosts.map(item => (
+      <div
+        key={item.id}
+        className="p-4 rounded-2xl bg-black/40 border border-white/5 flex items-center justify-between group hover:border-white/10 transition-all"
+      >
+        <div className="flex items-center gap-3 flex-1 min-w-0">
+          <div className="w-9 h-9 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center text-emerald-500 text-[8px] font-black uppercase shrink-0">
+            {item.content_type.substring(0, 3)}
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="text-white font-black text-[11px] uppercase tracking-tight line-clamp-1">
+              {item.title}
+            </div>
+            <div className="flex items-center gap-2 mt-1">
+              <span className={cn(
+                "px-1.5 py-0.5 rounded text-[7px] font-black uppercase tracking-wider border",
+                STATUS_STYLE[item.status] || STATUS_STYLE.archived
+              )}>
+                {item.status}
+              </span>
+              <span className="text-[8px] text-gray-700 uppercase">
+                {new Date(item.created_at).toLocaleDateString()}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all translate-x-2 group-hover:translate-x-0 shrink-0 ml-2">
+          <button
+            onClick={() => handleToggleStatus(item.id, item.status)}
+            className="p-2 text-gray-500 hover:text-amber-400 transition-colors"
+            title={item.status === "published" ? "Unpublish" : "Publish"}
+          >
+            {item.status === "published" ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+          </button>
+          <button
+            onClick={() => handleEdit(item)}
+            className="p-2 text-gray-500 hover:text-emerald-500 transition-colors"
+          >
+            <Edit2 className="w-3.5 h-3.5" />
+          </button>
+          <button
+            onClick={() => { setContentToDelete(item.id); setIsDeleteDialogOpen(true); }}
+            className="p-2 text-gray-500 hover:text-red-500 transition-colors"
+          >
+            <Trash2 className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      </div>
+    ));
+  };
+
   return (
     <div className="space-y-8">
       {/* Toast */}
@@ -229,8 +296,9 @@ export const ContentManager = () => {
               {/* Row 1: Title + Category */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Title *</label>
+                  <label htmlFor="content-title" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Title *</label>
                   <input
+                    id="content-title"
                     value={title} onChange={e => setTitle(e.target.value)} required
                     placeholder="e.g. Gold Macro Structure Q2 2025"
                     className="w-full bg-black border border-white/5 rounded-2xl p-4 text-white text-sm outline-none focus:border-emerald-500/50 transition-all placeholder:text-zinc-700"
@@ -243,8 +311,9 @@ export const ContentManager = () => {
                   )}
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Content Type</label>
+                  <label htmlFor="content-type" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Content Type</label>
                   <select
+                    id="content-type"
                     value={type} onChange={e => setType(e.target.value)}
                     className="w-full bg-black border border-white/5 rounded-2xl p-4 text-white text-sm outline-none focus:border-emerald-500/50 transition-all"
                   >
@@ -257,8 +326,9 @@ export const ContentManager = () => {
 
               {/* Body */}
               <div className="space-y-2">
-                <label className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Content Body (Markdown) *</label>
+                <label htmlFor="content-body" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Content Body (Markdown) *</label>
                 <textarea
+                  id="content-body"
                   rows={8} value={body} onChange={e => setBody(e.target.value)} required
                   placeholder="Write your institutional content here using Markdown..."
                   className="w-full bg-black border border-white/5 rounded-3xl p-6 text-white text-sm outline-none focus:border-emerald-500/50 transition-all font-mono resize-none placeholder:text-zinc-700"
@@ -268,16 +338,18 @@ export const ContentManager = () => {
               {/* Media + Status */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Cover Image URL</label>
+                  <label htmlFor="content-cover" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Cover Image URL</label>
                   <input
+                    id="content-cover"
                     type="url" value={coverImage} onChange={e => setCoverImage(e.target.value)}
                     placeholder="https://..."
                     className="w-full bg-black border border-white/5 rounded-2xl p-4 text-white text-sm outline-none focus:border-cyan-500/50 transition-all placeholder:text-zinc-700"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Publication Status</label>
+                  <label htmlFor="content-status" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Publication Status</label>
                   <select
+                    id="content-status"
                     value={status} onChange={e => setStatus(e.target.value)}
                     className="w-full bg-black border border-white/5 rounded-2xl p-4 text-white text-sm outline-none focus:border-emerald-500/50 transition-all uppercase font-black"
                   >
@@ -350,66 +422,7 @@ export const ContentManager = () => {
 
             {/* List Items */}
             <div className="flex-1 overflow-y-auto p-4 space-y-2 max-h-[700px] scrollbar-hide">
-              {fetching ? (
-                Array.from({ length: 4 }).map((_, i) => (
-                  <div key={i} className="h-16 bg-white/5 rounded-2xl animate-pulse" />
-                ))
-              ) : filteredPosts.length === 0 ? (
-                <div className="text-center py-20 border-2 border-dashed border-white/5 rounded-3xl uppercase font-black text-gray-700 text-[10px] tracking-widest">
-                  {search || filterType !== "all" ? "No matching content found." : "No content published yet."}
-                </div>
-              ) : (
-                filteredPosts.map(item => (
-                  <div
-                    key={item.id}
-                    className="p-4 rounded-2xl bg-black/40 border border-white/5 flex items-center justify-between group hover:border-white/10 transition-all"
-                  >
-                    <div className="flex items-center gap-3 flex-1 min-w-0">
-                      <div className="w-9 h-9 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center text-emerald-500 text-[8px] font-black uppercase shrink-0">
-                        {item.content_type.substring(0, 3)}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="text-white font-black text-[11px] uppercase tracking-tight line-clamp-1">
-                          {item.title}
-                        </div>
-                        <div className="flex items-center gap-2 mt-1">
-                          <span className={cn(
-                            "px-1.5 py-0.5 rounded text-[7px] font-black uppercase tracking-wider border",
-                            STATUS_STYLE[item.status] || STATUS_STYLE.archived
-                          )}>
-                            {item.status}
-                          </span>
-                          <span className="text-[8px] text-gray-700 uppercase">
-                            {new Date(item.created_at).toLocaleDateString()}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all translate-x-2 group-hover:translate-x-0 shrink-0 ml-2">
-                      <button
-                        onClick={() => handleToggleStatus(item.id, item.status)}
-                        className="p-2 text-gray-500 hover:text-amber-400 transition-colors"
-                        title={item.status === "published" ? "Unpublish" : "Publish"}
-                      >
-                        {item.status === "published" ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-                      </button>
-                      <button
-                        onClick={() => handleEdit(item)}
-                        className="p-2 text-gray-500 hover:text-emerald-500 transition-colors"
-                      >
-                        <Edit2 className="w-3.5 h-3.5" />
-                      </button>
-                      <button
-                        onClick={() => { setContentToDelete(item.id); setIsDeleteDialogOpen(true); }}
-                        className="p-2 text-gray-500 hover:text-red-500 transition-colors"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  </div>
-                ))
-              )}
+              {renderContentList()}
             </div>
           </section>
         </div>
