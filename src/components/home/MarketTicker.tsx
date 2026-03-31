@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 import { TrendingUp, TrendingDown, Activity, ShieldCheck } from "lucide-react";
 import { supabase, safeQuery } from "../../lib/supabase";
 

@@ -63,7 +63,7 @@ export const DataPulseProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         signalService.getSignals().catch(e => { console.error("Signals Fetch Failed", e); return []; }),
         webinarService.getWebinars().catch(e => { console.error("Webinars Fetch Failed", e); return []; }),
         marketService.getMarketPairs().catch(e => { console.error("Market Fetch Failed", e); return []; }),
-        supabase.from('performance_results').select('*').eq('is_featured', true).maybeSingle().catch(() => ({ data: null }))
+        supabase.from('performance_results').select('*').eq('is_featured', true).maybeSingle().then(res => res, () => ({ data: null }))
       ]);
 
       setSignals(sigData || []);
@@ -103,15 +103,17 @@ export const DataPulseProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     };
   }, [fetchData]);
 
+  const contextValue = React.useMemo(() => ({
+    signals,
+    webinars,
+    marketData,
+    performanceStats,
+    loading,
+    refresh: fetchData
+  }), [signals, webinars, marketData, performanceStats, loading, fetchData]);
+
   return (
-    <DataPulseContext.Provider value={{
-      signals,
-      webinars,
-      marketData,
-      performanceStats,
-      loading,
-      refresh: fetchData
-    }}>
+    <DataPulseContext.Provider value={contextValue}>
       {children}
     </DataPulseContext.Provider>
   );

@@ -76,10 +76,13 @@ export const CEOPanel = () => {
       const totalUsers = usersRes.count ?? 0;
       const totalLeads = leadsRes.count ?? 0;
 
-      const systemHealth: LiveStats["systemHealth"] =
-        (errorsRes.count ?? 0) > 5 ? "Critical"
-        : (errorsRes.count ?? 0) > 0 ? "Warning"
-        : "Optimal";
+      const errorCount = errorsRes.count ?? 0;
+      let systemHealth: LiveStats["systemHealth"] = "Optimal";
+      if (errorCount > 5) {
+        systemHealth = "Critical";
+      } else if (errorCount > 0) {
+        systemHealth = "Warning";
+      }
 
       setStats({
         revenueToday,

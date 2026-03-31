@@ -148,15 +148,18 @@ export const Admin = () => {
               )}
               {tabs.filter(t => t.group === group).map(tab => {
                 const isActive = activeTab === tab.id;
-                const badge = tab.id === "payments" ? liveStats.pendingPayments
-                  : tab.id === "reviews" ? liveStats.pendingReviews
-                  : null;
+                let badge = null;
+                if (tab.id === "payments") {
+                  badge = liveStats.pendingPayments;
+                } else if (tab.id === "reviews") {
+                  badge = liveStats.pendingReviews;
+                }
 
                 return (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    title={!sidebarOpen ? tab.name : undefined}
+                    title={sidebarOpen ? undefined : tab.name}
                     className={cn(
                       "w-full flex items-center gap-3 px-4 py-2.5 text-left transition-all group relative",
                       isActive

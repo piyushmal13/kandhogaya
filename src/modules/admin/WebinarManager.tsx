@@ -237,8 +237,9 @@ export const WebinarManager = () => {
           {/* Row 1: Title + Date + Status */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="md:col-span-1 space-y-2">
-              <label className="text-[9px] font-black uppercase tracking-[0.25em] text-gray-500">Session Title *</label>
+              <label htmlFor="session-title" className="text-[9px] font-black uppercase tracking-[0.25em] text-gray-500">Session Title *</label>
               <input
+                id="session-title"
                 type="text" required value={form.title}
                 onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
                 placeholder="e.g. Institutional Macro Structure v4"
@@ -246,16 +247,18 @@ export const WebinarManager = () => {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-[9px] font-black uppercase tracking-[0.25em] text-gray-500">Date & Time *</label>
+              <label htmlFor="session-date" className="text-[9px] font-black uppercase tracking-[0.25em] text-gray-500">Date & Time *</label>
               <input
+                id="session-date"
                 type="datetime-local" required value={form.dateTime}
                 onChange={e => setForm(f => ({ ...f, dateTime: e.target.value }))}
                 className="w-full bg-black border border-white/5 focus:border-emerald-500/50 rounded-2xl p-4 text-white text-sm outline-none transition-all"
               />
             </div>
             <div className="space-y-2">
-              <label className="text-[9px] font-black uppercase tracking-[0.25em] text-gray-500">Status</label>
+              <label htmlFor="session-status" className="text-[9px] font-black uppercase tracking-[0.25em] text-gray-500">Status</label>
               <select
+                id="session-status"
                 value={form.status}
                 onChange={e => setForm(f => ({ ...f, status: e.target.value as Webinar["status"] }))}
                 className="w-full bg-black border border-white/5 focus:border-emerald-500/50 rounded-2xl p-4 text-white text-sm outline-none transition-all uppercase font-black"
@@ -269,8 +272,9 @@ export const WebinarManager = () => {
 
           {/* Row 2: Description */}
           <div className="space-y-2">
-            <label className="text-[9px] font-black uppercase tracking-[0.25em] text-gray-500">Session Description *</label>
+            <label htmlFor="session-desc" className="text-[9px] font-black uppercase tracking-[0.25em] text-gray-500">Session Description *</label>
             <textarea
+              id="session-desc"
               required rows={3} value={form.description}
               onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
               placeholder="What will traders learn in this session?"
@@ -281,8 +285,9 @@ export const WebinarManager = () => {
           {/* Row 3: Speaker + Max Attendees */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="space-y-2">
-              <label className="text-[9px] font-black uppercase tracking-[0.25em] text-gray-500">Speaker Name</label>
+              <label htmlFor="session-speaker" className="text-[9px] font-black uppercase tracking-[0.25em] text-gray-500">Speaker Name</label>
               <input
+                id="session-speaker"
                 type="text" value={form.speaker}
                 onChange={e => setForm(f => ({ ...f, speaker: e.target.value }))}
                 placeholder="e.g. Vikram Shah"
@@ -290,8 +295,9 @@ export const WebinarManager = () => {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-[9px] font-black uppercase tracking-[0.25em] text-gray-500">Max Attendees</label>
+              <label htmlFor="session-max" className="text-[9px] font-black uppercase tracking-[0.25em] text-gray-500">Max Attendees</label>
               <input
+                id="session-max"
                 type="number" min={1} value={form.maxAttendees}
                 onChange={e => setForm(f => ({ ...f, maxAttendees: Number(e.target.value) }))}
                 className="w-full bg-black border border-white/5 rounded-2xl p-4 text-white text-sm outline-none transition-all"
@@ -347,8 +353,9 @@ export const WebinarManager = () => {
 
           {/* Row 5: About Content */}
           <div className="space-y-2">
-            <label className="text-[9px] font-black uppercase tracking-[0.25em] text-gray-500">About This Session (Extended Description)</label>
+            <label htmlFor="session-about" className="text-[9px] font-black uppercase tracking-[0.25em] text-gray-500">About This Session (Extended Description)</label>
             <textarea
+              id="session-about"
               rows={4} value={form.aboutContent}
               onChange={e => setForm(f => ({ ...f, aboutContent: e.target.value }))}
               placeholder="Detailed content that appears on the webinar detail page..."
@@ -402,75 +409,79 @@ export const WebinarManager = () => {
               <div key={i} className="h-24 bg-white/5 rounded-3xl animate-pulse" />
             ))}
           </div>
-        ) : webinars.length === 0 ? (
-          <div className="text-center py-20 bg-black/20 rounded-[32px] border-2 border-dashed border-white/5 uppercase font-black text-gray-700 text-[10px] tracking-widest">
-            No sessions scheduled. Create one above.
-          </div>
         ) : (
-          <div className="space-y-4">
-            {webinars.map(w => (
-              <div key={w.id} className="p-6 rounded-3xl bg-black/40 border border-white/5 hover:border-white/10 transition-all group">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-5 flex-1 min-w-0">
-                    <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-gray-500 group-hover:text-emerald-500 transition-colors shrink-0">
-                      <Clock className="w-6 h-6" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-3 mb-1.5">
-                        <h4 className="text-white font-black uppercase tracking-tight text-sm truncate">{w.title}</h4>
-                        <span className={cn("px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest border shrink-0", STATUS_COLORS[w.status])}>
-                          {w.status}
-                        </span>
-                        {w.is_paid && (
-                          <span className="px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest border shrink-0 bg-amber-500/10 text-amber-400 border-amber-500/20">
-                            ${w.price}
-                          </span>
-                        )}
-                      </div>
-                      <div className="flex items-center gap-4 text-[9px] font-black uppercase tracking-widest text-gray-500">
-                        <span className="flex items-center gap-1.5">
-                          <Calendar className="w-3 h-3 text-emerald-500" />
-                          {new Date(w.date_time).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
-                        </span>
-                        {w.speaker_name && (
-                          <span className="flex items-center gap-1.5">
-                            <Globe className="w-3 h-3 text-cyan-500" />
-                            {w.speaker_name}
-                          </span>
-                        )}
-                        <span className="flex items-center gap-1.5 text-gray-600">
-                          <Users className="w-3 h-3" />
-                          {w.registration_count ?? 0} / {w.max_attendees}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-2 shrink-0 ml-4">
-                    <button
-                      onClick={() => fetchRegistrations(w.id)}
-                      className="p-3 rounded-xl bg-white/5 text-gray-400 hover:bg-blue-500/20 hover:text-blue-400 transition-all"
-                      title="View Registrations"
-                    >
-                      <Eye className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={() => handleEdit(w)}
-                      className="p-3 rounded-xl bg-white/5 text-gray-400 hover:bg-emerald-500/20 hover:text-emerald-400 transition-all"
-                    >
-                      <Edit2 className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={() => { setWebinarToDelete(w.id); setIsDeleteDialogOpen(true); }}
-                      className="p-3 rounded-xl bg-white/5 text-gray-400 hover:bg-red-500/20 hover:text-red-400 transition-all"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
+          <>
+            {webinars.length === 0 ? (
+              <div className="text-center py-20 bg-black/20 rounded-[32px] border-2 border-dashed border-white/5 uppercase font-black text-gray-700 text-[10px] tracking-widest">
+                No sessions scheduled. Create one above.
               </div>
-            ))}
-          </div>
+            ) : (
+              <div className="space-y-4">
+                {webinars.map(w => (
+                  <div key={w.id} className="p-6 rounded-3xl bg-black/40 border border-white/5 hover:border-white/10 transition-all group">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-5 flex-1 min-w-0">
+                        <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-gray-500 group-hover:text-emerald-500 transition-colors shrink-0">
+                          <Clock className="w-6 h-6" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-3 mb-1.5">
+                            <h4 className="text-white font-black uppercase tracking-tight text-sm truncate">{w.title}</h4>
+                            <span className={cn("px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest border shrink-0", STATUS_COLORS[w.status])}>
+                              {w.status}
+                            </span>
+                            {w.is_paid && (
+                              <span className="px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest border shrink-0 bg-amber-500/10 text-amber-400 border-amber-500/20">
+                                ${w.price}
+                              </span>
+                            )}
+                          </div>
+                          <div className="flex items-center gap-4 text-[9px] font-black uppercase tracking-widest text-gray-500">
+                            <span className="flex items-center gap-1.5">
+                              <Calendar className="w-3 h-3 text-emerald-500" />
+                              {new Date(w.date_time).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
+                            </span>
+                            {w.speaker_name && (
+                              <span className="flex items-center gap-1.5">
+                                <Globe className="w-3 h-3 text-cyan-500" />
+                                {w.speaker_name}
+                              </span>
+                            )}
+                            <span className="flex items-center gap-1.5 text-gray-600">
+                              <Users className="w-3 h-3" />
+                              {w.registration_count ?? 0} / {w.max_attendees}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0 ml-4">
+                        <button
+                          onClick={() => fetchRegistrations(w.id)}
+                          className="p-3 rounded-xl bg-white/5 text-gray-400 hover:bg-blue-500/20 hover:text-blue-400 transition-all"
+                          title="View Registrations"
+                        >
+                          <Eye className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleEdit(w)}
+                          className="p-3 rounded-xl bg-white/5 text-gray-400 hover:bg-emerald-500/20 hover:text-emerald-400 transition-all"
+                        >
+                          <Edit2 className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => { setWebinarToDelete(w.id); setIsDeleteDialogOpen(true); }}
+                          className="p-3 rounded-xl bg-white/5 text-gray-400 hover:bg-red-500/20 hover:text-red-400 transition-all"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </>
         )}
       </div>
 
@@ -498,40 +509,44 @@ export const WebinarManager = () => {
             <div className="space-y-3">
               {[1, 2, 3].map(i => <div key={i} className="h-12 bg-white/5 rounded-2xl animate-pulse" />)}
             </div>
-          ) : registrations.length === 0 ? (
-            <div className="text-center py-12 text-gray-600 font-bold text-[11px] uppercase tracking-widest">
-              No registrations yet for this session.
-            </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left">
-                <thead>
-                  <tr className="border-b border-white/5">
-                    {["Email", "Registered At", "Attended", "Payment"].map(h => (
-                      <th key={h} className="pb-3 text-[9px] font-black uppercase tracking-widest text-gray-600">{h}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-white/5">
-                  {registrations.map(r => (
-                    <tr key={r.id} className="hover:bg-white/[0.02] transition-colors">
-                      <td className="py-3 text-xs text-white font-mono">{r.email}</td>
-                      <td className="py-3 text-[10px] text-gray-500">{new Date(r.created_at).toLocaleDateString()}</td>
-                      <td className="py-3">
-                        <span className={cn("px-2 py-0.5 rounded-full text-[8px] font-black uppercase border", r.attended ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" : "bg-gray-500/10 text-gray-500 border-gray-500/20")}>
-                          {r.attended ? "Yes" : "No"}
-                        </span>
-                      </td>
-                      <td className="py-3">
-                        <span className={cn("px-2 py-0.5 rounded-full text-[8px] font-black uppercase border", r.payment_status === "completed" ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" : "bg-amber-500/10 text-amber-400 border-amber-500/20")}>
-                          {r.payment_status}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <>
+              {registrations.length === 0 ? (
+                <div className="text-center py-12 text-gray-600 font-bold text-[11px] uppercase tracking-widest">
+                  No registrations yet for this session.
+                </div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left">
+                    <thead>
+                      <tr className="border-b border-white/5">
+                        {["Email", "Registered At", "Attended", "Payment"].map(h => (
+                          <th key={h} className="pb-3 text-[9px] font-black uppercase tracking-widest text-gray-600">{h}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/5">
+                      {registrations.map(r => (
+                        <tr key={r.id} className="hover:bg-white/[0.02] transition-colors">
+                          <td className="py-3 text-xs text-white font-mono">{r.email}</td>
+                          <td className="py-3 text-[10px] text-gray-500">{new Date(r.created_at).toLocaleDateString()}</td>
+                          <td className="py-3">
+                            <span className={cn("px-2 py-0.5 rounded-full text-[8px] font-black uppercase border", r.attended ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" : "bg-gray-500/10 text-gray-500 border-gray-500/20")}>
+                              {r.attended ? "Yes" : "No"}
+                            </span>
+                          </td>
+                          <td className="py-3">
+                            <span className={cn("px-2 py-0.5 rounded-full text-[8px] font-black uppercase border", r.payment_status === "completed" ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" : "bg-amber-500/10 text-amber-400 border-amber-500/20")}>
+                              {r.payment_status}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </>
           )}
         </div>
       )}
