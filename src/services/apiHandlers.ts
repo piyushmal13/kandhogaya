@@ -1,6 +1,6 @@
 import { supabase, safeQuery } from "../lib/supabase";
 import {
-  Webinar, Signal, Product, Blog, Course
+  Signal, Product, Blog, Course
 } from "../types";
 
 import { webinarService } from "./webinarService";
@@ -146,6 +146,7 @@ export const getBlogPosts = async (page = 0, pageSize = 9, searchQuery = "") => 
     }
     return posts;
   } catch (err) {
+    console.error("Institutional Blog Fetch Fallback:", err);
     return [
       {
         id: 'mock-post1',
@@ -192,6 +193,7 @@ export const getCourses = async () => {
     }
     return res;
   } catch (err) {
+    console.error("Institutional Academy Course Fallback:", err);
     return [
       {
         id: 'mock-course-1',

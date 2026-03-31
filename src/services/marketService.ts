@@ -72,13 +72,13 @@ export const marketService = {
     } catch (error) {
       console.error("📈 [MARKET FETCH] ERROR/FALLBACK", error);
       const m = [
-        { id: '1', symbol: 'EUR/USD', price: 1.0942, change: +0.12, up: true },
+        { id: '1', symbol: 'EUR/USD', price: 1.0942, change: 0.12, up: true },
         { id: '2', symbol: 'GBP/USD', price: 1.2651, change: -0.08, up: false },
-        { id: '3', symbol: 'USD/JPY', price: 151.24, change: +0.45, up: true },
-        { id: '4', symbol: 'XAU/USD', price: 2341.5, change: +1.20, up: true },
-        { id: '5', symbol: 'XAG/USD', price: 28.15, change: -0.30, up: false },
-        { id: '6', symbol: 'BTC/USD', price: 68540, change: +2.10, up: true },
-        { id: '7', symbol: 'ETH/USD', price: 3540.2, change: +1.80, up: true }
+        { id: '3', symbol: 'USD/JPY', price: 151.24, change: 0.45, up: true },
+        { id: '4', symbol: 'XAU/USD', price: 2341.5, change: 1.2, up: true },
+        { id: '5', symbol: 'XAG/USD', price: 28.15, change: -0.3, up: false },
+        { id: '6', symbol: 'BTC/USD', price: 68540, change: 2.1, up: true },
+        { id: '7', symbol: 'ETH/USD', price: 3540.2, change: 1.8, up: true }
       ];
 
       return m.map(item => {
