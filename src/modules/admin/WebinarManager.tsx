@@ -1,141 +1,166 @@
 import React, { useState, useEffect, SyntheticEvent } from "react";
-import { Video, Calendar, Search, Trash2, Edit2, Clock } from "lucide-react";
+import {
+  Video, Calendar, Trash2, Edit2, Clock, Users, Plus,
+  RefreshCw, CheckCircle, XCircle, DollarSign, Globe, Eye
+} from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { Dialog } from "../../components/ui/Dialog";
-import { getCache, setCache } from "@/utils/cache";
-import { DataMapper } from "@/core/dataMapper";
-import { Webinar } from "@/types";
+import { cn } from "../../utils/cn";
 
-const cacheKey = "webinars_list";
+interface Webinar {
+  id: string;
+  title: string;
+  description: string;
+  date_time: string;
+  speaker_name: string;
+  speaker_profile_url: string;
+  brand_logo_url: string;
+  webinar_image_url: string;
+  about_content: string;
+  is_paid: boolean;
+  price: number;
+  status: "upcoming" | "live" | "past";
+  max_attendees: number;
+  registration_count: number;
+  sponsor_logos: string[];
+}
+
+interface RegistrationRow {
+  id: string;
+  email: string;
+  created_at: string;
+  attended: boolean;
+  payment_status: string;
+}
+
+const EMPTY_FORM = {
+  title: "",
+  description: "",
+  dateTime: "",
+  speaker: "",
+  speakerProfileUrl: "",
+  brandLogoUrl: "",
+  webinarImageUrl: "",
+  aboutContent: "",
+  isPaid: false,
+  price: 0,
+  status: "upcoming" as Webinar["status"],
+  maxAttendees: 500,
+  sponsorLogos: "",
+};
 
 export const WebinarManager = () => {
-  
-  // Form State
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [dateTime, setDateTime] = useState("");
-  const [speaker, setSpeaker] = useState("");
-  const [speakerProfileUrl, setSpeakerProfileUrl] = useState("");
-  const [brandLogoUrl, setBrandLogoUrl] = useState("");
-  const [webinarImageUrl, setWebinarImageUrl] = useState("");
-  const [aboutContent, setAboutContent] = useState("");
-  const [level, setLevel] = useState("All Levels");
-  const [duration, setDuration] = useState("60 mins");
-  const [isPaid, setIsPaid] = useState(false);
-  const [price, setPrice] = useState(0);
-  const [isSponsored, setIsSponsored] = useState(false);
-  const [sponsors, setSponsors] = useState("");
-  const [sponsorLogos, setSponsorLogos] = useState("");
-  const [maxAttendees, setMaxAttendees] = useState(500);
-  
+  const [form, setForm] = useState(EMPTY_FORM);
   const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(true);
   const [deleteLoading, setDeleteLoading] = useState(false);
-  const [recentWebinars, setRecentWebinars] = useState<Webinar[]>([]);
+  const [webinars, setWebinars] = useState<Webinar[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [webinarToDelete, setWebinarToDelete] = useState<string | null>(null);
+  const [viewRegistrations, setViewRegistrations] = useState<string | null>(null);
+  const [registrations, setRegistrations] = useState<RegistrationRow[]>([]);
+  const [regLoading, setRegLoading] = useState(false);
+  const [toast, setToast] = useState<{ type: "success" | "error"; msg: string } | null>(null);
 
-  const fetchRecentWebinars = async () => {
-    const { data, error } = await supabase.from('webinars').select('*').order('date_time', { ascending: true }).limit(10);
-    if (error) {
-       console.error("Admin Webinar Discovery error", error);
-       return;
-    }
-    const mappedData = data.map(DataMapper.webinar);
-    setCache(cacheKey, mappedData, 30000);
-    setRecentWebinars(mappedData);
+  const showToast = (type: "success" | "error", msg: string) => {
+    setToast({ type, msg });
+    setTimeout(() => setToast(null), 3000);
   };
 
-  useEffect(() => {
-    const cached = getCache(cacheKey);
-    if (cached) {
-      setRecentWebinars(cached);
-    } else {
-      fetchRecentWebinars();
-    }
-  }, []);
+  const fetchWebinars = async () => {
+    setFetching(true);
+    const { data, error } = await supabase
+      .from("webinars")
+      .select("*")
+      .order("date_time", { ascending: true });
 
-  const handleEdit = (webinar: Webinar) => {
-    setEditingId(webinar.id);
-    setTitle(webinar.title || "");
-    setDescription(webinar.description || "");
-    setDateTime(webinar.date_time ? new Date(webinar.date_time).toISOString().slice(0, 16) : "");
-    setSpeaker(webinar.speaker_name || "");
-    setSpeakerProfileUrl(webinar.speaker_profile_url || "");
-    setBrandLogoUrl(webinar.brand_logo_url || "");
-    setWebinarImageUrl(webinar.webinar_image_url || "");
-    setAboutContent(webinar.about_content || "");
-    setLevel((webinar as any).metadata?.level || "All Levels");
-    setDuration((webinar as any).metadata?.duration || "60 mins");
-    setIsPaid(webinar.is_paid || false);
-    setPrice(webinar.price || 0);
-    setIsSponsored((webinar as any).metadata?.is_sponsored || false);
-    setSponsors((webinar as any).metadata?.sponsors?.join(", ") || "");
-    setSponsorLogos(Array.isArray(webinar.sponsor_logos) ? webinar.sponsor_logos.join(", ") : "");
-    setMaxAttendees(webinar.max_attendees || 500);
-    
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (error) {
+      console.error("[WebinarManager] Fetch error:", error);
+      showToast("error", "Failed to load webinars.");
+    } else {
+      setWebinars(data || []);
+    }
+    setFetching(false);
+  };
+
+  const fetchRegistrations = async (webinarId: string) => {
+    setRegLoading(true);
+    setViewRegistrations(webinarId);
+    const { data, error } = await supabase
+      .from("webinar_registrations")
+      .select("id, email, created_at, attended, payment_status")
+      .eq("webinar_id", webinarId)
+      .order("created_at", { ascending: false });
+
+    if (!error) setRegistrations(data || []);
+    setRegLoading(false);
+  };
+
+  useEffect(() => { fetchWebinars(); }, []);
+
+  const handleEdit = (w: Webinar) => {
+    setEditingId(w.id);
+    setForm({
+      title: w.title || "",
+      description: w.description || "",
+      dateTime: w.date_time ? new Date(w.date_time).toISOString().slice(0, 16) : "",
+      speaker: w.speaker_name || "",
+      speakerProfileUrl: w.speaker_profile_url || "",
+      brandLogoUrl: w.brand_logo_url || "",
+      webinarImageUrl: w.webinar_image_url || "",
+      aboutContent: w.about_content || "",
+      isPaid: w.is_paid || false,
+      price: w.price || 0,
+      status: w.status || "upcoming",
+      maxAttendees: w.max_attendees || 500,
+      sponsorLogos: Array.isArray(w.sponsor_logos) ? w.sponsor_logos.join(", ") : "",
+    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const resetForm = () => {
     setEditingId(null);
-    setTitle("");
-    setDescription("");
-    setDateTime("");
-    setSpeaker("");
-    setSpeakerProfileUrl("");
-    setBrandLogoUrl("");
-    setWebinarImageUrl("");
-    setAboutContent("");
-    setLevel("All Levels");
-    setDuration("60 mins");
-    setIsPaid(false);
-    setPrice(0);
-    setIsSponsored(false);
-    setSponsors("");
-    setSponsorLogos("");
-    setMaxAttendees(500);
+    setForm(EMPTY_FORM);
   };
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
     setLoading(true);
-    
+
+    const payload = {
+      title: form.title,
+      description: form.description,
+      date_time: new Date(form.dateTime).toISOString(),
+      speaker_name: form.speaker,
+      speaker_profile_url: form.speakerProfileUrl,
+      brand_logo_url: form.brandLogoUrl,
+      webinar_image_url: form.webinarImageUrl,
+      about_content: form.aboutContent,
+      is_paid: form.isPaid,
+      price: form.isPaid ? form.price : 0,
+      status: form.status,
+      max_attendees: form.maxAttendees,
+      sponsor_logos: form.sponsorLogos
+        ? form.sponsorLogos.split(",").map(s => s.trim()).filter(Boolean)
+        : [],
+    };
+
     try {
-      const payload = {
-        title,
-        description,
-        date_time: new Date(dateTime).toISOString(),
-        speaker_name: speaker,
-        speaker_profile_url: speakerProfileUrl,
-        brand_logo_url: brandLogoUrl,
-        webinar_image_url: webinarImageUrl,
-        about_content: aboutContent,
-        is_paid: isPaid,
-        price,
-        max_attendees: maxAttendees,
-        sponsor_logos: sponsorLogos ? sponsorLogos.split(",").map(s => s.trim()) : [],
-        metadata: {
-          level,
-          duration,
-          is_sponsored: isSponsored,
-          sponsors: sponsors ? sponsors.split(",").map(s => s.trim()) : [],
-          updated_at: new Date().toISOString()
-        }
-      };
-
       if (editingId) {
-        const { error } = await supabase.from('webinars').update(payload).eq('id', editingId);
+        const { error } = await supabase.from("webinars").update(payload).eq("id", editingId);
         if (error) throw error;
+        showToast("success", "Webinar updated successfully.");
       } else {
-        const { error } = await supabase.from('webinars').insert([payload]);
+        const { error } = await supabase.from("webinars").insert([payload]);
         if (error) throw error;
+        showToast("success", "Webinar scheduled successfully.");
       }
-
       resetForm();
-      fetchRecentWebinars();
-    } catch (err) {
-      console.error("Institutional Webinar Execution Error:", err);
+      fetchWebinars();
+    } catch (err: any) {
+      console.error("[WebinarManager] Submit error:", err);
+      showToast("error", err.message || "Operation failed.");
     } finally {
       setLoading(false);
     }
@@ -145,167 +170,385 @@ export const WebinarManager = () => {
     if (!webinarToDelete) return;
     setDeleteLoading(true);
     try {
-      const { error } = await supabase.from('webinars').delete().eq('id', webinarToDelete);
+      const { error } = await supabase.from("webinars").delete().eq("id", webinarToDelete);
       if (error) throw error;
       setIsDeleteDialogOpen(false);
       setWebinarToDelete(null);
-      fetchRecentWebinars();
-    } catch (err) {
-      console.error("Institutional Webinar Erasure Error:", err);
+      showToast("success", "Webinar removed from schedule.");
+      fetchWebinars();
+    } catch (err: any) {
+      showToast("error", err.message || "Delete failed.");
     } finally {
       setDeleteLoading(false);
     }
   };
 
+  const STATUS_COLORS = {
+    upcoming: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
+    live:     "bg-red-500/10 text-red-400 border-red-500/20",
+    past:     "bg-gray-500/10 text-gray-400 border-gray-500/20",
+  };
+
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <div className="bg-zinc-900 border border-white/10 p-10 rounded-[40px] shadow-2xl">
-        <div className="flex items-center gap-4 mb-10">
-          <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500">
-            <Video className="w-6 h-6" />
+    <div className="space-y-8">
+      {/* Toast */}
+      {toast && (
+        <div className={cn(
+          "fixed top-24 right-6 z-50 flex items-center gap-3 px-5 py-4 rounded-2xl border shadow-2xl text-sm font-bold animate-in slide-in-from-right duration-300",
+          toast.type === "success"
+            ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400"
+            : "bg-red-500/10 border-red-500/30 text-red-400"
+        )}>
+          {toast.type === "success"
+            ? <CheckCircle className="w-4 h-4" />
+            : <XCircle className="w-4 h-4" />}
+          {toast.msg}
+        </div>
+      )}
+
+      {/* Form Panel */}
+      <div className="bg-zinc-900 border border-white/10 p-8 lg:p-12 rounded-[40px] shadow-2xl">
+        <div className="flex items-center justify-between mb-10">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500">
+              {editingId ? <Edit2 className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
+            </div>
+            <div>
+              <h2 className="text-2xl font-black text-white uppercase tracking-tighter">
+                {editingId ? "Edit Session" : "Schedule New Session"}
+              </h2>
+              <p className="text-[10px] text-gray-500 font-bold uppercase tracking-[0.3em] mt-1">
+                Institutional Webinar Orchestration Console
+              </p>
+            </div>
           </div>
-          <div>
-            <h2 className="text-2xl font-black text-white uppercase tracking-tighter italic">
-              {editingId ? "Modify Session" : "Schedule New Session"}
-            </h2>
-            <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">Institutional Webinar Orchestration</p>
-          </div>
+          {editingId && (
+            <button
+              type="button"
+              onClick={resetForm}
+              className="px-5 py-2.5 bg-red-500/10 border border-red-500/20 text-red-400 font-black text-[10px] uppercase tracking-widest rounded-xl hover:bg-red-500/20 transition-all"
+            >
+              Cancel Edit
+            </button>
+          )}
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="space-y-6">
-              <div className="space-y-2">
-                <label htmlFor="title" className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 px-1">Session Title</label>
-                <input 
-                  id="title" type="text" value={title} onChange={(e) => setTitle(e.target.value)} required
-                  placeholder="e.g., Institutional Macro Structure v4"
-                  className="w-full bg-black border border-white/5 focus:border-emerald-500/50 rounded-2xl p-4 text-white text-sm outline-none transition-all placeholder:text-zinc-700"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label htmlFor="dateTime" className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 px-1">Institutional Date/Time</label>
-                <input 
-                  id="dateTime" type="datetime-local" value={dateTime} onChange={(e) => setDateTime(e.target.value)} required
-                  className="w-full bg-black border border-white/5 focus:border-emerald-500/50 rounded-2xl p-4 text-white text-sm outline-none transition-all"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label htmlFor="speaker" className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 px-1">Speaker Name</label>
-                  <input id="speaker" type="text" value={speaker} onChange={(e) => setSpeaker(e.target.value)} className="w-full bg-black border border-white/5 rounded-2xl p-4 text-white text-sm outline-none" />
-                </div>
-                <div className="space-y-2">
-                  <label htmlFor="maxAttendees" className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 px-1">Max Capacity</label>
-                  <input id="maxAttendees" type="number" value={maxAttendees} onChange={(e) => setMaxAttendees(Number(e.target.value))} className="w-full bg-black border border-white/5 rounded-2xl p-4 text-white text-sm outline-none" />
-                </div>
-              </div>
+          {/* Row 1: Title + Date + Status */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="md:col-span-1 space-y-2">
+              <label className="text-[9px] font-black uppercase tracking-[0.25em] text-gray-500">Session Title *</label>
+              <input
+                type="text" required value={form.title}
+                onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
+                placeholder="e.g. Institutional Macro Structure v4"
+                className="w-full bg-black border border-white/5 focus:border-emerald-500/50 rounded-2xl p-4 text-white text-sm outline-none transition-all placeholder:text-zinc-700"
+              />
             </div>
+            <div className="space-y-2">
+              <label className="text-[9px] font-black uppercase tracking-[0.25em] text-gray-500">Date & Time *</label>
+              <input
+                type="datetime-local" required value={form.dateTime}
+                onChange={e => setForm(f => ({ ...f, dateTime: e.target.value }))}
+                className="w-full bg-black border border-white/5 focus:border-emerald-500/50 rounded-2xl p-4 text-white text-sm outline-none transition-all"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-[9px] font-black uppercase tracking-[0.25em] text-gray-500">Status</label>
+              <select
+                value={form.status}
+                onChange={e => setForm(f => ({ ...f, status: e.target.value as Webinar["status"] }))}
+                className="w-full bg-black border border-white/5 focus:border-emerald-500/50 rounded-2xl p-4 text-white text-sm outline-none transition-all uppercase font-black"
+              >
+                <option value="upcoming">Upcoming</option>
+                <option value="live">Live Now</option>
+                <option value="past">Past / Archived</option>
+              </select>
+            </div>
+          </div>
 
-            <div className="space-y-6">
-              <div className="space-y-2">
-                <label htmlFor="description" className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 px-1">Strategy Narrative</label>
-                <textarea 
-                  id="description" value={description} onChange={(e) => setDescription(e.target.value)} required rows={4}
-                  className="w-full bg-black border border-white/5 focus:border-emerald-500/50 rounded-2xl p-4 text-white text-sm outline-none transition-all resize-none"
-                />
-              </div>
+          {/* Row 2: Description */}
+          <div className="space-y-2">
+            <label className="text-[9px] font-black uppercase tracking-[0.25em] text-gray-500">Session Description *</label>
+            <textarea
+              required rows={3} value={form.description}
+              onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
+              placeholder="What will traders learn in this session?"
+              className="w-full bg-black border border-white/5 focus:border-emerald-500/50 rounded-2xl p-4 text-white text-sm outline-none transition-all resize-none"
+            />
+          </div>
 
-              <div className="flex gap-8 px-1 pt-2">
-                <label className="flex items-center gap-3 cursor-pointer group">
-                  <input type="checkbox" checked={isPaid} onChange={(e) => setIsPaid(e.target.checked)} className="w-5 h-5 rounded-lg border-white/10 bg-black text-emerald-500 focus:ring-emerald-500" />
-                  <span className="text-[10px] font-black uppercase tracking-widest text-gray-400 group-hover:text-white transition-colors">Paid Session</span>
+          {/* Row 3: Speaker + Max Attendees */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="space-y-2">
+              <label className="text-[9px] font-black uppercase tracking-[0.25em] text-gray-500">Speaker Name</label>
+              <input
+                type="text" value={form.speaker}
+                onChange={e => setForm(f => ({ ...f, speaker: e.target.value }))}
+                placeholder="e.g. Vikram Shah"
+                className="w-full bg-black border border-white/5 rounded-2xl p-4 text-white text-sm outline-none transition-all placeholder:text-zinc-700"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-[9px] font-black uppercase tracking-[0.25em] text-gray-500">Max Attendees</label>
+              <input
+                type="number" min={1} value={form.maxAttendees}
+                onChange={e => setForm(f => ({ ...f, maxAttendees: Number(e.target.value) }))}
+                className="w-full bg-black border border-white/5 rounded-2xl p-4 text-white text-sm outline-none transition-all"
+              />
+            </div>
+            <div className="space-y-2 flex flex-col justify-end">
+              <div className="flex items-center gap-6 p-4 bg-black border border-white/5 rounded-2xl">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox" checked={form.isPaid}
+                    onChange={e => setForm(f => ({ ...f, isPaid: e.target.checked }))}
+                    className="w-4 h-4 rounded border-white/10 bg-black text-emerald-500"
+                  />
+                  <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Paid Session</span>
                 </label>
-                {isPaid && (
-                  <div className="flex items-center gap-2">
-                    <span className="text-gray-500 font-bold">$</span>
-                    <input type="number" value={price} onChange={(e) => setPrice(Number(e.target.value))} className="w-20 bg-black border border-white/5 rounded-xl p-2 text-white text-xs outline-none" />
+                {form.isPaid && (
+                  <div className="flex items-center gap-2 flex-1">
+                    <DollarSign className="w-4 h-4 text-gray-500 shrink-0" />
+                    <input
+                      type="number" min={0} value={form.price}
+                      onChange={e => setForm(f => ({ ...f, price: Number(e.target.value) }))}
+                      className="w-full bg-transparent text-white text-sm outline-none font-bold"
+                    />
                   </div>
                 )}
               </div>
             </div>
           </div>
 
-          <div className="flex gap-4 pt-4">
-            <button 
+          {/* Row 4: Media URLs */}
+          <div className="p-6 bg-black/40 border border-white/5 rounded-3xl space-y-6">
+            <div className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.3em]">Media & Branding</div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {[
+                { label: "Speaker Profile Image URL", key: "speakerProfileUrl", placeholder: "https://..." },
+                { label: "Brand / Company Logo URL", key: "brandLogoUrl", placeholder: "https://..." },
+                { label: "Webinar Cover Image URL", key: "webinarImageUrl", placeholder: "https://..." },
+                { label: "Sponsor Logos (comma-separated URLs)", key: "sponsorLogos", placeholder: "https://logo1.png, https://logo2.png" },
+              ].map(field => (
+                <div key={field.key} className="space-y-1.5">
+                  <label className="text-[9px] font-black uppercase tracking-widest text-gray-600">{field.label}</label>
+                  <input
+                    type="url"
+                    value={(form as any)[field.key]}
+                    onChange={e => setForm(f => ({ ...f, [field.key]: e.target.value }))}
+                    placeholder={field.placeholder}
+                    className="w-full bg-black/40 border border-white/5 rounded-xl p-3 text-xs text-white outline-none focus:border-cyan-500/50 transition-all placeholder:text-zinc-800"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Row 5: About Content */}
+          <div className="space-y-2">
+            <label className="text-[9px] font-black uppercase tracking-[0.25em] text-gray-500">About This Session (Extended Description)</label>
+            <textarea
+              rows={4} value={form.aboutContent}
+              onChange={e => setForm(f => ({ ...f, aboutContent: e.target.value }))}
+              placeholder="Detailed content that appears on the webinar detail page..."
+              className="w-full bg-black border border-white/5 focus:border-emerald-500/50 rounded-2xl p-4 text-white text-sm outline-none transition-all resize-none font-mono"
+            />
+          </div>
+
+          {/* Actions */}
+          <div className="flex gap-4">
+            <button
               type="submit" disabled={loading}
-              className="px-10 py-4 bg-emerald-500 hover:bg-emerald-400 text-black font-black text-[10px] uppercase tracking-[0.2em] rounded-2xl shadow-xl shadow-emerald-500/10 transition-all disabled:opacity-50"
+              className="flex-1 py-4 bg-emerald-500 hover:bg-emerald-400 text-black font-black text-[10px] uppercase tracking-[0.2em] rounded-2xl shadow-xl shadow-emerald-500/10 transition-all disabled:opacity-50 flex items-center justify-center gap-3"
             >
-              {(() => {
-                if (loading) return "Discovering...";
-                if (editingId) return "Save Amendment";
-                return "Execute Schedule";
-              })()}
+              {loading ? (
+                <RefreshCw className="w-4 h-4 animate-spin" />
+              ) : (
+                <Video className="w-4 h-4" />
+              )}
+              {editingId ? "Save Changes" : "Schedule Session"}
             </button>
-            {editingId && (
-              <button 
-                type="button" onClick={resetForm}
-                className="px-10 py-4 bg-red-500/10 hover:bg-red-500/20 text-red-500 font-black text-[10px] uppercase tracking-[0.2em] rounded-2xl transition-all"
-              >
-                Abort Edit
-              </button>
-            )}
           </div>
         </form>
       </div>
 
-      <div className="bg-zinc-900 border border-white/10 p-10 rounded-[40px] shadow-2xl">
-        <div className="flex items-center justify-between mb-10">
+      {/* Webinar List */}
+      <div className="bg-zinc-900 border border-white/10 p-8 lg:p-10 rounded-[40px] shadow-2xl">
+        <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 flex items-center justify-center text-cyan-500">
-              <Calendar className="w-6 h-6" />
+              <Calendar className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-2xl font-black text-white uppercase tracking-tighter italic">Live Calendar</h2>
-              <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">Pending Institutional Sessions</p>
+              <h2 className="text-2xl font-black text-white uppercase tracking-tighter">Live Calendar</h2>
+              <p className="text-[10px] text-gray-500 font-bold uppercase tracking-[0.3em] mt-1">
+                {webinars.length} sessions in system
+              </p>
             </div>
           </div>
+          <button
+            onClick={fetchWebinars}
+            disabled={fetching}
+            className="p-3 rounded-xl bg-white/5 border border-white/5 text-gray-500 hover:text-white transition-all"
+          >
+            <RefreshCw className={cn("w-4 h-4", fetching && "animate-spin")} />
+          </button>
         </div>
 
-        <div className="space-y-4">
-          {recentWebinars.length > 0 ? (
-            recentWebinars.map((w) => (
-              <div key={w.id} className="p-6 rounded-3xl bg-black/40 border border-white/5 flex items-center justify-between group hover:bg-white/[0.02] transition-all">
-                <div className="flex items-center gap-6">
-                  <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-gray-500 group-hover:text-emerald-500 transition-colors shrink-0">
-                    <Clock className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h4 className="text-white font-black uppercase tracking-tight italic">{w.title}</h4>
-                    <div className="flex items-center gap-4 mt-1.5 text-[9px] font-black uppercase tracking-widest text-gray-500">
-                      <span className="flex items-center gap-1.5"><Calendar className="w-3 h-3 text-emerald-500" /> {new Date(w.date_time).toLocaleDateString()}</span>
-                      <span className="flex items-center gap-1.5"><Search className="w-3 h-3 text-cyan-500" /> {w.speaker_name}</span>
+        {fetching ? (
+          <div className="space-y-4">
+            {[1, 2, 3].map(i => (
+              <div key={i} className="h-24 bg-white/5 rounded-3xl animate-pulse" />
+            ))}
+          </div>
+        ) : webinars.length === 0 ? (
+          <div className="text-center py-20 bg-black/20 rounded-[32px] border-2 border-dashed border-white/5 uppercase font-black text-gray-700 text-[10px] tracking-widest">
+            No sessions scheduled. Create one above.
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {webinars.map(w => (
+              <div key={w.id} className="p-6 rounded-3xl bg-black/40 border border-white/5 hover:border-white/10 transition-all group">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-5 flex-1 min-w-0">
+                    <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-gray-500 group-hover:text-emerald-500 transition-colors shrink-0">
+                      <Clock className="w-6 h-6" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-3 mb-1.5">
+                        <h4 className="text-white font-black uppercase tracking-tight text-sm truncate">{w.title}</h4>
+                        <span className={cn("px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest border shrink-0", STATUS_COLORS[w.status])}>
+                          {w.status}
+                        </span>
+                        {w.is_paid && (
+                          <span className="px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest border shrink-0 bg-amber-500/10 text-amber-400 border-amber-500/20">
+                            ${w.price}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-4 text-[9px] font-black uppercase tracking-widest text-gray-500">
+                        <span className="flex items-center gap-1.5">
+                          <Calendar className="w-3 h-3 text-emerald-500" />
+                          {new Date(w.date_time).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
+                        </span>
+                        {w.speaker_name && (
+                          <span className="flex items-center gap-1.5">
+                            <Globe className="w-3 h-3 text-cyan-500" />
+                            {w.speaker_name}
+                          </span>
+                        )}
+                        <span className="flex items-center gap-1.5 text-gray-600">
+                          <Users className="w-3 h-3" />
+                          {w.registration_count ?? 0} / {w.max_attendees}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button onClick={() => handleEdit(w)} className="p-3 rounded-xl bg-white/5 text-gray-400 hover:bg-emerald-500 hover:text-black transition-all"><Edit2 className="w-4 h-4" /></button>
-                  <button onClick={() => { setWebinarToDelete(w.id); setIsDeleteDialogOpen(true); }} className="p-3 rounded-xl bg-white/5 text-gray-400 hover:bg-red-500 hover:text-white transition-all"><Trash2 className="w-4 h-4" /></button>
+
+                  <div className="flex items-center gap-2 shrink-0 ml-4">
+                    <button
+                      onClick={() => fetchRegistrations(w.id)}
+                      className="p-3 rounded-xl bg-white/5 text-gray-400 hover:bg-blue-500/20 hover:text-blue-400 transition-all"
+                      title="View Registrations"
+                    >
+                      <Eye className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => handleEdit(w)}
+                      className="p-3 rounded-xl bg-white/5 text-gray-400 hover:bg-emerald-500/20 hover:text-emerald-400 transition-all"
+                    >
+                      <Edit2 className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => { setWebinarToDelete(w.id); setIsDeleteDialogOpen(true); }}
+                      className="p-3 rounded-xl bg-white/5 text-gray-400 hover:bg-red-500/20 hover:text-red-400 transition-all"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
               </div>
-            ))
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Registrations Panel */}
+      {viewRegistrations && (
+        <div className="bg-zinc-900 border border-white/10 p-8 lg:p-10 rounded-[40px] shadow-2xl">
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-purple-500/10 flex items-center justify-center text-purple-400">
+                <Users className="w-5 h-5" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-black text-white uppercase tracking-tighter">Registrations</h2>
+                <p className="text-[10px] text-gray-500 font-bold uppercase tracking-[0.3em] mt-1">
+                  {webinars.find(w => w.id === viewRegistrations)?.title}
+                </p>
+              </div>
+            </div>
+            <button onClick={() => setViewRegistrations(null)} className="p-3 rounded-xl bg-white/5 text-gray-400 hover:text-white transition-all">
+              <XCircle className="w-4 h-4" />
+            </button>
+          </div>
+
+          {regLoading ? (
+            <div className="space-y-3">
+              {[1, 2, 3].map(i => <div key={i} className="h-12 bg-white/5 rounded-2xl animate-pulse" />)}
+            </div>
+          ) : registrations.length === 0 ? (
+            <div className="text-center py-12 text-gray-600 font-bold text-[11px] uppercase tracking-widest">
+              No registrations yet for this session.
+            </div>
           ) : (
-            <div className="text-center py-20 bg-black/20 rounded-[32px] border-2 border-dashed border-white/5 uppercase font-black text-gray-700 text-[10px] tracking-widest">
-              No sessions found in the institutional hopper.
+            <div className="overflow-x-auto">
+              <table className="w-full text-left">
+                <thead>
+                  <tr className="border-b border-white/5">
+                    {["Email", "Registered At", "Attended", "Payment"].map(h => (
+                      <th key={h} className="pb-3 text-[9px] font-black uppercase tracking-widest text-gray-600">{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/5">
+                  {registrations.map(r => (
+                    <tr key={r.id} className="hover:bg-white/[0.02] transition-colors">
+                      <td className="py-3 text-xs text-white font-mono">{r.email}</td>
+                      <td className="py-3 text-[10px] text-gray-500">{new Date(r.created_at).toLocaleDateString()}</td>
+                      <td className="py-3">
+                        <span className={cn("px-2 py-0.5 rounded-full text-[8px] font-black uppercase border", r.attended ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" : "bg-gray-500/10 text-gray-500 border-gray-500/20")}>
+                          {r.attended ? "Yes" : "No"}
+                        </span>
+                      </td>
+                      <td className="py-3">
+                        <span className={cn("px-2 py-0.5 rounded-full text-[8px] font-black uppercase border", r.payment_status === "completed" ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" : "bg-amber-500/10 text-amber-400 border-amber-500/20")}>
+                          {r.payment_status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           )}
         </div>
-      </div>
+      )}
 
-      <Dialog isOpen={isDeleteDialogOpen} onClose={() => setIsDeleteDialogOpen(false)} title="Destroy Session?">
-        <div className="p-8 text-center">
-          <p className="text-gray-400 text-sm font-medium leading-relaxed mb-8 italic">
-            "Are you certain you want to erase this session from the public discovery stream? This action is non-reversible."
-          </p>
-          <div className="flex gap-4">
-            <button onClick={() => setIsDeleteDialogOpen(false)} className="flex-1 py-4 bg-white/5 text-white font-black text-[10px] uppercase tracking-widest rounded-2xl hover:bg-white/10 transition-all">Abort</button>
-            <button onClick={handleDelete} disabled={deleteLoading} className="flex-1 py-4 bg-red-500 text-white font-black text-[10px] uppercase tracking-widest rounded-2xl hover:bg-red-400 shadow-xl shadow-red-500/20 transition-all">
-              {deleteLoading ? "Erasing..." : "Execute Destruction"}
-            </button>
-          </div>
-        </div>
+      {/* Delete Dialog */}
+      <Dialog
+        isOpen={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        onConfirm={handleDelete}
+        isLoading={deleteLoading}
+        title="Remove Session?"
+        variant="danger"
+        confirmText="Delete Session"
+      >
+        <p className="text-gray-400 text-sm font-medium leading-relaxed text-center p-6">
+          This will permanently remove the webinar and all associated data. This action cannot be undone.
+        </p>
       </Dialog>
     </div>
   );

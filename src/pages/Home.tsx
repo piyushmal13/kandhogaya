@@ -5,16 +5,15 @@ import { EcosystemSection } from "../components/home/EcosystemSection";
 import { GlobalReach } from "../components/home/GlobalReach";
 import { HeroSection } from "../components/home/HeroSection";
 import { MarketTicker } from "../components/home/MarketTicker";
-import { PerformanceHistory } from "../components/home/PerformanceHistory";
 import { WebinarPromo } from "../components/home/WebinarPromo";
 import { NewsletterPopup } from "../components/ui/NewsletterPopup";
 import { SignupForm } from "../components/ui/SignupForm";
 import { SuccessShowcase } from "../components/ui/SuccessShowcase";
 import { ReviewPromptModal } from "../components/ui/ReviewPromptModal";
 import { ExitIntentModal } from "../components/ui/ExitIntentModal";
-import { SocialProof } from "../components/home/SocialProof";
 import { educationalOrganizationSchema, websiteSchema, faqSchema, goldAlgoCourseSchema } from "../utils/structuredData";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { LazySection } from "../components/ui/LazySection";
 
 const homeFaqs = [
   {
@@ -39,69 +38,58 @@ const homeFaqs = [
   },
 ];
 
-import { LazySection } from "../components/ui/LazySection";
-
 export const Home = () => {
   const [showReviewModal, setShowReviewModal] = useState(false);
 
-  useEffect(() => {
-    // Audit: Removed simulator trigger. Reviews now trigger on purchase fulfillment.
-  }, []);
-
   return (
-  <div className="min-h-screen relative overflow-hidden">
-    <ReviewPromptModal isOpen={showReviewModal} onClose={() => setShowReviewModal(false)} />
-    <ExitIntentModal />
-    <PageMeta
-      title="IFX Trades | Institutional Forex Education & Macro Research"
-      description="Asia's leading institutional forex education platform. Master quantitative analysis with the best algo trading course in Dubai and India. Professional macro research."
-      path="/"
-      keywords={[
-        "IFX Trades",
-        "forex education Asia",
-        "best algo trading course Dubai India",
-        "institutional macro research",
-        "trading academy"
-      ]}
-      structuredData={[educationalOrganizationSchema(), websiteSchema(), goldAlgoCourseSchema(), faqSchema(homeFaqs)]}
-    />
-    <HeroSection />
-    <MarketTicker />
-    <SocialProof />
-    
-    <LazySection placeholderHeight="600px">
-      <WebinarPromo />
-    </LazySection>
+    <div className="min-h-screen relative overflow-hidden">
+      <ReviewPromptModal isOpen={showReviewModal} onClose={() => setShowReviewModal(false)} />
+      <ExitIntentModal />
+      <PageMeta
+        title="IFX Trades | Institutional Forex Education & Macro Research"
+        description="Asia's leading institutional forex education platform. Master quantitative analysis with the best algo trading course in Dubai and India. Professional macro research."
+        path="/"
+        keywords={[
+          "IFX Trades",
+          "forex education Asia",
+          "best algo trading course Dubai India",
+          "institutional macro research",
+          "trading academy"
+        ]}
+        structuredData={[educationalOrganizationSchema(), websiteSchema(), goldAlgoCourseSchema(), faqSchema(homeFaqs)]}
+      />
+      <HeroSection />
+      <MarketTicker />
 
-    <LazySection placeholderHeight="800px">
-      <EcosystemSection />
-    </LazySection>
+      <LazySection placeholderHeight="600px">
+        <WebinarPromo />
+      </LazySection>
 
-    <LazySection placeholderHeight="700px">
-      <GlobalReach />
-    </LazySection>
+      <LazySection placeholderHeight="800px">
+        <EcosystemSection />
+      </LazySection>
 
-    <LazySection placeholderHeight="600px">
-      <AlgoGreatness />
-    </LazySection>
+      <LazySection placeholderHeight="700px">
+        <GlobalReach />
+      </LazySection>
 
-    <LazySection placeholderHeight="800px">
-      <BlogSection />
-    </LazySection>
+      <LazySection placeholderHeight="600px">
+        <AlgoGreatness />
+      </LazySection>
 
-    <LazySection placeholderHeight="900px">
-      <PerformanceHistory />
-    </LazySection>
+      <LazySection placeholderHeight="800px">
+        <BlogSection />
+      </LazySection>
 
-    <LazySection placeholderHeight="600px">
-      <SuccessShowcase />
-    </LazySection>
+      <LazySection placeholderHeight="600px">
+        <SuccessShowcase />
+      </LazySection>
 
-    <LazySection placeholderHeight="400px">
-      <SignupForm />
-    </LazySection>
+      <LazySection placeholderHeight="400px">
+        <SignupForm />
+      </LazySection>
 
-    <NewsletterPopup />
-  </div>
+      <NewsletterPopup />
+    </div>
   );
 };
