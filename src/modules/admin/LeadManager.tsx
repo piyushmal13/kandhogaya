@@ -21,6 +21,86 @@ export const LeadManager = () => {
     l.email?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const renderLeadContent = () => {
+    if (loading) {
+      return (
+        <tr>
+          <td colSpan={6} className="px-8 py-20 text-center">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
+          </td>
+        </tr>
+      );
+    }
+
+    if (filteredLeads.length === 0) {
+      return (
+        <tr>
+          <td colSpan={6} className="px-8 py-20 text-center text-[10px] font-black text-gray-600 uppercase tracking-widest">
+            No Prospects Discovered
+          </td>
+        </tr>
+      );
+    }
+
+    return filteredLeads.map((lead) => (
+      <tr key={lead.id} className="hover:bg-white/5 transition-colors group cursor-pointer">
+        <td className="px-8 py-6">
+          <div className="flex flex-col">
+            <span className="text-[11px] font-black text-white uppercase tracking-wider">{lead.name || 'Anonymous Prospect'}</span>
+            <span className="text-[9px] font-black text-gray-600 uppercase tracking-widest mt-1">{lead.email}</span>
+            <div className="flex gap-2 mt-2">
+               {(lead.active_licenses ?? 0) > 0 && (
+                 <span className="px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-[10px] font-black uppercase tracking-tighter">
+                   {lead.active_licenses} ACTIVE BOTS
+                 </span>
+               )}
+               {(lead.webinar_count ?? 0) > 0 && (
+                 <span className="px-1.5 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/20 text-cyan-500 text-[10px] font-black uppercase tracking-tighter">
+                   {lead.webinar_count} WEBINARS
+                 </span>
+               )}
+            </div>
+          </div>
+        </td>
+        <td className="px-8 py-6">
+          <div className="flex items-center gap-2">
+            {(() => {
+               let color = 'bg-gray-600';
+               let glow = '';
+               if (lead.status === 'converted') {
+                 color = 'bg-emerald-500';
+                 glow = 'shadow-[0_0_8px_rgba(16,185,129,0.5)]';
+               } else if (lead.status === 'interested' || lead.status === 'HIGH_INTENT') {
+                 color = 'bg-cyan-500';
+               }
+               return <div className={cn("w-1.5 h-1.5 rounded-full animate-pulse", color, glow)} />;
+            })()}
+            <span className="text-[10px] font-black text-white uppercase tracking-widest italic">{lead.status}</span>
+          </div>
+        </td>
+        <td className="px-8 py-6">
+          <span className="text-[11px] font-black text-amber-500 italic">${(lead.ltv_projected || 0).toLocaleString()}</span>
+        </td>
+        <td className="px-8 py-6">
+          <span className="text-[11px] font-black text-white italic">${(lead.revenue_mtd || 0).toLocaleString()}</span>
+        </td>
+        <td className="px-8 py-6">
+          {lead.referred_by_code ? (
+            <div className="flex flex-col">
+               <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest italic">{lead.referred_by_code}</span>
+               <span className="text-[8px] font-bold text-gray-600 uppercase tracking-widest mt-1">Affiliate Signal</span>
+            </div>
+          ) : (
+            <span className="text-[10px] font-black text-gray-700 uppercase tracking-widest italic">Direct</span>
+          )}
+        </td>
+        <td className="px-8 py-6">
+          <span className="text-[10px] font-black text-gray-600 uppercase tracking-widest">{new Date(lead.created_at).toLocaleDateString()}</span>
+        </td>
+      </tr>
+    ));
+  };
+
   return (
     <div className="space-y-8 animate-in fade-in duration-1000">
       
@@ -36,7 +116,7 @@ export const LeadManager = () => {
             onClick={() => {
               const csv = [
                 ["ID", "Name", "Email", "Status", "Source", "Referrer", "Discovery Date"],
-                ...filteredLeads.map(l => [l.id, l.name || 'Anonymous', l.email, l.status, l.source || 'Direct', l.referred_by_code || 'None', new Date(l.created_at).toLocaleDateString()])
+                ...filteredLeads.map(l => [l.id, l.name || 'Anonymous', l.email, l.status, l.source || 'Direct', l.referred_by_code || 'None', new Date(l.created_at || "").toLocaleDateString()])
               ].map(e => e.join(",")).join("\n");
               const blob = new Blob([csv], { type: 'text/csv' });
               const url = globalThis.URL.createObjectURL(blob);
@@ -98,77 +178,7 @@ export const LeadManager = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
-              {loading ? (
-                <tr>
-                  <td colSpan={5} className="px-8 py-20 text-center">
-                    <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
-                  </td>
-                </tr>
-              ) : filteredLeads.length === 0 ? (
-                <tr>
-                  <td colSpan={5} className="px-8 py-20 text-center text-[10px] font-black text-gray-600 uppercase tracking-widest">
-                    No Prospects Discovered
-                  </td>
-                </tr>
-              ) : (
-                filteredLeads.map((lead) => (
-                  <tr key={lead.id} className="hover:bg-white/5 transition-colors group cursor-pointer">
-                    <td className="px-8 py-6">
-                      <div className="flex flex-col">
-                        <span className="text-[11px] font-black text-white uppercase tracking-wider">{lead.name || 'Anonymous Prospect'}</span>
-                        <span className="text-[9px] font-black text-gray-600 uppercase tracking-widest mt-1">{lead.email}</span>
-                        <div className="flex gap-2 mt-2">
-                           {lead.active_licenses > 0 && (
-                             <span className="px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-[7px] font-black uppercase tracking-tighter">
-                               {lead.active_licenses} ACTIVE BOTS
-                             </span>
-                           )}
-                           {lead.webinar_count > 0 && (
-                             <span className="px-1.5 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/20 text-cyan-500 text-[7px] font-black uppercase tracking-tighter">
-                               {lead.webinar_count} WEBINARS
-                             </span>
-                           )}
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-8 py-6">
-                      <div className="flex items-center gap-2">
-                        {(() => {
-                           let color = 'bg-gray-600';
-                           let glow = '';
-                           if (lead.status === 'converted') {
-                             color = 'bg-emerald-500';
-                             glow = 'shadow-[0_0_8px_rgba(16,185,129,0.5)]';
-                           } else if (lead.status === 'interested' || lead.status === 'HIGH_INTENT') {
-                             color = 'bg-cyan-500';
-                           }
-                           return <div className={cn("w-1.5 h-1.5 rounded-full animate-pulse", color, glow)} />;
-                        })()}
-                        <span className="text-[10px] font-black text-white uppercase tracking-widest italic">{lead.status}</span>
-                      </div>
-                    </td>
-                    <td className="px-8 py-6">
-                      <span className="text-[11px] font-black text-amber-500 italic">${(lead.ltv_projected || 0).toLocaleString()}</span>
-                    </td>
-                    <td className="px-8 py-6">
-                      <span className="text-[11px] font-black text-white italic">${(lead.revenue_mtd || 0).toLocaleString()}</span>
-                    </td>
-                    <td className="px-8 py-6">
-                      {lead.referred_by_code ? (
-                        <div className="flex flex-col">
-                           <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest italic">{lead.referred_by_code}</span>
-                           <span className="text-[8px] font-bold text-gray-600 uppercase tracking-widest mt-1">Affiliate Signal</span>
-                        </div>
-                      ) : (
-                        <span className="text-[10px] font-black text-gray-700 uppercase tracking-widest italic">Direct</span>
-                      )}
-                    </td>
-                    <td className="px-8 py-6">
-                      <span className="text-[10px] font-black text-gray-600 uppercase tracking-widest">{new Date(lead.created_at).toLocaleDateString()}</span>
-                    </td>
-                  </tr>
-                ))
-              )}
+              {renderLeadContent()}
             </tbody>
           </table>
         </div>
