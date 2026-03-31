@@ -293,7 +293,7 @@ export const Dashboard = () => {
             <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight leading-none">
               Console <span className="text-emerald-500">01</span>
               <span className="block text-sm font-medium text-gray-400 mt-4 lowercase font-mono">
-                authenticated id: {userProfile?.full_name || user.email?.split('@')[0]}
+                authenticated id: {userProfile?.full_name || (user.email ? user.email.split('@')[0] : user.id.slice(0, 8))}
               </span>
             </h1>
           </motion.div>

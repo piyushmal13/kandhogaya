@@ -17,7 +17,7 @@ interface RegistrationModalProps {
 export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationModalProps) => {
   const { user, userProfile } = useAuth();
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({ name: "", email: "", country: "" });
+  const [formData, setFormData] = useState({ name: "", email: "", phone: "", country: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -118,6 +118,25 @@ export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationM
 
         if (updateError) console.error("Could not update count:", updateError);
 
+        // 4. Upsert Lead in CRM
+        const { error: leadError } = await supabase
+          .from('leads')
+          .upsert({
+            id: user.id || undefined,
+            name: formData.name || userProfile?.full_name || "Webinar Registrant",
+            email: formData.email,
+            status: "interested",
+            source: "Webinar Registration",
+            metadata: { 
+              phone: formData.phone,
+              country: formData.country,
+              webinar_id: webinar.id,
+              webinar_title: webinar.title
+            }
+          }, { onConflict: "email" });
+          
+        if (leadError) console.error("Could not add to leads CRM:", leadError);
+
         tracker.track("webinar_register", { webinar_id: webinar.id, title: webinar.title });
         setLoading(false);
         setStep(3); // Success
@@ -205,7 +224,7 @@ export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationM
                 />
               </div>
               <div>
-                <label className="block text-xs text-gray-500 mb-1" htmlFor="emailAddress">Email Address</label>
+                <label className="block text-xs text-gray-500 mb-1" htmlFor="emailAddress">Email Address *</label>
                 <input 
                   id="emailAddress"
                   required
@@ -214,6 +233,18 @@ export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationM
                   value={formData.email}
                   onChange={e => setFormData({...formData, email: e.target.value})}
                   placeholder="john@example.com"
+                />
+              </div>
+              <div>
+                <label className="block text-xs text-gray-500 mb-1" htmlFor="phone">Phone Number *</label>
+                <input 
+                  id="phone"
+                  required
+                  type="tel" 
+                  className="w-full bg-black border border-white/10 rounded-lg px-4 py-3 text-white focus:border-emerald-500 outline-none transition-colors"
+                  value={formData.phone}
+                  onChange={e => setFormData({...formData, phone: e.target.value})}
+                  placeholder="+1 (555) 000-0000"
                 />
               </div>
               <div>
@@ -287,11 +318,40 @@ export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationM
             </p>
             
             <div className="bg-white/5 rounded-xl p-4 mb-8 border border-white/5 text-left">
-              <div className="text-xs text-gray-500 uppercase tracking-wider mb-2">Next Steps</div>
-              <ul className="space-y-2 text-sm text-gray-300">
-                <li className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-emerald-500" />
-                  Add to Calendar (Link in email)
+              <div className="text-xs text-gray-500 uppercase tracking-wider mb-3">Next Steps</div>
+              <ul className="space-y-4 text-sm text-gray-300">
+                <li className="flex flex-col gap-2">
+                  <div className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-emerald-500" />
+                    <span className="font-bold text-white">Save the Date to your Calendar</span>
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-2 pl-6">
+                    <a 
+                      href={`https://calendar.google.com/calendar/r/eventedit?text=${encodeURIComponent(webinar.title)}&dates=${new Date(webinar.date_time).toISOString().replace(/-|:|\.\d+/g, '')}/${new Date(new Date(webinar.date_time).getTime() + 60*60*1000).toISOString().replace(/-|:|\.\d+/g, '')}&details=${encodeURIComponent(webinar.description || 'Institutional Trading Masterclass')}&location=Online`}
+                      target="_blank" rel="noopener noreferrer"
+                      className="px-4 py-2 bg-emerald-500/10 text-emerald-500 rounded-lg border border-emerald-500/20 text-xs font-bold uppercase tracking-widest hover:bg-emerald-500 hover:text-black transition-all text-center"
+                    >
+                      Google Calendar
+                    </a>
+                    <a 
+                      href={`data:text/calendar;charset=utf-8,${encodeURIComponent([
+                        'BEGIN:VCALENDAR',
+                        'VERSION:2.0',
+                        'BEGIN:VEVENT',
+                         `DTSTART:${new Date(webinar.date_time).toISOString().replace(/-|:|\.\d+/g, '')}`,
+                         `DTEND:${new Date(new Date(webinar.date_time).getTime() + 60*60*1000).toISOString().replace(/-|:|\.\d+/g, '')}`,
+                         `SUMMARY:${webinar.title}`,
+                         `DESCRIPTION:${webinar.description || 'Institutional Trading Masterclass'}`,
+                         `LOCATION:Online`,
+                        'END:VEVENT',
+                        'END:VCALENDAR'
+                      ].join('\n'))}`}
+                      download={`${webinar.title.replace(/[^a-z0-9]/gi, '_')}.ics`}
+                      className="px-4 py-2 bg-blue-500/10 text-blue-400 rounded-lg border border-blue-500/20 text-xs font-bold uppercase tracking-widest hover:bg-blue-500 hover:text-white transition-all text-center"
+                    >
+                      Apple / Outlook (.ics)
+                    </a>
+                  </div>
                 </li>
                 <li className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-emerald-500" />
@@ -299,14 +359,14 @@ export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationM
                 </li>
                 <li className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-emerald-500" />
-                  Prepare questions for Q&A
+                  Prepare questions for Q&A session
                 </li>
               </ul>
             </div>
 
             <button 
               onClick={() => {
-                onSuccess();
+                if (onSuccess) onSuccess();
                 onClose();
               }}
               className="w-full py-3 bg-white text-black font-bold rounded-xl hover:bg-gray-200 transition-colors"

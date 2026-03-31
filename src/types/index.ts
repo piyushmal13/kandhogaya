@@ -309,10 +309,11 @@ export interface MarketPair {
   id: string;
   symbol: string;
   price: number;
-  change: number;
+  change: number | string;
   change_percent: number;
   volume: number;
   last_updated: string;
   high_24h: number;
   low_24h: number;
+  up?: boolean;
 }
