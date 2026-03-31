@@ -327,7 +327,7 @@ export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationM
                   </div>
                   <div className="flex flex-col sm:flex-row gap-2 pl-6">
                     <a 
-                      href={`https://calendar.google.com/calendar/r/eventedit?text=${encodeURIComponent(webinar.title)}&dates=${new Date(webinar.date_time).toISOString().replace(/-|:|\.\d+/g, '')}/${new Date(new Date(webinar.date_time).getTime() + 60*60*1000).toISOString().replace(/-|:|\.\d+/g, '')}&details=${encodeURIComponent(webinar.description || 'Institutional Trading Masterclass')}&location=Online`}
+                      href={`https://calendar.google.com/calendar/r/eventedit?text=${encodeURIComponent(webinar.title)}&dates=${new Date(webinar.date_time).toISOString().replaceAll(/-|:|\.\d+/g, '')}/${new Date(new Date(webinar.date_time).getTime() + 60*60*1000).toISOString().replaceAll(/-|:|\.\d+/g, '')}&details=${encodeURIComponent(webinar.description || 'Institutional Trading Masterclass')}&location=Online`}
                       target="_blank" rel="noopener noreferrer"
                       className="px-4 py-2 bg-emerald-500/10 text-emerald-500 rounded-lg border border-emerald-500/20 text-xs font-bold uppercase tracking-widest hover:bg-emerald-500 hover:text-black transition-all text-center"
                     >
@@ -338,15 +338,15 @@ export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationM
                         'BEGIN:VCALENDAR',
                         'VERSION:2.0',
                         'BEGIN:VEVENT',
-                         `DTSTART:${new Date(webinar.date_time).toISOString().replace(/-|:|\.\d+/g, '')}`,
-                         `DTEND:${new Date(new Date(webinar.date_time).getTime() + 60*60*1000).toISOString().replace(/-|:|\.\d+/g, '')}`,
+                         `DTSTART:${new Date(webinar.date_time).toISOString().replaceAll(/-|:|\.\d+/g, '')}`,
+                         `DTEND:${new Date(new Date(webinar.date_time).getTime() + 60*60*1000).toISOString().replaceAll(/-|:|\.\d+/g, '')}`,
                          `SUMMARY:${webinar.title}`,
                          `DESCRIPTION:${webinar.description || 'Institutional Trading Masterclass'}`,
                          `LOCATION:Online`,
                         'END:VEVENT',
                         'END:VCALENDAR'
                       ].join('\n'))}`}
-                      download={`${webinar.title.replace(/[^a-z0-9]/gi, '_')}.ics`}
+                      download={`${webinar.title.replaceAll(/[^a-z0-9]/gi, '_')}.ics`}
                       className="px-4 py-2 bg-blue-500/10 text-blue-400 rounded-lg border border-blue-500/20 text-xs font-bold uppercase tracking-widest hover:bg-blue-500 hover:text-white transition-all text-center"
                     >
                       Apple / Outlook (.ics)
