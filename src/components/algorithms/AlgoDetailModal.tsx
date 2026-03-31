@@ -3,7 +3,7 @@ import { motion } from "motion/react";
 import { 
   X, Check, ArrowRight, ShieldCheck, 
   Activity, Zap, HelpCircle, Star, 
-  BarChart3, Lock, FileText, TrendingUp 
+  BarChart3, Lock, FileText, TrendingUp, Share2
 } from "lucide-react";
 import { Product } from "../../types";
 import { useAuth } from "../../contexts/AuthContext";
@@ -70,7 +70,23 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
               <Zap className="w-3 h-3" />
               {algo.category || "Algorithm"}
             </div>
-            <h2 className="text-2xl md:text-4xl font-bold text-white mb-3 md:mb-4">{algo.name}</h2>
+            <div className="flex justify-between items-start gap-4 mb-3 md:mb-4">
+              <h2 className="text-2xl md:text-4xl font-bold text-white">{algo.name}</h2>
+              <button 
+                onClick={() => {
+                  let url = `${globalThis.location.origin}/marketplace`;
+                  if (user?.role === 'admin' || user?.role === 'agent') {
+                      url += `?ref=${user.id.slice(0, 8)}`;
+                  }
+                  globalThis.navigator.clipboard.writeText(url);
+                  info("Referral link copied to clipboard!");
+                }}
+                className="flex items-center gap-2 px-3 py-1.5 bg-emerald-500/10 text-emerald-500 rounded-lg hover:bg-emerald-500 hover:text-black transition-colors border border-emerald-500/20 text-[10px] font-bold uppercase tracking-widest whitespace-nowrap mt-1"
+                title={user?.role === 'admin' || user?.role === 'agent' ? "Copy Your Referral Link" : "Share Link"}
+              >
+                <Share2 className="w-3 h-3" /> {user?.role === 'admin' || user?.role === 'agent' ? "Copy Link" : "Share"}
+              </button>
+            </div>
             <p className="text-gray-400 leading-relaxed text-sm md:text-lg">{algo.description}</p>
           </div>
 

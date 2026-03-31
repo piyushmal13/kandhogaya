@@ -12,6 +12,7 @@ import { CountdownTimer } from "../components/webinars/CountdownTimer";
 import { WebinarSponsors } from "../components/webinars/WebinarSponsors";
 import { PageMeta } from "../components/site/PageMeta";
 import { useAuth } from "../contexts/AuthContext";
+import { useToast } from "../contexts/ToastContext";
 import { ResizedImage } from "../components/ui/ResizedImage";
 
 export const WebinarDetail = () => {
@@ -25,6 +26,7 @@ export const WebinarDetail = () => {
   const [activeTab, setActiveTab] = useState("overview"); // chat, agenda, resources
   const chatEndRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
+  const { success } = useToast();
   const particles = React.useMemo(() => new Array(20).fill(null).map((_, i) => ({ id: `particle-${i}` })), []);
 
   useEffect(() => {
@@ -127,7 +129,19 @@ export const WebinarDetail = () => {
               <Users className="w-4 h-4 text-emerald-500" />
               <span>{webinar.registration_count}+ Attended</span>
             </div>
-            <button className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-gray-400 transition-colors">
+            <button 
+              onClick={() => {
+                let url = window.location.href.split('?')[0];
+                if (user?.role === 'admin' || user?.role === 'agent') {
+                   // Short id mapping if we have an affiliate code, but fallback to their ID
+                   url += `?ref=${user.id.slice(0, 8)}`;
+                }
+                navigator.clipboard.writeText(url);
+                success("Referral link copied to clipboard!");
+              }}
+              className="p-2 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-500 transition-colors border border-emerald-500/20"
+              title={user?.role === 'admin' || user?.role === 'agent' ? "Copy Your Referral Link" : "Copy Link"}
+            >
               <Share2 className="w-5 h-5" />
             </button>
           </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, Play, Lock, CheckCircle2, Clock, BookOpen, ShieldCheck } from "lucide-react";
+import { ArrowLeft, Play, Lock, CheckCircle2, Clock, BookOpen, ShieldCheck, Share2 } from "lucide-react";
 import { getCourseById, checkUserAccess } from "../services/apiHandlers";
 import { Course, Chapter } from "../types";
 import { useAuth } from "../contexts/AuthContext";
@@ -86,9 +86,25 @@ export const CourseDetail = () => {
 
   return (
     <div className="pt-32 pb-20 px-4 max-w-7xl mx-auto min-h-screen">
-      <Link to="/academy" className="inline-flex items-center gap-2 text-emerald-500 font-bold mb-8 hover:translate-x-[-4px] transition-transform">
-        <ArrowLeft className="w-4 h-4" /> Back to Academy
-      </Link>
+      <div className="flex justify-between items-center mb-8">
+        <Link to="/academy" className="inline-flex items-center gap-2 text-emerald-500 font-bold hover:translate-x-[-4px] transition-transform">
+          <ArrowLeft className="w-4 h-4" /> Back to Academy
+        </Link>
+        <button 
+          onClick={() => {
+            let url = globalThis.location.href.split('?')[0];
+            if (user?.role === 'admin' || user?.role === 'agent') {
+                url += `?ref=${user.id.slice(0, 8)}`;
+            }
+            globalThis.navigator.clipboard.writeText(url);
+            info("Referral link copied to clipboard!");
+          }}
+          className="flex items-center gap-2 px-4 py-2 bg-emerald-500/10 text-emerald-500 rounded-lg hover:bg-emerald-500 hover:text-black transition-colors border border-emerald-500/20 text-xs font-bold uppercase tracking-widest"
+          title={user?.role === 'admin' || user?.role === 'agent' ? "Copy Your Referral Link" : "Copy Shared Link"}
+        >
+          <Share2 className="w-4 h-4" /> {user?.role === 'admin' || user?.role === 'agent' ? "Copy Referral Link" : "Share"}
+        </button>
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
         {/* Left: Video Player & Content */}

@@ -127,6 +127,7 @@ export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationM
             email: formData.email,
             status: "interested",
             source: "Webinar Registration",
+            referred_by_code: refCode,
             metadata: { 
               phone: formData.phone,
               country: formData.country,
