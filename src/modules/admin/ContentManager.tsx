@@ -179,8 +179,8 @@ export const ContentManager = () => {
 
   const renderContentList = () => {
     if (fetching) {
-      return Array.from({ length: 4 }).map((_, i) => (
-        <div key={`skeleton-${i}`} className="h-16 bg-white/5 rounded-2xl animate-pulse" />
+      return [1, 2, 3, 4].map((id) => (
+        <div key={id} className="h-16 bg-white/5 rounded-2xl animate-pulse" />
       ));
     }
 
