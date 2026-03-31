@@ -122,25 +122,20 @@ export const ProductManager = () => {
 
     try {
       if (!session) throw new Error("No active session");
-      const res = await fetch(`/api/admin/products/${editingId}`, {
-        method: "PUT",
-        headers: { 
-          "Authorization": `Bearer ${session?.access_token}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(dataToSave)
-      });
       
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || "Failed to update product");
-      }
+      // INSTITUTIONAL FIX: Bypassing broken Express route, updating via direct Supabase Client
+      const { error: updateError } = await supabase
+        .from('products')
+        .update(dataToSave)
+        .eq('id', editingId);
+      
+      if (updateError) throw updateError;
       
       setEditingId(null);
       fetchProducts();
     } catch (error: unknown) {
       const err = error as Error;
-      alert("Error updating product: " + err.message);
+      alert("Institutional Data Error: " + err.message);
     }
     setLoading(false);
   };

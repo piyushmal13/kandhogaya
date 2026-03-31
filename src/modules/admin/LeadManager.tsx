@@ -117,6 +117,18 @@ export const LeadManager = () => {
                       <div className="flex flex-col">
                         <span className="text-[11px] font-black text-white uppercase tracking-wider">{lead.name || 'Anonymous Prospect'}</span>
                         <span className="text-[9px] font-black text-gray-600 uppercase tracking-widest mt-1">{lead.email}</span>
+                        <div className="flex gap-2 mt-2">
+                           {lead.active_licenses > 0 && (
+                             <span className="px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-[7px] font-black uppercase tracking-tighter">
+                               {lead.active_licenses} ACTIVE BOTS
+                             </span>
+                           )}
+                           {lead.webinar_count > 0 && (
+                             <span className="px-1.5 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/20 text-cyan-500 text-[7px] font-black uppercase tracking-tighter">
+                               {lead.webinar_count} WEBINARS
+                             </span>
+                           )}
+                        </div>
                       </div>
                     </td>
                     <td className="px-8 py-6">

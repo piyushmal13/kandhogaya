@@ -16,7 +16,7 @@ export const leadService = {
     const rawLeads = await safeQuery<any[]>(
       publicSupabase
         .from('leads')
-        .select('*')
+        .select('*, bot_licenses(*), webinar_registrations(*)')
         .order('created_at', { ascending: false })
         .range(offset, offset + limit - 1)
     );

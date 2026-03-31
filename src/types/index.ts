@@ -292,6 +292,9 @@ export interface Lead {
   engagement_score?: number;
   referred_by_code?: string;
   metadata?: Record<string, any>;
+  // UI Virtual Fields (Joined)
+  active_licenses?: number;
+  webinar_count?: number;
 }
 
 export interface WebinarRegistration {

@@ -96,10 +96,12 @@ export const DataPulseProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     // Subscribe to changes if needed
     const signalSub = signalService.subscribe(() => fetchData());
     const webinarSub = webinarService.subscribe(() => fetchData());
+    const marketSub = marketService.subscribe(() => fetchData());
 
     return () => {
       signalSub.unsubscribe();
       webinarSub.unsubscribe();
+      marketSub.unsubscribe();
     };
   }, [fetchData]);
 

@@ -54,6 +54,8 @@ export const mapLead = (raw: any): any => ({
   last_active_symbol: raw.last_active_symbol || null,
   engagement_score: Number(raw.engagement_score) || 0,
   metadata: typeof raw.metadata === 'string' ? JSON.parse(raw.metadata) : (raw.metadata || {}),
+  active_licenses: Array.isArray(raw.bot_licenses) ? raw.bot_licenses.length : 0,
+  webinar_count: Array.isArray(raw.webinar_registrations) ? raw.webinar_registrations.length : 0,
 });
 
 export const mapMarketTicker = (raw: any): any => ({
