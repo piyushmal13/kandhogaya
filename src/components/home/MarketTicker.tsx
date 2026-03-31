@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { TrendingUp, TrendingDown, Activity, ShieldCheck } from "lucide-react";
-import { supabase, safeQuery } from "../../lib/supabase";
+import { marketService } from "../../services/marketService";
 
 interface MarketItem {
   id: string;
@@ -16,36 +16,33 @@ export const MarketTicker = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    let active = true;
+
     const fetchMarketData = async () => {
+      setIsLoading(true);
       try {
-        const query = supabase
-          .from("market_data")
-          .select("*")
-          .order("symbol", { ascending: true });
-        
-        const res = await safeQuery<MarketItem[]>(query);
-        if (res && res.length > 0) {
+        // Use the resilient marketService which includes TwelveData, DB, and Mock Fallbacks
+        const res = await marketService.getMarketPairs();
+        if (active && res && res.length > 0) {
           setData(res);
         }
       } catch (err) {
         console.error("Institutional Ticker Feed Failure:", err);
       } finally {
-        setIsLoading(false);
+        if (active) setIsLoading(false);
       }
     };
 
     fetchMarketData();
 
-    // Subscribe to real-time updates for high-fidelity execution feel
-    const channel = supabase
-      .channel('market-ticker-updates')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'market_data' }, (payload) => {
-        fetchMarketData();
-      })
-      .subscribe();
+    // The marketService handles its own robust polling strategy for the ticker
+    const sub = marketService.subscribe(() => {
+      fetchMarketData();
+    });
 
     return () => {
-      supabase.removeChannel(channel);
+      active = false;
+      sub.unsubscribe();
     };
   }, []);
 
