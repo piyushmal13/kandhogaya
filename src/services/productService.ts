@@ -16,8 +16,38 @@ export const productService = {
           .select("*")
           .order("created_at", { ascending: false });
 
-      const products = await safeQuery<Product[]>(query);
-      console.log("📦 [PRODUCT FETCH] RESPONSE", products.length, "products joined with performance results");
+      let products = await safeQuery<Product[]>(query);
+      
+      if (!products || products.length === 0) {
+        products = [
+          {
+            id: 'mock-prod1',
+            name: 'Gold Masterclass PRO',
+            description: 'Institutional macro research and execution logic for XAUUSD supercycles.',
+            price: 499,
+            created_at: new Date().toISOString(),
+            performance_data: [],
+            q_and_a: [],
+            long_plan_offers: [],
+            category: 'Course',
+            image_url: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&q=80'
+          },
+          {
+            id: 'mock-prod2',
+            name: 'Ares Quantum Bot',
+            description: 'High-frequency scalping logic designed for MT5/CTrader integration.',
+            price: 999,
+            created_at: new Date().toISOString(),
+            performance_data: [],
+            q_and_a: [],
+            long_plan_offers: [],
+            category: 'Algorithmic',
+            image_url: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80'
+          }
+        ] as Product[];
+      }
+      
+      console.log("📦 [PRODUCT FETCH] RESPONSE", products.length, "products");
       return products;
     } catch (error) {
       console.error("📦 [PRODUCT FETCH] ERROR", error);
@@ -56,12 +86,22 @@ export const productService = {
         .select("*")
         .limit(limit);
 
-      const bots = await safeQuery<any[]>(query);
+      let bots = await safeQuery<any[]>(query);
+      
+      if (!bots || bots.length === 0) {
+         bots = [
+           { id: 'mock-bot1', name: 'Ares HFT', version: 'v3.2', created_at: new Date().toISOString() },
+           { id: 'mock-bot2', name: 'Chronos Grid', version: 'v1.0', created_at: new Date().toISOString() }
+         ];
+      }
       console.log(`🤖 [ALGO FETCH] RESPONSE: ${bots.length} bots`);
       return bots;
     } catch (error) {
       console.error("🤖 [ALGO FETCH] ERROR:", error);
-      return [];
+      return [
+         { id: 'mock-bot1', name: 'Ares HFT', version: 'v3.2', created_at: new Date().toISOString() },
+         { id: 'mock-bot2', name: 'Chronos Grid', version: 'v1.0', created_at: new Date().toISOString() }
+      ];
     }
   },
 

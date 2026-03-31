@@ -92,15 +92,19 @@ export const HeroSection = () => {
       className="relative min-h-[90vh] sm:min-h-screen pt-24 sm:pt-32 pb-20 flex flex-col items-center justify-center overflow-hidden bg-[#020202]"
     >
       {/* --- Ambient Background --- */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1639734384857-04d8964040ff?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center bg-no-repeat opacity-[0.08]" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#020202] via-transparent to-[#020202]" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full sm:w-[1000px] h-[500px] bg-emerald-500/10 blur-[120px] rounded-full opacity-40 animate-pulse" />
+      <div className="absolute inset-0 z-0 bg-[#020202]">
+        {/* Abstract Grid Layer for Institutional Precision */}
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSA0MCAwIEwgMCAwIDAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjAyKSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#020202]/80 to-[#020202]" />
         
+        {/* Strategic Glows */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-full sm:w-[800px] h-[400px] bg-emerald-500/10 blur-[140px] rounded-[100%] opacity-50 animate-pulse mix-blend-screen" />
+        <div className="absolute -top-32 right-0 w-[500px] h-[500px] bg-cyan-500/10 blur-[120px] rounded-full opacity-30 mix-blend-screen" />
+
         {particles.map(p => (
            <motion.div
              key={p.id}
-             className="absolute w-1 h-1 bg-emerald-500 rounded-full pointer-events-none"
+             className="absolute w-1 h-1 bg-emerald-400 rounded-full pointer-events-none shadow-[0_0_8px_rgba(52,211,153,0.8)]"
              animate={{ x: `${p.x}vw`, y: `${p.y}vh` }}
              style={{ width: p.size, height: p.size, opacity: p.opacity }}
            />
@@ -130,15 +134,19 @@ export const HeroSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          className="max-w-4xl mx-auto"
+          className="max-w-5xl mx-auto"
         >
-          <h1 className="font-black text-white mb-6 leading-[1.05] tracking-tighter uppercase">
-            <span className="text-4xl sm:text-7xl md:text-8xl block font-black">IFX Trades</span>
+          <h1 className="font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/40 mb-6 leading-[0.9] tracking-tighter uppercase relative">
+            <span className="text-5xl sm:text-8xl md:text-[120px] block font-black drop-shadow-[0_0_30px_rgba(255,255,255,0.05)]">
+              IFX Trades
+            </span>
           </h1>
           
-          <p className="text-[10px] sm:text-base text-gray-400 font-medium tracking-[0.1em] uppercase mb-10 sm:mb-14 px-4 leading-relaxed max-w-3xl mx-auto">
-            Global HQ: Dubai &bull; Institutional-Grade Quantitative Research &bull; Macro Intelligence for the Sovereign Elite.{" "}
-            <span className="block text-emerald-500 font-black mt-2 tracking-[0.2em]">Zero Broker Affiliation — Pure Institutional Education.</span>
+          <p className="text-[11px] sm:text-base text-gray-400 font-medium tracking-[0.1em] uppercase mb-10 sm:mb-14 px-4 leading-relaxed max-w-4xl mx-auto backdrop-blur-sm bg-[#020202]/30 py-4 border-y border-white/5 rounded-2xl">
+            <span className="text-white">Global HQ: Dubai</span> &bull; Institutional-Grade Quantitative Research &bull; Macro Intelligence for the Sovereign Elite.{" "}
+            <span className="block text-emerald-400 font-black mt-2 tracking-[0.2em] drop-shadow-[0_0_8px_rgba(52,211,153,0.3)]">
+              Zero Broker Affiliation — Pure Institutional Education.
+            </span>
           </p>
         </motion.div>
 
@@ -168,26 +176,28 @@ export const HeroSection = () => {
                  }, 1000);
                }
             }}
-            className="group p-1 bg-white/5 border border-white/10 rounded-2xl sm:rounded-[32px] flex flex-col sm:flex-row items-stretch sm:items-center gap-1 hover:border-emerald-500/30 transition-all duration-500 shadow-2xl"
+            className="group p-1.5 bg-[#0a0a0a]/60 backdrop-blur-2xl border border-white/10 rounded-2xl sm:rounded-[32px] flex flex-col sm:flex-row items-stretch sm:items-center gap-1.5 hover:border-emerald-500/40 hover:bg-[#0a0a0a]/80 transition-all duration-500 shadow-[0_0_40px_rgba(0,0,0,0.8)] relative overflow-hidden"
           >
+            <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/0 via-emerald-500/5 to-cyan-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
             <input 
               name="email"
               type="email"
               placeholder="ENTER INSTITUTIONAL EMAIL..."
               required
               disabled={formState !== 'idle'}
-              className="flex-1 bg-transparent px-6 py-4 text-[10px] sm:text-xs font-black tracking-widest text-white outline-none uppercase placeholder:text-gray-700 w-full disabled:opacity-50"
+              className="flex-1 bg-transparent px-6 py-4 text-[10px] sm:text-xs font-black tracking-widest text-white outline-none uppercase placeholder:text-gray-600 w-full disabled:opacity-50 z-10"
             />
             <button 
               type="submit"
               disabled={formState !== 'idle'}
-              className="px-8 py-5 sm:py-4 bg-emerald-500 text-black font-black rounded-xl sm:rounded-[28px] transition-all duration-300 hover:bg-emerald-400 hover:scale-[1.02] active:scale-95 text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 whitespace-nowrap shadow-xl"
+              className="relative px-8 py-5 sm:py-4 bg-gradient-to-r from-emerald-500 to-emerald-400 text-black font-black rounded-xl sm:rounded-[26px] transition-all duration-300 hover:scale-[1.02] active:scale-95 text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 whitespace-nowrap shadow-[0_4px_20px_rgba(52,211,153,0.3)] hover:shadow-[0_4px_30px_rgba(52,211,153,0.5)] z-10"
             >
+              <div className="absolute inset-0 bg-white/20 rounded-[inherit] mix-blend-overlay opacity-0 hover:opacity-100 transition-opacity" />
               {formState === 'loading' && <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />}
-              {formState === 'success' && <><CheckCircle2 className="w-4 h-4" /> ACCESS GRANTED</>}
+              {formState === 'success' && <><CheckCircle2 className="w-4 h-4" /> SECURED</>}
               {formState === 'idle' && (
                 <>
-                  Get Free Preview
+                  Connect Terminal
                   <ArrowRight className="w-4 h-4" />
                 </>
               )}
