@@ -21,62 +21,13 @@ export const webinarService = {
       console.log("🎥 [WEBINAR FETCH] RESPONSE", rawData.length, "webinars");
 
       let webinars = (rawData as any[]).map(mapWebinar);
-      
-      // MOCK FALLBACK IF DB IS EMPTY
-      if (webinars.length === 0) {
-        webinars = [
-          {
-            id: 'mock-web1',
-            title: 'Institutional Macro Trading 2024: Navigating the Gold Run',
-            description: 'Learn the exact quantitative models used by top proprietary firms to navigate the current XAUUSD supercycle.',
-            date_time: new Date(Date.now() + 86400000 * 3).toISOString(),
-            speaker: 'Piyush Mal',
-            speaker_name: 'Piyush Mal',
-            status: 'upcoming',
-            is_paid: false,
-            price: 0,
-            created_at: new Date().toISOString(),
-            max_attendees: 500,
-            registration_count: 342,
-            webinar_image_url: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&q=80',
-            sponsors: []
-          },
-          {
-            id: 'mock-web2',
-            title: 'Algo Trading Infrastructure: Python to MT5',
-            description: 'Step-by-step masterclass on deploying algorithmic execution models from Python directly into MetaTrader 5.',
-            date_time: new Date(Date.now() + 86400000 * 7).toISOString(),
-            speaker: 'IFX Quant Team',
-            speaker_name: 'IFX Quant Team',
-            status: 'upcoming',
-            is_paid: true,
-            price: 99,
-            created_at: new Date().toISOString(),
-            max_attendees: 200,
-            registration_count: 89,
-            webinar_image_url: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80',
-            sponsors: []
-          }
-        ];
-      }
       return webinars;
     } catch (error) {
       console.error("🎥 [WEBINAR FETCH] ERROR", error);
-      return [
-        {
-          id: 'mock-web1',
-          title: 'Institutional Macro Trading 2024: Navigating the Gold Run',
-          date_time: new Date(Date.now() + 86400000 * 3).toISOString(),
-          speaker: 'Piyush Mal',
-          status: 'upcoming',
-          created_at: new Date().toISOString(),
-          max_attendees: 500,
-          registration_count: 342,
-          webinar_image_url: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&q=80'
-        } as any
-      ];
+      return [];
     }
   },
+
 
   /**
    * Fetch a single webinar by ID with normalization
@@ -99,25 +50,10 @@ export const webinarService = {
       return mapWebinar(data);
     } catch (error) {
       console.error(`🎥 [WEBINAR ID FETCH] CRITICAL ERROR:`, error);
-      // Fallback to mock on error
-      return {
-          id: id,
-          title: 'Institutional Macro Trading 2024: Navigating the Gold Run',
-          description: 'Learn the exact quantitative models used by top proprietary firms to navigate the current XAUUSD supercycle.',
-          date_time: new Date(Date.now() + 86400000 * 3).toISOString(),
-          speaker: 'Piyush Mal',
-          speaker_name: 'Piyush Mal',
-          status: 'upcoming',
-          is_paid: false,
-          price: 0,
-          created_at: new Date().toISOString(),
-          max_attendees: 500,
-          registration_count: 342,
-          webinar_image_url: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&q=80',
-          sponsors: []
-      } as any;
+      return null;
     }
   },
+
 
   /**
    * Check if a user is registered for a webinar

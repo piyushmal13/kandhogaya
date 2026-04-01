@@ -142,27 +142,15 @@ export const getBlogPosts = async (page = 0, pageSize = 9, searchQuery = "") => 
 
     const posts = await safeQuery<Blog[]>(query);
     if (!posts || posts.length === 0) {
-      throw new Error("Empty DB");
+      return [];
     }
     return posts;
   } catch (err) {
-    console.error("Institutional Blog Fetch Fallback:", err);
-    return [
-      {
-        id: 'mock-post1',
-        title: 'Institutional Macro Outlook Q3 2026',
-        slug: 'institutional-macro-outlook',
-        content: 'Discover the top hedge fund accumulation zones for XAU/USD this quarter.',
-        category: 'Macroeconomics',
-        status: 'published',
-        created_at: new Date().toISOString(),
-        content_type: 'Article',
-        image_url: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&q=80',
-        author: { full_name: 'Piyush Mal' }
-      }
-    ] as Blog[];
+    console.error("Institutional Blog Fetch Error:", err);
+    return [];
   }
 };
+
 
 export const getBlogPostBySlug = async (slug: string) => {
   const { data, error } = await supabase
@@ -188,26 +176,13 @@ export const getCourses = async () => {
         .order("created_at", { ascending: false })
     );
 
-    if (!res || res.length === 0) {
-       throw new Error("Empty DB");
-    }
-    return res;
+    return res || [];
   } catch (err) {
-    console.error("Institutional Academy Course Fallback:", err);
-    return [
-      {
-        id: 'mock-course-1',
-        title: 'Gold Macro Masterclass',
-        description: 'Elite institutional forex strategies for XAUUSD supercycles.',
-        price: 299,
-        level: 'Advanced',
-        created_at: new Date().toISOString(),
-        image_url: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80',
-        chapters: []
-      }
-    ] as Course[];
+    console.error("Institutional Academy Course Error:", err);
+    return [];
   }
 };
+
 
 export const getCourseById = async (id: string) => {
   const { data, error } = await supabase
