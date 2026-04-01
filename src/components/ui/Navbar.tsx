@@ -53,17 +53,9 @@ export const Navbar = () => {
     <>
       <nav className="fixed inset-x-0 top-3 sm:top-6 z-50 px-3 sm:px-12">
         <div className="mx-auto flex h-14 sm:h-20 max-w-7xl items-center justify-between rounded-full border border-white/5 bg-black/40 px-5 sm:px-8 shadow-[0_32px_80px_rgba(0,0,0,0.6)] backdrop-blur-3xl transition-all duration-700 hover:border-white/10">
-          <Link to="/" className="flex items-center gap-3 group">
-            <div className="flex items-center justify-center transition-all duration-700 group-hover:scale-110 h-10 w-10 sm:h-12 sm:w-12 rounded-xl overflow-hidden bg-black/50 border border-white/10 shadow-[0_0_20px_rgba(255,255,255,0.05)]">
-              <img src={BRANDING.logoUrl} alt={BRANDING.name} className="h-full w-full object-contain p-2" />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-white font-black text-sm sm:text-base uppercase tracking-[0.2em] leading-tight">
-                {BRANDING.name}
-              </span>
-              <span className="text-[7px] sm:text-[9px] text-emerald-500 font-bold uppercase tracking-widest hidden sm:block">
-                Institutional Intelligence
-              </span>
+          <Link to="/" className="flex items-center gap-3 group" aria-label="IFX Trades — Institutional Forex Education Platform">
+            <div className="flex items-center justify-center transition-all duration-700 group-hover:scale-110 h-10 w-10 sm:h-14 sm:w-14 rounded-xl overflow-hidden bg-black/50 border border-white/10 shadow-[0_0_20px_rgba(255,255,255,0.05)] group-hover:shadow-[0_0_30px_rgba(88,242,182,0.15)] group-hover:border-emerald-500/20">
+              <img src={BRANDING.logoUrl} alt="IFX Trades institutional forex education logo" className="h-full w-full object-contain p-1.5" />
             </div>
           </Link>
 

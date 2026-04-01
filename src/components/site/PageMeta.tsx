@@ -16,9 +16,16 @@ export interface PageMetaProps {
 const DEFAULT_KEYWORDS = [
   "IFX Trades",
   "forex education Asia",
-  "best algo trading course Dubai India",
-  "institutional macro research",
-  "trading academy"
+  "best algo trading course India",
+  "best algo trading course Dubai",
+  "institutional forex education",
+  "forex academy India",
+  "forex webinar India 2026",
+  "gold trading signals XAUUSD",
+  "automated forex trading strategies",
+  "AI forex trading bot MT5",
+  "quantitative trading course India",
+  "forex signals India live",
 ];
 
 const getAbsoluteUrl = (path: string) => {
@@ -26,11 +33,11 @@ const getAbsoluteUrl = (path: string) => {
     return path;
   }
 
-  if (typeof window === "undefined") {
+  if (typeof globalThis.window === "undefined") {
     return path;
   }
 
-  return new URL(path, window.location.origin).toString();
+  return new URL(path, globalThis.window.location.origin).toString();
 };
 
 const upsertMeta = (selector: string, attrs: Record<string, string>, content: string) => {
@@ -81,7 +88,8 @@ export const PageMeta = ({
 }: PageMetaProps) => {
   const keywordContent = Array.from(new Set([...DEFAULT_KEYWORDS, ...(keywords ?? [])])).join(", ");
   const fullTitle = title.includes(BRANDING.name) ? title : `${title} | ${BRANDING.name}`;
-  const url = getAbsoluteUrl(path || (typeof window !== "undefined" ? window.location.pathname : "/"));
+  const currentPath = typeof globalThis.window !== "undefined" ? globalThis.window.location.pathname : "/";
+  const url = getAbsoluteUrl(path || currentPath);
   const imageUrl = getAbsoluteUrl(image || BRANDING.logoUrl);
   const schema = structuredData ? JSON.stringify(structuredData) : "";
 
