@@ -13,6 +13,8 @@ import { ScrollToTop } from "./components/ScrollToTop";
 import { SiteBackdrop } from "./components/site/SiteBackdrop";
 import { LoadingSpinner } from "./components/ui/LoadingSpinner";
 import { ProtectedRoute } from "./components/ui/ProtectedRoute";
+import { SpeedInsights } from "@vercel/speed-insights/react";
+
 
 import { useReferral } from "./hooks/useReferral";
 
@@ -134,7 +136,9 @@ export default function App() {
                   <span className="opacity-50">CRITICAL INSTITUTIONAL NOTICE:</span> IFX Trades is strictly an education & research platform. We license algorithms, deliver courses, and provide macro analysis. <strong className="text-white underline">WE ARE NOT A BROKER.</strong> We do not accept deposits, execute trades, or handle client funds. Trading involves significant risk.
                 </div>
               </div>
+              <SpeedInsights />
             </div>
+
           </Router>
         </DataPulseProvider>
       </AuthProvider>
