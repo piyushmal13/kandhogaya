@@ -33,7 +33,7 @@ const getAbsoluteUrl = (path: string) => {
     return path;
   }
 
-  if (typeof globalThis.window === "undefined") {
+  if (globalThis.window === undefined) {
     return path;
   }
 
@@ -88,7 +88,7 @@ export const PageMeta = ({
 }: PageMetaProps) => {
   const keywordContent = Array.from(new Set([...DEFAULT_KEYWORDS, ...(keywords ?? [])])).join(", ");
   const fullTitle = title.includes(BRANDING.name) ? title : `${title} | ${BRANDING.name}`;
-  const currentPath = typeof globalThis.window !== "undefined" ? globalThis.window.location.pathname : "/";
+  const currentPath = globalThis.window === undefined ? "/" : globalThis.window.location.pathname;
   const url = getAbsoluteUrl(path || currentPath);
   const imageUrl = getAbsoluteUrl(image || BRANDING.logoUrl);
   const schema = structuredData ? JSON.stringify(structuredData) : "";

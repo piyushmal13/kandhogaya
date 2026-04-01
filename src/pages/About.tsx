@@ -53,7 +53,7 @@ export const About = () => (
         { label: "Contact Desk", to: "/contact", variant: "secondary" },
       ]}
       metrics={[
-        { label: "Founded", value: "2020", helper: "Built around disciplined retail execution" },
+        { label: "Founded", value: "2018", helper: "Built around disciplined retail execution" },
         { label: "Countries", value: "110+", helper: "Global trader participation" },
         { label: "Algorithms", value: "15+", helper: "Systematic tools and strategy modules" },
         { label: "Research Cadence", value: "Daily", helper: "Signals, webinars, and analysis" },

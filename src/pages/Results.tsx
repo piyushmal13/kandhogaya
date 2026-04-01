@@ -8,6 +8,7 @@ import { PageMeta } from "../components/site/PageMeta";
 import { PageSection, SectionHeading } from "../components/site/PageSection";
 import { Reveal } from "../components/site/Reveal";
 import { PartnerLogos } from "../components/ui/PartnerLogos";
+import { TrustGrid } from "../components/home/TrustGrid";
 import { cn } from "../utils/cn";
 import { breadcrumbSchema } from "../utils/structuredData";
 import { getPerformanceResults } from "../services/apiHandlers";
@@ -175,7 +176,10 @@ export const Results = () => {
       </PageSection>
 
       {/* === SOCIAL PROOF — Partner Logos + Verified Student Outcomes === */}
-      <PartnerLogos />
+      <TrustGrid />
+      <div className="py-24 border-t border-white/5">
+        <PartnerLogos />
+      </div>
     </div>
   );
 };

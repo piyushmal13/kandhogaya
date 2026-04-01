@@ -5,12 +5,11 @@ import { EcosystemSection } from "../components/home/EcosystemSection";
 import { GlobalReach } from "../components/home/GlobalReach";
 import { HeroSection } from "../components/home/HeroSection";
 import { MarketTicker } from "../components/home/MarketTicker";
-import { StatsSection } from "../components/home/StatsSection";
 import { WebinarPromo } from "../components/home/WebinarPromo";
 import { PartnerLogos } from "../components/ui/PartnerLogos";
+import { TrustGrid } from "../components/home/TrustGrid";
 import { NewsletterPopup } from "../components/ui/NewsletterPopup";
 import { SignupForm } from "../components/ui/SignupForm";
-import { SuccessShowcase } from "../components/ui/SuccessShowcase";
 import { ReviewPromptModal } from "../components/ui/ReviewPromptModal";
 import { ExitIntentModal } from "../components/ui/ExitIntentModal";
 import { educationalOrganizationSchema, websiteSchema, faqSchema, goldAlgoCourseSchema } from "../utils/structuredData";
@@ -94,11 +93,6 @@ export const Home = () => {
       <HeroSection />
       <MarketTicker />
 
-      {/* === STATS — Educational credibility metrics === */}
-      <LazySection placeholderHeight="300px">
-        <StatsSection />
-      </LazySection>
-
       {/* === NEXT LIVE WEBINAR — High-conversion section === */}
       <LazySection placeholderHeight="600px">
         <WebinarPromo />
@@ -124,13 +118,9 @@ export const Home = () => {
         <BlogSection />
       </LazySection>
 
-      {/* === SUCCESS STORIES === */}
-      <LazySection placeholderHeight="600px">
-        <SuccessShowcase />
-      </LazySection>
-
-      {/* === PARTNER LOGOS + SOCIAL PROOF === */}
-      <LazySection placeholderHeight="700px">
+      {/* === INSTITUTIONAL ECOSYSTEM + PARTNERS === */}
+      <LazySection placeholderHeight="1400px">
+        <TrustGrid />
         <PartnerLogos />
       </LazySection>
 
