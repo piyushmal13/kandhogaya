@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import { signalService } from "../services/signalService";
 import { webinarService } from "../services/webinarService";
 import { marketService } from "../services/marketService";
-import { supabase } from "../lib/supabase";
+import { supabase, safeQuery } from "../lib/supabase";
 import { Signal, Webinar, MarketPair } from "../types";
 
 export interface DashboardStats {
@@ -47,21 +47,30 @@ export const DataPulseProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     totalPips: 12450
   });
 
-  const fetchData = useCallback(async () => {
-    console.log("🌐 [DATA PULSE] INITIATING DISCOVERY...");
+  const fetchData = useCallback(async (retryCount = 0) => {
+    console.log(`🌐 [DATA PULSE] DISCOVERY CYCLE ${retryCount + 1}...`);
     // Only show loader if we have no cached data to show
     if (signals.length === 0 && webinars.length === 0 && marketData.length === 0) {
       setLoading(true);
     }
     
     try {
-      // Parallel resilient fetch
+      // Parallel resilient fetch with independent catch-boundaries
       const [sigData, webData, markData, perfResult, regData] = await Promise.all([
-        signalService.getSignals().catch(e => { console.error("Signals Fetch Failed", e); return []; }),
-        webinarService.getWebinars().catch(e => { console.error("Webinars Fetch Failed", e); return []; }),
-        marketService.getMarketPairs().catch(e => { console.error("Market Fetch Failed", e); return []; }),
-        supabase.from('performance_results').select('*').eq('is_featured', true).maybeSingle().then(res => res, () => ({ data: null })),
-        supabase.from('webinar_registrations').select('webinar_id').then(res => res.data || [])
+        signalService.getSignals().catch(e => { 
+          console.error("Signals Pulse Failed", e); 
+          return JSON.parse(localStorage.getItem('pulse_signals') || '[]');
+        }),
+        webinarService.getWebinars().catch(e => { 
+          console.error("Webinars Pulse Failed", e); 
+          return JSON.parse(localStorage.getItem('pulse_webinars') || '[]');
+        }),
+        marketService.getMarketPairs().catch(e => { 
+          console.error("Market Pulse Failed", e); 
+          return JSON.parse(localStorage.getItem('pulse_market') || '[]');
+        }),
+        safeQuery<any>(supabase.from('performance_results').select('*').eq('is_featured', true).maybeSingle()),
+        safeQuery<any[]>(supabase.from('webinar_registrations').select('webinar_id'))
       ]);
 
       setSignals(sigData || []);
@@ -69,11 +78,11 @@ export const DataPulseProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       setMarketData(markData || []);
       setRegistrations(regData || []);
 
-      if (perfResult && (perfResult as any).data) {
-        const d = (perfResult as any).data;
+      const perfData = Array.isArray(perfResult) ? perfResult[0] : (perfResult?.data || perfResult);
+      if (perfData) {
         setPerformanceStats({
-          winRate: d.win_rate || "74%",
-          totalPips: d.total_pips || 12000
+          winRate: perfData.win_rate || "74%",
+          totalPips: perfData.total_pips || 12000
         });
       }
 
@@ -83,7 +92,10 @@ export const DataPulseProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       localStorage.setItem('pulse_market', JSON.stringify(markData || []));
 
     } catch (err) {
-      console.error("[DataPulse] Institutional Recovery Crash:", err);
+      console.warn("[DataPulse] Institutional Recovery Active. Retry in 5s.", err);
+      if (retryCount < 3) {
+        setTimeout(() => fetchData(retryCount + 1), 5000);
+      }
     } finally {
       setLoading(false);
     }

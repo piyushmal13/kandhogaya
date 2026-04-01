@@ -1,45 +1,51 @@
 import { createClient } from '@supabase/supabase-js';
 
 const getSupabaseConfig = () => {
-  // Priority 1: Server-side runtime injection (globalThis scope)
-  const injectedUrl = (globalThis as any)._SUPABASE_URL;
-  const injectedKey = (globalThis as any)._SUPABASE_ANON_KEY;
+  const injectedUrl = (globalThis as any)._SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL;
+  const injectedKey = (globalThis as any)._SUPABASE_ANON_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY;
 
   if (!injectedUrl || injectedUrl.includes('placeholder')) {
-    console.warn("⚠️ [INSTITUTIONAL DIAGNOSTIC]: Supabase URL missing or placeholder. Running in RESILIENCE MODE.");
-  } else {
-    console.log("✅ [INSTITUTIONAL DIAGNOSTIC]: Multi-cluster Cloud Active:", injectedUrl.split('.')[0]);
+    console.warn("⚠️ [INSTITUTIONAL DIAGNOSTIC]: Supabase credentials missing. Running in RESILIENCE MODE.");
   }
 
-  // Priority 2: Build-time baked variables
-  const bakedUrl = import.meta.env.VITE_SUPABASE_URL;
-  const bakedKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-
-  if (injectedUrl && injectedKey && !injectedUrl.includes('placeholder')) {
-    return { url: injectedUrl, key: injectedKey };
-  }
-
-  if (bakedUrl && bakedKey && !bakedUrl.includes('placeholder')) {
-    return { url: bakedUrl, key: bakedKey };
-  }
-
-  // Fallback: Environment variables (for Node/Vite fallback contexts)
   return {
-    url: process.env.VITE_SUPABASE_URL || '',
-    key: process.env.VITE_SUPABASE_ANON_KEY || ''
+    url: injectedUrl || 'https://placeholder.supabase.co',
+    key: injectedKey || 'placeholder'
   };
 };
 
-const { url, key } = getSupabaseConfig();
+const { url: supabaseUrl, key: supabaseAnonKey } = getSupabaseConfig();
 
-// Standard Institutional Client
-export const supabase = createClient(url || 'https://placeholder.supabase.co', key || 'placeholder', {
+// Hardened Institutional Supabase Client v2.1
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
-    detectSessionInUrl: true 
+    detectSessionInUrl: true
+  },
+  global: {
+    headers: { 'x-institutional-resilience': 'active' }
   }
 });
+
+// Resilience Heartbeat Logic
+let isHealthy = true;
+const checkHealth = async () => {
+  try {
+    const { error } = await supabase.from('leads').select('count', { count: 'exact', head: true }).limit(1);
+    isHealthy = !error;
+  } catch {
+    isHealthy = false;
+  }
+};
+
+// Continuous Health Monitoring
+if (typeof globalThis !== 'undefined' && globalThis.window) {
+  setInterval(checkHealth, 30000); // Audit cluster every 30s
+}
+
+export const getSupabaseHealth = () => isHealthy;
+
 
 // Alias for public data usage (used for backwards compatibility in existing hooks)
 export const publicSupabase = supabase;
