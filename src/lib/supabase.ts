@@ -5,13 +5,19 @@ const getSupabaseConfig = () => {
   const injectedUrl = (globalThis as any)._SUPABASE_URL;
   const injectedKey = (globalThis as any)._SUPABASE_ANON_KEY;
 
-  if (injectedUrl && injectedKey && !injectedUrl.includes('placeholder')) {
-    return { url: injectedUrl, key: injectedKey };
+  if (!injectedUrl || injectedUrl.includes('placeholder')) {
+    console.warn("⚠️ [INSTITUTIONAL DIAGNOSTIC]: Supabase URL missing or placeholder. Running in RESILIENCE MODE.");
+  } else {
+    console.log("✅ [INSTITUTIONAL DIAGNOSTIC]: Multi-cluster Cloud Active:", injectedUrl.split('.')[0]);
   }
 
   // Priority 2: Build-time baked variables
   const bakedUrl = import.meta.env.VITE_SUPABASE_URL;
   const bakedKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+  if (injectedUrl && injectedKey && !injectedUrl.includes('placeholder')) {
+    return { url: injectedUrl, key: injectedKey };
+  }
 
   if (bakedUrl && bakedKey && !bakedUrl.includes('placeholder')) {
     return { url: bakedUrl, key: bakedKey };

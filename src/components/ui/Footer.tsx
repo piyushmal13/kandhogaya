@@ -27,7 +27,7 @@ export const Footer = () => (
                 className="h-full w-full object-contain"
               />
             </div>
-            <div className="text-[14px] font-bold tracking-[0.5em] text-white uppercase opacity-90 group-hover:opacity-100 transition-opacity">{BRANDING.name}</div>
+            <div className="text-[10px] font-black tracking-[0.4em] text-emerald-500/40 uppercase">Institutional DNA</div>
           </Link>
           <p className="text-[12px] leading-relaxed text-gray-500 font-sans font-medium opacity-80 max-w-xs mb-6">
             The global benchmark for **Best Forex Signals**, **Gold Trading Algorithms**, and Institutional Market Intelligence. Engineered for elite education & execution.

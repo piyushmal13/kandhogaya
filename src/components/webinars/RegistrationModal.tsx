@@ -5,6 +5,7 @@ import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../contexts/AuthContext";
 import { Link } from "react-router-dom";
 import { tracker } from "../../core/tracker";
+import { BRANDING } from "../../constants/branding";
 
 import { Webinar } from '../../types';
 
@@ -365,15 +366,25 @@ export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationM
               </ul>
             </div>
 
-            <button 
-              onClick={() => {
-                if (onSuccess) onSuccess();
-                onClose();
-              }}
-              className="w-full py-3 bg-white text-black font-bold rounded-xl hover:bg-gray-200 transition-colors"
-            >
-              Done
-            </button>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <button 
+                onClick={() => {
+                  if (onSuccess) onSuccess();
+                  onClose();
+                }}
+                className="flex-1 py-4 bg-white/5 text-white font-bold rounded-2xl border border-white/10 hover:bg-white/10 transition-colors"
+              >
+                Done
+              </button>
+              <a 
+                href={BRANDING.whatsappUrl}
+                target="_blank" rel="noopener noreferrer"
+                className="flex-1 py-4 bg-[#25D366] text-white font-bold rounded-2xl hover:bg-[#128C7E] transition-all flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(37,211,102,0.3)]"
+              >
+                Join WhatsApp
+                <ArrowRight className="w-5 h-5" />
+              </a>
+            </div>
           </div>
         )}
       </motion.div>

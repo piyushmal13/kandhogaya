@@ -128,6 +128,12 @@ export const Home = () => {
       <LazySection placeholderHeight="400px">
         <SignupForm />
       </LazySection>
+      
+      <div className="mb-24 px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <TrustGrid />
+        </div>
+      </div>
 
       <NewsletterPopup />
     </div>

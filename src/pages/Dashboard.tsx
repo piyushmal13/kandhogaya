@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { 
-  ShieldCheck, Bell, Settings, Target, Video, 
-  Clock, Activity, ArrowUpRight, Zap, BookOpen, 
-  Lock, ListChecks 
+  Clock, Activity, Zap, BookOpen, 
+  Lock, ListChecks, ShieldCheck, Bell, Settings, Target, Users, Video 
 } from "lucide-react";
+import { supabase } from "../lib/supabase";
 import { useAuth } from "../contexts/AuthContext";
 import { cn } from "../utils/cn";
 import { motion, AnimatePresence } from "motion/react";
@@ -12,51 +12,65 @@ import { BRANDING } from "../constants/branding";
 import { PurchaseModal } from "@/components/payments/PurchaseModal";
 import { tracker } from "@/core/tracker";
 import { useDataPulse } from "@/hooks/useDataPulse";
-import { productService } from "@/services/productService";
 import { BotLicense } from "@/types";
 import { ActivityPulse } from "@/components/dashboard/ActivityPulse";
 import { UrgencyBanner } from "@/components/ui/UrgencyBanner";
 
 export const Dashboard = () => {
-  const { user, userProfile, access } = useAuth();
+  const { user, userProfile, sessionReady, access } = useAuth();
   const navigate = useNavigate();
-  const { signals, webinars, performanceStats, marketData } = useDataPulse();
+  const { signals, webinars, performanceStats, marketData, registrations } = useDataPulse();
+  const [userLead, setUserLead] = useState<any>(null);
+  const isMountedRef = useRef(true);
 
   const [licenses, setLicenses] = useState<BotLicense[]>([]);
   const [loading, setLoading] = useState(true);
-  const [dbHealthy, setDbHealthy] = useState(true);
   const [selectedPlan, setSelectedPlan] = useState<{ plan: string, amount: number, productId?: string } | null>(null);
 
-  const fetchData = useCallback(async () => {
+  const fetchLicenses = useCallback(async () => {
     if (!user?.id) {
        setLoading(false);
        return;
     }
-
-    setLoading(true);
-    console.log("💎 [DASHBOARD FETCH] START");
+    
     try {
-      const licenseData = await productService.getUserLicenses(user.id);
-      console.log("💎 [DASHBOARD FETCH] RESPONSE", licenseData.length, "licenses");
-      setLicenses(licenseData);
-      setDbHealthy(true);
+      const { data, error } = await supabase.from('bot_licenses')
+        .select(`
+          *,
+          algo_bots (
+            name,
+            version
+          )
+        `)
+        .eq('user_id', user.id);
+      
+      if (error) throw error;
+      setLicenses(data || []);
     } catch (err) {
-      console.error("💎 [DASHBOARD FETCH] ERROR", err);
-      setDbHealthy(false);
+      console.error('Institutional License Discovery Error:', err);
     } finally {
-      setLoading(false);
+      if (isMountedRef.current) setLoading(false);
     }
   }, [user?.id]);
 
+  const fetchUserLead = useCallback(async () => {
+    if (!user?.email) return;
+    const { data } = await supabase.from('leads').select('*').eq('email', user.email).maybeSingle();
+    if (data) setUserLead(data);
+  }, [user]);
+
   useEffect(() => {
-    fetchData();
+    if (sessionReady) {
+      fetchLicenses();
+      fetchUserLead();
+    }
     tracker.track("page_view", { surface: "dashboard" });
-  }, []);
+  }, [sessionReady, fetchLicenses, fetchUserLead]);
 
   console.log("RENDER DASHBOARD DATA:", { licenses, signals, webinars });
 
   useEffect(() => {
-    const refetch = () => fetchData();
+    const refetch = () => fetchLicenses();
     globalThis.addEventListener("supabase:refresh", refetch);
     globalThis.addEventListener("app:login", refetch);
 
@@ -64,7 +78,7 @@ export const Dashboard = () => {
       globalThis.removeEventListener("supabase:refresh", refetch);
       globalThis.removeEventListener("app:login", refetch);
     };
-  }, [fetchData]);
+  }, [fetchLicenses]);
 
   const isAdmin = access.admin;
   const isPro = access.signals || access.algo;
@@ -202,31 +216,46 @@ export const Dashboard = () => {
   };
 
   const renderWebinars = () => {
-    if (webinars.length === 0) {
+    const registeredWebinars = webinars.filter(w => 
+      registrations.some(r => r.webinar_id === w.id)
+    );
+
+    if (registeredWebinars.length === 0) {
       return (
-        <div className="text-[10px] uppercase font-black text-gray-700 tracking-[0.2em] text-center py-12 italic">
-          NO SESSIONS SCHEDULED
+        <div className="text-center py-12 px-6 border border-dashed border-white/5 rounded-3xl bg-black/20">
+          <p className="text-[10px] uppercase font-black text-gray-500 tracking-[0.2em] mb-4 italic">
+            NO SESSIONS REGISTERED
+          </p>
+          <Link to="/webinars" className="inline-flex py-3 px-6 bg-white/5 text-xs font-bold text-white rounded-xl hover:bg-emerald-500 hover:text-black transition-all">
+            Join a Webinar
+          </Link>
         </div>
       );
     }
 
     return (
-      <AnimatePresence>
+      <AnimatePresence mode="popLayout">
         <div className="space-y-4">
-          {webinars.map(w => (
+          {registeredWebinars.map(w => (
             <motion.div 
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               key={w.id} 
-              className="p-6 rounded-[32px] bg-black/40 border border-white/5 hover:border-emerald-500/30 transition-all"
+              className="p-6 rounded-[32px] bg-emerald-500/5 border border-emerald-500/20 hover:border-emerald-500 transition-all group"
             >
-              <div className="text-sm font-black text-white mb-4 uppercase tracking-tight leading-snug">{w.title}</div>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+                <span className="text-[9px] font-black text-emerald-500 uppercase tracking-widest">Enrolled Session</span>
+              </div>
+              <div className="text-sm font-black text-white mb-4 uppercase tracking-tighter leading-snug group-hover:text-emerald-400 transition-colors">
+                {w.title}
+              </div>
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest bg-emerald-500/5 px-3 py-1 rounded-lg font-mono">
-                  {new Date(w.date_time).toLocaleDateString()}
+                <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest font-mono">
+                  {new Date(w.date_time).toLocaleDateString()} at {new Date(w.date_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </span>
-                <Link to="/academy" className="w-10 h-10 rounded-2xl bg-white/5 flex items-center justify-center hover:bg-emerald-500 hover:text-black transition-all">
-                  <ArrowUpRight className="w-5 h-5" />
+                <Link to="/webinar-feed" className="w-10 h-10 rounded-2xl bg-white/5 flex items-center justify-center hover:bg-emerald-500 hover:text-black transition-all">
+                  <Video className="w-5 h-5 shadow-[0_0_10px_rgba(16,185,129,0.3)]" />
                 </Link>
               </div>
             </motion.div>
@@ -256,6 +285,39 @@ export const Dashboard = () => {
             className="mb-10 p-5 bg-gradient-to-r from-emerald-500/10 via-emerald-500/20 to-emerald-500/10 border border-emerald-500/20 rounded-[32px] flex items-center justify-between group overflow-hidden relative"
           >
             <div className="absolute inset-0 bg-emerald-500/5 animate-pulse" />
+              {/* Profile Card */}
+              <div className="p-6 rounded-[32px] bg-white/[0.03] border border-white/5 relative overflow-hidden group">
+                <div className="absolute top-0 right-0 p-4">
+                  <div className={`px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest ${userProfile?.isPro ? 'bg-emerald-500 text-black' : 'bg-white/10 text-white/40'}`}>
+                    {userProfile?.role || 'TRADER'}
+                  </div>
+                </div>
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 border border-white/10 flex items-center justify-center relative group">
+                    <Users className="w-8 h-8 text-emerald-400" />
+                    <div className="absolute inset-0 bg-emerald-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-black text-white uppercase tracking-tighter leading-none mb-1">
+                      {userProfile?.full_name || user?.email?.split('@')[0] || 'Institutional Trader'}
+                    </h2>
+                    <p className="text-[10px] text-gray-500 font-mono tracking-widest uppercase">
+                      {userLead?.crm_metadata?.phone || "Phone Not Verified"}
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between p-3 rounded-2xl bg-black/40 border border-white/5">
+                    <span className="text-[9px] font-black text-gray-500 uppercase tracking-widest">Email</span>
+                    <span className="text-[10px] font-mono text-white/80">{user?.email}</span>
+                  </div>
+                  <div className="flex items-center justify-between p-3 rounded-2xl bg-black/40 border border-white/5">
+                    <span className="text-[9px] font-black text-gray-500 uppercase tracking-widest">Region</span>
+                    <span className="text-[10px] font-mono text-white/80">{userLead?.priority_tag || "GLOBAL"}</span>
+                  </div>
+                </div>
+              </div>
             <div className="flex items-center gap-6 relative z-10 px-4">
               <div className="w-10 h-10 bg-emerald-500 text-black rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
                 <ShieldCheck className="w-6 h-6" />
@@ -285,9 +347,9 @@ export const Dashboard = () => {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
             <div className="flex items-center gap-3 mb-2">
-              <div className={cn("w-2 h-2 rounded-full", dbHealthy ? "bg-emerald-500 shadow-[0_0_10px_#10b981]" : "bg-red-500")} />
+              <div className={cn("w-2 h-2 rounded-full", sessionReady ? "bg-emerald-500 shadow-[0_0_10px_#10b981]" : "bg-red-500 animate-pulse")} />
               <span className="text-[10px] font-mono uppercase tracking-widest text-gray-500">
-                {dbHealthy ? "SYSTEMS OPERATIONAL • LIVE CONNECTION" : "CONNECTION LOST • OFFLINE MODE"}
+                {sessionReady ? "SYSTEMS OPERATIONAL • LIVE CONNECTION" : "INITIALIZING QUANTUM PULSE • HANDSHAKING..."}
               </span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight leading-none">

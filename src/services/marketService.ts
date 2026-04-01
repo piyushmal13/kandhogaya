@@ -70,7 +70,7 @@ export const marketService = {
          };
       });
     } catch (error) {
-      console.error("📈 [MARKET FETCH] ERROR/FALLBACK", error);
+      console.error("📈 [MARKET FETCH] CRITICAL ERROR/FALLBACK", error);
       const m = [
         { id: '1', symbol: 'EUR/USD', price: 1.0942, change: 0.12, up: true },
         { id: '2', symbol: 'GBP/USD', price: 1.2651, change: -0.08, up: false },

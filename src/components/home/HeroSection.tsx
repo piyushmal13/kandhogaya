@@ -26,10 +26,10 @@ const TRUST_SIGNALS = [
 
 // TOP PLATFORM FEATURES — keyword-rich, conversion-optimized
 const FEATURES = [
-  "Live Forex Webinars (India & Dubai)",
-  "AI Algo Trading Bots for MT5",
-  "XAUUSD Gold Macro Signals",
-  "Institutional Algorithmic Education",
+  "Best Algo Trading Platform in India & Dubai",
+  "Institutional Algo Marketplace & Strategy Store",
+  "Verified XAUUSD Gold Trading Signals",
+  "Elite Python & MT5 Algo Masterclass",
 ];
 
 export const HeroSection = () => {
@@ -121,13 +121,13 @@ export const HeroSection = () => {
           className="font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/30 mb-4 leading-[0.88] tracking-tighter uppercase"
         >
           <span className="text-5xl sm:text-8xl md:text-[110px] block">
-            Institutional
+            Institutional-Grade
           </span>
           <span className="text-4xl sm:text-7xl md:text-[90px] block text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-emerald-300 to-cyan-400 mt-2">
-            Forex Education
+            Algo Marketplace
           </span>
-          <span className="text-3xl sm:text-5xl md:text-[60px] block text-white/50 mt-2 font-light tracking-normal">
-            for Dubai & India
+          <span className="text-3xl sm:text-5xl md:text-[50px] block text-white/50 mt-4 font-light tracking-wide italic">
+            The Best Algo Trading Platform
           </span>
         </motion.h1>
 

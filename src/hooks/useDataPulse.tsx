@@ -14,6 +14,7 @@ interface DataPulseContextType {
   signals: Signal[];
   webinars: Webinar[];
   marketData: MarketPair[];
+  registrations: any[];
   performanceStats: DashboardStats;
   loading: boolean;
   refresh: () => Promise<void>;
@@ -38,12 +39,8 @@ export const DataPulseProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     } catch { return []; }
   });
 
-  const [marketData, setMarketData] = useState<MarketPair[]>(() => {
-    try {
-      const cached = localStorage.getItem('pulse_market');
-      return cached ? JSON.parse(cached) : [];
-    } catch { return []; }
-  });
+  const [marketData, setMarketData] = useState<MarketPair[]>([]);
+  const [registrations, setRegistrations] = useState<any[]>([]);
 
   const [performanceStats, setPerformanceStats] = useState<DashboardStats>({
     winRate: "78%",
@@ -59,16 +56,18 @@ export const DataPulseProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     
     try {
       // Parallel resilient fetch
-      const [sigData, webData, markData, perfResult] = await Promise.all([
+      const [sigData, webData, markData, perfResult, regData] = await Promise.all([
         signalService.getSignals().catch(e => { console.error("Signals Fetch Failed", e); return []; }),
         webinarService.getWebinars().catch(e => { console.error("Webinars Fetch Failed", e); return []; }),
         marketService.getMarketPairs().catch(e => { console.error("Market Fetch Failed", e); return []; }),
-        supabase.from('performance_results').select('*').eq('is_featured', true).maybeSingle().then(res => res, () => ({ data: null }))
+        supabase.from('performance_results').select('*').eq('is_featured', true).maybeSingle().then(res => res, () => ({ data: null })),
+        supabase.from('webinar_registrations').select('webinar_id').then(res => res.data || [])
       ]);
 
       setSignals(sigData || []);
       setWebinars(webData || []);
       setMarketData(markData || []);
+      setRegistrations(regData || []);
 
       if (perfResult && (perfResult as any).data) {
         const d = (perfResult as any).data;
@@ -109,10 +108,11 @@ export const DataPulseProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     signals,
     webinars,
     marketData,
+    registrations,
     performanceStats,
     loading,
     refresh: fetchData
-  }), [signals, webinars, marketData, performanceStats, loading, fetchData]);
+  }), [signals, webinars, marketData, registrations, performanceStats, loading, fetchData]);
 
   return (
     <DataPulseContext.Provider value={contextValue}>
