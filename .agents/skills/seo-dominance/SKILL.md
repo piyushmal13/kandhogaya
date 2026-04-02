@@ -31,6 +31,8 @@ This is a living, enforced document. Every developer, content editor, or AI maki
 | `forex algo trading course for beginners` | `/academy` | Transactional |
 | `automated forex trading strategies 2026` | `/marketplace` | Commercial |
 | `best AI forex trading bot MT5` | `/marketplace` | Commercial |
+| `traders travel` | `/travel` | Transactional |
+| `forex trader retreat India` | `/travel` | Transactional |
 | `forex signals India live` | `/signals` | Transactional |
 | `gold trading signals XAUUSD` | `/signals` | Transactional |
 | `how to pass prop firm challenge 2026` | `/blog` | Informational |
@@ -90,6 +92,7 @@ All schemas live in `src/utils/structuredData.ts`. ALWAYS inject these:
 | `/academy` | `educationalOrganizationSchema`, `courseSchema`, `breadcrumbSchema` |
 | `/webinars` | `eventSchema` (per webinar), `breadcrumbSchema` |
 | `/marketplace` | `productSchema` (per product), `breadcrumbSchema` |
+| `/travel` | `breadcrumbSchema`, `organizationSchema` |
 | `/signals` | `breadcrumbSchema`, `organizationSchema` |
 | `/blog/:slug` | `articleSchema`, `breadcrumbSchema` |
 | `/results` | `breadcrumbSchema` |

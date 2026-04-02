@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { fetchTravelTrips, TravelTrip } from "../services/travelService";
 import { Plane, MapPin, Calendar, Users, ArrowRight, Star, ShieldCheck } from "lucide-react";
+import { PageMeta } from "../components/site/PageMeta";
+import { breadcrumbSchema } from "../utils/structuredData";
 
 export const TradersTravel = () => {
   const [trips, setTrips] = useState<TravelTrip[]>([]);
@@ -18,7 +20,27 @@ export const TradersTravel = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#020202] pt-24 pb-32">
+    <div className="min-h-screen bg-[#020202] pt-24 pb-32 relative overflow-hidden">
+      <PageMeta 
+        title="Traders Travel | Exclusive Forex & Algo Trader Retreats 2026"
+        description="Join the top 1% community on exclusive trader retreats in Bali, Dubai, and Thailand. Elite networking & institutional mastermind sessions for professional traders."
+        path="/travel"
+        keywords={[
+          "traders travel",
+          "forex trader retreat India",
+          "institutional trading mastermind Dubai",
+          "best trading community retreats 2026",
+          "luxury trading vacation Bali",
+          "elite trader networking event",
+          "high net worth trader community",
+        ]}
+        structuredData={[
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Traders Travel", path: "/travel" }
+          ])
+        ]}
+      />
       {/* Background Decor */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(16,185,129,0.05),transparent_70%)] pointer-events-none" />
       
