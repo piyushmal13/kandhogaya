@@ -32,7 +32,7 @@ export interface WebinarSponsor {
   id: string;
   webinar_id: string;
   name: string;
-  tier: 'Headline' | 'Partner' | 'Supporter';
+  tier: 'Headline' | 'Partner' | 'Supporter' | 'Co-Sponsor';
   logo_url: string;
   website_url?: string;
 }

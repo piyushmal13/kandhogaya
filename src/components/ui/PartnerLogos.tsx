@@ -13,6 +13,18 @@ import { CheckCircle2, Globe } from "lucide-react";
 // Replace with actual logo images once assets are available
 const PARTNERS = [
   {
+    name: "Binance",
+    category: "Global Exchange",
+    logoUrl: "https://cryptologos.cc/logos/binance-coin-bnb-logo.svg",
+    color: "from-yellow-600 to-yellow-400",
+  },
+  {
+    name: "MetaTrader 4",
+    category: "Trading Platform",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/2/23/MetaTrader_4_logo.png",
+    color: "from-blue-700 to-blue-500",
+  },
+  {
     name: "MetaTrader 5",
     category: "Supported Platform",
     abbr: "MT5",
@@ -21,7 +33,7 @@ const PARTNERS = [
   {
     name: "TradingView",
     category: "Chart Partner",
-    abbr: "TV",
+    logoUrl: "https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/v1481103649/k4c5p4t2gqjymnld10c9.png",
     color: "from-sky-500 to-cyan-400",
   },
   {
@@ -29,30 +41,6 @@ const PARTNERS = [
     category: "Execution Platform",
     abbr: "CT",
     color: "from-orange-600 to-amber-400",
-  },
-  {
-    name: "Dhan",
-    category: "India Partner",
-    abbr: "DH",
-    color: "from-violet-600 to-purple-400",
-  },
-  {
-    name: "Zerodha",
-    category: "Indian Market",
-    abbr: "ZE",
-    color: "from-emerald-600 to-green-400",
-  },
-  {
-    name: "Interactive Brokers",
-    category: "Global Execution",
-    abbr: "IB",
-    color: "from-red-600 to-rose-400",
-  },
-  {
-    name: "Refinitiv",
-    category: "Data Intelligence",
-    abbr: "RFN",
-    color: "from-slate-500 to-slate-400",
   },
   {
     name: "Bloomberg",
@@ -105,7 +93,7 @@ const SUCCESS_STORIES = [
 const StarRating = ({ count }: { count: number }) => (
   <div className="flex gap-0.5">
     {Array.from({ length: count }).map((_, i) => (
-      <svg key={i} className="w-3.5 h-3.5 text-amber-400 fill-amber-400" viewBox="0 0 20 20">
+      <svg key={`star-${i}`} className="w-3.5 h-3.5 text-amber-400 fill-amber-400" viewBox="0 0 20 20">
         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
       </svg>
     ))}
@@ -159,8 +147,14 @@ export const PartnerLogos = () => {
               className="group relative p-5 sm:p-6 bg-white/[0.02] border border-white/[0.05] rounded-2xl hover:border-white/15 hover:bg-white/[0.04] transition-all duration-500 flex items-center gap-4 overflow-hidden"
             >
               {/* Logo Avatar */}
-              <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br ${partner.color} flex items-center justify-center font-black text-white text-sm shrink-0 shadow-lg`}>
-                {partner.abbr}
+              <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center font-black text-white text-sm shrink-0 shadow-lg overflow-hidden border border-white/10 p-1 bg-white/5`}>
+                {partner.logoUrl ? (
+                  <img src={partner.logoUrl} alt={`${partner.name} logo`} className="w-full h-full object-contain" />
+                ) : (
+                  <div className={`w-full h-full flex items-center justify-center bg-gradient-to-br ${partner.color} rounded-lg`}>
+                    {partner.abbr}
+                  </div>
+                )}
               </div>
               <div>
                 <div className="text-white font-bold text-sm leading-tight">{partner.name}</div>

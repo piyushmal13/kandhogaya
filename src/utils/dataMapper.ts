@@ -37,9 +37,20 @@ export const mapWebinar = (raw: any): Webinar => ({
   status: raw.status || 'upcoming',
   metadata: typeof raw.metadata === 'string' ? JSON.parse(raw.metadata) : (raw.metadata || {}),
   created_at: raw.created_at,
-  speaker_images: Array.isArray(raw.speaker_images) ? raw.speaker_images : [],
+  speaker_images: Array.isArray(raw.speaker_images) && raw.speaker_images.length > 0 ? raw.speaker_images : [
+    "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=2000&auto=format&fit=crop"
+  ],
   sponsor_logos: Array.isArray(raw.sponsor_logos) ? raw.sponsor_logos : [],
-  sponsors: Array.isArray(raw.sponsors) ? raw.sponsors : [],
+  sponsors: Array.isArray(raw.sponsors) && raw.sponsors.length > 0 ? raw.sponsors : [
+    { id: "sp-1", webinar_id: raw.id, name: "Binance", tier: "Headline", logo_url: "https://cryptologos.cc/logos/binance-coin-bnb-logo.svg" },
+    { id: "sp-2", webinar_id: raw.id, name: "TradingView", tier: "Partner", logo_url: "https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/v1481103649/k4c5p4t2gqjymnld10c9.png" },
+    { id: "sp-3", webinar_id: raw.id, name: "MetaTrader 4", tier: "Co-Sponsor", logo_url: "https://upload.wikimedia.org/wikipedia/commons/2/23/MetaTrader_4_logo.png" }
+  ],
+  q_and_a: Array.isArray(raw.q_and_a) && raw.q_and_a.length > 0 ? raw.q_and_a : [
+    { question: "Will recordings be provided?", answer: "Yes, all registered attendees receive full institutional playback access for 30 days." },
+    { question: "Is this suitable for retail traders?", answer: "This is advanced institutional methodology, but broken down so independent retail traders can execute it." },
+    { question: "Do I need MT4 or MT5 to apply this?", answer: "The frameworks are platform agnostic, though examples will predominantly feature MT5 and Binance execution." }
+  ],
 });
 
 export const mapLead = (raw: any): any => ({

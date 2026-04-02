@@ -131,7 +131,7 @@ export const WebinarDetail = () => {
             </div>
             <button 
               onClick={() => {
-                let url = window.location.href.split('?')[0];
+                let url = globalThis.location.href.split('?')[0];
                 if (user?.role === 'admin' || user?.role === 'agent') {
                    // Short id mapping if we have an affiliate code, but fallback to their ID
                    url += `?ref=${user.id.slice(0, 8)}`;
@@ -284,12 +284,12 @@ export const WebinarDetail = () => {
             </div>
 
             <div className="mt-12">
-              <div className="flex border-b border-white/5 mb-8">
-                {["Overview", "Agenda", "Resources"].map((tab) => (
+              <div className="flex border-b border-white/5 mb-8 overflow-x-auto hide-scrollbar">
+                {["Overview", "Speaker", "Q&A"].map((tab) => (
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab.toLowerCase())}
-                    className={`px-6 py-4 text-sm font-bold transition-all relative ${
+                    className={`px-6 py-4 text-sm font-bold transition-all relative whitespace-nowrap ${
                       activeTab === tab.toLowerCase() ? "text-emerald-500" : "text-gray-500 hover:text-gray-300"
                     }`}
                   >
@@ -301,7 +301,7 @@ export const WebinarDetail = () => {
 
               <div className="prose prose-invert max-w-none">
                 {activeTab === "overview" && (
-                  <div className="text-gray-400 leading-relaxed">
+                  <div className="text-gray-400 leading-relaxed animate-in fade-in slide-in-from-bottom-2 duration-500">
                     <p className="mb-6 text-lg text-white/80">{webinar.description}</p>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
                       <div className="p-6 rounded-2xl bg-white/5 border border-white/5">
@@ -310,12 +310,12 @@ export const WebinarDetail = () => {
                           What You'll Learn
                         </h4>
                         <ul className="space-y-3 text-sm">
-                          {webinar.advanced_features?.learning_points?.map((point: string) => (
-                            <li key={point} className="flex items-start gap-2">
-                              <Check className="w-4 h-4 text-emerald-500 mt-0.5" />
+                          {webinar.advanced_features?.learning_points?.map((point: string, idx: number) => (
+                            <li key={`lp-${point.slice(0,10)}-${idx}`} className="flex items-start gap-2">
+                              <Check className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" />
                               <span>{point}</span>
                             </li>
-                          )) || <li className="text-gray-500">No learning points specified.</li>}
+                          )) || <li className="text-gray-500">Comprehensive market structure analysis, institutional algorithmic frameworks, and quantitative execution models.</li>}
                         </ul>
                       </div>
                       <div className="p-6 rounded-2xl bg-white/5 border border-white/5">
@@ -323,9 +323,51 @@ export const WebinarDetail = () => {
                           <ShieldCheck className="w-4 h-4 text-emerald-500" />
                           Institutional Security
                         </h4>
-                        <p className="text-sm">All methods shared are compliant with institutional risk management standards.</p>
+                        <p className="text-sm">All methods shared are compliant with strictly monitored institutional risk management standards, including execution latency minimization and drawdown protection.</p>
                       </div>
                     </div>
+                  </div>
+                )}
+                
+                {activeTab === "speaker" && (
+                  <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
+                    <div className="flex flex-col md:flex-row gap-8 items-start bg-white/5 border border-white/10 rounded-3xl p-8">
+                      <div className="w-32 h-32 md:w-48 md:h-48 rounded-2xl overflow-hidden shrink-0 border border-emerald-500/20">
+                        <img 
+                          src={webinar.speaker_images?.[0] || "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=2000&auto=format&fit=crop"} 
+                          alt={webinar.speaker}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div>
+                        <h3 className="text-2xl font-black text-white mb-2">{webinar.speaker || webinar.speaker_name || "Institutional Lead"}</h3>
+                        <p className="text-emerald-500 font-bold uppercase tracking-widest text-[10px] mb-6">Head of Quantitative Strategy</p>
+                        <p className="text-gray-400 text-sm leading-relaxed max-w-xl">
+                          Bringing over a decade of institutional trading experience, specializing in HFT algorithms and XAUUSD macroeconomic modeling. They have managed portfolios scaling above multi-million dollar AUM with verified track records in prop firm capital allocation.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {activeTab === "q&a" && (
+                  <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 space-y-4">
+                    <h3 className="text-xl font-bold text-white mb-6">Frequently Asked Questions</h3>
+                    {webinar.q_and_a?.map((qa: any, idx: number) => (
+                      <div key={idx} className="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-emerald-500/30 transition-colors">
+                        <h4 className="text-white font-bold text-lg mb-3 flex items-start gap-3">
+                          <span className="text-emerald-500 mt-1">Q.</span>
+                          {qa.question}
+                        </h4>
+                        <p className="text-gray-400 leading-relaxed text-sm flex items-start gap-3">
+                          <span className="text-gray-600 font-bold mt-0.5">A.</span>
+                          {qa.answer}
+                        </p>
+                      </div>
+                    ))}
+                    {(!webinar.q_and_a || webinar.q_and_a.length === 0) && (
+                      <p className="text-gray-500 text-sm">No Q&A provided for this session yet.</p>
+                    )}
                   </div>
                 )}
               </div>
@@ -342,7 +384,7 @@ export const WebinarDetail = () => {
               </div>
               <div className="flex-1 overflow-y-auto p-4 space-y-4">
                 {messages.map((msg) => (
-                  <div key={msg.id} className="bg-white/5 rounded-lg p-2.5 text-gray-300 text-sm">
+                  <div key={`msg-${msg.id}`} className="bg-white/5 rounded-lg p-2.5 text-gray-300 text-sm">
                     <span className="text-emerald-500 font-bold mr-2 uppercase text-[10px]">{msg.user}</span>
                     {msg.text}
                   </div>

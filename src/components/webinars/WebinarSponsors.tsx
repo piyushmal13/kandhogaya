@@ -5,7 +5,7 @@ import { ShieldCheck, ExternalLink } from 'lucide-react';
 interface Sponsor {
   id: string;
   name: string;
-  tier: 'Headline' | 'Partner';
+  tier: 'Headline' | 'Partner' | 'Co-Sponsor';
   logo_url: string;
   website_url?: string;
 }
@@ -18,7 +18,7 @@ export const WebinarSponsors = ({ sponsors }: WebinarSponsorsProps) => {
   if (!sponsors || sponsors.length === 0) return null;
 
   const headlineSponsors = sponsors.filter(s => s.tier === 'Headline');
-  const partnerSponsors = sponsors.filter(s => s.tier === 'Partner');
+  const partnerSponsors = sponsors.filter(s => s.tier === 'Partner' || s.tier === 'Co-Sponsor');
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
