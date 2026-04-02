@@ -12,7 +12,7 @@ import {
   Settings,
   Video,
   X,
-  Zap,
+  Plane,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 
@@ -42,7 +42,8 @@ export const Navbar = () => {
     { name: "Home", path: "/", icon: Home },
     { name: "Courses", path: "/academy", icon: BookOpen },
     { name: "Algos", path: "/marketplace", icon: BarChart3 },
-    { name: "Signals", path: "/signals", icon: Zap },
+    // { name: "Signals", path: "/signals", icon: Zap }, // Temporarily disconnected
+    { name: "Travel", path: "/travel", icon: Plane },
     { name: "Webinars", path: "/webinars", icon: Video },
     { name: "Blog", path: "/blog", icon: MessageSquare },
   ];

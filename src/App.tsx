@@ -14,15 +14,12 @@ import { SiteBackdrop } from "./components/site/SiteBackdrop";
 import { LoadingSpinner } from "./components/ui/LoadingSpinner";
 import { ProtectedRoute } from "./components/ui/ProtectedRoute";
 import { SpeedInsights } from "@vercel/speed-insights/react";
-
-
 import { useReferral } from "./hooks/useReferral";
 
-// ── Lazy-loaded pages (route-level code splitting) ──
 const Home = lazy(() => import("./pages/Home").then(m => ({ default: m.Home })));
-const Signals = lazy(() => import("./pages/Signals").then(m => ({ default: m.Signals })));
 const Marketplace = lazy(() => import("./pages/Marketplace").then(m => ({ default: m.Marketplace })));
 const Results = lazy(() => import("./pages/Results").then(m => ({ default: m.Results })));
+const TradersTravel = lazy(() => import("./pages/TradersTravel").then(m => ({ default: m.TradersTravel })));
 const Academy = lazy(() => import("./pages/Academy").then(m => ({ default: m.Academy })));
 const CourseDetail = lazy(() => import("./pages/CourseDetail").then(m => ({ default: m.CourseDetail })));
 const Webinars = lazy(() => import("./pages/Webinars").then(m => ({ default: m.Webinars })));
@@ -69,8 +66,8 @@ const AnimatedRoutes = () => {
         <Suspense fallback={<PageLoader />}>
           <Routes location={location}>
             <Route path="/" element={<Home />} />
-            <Route path="/signals" element={<Signals />} />
             <Route path="/marketplace" element={<Marketplace />} />
+            <Route path="/travel" element={<TradersTravel />} />
             <Route path="/results" element={<Results />} />
             <Route path="/academy" element={<Academy />} />
             <Route path="/academy/:courseId" element={<CourseDetail />} />
