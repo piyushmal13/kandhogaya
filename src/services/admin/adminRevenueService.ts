@@ -27,7 +27,9 @@ export const adminRevenueService = {
         .from('sales_tracking')
         .select('sale_amount, created_at');
 
-      if (salesError) throw salesError;
+      if (salesError) {
+        console.error("[Institutional Revenue Recovery]: Financial signal lost.", salesError);
+      }
 
       const salesData = sales || [];
       const today = salesData
@@ -43,14 +45,18 @@ export const adminRevenueService = {
         .from('users')
         .select('*', { count: 'exact', head: true });
 
-      if (userError) throw userError;
+      if (userError) {
+        console.error("[Institutional CRM Recovery]: User identity signal lost.", userError);
+      }
 
       const { count: converted, error: pipelineError } = await supabase
         .from('sales_pipeline')
         .select('*', { count: 'exact', head: true })
         .eq('stage', 'converted');
 
-      if (pipelineError) throw pipelineError;
+      if (pipelineError) {
+        console.error("[Institutional CRM Recovery]: Pipeline signal lost.", pipelineError);
+      }
 
       // 3. Health Signals
       const { count: errors, error: logError } = await supabase
@@ -58,11 +64,13 @@ export const adminRevenueService = {
         .select('*', { count: 'exact', head: true })
         .eq('severity', 'critical');
 
-      if (logError) throw logError;
+      if (logError) {
+        console.error("[Institutional Cluster Recovery]: Health signal lost.", logError);
+      }
 
       return {
-        revenueToday: today,
-        revenueMTD: mtd,
+        revenueToday: today || 0,
+        revenueMTD: mtd || 0,
         activeUsers: users || 0,
         conversionRate: users ? ((converted || 0) / users) * 100 : 0,
         systemHealth: (errors || 0) > 0 ? "Critical Action Required" : "Optimal"

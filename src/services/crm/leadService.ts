@@ -13,15 +13,21 @@ export const leadService = {
   getLeads: async (page: number = 0, limit: number = 20): Promise<Lead[]> => {
     const offset = page * limit;
     
-    const rawLeads = await safeQuery<any[]>(
-      publicSupabase
-        .from('leads')
-        .select('*, bot_licenses(*), webinar_registrations(*)')
-        .order('created_at', { ascending: false })
-        .range(offset, offset + limit - 1)
-    );
+    try {
+      const rawLeads = await safeQuery<any[]>(
+        publicSupabase
+          .from('leads')
+          .select('*, bot_licenses(*), webinar_registrations(*)')
+          .order('created_at', { ascending: false })
+          .range(offset, offset + limit - 1)
+      );
 
-    return (rawLeads as any[]).map(mapLead);
+      if (!rawLeads || rawLeads.length === 0) return [];
+      return (rawLeads as any[]).map(mapLead);
+    } catch (err) {
+      console.error("[Institutional CRM Recovery]: Discovery segment failed. Trapping exception.", err);
+      return [];
+    }
   },
 
   /**
