@@ -121,27 +121,38 @@ export const articleSchema = (article: {
   author_name?: string;
   image_url?: string;
   featured_image?: string;
-}) => ({
-  "@context": "https://schema.org",
-  "@type": "Article",
-  headline: article.title,
-  description: article.content?.substring(0, 160),
-  url: `${SITE_URL}/blog/${article.slug}`,
-  image: article.image_url || article.featured_image || `${SITE_URL}/logo.png`,
-  datePublished: article.published_at || article.created_at,
-  author: {
-    "@type": "Organization",
-    name: article.author_name || BRANDING.name,
-  },
-  publisher: {
-    "@type": "Organization",
-    name: BRANDING.name,
-    logo: {
-      "@type": "ImageObject",
-      url: `${SITE_URL}/logo.png`,
+  metadata?: any;
+}) => {
+  const meta = article.metadata || {};
+  const author = meta.author_name || article.author_name || BRANDING.name;
+  
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: article.title,
+    description: meta.bold_headline || article.content?.substring(0, 160),
+    url: `${SITE_URL}/blog/${article.slug}`,
+    image: meta.cover_image || meta.image || article.image_url || article.featured_image || `${SITE_URL}/logo.png`,
+    datePublished: article.published_at || article.created_at,
+    dateModified: article.published_at || article.created_at,
+    author: {
+      "@type": "Person",
+      name: author,
     },
-  },
-});
+    publisher: {
+      "@type": "EducationalOrganization",
+      name: BRANDING.name,
+      logo: {
+        "@type": "ImageObject",
+        url: `${SITE_URL}/logo.png`,
+      },
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `${SITE_URL}/blog/${article.slug}`,
+    },
+  };
+};
 
 export const productSchema = (product: {
   name: string;

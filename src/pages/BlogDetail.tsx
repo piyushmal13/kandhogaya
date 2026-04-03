@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ArrowUpRight, Zap, Share2, Calendar, Clock, User } from "lucide-react";
+import { ArrowUpRight, Zap, Share2, Calendar, Clock, User, Shield, ExternalLink, Globe } from "lucide-react";
 import ReactMarkdown from "react-markdown";
-import { motion } from "motion/react";
+import { motion, useScroll, useSpring } from "motion/react";
 
 import { PageMeta } from "../components/site/PageMeta";
 import { WebinarPromoInline } from "../components/webinars/WebinarPromoInline";
 import { getBlogPostBySlug } from "../services/apiHandlers";
 import { Blog } from "../types";
+import { KeyInsightsCard } from "../components/blog/KeyInsightsCard";
+import { BrokerAdBanner } from "../components/blog/BrokerAdBanner";
+import { resolveBlogImage } from "../utils/blogUtils";
+import { articleSchema, breadcrumbSchema } from "../utils/structuredData";
 
 export const BlogDetail = () => {
   const { pathname } = useLocation();
@@ -15,179 +19,344 @@ export const BlogDetail = () => {
   const [post, setPost] = useState<Blog | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Scroll Progress Bar
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
+
   useEffect(() => {
     const fetchPost = async () => {
+      if (!slug) return;
       setLoading(true);
-      const data = await getBlogPostBySlug(slug);
-      setPost(data);
-      setLoading(false);
+      try {
+        const data = await getBlogPostBySlug(slug);
+        setPost(data);
+      } catch (err) {
+        console.error("Fetch blog detail failed:", err);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchPost();
+    window.scrollTo(0, 0);
   }, [slug]);
 
   if (loading) {
     return (
-      <div className="pt-32 text-center text-white">
-        <PageMeta title="Market Insight" description="Loading IFXTrades market insight." path={pathname} />
-        <div className="w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto" />
+      <div className="pt-40 min-h-screen bg-[#020202] text-center text-white">
+        <PageMeta title="Market Insight | IFX Trades" description="Loading IFXTrades market insight." path={pathname} />
+        <motion.div 
+          animate={{ rotate: 360 }}
+          transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+          className="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full mx-auto" 
+        />
+        <p className="mt-8 text-gray-500 font-mono text-[10px] uppercase tracking-[0.3em]">
+          Decrypting Institutional Order Flow...
+        </p>
       </div>
     );
   }
 
   if (!post) {
     return (
-      <div className="pt-32 text-center text-white">
+      <div className="pt-40 min-h-screen bg-[#020202] text-center text-white">
         <PageMeta
           title="Insight Not Found"
           description="The requested IFXTrades market insight could not be found."
           path={pathname}
           robots="noindex,follow"
         />
-        Post not found.
+        <h2 className="text-2xl font-black uppercase tracking-tighter mb-4">Signal Lost (404)</h2>
+        <Link to="/blog" className="text-emerald-500 font-bold hover:underline">Return to Radar</Link>
       </div>
     );
   }
 
+  // Handle rich metadata (with fallbacks to legacy fields)
+  const meta = post.metadata || {};
+  const boldHeadline = meta.bold_headline || post.bold_headline;
+  const authorName = meta.author_name || post.author?.full_name || post.author_name || "IFX Analyst";
+  const authorAvatar = meta.author_profile_url || post.author?.avatar_url || post.author_profile_url;
+  const authorBio = meta.author_bio || post.author_bio || "Expert market analyst at IFX Trades Institutional Desk.";
+  const videoUrl = meta.video_url || post.video_url;
+  const coverImage = resolveBlogImage(post);
+  const keyInsights = meta.key_insights || ["Institutional liquidity zones.", "Order block identification.", "Macro-structure alignment."];
+
   return (
-    <div className="pt-32 pb-20 px-4 max-w-4xl mx-auto">
+    <div className="bg-[#020202] min-h-screen overflow-hidden selection:bg-emerald-500 selection:text-black">
       <PageMeta
-        title={post.title}
-        description={(post.content || "").slice(0, 160)}
+        title={`${post.title} | Market Insight`}
+        description={boldHeadline || (post.content || "").slice(0, 160)}
         path={pathname}
         type="article"
-        keywords={["market insight", post.category || "market analysis", "IFXTrades blog"]}
+        keywords={["market insight", post.category || "market analysis", "forex research"]}
+        structuredData={[
+          articleSchema(post),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Insights", path: "/blog" },
+            { name: post.title, path: pathname },
+          ])
+        ]}
       />
 
-      <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
-        <Link to="/blog" className="text-emerald-500 text-sm font-bold flex items-center gap-2 mb-8 hover:translate-x-[-4px] transition-transform">
-          <ArrowUpRight className="rotate-[225deg] w-4 h-4" /> Back to Insights
-        </Link>
-      </motion.div>
+      {/* Progress Bar */}
+      <motion.div className="fixed top-0 left-0 right-0 h-1 bg-emerald-500 z-[100] origin-left" style={{ scaleX }} />
 
-      <div className="mb-12">
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-[10px] text-emerald-500 font-bold uppercase mb-4 tracking-widest">
-          {post.category || "Market Analysis"}
-        </motion.div>
-        <motion.h1 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-4xl md:text-6xl font-bold text-white mb-6 tracking-tighter leading-tight">
-          {post.title}
-        </motion.h1>
+      {/* Hero Section */}
+      <div className="relative pt-40 pb-20 px-4">
+        {/* Background Gradients */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-screen h-full opacity-20 pointer-events-none">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,_#10b98133_0%,_transparent_50%)]" />
+        </div>
 
-        {post.bold_headline ? (
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 }}
-            className="text-xl md:text-2xl text-gray-400 font-medium mb-8 leading-relaxed italic border-l-4 border-emerald-500 pl-6"
-          >
-            {post.bold_headline}
-          </motion.p>
-        ) : null}
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+          <div className="lg:col-span-8">
+            <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
+              <Link to="/blog" className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/5 text-emerald-400 text-[10px] font-black uppercase tracking-[0.2em] mb-12 hover:bg-white/10 transition-all hover:translate-x-[-4px]">
+                <ArrowUpRight className="rotate-[225deg] w-3 h-3" /> 
+                Institutional Feed
+              </Link>
+            </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="flex flex-wrap items-center justify-between gap-6 py-6 border-y border-white/5"
-        >
-          <div className="flex items-center gap-4">
-            { (post.author?.avatar_url || post.author_profile_url) ? (
-              <img 
-                src={post.author?.avatar_url || post.author_profile_url} 
-                alt={post.author?.full_name || post.author_name || "Author"} 
-                className="w-12 h-12 rounded-full object-cover border border-white/10" 
-                referrerPolicy="no-referrer" 
-              />
-            ) : (
-              <div className="w-12 h-12 bg-emerald-500 rounded-full flex items-center justify-center text-black font-bold">
-                {(post.author?.full_name || post.author_name || "A").charAt(0)}
-              </div>
-            )}
-            <div>
-              <div className="text-white font-bold text-sm">{post.author?.full_name || post.author_name || "IFXTrades Analyst"}</div>
-              <div className="flex items-center gap-3 text-xs text-gray-500 mt-1">
-                <span className="flex items-center gap-1"><Calendar className="w-3 h-3" /> {new Date(post.created_at).toLocaleDateString()}</span>
-                <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> 5 min read</span>
-              </div>
+            <div className="space-y-6 mb-12">
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }} 
+                animate={{ opacity: 1, y: 0 }} 
+                className="flex items-center gap-4 text-[10px] text-emerald-500 font-black uppercase tracking-[0.3em]"
+              >
+                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                {post.category || "Research Note"}
+              </motion.div>
+
+              <motion.h1 
+                initial={{ opacity: 0, y: 20 }} 
+                animate={{ opacity: 1, y: 0 }} 
+                transition={{ delay: 0.1 }} 
+                className="text-5xl md:text-7xl font-black text-white tracking-tighter leading-[0.9] lg:max-w-4xl"
+              >
+                {post.title}
+              </motion.h1>
+
+              {boldHeadline && (
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.15 }}
+                  className="text-2xl md:text-3xl text-gray-400 font-medium leading-tight tracking-tight max-w-3xl border-l-4 border-emerald-500/50 pl-8 py-2"
+                >
+                  {boldHeadline}
+                </motion.p>
+              )}
             </div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="flex flex-wrap items-center justify-between gap-10 py-8 border-y border-white/5"
+            >
+              <div className="flex items-center gap-5">
+                {authorAvatar ? (
+                  <img 
+                    src={authorAvatar} 
+                    alt={authorName} 
+                    className="w-14 h-14 rounded-2xl object-cover ring-2 ring-emerald-500/10" 
+                    referrerPolicy="no-referrer" 
+                  />
+                ) : (
+                  <div className="w-14 h-14 bg-zinc-800 rounded-2xl flex items-center justify-center text-emerald-500 text-xl font-black">
+                    {authorName.charAt(0)}
+                  </div>
+                )}
+                <div>
+                  <div className="text-white font-black text-xs uppercase tracking-widest">{authorName}</div>
+                  <div className="flex items-center gap-4 text-[9px] text-gray-600 font-black uppercase tracking-[0.2em] mt-1.5">
+                    <span className="flex items-center gap-1.5"><Calendar className="w-3 h-3 text-emerald-500/50" /> {new Date(post.created_at).toLocaleDateString()}</span>
+                    <span className="flex items-center gap-1.5"><Clock className="w-3 h-3 text-emerald-500/50" /> 5 Min Discovery</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <button className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 border border-white/5 text-gray-400 hover:text-white hover:border-white/10 transition-all text-[10px] font-black uppercase tracking-widest">
+                  <Share2 className="w-4 h-4" /> Share
+                </button>
+              </div>
+            </motion.div>
           </div>
-          <div className="flex items-center gap-2">
-            <button className="p-2 rounded-lg bg-white/5 text-gray-400 hover:text-white transition-colors">
-              <Share2 className="w-5 h-5" />
-            </button>
+
+          <aside className="lg:col-span-4 hidden lg:block">
+            <KeyInsightsCard insights={keyInsights} />
+          </aside>
+        </div>
+      </div>
+
+      {/* Media Block */}
+      <div className="max-w-7xl mx-auto px-4 mb-20">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.98 }} 
+          animate={{ opacity: 1, scale: 1 }} 
+          transition={{ delay: 0.3 }} 
+          className="rounded-[40px] overflow-hidden border border-white/10 bg-black aspect-video relative group shadow-[0_0_100px_rgba(0,0,0,0.5)]"
+        >
+          {videoUrl ? (
+            <div className="w-full h-full">
+              <iframe 
+                src={videoUrl.includes("youtube.com") ? videoUrl.replace("watch?v=", "embed/") : videoUrl}
+                className="w-full h-full"
+                title="Institutional Analysis Media"
+                allowFullScreen
+              />
+            </div>
+          ) : (
+            <img 
+              src={coverImage} 
+              alt={post.title} 
+              className="w-full h-full object-cover transform scale-105 group-hover:scale-100 transition-transform duration-[2s]" 
+              referrerPolicy="no-referrer" 
+            />
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-10">
+            <div className="flex items-center gap-3">
+              <Shield className="w-5 h-5 text-emerald-500" />
+              <span className="text-white text-xs font-black uppercase tracking-widest">Verified Multi-Asset Coverage</span>
+            </div>
           </div>
         </motion.div>
       </div>
 
-      <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3 }} className="mb-12 rounded-3xl overflow-hidden border border-white/10 bg-black aspect-video relative group">
-        {post.video_url ? (
-          <div className="w-full h-full">
-            <iframe 
-              src={post.video_url.includes("youtube.com") ? post.video_url.replace("watch?v=", "embed/") : post.video_url}
-              className="w-full h-full"
-              title="Blog post video material"
-              allowFullScreen
-            />
-          </div>
-        ) : (
-          <img src={post.image_url || `https://picsum.photos/seed/${post.id}/1280/720`} alt={post.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-        )}
-      </motion.div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-        <div className="lg:col-span-8">
-          <div className="prose prose-invert max-w-none">
-            <div className="text-lg md:text-xl text-gray-300 leading-relaxed mb-8">
+      {/* Main Content Area */}
+      <div className="max-w-7xl mx-auto px-4 pb-32">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
+          <div className="lg:col-span-8">
+            {/* Content Container */}
+            <div className="prose prose-invert prose-p:text-gray-300 prose-p:text-lg prose-p:leading-relaxed prose-headings:text-white prose-headings:font-black prose-headings:tracking-tighter prose-headings:uppercase prose-h2:text-3xl prose-h3:text-xl prose-span:text-emerald-400 max-w-none">
               <ReactMarkdown>{post.content}</ReactMarkdown>
             </div>
-          </div>
 
-          {post.author_bio ? (
-            <div className="mt-16 p-8 rounded-3xl bg-zinc-900 border border-white/10">
-              <div className="flex items-center gap-4 mb-4">
-                <User className="text-emerald-500 w-5 h-5" />
-                <h3 className="text-white font-bold">About the Author</h3>
+            {/* In-content Broker Ad */}
+            {meta.broker_ad ? (
+              <BrokerAdBanner 
+                name={meta.broker_ad.name}
+                logoUrl={meta.broker_ad.logo_url}
+                referralUrl={meta.broker_ad.referral_url}
+                tagline={meta.broker_ad.tagline}
+                description={meta.broker_ad.description}
+              />
+            ) : (
+              <BrokerAdBanner 
+                name="Binance Institutional" 
+                logoUrl="https://upload.wikimedia.org/wikipedia/commons/4/4c/Binance_Logo.png" 
+                referralUrl="https://accounts.binance.com/register?ref=IFXTRADES"
+                tagline="Institutional Liquidity Partner"
+                description="Leverage the world's deepest liquidity pools and institutional trading workflows."
+              />
+            )}
+
+            {/* Author Bio Footer */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="mt-24 p-12 rounded-[40px] bg-white/5 border border-white/5 flex flex-col md:flex-row items-center gap-10 relative overflow-hidden"
+            >
+              <div className="absolute top-0 left-0 p-8 opacity-[0.03] pointer-events-none">
+                <Globe className="w-40 h-40 text-emerald-500" />
               </div>
-              <p className="text-gray-400 text-sm leading-relaxed">{post.author_bio}</p>
-            </div>
-          ) : null}
-        </div>
-
-        <div className="lg:col-span-4 space-y-8">
-          <div className="bg-zinc-900 p-8 rounded-3xl border border-white/10">
-            <h3 className="text-white font-bold mb-6 flex items-center gap-2">
-              <Zap className="text-emerald-500 w-5 h-5" />
-              Key Insights
-            </h3>
-            <ul className="space-y-4 text-gray-400 text-sm">
-              <li className="flex items-start gap-3">
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
-                <span>Institutional order flow analysis.</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
-                <span>Macroeconomic impact assessment.</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
-                <span>Risk management protocols.</span>
-              </li>
-            </ul>
+              
+              <div className="w-24 h-24 rounded-3xl bg-zinc-800 flex items-center justify-center shrink-0 border border-white/5 overflow-hidden">
+                {authorAvatar ? (
+                  <img src={authorAvatar} alt={authorName} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                ) : (
+                  <User className="w-10 h-10 text-emerald-500" />
+                )}
+              </div>
+              
+              <div className="relative z-10 text-center md:text-left">
+                <div className="flex items-center gap-3 mb-4 justify-center md:justify-start">
+                  <h3 className="text-xl font-black text-white uppercase tracking-tight">{authorName}</h3>
+                  <div className="px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-[8px] font-black uppercase tracking-widest">
+                    Verified Analyst
+                  </div>
+                </div>
+                <p className="text-gray-400 text-sm leading-relaxed max-w-xl italic">
+                  "{authorBio}"
+                </p>
+                <div className="flex items-center gap-6 mt-8 justify-center md:justify-start">
+                  <button className="flex items-center gap-2 text-[10px] font-black text-emerald-400 uppercase tracking-widest hover:text-emerald-300 transition-colors">
+                    <ExternalLink className="w-3.5 h-3.5" /> Institutional Profile
+                  </button>
+                  <button className="flex items-center gap-2 text-[10px] font-black text-gray-500 uppercase tracking-widest hover:text-white transition-colors">
+                     View All Research
+                  </button>
+                </div>
+              </div>
+            </motion.div>
           </div>
 
-          <div className="bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 p-8 rounded-3xl border border-emerald-500/20">
-            <h3 className="text-white font-bold mb-4">Want Live Updates?</h3>
-            <p className="text-gray-400 text-sm mb-6">Join our private Telegram channel for real-time market alerts and institutional signals.</p>
-            <button className="w-full py-3 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all">
-              Join Telegram
-            </button>
+          {/* Sidebar */}
+          <div className="lg:col-span-4 space-y-12">
+            <div className="lg:hidden">
+              <KeyInsightsCard insights={keyInsights} />
+            </div>
+
+            <div className="sticky top-24 space-y-12">
+              {/* Telegram Promo */}
+              <div className="p-[1px] bg-gradient-to-br from-emerald-500/20 via-white/5 to-transparent rounded-[40px] border border-white/5">
+                <div className="bg-[#050505] p-10 rounded-[39px] relative overflow-hidden">
+                   <div className="absolute top-0 right-0 p-8 opacity-[0.05]">
+                      <Zap className="w-20 h-20 text-emerald-500" />
+                   </div>
+                   <h3 className="text-2xl font-black text-white uppercase tracking-tighter mb-4 leading-none">
+                      Live Pulse <br/><span className="text-emerald-500 text-lg">Signal Channel</span>
+                   </h3>
+                   <p className="text-gray-500 text-xs leading-relaxed mb-8">
+                      Institutional trade flow and macro adjustments delivered instantly to your device.
+                   </p>
+                   <a 
+                     href="https://t.me/ifxtrades" 
+                     target="_blank" 
+                     className="block w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-black text-center font-black text-[10px] uppercase tracking-widest rounded-2xl shadow-2xl transition-all"
+                   >
+                      Enter Signal Intelligence
+                   </a>
+                </div>
+              </div>
+
+              {/* Related Ads or Content */}
+              <div className="bg-zinc-900/30 p-10 rounded-[40px] border border-white/5">
+                <h4 className="text-white font-black text-xs uppercase tracking-widest mb-8 flex items-center gap-3">
+                  <Shield className="w-4 h-4 text-emerald-500" />
+                  Transparency Desk
+                </h4>
+                <div className="space-y-6">
+                  <div className="flex items-start gap-4">
+                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-2 shrink-0" />
+                     <p className="text-[11px] text-gray-500 font-medium">All analysis is provided for educational purposes and institutional framing.</p>
+                  </div>
+                  <div className="flex items-start gap-4">
+                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-2 shrink-0" />
+                     <p className="text-[11px] text-gray-500 font-medium">Verified data sources include MT4, TradingView, and BloomBerg Terminal.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="mt-24 pt-24 border-t border-white/5">
-        <WebinarPromoInline />
+      {/* Footer Promo */}
+      <div className="bg-white/5 pt-32 pb-24 border-t border-white/5">
+        <div className="max-w-7xl mx-auto px-4">
+          <WebinarPromoInline />
+        </div>
       </div>
     </div>
   );
 };
+

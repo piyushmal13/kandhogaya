@@ -10,6 +10,7 @@ import { PageSection } from "../components/site/PageSection";
 import { BlogCardSkeleton } from "../components/ui/Skeleton";
 import { breadcrumbSchema } from "../utils/structuredData";
 import { Blog as BlogPost } from "../types";
+import { resolveBlogImage } from "../utils/blogUtils";
 
 export const Blog = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -112,37 +113,64 @@ export const Blog = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: (index % 3) * 0.1 }}
                 layout
+                className="group"
               >
-                <Link to={`/blog/${post.slug}`} className="group block h-full">
-                  <div className="site-panel flex h-full flex-col overflow-hidden">
-                    <div className="relative aspect-video overflow-hidden bg-black">
+                <Link to={`/blog/${post.slug}`} className="block h-full">
+                  <div className="relative h-full flex flex-col bg-[#0a0a0a] border border-white/5 rounded-[32px] overflow-hidden hover:border-emerald-500/30 transition-all duration-500 hover:shadow-[0_0_50px_rgba(16,185,129,0.05)]">
+                    {/* Image Section */}
+                    <div className="relative aspect-[16/10] overflow-hidden">
                       <img
-                        src={post.image_url || post.featured_image || `https://picsum.photos/seed/${post.slug}/800/450`}
+                        src={resolveBlogImage(post, "thumb")}
                         alt={post.title}
-                        className="h-full w-full object-cover opacity-65 transition-transform duration-700 group-hover:scale-105 group-hover:opacity-100"
+                        className="h-full w-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110 opacity-70 group-hover:opacity-100"
                         referrerPolicy="no-referrer"
                       />
-                    </div>
-                    <div className="flex flex-1 flex-col p-8">
-                      <div className="mb-4 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-emerald-200/80">
-                        <Calendar className="h-3 w-3" />
-                        {new Date(post.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent opacity-80" />
+                      
+                      {/* Floating Category Tag */}
+                      <div className="absolute top-6 left-6">
+                        <div className="px-3 py-1 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-emerald-400 text-[9px] font-black uppercase tracking-widest">
+                          {post.category || "Research"}
+                        </div>
                       </div>
-                      <h3 className="mb-4 text-2xl font-semibold leading-tight text-white transition-colors group-hover:text-emerald-100">
+                    </div>
+
+                    {/* Content Section */}
+                    <div className="flex flex-1 flex-col p-8 pt-4">
+                      {/* Date & Read Time */}
+                      <div className="mb-6 flex items-center justify-between">
+                         <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-600">
+                           <Calendar className="h-3 w-3 text-emerald-500/50" />
+                           {new Date(post.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                         </div>
+                         <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.15em] text-gray-500/50 bg-white/5 px-2 py-0.5 rounded-md">
+                           <Clock className="h-2.5 w-2.5" />
+                           5 MIN
+                         </div>
+                      </div>
+
+                      {/* Title */}
+                      <h3 className="mb-4 text-2xl font-black leading-tight text-white group-hover:text-emerald-400 transition-colors tracking-tighter">
                         {post.title}
                       </h3>
-                      <p className="mb-8 flex-1 text-sm leading-7 text-slate-300 line-clamp-3">
-                        {post.content}
+
+                      {/* Content Snippet */}
+                      <p className="mb-8 flex-1 text-[13px] leading-6 text-gray-400 line-clamp-2 font-medium opacity-80 group-hover:opacity-100 transition-opacity">
+                        {post.metadata?.bold_headline || post.content}
                       </p>
+
+                      {/* Footer */}
                       <div className="flex items-center justify-between border-t border-white/5 pt-6">
-                        <div className="flex items-center gap-2">
-                          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-300/10 text-emerald-200">
-                            <Clock className="h-3 w-3" />
-                          </div>
-                          <span className="text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-500">5 min read</span>
+                        <div className="flex items-center gap-3">
+                           <div className="w-8 h-8 rounded-full bg-zinc-800 border border-white/10 flex items-center justify-center text-emerald-500 font-black text-[10px]">
+                              {(post.metadata?.author_name || (post as any).author?.full_name || "A").charAt(0)}
+                           </div>
+                           <span className="text-[10px] font-black uppercase tracking-widest text-gray-500">
+                             {post.metadata?.author_name || (post as any).author?.full_name || "IFX ANALYST"}
+                           </span>
                         </div>
-                        <div className="text-emerald-200 transition-transform group-hover:translate-x-1">
-                          <ArrowRight className="h-5 w-5" />
+                        <div className="w-10 h-10 rounded-full border border-white/5 flex items-center justify-center group-hover:bg-emerald-500 group-hover:border-emerald-500 text-gray-600 group-hover:text-black transition-all duration-300 transform group-hover:rotate-45">
+                          <ArrowRight className="h-4 w-4" />
                         </div>
                       </div>
                     </div>

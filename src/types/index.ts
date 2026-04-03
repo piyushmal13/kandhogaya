@@ -181,12 +181,29 @@ export interface Blog {
   created_at: string;
   content_type: string;
   author_id?: string;
+  metadata?: {
+    cover_image?: string;
+    image?: string;
+    video_url?: string;
+    bold_headline?: string;
+    key_insights?: string[];
+    author_bio?: string;
+    author_name?: string;
+    author_profile_url?: string;
+    broker_ad?: {
+      name: string;
+      logo_url: string;
+      referral_url: string;
+      description?: string;
+      tagline?: string;
+    };
+  };
   // joined via apiHandlers
   author?: {
     full_name?: string;
     avatar_url?: string;
   };
-  // Extended fields — add via ALTER TABLE if you need these stored in Supabase
+  // Legacy / Extended fields — kept for compatibility
   bold_headline?: string;
   author_name?: string;
   author_profile_url?: string;
