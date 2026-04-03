@@ -316,6 +316,49 @@
     box-shadow: 0 0 20px rgba(6, 182, 212, 0.3), 0 0 40px rgba(6, 182, 212, 0.1);
   }
 
+  /* ── Prose Institutional (Elite Research Typography) ── */
+  .prose-institutional {
+    @apply text-[17px] md:text-[19px] leading-[1.8] text-gray-300 font-normal tracking-[-0.01em];
+  }
+
+  .prose-institutional h2 {
+    @apply text-3xl md:text-4xl font-black text-white uppercase tracking-tighter mt-16 mb-8 pt-4 border-t border-white/5;
+  }
+
+  .prose-institutional h3 {
+    @apply text-xl md:text-2xl font-black text-emerald-400 uppercase tracking-tight mt-12 mb-6;
+  }
+
+  .prose-institutional p {
+    @apply mb-8;
+  }
+
+  .prose-institutional ul,
+  .prose-institutional ol {
+    @apply my-10 space-y-4 pl-6;
+  }
+
+  .prose-institutional li {
+    @apply relative pl-2;
+  }
+
+  .prose-institutional ul li::before {
+    content: "—";
+    @apply absolute -left-6 text-emerald-500/50 font-black;
+  }
+
+  .prose-institutional strong {
+    @apply text-white font-black;
+  }
+
+  .prose-institutional blockquote {
+    @apply my-12 p-8 md:p-12 bg-white/[0.02] border-l-4 border-emerald-500 rounded-3xl italic text-2xl text-gray-200 tracking-tight leading-relaxed;
+  }
+
+  .prose-institutional img {
+    @apply my-16 rounded-[40px] border border-white/10 shadow-2xl;
+  }
+
   .noise-overlay {
     display: none;
   }

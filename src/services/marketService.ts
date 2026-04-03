@@ -98,7 +98,8 @@ export const marketService = {
    * Subscribe to real-time updates (Using polling interval for Twelve Data free tier)
    */
   subscribe: (callback: () => void) => {
-    const interval = setInterval(callback, 30000); // 30s refresh for institutional data pulse
+    // 15s refresh for institutional data pulse (Safe within Twelve Data 8req/min limit)
+    const interval = setInterval(callback, 15000); 
     return {
       unsubscribe: () => clearInterval(interval)
     };

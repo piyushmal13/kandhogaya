@@ -118,7 +118,7 @@ export const WebinarDetail = () => {
                     SESSION RECORDING
                   </span>
                 )}
-                <span className="text-gray-500 text-[10px] font-mono uppercase tracking-widest">{webinar.speaker_name || webinar.speaker || 'Institutional Lead'}</span>
+                <span className="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em]">{webinar.speaker_name || webinar.speaker || 'Institutional Lead Analyst'}</span>
               </div>
               <h1 className="text-xl md:text-2xl font-bold text-white tracking-tight">{webinar.title}</h1>
             </div>
@@ -233,14 +233,14 @@ export const WebinarDetail = () => {
                           <span className="text-emerald-500">Successfully Unlocked</span>
                         </h2>
                         <div className="grid grid-cols-3 gap-8 max-w-2xl mx-auto mb-12">
-                          {[
-                            { label: "Accuracy", value: "94.2%" },
-                            { label: "Volume Analyzed", value: "1.4M+" },
-                            { label: "Latency", value: "0.1ms" }
+                           {[
+                            { label: "Analysis Depth", value: "Q2/26" },
+                            { label: "Data Points", value: "1.4M+" },
+                            { label: "Logic Framework", value: "Institutional" }
                           ].map((stat) => (
-                            <div key={stat.label} className="text-center p-4 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm">
-                              <div className="text-2xl md:text-3xl font-bold text-emerald-500 font-mono">{stat.value}</div>
-                              <div className="text-[10px] text-gray-500 uppercase tracking-widest font-bold mt-1">{stat.label}</div>
+                            <div key={stat.label} className="text-center p-6 rounded-[2rem] bg-white/[0.03] border border-white/5 backdrop-blur-md">
+                              <div className="text-2xl md:text-3xl font-black text-emerald-500 tracking-tighter leading-none">{stat.value}</div>
+                              <div className="text-[9px] text-gray-500 uppercase tracking-[0.2em] font-black mt-3">{stat.label}</div>
                             </div>
                           ))}
                         </div>
@@ -331,19 +331,20 @@ export const WebinarDetail = () => {
                 
                 {activeTab === "speaker" && (
                   <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
-                    <div className="flex flex-col md:flex-row gap-8 items-start bg-white/5 border border-white/10 rounded-3xl p-8">
-                      <div className="w-32 h-32 md:w-48 md:h-48 rounded-2xl overflow-hidden shrink-0 border border-emerald-500/20">
+                    <div className="flex flex-col md:flex-row gap-12 items-center bg-white/[0.02] border border-white/5 rounded-[40px] p-10 md:p-14">
+                      <div className="w-40 h-40 md:w-56 md:h-56 rounded-[32px] overflow-hidden shrink-0 border border-emerald-500/20 shadow-2xl relative group">
+                        <div className="absolute inset-0 bg-emerald-500/20 group-hover:opacity-0 transition-opacity" />
                         <img 
-                          src={webinar.speaker_images?.[0] || "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=2000&auto=format&fit=crop"} 
+                          src={webinar.speaker_profile_url || webinar.speaker_images?.[0] || "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=2000&auto=format&fit=crop"} 
                           alt={webinar.speaker}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
                         />
                       </div>
-                      <div>
-                        <h3 className="text-2xl font-black text-white mb-2">{webinar.speaker || webinar.speaker_name || "Institutional Lead"}</h3>
-                        <p className="text-emerald-500 font-bold uppercase tracking-widest text-[10px] mb-6">Head of Quantitative Strategy</p>
-                        <p className="text-gray-400 text-sm leading-relaxed max-w-xl">
-                          Bringing over a decade of institutional trading experience, specializing in HFT algorithms and XAUUSD macroeconomic modeling. They have managed portfolios scaling above multi-million dollar AUM with verified track records in prop firm capital allocation.
+                      <div className="text-center md:text-left">
+                        <h3 className="text-3xl md:text-4xl font-black text-white mb-2 tracking-tighter uppercase">{webinar.speaker || webinar.speaker_name || "IFX Lead Strategist"}</h3>
+                        <p className="text-emerald-500 font-black uppercase tracking-[0.3em] text-[10px] mb-8">Director of Global Macro Strategy</p>
+                        <p className="text-gray-400 text-lg leading-relaxed max-w-xl font-medium opacity-80">
+                          {webinar.metadata?.author_bio || "A defining voice in institutional market structure, specializing in high-velocity algorithmic modeling and sovereign capital flow analysis. Leading the IFX research desk since 2024."}
                         </p>
                       </div>
                     </div>
@@ -353,8 +354,8 @@ export const WebinarDetail = () => {
                 {activeTab === "q&a" && (
                   <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 space-y-4">
                     <h3 className="text-xl font-bold text-white mb-6">Frequently Asked Questions</h3>
-                    {webinar.q_and_a?.map((qa: any, idx: number) => (
-                      <div key={idx} className="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-emerald-500/30 transition-colors">
+                    {webinar.q_and_a?.map((qa: any) => (
+                      <div key={qa.id || qa.question?.slice(0, 32)} className="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-emerald-500/30 transition-colors">
                         <h4 className="text-white font-bold text-lg mb-3 flex items-start gap-3">
                           <span className="text-emerald-500 mt-1">Q.</span>
                           {qa.question}

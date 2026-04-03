@@ -24,3 +24,18 @@ export const resolveBlogImage = (blog: Blog, size: "thumb" | "full" = "full") =>
   // Using a stable seed (slug) so the image doesn't change on Refresh
   return `https://picsum.photos/seed/${blog.slug || blog.id}/${width}/${height}`;
 };
+
+/**
+ * stripHtml - Institutional Preview Sanitization
+ * Removes HTML tags from content to prevent display bugs in card previews.
+ */
+export const stripHtml = (html: string = "") => {
+  if (!html) return "";
+  const stripped = html
+    .replaceAll(/<[^>]*>?/gm, " ") // Remove tags
+    .replaceAll("&nbsp;", " ")      // Institutional space normalization
+    .replaceAll(/\s+/g, " ")       // Triple whitespace cleanup
+    .trim();
+  
+  return stripped.length > 160 ? stripped.slice(0, 157) + "..." : stripped;
+};

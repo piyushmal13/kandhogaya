@@ -94,29 +94,38 @@ export const Dashboard = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-black pt-28 pb-32 px-4 selection:bg-emerald-500/30">
+    <div className="relative min-h-screen bg-[#020202] pt-28 pb-32 px-4 selection:bg-emerald-500/30 overflow-hidden">
+      {/* Background Ambience */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1400px] h-[600px] bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.05),transparent_70%)] pointer-events-none" />
+      
       <UrgencyBanner />
       
       <div className="max-w-7xl mx-auto relative z-10">
-        <MarketTicker data={marketData} />
+        <div className="mb-10">
+          <MarketTicker data={marketData} />
+        </div>
 
         {!isElite && (
-          <ProfileBanner 
-            userProfile={userProfile}
-            user={user}
-            userLead={userLead}
-            isProOnly={isProOnly}
-            onUpgrade={handleUpgrade}
-          />
+          <div className="mb-12">
+            <ProfileBanner 
+              userProfile={userProfile}
+              user={user}
+              userLead={userLead}
+              isProOnly={isProOnly}
+              onUpgrade={handleUpgrade}
+            />
+          </div>
         )}
 
-        <ConsoleHeader 
-          sessionReady={sessionReady}
-          userProfile={userProfile}
-          user={user}
-          isAdmin={isAdmin}
-          isPro={isPro}
-        />
+        <div className="mb-14">
+          <ConsoleHeader 
+            sessionReady={sessionReady}
+            userProfile={userProfile}
+            user={user}
+            isAdmin={isAdmin}
+            isPro={isPro}
+          />
+        </div>
 
         <StatsGrid 
           licenseCount={licenses.filter(l => l.is_active).length}
@@ -125,13 +134,9 @@ export const Dashboard = () => {
           totalPips={performanceStats.totalPips}
         />
 
-        <TraderChecklist 
-          signalsCount={signals.length}
-          hasActiveBot={licenses.some(l => l.is_active)}
-        />
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 space-y-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Main Operative Area */}
+          <div className="lg:col-span-8 space-y-8">
             <ExecutionTerminal 
               licenses={licenses}
               loading={loading}
@@ -146,17 +151,31 @@ export const Dashboard = () => {
             />
           </div>
 
-          <div className="space-y-8">
-            <WebinarSessions 
-              webinars={webinars}
-              registrations={registrations}
-              isElite={isElite}
-              onUpgrade={() => handleUpgrade('elite', 249, 'b2b2b2b2-b2b2-b2b2-b2b2-b2b2b2b2b2b2')}
+          {/* Secondary Intelligence Area */}
+          <div className="lg:col-span-4 space-y-8">
+            <div className="p-1 rounded-[48px] bg-white/[0.02] border border-white/5">
+              <WebinarSessions 
+                webinars={webinars}
+                registrations={registrations}
+                isElite={isElite}
+                onUpgrade={() => handleUpgrade('elite', 249, 'b2b2b2b2-b2b2-b2b2-b2b2-b2b2b2b2b2b2')}
+              />
+            </div>
+
+            <TraderChecklist 
+              signalsCount={signals.length}
+              hasActiveBot={licenses.some(l => l.is_active)}
             />
 
             <QuickMatrix navigate={navigate} />
 
-            <ActivityPulse />
+            <div className="p-8 rounded-[40px] bg-black border border-white/5 relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-4 opacity-10 blur-xl">
+                 <ActivityPulse />
+              </div>
+              <h4 className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] font-mono mb-6">REAL-TIME ACTIVITY</h4>
+              <ActivityPulse />
+            </div>
           </div>
         </div>
       </div>

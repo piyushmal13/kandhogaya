@@ -102,13 +102,13 @@ export const Marketplace = () => {
             ALGO MARKETPLACE
           </motion.div>
 
-          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.1 }} className="text-5xl md:text-8xl font-black text-white mb-8 tracking-tighter leading-tight uppercase italic">
-            Professional <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">Trading Algos</span>
+          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.1 }} className="text-6xl md:text-9xl font-black text-white mb-10 tracking-tighter leading-[0.85] uppercase italic font-serif">
+            Quant <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-500 to-emerald-500">Terminal</span>
           </motion.h1>
 
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed mb-12 font-light">
-            Automated intelligence designed by the IFXTrades quant desk. Execute disciplined strategies based on strict market structure and institutional models.
+          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="text-lg md:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed mb-16 font-medium opacity-80">
+            Systematic intelligence engineered for institutional liquidity. Execute high-probability models derived from sovereign capital flow and macroeconomic structural analysis.
           </motion.p>
 
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.3 }} className="space-y-8">
@@ -130,29 +130,29 @@ export const Marketplace = () => {
             </div>
 
             {/* Asset & Risk Filter */}
-            <div className="flex flex-wrap justify-center gap-8 pt-6 border-t border-white/5">
-              <div className="flex items-center gap-4">
-                <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest font-mono">Asset Class:</span>
-                <div className="flex gap-4">
+            <div className="flex flex-wrap justify-center gap-12 pt-10 border-t border-white/5">
+              <div className="flex items-center gap-6">
+                <span className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] font-mono">Terminal Focus</span>
+                <div className="flex gap-6">
                   {["All", "Forex", "Crypto", "Indices", "Gold"].map(a => (
                     <button 
                       key={a}
                       onClick={() => setAssetFilter(a)}
-                      className={`text-[10px] font-black uppercase tracking-widest transition-colors ${assetFilter === a ? 'text-emerald-500' : 'text-gray-600 hover:text-gray-400'}`}
+                      className={`text-[10px] font-black uppercase tracking-[0.3em] transition-all hover:tracking-[0.4em] ${assetFilter === a ? 'text-emerald-500' : 'text-gray-600 hover:text-gray-400'}`}
                     >
                       {a}
                     </button>
                   ))}
                 </div>
               </div>
-              <div className="flex items-center gap-4">
-                <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest font-mono">Risk Level:</span>
-                <div className="flex gap-4">
+              <div className="flex items-center gap-6">
+                <span className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] font-mono">Risk Class</span>
+                <div className="flex gap-6">
                   {["All", "Low", "Medium", "High"].map(r => (
                     <button 
                       key={r}
                       onClick={() => setRiskFilter(r)}
-                      className={`text-[10px] font-black uppercase tracking-widest transition-colors ${riskFilter === r ? 'text-emerald-500' : 'text-gray-600 hover:text-gray-400'}`}
+                      className={`text-[10px] font-black uppercase tracking-[0.3em] transition-all hover:tracking-[0.4em] ${riskFilter === r ? 'text-emerald-500' : 'text-gray-600 hover:text-gray-400'}`}
                     >
                       {r}
                     </button>

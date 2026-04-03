@@ -10,7 +10,7 @@ import { PageSection } from "../components/site/PageSection";
 import { BlogCardSkeleton } from "../components/ui/Skeleton";
 import { breadcrumbSchema } from "../utils/structuredData";
 import { Blog as BlogPost } from "../types";
-import { resolveBlogImage } from "../utils/blogUtils";
+import { resolveBlogImage, stripHtml } from "../utils/blogUtils";
 
 export const Blog = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -60,10 +60,10 @@ export const Blog = () => {
   return (
     <div className="relative overflow-hidden pb-20">
       <PageMeta
-        title="Market Insights & Trading Analysis"
-        description="Read IFXTrades research on forex, gold, macro structure, and execution workflows from the institutional analysis desk. Daily market insights."
-        path="/blog"
-        keywords={["trading blog", "forex market analysis", "gold market insights", "trading research", "market commentary"]}
+        title="Institutional Research & Sovereign Intelligence"
+        description="Deep-dive analysis on liquid currency pairs, gold market structure, and systemic macro developments from the IFX research desk. Strategically engineered for institutional decision makers."
+        path="/research"
+        keywords={["institutional forex research", "sovereign market analysis", "gold market structure", "macro research 2026", "quantitative trading insights"]}
         structuredData={breadcrumbSchema([
           { name: "Home", path: "/" },
           { name: "Market Insights", path: "/blog" },
@@ -71,16 +71,16 @@ export const Blog = () => {
       />
 
       <PageHero
-        eyebrow="Institutional Research"
+        eyebrow="Sovereign Intelligence"
         title={
           <>
-            Market insights with <span className="site-title-gradient">execution relevance.</span>
+            Strategic research for <span className="site-title-gradient">institutional players.</span>
           </>
         }
-        description="Read analysis designed to help traders frame bias, risk, and market structure. The goal is not content volume. The goal is better decisions."
+        description="Advanced analysis derived from sovereign capital flow, systemic liquidity shifts, and macroeconomic structural integrity. We prioritize technical alpha over content volume."
         metrics={[
-          { label: "Cadence", value: "Daily", helper: "Fresh market context and trade framing" },
-          { label: "Coverage", value: "Forex + Gold + Macro", helper: "Focused on tradable market structure" },
+          { label: "Alpha Depth", value: "High-Fidelity", helper: "Institutional-grade market framing" },
+          { label: "Desk Cadence", value: "Systematic Pulse", helper: "Daily live market intelligence" },
         ]}
         aside={
           <div className="space-y-4">
@@ -94,9 +94,9 @@ export const Blog = () => {
                 className="w-full rounded-2xl border border-white/10 bg-black/30 py-3 pr-4 pl-12 text-sm text-white outline-none focus:border-emerald-300/40"
               />
             </form>
-            <button className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-300 hover:text-white">
-              <Filter className="h-4 w-4 text-emerald-200" />
-              All Topics
+            <button className="inline-flex items-center gap-3 rounded-2xl border border-white/5 bg-white/5 px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-emerald-400 transition-all">
+              <Filter className="h-3.5 w-3.5 text-emerald-500" />
+              INTELLIGENCE TYPE
             </button>
           </div>
         }
@@ -156,7 +156,7 @@ export const Blog = () => {
 
                       {/* Content Snippet */}
                       <p className="mb-8 flex-1 text-[13px] leading-6 text-gray-400 line-clamp-2 font-medium opacity-80 group-hover:opacity-100 transition-opacity">
-                        {post.metadata?.bold_headline || post.content}
+                        {post.metadata?.bold_headline || stripHtml(post.content)}
                       </p>
 
                       {/* Footer */}

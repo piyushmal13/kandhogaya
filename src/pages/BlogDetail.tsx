@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ArrowUpRight, Zap, Share2, Calendar, Clock, User, Shield, ExternalLink, Globe } from "lucide-react";
-import ReactMarkdown from "react-markdown";
 import { motion, useScroll, useSpring } from "motion/react";
 
 import { PageMeta } from "../components/site/PageMeta";
@@ -235,9 +234,17 @@ export const BlogDetail = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
           <div className="lg:col-span-8">
             {/* Content Container */}
-            <div className="prose prose-invert prose-p:text-gray-300 prose-p:text-lg prose-p:leading-relaxed prose-headings:text-white prose-headings:font-black prose-headings:tracking-tighter prose-headings:uppercase prose-h2:text-3xl prose-h3:text-xl prose-span:text-emerald-400 max-w-none">
-              <ReactMarkdown>{post.content}</ReactMarkdown>
-            </div>
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="prose-institutional selection:bg-emerald-500/30"
+            >
+              <div 
+                dangerouslySetInnerHTML={{ __html: post.content }} 
+                className="max-w-none"
+              />
+            </motion.div>
 
             {/* In-content Broker Ad */}
             {meta.broker_ad ? (

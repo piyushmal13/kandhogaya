@@ -3,7 +3,7 @@ import { motion, useMotionValue } from "motion/react";
 import { ArrowUpRight, Calendar, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { getBlogPosts } from "../../services/apiHandlers";
-import { resolveBlogImage } from "../../utils/blogUtils";
+import { resolveBlogImage, stripHtml } from "../../utils/blogUtils";
 
 export const BlogSection = () => {
   const [blogs, setBlogs] = useState<any[]>([]);
@@ -73,7 +73,7 @@ export const BlogSection = () => {
                   </h3>
                   
                   <p className="text-gray-500 text-sm leading-relaxed line-clamp-2 font-medium opacity-80">
-                    {blog.metadata?.bold_headline || blog.content}
+                    {blog.metadata?.bold_headline || stripHtml(blog.content)}
                   </p>
                   
                   <div className="pt-4 flex items-center gap-3 text-emerald-500 text-[10px] font-black uppercase tracking-[0.2em] group-hover:gap-5 transition-all">
