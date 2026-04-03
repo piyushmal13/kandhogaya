@@ -1,7 +1,7 @@
 import React, { useState, useEffect, SyntheticEvent } from "react";
 import {
   Zap, FileText, Plus, Search, Trash2, Edit2, Globe,
-  Eye, EyeOff, RefreshCw, CheckCircle, XCircle, Tag
+  Eye, EyeOff, RefreshCw, CheckCircle, XCircle, Tag, Upload, UserCheck, Shield
 } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { useAuth } from "../../contexts/AuthContext";
@@ -16,6 +16,9 @@ interface ContentPost {
   image_url: string;
   content_type: string;
   status: string;
+  category?: string;
+  author_bio?: string;
+  metadata?: any;
   created_at: string;
   author?: { full_name: string };
 }
@@ -41,6 +44,9 @@ export const ContentManager = () => {
   const [type, setType] = useState("blog");
   const [status, setStatus] = useState("published");
   const [coverImage, setCoverImage] = useState("");
+  const [category, setCategory] = useState("Research");
+  const [authorBio, setAuthorBio] = useState("");
+  const [metadata, setMetadata] = useState<any>({});
   const [loading, setLoading] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
 
@@ -86,6 +92,9 @@ export const ContentManager = () => {
     setType(item.content_type || "blog");
     setStatus(item.status || "published");
     setCoverImage(item.image_url || "");
+    setCategory(item.category || "Research");
+    setAuthorBio(item.author_bio || "");
+    setMetadata(item.metadata || {});
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -96,6 +105,9 @@ export const ContentManager = () => {
     setType("blog");
     setStatus("published");
     setCoverImage("");
+    setCategory("Research");
+    setAuthorBio("");
+    setMetadata({});
   };
 
   const handleSubmit = async (e: SyntheticEvent) => {
@@ -112,6 +124,9 @@ export const ContentManager = () => {
         content: body,
         status,
         image_url: coverImage,
+        category,
+        author_bio: authorBio,
+        metadata,
         author_id: userProfile.id,
       };
 
@@ -130,6 +145,53 @@ export const ContentManager = () => {
     } catch (err: any) {
       console.error("[ContentManager] Submit error:", err);
       showToast("error", err.message || "Operation failed.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCsvImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !userProfile?.id) return;
+    setLoading(true);
+
+    try {
+      const reader = new FileReader();
+      reader.onload = async (event) => {
+        const text = event.target?.result as string;
+        const rows = text.split("\n").slice(1);
+        const imports = rows.map(row => {
+          const cols = row.split(",");
+          const title = cols[0]?.trim();
+          const content = cols[2]?.trim();
+          if (!title || !content) return null;
+          
+          let parsedMeta = {};
+          try { parsedMeta = cols[5] ? JSON.parse(cols[5].trim()) : {}; } catch (e) {}
+
+          return {
+            title,
+            slug: cols[1]?.trim() || slugify(title),
+            content,
+            content_type: "blog",
+            category: cols[3]?.trim() || "Research",
+            author_bio: cols[4]?.trim() || "",
+            status: "published",
+            metadata: parsedMeta,
+            author_id: userProfile.id
+          };
+        }).filter(Boolean);
+
+        if (imports.length > 0) {
+          const { error } = await supabase.from("content_posts").insert(imports);
+          if (error) throw error;
+          showToast("success", `Imported ${imports.length} posts.`);
+          fetchPosts();
+        }
+      };
+      reader.readAsText(file);
+    } catch (err: any) {
+      showToast("error", "CSV Import failed.");
     } finally {
       setLoading(false);
     }
@@ -164,7 +226,6 @@ export const ContentManager = () => {
     }
   };
 
-  // Filtered list
   const filteredPosts = posts.filter(p => {
     const matchSearch = search === "" || p.title.toLowerCase().includes(search.toLowerCase());
     const matchType = filterType === "all" || p.content_type === filterType;
@@ -246,7 +307,6 @@ export const ContentManager = () => {
 
   return (
     <div className="space-y-8">
-      {/* Toast */}
       {toast && (
         <div className={cn(
           "fixed top-24 right-6 z-50 flex items-center gap-3 px-5 py-4 rounded-2xl border shadow-2xl text-sm font-bold animate-in slide-in-from-right duration-300",
@@ -260,7 +320,6 @@ export const ContentManager = () => {
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* ── Form Panel ── */}
         <div className="lg:col-span-7">
           <section className="bg-zinc-900 border border-white/10 rounded-[40px] p-8 lg:p-10 shadow-2xl relative overflow-hidden">
             <div className="absolute top-0 right-0 p-10 opacity-[0.03] pointer-events-none">
@@ -277,7 +336,7 @@ export const ContentManager = () => {
                     {editingId ? "Edit Content" : "Publish Content"}
                   </h2>
                   <p className="text-[10px] text-gray-500 font-bold uppercase tracking-[0.3em] mt-1">
-                    Content Orchestration Console
+                    Orchestration Console
                   </p>
                 </div>
               </div>
@@ -293,27 +352,18 @@ export const ContentManager = () => {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
-              {/* Row 1: Title + Category */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label htmlFor="content-title" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Title *</label>
+                  <label className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Title *</label>
                   <input
-                    id="content-title"
                     value={title} onChange={e => setTitle(e.target.value)} required
-                    placeholder="e.g. Gold Macro Structure Q2 2025"
+                    placeholder="e.g. Gold Macro Structure"
                     className="w-full bg-black border border-white/5 rounded-2xl p-4 text-white text-sm outline-none focus:border-emerald-500/50 transition-all placeholder:text-zinc-700"
                   />
-                  {title && (
-                    <div className="flex items-center gap-2 px-2 py-1">
-                      <Tag className="w-3 h-3 text-gray-600" />
-                      <span className="text-[9px] text-gray-600 font-mono">{slugify(title)}</span>
-                    </div>
-                  )}
                 </div>
                 <div className="space-y-2">
-                  <label htmlFor="content-type" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Content Type</label>
+                  <label className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Content Type</label>
                   <select
-                    id="content-type"
                     value={type} onChange={e => setType(e.target.value)}
                     className="w-full bg-black border border-white/5 rounded-2xl p-4 text-white text-sm outline-none focus:border-emerald-500/50 transition-all"
                   >
@@ -324,32 +374,27 @@ export const ContentManager = () => {
                 </div>
               </div>
 
-              {/* Body */}
               <div className="space-y-2">
-                <label htmlFor="content-body" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Content Body (Markdown) *</label>
+                <label className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Body (Markdown) *</label>
                 <textarea
-                  id="content-body"
-                  rows={8} value={body} onChange={e => setBody(e.target.value)} required
-                  placeholder="Write your institutional content here using Markdown..."
+                  rows={6} value={body} onChange={e => setBody(e.target.value)} required
+                  placeholder="Analyze markets here..."
                   className="w-full bg-black border border-white/5 rounded-3xl p-6 text-white text-sm outline-none focus:border-emerald-500/50 transition-all font-mono resize-none placeholder:text-zinc-700"
                 />
               </div>
 
-              {/* Media + Status */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label htmlFor="content-cover" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Cover Image URL</label>
+                  <label className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Cover Image</label>
                   <input
-                    id="content-cover"
                     type="url" value={coverImage} onChange={e => setCoverImage(e.target.value)}
                     placeholder="https://..."
                     className="w-full bg-black border border-white/5 rounded-2xl p-4 text-white text-sm outline-none focus:border-cyan-500/50 transition-all placeholder:text-zinc-700"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label htmlFor="content-status" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Publication Status</label>
+                  <label className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Status</label>
                   <select
-                    id="content-status"
                     value={status} onChange={e => setStatus(e.target.value)}
                     className="w-full bg-black border border-white/5 rounded-2xl p-4 text-white text-sm outline-none focus:border-emerald-500/50 transition-all uppercase font-black"
                   >
@@ -360,68 +405,81 @@ export const ContentManager = () => {
                 </div>
               </div>
 
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-black/30 p-6 rounded-3xl border border-white/5">
+                <div className="space-y-2">
+                  <label className="text-[9px] font-black uppercase tracking-widest text-emerald-400 px-1 flex items-center gap-2">
+                    <Tag className="w-3 h-3" /> Category
+                  </label>
+                  <input
+                    value={category} onChange={e => setCategory(e.target.value)}
+                    placeholder="e.g. Macro Analysis"
+                    className="w-full bg-black border border-white/5 rounded-2xl p-4 text-white text-sm outline-none focus:border-emerald-500/50 transition-all"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[9px] font-black uppercase tracking-widest text-emerald-400 px-1 flex items-center gap-2">
+                    <UserCheck className="w-3 h-3" /> Author Title
+                  </label>
+                  <input
+                    value={authorBio} onChange={e => setAuthorBio(e.target.value)}
+                    placeholder="e.g. Lead Analyst"
+                    className="w-full bg-black border border-white/5 rounded-2xl p-4 text-white text-sm outline-none focus:border-emerald-500/50 transition-all"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2 bg-black/40 p-6 rounded-3xl border border-white/5">
+                <label className="text-[9px] font-black uppercase tracking-widest text-cyan-400 px-1 flex items-center gap-2">
+                  <Shield className="w-3 h-3" /> Institutional Metadata
+                </label>
+                <textarea
+                  rows={4}
+                  value={JSON.stringify(metadata, null, 2)}
+                  onChange={e => {
+                    try { setMetadata(JSON.parse(e.target.value)); } catch (err) {}
+                  }}
+                  className="w-full bg-black border border-white/10 rounded-2xl p-4 text-white text-xs outline-none focus:border-cyan-500/50 transition-all font-mono"
+                />
+              </div>
+
               <button
                 type="submit" disabled={loading}
-                className="w-full py-4 bg-emerald-500 text-black font-black text-[10px] uppercase tracking-[0.2em] rounded-2xl hover:bg-emerald-400 active:scale-[0.98] transition-all flex items-center justify-center gap-3 shadow-2xl shadow-emerald-500/20 disabled:opacity-50"
+                className="w-full py-4 bg-emerald-500 text-black font-black text-[10px] uppercase tracking-[0.2em] rounded-2xl hover:bg-emerald-400 transition-all flex items-center justify-center gap-3 shadow-2xl disabled:opacity-50"
               >
                 {loading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Zap className="w-4 h-4" />}
-                {editingId ? "Save Changes" : "Publish Content"}
+                {editingId ? "Update Content" : "Publish to Desk"}
               </button>
             </form>
           </section>
         </div>
 
-        {/* ── Content List ── */}
         <div className="lg:col-span-5">
           <section className="bg-zinc-900 border border-white/10 rounded-[40px] overflow-hidden shadow-2xl flex flex-col h-full">
-            {/* List Header */}
             <div className="p-6 border-b border-white/5 bg-black/20 space-y-4">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Globe className="w-4 h-4 text-emerald-500" />
-                  <h3 className="text-white font-black text-sm uppercase tracking-tight">
-                    Content Feed
-                  </h3>
-                  <span className="text-[9px] font-black text-gray-600 uppercase tracking-widest">
-                    ({filteredPosts.length})
-                  </span>
+                <div className="flex items-center gap-3 text-white font-black text-sm uppercase">
+                  <Globe className="w-4 h-4 text-emerald-500" /> Content Feed
                 </div>
-                <button onClick={fetchPosts} disabled={fetching} className="p-2 text-gray-600 hover:text-white transition-colors">
-                  <RefreshCw className={cn("w-3.5 h-3.5", fetching && "animate-spin")} />
-                </button>
+                <div className="flex items-center gap-2">
+                  <label className="cursor-pointer">
+                    <input type="file" accept=".csv" onChange={handleCsvImport} className="hidden" />
+                    <Upload className="w-3.5 h-3.5 text-gray-600 hover:text-white transition-colors" />
+                  </label>
+                  <button onClick={fetchPosts} disabled={fetching} className="p-2 text-gray-600 hover:text-white transition-colors">
+                    <RefreshCw className={cn("w-3.5 h-3.5", fetching && "animate-spin")} />
+                  </button>
+                </div>
               </div>
-
-              {/* Search */}
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-600" />
                 <input
                   type="text" value={search} onChange={e => setSearch(e.target.value)}
-                  placeholder="Search content..."
-                  className="w-full bg-black border border-white/10 rounded-xl pl-9 pr-4 py-2 text-xs text-white outline-none focus:border-emerald-500/50 transition-all placeholder:text-zinc-700"
+                  placeholder="Search articles..."
+                  className="w-full bg-black border border-white/10 rounded-xl pl-9 pr-4 py-2 text-xs text-white outline-none focus:border-emerald-500/50 transition-all"
                 />
               </div>
-
-              {/* Type Filter */}
-              <div className="flex gap-1.5 overflow-x-auto scrollbar-hide">
-                {["all", ...CONTENT_TYPES.map(t => t.value)].map(t => (
-                  <button
-                    key={t}
-                    onClick={() => setFilterType(t)}
-                    className={cn(
-                      "px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest whitespace-nowrap transition-all",
-                      filterType === t
-                        ? "bg-emerald-500 text-black"
-                        : "bg-white/5 text-gray-500 hover:text-white"
-                    )}
-                  >
-                    {t === "all" ? "All" : CONTENT_TYPES.find(ct => ct.value === t)?.label.split(" ")[0]}
-                  </button>
-                ))}
-              </div>
             </div>
-
-            {/* List Items */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-2 max-h-[700px] scrollbar-hide">
+            <div className="flex-1 overflow-y-auto p-4 space-y-2 max-h-[600px] scrollbar-hide">
               {renderContentList()}
             </div>
           </section>
@@ -433,13 +491,11 @@ export const ContentManager = () => {
         onClose={() => setIsDeleteDialogOpen(false)}
         onConfirm={handleDelete}
         isLoading={loading}
-        title="Delete Content?"
+        title="Destroy Content?"
         variant="danger"
-        confirmText="Delete Forever"
+        confirmText="Confirm Destruction"
       >
-        <p className="text-gray-400 text-sm font-medium leading-relaxed text-center p-4">
-          This will permanently remove the content from the platform. This cannot be undone.
-        </p>
+        <p className="text-gray-400 text-sm p-4 text-center">Permanently remove this intelligence from the primary feed?</p>
       </Dialog>
     </div>
   );
