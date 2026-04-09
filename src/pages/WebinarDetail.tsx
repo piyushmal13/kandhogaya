@@ -284,20 +284,26 @@ export const WebinarDetail = () => {
             </div>
 
             <div className="mt-12">
-              <div className="flex border-b border-white/5 mb-8 overflow-x-auto hide-scrollbar">
-                {["Overview", "Speaker", "Q&A"].map((tab) => (
-                  <button
-                    key={tab}
-                    onClick={() => setActiveTab(tab.toLowerCase())}
-                    className={`px-6 py-4 text-sm font-bold transition-all relative whitespace-nowrap ${
-                      activeTab === tab.toLowerCase() ? "text-emerald-500" : "text-gray-500 hover:text-gray-300"
-                    }`}
-                  >
-                    {tab}
-                    {activeTab === tab.toLowerCase() && <motion.div layoutId="activeTab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-500" />}
-                  </button>
-                ))}
-              </div>
+              <ul className="flex border-b border-white/5 mb-8 overflow-x-auto hide-scrollbar" role="tablist">
+                {["Overview", "Speaker", "Q&A"].map((tab) => {
+                  const isActive = activeTab === tab.toLowerCase();
+                  return (
+                  <li key={tab} role="presentation">
+                    <button
+                      role="tab"
+                      aria-selected={isActive}
+                      tabIndex={isActive ? 0 : -1}
+                      onClick={() => setActiveTab(tab.toLowerCase())}
+                      className={`px-6 py-4 text-sm font-bold transition-all relative whitespace-nowrap ${
+                        isActive ? "text-emerald-500" : "text-gray-500 hover:text-gray-300"
+                      }`}
+                    >
+                      {tab}
+                      {isActive && <motion.div layoutId="activeTab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-500" />}
+                    </button>
+                  </li>
+                )})}
+              </ul>
 
               <div className="prose prose-invert max-w-none">
                 {activeTab === "overview" && (

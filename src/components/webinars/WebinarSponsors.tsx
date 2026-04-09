@@ -44,7 +44,9 @@ export const WebinarSponsors = ({ sponsors }: WebinarSponsorsProps) => {
                 </div>
                 <img 
                   src={sponsor.logo_url} 
-                  alt={sponsor.name} 
+                  alt={`${sponsor.name} logo`}
+                  loading="lazy"
+                  onError={(e)=>{ (e.target as HTMLImageElement).src = '/logo.png'; }}
                   className="h-12 w-auto object-contain brightness-100 contrast-125 grayscale group-hover:grayscale-0 transition-all duration-500"
                 />
                 <div className="text-[9px] font-black text-gray-500 uppercase tracking-widest group-hover:text-white">
@@ -74,7 +76,9 @@ export const WebinarSponsors = ({ sponsors }: WebinarSponsorsProps) => {
               >
                 <img 
                   src={sponsor.logo_url} 
-                  alt={sponsor.name} 
+                  alt={`${sponsor.name} logo`}
+                  loading="lazy"
+                  onError={(e)=>{ (e.target as HTMLImageElement).src = '/logo.png'; }}
                   className="h-6 w-auto object-contain opacity-40 group-hover:opacity-100 transition-opacity"
                 />
                 <span className="text-[10px] font-black text-gray-600 uppercase tracking-widest group-hover:text-white">

@@ -50,6 +50,34 @@ const PARTNERS = [
   },
 ];
 
+const RETAIL_PARTNERS = [
+  {
+    name: "Dhan",
+    category: "India Partner",
+    abbr: "DH",
+    color: "from-violet-600 to-purple-400",
+  },
+  {
+    name: "Zerodha",
+    category: "Indian Market",
+    abbr: "ZE",
+    color: "from-emerald-600 to-green-400",
+  },
+  {
+    name: "Interactive Brokers",
+    category: "Global Execution",
+    abbr: "IB",
+    color: "from-red-600 to-rose-400",
+  },
+  {
+    name: "Refinitiv",
+    category: "Data Intelligence",
+    abbr: "RFN",
+    color: "from-slate-500 to-slate-400",
+  },
+];
+
+
 // VERIFIED SUCCESS TESTIMONIALS WITH COMPANY AFFILIATIONS
 const SUCCESS_STORIES = [
   {
@@ -101,6 +129,8 @@ const StarRating = ({ count }: { count: number }) => (
 );
 
 export const PartnerLogos = () => {
+  const SHOW_RETAIL = import.meta.env.VITE_SHOW_RETAIL === 'true';
+
   return (
     <section
       aria-label="IFX Trades partner platforms and student success stories"
@@ -137,7 +167,7 @@ export const PartnerLogos = () => {
 
         {/* === PARTNER LOGO GRID === */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-24">
-          {PARTNERS.map((partner, i) => (
+          {[...PARTNERS, ...(SHOW_RETAIL ? RETAIL_PARTNERS : [])].map((partner, i) => (
             <motion.div
               key={partner.name}
               initial={{ opacity: 0, y: 20 }}
@@ -148,8 +178,13 @@ export const PartnerLogos = () => {
             >
               {/* Logo Avatar */}
               <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center font-black text-white text-sm shrink-0 shadow-lg overflow-hidden border border-white/10 p-1 bg-white/5`}>
-                {partner.logoUrl ? (
-                  <img src={partner.logoUrl} alt={`${partner.name} logo`} className="w-full h-full object-contain" />
+                {'logoUrl' in partner && partner.logoUrl ? (
+                  <img 
+                    src={partner.logoUrl} 
+                    alt={`${partner.name} logo`} 
+                    loading="lazy"
+                    className="w-full h-full object-contain" 
+                  />
                 ) : (
                   <div className={`w-full h-full flex items-center justify-center bg-gradient-to-br ${partner.color} rounded-lg`}>
                     {partner.abbr}
