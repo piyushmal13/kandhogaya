@@ -1,5 +1,5 @@
-import React, { useState, useEffect, createContext, useContext, useMemo, useRef, useCallback } from "react";
 import { supabase } from "../lib/supabase";
+import { getSecureItem, setSecureItem, removeSecureItem } from "../lib/secureStore";
 import type { User, Session } from "@supabase/supabase-js";
 import { getAccess, Entitlement } from "../core/accessEngine";
 import { clearCache } from "../utils/cache";
@@ -69,42 +69,57 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const isMountedRef = useRef(true);
 
     const fetchUserProfile = useCallback(async (userId: string, email?: string) => {
-      // Logic Audit: Only block if ALREADY FETECHED (lastFetchedId) AND active
       if (isFetchingRef.current || (lastFetchedId.current === userId && userProfile)) return;
 
       isFetchingRef.current = true;
       lastFetchedId.current = userId;
 
       try {
-        // CONCURRENT Artifact Discovery (Direct Select without retry wrapper for speed)
-        const [userRes, entitlementRes] = await Promise.all([
+        const cachedProfile = await getSecureItem<UserProfile>('encrypted_profile');
+        if (cachedProfile && cachedProfile.id === userId && isMountedRef.current) {
+           setUserProfile(cachedProfile);
+           // Hydrate entitlements for access engine
+           const curEnts = await getSecureItem<Entitlement[]>('encrypted_ents') || [];
+           setEntitlements(curEnts);
+        }
+
+        const [userRes, entitlementRes, sessionData] = await Promise.all([
           supabase.from("users").select("*").eq("id", userId).maybeSingle(),
-          supabase.from("user_entitlements").select("*").eq("user_id", userId)
+          supabase.from("user_entitlements").select("*").eq("user_id", userId),
+          supabase.auth.getSession()
         ]);
 
         const userData = userRes?.data || null;
         const entitlementData = entitlementRes?.data || [];
+        
+        // Institutional Validation: Extract custom claim or fallback to database role
+        const tokenRole = sessionData.data.session?.user?.app_metadata?.role;
+        const serverRole = tokenRole || (userData?.role as any) || "user";
 
         if (isMountedRef.current) {
           const base = userData || { id: userId, email, role: "user" as const };
           setEntitlements(entitlementData);
-          const bypassRole = (email === "piyushmal1301@gmail.com" || email === "info@ifxtrades.com") ? "admin" : (base.role as any) ?? "user";
-          setUserProfile({
+          
+          const profileData = {
             ...base,
-            role: bypassRole,
-            isPro: entitlementData.some(e => e.active) || bypassRole === "admin",
-          });
+            role: serverRole,
+            isPro: entitlementData.some(e => e.active) || serverRole === "admin",
+          };
+          
+          setUserProfile(profileData);
+          
+          // Secure Payload Persistence
+          await setSecureItem('encrypted_profile', profileData);
+          await setSecureItem('encrypted_ents', entitlementData);
         }
       } catch (err) {
         console.error("Institutional Identity Discovery Error (Recovery Active):", err);
-        // Fallback to basic user profile to unblock UI
         if (isMountedRef.current) {
-           const fallbackRole = (email === "piyushmal1301@gmail.com" || email === "info@ifxtrades.com") ? "admin" : "user";
+           const fallbackRole = "user";
            setUserProfile({ id: userId, email, role: fallbackRole as any, isPro: true });
         }
       } finally {
         isFetchingRef.current = false;
-        // CRITICAL: Ensure loading is cleared regardless of fetch outcome
         if (isMountedRef.current) {
            setLoading(false);
            setSessionReady(true);
@@ -176,6 +191,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUserProfile(null);
         setEntitlements([]);
         lastFetchedId.current = null;
+        
+        // Secure wipe
+        removeSecureItem('encrypted_profile');
+        removeSecureItem('encrypted_ents');
+        
         tracker.track("logout", { session: "terminated" });
         globalThis.dispatchEvent(new Event("app:logout"));
       } else if (event === 'TOKEN_REFRESHED') {
@@ -200,6 +220,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setUserProfile(null);
       setEntitlements([]);
       clearCache();
+      
+      // Secure wipe
+      await removeSecureItem('encrypted_profile');
+      await removeSecureItem('encrypted_ents');
       
       globalThis.dispatchEvent(new Event("app:logout"));
       globalThis.location.href = "/login"; // Force full state purge

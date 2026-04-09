@@ -14,6 +14,8 @@ import { SiteBackdrop } from "./components/site/SiteBackdrop";
 import { LoadingSpinner } from "./components/ui/LoadingSpinner";
 import { ProtectedRoute } from "./components/ui/ProtectedRoute";
 import { SpeedInsights } from "@vercel/speed-insights/react";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "./lib/reactQuery";
 import { useReferral } from "./hooks/useReferral";
 
 const Home = lazy(() => import("./pages/Home").then(m => ({ default: m.Home })));
@@ -105,41 +107,43 @@ export default function App() {
 
   return (
     <ErrorBoundary>
-      <ToastProvider>
-        <AuthProvider>
-          <DataPulseProvider>
-            <Router>
-              <ScrollToTop />
-              <ReferralHandler />
-            <a href="#main-content" className="skip-to-content">
-              Skip to main content
-            </a>
-            <div className="relative min-h-screen overflow-hidden font-sans">
-              <div className="noise-overlay" />
-              <SiteBackdrop />
-              <Navbar />
-              <main id="main-content" className="relative z-10">
-                <AnimatedRoutes />
-              </main>
-              <Footer />
-              <WhatsAppButton />
-              
-              {/* Institutional Accountability: Relative Bottom Notice */}
-              <div 
-                id="regulatory-notice"
-                className="relative w-full bg-[#991b1b] text-white text-center p-8 md:p-12 text-[10px] md:text-sm font-black uppercase tracking-[0.2em] z-50 border-t border-white/10"
-              >
-                <div className="max-w-7xl mx-auto px-4">
-                  <span className="opacity-50">CRITICAL INSTITUTIONAL NOTICE:</span> IFX Trades is strictly an education & research platform. We license algorithms, deliver courses, and provide macro analysis. <strong className="text-white underline">WE ARE NOT A BROKER.</strong> We do not accept deposits, execute trades, or handle client funds. Trading involves significant risk.
+      <QueryClientProvider client={queryClient}>
+        <ToastProvider>
+          <AuthProvider>
+            <DataPulseProvider>
+              <Router>
+                <ScrollToTop />
+                <ReferralHandler />
+              <a href="#main-content" className="skip-to-content">
+                Skip to main content
+              </a>
+              <div className="relative min-h-screen overflow-hidden font-sans">
+                <div className="noise-overlay" />
+                <SiteBackdrop />
+                <Navbar />
+                <main id="main-content" className="relative z-10">
+                  <AnimatedRoutes />
+                </main>
+                <Footer />
+                <WhatsAppButton />
+                
+                {/* Institutional Accountability: Relative Bottom Notice */}
+                <div 
+                  id="regulatory-notice"
+                  className="relative w-full bg-[#991b1b] text-white text-center p-8 md:p-12 text-[10px] md:text-sm font-black uppercase tracking-[0.2em] z-50 border-t border-white/10"
+                >
+                  <div className="max-w-7xl mx-auto px-4">
+                    <span className="opacity-50">CRITICAL INSTITUTIONAL NOTICE:</span> IFX Trades is strictly an education & research platform. We license algorithms, deliver courses, and provide macro analysis. <strong className="text-white underline">WE ARE NOT A BROKER.</strong> We do not accept deposits, execute trades, or handle client funds. Trading involves significant risk.
+                  </div>
                 </div>
+                <SpeedInsights />
               </div>
-              <SpeedInsights />
-            </div>
 
-          </Router>
-        </DataPulseProvider>
-      </AuthProvider>
-    </ToastProvider>
+            </Router>
+          </DataPulseProvider>
+        </AuthProvider>
+      </ToastProvider>
+    </QueryClientProvider>
   </ErrorBoundary>
 );
 }
