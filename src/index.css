@@ -18,26 +18,27 @@
 
 @layer base {
   :root {
-    /* ── Background Scale (3 semantic levels) ── */
-    --bg-base: #050816;
-    --bg-raised: #0a1120;
-    --bg-surface: #0f1a2e;
+    /* ── Text Scale (Refined for High Authority) ── */
+    --text-primary: #ffffff;
+    --text-secondary: #a1a1aa;
+    --text-muted: #52525b;
 
-    /* ── Border Scale ── */
-    --border-default: rgba(255, 255, 255, 0.08);
-    --border-emphasis: rgba(131, 255, 200, 0.16);
-    --border-hover: rgba(255, 255, 255, 0.14);
+    /* ── Accent Scale (Sovereign Emerald & Cyan) ── */
+    --accent: #10b981;
+    --accent-hover: #34d399;
+    --accent-subtle: rgba(16, 185, 129, 0.08);
+    --accent-fg: #020617;
 
-    /* ── Text Scale ── */
-    --text-primary: #f3fbff;
-    --text-secondary: #c7d3e1;
-    --text-muted: #7a8ea3;
+    /* ── Background Scale (Institutional Depth) ── */
+    --bg-base: #020202;
+    --bg-raised: #0a0a0b;
+    --bg-surface: #121214;
 
-    /* ── Accent Scale ── */
-    --accent: #58f2b6;
-    --accent-hover: #8df6cf;
-    --accent-subtle: rgba(88, 242, 182, 0.12);
-    --accent-fg: #051119;
+    /* ── Border Scale (Ultra-Fine Precision) ── */
+    --border-default: rgba(255, 255, 255, 0.04);
+    --border-emphasis: rgba(255, 255, 255, 0.08);
+    --border-hover: rgba(255, 255, 255, 0.12);
+    --border-brand: rgba(16, 185, 129, 0.2);
 
     /* ── Semantic Colors ── */
     /* ── Semantic Alignment ── */
@@ -53,11 +54,11 @@
     --brand-glow: rgba(16, 185, 129, 0.4);
     --brand-glow-subtle: rgba(16, 185, 129, 0.1);
 
-    /* ── Spacing Scale (Section / Content) ── */
-    --space-section: 12rem;
-    --space-section-sm: 8rem;
-    --space-content: 6rem;
-    --space-content-sm: 4rem;
+    /* ── Spacing Scale (Institutional Precision) ── */
+    --space-section: 10rem;
+    --space-section-sm: 6rem;
+    --space-content: 5rem;
+    --space-content-sm: 3rem;
 
     /* ── Radius Scale ── */
     --radius-card: 2.75rem;
@@ -72,14 +73,19 @@
     --shadow-glow: 0 16px 40px rgba(88, 242, 182, 0.18);
     --shadow-float: 0 24px 60px rgba(0, 0, 0, 0.35);
 
-    /* ── 200x Elite Evolution Tokens ── */
+    /* ── 200x Elite Evolution Tokens (Apple/Google Tier) ── */
     --neon-emerald: #10b981;
     --neon-cyan: #06b6d4;
     --neon-purple: #8b5cf6;
-    --glass-bg: rgba(255, 255, 255, 0.02);
-    --glass-border: rgba(255, 255, 255, 0.05);
-    --glass-blur: 24px;
-    --noise-opacity: 0.04;
+    --glass-bg: rgba(255, 255, 255, 0.015);
+    --glass-border: rgba(255, 255, 255, 0.04);
+    --glass-blur: 32px;
+    --noise-opacity: 0.02;
+
+    /* ── Premium Gradients ── */
+    --grad-sovereign: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
+    --grad-emerald: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    --grad-dark: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 100%);
 
     color-scheme: dark;
   }

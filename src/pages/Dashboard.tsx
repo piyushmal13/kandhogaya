@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "motion/react";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "../contexts/AuthContext";
 import { tracker } from "@/core/tracker";
@@ -94,19 +95,28 @@ export const Dashboard = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#020202] pt-28 pb-32 px-4 selection:bg-emerald-500/30 overflow-hidden">
-      {/* Background Ambience */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1400px] h-[600px] bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.05),transparent_70%)] pointer-events-none" />
+    <div className="relative min-h-screen bg-bg-base pt-24 pb-32 px-4 selection:bg-accent/30 overflow-hidden font-sans">
+      {/* ── Sovereign Architecture Layer ── */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_50%_-20%,rgba(16,185,129,0.08),transparent_70%)]" />
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCI+PHBhdGggZD0iTSA2MCAwIEwgMCAwIDAgNjAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjAwOCkiIHN0cm9rZS13aWR0aD0iMSIvPjwvc3ZnPg==')] opacity-100" />
+      </div>
       
       <UrgencyBanner />
       
-      <div className="max-w-7xl mx-auto relative z-10">
-        <div className="mb-10">
+      <div className="max-w-[1400px] mx-auto relative z-10 space-y-12">
+        {/* ── Intelligence Pulse ── */}
+        <div className="glass-card p-2 border-white/5 bg-white/[0.01]">
           <MarketTicker data={marketData} />
         </div>
 
+        {/* ── Identity & Access Control ── */}
         {!isElite && (
-          <div className="mb-12">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="perspective-container"
+          >
             <ProfileBanner 
               userProfile={userProfile}
               user={user}
@@ -114,10 +124,11 @@ export const Dashboard = () => {
               isProOnly={isProOnly}
               onUpgrade={handleUpgrade}
             />
-          </div>
+          </motion.div>
         )}
 
-        <div className="mb-14">
+        {/* ── Operational Command ── */}
+        <div className="space-y-6">
           <ConsoleHeader 
             sessionReady={sessionReady}
             userProfile={userProfile}
@@ -125,18 +136,19 @@ export const Dashboard = () => {
             isAdmin={isAdmin}
             isPro={isPro}
           />
+          
+          <StatsGrid 
+            licenseCount={licenses.filter(l => l.is_active).length}
+            winRate={performanceStats.winRate}
+            signalCount={signals.length}
+            totalPips={performanceStats.totalPips}
+          />
         </div>
 
-        <StatsGrid 
-          licenseCount={licenses.filter(l => l.is_active).length}
-          winRate={performanceStats.winRate}
-          signalCount={signals.length}
-          totalPips={performanceStats.totalPips}
-        />
-
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Main Operative Area */}
-          <div className="lg:col-span-8 space-y-8">
+        {/* ── Primary Operational Matrix ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+          {/* Main Execution Core */}
+          <div className="lg:col-span-8 space-y-10">
             <ExecutionTerminal 
               licenses={licenses}
               loading={loading}
@@ -151,9 +163,9 @@ export const Dashboard = () => {
             />
           </div>
 
-          {/* Secondary Intelligence Area */}
-          <div className="lg:col-span-4 space-y-8">
-            <div className="p-1 rounded-[48px] bg-white/[0.02] border border-white/5">
+          {/* Intelligence & Support Grid */}
+          <div className="lg:col-span-4 space-y-10">
+            <div className="glass-card p-1.5 border-white/[0.03] bg-grad-dark overflow-hidden">
               <WebinarSessions 
                 webinars={webinars}
                 registrations={registrations}
@@ -169,12 +181,14 @@ export const Dashboard = () => {
 
             <QuickMatrix navigate={navigate} />
 
-            <div className="p-8 rounded-[40px] bg-black border border-white/5 relative overflow-hidden">
-              <div className="absolute top-0 right-0 p-4 opacity-10 blur-xl">
-                 <ActivityPulse />
+            <div className="glass-card p-10 bg-black/40 border-white/5 relative overflow-hidden group">
+              <div className="absolute -top-24 -right-24 w-64 h-64 bg-accent/5 blur-[80px] rounded-full group-hover:bg-accent/10 transition-all duration-1000" />
+              <div className="relative z-10">
+                <h4 className="text-[9px] font-black text-white/20 uppercase tracking-[0.4em] font-mono mb-8 border-b border-white/5 pb-4">
+                  Sovereign Transmission Pulse
+                </h4>
+                <ActivityPulse />
               </div>
-              <h4 className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] font-mono mb-6">REAL-TIME ACTIVITY</h4>
-              <ActivityPulse />
             </div>
           </div>
         </div>

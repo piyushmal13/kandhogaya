@@ -52,26 +52,25 @@ export const ExecutionTerminal: React.FC<ExecutionTerminalProps> = ({
                     )}
                   </div>
                   <div>
-                    <div className="text-2xl font-black text-white group-hover:text-emerald-400 transition-colors uppercase tracking-tight italic">
-                      {license.algo_bots?.name || "QUANT ENGINE v2"}
+                    <div className="text-2xl font-black text-white group-hover:text-emerald-400 transition-colors uppercase tracking-tight italic font-serif">
+                      {license.algo_bots?.name || "SOVEREIGN ENGINE v4"}
                     </div>
-                    <div className="flex items-center gap-6 mt-3 text-[10px] font-mono text-gray-500 uppercase tracking-widest font-black">
-                      <span className="bg-white/5 px-2.5 py-1 rounded-md border border-white/5">KEY: {license.license_key.slice(0, 12)}...</span>
+                    <div className="flex items-center gap-6 mt-3 text-[9px] font-mono text-gray-500 uppercase tracking-[0.3em] font-black">
+                      <span className="bg-white/5 px-2.5 py-1 rounded-lg border border-white/5">CLEARANCE: {license.license_key.slice(0, 12)}...</span>
                       <span className="flex items-center gap-2">
                         <Clock className="w-3.5 h-3.5 text-emerald-500" />
-                        UNTIL: {new Date(license.expires_at).toLocaleDateString()}
+                        EXPIRY: {new Date(license.expires_at).toLocaleDateString()}
                       </span>
                     </div>
                   </div>
                 </div>
                 <div className="flex flex-col items-end gap-2">
                   <span className={cn(
-                    "px-6 py-2.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] border transition-all",
-                    license.is_active ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)]" : "bg-red-500/10 text-red-500 border-red-500/20"
+                    "px-6 py-2.5 rounded-2xl text-[9px] font-black uppercase tracking-[0.3em] border transition-all",
+                    license.is_active ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20 shadow-[0_0_20px_rgba(16,185,129,0.1)]" : "bg-red-500/10 text-red-500 border-red-500/20"
                   )}>
-                    {license.is_active ? "ENGINE ONLINE" : "ENGINE OFFLINE"}
+                    {license.is_active ? "NODE ONLINE" : "NODE OFFLINE"}
                   </span>
-                  {license.is_active && <span className="text-[8px] font-black text-emerald-500/40 uppercase tracking-widest font-mono">LATENCY: 12ms</span>}
                 </div>
               </div>
             </div>
@@ -91,39 +90,41 @@ export const ExecutionTerminal: React.FC<ExecutionTerminalProps> = ({
   };
 
   return (
-    <section className={cn("p-12 rounded-[56px] bg-black border border-white/5 backdrop-blur-3xl overflow-hidden relative group", !isElite && "min-h-[480px]")}>
+    <section className={cn("p-1.5 rounded-[3.5rem] glass-card border-white/5 bg-white/[0.01] overflow-hidden relative group transition-all duration-1000", !isElite && "min-h-[520px]")}>
       {!isElite && (
-        <div className="absolute inset-0 z-50 flex items-center justify-center p-12 bg-black/90 backdrop-blur-2xl rounded-[56px] animate-in fade-in duration-1000">
-          <div className="text-center space-y-8 max-w-sm">
-            <div className="w-28 h-28 bg-emerald-500/10 border border-emerald-500/20 rounded-[48px] flex items-center justify-center mx-auto text-emerald-500 shadow-2xl relative">
-              <Lock className="w-12 h-12" />
-              <div className="absolute inset-0 bg-emerald-500/20 blur-2xl rounded-full animate-pulse" />
+        <div className="absolute inset-0 z-50 flex items-center justify-center p-12 bg-black/95 backdrop-blur-[40px] rounded-[3.25rem] animate-in fade-in zoom-in duration-1000">
+          <div className="text-center space-y-10 max-w-md">
+            <div className="w-32 h-32 bg-emerald-500/5 border border-emerald-500/10 rounded-[2.5rem] flex items-center justify-center mx-auto text-emerald-500 shadow-[0_0_60px_rgba(16,185,129,0.1)] relative group/lock">
+              <Lock className="w-12 h-12 transition-transform duration-500 group-hover/lock:scale-110" />
+              <div className="absolute inset-0 bg-emerald-500/10 blur-3xl rounded-full animate-pulse" />
             </div>
-            <div>
-              <h3 className="text-3xl font-black text-white uppercase tracking-tighter italic">Terminal Access Restricted</h3>
-              <p className="text-[10px] text-gray-500 font-black uppercase tracking-[0.3em] leading-loose mt-6 opacity-80">
-                Institutional clearance required for algorithmic execution. Upgrade to Elite tier for full terminal functionality.
+            <div className="space-y-4">
+              <h3 className="text-4xl font-black text-white uppercase tracking-tighter italic font-serif leading-none">Terminal Encryption Active</h3>
+              <p className="text-[10px] text-gray-500 font-black uppercase tracking-[0.4em] leading-relaxed opacity-60">
+                Institutional credentials required for algorithmic orchestration. Access level: <span className="text-emerald-500">Tier 0 (Unverified)</span>. 
               </p>
             </div>
             <button 
               onClick={onUpgrade}
-              className="w-full py-6 bg-emerald-500 text-black font-black text-[12px] uppercase tracking-[0.4em] rounded-[2rem] hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-emerald-500/40"
+              className="w-full py-6 bg-emerald-500 text-black font-black text-[12px] uppercase tracking-[0.4em] rounded-2xl hover:bg-emerald-400 transition-all shadow-[0_20px_50px_rgba(16,185,129,0.3)] active:scale-95"
             >
-              Request Access
+              Initialize Clearance
             </button>
           </div>
         </div>
       )}
-      <div className="flex items-center justify-between mb-12">
-        <h2 className="text-3xl font-black text-white flex items-center gap-4 uppercase tracking-tighter italic font-serif">
-          <Activity className="w-8 h-8 text-emerald-500" />
-          Execution Hub
-        </h2>
-        <Link to="/marketplace" className="text-[11px] font-black text-emerald-500 hover:text-emerald-400 transition-all uppercase tracking-[0.3em] hover:tracking-[0.4em]">PROVISION NEW KEY</Link>
-      </div>
-      
-      <div className={cn("transition-all duration-1000", !isElite && "blur-2xl grayscale select-none pointer-events-none")}>
-        {renderLicenses()}
+      <div className="p-10">
+        <div className="flex items-center justify-between mb-12">
+          <h2 className="text-4xl font-black text-white flex items-center gap-5 uppercase tracking-tighter italic font-serif">
+            <Activity className="w-10 h-10 text-emerald-500" />
+            Sovereign Ops Desk
+          </h2>
+          <Link to="/marketplace" className="text-[10px] font-black text-emerald-500/60 hover:text-emerald-500 transition-all uppercase tracking-[0.4em] hover:tracking-[0.5em] border-b border-emerald-500/20 pb-1">COMMAND NEW NODE</Link>
+        </div>
+        
+        <div className={cn("transition-all duration-1000", !isElite && "blur-2xl grayscale brightness-[0.3] select-none pointer-events-none")}>
+          {renderLicenses()}
+        </div>
       </div>
     </section>
   );
