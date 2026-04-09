@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Flame, Zap, Clock, TrendingUp, X } from "lucide-react";
-import { publicSupabase, safeQuery } from "../../lib/supabase";
+import { Zap, Flame, X } from "lucide-react";
+import { publicSupabase } from "../../lib/supabase";
+import { useFlag } from "../../hooks/useFlags";
 
 /**
  * Institutional Urgency Engine (v1.24)
@@ -9,8 +10,12 @@ import { publicSupabase, safeQuery } from "../../lib/supabase";
  */
 
 export const UrgencyBanner = ({ leadId }: { leadId?: string }) => {
+  const bannerEnabled = useFlag('urgency_banner_active');
   const [message, setMessage] = useState<string | null>(null);
   const [isVisible, setIsVisible] = useState(false);
+
+  // Bail out immediately if the admin toggled the banner off
+  if (!bannerEnabled) return null;
 
   useEffect(() => {
     const generateContextualUrgency = async () => {
