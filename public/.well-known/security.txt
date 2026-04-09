@@ -1,0 +1,5 @@
+Contact: mailto:security@ifxtrades.com
+Preferred-Languages: en
+Expires: 2027-04-01T00:00:00Z
+Encryption: TLS 1.2
+Acknowledgments: https://ifxtrades.com/security-hall-of-fame

@@ -9,6 +9,8 @@
     "start": "node server.ts",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
+    "type-check": "tsc --noEmit",
+    "alt-check": "node scripts/altCheck.js",
     "test": "vitest run"
   },
   "dependencies": {
