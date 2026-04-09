@@ -1,6 +1,43 @@
 {
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/index.ts" },
-    { "source": "/(.*)", "destination": "/index.html" }
-  ]
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "version": 2,
+  "routes": [
+    {
+      "src": "/api/health",
+      "dest": "/src/edge-functions/health.ts"
+    },
+    {
+      "src": "/api/signals",
+      "dest": "/src/edge-functions/api/signals.ts",
+      "headers": {
+        "cache-control": "s-maxage=30, stale-while-revalidate=60"
+      }
+    },
+    {
+      "src": "/api/webinars",
+      "dest": "/src/edge-functions/api/webinars.ts",
+      "headers": {
+        "cache-control": "s-maxage=60, stale-while-revalidate=120"
+      }
+    },
+    {
+      "src": "/api/admin/(.*)",
+      "dest": "/src/edge-functions/auth/verifyJwt.ts"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ],
+  "functions": {
+    "src/edge-functions/**/*.ts": {
+      "runtime": "@vercel/node@3.x",
+      "maxDuration": 10
+    }
+  },
+  "github": {
+    "enabled": true,
+    "autoMerge": false,
+    "silent": true
+  }
 }

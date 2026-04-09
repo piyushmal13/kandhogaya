@@ -1,3 +1,4 @@
+import React, { useState, useEffect, createContext, useContext, useMemo, useRef, useCallback } from "react";
 import { supabase } from "../lib/supabase";
 import { getSecureItem, setSecureItem, removeSecureItem } from "../lib/secureStore";
 import type { User, Session } from "@supabase/supabase-js";
@@ -76,10 +77,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       try {
         const cachedProfile = await getSecureItem<UserProfile>('encrypted_profile');
-        if (cachedProfile && cachedProfile.id === userId && isMountedRef.current) {
+        if (cachedProfile?.id === userId && isMountedRef.current) {
            setUserProfile(cachedProfile);
            // Hydrate entitlements for access engine
-           const curEnts = await getSecureItem<Entitlement[]>('encrypted_ents') || [];
+           const curEnts = (await getSecureItem<Entitlement[]>('encrypted_ents')) ?? [];
            setEntitlements(curEnts);
         }
 
@@ -94,7 +95,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         
         // Institutional Validation: Extract custom claim or fallback to database role
         const tokenRole = sessionData.data.session?.user?.app_metadata?.role;
-        const serverRole = tokenRole || (userData?.role as any) || "user";
+        const serverRole = (tokenRole || userData?.role || "user") as UserProfile["role"];
 
         if (isMountedRef.current) {
           const base = userData || { id: userId, email, role: "user" as const };
