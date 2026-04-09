@@ -11,7 +11,7 @@
     "lint": "tsc --noEmit",
     "type-check": "tsc --noEmit",
     "alt-check": "node scripts/altCheck.js",
-    "test": "vitest run"
+    "test": "npm run lint && npm run alt-check && vitest run"
   },
   "dependencies": {
     "@google/genai": "^1.29.0",
