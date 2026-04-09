@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 import {
   BarChart3, Zap, ShieldCheck, Users, Video, Settings, Star,
   ShoppingCart, Activity, Trophy, DollarSign, FileText, CreditCard,
-  Menu, X, TrendingUp, Bell, RefreshCw, LogOut, ChevronRight
+  Menu, X, TrendingUp, Bell, RefreshCw, LogOut, ChevronRight, Flag
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { cn } from "../utils/cn";
@@ -24,6 +24,7 @@ import { CEOPanel } from "../modules/admin/CEOPanel";
 import { SettingsManager } from "../modules/admin/SettingsManager";
 import { ErrorViewer } from "../modules/admin/ErrorViewer";
 import { PaymentManager } from "../modules/admin/PaymentManager";
+import { FeatureFlagManager } from "../modules/admin/FeatureFlagManager";
 
 interface LiveStats {
   totalUsers: number;
@@ -46,6 +47,7 @@ const tabs = [
   { id: "algos",       name: "Product Manager",     icon: Zap,          group: "CONTENT" },
   { id: "reviews",     name: "Review Manager",      icon: Star,         group: "CONTENT" },
   { id: "licenses",    name: "License Vault",       icon: ShieldCheck,  group: "SYSTEM" },
+  { id: "flags",       name: "Feature Flags",       icon: Flag,         group: "SYSTEM" },
   { id: "health",      name: "System Health",       icon: Activity,     group: "SYSTEM" },
   { id: "settings",    name: "Settings",            icon: Settings,     group: "SYSTEM" },
 ];
@@ -286,6 +288,7 @@ export const Admin = () => {
             {activeTab === "payments"    && <PaymentManager />}
             {activeTab === "content"     && <ContentManager />}
             {activeTab === "licenses"    && <LicenseManager />}
+            {activeTab === "flags"       && <FeatureFlagManager />}
             {activeTab === "algos"       && <ProductManager />}
             {activeTab === "webinars"    && <WebinarManager />}
             {activeTab === "reviews"     && <ReviewManager />}

@@ -5,16 +5,19 @@
   "type": "module",
   "scripts": {
     "dev": "cross-env NODE_ENV=development tsx server.ts",
+    "prebuild": "node scripts/gen-sitemap.js",
     "build": "vite build",
     "start": "node server.ts",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
     "type-check": "tsc --noEmit",
     "alt-check": "node scripts/altCheck.js",
+    "sitemap": "node scripts/gen-sitemap.js",
     "test": "npm run lint && npm run alt-check && vitest run"
   },
   "dependencies": {
     "@google/genai": "^1.29.0",
+    "@sentry/react": "^10.48.0",
     "@supabase/supabase-js": "^2.98.0",
     "@tailwindcss/vite": "^4.1.14",
     "@tanstack/react-query": "^5.97.0",
