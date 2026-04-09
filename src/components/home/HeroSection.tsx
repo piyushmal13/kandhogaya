@@ -11,7 +11,6 @@ import {
   Globe,
   Activity
 } from "lucide-react";
-import { Link } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
 import { tracker } from "@/core/tracker";
 import { getCache, setCache } from "@/utils/cache";
@@ -174,9 +173,12 @@ export const HeroSection = () => {
                const email = input?.value;
                if (email) {
                  setFormState('loading');
-                 try {
-                   await supabase.from("leads").insert([{ email, source: "sovereign_terminal_v7" }]);
-                 } catch (err) {}
+                  try {
+                    const { error } = await supabase.from("leads").insert([{ email, source: "sovereign_terminal_v7" }]);
+                    if (error) tracker.track("lead_capture_failed", { error: error.message });
+                  } catch (err: any) {
+                    tracker.track("lead_capture_exception", { error: err.message });
+                  }
                  setTimeout(() => {
                    setFormState('success');
                    if (input) input.value = '';

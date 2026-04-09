@@ -54,7 +54,7 @@ export const ContentManager = () => {
   const [posts, setPosts] = useState<ContentPost[]>([]);
   const [fetching, setFetching] = useState(true);
   const [search, setSearch] = useState("");
-  const [filterType, setFilterType] = useState<string>("all");
+  const [filterType] = useState<string>("all");
 
   // UI State
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -156,41 +156,42 @@ export const ContentManager = () => {
     setLoading(true);
 
     try {
-      const reader = new FileReader();
-      reader.onload = async (event) => {
-        const text = event.target?.result as string;
-        const rows = text.split("\n").slice(1);
-        const imports = rows.map(row => {
-          const cols = row.split(",");
-          const title = cols[0]?.trim();
-          const content = cols[2]?.trim();
-          if (!title || !content) return null;
-          
-          let parsedMeta = {};
-          try { parsedMeta = cols[5] ? JSON.parse(cols[5].trim()) : {}; } catch (e) {}
-
-          return {
-            title,
-            slug: cols[1]?.trim() || slugify(title),
-            content,
-            content_type: "blog",
-            category: cols[3]?.trim() || "Research",
-            author_bio: cols[4]?.trim() || "",
-            status: "published",
-            metadata: parsedMeta,
-            author_id: userProfile.id
-          };
-        }).filter(Boolean);
-
-        if (imports.length > 0) {
-          const { error } = await supabase.from("content_posts").insert(imports);
-          if (error) throw error;
-          showToast("success", `Imported ${imports.length} posts.`);
-          fetchPosts();
+      const text = await file.text();
+      const rows = text.split("\n").slice(1);
+      const imports = rows.map(row => {
+        const cols = row.split(",");
+        const title = cols[0]?.trim();
+        const content = cols[2]?.trim();
+        if (!title || !content) return null;
+        
+        let parsedMeta = {};
+        try { 
+          parsedMeta = cols[5] ? JSON.parse(cols[5].trim()) : {}; 
+        } catch (e) {
+          console.warn("[ContentManager] Item metadata parse error in CSV:", e);
         }
-      };
-      reader.readAsText(file);
+
+        return {
+          title,
+          slug: cols[1]?.trim() || slugify(title),
+          content,
+          content_type: "blog",
+          category: cols[3]?.trim() || "Research",
+          author_bio: cols[4]?.trim() || "",
+          status: "published",
+          metadata: parsedMeta,
+          author_id: userProfile.id
+        };
+      }).filter(Boolean);
+
+      if (imports.length > 0) {
+        const { error } = await supabase.from("content_posts").insert(imports);
+        if (error) throw error;
+        showToast("success", `Imported ${imports.length} posts.`);
+        fetchPosts();
+      }
     } catch (err: any) {
+      console.error("[ContentManager] CSV Import failure:", err);
       showToast("error", "CSV Import failed.");
     } finally {
       setLoading(false);
@@ -354,16 +355,18 @@ export const ContentManager = () => {
             <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Title *</label>
+                  <label htmlFor="post-title" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Title *</label>
                   <input
+                    id="post-title"
                     value={title} onChange={e => setTitle(e.target.value)} required
                     placeholder="e.g. Gold Macro Structure"
                     className="w-full bg-black border border-white/5 rounded-2xl p-4 text-white text-sm outline-none focus:border-emerald-500/50 transition-all placeholder:text-zinc-700"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Content Type</label>
+                  <label htmlFor="post-type" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Content Type</label>
                   <select
+                    id="post-type"
                     value={type} onChange={e => setType(e.target.value)}
                     className="w-full bg-black border border-white/5 rounded-2xl p-4 text-white text-sm outline-none focus:border-emerald-500/50 transition-all"
                   >
@@ -375,8 +378,9 @@ export const ContentManager = () => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Body (Markdown) *</label>
+                <label htmlFor="post-body" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Body (Markdown) *</label>
                 <textarea
+                  id="post-body"
                   rows={6} value={body} onChange={e => setBody(e.target.value)} required
                   placeholder="Analyze markets here..."
                   className="w-full bg-black border border-white/5 rounded-3xl p-6 text-white text-sm outline-none focus:border-emerald-500/50 transition-all font-mono resize-none placeholder:text-zinc-700"
@@ -385,16 +389,18 @@ export const ContentManager = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Cover Image</label>
+                  <label htmlFor="post-image" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Cover Image</label>
                   <input
+                    id="post-image"
                     type="url" value={coverImage} onChange={e => setCoverImage(e.target.value)}
                     placeholder="https://..."
                     className="w-full bg-black border border-white/5 rounded-2xl p-4 text-white text-sm outline-none focus:border-cyan-500/50 transition-all placeholder:text-zinc-700"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Status</label>
+                  <label htmlFor="post-status" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Status</label>
                   <select
+                    id="post-status"
                     value={status} onChange={e => setStatus(e.target.value)}
                     className="w-full bg-black border border-white/5 rounded-2xl p-4 text-white text-sm outline-none focus:border-emerald-500/50 transition-all uppercase font-black"
                   >
@@ -429,14 +435,20 @@ export const ContentManager = () => {
               </div>
 
               <div className="space-y-2 bg-black/40 p-6 rounded-3xl border border-white/5">
-                <label className="text-[9px] font-black uppercase tracking-widest text-cyan-400 px-1 flex items-center gap-2">
+                <label htmlFor="post-metadata" className="text-[9px] font-black uppercase tracking-widest text-cyan-400 px-1 flex items-center gap-2">
                   <Shield className="w-3 h-3" /> Institutional Metadata
                 </label>
                 <textarea
+                  id="post-metadata"
                   rows={4}
                   value={JSON.stringify(metadata, null, 2)}
                   onChange={e => {
-                    try { setMetadata(JSON.parse(e.target.value)); } catch (err) {}
+                    try { 
+                      const parsed = JSON.parse(e.target.value);
+                      setMetadata(parsed); 
+                    } catch (err) {
+                      console.warn("[ContentManager] Metadata JSON parse error:", err);
+                    }
                   }}
                   className="w-full bg-black border border-white/10 rounded-2xl p-4 text-white text-xs outline-none focus:border-cyan-500/50 transition-all font-mono"
                 />
