@@ -15,9 +15,9 @@
  */
 
 import { createClient } from '@supabase/supabase-js';
-import { writeFileSync } from 'fs';
-import { resolve, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { writeFileSync } from 'node:fs';
+import { resolve, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import dotenv from 'dotenv';
 
 const __dir = dirname(fileURLToPath(import.meta.url));
@@ -95,13 +95,11 @@ function buildXml(urls) {
 }
 
 // ─── Entry Point ──────────────────────────────────────────────────────────────
-(async () => {
-  console.log('[sitemap] Generating…');
-  const dynamic = await fetchDynamicRoutes();
-  const all     = [...STATIC_URLS, ...dynamic];
-  const xml     = buildXml(all);
-  const outPath = resolve(__dir, '../public/sitemap.xml');
+console.log('[sitemap] Generating…');
+const dynamic = await fetchDynamicRoutes();
+const all     = [...STATIC_URLS, ...dynamic];
+const xml     = buildXml(all);
+const outPath = resolve(__dir, '../public/sitemap.xml');
 
-  writeFileSync(outPath, xml, 'utf-8');
-  console.log(`[sitemap] ✔  Written ${all.length} URLs → public/sitemap.xml`);
-})();
+writeFileSync(outPath, xml, 'utf-8');
+console.log(`[sitemap] ✔  Written ${all.length} URLs → public/sitemap.xml`);

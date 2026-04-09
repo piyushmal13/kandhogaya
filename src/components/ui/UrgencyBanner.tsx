@@ -14,10 +14,10 @@ export const UrgencyBanner = ({ leadId }: { leadId?: string }) => {
   const [message, setMessage] = useState<string | null>(null);
   const [isVisible, setIsVisible] = useState(false);
 
-  // Bail out immediately if the admin toggled the banner off
-  if (!bannerEnabled) return null;
-
   useEffect(() => {
+    // Only run logic if enabled
+    if (!bannerEnabled) return;
+
     const generateContextualUrgency = async () => {
       // 1. Audit active signal volatility
       const { data: signal } = await publicSupabase
@@ -45,7 +45,9 @@ export const UrgencyBanner = ({ leadId }: { leadId?: string }) => {
     generateContextualUrgency();
     const timer = setTimeout(() => setIsVisible(false), 8000); // 8s visibility
     return () => clearTimeout(timer);
-  }, []);
+  }, [bannerEnabled]);
+
+  if (!bannerEnabled) return null;
 
   return (
     <AnimatePresence>
