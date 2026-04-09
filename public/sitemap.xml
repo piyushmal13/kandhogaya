@@ -68,6 +68,13 @@
     <priority>0.7</priority>
   </url>
 
+  <!-- TRADERS TRAVEL -->
+  <url>
+    <loc>https://ifxtrades.com/travel</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+
   <!-- HIRING -->
   <url>
     <loc>https://ifxtrades.com/hiring</loc>
