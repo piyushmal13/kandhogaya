@@ -1,10 +1,4 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "version": 2,
-
-  "cleanUrls": true,
-  "trailingSlash": false,
-
   "headers": [
     {
       "source": "/assets/(.*)",
@@ -13,45 +7,21 @@
       ]
     },
     {
-      "source": "/(.*\\.(js|css|woff2?|ttf|eot|png|jpg|jpeg|gif|svg|ico|webp|xml|txt))",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=86400, must-revalidate" }
-      ]
-    },
-    {
       "source": "/(.*)",
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; img-src 'self' data: https: blob:; font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://cdn.jsdelivr.net; connect-src 'self' https://*.supabase.co https://www.googletagmanager.com https://www.google-analytics.com; worker-src 'self' blob:; frame-ancestors 'none';"
+          "value": "default-src 'self'; img-src 'self' data: https: blob:; font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://cdn.jsdelivr.net https://va.vercel-scripts.com; connect-src 'self' https://*.supabase.co https://www.googletagmanager.com https://www.google-analytics.com https://vitals.vercel-insights.com https://*.ingest.sentry.io; worker-src 'self' blob:; frame-ancestors 'none';"
         },
         { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" },
-        { "key": "X-Content-Type-Options",    "value": "nosniff" },
-        { "key": "X-Frame-Options",            "value": "SAMEORIGIN" },
-        { "key": "Referrer-Policy",            "value": "strict-origin-when-cross-origin" },
-        { "key": "Permissions-Policy",         "value": "camera=(), microphone=(), geolocation=(), payment=()" }
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(), payment=()" }
       ]
     }
   ],
-
   "rewrites": [
-    { "source": "/api/health",      "destination": "/src/edge-functions/health.ts" },
-    { "source": "/api/signals",     "destination": "/src/edge-functions/api/signals.ts" },
-    { "source": "/api/webinars",    "destination": "/src/edge-functions/api/webinars.ts" },
-    { "source": "/api/admin/(.*)",  "destination": "/src/edge-functions/auth/verifyJwt.ts" },
-    { "source": "/((?!_next|.*\\..*).*)", "destination": "/index.html" }
-  ],
-
-  "functions": {
-    "src/edge-functions/**/*.ts": {
-      "runtime": "@vercel/node@3.x",
-      "maxDuration": 10
-    }
-  },
-
-  "github": {
-    "enabled":   true,
-    "autoMerge": false,
-    "silent":    true
-  }
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
+  ]
 }
