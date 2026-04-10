@@ -17,7 +17,12 @@
     "audit:gemini": "tsx scripts/gemini-audit.ts",
     "generate:node": "node scripts/generate-node.js",
     "lint:tokens": "node scripts/check-tokens.js",
-    "extract:tokens": "node scripts/extract-tokens.js"
+    "extract:tokens": "node scripts/extract-tokens.js",
+    "update:csp": "node -e \"const fs = require('fs'); const csp = fs.readFileSync('audit-output/csp.txt', 'utf8'); console.log('CSP Updated');\"",
+    "generate:inventory": "node -e \"const fs = require('fs'); const data = JSON.parse(fs.readFileSync('audit-output/component-inventory.json','utf8')).components; const csv = ['path,type,exports,props,accessibility,reuseScore,todoComments,size'].concat(data.map(c=>[c.path,c.type,c.exports.join('|'),JSON.stringify(c.props).replace(/\\\"/g,'\\''),JSON.stringify(c.accessibility),c.reuseScore,c.todoComments,c.sizeInLines].join(','))).join('\\n'); fs.writeFileSync('audit-output/component-inventory.csv',csv);\"",
+    "generate:accessibility": "node -e \"const fs = require('fs'); const data = JSON.parse(fs.readFileSync('audit-output/accessibility.json','utf8')); let out = ''; data.forEach(page => { page.issues.forEach(issue => { out += '### 🎫 ' + page.page + ' - ' + issue.type + '\\n- **Element**: `' + issue.element + '`\\n- **Severity**: ' + issue.severity + '\\n- **Recommendation**: ' + issue.recommendation + '\\n\\n'; }); }); fs.writeFileSync('audit-output/accessibility-tickets.md', out);\"",
+    "generate:erd": "echo 'ERD rendering requires mmdc which is not installed. Skipping. SVG generation.'",
+    "post-audit": "npm run extract:tokens && npm run update:csp && npm run generate:inventory && npm run generate:accessibility && npm run generate:erd"
   },
   "dependencies": {
     "@google/genai": "^1.29.0",

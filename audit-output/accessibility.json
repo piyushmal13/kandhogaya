@@ -1,0 +1,13 @@
+[
+  {
+    "page": "/",
+    "issues": [
+      {
+        "type": "Contrast",
+        "element": ".hero-text",
+        "severity": "Low",
+        "recommendation": "Increase contrast ratio."
+      }
+    ]
+  }
+]

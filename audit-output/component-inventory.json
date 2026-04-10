@@ -1,0 +1,14 @@
+{
+  "components": [
+    {
+      "path": "src/components/ui/Button.tsx",
+      "type": "UI Component",
+      "exports": ["SovereignButton"],
+      "props": {"glowEffect": "boolean"},
+      "accessibility": {"ARIA": true},
+      "reuseScore": 5,
+      "todoComments": 0,
+      "sizeInLines": 120
+    }
+  ]
+}

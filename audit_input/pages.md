@@ -1,0 +1,13 @@
+/
+/academy
+/marketplace
+/trade-setup
+/login
+/signup
+/traders-travel
+/results
+/admin
+/admin/roles
+/admin/users
+/dashboard
+/agent
