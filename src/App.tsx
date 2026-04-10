@@ -100,6 +100,56 @@ const AnimatedRoutes = () => {
 
 import { loadSystem } from "./core/systemLoader";
 
+function AppContent() {
+  const location = useLocation();
+  
+  const isInstitutional = [
+    '/dashboard', 
+    '/marketplace', 
+    '/academy', 
+    '/webinars', 
+    '/results'
+  ].some(path => location.pathname.startsWith(path));
+
+  return (
+    <>
+      <ScrollToTop />
+      <ReferralHandler />
+      <a href="#main-content" className="skip-to-content">
+        Skip to main content
+      </a>
+      <div className="relative min-h-screen overflow-hidden font-sans">
+        <div className="noise-overlay" />
+        <SiteBackdrop />
+        
+        {/* Global elements only on landing/secondary pages */}
+        {!isInstitutional && <Navbar />}
+        
+        <main id="main-content" className="relative z-10">
+          <AnimatedRoutes />
+        </main>
+        
+        {!isInstitutional && <Footer />}
+        
+        <WhatsAppButton />
+        
+        {/* Institutional Accountability: Relative Bottom Notice (Only on public pages) */}
+        {!isInstitutional && (
+          <div 
+            id="regulatory-notice"
+            className="relative w-full bg-[var(--color4)] text-white text-center p-8 md:p-12 text-[10px] md:text-sm font-black uppercase tracking-[0.2em] z-50 border-t border-white/10"
+          >
+            <div className="max-w-7xl mx-auto px-4">
+              <span className="opacity-50">CRITICAL INSTITUTIONAL NOTICE:</span> IFX Trades is strictly an education & research platform. We license algorithms, deliver courses, and provide macro analysis. <strong className="text-white underline">WE ARE NOT A BROKER.</strong> We do not accept deposits, execute trades, or handle client funds. Trading involves significant risk.
+            </div>
+          </div>
+        )}
+        <SpeedInsights />
+      </div>
+    </>
+  );
+}
+
 export default function App() {
   useEffect(() => {
     loadSystem();
@@ -112,38 +162,12 @@ export default function App() {
           <AuthProvider>
             <DataPulseProvider>
               <Router>
-                <ScrollToTop />
-                <ReferralHandler />
-              <a href="#main-content" className="skip-to-content">
-                Skip to main content
-              </a>
-              <div className="relative min-h-screen overflow-hidden font-sans">
-                <div className="noise-overlay" />
-                <SiteBackdrop />
-                <Navbar />
-                <main id="main-content" className="relative z-10">
-                  <AnimatedRoutes />
-                </main>
-                <Footer />
-                <WhatsAppButton />
-                
-                {/* Institutional Accountability: Relative Bottom Notice */}
-                <div 
-                  id="regulatory-notice"
-                  className="relative w-full bg-[var(--color4)] text-white text-center p-8 md:p-12 text-[10px] md:text-sm font-black uppercase tracking-[0.2em] z-50 border-t border-white/10"
-                >
-                  <div className="max-w-7xl mx-auto px-4">
-                    <span className="opacity-50">CRITICAL INSTITUTIONAL NOTICE:</span> IFX Trades is strictly an education & research platform. We license algorithms, deliver courses, and provide macro analysis. <strong className="text-white underline">WE ARE NOT A BROKER.</strong> We do not accept deposits, execute trades, or handle client funds. Trading involves significant risk.
-                  </div>
-                </div>
-                <SpeedInsights />
-              </div>
-
-            </Router>
-          </DataPulseProvider>
-        </AuthProvider>
-      </ToastProvider>
-    </QueryClientProvider>
-  </ErrorBoundary>
-);
+                <AppContent />
+              </Router>
+            </DataPulseProvider>
+          </AuthProvider>
+        </ToastProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
+  );
 }

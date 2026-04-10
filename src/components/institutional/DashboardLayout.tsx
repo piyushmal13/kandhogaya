@@ -1,72 +1,72 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  BarChart3, 
-  Terminal, 
-  Shield, 
-  BookOpen, 
-  Bell, 
-  Search, 
-  User, 
-  Settings, 
-  LayoutDashboard,
-  Zap,
-  Activity,
-  ChevronRight,
-  Menu,
-  X,
-  Plus
-} from 'lucide-react';
+import React from 'react';
+import { GlobalNavigation } from './GlobalNavigation';
+import { Breadcrumb } from './Breadcrumb';
+import { Footer } from './Footer';
+import { DashboardHeader } from './DashboardHeader';
 import { cn } from '@/lib/utils';
-import { useFeatureFlag } from '@/hooks/useFeatureFlag';
-import { Button } from '../ui/Button';
 
 // ── TYPES ──
 interface DashboardLayoutProps {
   children: React.ReactNode;
-  leftRail?: React.ReactNode;
+  leftRail?: React.ReactNode; 
   topBar?: React.ReactNode;
   contextPanel?: React.ReactNode;
+  showBreadcrumb?: boolean;
 }
 
-// ── COMPONENTS ──
-
+/**
+ * INSTITUTIONAL DASHBOARD LAYOUT (v6.0)
+ * Unified architecture for Dashboard, Marketplace, Academy, and Webinars.
+ * Features:
+ * - Persistent Sovereign Navigation (Fixed Aside)
+ * - Telemetry Header
+ * - Automated SEO Breadcrumbs
+ * - Right Intelligence Rail (Context Panel)
+ * - Global Authority Footer
+ */
 export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ 
   children, 
-  leftRail, 
-  topBar, 
-  contextPanel 
+  leftRail = <GlobalNavigation />, 
+  topBar = <DashboardHeader />, 
+  contextPanel,
+  showBreadcrumb = true
 }) => {
   return (
-    <div className="flex h-screen w-full bg-[var(--color6)] overflow-hidden text-white font-sans selection:bg-emerald-500/30">
-      {/* ── LEFT RAIL: Navigation (240px) ── */}
-      <aside 
-        className="relative h-full border-r border-white/5 bg-black/40 backdrop-blur-3xl z-50 flex flex-col w-[240px] hidden lg:flex"
-      >
+    <div className="flex min-h-screen w-full bg-[#050505] text-white selection:bg-emerald-500/30 overflow-x-hidden">
+      {/* ── LEFT RAIL: Navigation (Fixed Aside) ── */}
+      <aside className="w-72 fixed h-screen hidden lg:block z-50">
         {leftRail}
       </aside>
-
-      {/* ── MAIN MATRIX ── */}
-      <div className="flex-1 flex flex-col min-w-0">
-        {/* TOP BAR (64px) */}
-        <header className="h-16 border-b border-white/5 flex items-center justify-between px-8 bg-black/20 backdrop-blur-md shrink-0 z-40">
+      
+      {/* ── MAIN EXECUTION TRACK ── */}
+      <div className={cn(
+        "flex-1 flex flex-col min-h-screen transition-all duration-500 ease-out",
+        "lg:ml-72", // Space for fixed left rail
+        contextPanel ? "xl:mr-80" : "" // Alternative: space for right rail if present
+      )}>
+        {/* TOP BAR: Universal Telemetry */}
+        <header className="h-20 border-b border-white/5 flex items-center justify-between px-10 bg-black/40 backdrop-blur-3xl sticky top-0 z-40">
           {topBar}
         </header>
 
-        {/* MAIN STAGE */}
-        <main className="flex-1 overflow-y-auto bg-black/10 custom-scrollbar">
-          <div className="max-w-[1400px] mx-auto p-10 space-y-10">
-             {children}
+        {/* MAIN STAGE: Content Matrix */}
+        <main className="flex-1 flex flex-col pt-10 pb-20 px-10 max-w-7xl w-full mx-auto">
+          {showBreadcrumb && <Breadcrumb />}
+          <div className="flex-1 animate-in fade-in duration-700">
+            {children}
           </div>
         </main>
+
+        {/* FOOTER: Organization Authority */}
+        <Footer />
       </div>
 
-      {/* ── RIGHT CONTEXT PANEL (320px) ── */}
-      <aside 
-        className="w-[320px] h-full border-l border-white/5 bg-black/40 backdrop-blur-3xl hidden xl:flex flex-col z-50"
-      >
-        {contextPanel}
-      </aside>
+      {/* ── RIGHT RAIL: Context Intelligence (Optional) ── */}
+      {contextPanel && (
+        <aside className="w-80 fixed right-0 h-screen hidden xl:block z-40 border-l border-white/5 bg-black/40 backdrop-blur-3xl">
+          {contextPanel}
+        </aside>
+      )}
     </div>
   );
 };
