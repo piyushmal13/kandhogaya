@@ -26,13 +26,13 @@ export const AlgoCard = ({ algo, onSelect }: AlgoCardProps) => {
   return (
     <motion.div
       whileHover={{ y: -8 }}
-      className="bg-[#0a0a0a] border border-white/5 rounded-[2.5rem] overflow-hidden group hover:border-emerald-500/40 transition-all duration-500 flex flex-col h-full relative shadow-2xl hover:shadow-emerald-500/10"
+      className="bg-[var(--color7)] border border-white/5 rounded-[2.5rem] overflow-hidden group hover:border-emerald-500/40 transition-all duration-500 flex flex-col h-full relative shadow-2xl hover:shadow-emerald-500/10"
     >
       {/* Top Intelligence Gradient */}
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 via-cyan-500 to-emerald-500 opacity-20 group-hover:opacity-100 transition-opacity duration-700" />
 
       <div className="relative h-56 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/20 to-transparent z-10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--color7)] via-[var(--color7)]/20 to-transparent z-10" />
         <ResizedImage 
           src={algo.image_url || `https://picsum.photos/seed/${algo.id}/800/450`} 
           alt={algo.name} 
@@ -57,7 +57,7 @@ export const AlgoCard = ({ algo, onSelect }: AlgoCardProps) => {
         <div className="absolute top-6 right-6 z-20 opacity-40 group-hover:opacity-100 transition-all duration-700 bg-black/40 backdrop-blur-xl p-3 rounded-2xl border border-white/10">
           <Sparkline 
             data={performance.equity_curve} 
-            color={isPositive ? "#10b981" : "#ef4444"} 
+            color={isPositive ? "var(--color8)" : "var(--color9)"} 
             width={80} 
             height={30} 
           />

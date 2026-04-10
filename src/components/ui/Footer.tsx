@@ -10,7 +10,7 @@ import { BRANDING } from "../../constants/branding";
 import { InstagramIcon, LinkedinIcon } from "./Icons";
 
 export const Footer = () => (
-  <footer className="relative overflow-hidden border-t border-white/5 pt-32 bg-[#020202]">
+  <footer className="relative overflow-hidden border-t border-white/5 pt-32 bg-[var(--color10)]">
     {/* --- Institutional Backdrop --- */}
     <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(16,185,129,0.03),transparent_50%)]" />
 

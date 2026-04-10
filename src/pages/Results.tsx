@@ -93,8 +93,8 @@ export const Results = () => {
                   <AreaChart data={results}>
                     <defs>
                       <linearGradient id="ifxCurve" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#58f2b6" stopOpacity={0.35} />
-                        <stop offset="95%" stopColor="#58f2b6" stopOpacity={0} />
+                        <stop offset="5%" stopColor="var(--color33)" stopOpacity={0.35} />
+                        <stop offset="95%" stopColor="var(--color33)" stopOpacity={0} />
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
@@ -102,14 +102,14 @@ export const Results = () => {
                     <YAxis stroke="rgba(255,255,255,0.35)" tickLine={false} axisLine={false} />
                     <Tooltip
                       contentStyle={{
-                        backgroundColor: "#09111e",
+                        backgroundColor: "var(--color52)",
                         border: "1px solid rgba(255,255,255,0.08)",
                         borderRadius: "16px",
                       }}
-                      labelStyle={{ color: "#f3fbff" }}
-                      itemStyle={{ color: "#58f2b6" }}
+                      labelStyle={{ color: "var(--color53)" }}
+                      itemStyle={{ color: "var(--color33)" }}
                     />
-                    <Area type="monotone" dataKey="pips" stroke="#58f2b6" strokeWidth={3} fill="url(#ifxCurve)" />
+                    <Area type="monotone" dataKey="pips" stroke="var(--color33)" strokeWidth={3} fill="url(#ifxCurve)" />
                   </AreaChart>
                 </ResponsiveContainer>
               )}

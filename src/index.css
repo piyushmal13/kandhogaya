@@ -19,20 +19,20 @@
 @layer base {
   :root {
     /* ── Text Scale (Refined for High Authority) ── */
-    --text-primary: #ffffff;
-    --text-secondary: #a1a1aa;
-    --text-muted: #52525b;
+    --text-primary: var(--color34);
+    --text-secondary: var(--color35);
+    --text-muted: var(--color36);
 
     /* ── Accent Scale (Sovereign Emerald & Cyan) ── */
-    --accent: #10b981;
-    --accent-hover: #34d399;
+    --accent: var(--color8);
+    --accent-hover: var(--color37);
     --accent-subtle: rgba(16, 185, 129, 0.08);
-    --accent-fg: #020617;
+    --accent-fg: var(--color30);
 
     /* ── Background Scale (Institutional Depth) ── */
-    --bg-base: #020202;
-    --bg-raised: #0a0a0b;
-    --bg-surface: #121214;
+    --bg-base: var(--color10);
+    --bg-raised: var(--raised);
+    --bg-surface: var(--surface);
 
     /* ── Border Scale (Ultra-Fine Precision) ── */
     --border-default: rgba(255, 255, 255, 0.04);
@@ -42,14 +42,14 @@
 
     /* ── Semantic Colors ── */
     /* ── Semantic Alignment ── */
-    --success: #10b981;
-    --warning: #f59e0b;
-    --danger: #ef4444;
-    --info: #06b6d4;
+    --success: var(--color8);
+    --warning: var(--color38);
+    --danger: var(--color9);
+    --info: var(--color39);
     
     /* ── Single Brand Color System ── */
-    --brand: #10b981;
-    --brand-dark: #065f46;
+    --brand: var(--color8);
+    --brand-dark: var(--color40);
     --brand-subtle: rgba(16, 185, 129, 0.12);
     --brand-glow: rgba(16, 185, 129, 0.4);
     --brand-glow-subtle: rgba(16, 185, 129, 0.1);
@@ -74,17 +74,17 @@
     --shadow-float: 0 24px 60px rgba(0, 0, 0, 0.35);
 
     /* ── 200x Elite Evolution Tokens (Apple/Google Tier) ── */
-    --neon-emerald: #10b981;
-    --neon-cyan: #06b6d4;
-    --neon-purple: #8b5cf6;
+    --neon-emerald: var(--color8);
+    --neon-cyan: var(--color39);
+    --neon-purple: var(--color41);
     --glass-bg: rgba(255, 255, 255, 0.015);
     --glass-border: rgba(255, 255, 255, 0.04);
     --glass-blur: 32px;
     --noise-opacity: 0.02;
 
     /* ── Premium Gradients ── */
-    --grad-sovereign: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
-    --grad-emerald: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    --grad-sovereign: linear-gradient(135deg, var(--color34) 0%, var(--color35) 100%);
+    --grad-emerald: linear-gradient(135deg, var(--color8) 0%, var(--color42) 100%);
     --grad-dark: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 100%);
 
     color-scheme: dark;
@@ -96,7 +96,7 @@
 
   body {
     min-height: 100vh;
-    background-color: #000000;
+    background-color: var(--color43);
     color: var(--text-primary);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -222,7 +222,7 @@
 
   /* ── Gradient Title ── */
   .site-title-gradient {
-    background-image: linear-gradient(135deg, #fbfdff 0%, #a5f8d9 38%, #74e0ff 100%);
+    background-image: linear-gradient(135deg, var(--color44) 0%, var(--color45) 38%, var(--color46) 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -285,7 +285,7 @@
     border-left: 3px solid rgba(88, 242, 182, 0.4);
     background: var(--accent-subtle);
     padding: 1rem 1.25rem;
-    color: #d8edf3;
+    color: var(--color47);
   }
 
   .site-copy code,

@@ -50,7 +50,7 @@ const PILLARS = [
 
 export const TrustGrid = () => {
   return (
-    <section className="py-32 bg-[#020202] border-t border-white/5 relative overflow-hidden">
+    <section className="py-32 bg-[var(--color10)] border-t border-white/5 relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.03),transparent_70%)]" />
       
       <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -91,7 +91,7 @@ export const TrustGrid = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="p-10 rounded-[3rem] bg-[#050505] border border-white/5 group hover:border-emerald-500/20 transition-all duration-500 relative overflow-hidden"
+              className="p-10 rounded-[3rem] bg-[var(--color6)] border border-white/5 group hover:border-emerald-500/20 transition-all duration-500 relative overflow-hidden"
             >
               <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               

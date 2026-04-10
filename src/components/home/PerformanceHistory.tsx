@@ -32,7 +32,7 @@ export const PerformanceHistory = () => {
   const monthlyResults = useMemo(generateMonthlyResults, []);
 
   return (
-    <section className="py-16 md:py-32 bg-[#020202] relative overflow-hidden">
+    <section className="py-16 md:py-32 bg-[var(--color10)] relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(16,185,129,0.03),transparent_50%)]" />
       
       <div className="max-w-7xl mx-auto px-4 relative z-10 text-center mb-16">
@@ -56,7 +56,7 @@ export const PerformanceHistory = () => {
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="bg-[#050505] p-8 md:p-14 rounded-[2.5rem] border border-white/5 relative overflow-hidden group shadow-2xl"
+          className="bg-[var(--color6)] p-8 md:p-14 rounded-[2.5rem] border border-white/5 relative overflow-hidden group shadow-2xl"
         >
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-16 gap-10">
             <div className="flex items-center gap-6">

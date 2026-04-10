@@ -9,7 +9,7 @@ export const ReviewPromptModal = ({ isOpen, onClose }: { isOpen: boolean, onClos
       <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4">
         <div className="absolute inset-0 bg-black/90 backdrop-blur-md" onClick={onClose} />
         
-        <div className="relative w-full max-w-md bg-[#050505] border border-white/5 rounded-[40px] p-10 shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-500">
+        <div className="relative w-full max-w-md bg-[var(--color6)] border border-white/5 rounded-[40px] p-10 shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-500">
            <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-emerald-500 to-transparent" />
            
            <button onClick={onClose} className="absolute top-6 right-6 text-gray-500 hover:text-white transition-colors">

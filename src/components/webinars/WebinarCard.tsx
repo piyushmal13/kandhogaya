@@ -43,7 +43,7 @@ export const WebinarCard = ({ webinar, onRegister }: WebinarCardProps) => {
   return (
     <motion.div
       whileHover={{ y: -5 }}
-      className="bg-[#0a0a0a] border border-white/10 rounded-2xl overflow-hidden group hover:border-emerald-500/30 transition-all flex flex-col h-full"
+      className="bg-[var(--color7)] border border-white/10 rounded-2xl overflow-hidden group hover:border-emerald-500/30 transition-all flex flex-col h-full"
     >
       <Link to={`/webinars/${webinar.id}`} className="relative h-48 overflow-hidden block">
         <img 

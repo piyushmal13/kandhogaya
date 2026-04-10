@@ -96,7 +96,7 @@ export const RevenueAnalytics = () => {
     fetchRevenueMetrics();
   }, []);
 
-  const COLORS = ['#10b981', '#06b6d4', '#8b5cf6', '#f59e0b', '#ef4444'];
+  const COLORS = ['var(--color8)', 'var(--color39)', 'var(--color41)', 'var(--color38)', 'var(--color9)'];
 
   return (
     <div className="space-y-12 animate-in fade-in slide-in-from-bottom-6 duration-700">
@@ -155,8 +155,8 @@ export const RevenueAnalytics = () => {
                   ))}
                 </Pie>
                 <Tooltip 
-                  contentStyle={{ backgroundColor: '#18181b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '24px' }}
-                  itemStyle={{ color: '#fff', fontSize: '12px', fontWeight: 'bold', textTransform: 'uppercase' }}
+                  contentStyle={{ backgroundColor: 'var(--color48)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '24px' }}
+                  itemStyle={{ color: 'var(--color12)', fontSize: '12px', fontWeight: 'bold', textTransform: 'uppercase' }}
                 />
               </PieChart>
             </ResponsiveContainer>
@@ -190,8 +190,8 @@ export const RevenueAnalytics = () => {
               <AreaChart data={data.funnelConversion}>
                 <defs>
                   <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#06b6d4" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="var(--color39)" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="var(--color39)" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
@@ -199,18 +199,18 @@ export const RevenueAnalytics = () => {
                   dataKey="name" 
                   axisLine={false} 
                   tickLine={false} 
-                  tick={{ fill: '#71717a', fontSize: 10, fontWeight: 800 }} 
+                  tick={{ fill: 'var(--color49)', fontSize: 10, fontWeight: 800 }} 
                   dy={20}
                 />
                 <YAxis hide />
                 <Tooltip 
-                   contentStyle={{ backgroundColor: '#18181b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '24px' }}
-                   itemStyle={{ color: '#fff', fontSize: '12px', fontWeight: 'bold' }}
+                   contentStyle={{ backgroundColor: 'var(--color48)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '24px' }}
+                   itemStyle={{ color: 'var(--color12)', fontSize: '12px', fontWeight: 'bold' }}
                 />
                 <Area 
                   type="monotone" 
                   dataKey="value" 
-                  stroke="#06b6d4" 
+                  stroke="var(--color39)" 
                   strokeWidth={4} 
                   fillOpacity={1} 
                   fill="url(#colorValue)" 
@@ -242,21 +242,21 @@ export const RevenueAnalytics = () => {
                 dataKey="name" 
                 axisLine={false} 
                 tickLine={false} 
-                tick={{ fill: '#71717a', fontSize: 10, fontWeight: 800 }} 
+                tick={{ fill: 'var(--color49)', fontSize: 10, fontWeight: 800 }} 
                 dy={20}
               />
               <YAxis 
                 axisLine={false} 
                 tickLine={false} 
-                tick={{ fill: '#71717a', fontSize: 10, fontWeight: 800 }} 
+                tick={{ fill: 'var(--color49)', fontSize: 10, fontWeight: 800 }} 
               />
               <Tooltip 
-                 contentStyle={{ backgroundColor: '#18181b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '24px' }}
-                 itemStyle={{ color: '#fff', fontSize: '12px', fontWeight: 'bold' }}
+                 contentStyle={{ backgroundColor: 'var(--color48)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '24px' }}
+                 itemStyle={{ color: 'var(--color12)', fontSize: '12px', fontWeight: 'bold' }}
               />
               <Bar 
                 dataKey="value" 
-                fill="#8b5cf6" 
+                fill="var(--color41)" 
                 radius={[8, 8, 0, 0]}
                 animationDuration={2000}
               />
@@ -292,14 +292,14 @@ export const RevenueAnalytics = () => {
                     <Line 
                       type="monotone" 
                       dataKey="rev" 
-                      stroke="#10b981" 
+                      stroke="var(--color8)" 
                       strokeWidth={4} 
                       dot={false}
                       animationDuration={2000}
                     />
                     <Tooltip 
-                       contentStyle={{ backgroundColor: '#18181b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '24px' }}
-                       itemStyle={{ color: '#fff', fontSize: '12px', fontWeight: 'bold' }}
+                       contentStyle={{ backgroundColor: 'var(--color48)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '24px' }}
+                       itemStyle={{ color: 'var(--color12)', fontSize: '12px', fontWeight: 'bold' }}
                     />
                   </LineChart>
                 </ResponsiveContainer>

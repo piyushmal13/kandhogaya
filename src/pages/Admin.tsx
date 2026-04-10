@@ -114,12 +114,12 @@ export const Admin = () => {
   const activeTabDef = tabs.find(t => t.id === activeTab);
 
   return (
-    <div className="flex min-h-screen bg-[#020202] pt-20">
+    <div className="flex min-h-screen bg-[var(--color10)] pt-20">
 
       {/* ── Sidebar ── */}
       <aside
         className={cn(
-          "fixed top-20 left-0 bottom-0 z-40 flex flex-col bg-[#0a0a0a] border-r border-white/5 transition-all duration-300",
+          "fixed top-20 left-0 bottom-0 z-40 flex flex-col bg-[var(--color7)] border-r border-white/5 transition-all duration-300",
           sidebarOpen ? "w-64" : "w-[72px]"
         )}
       >
@@ -229,7 +229,7 @@ export const Admin = () => {
       )}>
 
         {/* Top Stats Bar */}
-        <div className="sticky top-20 z-30 bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/5">
+        <div className="sticky top-20 z-30 bg-[var(--color7)]/95 backdrop-blur-xl border-b border-white/5">
           <div className="flex items-center justify-between px-6 py-3">
             {/* Breadcrumb */}
             <div className="flex items-center gap-2">

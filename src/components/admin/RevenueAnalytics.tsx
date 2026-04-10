@@ -66,7 +66,7 @@ export const RevenueAnalytics = () => {
     fetchAnalytics();
   }, []);
 
-  if (loading || !data) return <div className="h-96 flex items-center justify-center font-mono text-[10px] uppercase tracking-widest text-[#64748b] animate-pulse">Synchronizing Global Revenue Signals...</div>;
+  if (loading || !data) return <div className="h-96 flex items-center justify-center font-mono text-[10px] uppercase tracking-widest text-[var(--color5)] animate-pulse">Synchronizing Global Revenue Signals...</div>;
 
   return (
     <div className="space-y-8">
@@ -79,7 +79,7 @@ export const RevenueAnalytics = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* --- Revenue by Product --- */}
-        <div className="p-10 bg-[#050505] border border-white/5 rounded-[2.5rem]">
+        <div className="p-10 bg-[var(--color6)] border border-white/5 rounded-[2.5rem]">
           <h3 className="text-white font-black text-lg mb-8 uppercase tracking-tight flex items-center gap-3">
             <PieChart className="w-5 h-5 text-emerald-500" />
             Product Velocity
@@ -87,7 +87,7 @@ export const RevenueAnalytics = () => {
           <div className="space-y-6">
             {Object.entries(data.revenueByProduct).map(([prod, amount]) => (
               <div key={prod} className="space-y-2">
-                <div className="flex justify-between text-[10px] font-mono font-bold uppercase tracking-widest text-[#64748b]">
+                <div className="flex justify-between text-[10px] font-mono font-bold uppercase tracking-widest text-[var(--color5)]">
                   <span>{prod}</span>
                   <span className="text-white">${amount.toLocaleString()}</span>
                 </div>
@@ -104,7 +104,7 @@ export const RevenueAnalytics = () => {
         </div>
 
         {/* --- Revenue by Agent --- */}
-        <div className="p-10 bg-[#050505] border border-white/5 rounded-[2.5rem]">
+        <div className="p-10 bg-[var(--color6)] border border-white/5 rounded-[2.5rem]">
           <h3 className="text-white font-black text-lg mb-8 uppercase tracking-tight flex items-center gap-3">
             <Users className="w-5 h-5 text-blue-500" />
             Agent Conversion Alpha
@@ -124,10 +124,10 @@ export const RevenueAnalytics = () => {
 };
 
 const MetricBox = ({ icon, label, value, sub }: any) => (
-  <div className="p-10 bg-[#050505] border border-white/5 rounded-[3rem] transition-all hover:border-emerald-500/20">
+  <div className="p-10 bg-[var(--color6)] border border-white/5 rounded-[3rem] transition-all hover:border-emerald-500/20">
     <div className="mb-6">{icon}</div>
-    <div className="text-[10px] font-black text-[#64748b] uppercase tracking-[0.3em] mb-2">{label}</div>
+    <div className="text-[10px] font-black text-[var(--color5)] uppercase tracking-[0.3em] mb-2">{label}</div>
     <div className="text-3xl font-black text-white tracking-tighter mb-1">{value}</div>
-    <div className="text-[9px] font-black text-[#64748b] uppercase tracking-widest">{sub}</div>
+    <div className="text-[9px] font-black text-[var(--color5)] uppercase tracking-widest">{sub}</div>
   </div>
 );

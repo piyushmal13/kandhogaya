@@ -96,7 +96,7 @@ const EcosystemCard = ({ mod, index }: { mod: typeof modules[0], index: number }
       >
         <Link 
           to={mod.link} 
-          className="block relative h-full p-8 md:p-12 rounded-[2.5rem] bg-[#050505] border border-white/5 overflow-hidden transition-all duration-700 group-hover:bg-[#080808] group-hover:border-white/10 shadow-2xl"
+          className="block relative h-full p-8 md:p-12 rounded-[2.5rem] bg-[var(--color6)] border border-white/5 overflow-hidden transition-all duration-700 group-hover:bg-[var(--color11)] group-hover:border-white/10 shadow-2xl"
         >
           {/* Spotlight Background Glow */}
           <motion.div
@@ -111,7 +111,7 @@ const EcosystemCard = ({ mod, index }: { mod: typeof modules[0], index: number }
             className="absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none rounded-[2.5rem]"
             style={{
               background: useMotionTemplate`radial-gradient(600px circle at ${spotlightX}px ${spotlightY}px, rgba(131, 255, 200, 0.4), transparent 40%)`,
-              WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+              WebkitMask: "linear-gradient(var(--color12) 0 0) content-box, linear-gradient(var(--color12) 0 0)",
               WebkitMaskComposite: "xor",
               maskComposite: "exclude",
               padding: "1px",
@@ -148,7 +148,7 @@ const EcosystemCard = ({ mod, index }: { mod: typeof modules[0], index: number }
 
 export const EcosystemSection = () => {
   return (
-    <section className="py-24 md:py-40 bg-[#020202] relative overflow-hidden">
+    <section className="py-24 md:py-40 bg-[var(--color10)] relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.03),transparent_70%)]" />
       
       <div className="max-w-7xl mx-auto px-4 relative z-10">

@@ -51,7 +51,7 @@ export const ExitIntentModal = () => {
       <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4">
         <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setIsOpen(false)} />
         
-        <div className="relative w-full max-w-lg bg-[#050505] border border-white/10 rounded-[32px] p-10 shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-500 text-center">
+        <div className="relative w-full max-w-lg bg-[var(--color6)] border border-white/10 rounded-[32px] p-10 shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-500 text-center">
            <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-red-500 via-amber-500 to-emerald-500" />
            
            <button onClick={() => setIsOpen(false)} className="absolute top-6 right-6 text-gray-500 hover:text-white transition-colors">

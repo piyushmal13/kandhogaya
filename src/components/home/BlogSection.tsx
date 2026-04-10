@@ -18,7 +18,7 @@ export const BlogSection = () => {
   }, []);
 
   return (
-    <section className="py-24 bg-[#020202] relative overflow-hidden border-t border-white/5">
+    <section className="py-24 bg-[var(--color10)] relative overflow-hidden border-t border-white/5">
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
@@ -45,7 +45,7 @@ export const BlogSection = () => {
               <article 
                 className="group cursor-pointer w-[320px] md:w-[450px]"
               >
-                <div className="relative aspect-[16/10] rounded-[32px] overflow-hidden mb-8 border border-white/5 bg-[#0a0a0a]">
+                <div className="relative aspect-[16/10] rounded-[32px] overflow-hidden mb-8 border border-white/5 bg-[var(--color7)]">
                   <img 
                     src={resolveBlogImage(blog, "thumb")} 
                     alt={blog.title}

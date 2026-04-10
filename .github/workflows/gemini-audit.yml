@@ -1,0 +1,36 @@
+name: Gemini UI/UX & Data Audit
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # needed for git ls‑files
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install deps
+        run: npm ci
+      - name: Run Gemini audit
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          NEXT_PUBLIC_GEMINI_MODEL: gemini-2.5-pro
+        run: npm run audit:gemini
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: gemini-audit-results
+          path: audit-output/
+      - name: Comment on PR
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            🤖 **Gemini audit complete** – see the attached artefacts.

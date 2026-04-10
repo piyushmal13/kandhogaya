@@ -90,7 +90,7 @@ export const AlgoGreatness = () => {
           className="relative max-w-6xl mx-auto mb-24 md:mb-40 px-4"
         >
           <div className="absolute -inset-4 bg-gradient-to-r from-[var(--brand)]/10 via-[var(--brand)]/10 to-[var(--brand)]/10 rounded-[3rem] blur-3xl opacity-20"></div>
-          <div className="relative bg-[#050505] border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl">
+          <div className="relative bg-[var(--color6)] border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl">
             <div className="aspect-video w-full bg-black relative group">
               <iframe 
                 src={videoUrl}
@@ -116,7 +116,7 @@ export const AlgoGreatness = () => {
           viewport={{ once: true }}
           className="relative max-w-6xl mx-auto mb-24 md:mb-40 px-4"
         >
-          <div className="bg-[#050505] border border-white/5 rounded-[2.5rem] aspect-video flex flex-col items-center justify-center gap-6">
+          <div className="bg-[var(--color6)] border border-white/5 rounded-[2.5rem] aspect-video flex flex-col items-center justify-center gap-6">
             <div className="w-20 h-20 rounded-3xl bg-[var(--brand)]/5 border border-[var(--brand)]/10 flex items-center justify-center">
               <Activity className="w-10 h-10 text-[var(--brand)] opacity-50" />
             </div>
@@ -170,7 +170,7 @@ export const AlgoGreatness = () => {
               initial={{ opacity: 0, y: 20 }} 
               whileInView={{ opacity: 1, y: 0 }} 
               viewport={{ once: true }}
-              className="min-w-[280px] md:min-w-0 bg-[#050505] border border-white/5 p-6 md:p-8 rounded-[2.5rem] relative hover:bg-white/[0.01] hover:border-white/10 transition-all duration-700 group shadow-2xl"
+              className="min-w-[280px] md:min-w-0 bg-[var(--color6)] border border-white/5 p-6 md:p-8 rounded-[2.5rem] relative hover:bg-white/[0.01] hover:border-white/10 transition-all duration-700 group shadow-2xl"
             >
               <div className="absolute -top-4 right-10 bg-[var(--brand)]/10 border border-[var(--brand)]/20 text-[var(--brand)] text-[10px] md:text-[11px] font-sans font-medium uppercase tracking-[0.2em] px-4 py-1.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-700 transform translate-y-2 group-hover:translate-y-0 backdrop-blur-xl">
                 Verified System

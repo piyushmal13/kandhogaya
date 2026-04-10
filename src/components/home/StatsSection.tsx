@@ -90,7 +90,7 @@ const StatItem = ({ stat, i }: { stat: typeof stats[0], i: number }) => {
 
 export const StatsSection = () => {
   return (
-    <section className="py-24 md:py-32 bg-[#020202] relative overflow-hidden" aria-label="IFX Trades platform statistics">
+    <section className="py-24 md:py-32 bg-[var(--color10)] relative overflow-hidden" aria-label="IFX Trades platform statistics">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(131,255,200,0.02),transparent_70%)] pointer-events-none" />
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 site-panel overflow-hidden border-white/5 shadow-[0_40px_100px_rgba(0,0,0,0.4)]">

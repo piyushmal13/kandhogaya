@@ -53,7 +53,7 @@ export const LiveAlgoTerminal = () => {
   const activeSignals = signals.slice(0, 5);
 
   return (
-    <section className="py-24 md:py-32 bg-[#020202] border-t border-white/5 relative overflow-hidden">
+    <section className="py-24 md:py-32 bg-[var(--color10)] border-t border-white/5 relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(16,185,129,0.03),transparent_50%)]" />
       
       <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -65,7 +65,7 @@ export const LiveAlgoTerminal = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="lg:col-span-1 bg-[#050505] border border-white/5 rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden flex flex-col group/terminal"
+            className="lg:col-span-1 bg-[var(--color6)] border border-white/5 rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden flex flex-col group/terminal"
           >
             {/* Header */}
             <div className="flex items-center justify-between mb-8 border-b border-white/5 pb-8">
@@ -74,7 +74,7 @@ export const LiveAlgoTerminal = () => {
                   <Shield className="w-6 h-6" />
                 </div>
                 <div>
-                  <div className="text-[10px] text-[#64748b] font-mono font-bold uppercase tracking-[0.3em]">Institutional Protocol</div>
+                  <div className="text-[10px] text-[var(--color5)] font-mono font-bold uppercase tracking-[0.3em]">Institutional Protocol</div>
                   <div className="text-white font-bold font-mono text-xl">Systematic Flow <span className="text-[10px] text-emerald-400 ml-2 tracking-widest uppercase opacity-80 animate-pulse">Live</span></div>
                 </div>
               </div>
@@ -90,7 +90,7 @@ export const LiveAlgoTerminal = () => {
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
-                    className="flex items-center justify-between p-5 bg-[#0a1422]/40 border border-white/5 rounded-[1.5rem] hover:border-emerald-500/20 transition-all group"
+                    className="flex items-center justify-between p-5 bg-[var(--color26)]/40 border border-white/5 rounded-[1.5rem] hover:border-emerald-500/20 transition-all group"
                   >
                     <div className="flex items-center gap-5">
                       <div className={`w-12 h-12 rounded-2xl flex items-center justify-center border transition-all duration-500 group-hover:scale-110 ${
@@ -109,7 +109,7 @@ export const LiveAlgoTerminal = () => {
                             {signal.direction}
                           </span>
                         </div>
-                        <div className="text-[10px] text-[#64748b] font-mono font-bold mt-1 uppercase tracking-widest">
+                        <div className="text-[10px] text-[var(--color5)] font-mono font-bold mt-1 uppercase tracking-widest">
                           ENTRY: <span className="text-white/80">{signal.entry}</span> 
                         </div>
                       </div>
@@ -120,7 +120,7 @@ export const LiveAlgoTerminal = () => {
 
               {/* Phase 3: Gated Control Overlay */}
               {!isElite && (
-                <div className="absolute inset-x-0 bottom-0 top-1/2 bg-gradient-to-t from-[#050505] via-[#050505]/80 to-transparent z-20 flex items-end justify-center pb-8 p-6">
+                <div className="absolute inset-x-0 bottom-0 top-1/2 bg-gradient-to-t from-[var(--color6)] via-[var(--color6)]/80 to-transparent z-20 flex items-end justify-center pb-8 p-6">
                    <button 
                     onClick={() => {
                       tracker.track("algo_click", { context: "terminal_locked" });
@@ -154,7 +154,7 @@ export const LiveAlgoTerminal = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="lg:col-span-2 bg-[#050505] border border-white/5 rounded-[2.5rem] p-10 md:p-14 shadow-2xl relative overflow-hidden"
+            className="lg:col-span-2 bg-[var(--color6)] border border-white/5 rounded-[2.5rem] p-10 md:p-14 shadow-2xl relative overflow-hidden"
           >
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-12 gap-6">
               <h3 className="text-white font-bold text-3xl flex items-center gap-4 tracking-[-0.03em]">
@@ -165,7 +165,7 @@ export const LiveAlgoTerminal = () => {
                 <div className="flex items-center gap-2 text-emerald-400">
                   <div className="w-2 h-2 rounded-full bg-emerald-500" /> <span>Alpha Flow</span>
                 </div>
-                <div className="flex items-center gap-2 text-[#64748b]">
+                <div className="flex items-center gap-2 text-[var(--color5)]">
                   <div className="w-2 h-2 rounded-full bg-rose-500/40" /> <span>Retraction</span>
                 </div>
               </div>
@@ -195,19 +195,19 @@ export const LiveAlgoTerminal = () => {
 
             <div className="mt-14 pt-12 border-t border-white/5 grid grid-cols-2 sm:grid-cols-4 gap-10">
               <div className="group">
-                <div className="text-[10px] font-mono font-bold text-[#64748b] uppercase tracking-[0.3em] mb-2">Total Alpha</div>
+                <div className="text-[10px] font-mono font-bold text-[var(--color5)] uppercase tracking-[0.3em] mb-2">Total Alpha</div>
                 <div className="text-emerald-400 font-bold text-3xl md:text-4xl tracking-tighter">+1,240%</div>
               </div>
               <div className="group">
-                <div className="text-[10px] font-mono font-bold text-[#64748b] uppercase tracking-[0.3em] mb-2">Portfolio MDD</div>
+                <div className="text-[10px] font-mono font-bold text-[var(--color5)] uppercase tracking-[0.3em] mb-2">Portfolio MDD</div>
                 <div className="text-rose-500/80 font-bold text-3xl md:text-4xl tracking-tighter">-8.2%</div>
               </div>
               <div className="group">
-                <div className="text-[10px] font-mono font-bold text-[#64748b] uppercase tracking-[0.3em] mb-2">Win Velocity</div>
+                <div className="text-[10px] font-mono font-bold text-[var(--color5)] uppercase tracking-[0.3em] mb-2">Win Velocity</div>
                 <div className="text-white font-bold text-3xl md:text-4xl tracking-tighter">{positiveCount}/36M</div>
               </div>
               <div className="group">
-                <div className="text-[10px] font-mono font-bold text-[#64748b] uppercase tracking-[0.3em] mb-2">Peak Capture</div>
+                <div className="text-[10px] font-mono font-bold text-[var(--color5)] uppercase tracking-[0.3em] mb-2">Peak Capture</div>
                 <div className="text-emerald-400/60 font-bold text-3xl md:text-4xl tracking-tighter">
                   +{bestMonth.toFixed(1)}%
                 </div>

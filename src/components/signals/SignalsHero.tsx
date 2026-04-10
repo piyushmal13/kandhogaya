@@ -15,7 +15,7 @@ export const SignalsHero = () => {
     <section
       ref={ref}
       className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-32 pb-24"
-      style={{ background: "linear-gradient(180deg, var(--bg-base), #0a0a0a)" }}
+      style={{ background: "linear-gradient(180deg, var(--bg-base), var(--color7))" }}
     >
       <motion.div
         style={{ y, opacity }}

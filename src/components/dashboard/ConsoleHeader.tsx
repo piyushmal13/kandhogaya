@@ -28,7 +28,7 @@ export const ConsoleHeader: React.FC<ConsoleHeaderProps> = ({
 
   if (sessionReady) {
     if (isHealthy) {
-      statusColor = "bg-emerald-500 shadow-[0_0_10px_#10b981]";
+      statusColor = "bg-emerald-500 shadow-[0_0_10px_var(--color8)]";
       statusText = "SYSTEMS OPERATIONAL • LIVE CONNECTION";
     } else {
       statusColor = "bg-yellow-500 animate-pulse";

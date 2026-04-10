@@ -227,10 +227,10 @@ export const CEOPanel = () => {
           </div>
           <div className="space-y-6">
             {[
-              { id: "sea",  region: "South & East Asia",     color: "#10b981", perf: 78 },
-              { id: "me",   region: "Middle East & Gulf",    color: "#06b6d4", perf: 65 },
-              { id: "eea",  region: "European Economic Area",color: "#8b5cf6", perf: 52 },
-              { id: "us",   region: "North America",         color: "#f59e0b", perf: 40 },
+              { id: "sea",  region: "South & East Asia",     color: "var(--color8)", perf: 78 },
+              { id: "me",   region: "Middle East & Gulf",    color: "var(--color39)", perf: 65 },
+              { id: "eea",  region: "European Economic Area",color: "var(--color41)", perf: 52 },
+              { id: "us",   region: "North America",         color: "var(--color38)", perf: 40 },
             ].map(r => (
               <div key={r.id}>
                 <div className="flex items-center justify-between mb-2">

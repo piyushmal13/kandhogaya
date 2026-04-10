@@ -41,7 +41,7 @@ export const WebinarPromoInline = () => {
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className="bg-gradient-to-br from-[#0a0a0a] to-[#050505] border border-emerald-500/20 rounded-2xl p-6 md:p-8 relative overflow-hidden group"
+      className="bg-gradient-to-br from-[var(--color7)] to-[var(--color6)] border border-emerald-500/20 rounded-2xl p-6 md:p-8 relative overflow-hidden group"
     >
       <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
         <Video className="w-24 h-24 text-emerald-500" />

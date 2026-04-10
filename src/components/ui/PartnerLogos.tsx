@@ -134,7 +134,7 @@ export const PartnerLogos = () => {
   return (
     <section
       aria-label="IFX Trades partner platforms and student success stories"
-      className="py-20 md:py-32 bg-[#020202] border-t border-white/5 relative overflow-hidden"
+      className="py-20 md:py-32 bg-[var(--color10)] border-t border-white/5 relative overflow-hidden"
     >
       {/* Ambient glow */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(16,185,129,0.04),transparent_60%)] pointer-events-none" />

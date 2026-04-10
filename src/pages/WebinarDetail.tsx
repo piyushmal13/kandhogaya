@@ -90,7 +90,7 @@ export const WebinarDetail = () => {
   const isUpcoming = webinar.status === "upcoming";
 
   return (
-    <div className="pt-20 bg-[#020202] min-h-screen">
+    <div className="pt-20 bg-[var(--color10)] min-h-screen">
       <PageMeta
         title={webinar.title}
         description={webinar.description || "IFXTrades webinar details and registration."}
@@ -99,7 +99,7 @@ export const WebinarDetail = () => {
         keywords={["trading webinar", webinar.speaker || "IFXTrades", webinar.status || "webinar"]}
       />
       
-      <div className="bg-[#050505] border-b border-white/5 py-6">
+      <div className="bg-[var(--color6)] border-b border-white/5 py-6">
         <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <Link to="/webinars" className="p-2 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 transition-colors">
@@ -160,7 +160,7 @@ export const WebinarDetail = () => {
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-12 p-8 md:p-12 bg-[#0a0a0a] border border-emerald-500/20 rounded-3xl relative overflow-hidden shadow-[0_0_50px_rgba(16,185,129,0.05)]"
+            className="mb-12 p-8 md:p-12 bg-[var(--color7)] border border-emerald-500/20 rounded-3xl relative overflow-hidden shadow-[0_0_50px_rgba(16,185,129,0.05)]"
           >
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.05),transparent_70%)]" />
             <div className="relative z-10 flex flex-col items-center text-center">
@@ -202,7 +202,7 @@ export const WebinarDetail = () => {
               {(() => {
                 if (isRecorded) {
                   return (
-                    <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-[#050505] overflow-hidden">
+                    <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-[var(--color6)] overflow-hidden">
                       <div className="absolute inset-0">
                         <motion.div 
                           animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
@@ -382,7 +382,7 @@ export const WebinarDetail = () => {
           </div>
 
           <div className="lg:col-span-4">
-            <div className="bg-[#0a0a0a] border border-white/10 rounded-2xl flex flex-col h-[600px] shadow-xl">
+            <div className="bg-[var(--color7)] border border-white/10 rounded-2xl flex flex-col h-[600px] shadow-xl">
               <div className="p-4 border-b border-white/5 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <MessageSquare className="w-4 h-4 text-emerald-500" />

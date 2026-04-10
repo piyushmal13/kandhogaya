@@ -17,7 +17,7 @@ export const LiveSignalsFeed = () => {
   }, [signals.length]);
 
   return (
-    <section className="py-12 border-b border-white/5 bg-[#050816]">
+    <section className="py-12 border-b border-white/5 bg-[var(--color27)]">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between mb-10">
           <div className="flex items-center gap-4">
@@ -28,7 +28,7 @@ export const LiveSignalsFeed = () => {
           </div>
           <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10">
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-            <span className="text-[10px] font-bold uppercase tracking-widest text-[#94a3b8]">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--color28)]">
               Institutional Execution Active
             </span>
           </div>
@@ -48,7 +48,7 @@ export const LiveSignalsFeed = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     whileHover={{ y: -5, scale: 1.02 }}
-                    className="rounded-[2rem] border border-white/5 p-8 hover:border-emerald-500/30 hover:shadow-[0_0_60px_rgba(16,185,129,0.1)] transition-all duration-500 group relative bg-[#0a1422]/60 backdrop-blur-2xl"
+                    className="rounded-[2rem] border border-white/5 p-8 hover:border-emerald-500/30 hover:shadow-[0_0_60px_rgba(16,185,129,0.1)] transition-all duration-500 group relative bg-[var(--color26)]/60 backdrop-blur-2xl"
                   >
                     <div className="flex justify-between items-start mb-6">
                       <div>
@@ -70,7 +70,7 @@ export const LiveSignalsFeed = () => {
                           className={`px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-widest ${
                             signal.status === "active"
                               ? "bg-emerald-500/10 text-emerald-400"
-                              : "bg-white/5 text-[#94a3b8]"
+                              : "bg-white/5 text-[var(--color28)]"
                           }`}
                         >
                           {signal.status}
@@ -80,7 +80,7 @@ export const LiveSignalsFeed = () => {
 
                     <div className="grid grid-cols-2 gap-8 mb-8">
                       <div className="space-y-1">
-                        <div className="text-[10px] uppercase font-bold tracking-widest text-[#64748b]">
+                        <div className="text-[10px] uppercase font-bold tracking-widest text-[var(--color5)]">
                           Target Output
                         </div>
                         <div className="text-xl font-bold text-white font-mono">
@@ -88,7 +88,7 @@ export const LiveSignalsFeed = () => {
                         </div>
                       </div>
                       <div className="space-y-1">
-                        <div className="text-[10px] uppercase font-bold tracking-widest text-[#64748b]">
+                        <div className="text-[10px] uppercase font-bold tracking-widest text-[var(--color5)]">
                           Risk Parameter
                         </div>
                         <div className="text-xl font-bold text-white font-mono text-rose-400/80">
@@ -98,7 +98,7 @@ export const LiveSignalsFeed = () => {
                     </div>
 
                     <div className="pt-6 border-t border-white/5 flex justify-between items-center">
-                      <div className="text-[11px] font-mono text-[#64748b] flex items-center gap-2">
+                      <div className="text-[11px] font-mono text-[var(--color5)] flex items-center gap-2">
                         <time dateTime={signal.created_at}>
                           {new Date(signal.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </time>

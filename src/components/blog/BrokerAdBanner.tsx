@@ -24,7 +24,7 @@ export const BrokerAdBanner: React.FC<BrokerAdProps> = ({
       viewport={{ once: true }}
       className="my-12 p-[1px] rounded-3xl bg-gradient-to-br from-emerald-500/30 via-white/5 to-cyan-500/30 border border-white/10 group overflow-hidden"
     >
-      <div className="bg-[#0a0a0a] rounded-[23px] p-6 md:p-8 relative overflow-hidden">
+      <div className="bg-[var(--color7)] rounded-[23px] p-6 md:p-8 relative overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute top-0 right-0 p-10 opacity-[0.02] pointer-events-none group-hover:scale-110 transition-transform duration-[3s]">
           <Shield className="w-56 h-56 text-emerald-500" />

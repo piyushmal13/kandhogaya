@@ -13,7 +13,11 @@
     "type-check": "tsc --noEmit",
     "alt-check": "node scripts/altCheck.js",
     "sitemap": "node scripts/gen-sitemap.js",
-    "test": "npm run lint && npm run alt-check && vitest run"
+    "test": "npm run lint && npm run alt-check && vitest run",
+    "audit:gemini": "tsx scripts/gemini-audit.ts",
+    "generate:node": "node scripts/generate-node.js",
+    "lint:tokens": "node scripts/check-tokens.js",
+    "extract:tokens": "node scripts/extract-tokens.js"
   },
   "dependencies": {
     "@google/genai": "^1.29.0",
@@ -60,10 +64,12 @@
     "@types/compression": "^1.8.1",
     "@types/crypto-js": "^4.2.2",
     "@types/express": "^4.17.21",
+    "@types/jscodeshift": "^17.3.0",
     "@types/node": "^22.14.0",
     "@vercel/node": "^5.6.11",
     "autoprefixer": "^10.4.21",
     "cross-env": "^10.1.0",
+    "jscodeshift": "^17.3.0",
     "jsdom": "^28.1.0",
     "tailwindcss": "^4.1.14",
     "tsx": "^4.21.0",

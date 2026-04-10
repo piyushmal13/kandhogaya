@@ -161,7 +161,7 @@ export const Navbar = () => {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="fixed inset-y-0 right-0 z-[70] w-full max-w-[320px] bg-[#020617]/95 border-l border-white/10 shadow-[-20px_0_60px_rgba(0,0,0,0.5)] backdrop-blur-2xl md:hidden overflow-y-auto"
+              className="fixed inset-y-0 right-0 z-[70] w-full max-w-[320px] bg-[var(--color30)]/95 border-l border-white/10 shadow-[-20px_0_60px_rgba(0,0,0,0.5)] backdrop-blur-2xl md:hidden overflow-y-auto"
             >
               <div className="p-6 flex flex-col min-h-full">
                 <div className="flex items-center justify-between mb-8">

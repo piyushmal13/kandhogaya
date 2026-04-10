@@ -20,7 +20,7 @@ export const TradersTravel = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#020202] pt-24 pb-32 relative overflow-hidden">
+    <div className="min-h-screen bg-[var(--color10)] pt-24 pb-32 relative overflow-hidden">
       <PageMeta 
         title="Traders Travel | Exclusive Forex & Algo Trader Retreats 2026"
         description="Join the top 1% community on exclusive trader retreats in Bali, Dubai, and Thailand. Elite networking & institutional mastermind sessions for professional traders."
@@ -89,11 +89,11 @@ export const TradersTravel = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 * idx }}
-                className="group relative rounded-3xl overflow-hidden border border-white/10 bg-[#0a0a0a] hover:border-[var(--brand)]/30 transition-all duration-500 hover:shadow-[0_0_40px_rgba(16,185,129,0.1)]"
+                className="group relative rounded-3xl overflow-hidden border border-white/10 bg-[var(--color7)] hover:border-[var(--brand)]/30 transition-all duration-500 hover:shadow-[0_0_40px_rgba(16,185,129,0.1)]"
               >
                 {/* Trip Image */}
                 <div className="relative h-64 overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-black/20 to-transparent z-10" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--color7)] via-black/20 to-transparent z-10" />
                   <img 
                     src={trip.image_url} 
                     alt={trip.destination}

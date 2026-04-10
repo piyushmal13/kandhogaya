@@ -179,7 +179,7 @@ export const FulfillmentManager = () => {
           </div>
         ) : (
           receipts.map((receipt) => (
-            <div key={receipt.id} className="group bg-[#0A0A0B] border border-white/10 p-10 rounded-[48px] shadow-2xl relative overflow-hidden transition-all hover:border-emerald-500/30">
+            <div key={receipt.id} className="group bg-[var(--raised)] border border-white/10 p-10 rounded-[48px] shadow-2xl relative overflow-hidden transition-all hover:border-emerald-500/30">
               <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none group-hover:opacity-10 transition-opacity">
                 <DollarSign className="w-32 h-32 text-white" />
               </div>

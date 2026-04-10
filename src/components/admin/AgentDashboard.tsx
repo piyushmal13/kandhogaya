@@ -50,7 +50,7 @@ export const AgentDashboard = () => {
     return true;
   });
 
-  if (loading) return <div className="h-screen flex items-center justify-center font-mono text-[10px] uppercase tracking-widest text-[#64748b] animate-pulse">Initializing Agent Interface...</div>;
+  if (loading) return <div className="h-screen flex items-center justify-center font-mono text-[10px] uppercase tracking-widest text-[var(--color5)] animate-pulse">Initializing Agent Interface...</div>;
 
   return (
     <div className="space-y-8 p-12 bg-black min-h-screen">
@@ -91,7 +91,7 @@ export const AgentDashboard = () => {
 
               {/* --- Stage Metrics --- */}
               <div className="flex flex-col min-w-[120px]">
-                <span className="text-[9px] font-black text-[#64748b] uppercase tracking-widest mb-2">Stage</span>
+                <span className="text-[9px] font-black text-[var(--color5)] uppercase tracking-widest mb-2">Stage</span>
                 <span className={cn(
                   "px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest w-fit",
                   lead.stage === 'CONVERTED' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-white/5 text-gray-400'
@@ -102,7 +102,7 @@ export const AgentDashboard = () => {
 
               {/* --- Conversion Probability --- */}
               <div className="flex flex-col min-w-[150px]">
-                <span className="text-[9px] font-black text-[#64748b] uppercase tracking-widest mb-2">Probability</span>
+                <span className="text-[9px] font-black text-[var(--color5)] uppercase tracking-widest mb-2">Probability</span>
                 <div className="flex items-center gap-3">
                   <span className="text-white font-black text-lg">{lead.conversion_probability}%</span>
                   <div className="w-16 h-1.5 bg-white/5 rounded-full overflow-hidden">
@@ -123,7 +123,7 @@ export const AgentDashboard = () => {
             {/* --- Assignment & Control --- */}
             <div className="flex items-center gap-6">
               <div className="flex flex-col text-right">
-                <span className="text-[9px] font-black text-[#64748b] uppercase tracking-widest mb-2">Assigned Agent</span>
+                <span className="text-[9px] font-black text-[var(--color5)] uppercase tracking-widest mb-2">Assigned Agent</span>
                 <select 
                   className="bg-white/5 border border-white/10 text-white rounded-xl px-4 py-2 text-[10px] font-bold uppercase tracking-widest focus:ring-1 focus:ring-emerald-500 outline-none"
                   value={lead.assigned_to || ''}

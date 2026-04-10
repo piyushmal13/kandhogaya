@@ -12,6 +12,7 @@ import {
   Activity
 } from "lucide-react";
 import { supabase } from "../../lib/supabase";
+import { Button } from "../ui/Button";
 import { tracker } from "@/core/tracker";
 import { getCache, setCache } from "@/utils/cache";
 
@@ -75,16 +76,16 @@ export const HeroSection = () => {
     <section 
       ref={containerRef} 
       aria-label="IFX Trades — Institutional Forex Education Platform Hero"
-      className="relative min-h-[100vh] pt-24 sm:pt-32 pb-20 flex flex-col items-center justify-center overflow-hidden bg-[#10131a]"
+      className="relative min-h-[100vh] pt-24 sm:pt-32 pb-20 flex flex-col items-center justify-center overflow-hidden bg-[var(--color13)]"
     >
       {/* === SOVEREIGN TERMINAL AMBIENT BACKGROUND === */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSA0MCAwIEwgMCAwIDAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-60" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,#10131a_80%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,var(--color13)_80%)]" />
         
         {/* Strategic Glows — primary cyan & secondary gold */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[#00E5FF]/5 blur-[120px] rounded-[100%] mix-blend-screen" />
-        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-[#E9C349]/5 blur-[140px] rounded-full mix-blend-screen" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[var(--color14)]/5 blur-[120px] rounded-[100%] mix-blend-screen" />
+        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-[var(--color15)]/5 blur-[140px] rounded-full mix-blend-screen" />
       </div>
 
       <div className="relative z-10 w-full max-w-[1400px] px-6 text-center">
@@ -96,19 +97,19 @@ export const HeroSection = () => {
           transition={{ duration: 1, ease: [0.23, 1, 0.32, 1] }}
           className="mb-12 flex flex-col sm:flex-row justify-center items-center gap-4"
         >
-          <div className="group inline-flex items-center gap-3 px-6 py-2.5 bg-[#1d2026] rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.5)] transition-all duration-500 hover:bg-[#272a31]">
+          <div className="group inline-flex items-center gap-3 px-6 py-2.5 bg-[var(--color16)] rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.5)] transition-all duration-500 hover:bg-[var(--color17)]">
             <div className="relative">
-              <div className="w-2 h-2 bg-[#00E5FF] rounded-full animate-ping absolute inset-0" />
-              <div className="w-2.5 h-2.5 bg-[#00E5FF] rounded-full relative z-10 shadow-[0_0_15px_rgba(0,229,255,0.8)]" />
+              <div className="w-2 h-2 bg-[var(--color14)] rounded-full animate-ping absolute inset-0" />
+              <div className="w-2.5 h-2.5 bg-[var(--color14)] rounded-full relative z-10 shadow-[0_0_15px_rgba(0,229,255,0.8)]" />
             </div>
-            <span className="text-[10px] font-black text-[#bac9cc] group-hover:text-white uppercase tracking-[0.4em] transition-colors">
-              Sovereign Intelligence Node <span className="text-[#00E5FF] italic ml-1">Active</span>
+            <span className="text-[10px] font-black text-[var(--color18)] group-hover:text-white uppercase tracking-[0.4em] transition-colors">
+              Sovereign Intelligence Node <span className="text-[var(--color14)] italic ml-1">Active</span>
             </span>
           </div>
           
-          <div className="hidden sm:flex items-center gap-2 px-6 py-2.5 bg-[#191c22]/80 backdrop-blur-md rounded-2xl">
-            <Activity className="w-3 h-3 text-[#E9C349]/80" />
-            <span className="text-[9px] font-black text-[#849396] uppercase tracking-[0.25em]">
+          <div className="hidden sm:flex items-center gap-2 px-6 py-2.5 bg-[var(--color19)]/80 backdrop-blur-md rounded-2xl">
+            <Activity className="w-3 h-3 text-[var(--color15)]/80" />
+            <span className="text-[9px] font-black text-[var(--color20)] uppercase tracking-[0.25em]">
               Terminal v4.0.0 · Core Sync Ready
             </span>
           </div>
@@ -125,11 +126,11 @@ export const HeroSection = () => {
             <span className="text-5xl sm:text-8xl md:text-[130px] block text-white drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
               Institutional
             </span>
-            <span className="text-4xl sm:text-7xl md:text-[100px] block text-transparent bg-clip-text bg-gradient-to-r from-[#c3f5ff] to-[#00E5FF] mt-2 filter drop-shadow-[0_10px_20px_rgba(0,229,255,0.15)]">
+            <span className="text-4xl sm:text-7xl md:text-[100px] block text-transparent bg-clip-text bg-gradient-to-r from-[var(--color21)] to-[var(--color14)] mt-2 filter drop-shadow-[0_10px_20px_rgba(0,229,255,0.15)]">
               Elite Academy
             </span>
           </h1>
-          <div className="absolute -top-10 left-1/2 -translate-x-1/2 text-[9px] font-black text-[#00E5FF]/20 uppercase tracking-[1em] pointer-events-none select-none">
+          <div className="absolute -top-10 left-1/2 -translate-x-1/2 text-[9px] font-black text-[var(--color14)]/20 uppercase tracking-[1em] pointer-events-none select-none">
              TRADED BY SOVEREIGN DESKS
           </div>
         </motion.div>
@@ -148,10 +149,10 @@ export const HeroSection = () => {
               animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
               exit={{ opacity: 0, filter: "blur(4px)", y: -10 }}
               transition={{ duration: 0.6, ease: "circOut" }}
-              className="inline-flex items-center gap-4 px-8 py-4 bg-[#32353c]/40 backdrop-blur-[16px] rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.4)]"
+              className="inline-flex items-center gap-4 px-8 py-4 bg-[var(--color22)]/40 backdrop-blur-[16px] rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.4)]"
             >
-              <Zap className="w-5 h-5 text-[#E9C349]" />
-              <span className="text-sm sm:text-lg font-bold text-[#e1e2eb] tracking-tight">
+              <Zap className="w-5 h-5 text-[var(--color15)]" />
+              <span className="text-sm sm:text-lg font-bold text-[var(--color23)] tracking-tight">
                 {FEATURES[activeFeature]}
               </span>
             </motion.div>
@@ -190,7 +191,7 @@ export const HeroSection = () => {
           >
             <div className="flex-1 relative group/input">
               <div className="absolute left-6 top-1/2 -translate-y-1/2">
-                <Globe className="w-5 h-5 text-[#849396]" />
+                <Globe className="w-5 h-5 text-[var(--color20)]" />
               </div>
               <input 
                 name="email"
@@ -198,35 +199,34 @@ export const HeroSection = () => {
                 placeholder="Secure Access Node (Email)"
                 required
                 disabled={formState !== 'idle'}
-                className="w-full bg-[#191c22] border-b-2 border-[#3b494c] px-14 py-5 text-base font-medium text-[#e1e2eb] outline-none placeholder:text-[#849396] transition-colors focus:border-[#00e5ff] disabled:opacity-50"
+                className="w-full bg-[var(--color19)] border-b-2 border-[var(--color24)] px-14 py-5 text-base font-medium text-[var(--color23)] outline-none placeholder:text-[var(--color20)] transition-colors focus:border-[var(--color14)] disabled:opacity-50"
               />
             </div>
             
-            <button 
+            <Button
               type="submit"
-              disabled={formState !== 'idle'}
-              className="px-10 py-5 bg-gradient-to-br from-[#c3f5ff] to-[#00e5ff] text-[#00363d] font-black uppercase tracking-widest rounded-md hover:shadow-[0_0_30px_rgba(0,229,255,0.3)] transition-all active:scale-95 text-sm flex justify-center items-center gap-3 min-w-[200px]"
+              variant="sovereign"
+              size="sovereign-hero"
+              glowEffect={true}
+              isLoading={formState === 'loading'}
+              disabled={formState !== 'idle' && formState !== 'loading'}
+              trackingEvent="deploy_terminal"
+              leftIcon={formState === 'success' ? <CheckCircle2 className="w-5 h-5" /> : undefined}
+              rightIcon={formState === 'idle' ? <ArrowRight className="w-5 h-5" /> : undefined}
             >
-              {formState === 'loading' && <div className="w-4 h-4 border-2 border-[#00363d] border-t-transparent rounded-full animate-spin" />}
-              {formState === 'success' && <><CheckCircle2 className="w-4 h-4" /> AUTHORIZED</>}
-              {formState === 'idle' && (
-                <>
-                  Deploy Terminal
-                  <ArrowRight className="w-4 h-4" />
-                </>
-              )}
-            </button>
+              {formState === 'success' ? 'AUTHORIZED' : 'Deploy Terminal'}
+            </Button>
           </form>
 
-          <div className="mt-6 flex flex-wrap justify-center gap-4 sm:gap-8 text-[9px] text-[#bac9cc] font-black uppercase tracking-[0.2em]">
+          <div className="mt-6 flex flex-wrap justify-center gap-4 sm:gap-8 text-[9px] text-[var(--color18)] font-black uppercase tracking-[0.2em]">
              <div className="flex items-center gap-2">
-               <span className="w-1.5 h-1.5 rounded-full bg-[#E9C349]" /> NO BROKER LOCKS
+               <span className="w-1.5 h-1.5 rounded-full bg-[var(--color15)]" /> NO BROKER LOCKS
              </div>
              <div className="flex items-center gap-2">
-               <span className="w-1.5 h-1.5 rounded-full bg-[#E9C349]" /> INSTITUTIONAL CORE
+               <span className="w-1.5 h-1.5 rounded-full bg-[var(--color15)]" /> INSTITUTIONAL CORE
              </div>
              <div className="flex items-center gap-2">
-               <span className="w-1.5 h-1.5 rounded-full bg-[#00E5FF]" /> {stats.traders} SYNCED
+               <span className="w-1.5 h-1.5 rounded-full bg-[var(--color14)]" /> {stats.traders} SYNCED
              </div>
           </div>
         </motion.div>
@@ -241,15 +241,15 @@ export const HeroSection = () => {
           {TRUST_SIGNALS.map((signal, i) => (
             <div
               key={signal.label}
-              className="group flex flex-col items-center gap-4 p-8 bg-[#1d2026] rounded-xl hover:bg-[#272a31] transition-colors"
+              className="group flex flex-col items-center gap-4 p-8 bg-[var(--color16)] rounded-xl hover:bg-[var(--color17)] transition-colors"
             >
-              <div className="w-12 h-12 bg-[#0b0e14] flex items-center justify-center rounded-lg relative overflow-hidden">
-                <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#E9C349]" />
-                <signal.icon className="w-5 h-5 text-[#e1e2eb] group-hover:text-[#00e5ff] transition-colors" />
+              <div className="w-12 h-12 bg-[var(--color25)] flex items-center justify-center rounded-lg relative overflow-hidden">
+                <div className="absolute left-0 top-0 bottom-0 w-1 bg-[var(--color15)]" />
+                <signal.icon className="w-5 h-5 text-[var(--color23)] group-hover:text-[var(--color14)] transition-colors" />
               </div>
               <div className="text-center">
-                <div className="text-sm font-bold text-[#e1e2eb] mb-1">{signal.label}</div>
-                <div className="text-[10px] uppercase tracking-wider text-[#849396]">{signal.sub}</div>
+                <div className="text-sm font-bold text-[var(--color23)] mb-1">{signal.label}</div>
+                <div className="text-[10px] uppercase tracking-wider text-[var(--color20)]">{signal.sub}</div>
               </div>
             </div>
           ))}

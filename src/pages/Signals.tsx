@@ -81,8 +81,8 @@ const SignalPreview = () => (
           style={{ perspective: "1000px" }}
         >
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-36 h-7 bg-zinc-800 rounded-b-2xl z-20" aria-hidden="true" />
-          <div className="bg-[#0b141a] h-[640px] w-full flex flex-col">
-            <div className="bg-[#202c33] p-4 pt-12 flex items-center gap-3 shadow-md z-10">
+          <div className="bg-[var(--color54)] h-[640px] w-full flex flex-col">
+            <div className="bg-[var(--color55)] p-4 pt-12 flex items-center gap-3 shadow-md z-10">
               <div className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white font-bold" aria-hidden="true">
                 IFX
               </div>
@@ -94,7 +94,7 @@ const SignalPreview = () => (
 
             <div className="flex-1 p-4 space-y-4 overflow-y-auto">
               <div className="flex justify-center">
-                <span className="bg-[#1f2c34] text-[#8696a0] text-[10px] px-3 py-1.5 rounded-lg font-medium">
+                <span className="bg-[var(--color56)] text-[var(--color57)] text-[10px] px-3 py-1.5 rounded-lg font-medium">
                   TODAY
                 </span>
               </div>
@@ -103,11 +103,11 @@ const SignalPreview = () => (
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="bg-[#202c33] rounded-lg rounded-tl-none p-3 max-w-[85%] shadow-sm"
+                className="bg-[var(--color55)] rounded-lg rounded-tl-none p-3 max-w-[85%] shadow-sm"
                 role="article"
                 aria-label="Trading signal"
               >
-                <div className="text-[#e9edef] text-sm font-mono leading-relaxed whitespace-pre-line">
+                <div className="text-[var(--color58)] text-sm font-mono leading-relaxed whitespace-pre-line">
                   <span className="font-bold text-emerald-400">⚡ NEW SIGNAL ALERT{"\n\n"}</span>
                   <span className="font-bold">XAUUSD (GOLD) BUY{"\n"}</span>
                   Entry: 2400.50 - 2402.00{"\n\n"}
@@ -117,7 +117,7 @@ const SignalPreview = () => (
                     Risk: 1-2% per trade. Wait for 15m candle close.
                   </span>
                 </div>
-                <div className="text-[10px] text-[#8696a0] text-right mt-1 flex items-center justify-end gap-1">
+                <div className="text-[10px] text-[var(--color57)] text-right mt-1 flex items-center justify-end gap-1">
                   10:42 AM <Check className="w-3 h-3 text-emerald-400" aria-hidden="true" />
                 </div>
               </motion.div>
@@ -126,13 +126,13 @@ const SignalPreview = () => (
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.8 }}
-                className="bg-[#202c33] rounded-lg rounded-tl-none p-3 max-w-[85%] shadow-sm"
+                className="bg-[var(--color55)] rounded-lg rounded-tl-none p-3 max-w-[85%] shadow-sm"
               >
-                <div className="text-[#e9edef] text-sm font-mono leading-relaxed">
+                <div className="text-[var(--color58)] text-sm font-mono leading-relaxed">
                   <span className="font-bold text-emerald-400">✅ TP 1 HIT (+45 Pips) </span>{"\n"}
                   Move SL to Breakeven. Secure partial profits.
                 </div>
-                <div className="text-[10px] text-[#8696a0] text-right mt-1 flex items-center justify-end gap-1">
+                <div className="text-[10px] text-[var(--color57)] text-right mt-1 flex items-center justify-end gap-1">
                   11:15 AM <Check className="w-3 h-3 text-emerald-400" aria-hidden="true" />
                 </div>
               </motion.div>
@@ -457,7 +457,7 @@ const RetentionModal = ({ onAccept, onClose }: { onAccept: () => void; onClose: 
     >
       <div
         className="absolute top-0 left-0 w-full h-1"
-        style={{ background: "linear-gradient(to right, var(--accent), #74e0ff)" }}
+        style={{ background: "linear-gradient(to right, var(--accent), var(--color46))" }}
         aria-hidden="true"
       />
 
@@ -569,7 +569,7 @@ const PricingSection = () => {
           <p style={{ color: "var(--text-muted)" }}>Choose the plan that fits your trading goals.</p>
           <div
             className="inline-block mt-4 px-4 py-1 rounded-full text-xs font-bold animate-pulse"
-            style={{ background: "rgba(248,113,113,0.1)", borderColor: "rgba(248,113,113,0.2)", color: "#fca5a5", border: "1px solid" }}
+            style={{ background: "rgba(248,113,113,0.1)", borderColor: "rgba(248,113,113,0.2)", color: "var(--color59)", border: "1px solid" }}
             role="alert"
             aria-live="polite"
           >

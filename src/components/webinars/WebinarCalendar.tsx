@@ -12,7 +12,7 @@ export const WebinarCalendar = ({ webinars }: WebinarCalendarProps) => {
   const sortedWebinars = [...webinars].sort((a, b) => new Date(a.date_time).getTime() - new Date(b.date_time).getTime());
 
   return (
-    <div className="bg-[#0a0a0a] border border-white/10 rounded-2xl p-6">
+    <div className="bg-[var(--color7)] border border-white/10 rounded-2xl p-6">
       <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
         <Calendar className="w-5 h-5 text-emerald-500" />
         Upcoming Schedule

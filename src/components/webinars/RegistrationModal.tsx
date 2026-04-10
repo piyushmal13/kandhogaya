@@ -44,7 +44,7 @@ export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationM
           initial={{ scale: 0.95, y: 20 }}
           animate={{ scale: 1, y: 0 }}
           exit={{ scale: 0.95, y: 20 }}
-          className="bg-[#0a0a0a] border border-white/10 rounded-2xl w-full max-w-md p-8 text-center shadow-2xl"
+          className="bg-[var(--color7)] border border-white/10 rounded-2xl w-full max-w-md p-8 text-center shadow-2xl"
         >
           <div className="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
             <Calendar className="w-8 h-8 text-emerald-500" />
@@ -161,7 +161,7 @@ export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationM
         initial={{ scale: 0.95, y: 20 }}
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.95, y: 20 }}
-        className="bg-[#0a0a0a] border border-white/10 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl relative"
+        className="bg-[var(--color7)] border border-white/10 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl relative"
       >
         <button 
           onClick={onClose}
@@ -379,7 +379,7 @@ export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationM
               <a 
                 href={BRANDING.whatsappUrl}
                 target="_blank" rel="noopener noreferrer"
-                className="flex-1 py-4 bg-[#25D366] text-white font-bold rounded-2xl hover:bg-[#128C7E] transition-all flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(37,211,102,0.3)]"
+                className="flex-1 py-4 bg-[var(--color31)] text-white font-bold rounded-2xl hover:bg-[var(--color32)] transition-all flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(37,211,102,0.3)]"
               >
                 Join WhatsApp
                 <ArrowRight className="w-5 h-5" />

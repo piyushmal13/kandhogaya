@@ -66,7 +66,7 @@ export const WebinarPromo = () => {
   const isFree = !webinar.is_paid;
 
   return (
-    <section className="py-8 md:py-48 bg-[#020202] relative overflow-hidden border-t border-white/5">
+    <section className="py-8 md:py-48 bg-[var(--color10)] relative overflow-hidden border-t border-white/5">
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-12 items-center">
           <div className="lg:col-span-7 text-center lg:text-left">

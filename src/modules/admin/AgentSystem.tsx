@@ -145,7 +145,7 @@ export const AgentSystem = () => {
          </div>
 
          {/* 3. Settlement Audit queue */}
-         <div className="bg-[#0A0A0B] border border-white/5 rounded-[48px] p-10 flex flex-col">
+         <div className="bg-[var(--raised)] border border-white/5 rounded-[48px] p-10 flex flex-col">
             <h3 className="text-xs font-black text-gray-400 uppercase tracking-widest italic mb-8 flex items-center gap-3">
                <Wallet className="w-4 h-4 text-emerald-500" />
                Settlement Audit queue

@@ -82,7 +82,7 @@ export const Marketplace = () => {
   });
 
   return (
-    <div className="min-h-screen bg-[#020202]">
+    <div className="min-h-screen bg-[var(--color10)]">
       <PageMeta
         title="Algorithm Marketplace"
         description="Explore IFXTrades trading algorithms, strategy filters, and subscription-ready systematic products."
@@ -90,7 +90,7 @@ export const Marketplace = () => {
         keywords={["trading algorithms", "algo marketplace", "MT5 trading bots"]}
       />
 
-      <section ref={ref} className="relative min-h-[70vh] flex flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-[#020617] to-[#0a0a0a] pt-32 pb-24">
+      <section ref={ref} className="relative min-h-[70vh] flex flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-[var(--color30)] to-[var(--color7)] pt-32 pb-24">
         <motion.div style={{ y, opacity }} className="absolute inset-0 overflow-hidden pointer-events-none will-change-transform">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1400px] h-[600px] bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.12),transparent_70%)] opacity-80" />
           <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:120px_120px] [mask-image:radial-gradient(ellipse_at_center,black_70%,transparent_100%)]" />
@@ -186,14 +186,14 @@ export const Marketplace = () => {
         )}
 
         {!loading && filteredProducts.length === 0 ? (
-          <div className="bg-[#0a0a0a] border border-white/5 rounded-[3rem] p-20 text-center">
+          <div className="bg-[var(--color7)] border border-white/5 rounded-[3rem] p-20 text-center">
              <div className="text-xl font-black text-gray-600 uppercase italic">No Algorithms Match Your Criteria</div>
              <p className="text-[10px] font-black text-gray-700 uppercase tracking-[0.3em] mt-3">Try adjusting your institutional filters.</p>
           </div>
         ) : null}
       </section>
 
-      <section className="bg-[#050505] py-32 border-t border-white/5">
+      <section className="bg-[var(--color6)] py-32 border-t border-white/5">
         <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-12">
           <div className="space-y-6">
             <div className="w-16 h-16 bg-emerald-500/10 rounded-3xl flex items-center justify-center text-emerald-500 border border-emerald-500/10">

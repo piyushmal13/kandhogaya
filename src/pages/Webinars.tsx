@@ -32,7 +32,7 @@ export const Webinars = () => {
   const nextWebinar = webinars[0];
 
   return (
-    <div className="min-h-screen pt-20 pb-20 relative overflow-hidden bg-[#020202]">
+    <div className="min-h-screen pt-20 pb-20 relative overflow-hidden bg-[var(--color10)]">
       <PageMeta
         title="Webinars"
         description="Register for IFXTrades webinars covering market structure, live analysis, algorithmic workflows, and trader education."
@@ -87,7 +87,7 @@ export const Webinars = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-[#0a0a0a]/80 backdrop-blur-2xl border border-emerald-500/30 rounded-[2.5rem] overflow-hidden relative shadow-[0_0_80px_rgba(16,185,129,0.15)] group"
+            className="bg-[var(--color7)]/80 backdrop-blur-2xl border border-emerald-500/30 rounded-[2.5rem] overflow-hidden relative shadow-[0_0_80px_rgba(16,185,129,0.15)] group"
           >
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 via-cyan-500 to-emerald-500 animate-gradient-x" />
             
@@ -143,7 +143,7 @@ export const Webinars = () => {
                     {nextWebinar.is_paid ? `Purchase Access ($${nextWebinar.price})` : "Register Now"}
                     <ArrowRight className="w-5 h-5" />
                   </button>
-                  <div className="px-8 py-4 bg-[#111820]/80 backdrop-blur-xl text-white font-medium rounded-2xl border border-white/10 flex flex-col items-center justify-center gap-1">
+                  <div className="px-8 py-4 bg-[var(--color60)]/80 backdrop-blur-xl text-white font-medium rounded-2xl border border-white/10 flex flex-col items-center justify-center gap-1">
                     <div className="flex items-center gap-2">
                       <Users className="w-5 h-5 text-gray-400" />
                       <span>{nextWebinar.registration_count} registered</span>
@@ -158,7 +158,7 @@ export const Webinars = () => {
               </div>
               
               <div className="relative h-[400px] lg:h-auto overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a]/90 via-[#0a0a0a]/50 to-transparent z-10" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[var(--color7)]/90 via-[var(--color7)]/50 to-transparent z-10" />
                 {nextWebinar.brand_logo_url && (
                   <div className="absolute top-8 right-8 w-20 h-20 bg-black/40 backdrop-blur-md rounded-2xl p-4 border border-white/10 z-20">
                     <img src={nextWebinar.brand_logo_url} alt="Brand" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
@@ -193,7 +193,7 @@ export const Webinars = () => {
             ) : (
               <>
                 {webinars.length <= 1 ? (
-                  <div className="bg-[#0a0a0a] border border-white/5 rounded-[2.5rem] p-12 text-center space-y-8">
+                  <div className="bg-[var(--color7)] border border-white/5 rounded-[2.5rem] p-12 text-center space-y-8">
                     <div className="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto border border-emerald-500/20">
                       <Calendar className="w-10 h-10 text-emerald-500" />
                     </div>

@@ -116,7 +116,7 @@ export const Blog = () => {
                 className="group"
               >
                 <Link to={`/blog/${post.slug}`} className="block h-full">
-                  <div className="relative h-full flex flex-col bg-[#0a0a0a] border border-white/5 rounded-[32px] overflow-hidden hover:border-emerald-500/30 transition-all duration-500 hover:shadow-[0_0_50px_rgba(16,185,129,0.05)]">
+                  <div className="relative h-full flex flex-col bg-[var(--color7)] border border-white/5 rounded-[32px] overflow-hidden hover:border-emerald-500/30 transition-all duration-500 hover:shadow-[0_0_50px_rgba(16,185,129,0.05)]">
                     {/* Image Section */}
                     <div className="relative aspect-[16/10] overflow-hidden">
                       <img
@@ -125,7 +125,7 @@ export const Blog = () => {
                         className="h-full w-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110 opacity-70 group-hover:opacity-100"
                         referrerPolicy="no-referrer"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent opacity-80" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[var(--color7)] via-transparent to-transparent opacity-80" />
                       
                       {/* Floating Category Tag */}
                       <div className="absolute top-6 left-6">

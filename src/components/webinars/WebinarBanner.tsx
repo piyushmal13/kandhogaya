@@ -33,7 +33,7 @@ export const WebinarBanner = () => {
   const seatsLeft = nextWebinar.max_attendees - (nextWebinar.registration_count || 0);
 
   return (
-    <div className="w-full bg-[#050505] border-b border-emerald-500/20 relative overflow-hidden group">
+    <div className="w-full bg-[var(--color6)] border-b border-emerald-500/20 relative overflow-hidden group">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(16,185,129,0.05),transparent_50%)]" />
       
       <div className="max-w-7xl mx-auto px-4 py-3 md:py-4 flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">

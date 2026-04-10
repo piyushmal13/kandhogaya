@@ -9,7 +9,7 @@ interface SparklineProps {
 
 export const Sparkline: React.FC<SparklineProps> = ({ 
   data, 
-  color = "#10b981", 
+  color = "var(--color8)", 
   width = 120, 
   height = 40 
 }) => {

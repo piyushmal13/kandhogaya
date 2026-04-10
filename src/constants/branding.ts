@@ -8,5 +8,5 @@ export const BRANDING = {
   supportEmail: "support@ifxtrades.com",
   careersEmail: "careers@ifxtrades.com",
   whatsappUrl: "https://wa.me/917709583224",
-  themeColor: "#58f2b6",
+  themeColor: "var(--color33)",
 };

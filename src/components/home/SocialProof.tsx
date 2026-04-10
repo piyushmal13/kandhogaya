@@ -44,7 +44,7 @@ export const SocialProof = () => {
   }, []);
 
   return (
-    <section className="py-24 relative overflow-hidden bg-[#020202] border-y border-white/5">
+    <section className="py-24 relative overflow-hidden bg-[var(--color10)] border-y border-white/5">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(16,185,129,0.02),transparent_70%)]" />
       
       <div className="max-w-7xl mx-auto px-6 lg:px-8 mb-16 text-center relative z-10">
@@ -68,8 +68,8 @@ export const SocialProof = () => {
 
       {/* Marquee Row */}
       <div className="relative w-full overflow-hidden flex pt-8">
-         <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#020202] to-transparent z-10 pointer-events-none" />
-         <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#020202] to-transparent z-10 pointer-events-none" />
+         <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[var(--color10)] to-transparent z-10 pointer-events-none" />
+         <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[var(--color10)] to-transparent z-10 pointer-events-none" />
 
          <motion.div
             animate={{ x: ["0%", "-50%"] }}
@@ -77,7 +77,7 @@ export const SocialProof = () => {
             className="flex gap-6 w-max px-6"
          >
             {[...reviews, ...reviews].map((review, i) => (
-               <div key={`institutional-review-v2-${review.id || i}-${i}`} className="w-[350px] md:w-[450px] shrink-0 bg-[#050505] border border-white/5 rounded-[32px] p-8 relative overflow-hidden group hover:border-emerald-500/20 transition-all duration-500">
+               <div key={`institutional-review-v2-${review.id || i}-${i}`} className="w-[350px] md:w-[450px] shrink-0 bg-[var(--color6)] border border-white/5 rounded-[32px] p-8 relative overflow-hidden group hover:border-emerald-500/20 transition-all duration-500">
                   <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   
                   <div className="flex items-center justify-between mb-6">

@@ -128,7 +128,7 @@ export const AgentDashboard = () => {
   const referralLink = affiliateCode ? `${globalThis.location.origin}?ref=${affiliateCode}` : "Establishing profile...";
 
   return (
-    <div className="min-h-screen bg-[#020202] pt-32 pb-24">
+    <div className="min-h-screen bg-[var(--color10)] pt-32 pb-24">
       <PageMeta 
         title="Agent Portal" 
         description="Monitor your institutional referral performance and manage your commissions."
@@ -183,7 +183,7 @@ export const AgentDashboard = () => {
                initial={{ opacity: 0, y: 20 }}
                animate={{ opacity: 1, y: 0 }}
                transition={{ delay: i * 0.1 }}
-               className="p-8 bg-[#0a0a0b] border border-white/5 rounded-[2.5rem] relative overflow-hidden group hover:border-white/10 transition-all"
+               className="p-8 bg-[var(--raised)] border border-white/5 rounded-[2.5rem] relative overflow-hidden group hover:border-white/10 transition-all"
              >
                 <div className={`w-14 h-14 ${stat.bg} ${stat.color} rounded-2xl flex items-center justify-center mb-6 border border-white/5 group-hover:scale-110 transition-transform`}>
                    <stat.icon className="w-6 h-6" />
@@ -203,7 +203,7 @@ export const AgentDashboard = () => {
            <motion.div 
              initial={{ opacity: 0, x: -20 }}
              animate={{ opacity: 1, x: 0 }}
-             className="lg:col-span-2 p-10 bg-[#080809] border border-white/5 rounded-[3rem] space-y-8"
+             className="lg:col-span-2 p-10 bg-[var(--color50)] border border-white/5 rounded-[3rem] space-y-8"
            >
               <div className="flex items-center gap-4 mb-2">
                  <Zap className="w-6 h-6 text-emerald-500 animate-pulse" />
@@ -249,14 +249,14 @@ export const AgentDashboard = () => {
                           <span className="text-emerald-500">20% Share</span>
                        </div>
                        <div className="w-full bg-white/5 h-1 rounded-full overflow-hidden">
-                          <div className="w-[20%] h-full bg-emerald-500 shadow-[0_0_10px_#10b981]" />
+                          <div className="w-[20%] h-full bg-emerald-500 shadow-[0_0_10px_var(--color8)]" />
                        </div>
                        <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-gray-500">
                           <span>Enterprise Signals</span>
                           <span className="text-cyan-400">15% Share</span>
                        </div>
                        <div className="w-full bg-white/5 h-1 rounded-full overflow-hidden">
-                          <div className="w-[15%] h-full bg-cyan-400 shadow-[0_0_10px_#22d3ee]" />
+                          <div className="w-[15%] h-full bg-cyan-400 shadow-[0_0_10px_var(--color51)]" />
                        </div>
                     </div>
                  </div>
@@ -273,7 +273,7 @@ export const AgentDashboard = () => {
            <motion.div 
              initial={{ opacity: 0, x: 20 }}
              animate={{ opacity: 1, x: 0 }}
-             className="p-10 bg-[#080809] border border-white/5 rounded-[3rem] flex flex-col"
+             className="p-10 bg-[var(--color50)] border border-white/5 rounded-[3rem] flex flex-col"
            >
               <h2 className="text-xl font-black text-white uppercase italic tracking-tighter mb-8 flex items-center gap-3">
                 <TrendingUp className="w-5 h-5 text-emerald-500" />

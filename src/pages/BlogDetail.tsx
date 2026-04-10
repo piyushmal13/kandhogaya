@@ -46,7 +46,7 @@ export const BlogDetail = () => {
 
   if (loading) {
     return (
-      <div className="pt-40 min-h-screen bg-[#020202] text-center text-white">
+      <div className="pt-40 min-h-screen bg-[var(--color10)] text-center text-white">
         <PageMeta title="Market Insight | IFX Trades" description="Loading IFXTrades market insight." path={pathname} />
         <motion.div 
           animate={{ rotate: 360 }}
@@ -62,7 +62,7 @@ export const BlogDetail = () => {
 
   if (!post) {
     return (
-      <div className="pt-40 min-h-screen bg-[#020202] text-center text-white">
+      <div className="pt-40 min-h-screen bg-[var(--color10)] text-center text-white">
         <PageMeta
           title="Insight Not Found"
           description="The requested IFXTrades market insight could not be found."
@@ -86,7 +86,7 @@ export const BlogDetail = () => {
   const keyInsights = meta.key_insights || ["Institutional liquidity zones.", "Order block identification.", "Macro-structure alignment."];
 
   return (
-    <div className="bg-[#020202] min-h-screen overflow-hidden selection:bg-emerald-500 selection:text-black">
+    <div className="bg-[var(--color10)] min-h-screen overflow-hidden selection:bg-emerald-500 selection:text-black">
       <PageMeta
         title={`${post.title} | Market Insight`}
         description={boldHeadline || (post.content || "").slice(0, 160)}
@@ -110,7 +110,7 @@ export const BlogDetail = () => {
       <div className="relative pt-40 pb-20 px-4">
         {/* Background Gradients */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-screen h-full opacity-20 pointer-events-none">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,_#10b98133_0%,_transparent_50%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,_var(--color8)33_0%,_transparent_50%)]" />
         </div>
 
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
@@ -315,7 +315,7 @@ export const BlogDetail = () => {
             <div className="sticky top-24 space-y-12">
               {/* Telegram Promo */}
               <div className="p-[1px] bg-gradient-to-br from-emerald-500/20 via-white/5 to-transparent rounded-[40px] border border-white/5">
-                <div className="bg-[#050505] p-10 rounded-[39px] relative overflow-hidden">
+                <div className="bg-[var(--color6)] p-10 rounded-[39px] relative overflow-hidden">
                    <div className="absolute top-0 right-0 p-8 opacity-[0.05]">
                       <Zap className="w-20 h-20 text-emerald-500" />
                    </div>

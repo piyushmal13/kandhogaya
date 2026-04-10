@@ -51,7 +51,7 @@ export const ExitIntentPopup = ({ onRegister, webinarTitle }: ExitIntentPopupPro
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="relative w-full max-w-lg bg-[#0a0a0a] border border-emerald-500/30 rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(16,185,129,0.2)]"
+            className="relative w-full max-w-lg bg-[var(--color7)] border border-emerald-500/30 rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(16,185,129,0.2)]"
           >
             {/* Background Glow */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(16,185,129,0.1),transparent_70%)]" />
@@ -101,7 +101,7 @@ export const ExitIntentPopup = ({ onRegister, webinarTitle }: ExitIntentPopupPro
                       key={i}
                       src={`https://i.pravatar.cc/100?u=${i}`}
                       alt="User"
-                      className="w-6 h-6 rounded-full border-2 border-[#0a0a0a]"
+                      className="w-6 h-6 rounded-full border-2 border-[var(--color7)]"
                     />
                   ))}
                 </div>

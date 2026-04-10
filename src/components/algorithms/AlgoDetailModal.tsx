@@ -54,7 +54,7 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
         initial={{ scale: 0.95, y: 20 }}
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.95, y: 20 }}
-        className="bg-[#0a0a0a] border border-white/10 rounded-3xl w-full max-w-5xl overflow-hidden shadow-2xl relative flex flex-col md:flex-row h-[90vh] md:h-auto"
+        className="bg-[var(--color7)] border border-white/10 rounded-3xl w-full max-w-5xl overflow-hidden shadow-2xl relative flex flex-col md:flex-row h-[90vh] md:h-auto"
       >
         <button 
           onClick={onClose}
@@ -187,7 +187,7 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
                   <div className="h-[200px] flex items-center justify-center relative z-10">
                     <Sparkline 
                         data={performance.equity_curve} 
-                        color="#10b981" 
+                        color="var(--color8)" 
                         width={600} 
                         height={180} 
                     />
@@ -273,7 +273,7 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
         </div>
 
         {/* Right: Subscription */}
-        <div className="w-full md:w-[400px] bg-[#050505] p-6 md:p-12 flex flex-col justify-center relative">
+        <div className="w-full md:w-[400px] bg-[var(--color6)] p-6 md:p-12 flex flex-col justify-center relative">
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-cyan-500" />
           
           <h3 className="text-xl md:text-2xl font-bold text-white mb-4 md:mb-6">Subscription Plans</h3>

@@ -49,7 +49,7 @@ export const Overview = ({ stats }: { stats: OverviewStats }) => {
                 <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center border border-white/5 shadow-2xl", s.grad)}>
                   <s.icon className={cn("w-6 h-6", s.color)} />
                 </div>
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_#10b981]" />
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_var(--color8)]" />
               </div>
               <div className="text-4xl font-black text-white mb-2 tracking-tighter italic font-serif leading-none italic">
                 {s.value}
@@ -83,19 +83,19 @@ export const Overview = ({ stats }: { stats: OverviewStats }) => {
                   <AreaChart data={chartData}>
                     <defs>
                       <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#10b981" stopOpacity={0.2}/>
-                        <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                        <stop offset="5%" stopColor="var(--color8)" stopOpacity={0.2}/>
+                        <stop offset="95%" stopColor="var(--color8)" stopOpacity={0}/>
                       </linearGradient>
                     </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#ffffff03" vertical={false} />
-                    <XAxis dataKey="name" stroke="#52525b" fontSize={9} tickLine={false} axisLine={false} dy={10} fontStyle="italic" />
-                    <YAxis stroke="#52525b" fontSize={9} tickLine={false} axisLine={false} tickFormatter={(value) => `$${value}`} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--color34)03" vertical={false} />
+                    <XAxis dataKey="name" stroke="var(--color36)" fontSize={9} tickLine={false} axisLine={false} dy={10} fontStyle="italic" />
+                    <YAxis stroke="var(--color36)" fontSize={9} tickLine={false} axisLine={false} tickFormatter={(value) => `$${value}`} />
                     <Tooltip 
-                      contentStyle={{ backgroundColor: "#020202", border: "1px solid rgba(255,255,255,0.05)", borderRadius: "20px", padding: "12px" }}
-                      itemStyle={{ color: "#10b981", fontWeight: "900", fontSize: "12px" }}
-                      labelStyle={{ color: "#52525b", marginBottom: "4px", fontSize: "10px", fontWeight: "900" }}
+                      contentStyle={{ backgroundColor: "var(--color10)", border: "1px solid rgba(255,255,255,0.05)", borderRadius: "20px", padding: "12px" }}
+                      itemStyle={{ color: "var(--color8)", fontWeight: "900", fontSize: "12px" }}
+                      labelStyle={{ color: "var(--color36)", marginBottom: "4px", fontSize: "10px", fontWeight: "900" }}
                     />
-                    <Area type="monotone" dataKey="revenue" stroke="#10b981" fillOpacity={1} fill="url(#colorRev)" strokeWidth={3} dot={{ fill: '#10b981', strokeWidth: 2, r: 4, stroke: '#020202' }} activeDot={{ r: 6, stroke: '#10b981', strokeWidth: 0 }} />
+                    <Area type="monotone" dataKey="revenue" stroke="var(--color8)" fillOpacity={1} fill="url(#colorRev)" strokeWidth={3} dot={{ fill: 'var(--color8)', strokeWidth: 2, r: 4, stroke: 'var(--color10)' }} activeDot={{ r: 6, stroke: 'var(--color8)', strokeWidth: 0 }} />
                   </AreaChart>
                 </ResponsiveContainer>
               )}
@@ -116,15 +116,15 @@ export const Overview = ({ stats }: { stats: OverviewStats }) => {
               {chartData.length > 0 && (
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#ffffff03" vertical={false} />
-                    <XAxis dataKey="name" stroke="#52525b" fontSize={9} tickLine={false} axisLine={false} dy={10} fontStyle="italic" />
-                    <YAxis stroke="#52525b" fontSize={9} tickLine={false} axisLine={false} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--color34)03" vertical={false} />
+                    <XAxis dataKey="name" stroke="var(--color36)" fontSize={9} tickLine={false} axisLine={false} dy={10} fontStyle="italic" />
+                    <YAxis stroke="var(--color36)" fontSize={9} tickLine={false} axisLine={false} />
                     <Tooltip 
-                      contentStyle={{ backgroundColor: "#020202", border: "1px solid rgba(255,255,255,0.05)", borderRadius: "20px", padding: "12px" }}
+                      contentStyle={{ backgroundColor: "var(--color10)", border: "1px solid rgba(255,255,255,0.05)", borderRadius: "20px", padding: "12px" }}
                       cursor={{ fill: 'rgba(255,255,255,0.02)' }}
-                      labelStyle={{ color: "#52525b", marginBottom: "4px", fontSize: "10px", fontWeight: "900" }}
+                      labelStyle={{ color: "var(--color36)", marginBottom: "4px", fontSize: "10px", fontWeight: "900" }}
                     />
-                    <Bar dataKey="users" fill="#06b6d4" radius={[6, 6, 0, 0]} barSize={24} />
+                    <Bar dataKey="users" fill="var(--color39)" radius={[6, 6, 0, 0]} barSize={24} />
                   </BarChart>
                 </ResponsiveContainer>
               )}

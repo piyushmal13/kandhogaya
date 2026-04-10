@@ -116,7 +116,7 @@ export const CrmMetrics = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* --- Conversion Funnel --- */}
-        <div className="bg-[#050505] border border-white/5 rounded-[2.5rem] p-10">
+        <div className="bg-[var(--color6)] border border-white/5 rounded-[2.5rem] p-10">
           <h3 className="text-white font-bold text-lg mb-8 flex items-center gap-3 uppercase tracking-tight">
             <TrendingUp className="w-5 h-5 text-emerald-500" />
             Conversion Funnel
@@ -124,7 +124,7 @@ export const CrmMetrics = () => {
           <div className="space-y-6">
             {Object.entries(stats.stageCounts).map(([stage, count]) => (
               <div key={stage} className="space-y-2">
-                <div className="flex justify-between text-[10px] font-mono font-bold uppercase tracking-widest text-[#64748b]">
+                <div className="flex justify-between text-[10px] font-mono font-bold uppercase tracking-widest text-[var(--color5)]">
                   <span>{stage}</span>
                   <span className="text-white">{count}</span>
                 </div>
@@ -141,7 +141,7 @@ export const CrmMetrics = () => {
         </div>
 
         {/* --- Top Behavioral Triggers --- */}
-        <div className="bg-[#050505] border border-white/5 rounded-[2.5rem] p-10">
+        <div className="bg-[var(--color6)] border border-white/5 rounded-[2.5rem] p-10">
           <h3 className="text-white font-bold text-lg mb-8 flex items-center gap-3 uppercase tracking-tight">
             <Activity className="w-5 h-5 text-cyan-500" />
             High-Intent Triggers
@@ -150,7 +150,7 @@ export const CrmMetrics = () => {
             {stats.topTriggers.map((trigger, i) => (
               <div key={trigger.type} className="flex items-center justify-between p-4 bg-white/[0.02] border border-white/5 rounded-2xl">
                 <div className="flex items-center gap-4">
-                  <span className="text-[10px] font-mono text-[#64748b]">0{i+1}</span>
+                  <span className="text-[10px] font-mono text-[var(--color5)]">0{i+1}</span>
                   <span className="text-sm font-bold text-white uppercase tracking-tight">{trigger.type.replace('_', ' ')}</span>
                 </div>
                 <span className="px-3 py-1 bg-white/5 rounded-lg text-[10px] font-mono text-emerald-400">{trigger.count} Events</span>
@@ -164,10 +164,10 @@ export const CrmMetrics = () => {
 };
 
 const MetricCard = ({ icon, label, value, subValue, highlight = false }: any) => (
-  <div className={`p-8 rounded-[2.5rem] border transition-all ${highlight ? 'bg-rose-500/5 border-rose-500/20 shadow-[0_0_40px_rgba(244,63,94,0.1)]' : 'bg-[#050505] border-white/5'}`}>
+  <div className={`p-8 rounded-[2.5rem] border transition-all ${highlight ? 'bg-rose-500/5 border-rose-500/20 shadow-[0_0_40px_rgba(244,63,94,0.1)]' : 'bg-[var(--color6)] border-white/5'}`}>
     <div className="mb-6">{icon}</div>
-    <div className="text-[10px] font-mono font-bold text-[#64748b] uppercase tracking-[0.3em] mb-2">{label}</div>
+    <div className="text-[10px] font-mono font-bold text-[var(--color5)] uppercase tracking-[0.3em] mb-2">{label}</div>
     <div className="text-3xl font-black text-white tracking-tighter mb-1">{value}</div>
-    <div className="text-[9px] font-mono text-[#64748b] uppercase tracking-widest">{subValue}</div>
+    <div className="text-[9px] font-mono text-[var(--color5)] uppercase tracking-widest">{subValue}</div>
   </div>
 );

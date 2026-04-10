@@ -65,7 +65,7 @@ export const NewsletterPopup = () => {
             initial={{ scale: 0.9, y: 20 }}
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.9, y: 20 }}
-            className="relative w-full max-w-md bg-[#0a0a0a] border border-white/10 rounded-2xl p-8 shadow-2xl overflow-hidden"
+            className="relative w-full max-w-md bg-[var(--color7)] border border-white/10 rounded-2xl p-8 shadow-2xl overflow-hidden"
           >
             {/* Background Glow */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 blur-[80px] rounded-full pointer-events-none -translate-y-1/2 translate-x-1/2" />
