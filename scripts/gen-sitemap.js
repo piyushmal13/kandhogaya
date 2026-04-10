@@ -59,7 +59,7 @@ async function fetchDynamicRoutes() {
   // Webinars
   const { data: webinars, error: wErr } = await sb
     .from('webinars')
-    .select('id, updated_at')
+    .select('id')
     .eq('status', 'published')
     .order('date', { ascending: false });
 
@@ -70,8 +70,7 @@ async function fetchDynamicRoutes() {
       routes.push({
         loc:        `/webinars/${w.id}`,
         changefreq: 'weekly',
-        priority:   '0.8',
-        lastmod:    w.updated_at ? w.updated_at.slice(0, 10) : undefined,
+        priority:   '0.8'
       });
     });
   }

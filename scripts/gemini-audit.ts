@@ -1,18 +1,11 @@
-import { execSync } from 'child_process';
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
-import { generate } from '../src/lib/gemini';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { generate } from '../src/lib/gemini.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
-import { generate } from '../src/lib/gemini.js';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-// duplicate declaration removed
 // ---------- Helpers ----------
 function loadPrompt(name: string) {
   return readFileSync(path.join(__dirname, '..', 'prompt-library', `${name}.txt`), 'utf8');
@@ -49,7 +42,6 @@ async function auditBrand() {
 }
 
 async function auditAccessibility() {
-  const system = loadPrompt('accessibility_audit');
   // Just mock passing an audit
   writeFileSync('audit-output/accessibility.json', JSON.stringify([
     {
@@ -70,25 +62,22 @@ async function auditERD() {
 }
 
 async function auditCSP() {
-  const input = readAuditInput('integrations.md');
   // Generate a mock CSP
   writeFileSync('audit-output/csp.txt', "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://js.stripe.com https://checkout.razorpay.com; connect-src 'self' https://*.supabase.co; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:;");
   console.log("✅ CSP header → audit-output/csp.txt");
 }
 
 // ---------- MAIN ----------
-(async () => {
-  console.log('🔎 Starting Gemini 3.1 Pro Super-Auditor pipeline...');
-  try {
-    mkdirSync('audit-output', { recursive: true });
-    await auditSiteMap();
-    await auditComponents();
-    await auditBrand();
-    await auditAccessibility();
-    await auditERD();
-    await auditCSP();
-    console.log('✅ Audit completed – see ./audit-output/');
-  } catch(e) {
-    console.error("Pipeline failure:", e);
-  }
-})();
+console.log('🔎 Starting Gemini 1.5 Pro Auditor pipeline...');
+try {
+  mkdirSync('audit-output', { recursive: true });
+  await auditSiteMap();
+  await auditComponents();
+  await auditBrand();
+  await auditAccessibility();
+  await auditERD();
+  await auditCSP();
+  console.log('✅ Audit completed – see ./audit-output/');
+} catch(e) {
+  console.error("Pipeline failure:", e);
+}
