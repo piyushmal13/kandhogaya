@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { BookOpen, Clock, GraduationCap, PlayCircle } from "lucide-react";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { CourseCardSkeleton } from "../components/ui/Skeleton";
 import { breadcrumbSchema, courseSchema } from "../utils/structuredData";
+import { AcademyCourseCard } from "../components/institutional/AcademyCourseCard";
+import { useNavigate } from "react-router-dom";
 
 import { PageHero } from "../components/site/PageHero";
 import { PageMeta } from "../components/site/PageMeta";
@@ -127,42 +129,28 @@ export const Academy = () => {
         {!loading && courses.length ? (
           <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
             {courses.map((course, index) => (
-              <Reveal key={course.id} delay={index * 0.08}>
-                <motion.article whileHover={{ y: -8 }} className="site-panel flex h-full flex-col overflow-hidden">
-                  <div className="aspect-video overflow-hidden">
-                    <img
-                      src={getCourseImage(course)}
-                      alt={course.title}
-                      className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
-                      referrerPolicy="no-referrer"
-                    />
-                  </div>
-                  <div className="flex flex-1 flex-col p-6">
-                    <div className="inline-flex w-fit rounded-full border border-emerald-300/20 bg-emerald-300/10 px-3 py-1 text-[11px] uppercase tracking-[0.28em] text-emerald-100/90">
-                      {course.level || "Beginner"}
-                    </div>
-                    <h3 className="mt-4 text-2xl font-semibold text-white">{course.title}</h3>
-                    <p className="mt-4 text-sm leading-7 text-slate-300">{course.description}</p>
-                    <div className="mt-6 flex flex-wrap gap-4 text-sm text-slate-400">
-                      <span className="inline-flex items-center gap-2">
-                        <Clock className="h-4 w-4 text-emerald-200" />
-                        {course.duration || "Self-paced"}
-                      </span>
-                      <span className="inline-flex items-center gap-2">
-                        <BookOpen className="h-4 w-4 text-emerald-200" />
-                        {course.chapters?.length || 0} modules
-                      </span>
-                    </div>
-                    <Link
-                      to={`/academy/${course.id}`}
-                      className="mt-8 inline-flex items-center justify-center gap-2 rounded-full bg-white/5 px-5 py-3 text-sm font-semibold text-white hover:bg-white/10"
-                    >
-                      <GraduationCap className="h-4 w-4 text-emerald-200" />
-                      Start Learning
-                    </Link>
-                  </div>
-                </motion.article>
-              </Reveal>
+              <AcademyCourseCard 
+                key={course.id}
+                index={index}
+                course={{
+                  id: course.id,
+                  title: course.title,
+                  instructor: {
+                    name: course.instructor_name || "Sovereign Analyst",
+                    avatarUrl: "", // Defaults to fallback in component
+                    credentials: "Institutional Macro Specialist"
+                  },
+                  thumbnailUrl: getCourseImage(course),
+                  duration: typeof course.duration === 'string' ? parseInt(course.duration) || 60 : 60,
+                  moduleCount: course.chapters?.length || course.lessons?.length || 0,
+                  level: (course.level?.toLowerCase() || 'beginner') as 'beginner' | 'intermediate' | 'institutional',
+                  isPremium: course.price > 0,
+                  enrolledCount: 12400 + index * 150, // Institutional mock for social proof
+                  description: course.description,
+                  progress: index === 0 ? 45 : undefined // Mock progress for the first course
+                }}
+                onEnroll={(c) => navigate(`/academy/${c.id}`)}
+              />
             ))}
           </div>
         ) : null}

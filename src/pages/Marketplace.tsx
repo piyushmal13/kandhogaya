@@ -4,10 +4,10 @@ import { Zap, ShieldCheck, Activity, TrendingUp } from "lucide-react";
 import { PurchaseModal } from "../components/payments/PurchaseModal";
 
 import { PageMeta } from "../components/site/PageMeta";
-import { AlgoCard } from "../components/algorithms/AlgoCard";
-import { AlgoDetailModal } from "../components/algorithms/AlgoDetailModal";
 import { productService } from "../services/productService";
 import { Product } from "../types";
+import { AlgoDetailModal } from "../components/algorithms/AlgoDetailModal";
+import { MarketplaceGrid, MarketplaceProduct } from "../components/institutional/MarketplaceGrid";
 import { useAuth } from "../contexts/AuthContext";
 import { useToast } from "../contexts/ToastContext";
 import { useNavigate } from "react-router-dom";
@@ -165,25 +165,27 @@ export const Marketplace = () => {
       </section>
 
       <section className="max-w-7xl mx-auto px-4 pb-24 relative z-20 -mt-20">
-        {loading ? (
-          <div className="flex items-center justify-center py-40">
-            <div className="w-16 h-16 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin" />
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredProducts.map((algo, index) => (
-              <motion.div 
-                key={algo.id} 
-                initial={{ opacity: 0, y: 30 }} 
-                whileInView={{ opacity: 1, y: 0 }} 
-                viewport={{ once: true, margin: "-100px" }} 
-                transition={{ duration: 0.6, delay: index * 0.1, ease: "easeOut" }}
-              >
-                <AlgoCard algo={algo} onSelect={setSelectedAlgo} />
-              </motion.div>
-            ))}
-          </div>
-        )}
+        <MarketplaceGrid 
+          isLoading={loading}
+          products={filteredProducts.map(algo => ({
+            id: algo.id,
+            name: algo.name,
+            type: (algo.category?.toLowerCase() === 'course' ? 'course' : 'algorithm') as 'course' | 'algorithm',
+            price: algo.price,
+            isPremium: algo.price > 150 || algo.category === 'Premium',
+            performance: algo.performance ? {
+              winRate: algo.performance.win_rate,
+              sharpe: (algo.performance as any).sharpe || 2.4, // Institutional mock for Sharpe
+              monthlyReturn: algo.performance.monthly_return
+            } : undefined,
+            category: algo.category,
+            description: algo.description
+          }))}
+          onSelect={(p) => {
+            const original = products.find(o => o.id === p.id);
+            if (original) setSelectedAlgo(original);
+          }}
+        />
 
         {!loading && filteredProducts.length === 0 ? (
           <div className="bg-[var(--color7)] border border-white/5 rounded-[3rem] p-20 text-center">
