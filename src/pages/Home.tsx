@@ -3,7 +3,8 @@ import { PageMeta } from "../components/site/PageMeta";
 import { BlogSection } from "../components/home/BlogSection";
 import { EcosystemSection } from "../components/home/EcosystemSection";
 import { GlobalReach } from "../components/home/GlobalReach";
-import { HeroLaboratory } from "../components/home/HeroLaboratory";
+import { FortressHero } from "../components/home/FortressHero";
+import { BrandAuthority } from "../components/home/BrandAuthority";
 import { MetricsTicker } from "../components/home/MetricsTicker";
 import { ProcessBento } from "../components/home/ProcessBento";
 import { WebinarPromo } from "../components/home/WebinarPromo";
@@ -93,8 +94,12 @@ export const Home = () => {
         ]}
       />
 
-      {/* === ABOVE THE FOLD — Cinematic Hero === */}
-      <HeroLaboratory />
+      {/* === ABOVE THE FOLD — Fortress Bloomberg Hero === */}
+      <FortressHero />
+
+      {/* === BRAND AUTHORITY — Trust Wall === */}
+      <BrandAuthority />
+
       <MetricsTicker />
 
       {/* === CORE PROMISE — Strategy to Execution === */}

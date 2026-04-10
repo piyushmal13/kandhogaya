@@ -139,6 +139,7 @@ function AppContent() {
       <div className="relative min-h-screen overflow-hidden font-sans">
         <CustomCursor />
         <div className="noise-overlay" />
+        <div className="noise-fortress" aria-hidden="true" />
         <SiteBackdrop />
         
         <Navbar />

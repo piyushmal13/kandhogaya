@@ -416,3 +416,43 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════
+   FORTRESS v9.0 — Premium Interaction Layer
+   ═══════════════════════════════════════════════════ */
+
+/* ── Premium text selection ── */
+::selection {
+  background: rgba(16, 185, 129, 0.28);
+  color: #fff;
+}
+
+/* ── Institutional scrollbar ── */
+::-webkit-scrollbar        { width: 6px; }
+::-webkit-scrollbar-track  { background: #020202; }
+::-webkit-scrollbar-thumb  {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(16, 185, 129, 0.45); }
+
+/* ── Animated gradient for FortressHero headline ── */
+@keyframes gradient-x {
+  0%, 100% { background-position: 0% 50%; }
+  50%       { background-position: 100% 50%; }
+}
+.animate-gradient-x {
+  background-size: 200% 200%;
+  animation: gradient-x 8s ease infinite;
+}
+
+/* ── Film-grain noise overlay (rendered in App.tsx as .noise-fortress) ── */
+.noise-fortress {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99998;
+  opacity: 0.025;
+  /* SVG fractal noise — zero HTTP requests */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
