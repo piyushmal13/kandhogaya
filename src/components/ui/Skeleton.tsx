@@ -2,7 +2,6 @@ import { cn } from "../../utils/cn";
 
 interface SkeletonProps {
   className?: string;
-  count?: number;
   height?: string;
   width?: string;
 }

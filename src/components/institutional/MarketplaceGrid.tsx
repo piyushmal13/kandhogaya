@@ -74,7 +74,7 @@ export const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({ products, isLo
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-50px" }}
-          transition={{ duration: 0.5, delay: index * 0.05, ease: [0.23, 1, 0.32, 1] }}
+          transition={{ duration: 0.5, delay: index * 0.05, ease: [0.23, 1, 0.32, 1] as const }}
           className="group relative"
           itemScope
           itemType="https://schema.org/Product"

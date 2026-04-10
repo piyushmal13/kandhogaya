@@ -119,7 +119,7 @@ export const GlobalReach = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] as const }}
             className="flex-1 w-full max-w-[280px] sm:max-w-[450px] lg:max-w-[600px] aspect-square relative mx-auto order-1 lg:order-2"
           >
             <div className="absolute inset-0 bg-emerald-500/15 blur-[80px] md:blur-[120px] rounded-full pointer-events-none animate-pulse" />

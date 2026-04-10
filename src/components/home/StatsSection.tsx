@@ -70,7 +70,7 @@ const StatItem = ({ stat, i }: { stat: typeof stats[0], i: number }) => {
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ delay: i * 0.15, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ delay: i * 0.15, duration: 0.8, ease: [0.16, 1, 0.3, 1] as const }}
       className="relative p-10 md:p-14 bg-transparent transition-all duration-700 flex flex-col justify-start group border-b lg:border-b-0 lg:border-r border-white/5 last:border-r-0 hover:bg-white/[0.01]"
     >
       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 bg-gradient-to-tr from-[var(--brand)]/5 via-transparent to-transparent pointer-events-none" />

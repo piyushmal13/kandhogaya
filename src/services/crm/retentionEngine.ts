@@ -17,7 +17,7 @@ export const retentionEngine = {
     const leads = await safeQuery<any[]>(
       publicSupabase
         .from('leads')
-        .select('id, user_id, anon_id, last_action_at')
+        .select('id, email, last_action_at')
         .lt('last_action_at', threshold)
         .is('reengagement_triggered_at', null)
         .limit(20)

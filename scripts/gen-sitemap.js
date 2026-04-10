@@ -61,7 +61,7 @@ async function fetchDynamicRoutes() {
     .from('webinars')
     .select('id')
     .eq('status', 'published')
-    .order('date', { ascending: false });
+    .order('id', { ascending: false });
 
   if (wErr) {
     console.error('[sitemap] Webinar fetch error:', wErr.message);

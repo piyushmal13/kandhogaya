@@ -1,8 +1,10 @@
 import React from 'react';
 import { GlobalNavigation } from './GlobalNavigation';
+import { MobileNavigation } from './MobileNavigation';
 import { Breadcrumb } from './Breadcrumb';
 import { Footer } from './Footer';
 import { DashboardHeader } from './DashboardHeader';
+import { useFocusRoute } from '@/hooks/useFocusRoute';
 import { cn } from '@/lib/utils';
 
 // ── TYPES ──
@@ -15,14 +17,9 @@ interface DashboardLayoutProps {
 }
 
 /**
- * INSTITUTIONAL DASHBOARD LAYOUT (v6.0)
+ * INSTITUTIONAL DASHBOARD LAYOUT (v6.1 - Sovereign Hardened)
  * Unified architecture for Dashboard, Marketplace, Academy, and Webinars.
- * Features:
- * - Persistent Sovereign Navigation (Fixed Aside)
- * - Telemetry Header
- * - Automated SEO Breadcrumbs
- * - Right Intelligence Rail (Context Panel)
- * - Global Authority Footer
+ * Optimized for both high-density desktop and responsive mobile execution.
  */
 export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ 
   children, 
@@ -31,8 +28,14 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   contextPanel,
   showBreadcrumb = true
 }) => {
+  // Hardening: Accessibility and focus management
+  useFocusRoute();
+
   return (
     <div className="flex min-h-screen w-full bg-[#050505] text-white selection:bg-emerald-500/30 overflow-x-hidden">
+      {/* ── MOBILE BRIDGE ── */}
+      <MobileNavigation />
+
       {/* ── LEFT RAIL: Navigation (Fixed Aside) ── */}
       <aside className="w-72 fixed h-screen hidden lg:block z-50">
         {leftRail}
@@ -50,9 +53,9 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         </header>
 
         {/* MAIN STAGE: Content Matrix */}
-        <main className="flex-1 flex flex-col pt-10 pb-20 px-10 max-w-7xl w-full mx-auto">
+        <main className="flex-1 flex flex-col pt-10 pb-20 px-10 max-w-7xl w-full mx-auto outline-none" tabIndex={-1}>
           {showBreadcrumb && <Breadcrumb />}
-          <div className="flex-1 animate-in fade-in duration-700">
+          <div className="flex-1 animate-in fade-in slide-in-from-bottom-2 duration-700">
             {children}
           </div>
         </main>

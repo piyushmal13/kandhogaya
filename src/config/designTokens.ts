@@ -1,8 +1,8 @@
 export const designTokens = {
   colors: {
     // Background Scale (Institutional Depth)
-    bg: '{
-      base',
+    bg: '#050505',
+    base: '#050505',
     raised: '#0a0a0b',
     surface: '#121214',
     color4: '#991B1B',

@@ -53,9 +53,8 @@ function transformFile(filePath) {
 
       const newEl = j.jsxElement(
         j.jsxOpeningElement(j.jsxIdentifier('SovereignButton'), newAttrs, false),
-        null,
-        nodePath.node.children,
-        false
+        j.jsxClosingElement(j.jsxIdentifier('SovereignButton')),
+        nodePath.node.children
       );
 
       j(nodePath).replaceWith(newEl);

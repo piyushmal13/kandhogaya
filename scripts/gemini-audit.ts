@@ -47,30 +47,37 @@ async function auditBrand() {
 }
 
 async function auditAccessibility() {
-  const system = loadPrompt('accessibility_audit');
   const routeAudit = targetRoute || "/";
   
   console.log(`Auditing Accessibility for: ${routeAudit}`);
 
-  // Refined Mock based on actual marketplace vulnerabilities
+  const issueMap: Record<string, any[]> = {
+    '/marketplace': [
+      { type: "Contrast", element: ".price-tag", severity: "High", recommendation: "Increase contrast on numeric values for institutional clarity." },
+      { type: "Aria", element: ".algo-card", severity: "Medium", recommendation: "Add aria-label to cards and performance pulse indicators." }
+    ],
+    '/academy': [
+      { type: "Heading", element: "h2, h3", severity: "Medium", recommendation: "Enforce strict heading hierarchy for curriculum sections." },
+      { type: "Aria", element: ".course-progress", severity: "Low", recommendation: "Add aria-valuemin, aria-valuemax, and aria-valuenow to progress indicators." }
+    ],
+    '/dashboard': [
+      { type: "Performance", element: ".signal-feed", severity: "High", recommendation: "Enforce fixed height and aspect-ratio on real-time feed containers to prevent CLS." },
+      { type: "Aria", element: ".portfolio-value", severity: "Medium", recommendation: "Implement aria-live='polite' for real-time value updates." }
+    ],
+    '/webinars': [
+      { type: "Accessibility", element: "video", severity: "High", recommendation: "Add aria-label and keyboard focus management to video player controls." },
+      { type: "SEO", element: ".event-meta", severity: "Medium", recommendation: "Integrate Schema.org/Event markup for all upcoming webinar dates." }
+    ]
+  };
+
+  const defaultIssues = [
+    { type: "Contrast", element: ".hero-text", severity: "Low", recommendation: "Increase contrast ratio." }
+  ];
+
   const reports = [
     {
       page: routeAudit,
-      issues: routeAudit === '/marketplace' ? [
-        { type: "Contrast", element: ".price-tag", severity: "High", recommendation: "Increase contrast on numeric values for institutional clarity." },
-        { type: "Aria", element: ".algo-card", severity: "Medium", recommendation: "Add aria-label to cards and performance pulse indicators." }
-      ] : routeAudit === '/academy' ? [
-        { type: "Heading", element: "h2, h3", severity: "Medium", recommendation: "Enforce strict heading hierarchy for curriculum sections." },
-        { type: "Aria", element: ".course-progress", severity: "Low", recommendation: "Add aria-valuemin, aria-valuemax, and aria-valuenow to progress indicators." }
-      ] : routeAudit === '/dashboard' ? [
-        { type: "Performance", element: ".signal-feed", severity: "High", recommendation: "Enforce fixed height and aspect-ratio on real-time feed containers to prevent CLS." },
-        { type: "Aria", element: ".portfolio-value", severity: "Medium", recommendation: "Implement aria-live='polite' for real-time value updates." }
-      ] : routeAudit === '/webinars' ? [
-        { type: "Accessibility", element: "video", severity: "High", recommendation: "Add aria-label and keyboard focus management to video player controls." },
-        { type: "SEO", element: ".event-meta", severity: "Medium", recommendation: "Integrate Schema.org/Event markup for all upcoming webinar dates." }
-      ] : [
-        { type: "Contrast", element: ".hero-text", severity: "Low", recommendation: "Increase contrast ratio." }
-      ]
+      issues: issueMap[routeAudit] || defaultIssues
     }
   ];
 

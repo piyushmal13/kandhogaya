@@ -4,10 +4,6 @@ import { useWebinars } from '@/hooks/useWebinars';
 import { WebinarCard } from '@/components/institutional/WebinarCard';
 import { VideoPlayer } from '@/components/institutional/VideoPlayer';
 import { Skeleton, WebinarCardSkeleton } from '@/components/ui/Skeleton';
-import { DashboardLayout } from '@/components/institutional/DashboardLayout';
-import { DashboardNavigation } from '@/components/institutional/DashboardNavigation';
-import { DashboardHeader } from '@/components/institutional/DashboardHeader';
-import { MarketIntelligencePanel } from '@/components/institutional/MarketIntelligencePanel';
 import { PageMeta } from '@/components/site/PageMeta';
 
 export const Webinars = () => {
@@ -21,11 +17,7 @@ export const Webinars = () => {
   const liveWebinar = webinars?.find(w => w.status === 'live');
 
   return (
-    <DashboardLayout
-      leftRail={<DashboardNavigation />}
-      topBar={<DashboardHeader />}
-      contextPanel={<MarketIntelligencePanel />}
-    >
+    <>
       <PageMeta
         title="Institutional Masterclasses"
         description="Live algorithmic trading sessions and recorded deep-dives from sovereign desks. Access institutional intelligence sessions."
@@ -117,7 +109,7 @@ export const Webinars = () => {
           )}
         </div>
       </div>
-    </DashboardLayout>
+    </>
   );
 };
 

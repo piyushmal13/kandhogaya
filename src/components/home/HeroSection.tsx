@@ -94,7 +94,7 @@ export const HeroSection = () => {
         <motion.div
           initial={{ opacity: 0, y: -40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: [0.23, 1, 0.32, 1] }}
+          transition={{ duration: 1, ease: [0.23, 1, 0.32, 1] as const }}
           className="mb-12 flex flex-col sm:flex-row justify-center items-center gap-4"
         >
           <div className="group inline-flex items-center gap-3 px-6 py-2.5 bg-[var(--color16)] rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.5)] transition-all duration-500 hover:bg-[var(--color17)]">
@@ -119,7 +119,7 @@ export const HeroSection = () => {
         <motion.div
            initial={{ opacity: 0, scale: 0.95 }}
            animate={{ opacity: 1, scale: 1 }}
-           transition={{ duration: 1.5, ease: [0.23, 1, 0.32, 1] }}
+           transition={{ duration: 1.5, ease: [0.23, 1, 0.32, 1] as const }}
            className="relative"
         >
           <h1 className="font-black mb-8 leading-[0.85] tracking-[-0.04em] uppercase font-['Manrope']">
@@ -163,7 +163,7 @@ export const HeroSection = () => {
         <motion.div 
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, delay: 0.6, ease: [0.23, 1, 0.32, 1] }}
+          transition={{ duration: 1.2, delay: 0.6, ease: [0.23, 1, 0.32, 1] as const }}
           className="w-full max-w-2xl mx-auto relative group"
         >
           <form 

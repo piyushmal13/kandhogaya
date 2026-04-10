@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Award, CheckCircle2, ShieldCheck, Target, TrendingUp, Zap, Activity } from "lucide-react";
+import { Award, CheckCircle2, ShieldCheck, Target, TrendingUp, Activity } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { PageMeta } from "../components/site/PageMeta";
-import { DashboardLayout } from '../components/institutional/DashboardLayout';
 import { getPerformanceResults } from "../services/apiHandlers";
+import { cn } from "@/lib/utils";
 
 export const Results = () => {
   const [results, setResults] = useState<any[]>([]);
@@ -27,7 +27,7 @@ export const Results = () => {
   ];
 
   return (
-    <DashboardLayout>
+    <>
       <PageMeta
         title="Verified Trading Performance"
         description="Review IFX Trades audited performance results: 82.4% win rate, 3.24 profit factor, equity growth."
@@ -153,6 +153,6 @@ export const Results = () => {
            </div>
         </section>
       </div>
-    </DashboardLayout>
+    </>
   );
 };

@@ -5,7 +5,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { CourseCardSkeleton } from "../components/ui/Skeleton";
 import { AcademyCourseCard } from "../components/institutional/AcademyCourseCard";
 import { PageMeta } from "../components/site/PageMeta";
-import { DashboardLayout } from '../components/institutional/DashboardLayout';
 import { getCourses } from "../services/apiHandlers";
 import { Course } from "../types";
 
@@ -46,9 +45,9 @@ export const Academy = () => {
   const totalLessons = courses.reduce((sum, course) => sum + (course.chapters?.length || 0), 0);
 
   return (
-    <DashboardLayout>
+    <>
       <PageMeta
-        title="Trading Academy"
+        title="Sovereign Trading Academy"
         description="Explore the IFXTrades Academy for structured trader education across forex, gold, and algorithmic execution workflows."
         path="/academy"
         keywords={["trading academy", "forex education", "algo trading course"]}
@@ -147,6 +146,6 @@ export const Academy = () => {
            </div>
         </section>
       </div>
-    </DashboardLayout>
+    </>
   );
 };

@@ -63,7 +63,7 @@ function SignalRow({ signal }: { signal: Signal }) {
       initial={{ opacity: 0, x: -20, scale: 0.98 }}
       animate={{ opacity: 1, x: 0, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
-      transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+      transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] as const }}
       className="group relative p-5 rounded-2xl bg-white/[0.03] border border-white/5 hover:bg-white/[0.07] hover:border-white/10 transition-all duration-300"
     >
       <div className="flex items-center justify-between gap-4">

@@ -36,6 +36,9 @@ const Hiring = lazy(() => import("./pages/Hiring").then(m => ({ default: m.Hirin
 const About = lazy(() => import("./pages/About").then(m => ({ default: m.About })));
 const Contact = lazy(() => import("./pages/Contact").then(m => ({ default: m.Contact })));
 const NotFound = lazy(() => import("./pages/NotFound").then(m => ({ default: m.NotFound })));
+const InstitutionalError = lazy(() => import("./pages/Error").then(m => ({ default: m.InstitutionalError })));
+const InstitutionalSkeleton = lazy(() => import("./components/institutional/InstitutionalSkeleton").then(m => ({ default: m.InstitutionalSkeleton })));
+const DashboardLayout = lazy(() => import("./components/institutional/DashboardLayout").then(m => ({ default: m.DashboardLayout })));
 
 const PrivacyPolicy = lazy(() => import("./pages/legal/PrivacyPolicy").then(m => ({ default: m.PrivacyPolicy })));
 const TermsOfService = lazy(() => import("./pages/legal/TermsOfService").then(m => ({ default: m.TermsOfService })));
@@ -65,7 +68,7 @@ const AnimatedRoutes = () => {
         exit={{ opacity: 0, y: -10 }}
         transition={{ duration: 0.3 }}
       >
-        <Suspense fallback={<PageLoader />}>
+        <Suspense fallback={<InstitutionalSkeleton />}>
           <Routes location={location}>
             <Route path="/" element={<Home />} />
             <Route path="/marketplace" element={<Marketplace />} />
@@ -90,7 +93,7 @@ const AnimatedRoutes = () => {
             <Route path="/terms" element={<TermsOfService />} />
             <Route path="/risk" element={<RiskDisclosure />} />
             <Route path="/cookies" element={<CookiePolicy />} />
-            <Route path="*" element={<NotFound />} />
+            <Route path="*" element={<InstitutionalError />} />
           </Routes>
         </Suspense>
       </motion.div>
@@ -111,6 +114,18 @@ function AppContent() {
     '/results'
   ].some(path => location.pathname.startsWith(path));
 
+  const content = <AnimatedRoutes />;
+
+  if (isInstitutional) {
+    return (
+      <DashboardLayout>
+        <Suspense fallback={<InstitutionalSkeleton />}>
+          {content}
+        </Suspense>
+      </DashboardLayout>
+    );
+  }
+
   return (
     <>
       <ScrollToTop />
@@ -122,28 +137,24 @@ function AppContent() {
         <div className="noise-overlay" />
         <SiteBackdrop />
         
-        {/* Global elements only on landing/secondary pages */}
-        {!isInstitutional && <Navbar />}
+        <Navbar />
         
         <main id="main-content" className="relative z-10">
-          <AnimatedRoutes />
+          {content}
         </main>
         
-        {!isInstitutional && <Footer />}
+        <Footer />
         
         <WhatsAppButton />
         
-        {/* Institutional Accountability: Relative Bottom Notice (Only on public pages) */}
-        {!isInstitutional && (
-          <div 
-            id="regulatory-notice"
-            className="relative w-full bg-[var(--color4)] text-white text-center p-8 md:p-12 text-[10px] md:text-sm font-black uppercase tracking-[0.2em] z-50 border-t border-white/10"
-          >
-            <div className="max-w-7xl mx-auto px-4">
-              <span className="opacity-50">CRITICAL INSTITUTIONAL NOTICE:</span> IFX Trades is strictly an education & research platform. We license algorithms, deliver courses, and provide macro analysis. <strong className="text-white underline">WE ARE NOT A BROKER.</strong> We do not accept deposits, execute trades, or handle client funds. Trading involves significant risk.
-            </div>
+        <div 
+          id="regulatory-notice"
+          className="relative w-full bg-[var(--color4)] text-white text-center p-8 md:p-12 text-[10px] md:text-sm font-black uppercase tracking-[0.2em] z-50 border-t border-white/10"
+        >
+          <div className="max-w-7xl mx-auto px-4">
+            <span className="opacity-50">CRITICAL INSTITUTIONAL NOTICE:</span> IFX Trades is strictly an education & research platform. We license algorithms, deliver courses, and provide macro analysis. <strong className="text-white underline">WE ARE NOT A BROKER.</strong> We do not accept deposits, execute trades, or handle client funds. Trading involves significant risk.
           </div>
-        )}
+        </div>
         <SpeedInsights />
       </div>
     </>

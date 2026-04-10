@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "motion/react";
 import { Zap, ShieldCheck, Activity, TrendingUp } from "lucide-react";
 import { PurchaseModal } from "../components/payments/PurchaseModal";
-import { DashboardLayout } from '../components/institutional/DashboardLayout';
 import { PageMeta } from "../components/site/PageMeta";
 import { productService } from "../services/productService";
 import { Product } from "../types";
@@ -74,9 +73,9 @@ export const Marketplace = () => {
   });
 
   return (
-    <DashboardLayout>
+    <>
       <PageMeta
-        title="Algorithm Marketplace"
+        title="Algorithmic Marketplace"
         description="Explore IFXTrades trading algorithms, strategy filters, and subscription-ready systematic products."
         path="/marketplace"
         keywords={["trading algorithms", "algo marketplace", "MT5 trading bots"]}
@@ -210,6 +209,6 @@ export const Marketplace = () => {
           onClose={() => setPurchaseDetails(null)}
         />
       )}
-    </DashboardLayout>
+    </>
   );
 };

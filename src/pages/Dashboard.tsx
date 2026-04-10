@@ -1,14 +1,11 @@
 import React from 'react';
-import { DashboardLayout } from '@/components/institutional/DashboardLayout';
-import { SignalFeed } from '@/components/institutional/SignalFeed';
 import { PortfolioValue } from '@/components/institutional/PortfolioValue';
+import { SignalFeed } from '@/components/institutional/SignalFeed';
 import { QuickActions } from '@/components/institutional/QuickActions';
 import { RiskMetrics } from '@/components/institutional/RiskMetrics';
 import { RecentActivity } from '@/components/institutional/RecentActivity';
-import { DashboardNavigation } from '@/components/institutional/DashboardNavigation';
-import { DashboardHeader } from '@/components/institutional/DashboardHeader';
-import { MarketIntelligencePanel } from '@/components/institutional/MarketIntelligencePanel';
 import { tracker } from '@/core/tracker';
+import { PageMeta } from '@/components/site/PageMeta';
 
 export const Dashboard = () => {
   React.useEffect(() => {
@@ -16,11 +13,13 @@ export const Dashboard = () => {
   }, []);
 
   return (
-    <DashboardLayout
-      leftRail={<DashboardNavigation />}
-      topBar={<DashboardHeader />}
-      contextPanel={<MarketIntelligencePanel />}
-    >
+    <>
+      <PageMeta 
+        title="Institutional Omni-View"
+        description="Real-time systematic intelligence, portfolio tracking, and execution metrics for sovereign capital management."
+        path="/dashboard"
+      />
+      
       {/* ── Main Stage Content ── */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-10 items-start">
         {/* Primary Alpha Surface */}
@@ -36,6 +35,6 @@ export const Dashboard = () => {
           <RecentActivity />
         </div>
       </div>
-    </DashboardLayout>
+    </>
   );
 };

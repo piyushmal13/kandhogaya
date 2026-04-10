@@ -44,7 +44,7 @@ export const AcademyCourseCard: React.FC<AcademyCourseCardProps> = ({ course, in
       transition: { 
         duration: 0.5, 
         delay: index * 0.1, 
-        ease: [0.23, 1, 0.32, 1] 
+        ease: [0.23, 1, 0.32, 1] as const 
       }
     }
   };

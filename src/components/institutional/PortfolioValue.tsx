@@ -17,7 +17,7 @@ export function PortfolioValue() {
   const formatPercentage = (val: number) => `${val >= 0 ? '+' : ''}${val.toFixed(2)}%`;
 
   return (
-    <div className="min-h-[160px] p-8 rounded-3xl bg-black/20 border border-white/10 backdrop-blur-3xl relative overflow-hidden group">
+    <div className="h-[180px] p-8 rounded-3xl bg-black/20 border border-white/10 backdrop-blur-3xl relative overflow-hidden group">
       {/* Decorative Background Icon */}
       <Wallet className="absolute -right-8 -bottom-8 w-48 h-48 text-white/[0.02] -rotate-12 pointer-events-none transition-transform group-hover:rotate-0 duration-700" />
       
@@ -50,7 +50,16 @@ export function PortfolioValue() {
               <span>{formatPercentage(portfolio.change)} (24H)</span>
             </div>
           </div>
-        ) : null}
+        ) : (
+          <div className="mt-auto">
+            <div className="text-4xl font-black text-white/10 italic tracking-tighter uppercase mb-2">
+              --.---,--
+            </div>
+            <div className="text-[10px] font-black text-white/20 uppercase tracking-widest">
+              Synchronization Pending
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Surface Gloss */}
