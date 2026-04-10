@@ -7,6 +7,9 @@ import { HeroSection } from "../components/home/HeroSection";
 import { MarketTicker } from "../components/home/MarketTicker";
 import { WebinarPromo } from "../components/home/WebinarPromo";
 import { JourneySection } from "../components/home/JourneySection";
+import { HowItWorksSection } from "../components/home/HowItWorksSection";
+import { WhyChooseUsSection } from "../components/home/WhyChooseUsSection";
+import { ConsultationSection } from "../components/home/ConsultationSection";
 import { PartnerLogos } from "../components/ui/PartnerLogos";
 import { TrustGrid } from "../components/home/TrustGrid";
 import { NewsletterPopup } from "../components/ui/NewsletterPopup";
@@ -94,6 +97,16 @@ export const Home = () => {
       <HeroSection />
       <MarketTicker />
 
+      {/* === CORE PROMISE — Strategy to Execution === */}
+      <LazySection placeholderHeight="800px">
+        <HowItWorksSection />
+      </LazySection>
+
+      {/* === TRUST DIFFERENTIATION — Why choose us === */}
+      <LazySection placeholderHeight="700px">
+        <WhyChooseUsSection />
+      </LazySection>
+
       {/* === TRUST & AUTHORITY TIMELINE === */}
       <LazySection placeholderHeight="900px">
         <JourneySection />
@@ -128,6 +141,11 @@ export const Home = () => {
       <LazySection placeholderHeight="1400px">
         <TrustGrid />
         <PartnerLogos />
+      </LazySection>
+
+      {/* === FINAL CONVERSION — Consultation Form === */}
+      <LazySection placeholderHeight="900px">
+        <ConsultationSection />
       </LazySection>
 
       {/* === FINAL SIGNUP CTA === */}
