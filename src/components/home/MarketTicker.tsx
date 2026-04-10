@@ -112,34 +112,35 @@ export const MarketTicker = () => {
     }
   }, []);
 
+  const processUpdates = useCallback(() => {
+    if (Object.keys(pendingUpdates.current).length === 0) return;
+
+    const updates = { ...pendingUpdates.current };
+    pendingUpdates.current = {};
+
+    setPairs(prev => {
+      const updated = [...prev];
+      const updateAsset = (newItem: MarketPair) => {
+        const index = updated.findIndex(p => p.symbol === newItem.symbol);
+        if (index >= 0) {
+          updated[index] = newItem;
+        } else {
+          updated.push(newItem);
+        }
+      };
+      Object.values(updates).forEach(updateAsset);
+      pairsRef.current = updated;
+      return updated;
+    });
+    
+    setLastUpdate(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+  }, [setPairs]);
+
   // Throttle processor: Flushes pending updates every 500ms
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (Object.keys(pendingUpdates.current).length === 0) return;
-
-      const updates = { ...pendingUpdates.current };
-      pendingUpdates.current = {};
-
-      setPairs(prev => {
-        const updated = [...prev];
-        const updateAsset = (newItem: MarketPair) => {
-          const index = updated.findIndex(p => p.symbol === newItem.symbol);
-          if (index >= 0) {
-            updated[index] = newItem;
-          } else {
-            updated.push(newItem);
-          }
-        };
-        Object.values(updates).forEach(updateAsset);
-        pairsRef.current = updated;
-        return updated;
-      });
-      
-      setLastUpdate(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
-    }, 500);
-
+    const interval = setInterval(processUpdates, 500);
     return () => clearInterval(interval);
-  }, []);
+  }, [processUpdates]);
 
   useEffect(() => {
     if (!sessionReady) return;
