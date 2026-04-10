@@ -6,6 +6,7 @@ import { Footer } from './Footer';
 import { DashboardHeader } from './DashboardHeader';
 import { useFocusRoute } from '@/hooks/useFocusRoute';
 import { cn } from '@/lib/utils';
+import { StickyCTA } from '@/components/ui/StickyCTA';
 
 // ── TYPES ──
 interface DashboardLayoutProps {
@@ -70,6 +71,9 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           {contextPanel}
         </aside>
       )}
+
+      {/* ── STICKY CONVERSION CTA ── */}
+      <StickyCTA />
     </div>
   );
 };

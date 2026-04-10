@@ -6,6 +6,7 @@ import { GlobalReach } from "../components/home/GlobalReach";
 import { HeroSection } from "../components/home/HeroSection";
 import { MarketTicker } from "../components/home/MarketTicker";
 import { WebinarPromo } from "../components/home/WebinarPromo";
+import { JourneySection } from "../components/home/JourneySection";
 import { PartnerLogos } from "../components/ui/PartnerLogos";
 import { TrustGrid } from "../components/home/TrustGrid";
 import { NewsletterPopup } from "../components/ui/NewsletterPopup";
@@ -92,6 +93,11 @@ export const Home = () => {
       {/* === ABOVE THE FOLD — Immediate value, trust-first === */}
       <HeroSection />
       <MarketTicker />
+
+      {/* === TRUST & AUTHORITY TIMELINE === */}
+      <LazySection placeholderHeight="900px">
+        <JourneySection />
+      </LazySection>
 
       {/* === NEXT LIVE WEBINAR — High-conversion section === */}
       <LazySection placeholderHeight="600px">
