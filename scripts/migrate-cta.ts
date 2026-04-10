@@ -1,7 +1,7 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 import j from 'jscodeshift';
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -14,7 +14,8 @@ function transformFile(filePath) {
   try {
     root = j(src, { parser: 'tsx' });
   } catch (e) {
-    return; // Parse error, skip
+    console.warn(`[cta-migrate] Skipping file due to parse error: ${filePath}`, e);
+    return;
   }
 
   const hasButton = root.find(j.JSXElement, {
@@ -40,11 +41,11 @@ function transformFile(filePath) {
 
       const newAttrs = [
         j.jsxAttribute(j.jsxIdentifier('variant'), j.literal('primary')),
-        attrs.onClick && attrs.onClick,
-        attrs.disabled && attrs.disabled,
+        attrs.onClick ? attrs.onClick : null,
+        attrs.disabled ? attrs.disabled : null,
         attrs.className && j.jsxAttribute(j.jsxIdentifier('className'), attrs.className.value),
-        attrs['aria-label'] && attrs['aria-label'],
-        attrs['aria-describedby'] && attrs['aria-describedby'],
+        attrs['aria-label'] ? attrs['aria-label'] : null,
+        attrs['aria-describedby'] ? attrs['aria-describedby'] : null,
         j.jsxAttribute(
           j.jsxIdentifier('trackingEvent'),
           j.literal(`cta_${path.basename(filePath, '.tsx').toLowerCase()}`)

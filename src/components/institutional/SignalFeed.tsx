@@ -37,25 +37,31 @@ export function SignalFeed() {
         aria-atomic="false"
       >
         <AnimatePresence initial={false}>
-          {isLoading ? (
-            [...Array(6)].map((_, i) => <SignalSkeleton key={i} />)
-          ) : isError ? (
-            <div className="h-full flex flex-col items-center justify-center text-center p-8">
-              <p className="text-xs font-black text-red-400 uppercase tracking-widest mb-2">Transmission Interrupted</p>
-              <p className="text-[10px] text-white/20 uppercase tracking-widest leading-relaxed">Failed to establish link with sovereign signal nodes.</p>
-            </div>
-          ) : (
-            signals?.map((signal) => (
+          {(() => {
+            if (isLoading) {
+              return new Array(6).fill(null).map((_, i) => (
+                <SignalSkeleton key={`signal-skel-${i}`} />
+              ));
+            }
+            if (isError) {
+              return (
+                <div className="h-full flex flex-col items-center justify-center text-center p-8">
+                  <p className="text-xs font-black text-red-400 uppercase tracking-widest mb-2">Transmission Interrupted</p>
+                  <p className="text-[10px] text-white/20 uppercase tracking-widest leading-relaxed">Failed to establish link with sovereign signal nodes.</p>
+                </div>
+              );
+            }
+            return signals?.map((signal) => (
               <SignalRow key={signal.id} signal={signal} />
-            ))
-          )}
+            ));
+          })()}
         </AnimatePresence>
       </div>
     </div>
   );
 }
 
-function SignalRow({ signal }: { signal: Signal }) {
+function SignalRow({ signal }: { readonly signal: Signal }) {
   const isBuy = signal.type === 'BUY';
   
   return (

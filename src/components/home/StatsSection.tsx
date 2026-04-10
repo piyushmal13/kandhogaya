@@ -56,7 +56,8 @@ const useCountUp = (end: number, trigger: boolean, duration: number = 2500) => {
 const StatItem = ({ stat, i }: { stat: typeof stats[0], i: number }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
-  const match = stat.value.match(/(\d+(\.\d+)?)/);
+  const regex = /(\d+(\.\d+)?)/;
+  const match = regex.exec(stat.value);
   const numericValue = match ? Number.parseFloat(match[0]) : 0;
   const hasDecimal = stat.value.includes('.');
   const animatedValue = useCountUp(numericValue, isInView, 2500);
