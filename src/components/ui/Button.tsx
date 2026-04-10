@@ -143,4 +143,5 @@ export const Button = forwardRef<HTMLButtonElement, SovereignButtonProps>(
   }
 );
 
+export { Button as SovereignButton };
 Button.displayName = "SovereignButton";

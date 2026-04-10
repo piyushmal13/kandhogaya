@@ -1,273 +1,124 @@
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
-import { Calendar, Users, ArrowRight, Zap, ShieldCheck } from "lucide-react";
-import { WebinarCard } from "../components/webinars/WebinarCard";
-import { RegistrationModal } from "../components/webinars/RegistrationModal";
-import { WebinarCalendar } from "../components/webinars/WebinarCalendar";
-import { CountdownTimer } from "../components/webinars/CountdownTimer";
-import { PageHero } from "../components/site/PageHero";
-import { PageMeta } from "../components/site/PageMeta";
-import { PageSection } from "../components/site/PageSection";
-import { Webinar } from "../types";
-import { useDataPulse } from "../hooks/useDataPulse";
-import { useAccess } from "../hooks/useAccess";
-import { UpgradeModal } from "../components/ui/UpgradeModal";
-import { tracker } from "../core/tracker";
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useWebinars } from '@/hooks/useWebinars';
+import { WebinarCard } from '@/components/institutional/WebinarCard';
+import { VideoPlayer } from '@/components/institutional/VideoPlayer';
+import { Skeleton, WebinarCardSkeleton } from '@/components/ui/Skeleton';
+import { DashboardLayout } from '@/components/institutional/DashboardLayout';
+import { DashboardNavigation } from '@/components/institutional/DashboardNavigation';
+import { DashboardHeader } from '@/components/institutional/DashboardHeader';
+import { MarketIntelligencePanel } from '@/components/institutional/MarketIntelligencePanel';
+import { PageMeta } from '@/components/site/PageMeta';
 
 export const Webinars = () => {
-  const { webinars, loading } = useDataPulse();
-  const { isPro } = useAccess();
-  const [selectedWebinar, setSelectedWebinar] = useState<Webinar | null>(null);
-  const [showUpgrade, setShowUpgrade] = useState(false);
+  const { data: webinars, isLoading } = useWebinars();
+  const [activeTab, setActiveTab] = useState<'upcoming' | 'recorded'>('upcoming');
 
-  const handleRegisterClick = (webinar: Webinar) => {
-    tracker.track("webinar_register", { title: webinar.title, is_paid: webinar.is_paid });
-    if (webinar.is_paid && !isPro) {
-      setShowUpgrade(true);
-      return;
-    }
-    setSelectedWebinar(webinar);
-  };
+  const filteredWebinars = webinars?.filter(w => 
+    activeTab === 'upcoming' ? w.status !== 'recorded' : w.status === 'recorded'
+  );
 
-  const nextWebinar = webinars[0];
+  const liveWebinar = webinars?.find(w => w.status === 'live');
 
   return (
-    <div className="min-h-screen pt-20 pb-20 relative overflow-hidden bg-[var(--color10)]">
+    <DashboardLayout
+      leftRail={<DashboardNavigation />}
+      topBar={<DashboardHeader />}
+      contextPanel={<MarketIntelligencePanel />}
+    >
       <PageMeta
-        title="Webinars"
-        description="Register for IFXTrades webinars covering market structure, live analysis, algorithmic workflows, and trader education."
+        title="Institutional Masterclasses"
+        description="Live algorithmic trading sessions and recorded deep-dives from sovereign desks. Access institutional intelligence sessions."
         path="/webinars"
-        keywords={["trading webinars", "live market analysis", "forex webinar"]}
       />
 
-      <PageHero
-        eyebrow="Live Trading Education"
-        title={
-          <>
-            Institutional market <span className="site-title-gradient">intelligence sessions.</span>
-          </>
-        }
-        description="Participate in sovereign market breakdowns, systematic workflow walkthroughs, and quantitative execution masterclasses led by the IFX research desk."
-        metrics={[
-          { label: "Formats", value: "Live + Recorded", helper: "Real-time sessions with replay support" },
-          { label: "Audience", value: "Global Traders", helper: "Designed for practical decision makers" },
-        ]}
-        aside={
-          nextWebinar ? (
-            <div className="space-y-4">
-              <div className="text-[11px] uppercase tracking-[0.32em] text-emerald-200/80">Next Session</div>
-              <h3 className="text-2xl font-semibold text-white">{nextWebinar.title}</h3>
-              <p className="text-sm leading-7 text-slate-300">
-                {new Date(nextWebinar.date_time).toLocaleDateString("en-US", {
-                  weekday: "long",
-                  month: "long",
-                  day: "numeric",
-                })}{" "}
-                with {nextWebinar.speaker_name || "IFXTrades Analyst Team"}.
-              </p>
+      <div className="space-y-12">
+        {/* Header Section */}
+        <div className="space-y-4">
+          <h1 className="text-5xl font-black text-white italic tracking-tighter uppercase leading-[0.8] mb-4">
+            Institutional <span className="text-emerald-500">Masterclasses</span>
+          </h1>
+          <p className="text-sm text-white/40 max-w-2xl font-medium uppercase tracking-widest leading-relaxed">
+            Participate in sovereign market breakdowns, systematic workflow walkthroughs, and quantitative execution masterclasses led by the IFX research desk.
+          </p>
+        </div>
+
+        {/* Live Stream Surface */}
+        <AnimatePresence mode="wait">
+          {liveWebinar && (
+            <motion.section 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="space-y-6"
+            >
+              <div className="flex items-center justify-between">
+                <h2 className="text-[10px] font-black text-white uppercase tracking-[0.3em] flex items-center gap-3">
+                  <span className="relative flex h-2.5 w-2.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+                  </span>
+                  Direct Link Active
+                </h2>
+                <div className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[9px] font-mono text-white/40 uppercase">
+                  Session ID: {liveWebinar.id.slice(0, 8)}
+                </div>
+              </div>
+              <VideoPlayer 
+                src={liveWebinar.streaming_url || ''}
+                title={liveWebinar.title}
+                isLive={true}
+              />
+            </motion.section>
+          )}
+        </AnimatePresence>
+
+        {/* Intelligence Archive Filters */}
+        <div className="space-y-10">
+          <div className="flex gap-10 border-b border-white/5">
+            {(['upcoming', 'recorded'] as const).map((tab) => (
               <button
-                onClick={() => setSelectedWebinar(nextWebinar)}
-                className="inline-flex rounded-full bg-emerald-500 px-6 py-3 text-sm font-bold text-black hover:bg-emerald-400 transition-colors shadow-[0_0_20px_rgba(16,185,129,0.3)]"
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`pb-4 text-[11px] font-black uppercase tracking-[0.2em] transition-all relative ${
+                  activeTab === tab ? 'text-emerald-500' : 'text-white/30 hover:text-white'
+                }`}
               >
-                Register Now
+                {tab === 'upcoming' ? 'Cycle Schedule' : 'Intelligence Archive'}
+                {activeTab === tab && (
+                  <motion.div 
+                    layoutId="activeTabWebinars"
+                    className="absolute bottom-[-1px] left-0 right-0 h-[2px] bg-emerald-500 shadow-[0_0_10px_#10b981]" 
+                  />
+                )}
               </button>
+            ))}
+          </div>
+
+          {/* Masterclass Grid */}
+          {isLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[...Array(3)].map((_, i) => (
+                <WebinarCardSkeleton key={i} />
+              ))}
             </div>
           ) : (
-            <div className="text-sm leading-7 text-slate-300">
-              Loading the current webinar calendar and featured session.
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredWebinars?.length ? (
+                filteredWebinars.map((webinar, index) => (
+                  <WebinarCard key={webinar.id} webinar={webinar} />
+                ))
+              ) : (
+                <div className="col-span-full py-20 text-center border border-white/5 rounded-[2.5rem] bg-white/[0.02]">
+                   <p className="text-sm font-black text-white/20 uppercase tracking-[0.3em]">No archive nodes located for this cycle.</p>
+                </div>
+              )}
             </div>
-          )
-        }
-      />
-
-      {/* --- Featured Webinar (Next Up) --- */}
-      {nextWebinar && (
-        <PageSection className="mb-8 pt-0">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="bg-[var(--color7)]/80 backdrop-blur-2xl border border-emerald-500/30 rounded-[2.5rem] overflow-hidden relative shadow-[0_0_80px_rgba(16,185,129,0.15)] group"
-          >
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 via-cyan-500 to-emerald-500 animate-gradient-x" />
-            
-            <div className="grid grid-cols-1 lg:grid-cols-2">
-              <div className="p-8 md:p-14 flex flex-col justify-center relative z-10">
-                <div className="flex items-center gap-3 mb-6">
-                  <span className="bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full animate-pulse flex items-center gap-1">
-                    <span className="w-2 h-2 bg-white rounded-full animate-ping" />
-                    {" "}UP NEXT
-                  </span>
-                  <span className="text-emerald-500 text-xs font-mono tracking-widest uppercase">
-                    {new Date(nextWebinar.date_time).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
-                  </span>
-                </div>
-
-                <h2 className="text-4xl md:text-6xl font-black text-white mb-8 leading-[0.9] tracking-tighter max-w-2xl uppercase italic">
-                  {nextWebinar.title}
-                </h2>
-                
-                <div className="mb-10">
-                  <div className="text-[10px] font-bold text-emerald-500 uppercase tracking-[0.3em] mb-6">Session Starts In</div>
-                  <CountdownTimer targetDate={nextWebinar.date_time} variant="hero" />
-                </div>
-                
-                <p className="text-gray-400 text-lg mb-10 leading-relaxed font-light">
-                  {nextWebinar.description}
-                </p>
-
-                <div className="flex items-center gap-4 mb-8">
-                  {nextWebinar.speaker_profile_url ? (
-                    <img 
-                      src={nextWebinar.speaker_profile_url} 
-                      alt={nextWebinar.speaker_name} 
-                      className="w-14 h-14 rounded-full object-cover border-2 border-white/10" 
-                      referrerPolicy="no-referrer"
-                    />
-                  ) : (
-                    <div className="w-14 h-14 rounded-full bg-white/10 flex items-center justify-center text-lg font-bold text-white border-2 border-white/10">
-                      {nextWebinar.speaker_name?.charAt(0) || 'S'}
-                    </div>
-                  )}
-                  <div>
-                    <div className="text-white font-bold text-lg">{nextWebinar.speaker_name || 'Speaker'}</div>
-                    <div className="text-emerald-500 text-xs font-mono uppercase tracking-widest mt-1">Lead Strategist</div>
-                  </div>
-                </div>
-
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <button 
-                    onClick={() => handleRegisterClick(nextWebinar)}
-                    className="px-8 py-4 bg-emerald-500 text-black font-bold rounded-2xl hover:bg-emerald-400 transition-all shadow-[0_0_30px_rgba(16,185,129,0.4)] hover:shadow-[0_0_50px_rgba(16,185,129,0.6)] flex items-center justify-center gap-3 text-lg"
-                  >
-                    {nextWebinar.is_paid ? `Purchase Access ($${nextWebinar.price})` : "Register Now"}
-                    <ArrowRight className="w-5 h-5" />
-                  </button>
-                  <div className="px-8 py-4 bg-[var(--color60)]/80 backdrop-blur-xl text-white font-medium rounded-2xl border border-white/10 flex flex-col items-center justify-center gap-1">
-                    <div className="flex items-center gap-2">
-                      <Users className="w-5 h-5 text-gray-400" />
-                      <span>{nextWebinar.registration_count} registered</span>
-                    </div>
-                    {nextWebinar.max_attendees - nextWebinar.registration_count < 20 && nextWebinar.max_attendees - nextWebinar.registration_count > 0 && (
-                      <div className="text-[10px] text-red-400 font-bold uppercase tracking-widest animate-pulse">
-                        Only {nextWebinar.max_attendees - nextWebinar.registration_count} seats remaining
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-              
-              <div className="relative h-[400px] lg:h-auto overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-[var(--color7)]/90 via-[var(--color7)]/50 to-transparent z-10" />
-                {nextWebinar.brand_logo_url && (
-                  <div className="absolute top-8 right-8 w-20 h-20 bg-black/40 backdrop-blur-md rounded-2xl p-4 border border-white/10 z-20">
-                    <img src={nextWebinar.brand_logo_url} alt="Brand" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
-                  </div>
-                )}
-                <img 
-                  src={nextWebinar.webinar_image_url || `https://picsum.photos/seed/${nextWebinar.id}/800/800`} 
-                  alt={nextWebinar.title} 
-                  className="w-full h-full object-cover opacity-50 group-hover:scale-105 transition-transform duration-1000"
-                  referrerPolicy="no-referrer"
-                />
-              </div>
-            </div>
-          </motion.div>
-        </PageSection>
-      )}
-
-      {/* --- Upcoming Grid & Calendar --- */}
-      <PageSection className="pb-24">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left: Webinar Grid */}
-          <div className="lg:col-span-2">
-            <h3 className="text-2xl font-bold text-white mb-8 flex items-center gap-2">
-              <Calendar className="w-6 h-6 text-emerald-500" />
-              Upcoming Sessions
-            </h3>
-            
-            {loading ? (
-              <div className="flex items-center justify-center py-20">
-                <div className="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin" />
-              </div>
-            ) : (
-              <>
-                {webinars.length <= 1 ? (
-                  <div className="bg-[var(--color7)] border border-white/5 rounded-[2.5rem] p-12 text-center space-y-8">
-                    <div className="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto border border-emerald-500/20">
-                      <Calendar className="w-10 h-10 text-emerald-500" />
-                    </div>
-                    <div className="space-y-4">
-                      <h3 className="text-3xl md:text-5xl font-black text-white tracking-tighter uppercase italic text-center">Institutional Archive Access</h3>
-                      <p className="text-gray-400 max-w-lg mx-auto leading-relaxed font-medium opacity-80">
-                        The current live masterclass cycle is undergoing systemic liquidity analysis. Join the institutional waitlist for priority clearance to the upcoming Q4 schedule.
-                      </p>
-                    </div>
-                    <div className="flex flex-col sm:flex-row justify-center gap-4 pt-4">
-                      <button className="px-10 py-4 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all shadow-[0_0_30px_rgba(16,185,129,0.3)]">
-                        Join Waitlist
-                      </button>
-                      <button className="px-10 py-4 bg-white/5 text-white font-bold rounded-xl border border-white/10 hover:bg-white/10">
-                        View Replays
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {webinars.slice(1).map((webinar, i) => (
-                      <motion.div
-                        key={webinar.id}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: i * 0.1 }}
-                      >
-                        <WebinarCard webinar={webinar} onRegister={handleRegisterClick} />
-                      </motion.div>
-                    ))}
-                  </div>
-                )}
-              </>
-            )}
-          </div>
-
-          {/* Right: Calendar */}
-          <div className="space-y-8">
-            <WebinarCalendar webinars={webinars} />
-            
-            <div className="bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 border border-emerald-500/20 rounded-2xl p-8 relative overflow-hidden">
-              <div className="absolute top-0 right-0 p-4 opacity-10">
-                <Zap className="w-20 h-20 text-emerald-500" />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-4 relative z-10">Institutional Edge</h3>
-              <p className="text-gray-400 text-sm leading-relaxed mb-6 relative z-10">
-                Our live sessions provide real-time alpha that isn't available anywhere else. Join the next session to stay ahead of the curve.
-              </p>
-              <div className="flex items-center gap-2 text-emerald-500 text-xs font-bold uppercase tracking-widest relative z-10">
-                <ShieldCheck className="w-4 h-4" />
-                Verified Institutional Data
-              </div>
-            </div>
-          </div>
+          )}
         </div>
-      </PageSection>
-
-      <AnimatePresence>
-        {selectedWebinar && (
-          <RegistrationModal 
-            webinar={selectedWebinar} 
-            onClose={() => setSelectedWebinar(null)} 
-          />
-        )}
-      </AnimatePresence>
-
-      <UpgradeModal 
-        isOpen={showUpgrade} 
-        onClose={() => setShowUpgrade(false)} 
-        requiredPlan="pro"
-        title="Pro Webinar Locked"
-        description="Active institutional Masterclasses and premium trading sessions require Pro-tier credentials. Upgrade currently to unlock the research desk's live feeds."
-      />
-    </div>
+      </div>
+    </DashboardLayout>
   );
 };
+
+export default Webinars;
