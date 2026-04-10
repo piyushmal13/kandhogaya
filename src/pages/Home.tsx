@@ -3,11 +3,11 @@ import { PageMeta } from "../components/site/PageMeta";
 import { BlogSection } from "../components/home/BlogSection";
 import { EcosystemSection } from "../components/home/EcosystemSection";
 import { GlobalReach } from "../components/home/GlobalReach";
-import { HeroSection } from "../components/home/HeroSection";
-import { MarketTicker } from "../components/home/MarketTicker";
+import { HeroLaboratory } from "../components/home/HeroLaboratory";
+import { MetricsTicker } from "../components/home/MetricsTicker";
+import { ProcessBento } from "../components/home/ProcessBento";
 import { WebinarPromo } from "../components/home/WebinarPromo";
 import { JourneySection } from "../components/home/JourneySection";
-import { HowItWorksSection } from "../components/home/HowItWorksSection";
 import { WhyChooseUsSection } from "../components/home/WhyChooseUsSection";
 import { ConsultationSection } from "../components/home/ConsultationSection";
 import { PartnerLogos } from "../components/ui/PartnerLogos";
@@ -93,13 +93,13 @@ export const Home = () => {
         ]}
       />
 
-      {/* === ABOVE THE FOLD — Immediate value, trust-first === */}
-      <HeroSection />
-      <MarketTicker />
+      {/* === ABOVE THE FOLD — Cinematic Hero === */}
+      <HeroLaboratory />
+      <MetricsTicker />
 
       {/* === CORE PROMISE — Strategy to Execution === */}
       <LazySection placeholderHeight="800px">
-        <HowItWorksSection />
+        <ProcessBento />
       </LazySection>
 
       {/* === TRUST DIFFERENTIATION — Why choose us === */}

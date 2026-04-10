@@ -13,6 +13,8 @@ import { ScrollToTop } from "./components/ScrollToTop";
 import { SiteBackdrop } from "./components/site/SiteBackdrop";
 import { LoadingSpinner } from "./components/ui/LoadingSpinner";
 import { ProtectedRoute } from "./components/ui/ProtectedRoute";
+import { CustomCursor } from "./components/ui/CustomCursor";
+import { useSmoothScroll } from "./lib/smoothScroll";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./lib/reactQuery";
@@ -105,6 +107,7 @@ import { loadSystem } from "./core/systemLoader";
 
 function AppContent() {
   const location = useLocation();
+  useSmoothScroll();
   
   const isInstitutional = [
     '/dashboard', 
@@ -134,6 +137,7 @@ function AppContent() {
         Skip to main content
       </a>
       <div className="relative min-h-screen overflow-hidden font-sans">
+        <CustomCursor />
         <div className="noise-overlay" />
         <SiteBackdrop />
         
