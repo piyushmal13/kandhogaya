@@ -7,6 +7,7 @@ interface SovereignButtonProps extends HTMLMotionProps<'button'> {
   size?: 'sm' | 'md' | 'lg' | 'xl';
   glowEffect?: boolean;
   isLoading?: boolean;
+  trackingEvent?: string;
 }
 
 /**
@@ -15,9 +16,18 @@ interface SovereignButtonProps extends HTMLMotionProps<'button'> {
  * Enforcing the Lumina Quant visual language.
  * Features: High-precision rounding, dynamic glow, and scale-accurate micro-interactions.
  */
+import { tracker } from '@/core/tracker';
+
 export const SovereignButton = React.forwardRef<HTMLButtonElement, SovereignButtonProps>(
-  ({ className, variant = 'primary', size = 'md', glowEffect = false, isLoading = false, children, disabled, ...props }, ref) => {
+  ({ className, variant = 'primary', size = 'md', glowEffect = false, isLoading = false, trackingEvent, children, disabled, onClick, ...props }, ref) => {
     const content = children as React.ReactNode;
+
+    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+      if (trackingEvent) {
+        tracker.track("button_click", { event: trackingEvent, label: typeof content === 'string' ? content : undefined });
+      }
+      if (onClick) onClick(e);
+    };
     
     const variants = {
       primary: "bg-[#58F2B6] text-[#020202] border-[#58F2B6] hover:bg-[#4ae0a5] shadow-[0_0_20px_rgba(88,242,182,0.2)]",
@@ -38,6 +48,7 @@ export const SovereignButton = React.forwardRef<HTMLButtonElement, SovereignButt
         ref={ref}
         whileHover={{ scale: 1.02, y: -2 }}
         whileTap={{ scale: 0.98, y: 0 }}
+        onClick={handleClick}
         disabled={disabled || isLoading}
         className={cn(
           "relative inline-flex items-center justify-center rounded-2xl border font-mono transition-all duration-300",

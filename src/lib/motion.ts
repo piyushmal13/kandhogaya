@@ -52,3 +52,5 @@ export const containerVariants: Variants = {
     }
   }
 };
+
+export const staggerContainer = containerVariants;

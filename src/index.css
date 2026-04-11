@@ -14,6 +14,14 @@
   /* ── Spatial Variables ── */
   --nav-h: 5rem;
   --nav-h-mobile: 4rem;
+
+  /* ── Lumina Quant Color Tokens ── */
+  --color-primary-400: #58F2B6;
+  --color-primary-500: #58F2B6;
+  --color-primary-600: #4ae0a5;
+  --color-background: #020202;
+  --color-foreground: #F8FAFC;
+  --color-surface: #0A0A0A;
 }
 
 @layer base {
