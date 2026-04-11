@@ -7,6 +7,8 @@ import { AcademyCourseCard } from "../components/institutional/AcademyCourseCard
 import { PageMeta } from "../components/site/PageMeta";
 import { getCourses } from "../services/apiHandlers";
 import { Course } from "../types";
+import { PageLayout } from "../components/layout/PageLayout";
+import { mobileFirst } from "../lib/responsive";
 
 const getCourseImage = (course: Course) =>
   course.image_url || course.thumbnail_url || `https://picsum.photos/seed/${course.id}/960/540`;
@@ -45,7 +47,7 @@ export const Academy = () => {
   const totalLessons = courses.reduce((sum, course) => sum + (course.chapters?.length || 0), 0);
 
   return (
-    <>
+    <PageLayout showFooter={true}>
       <PageMeta
         title="Sovereign Trading Academy"
         description="Explore the IFXTrades Academy for structured trader education across forex, gold, and algorithmic execution workflows."
@@ -53,12 +55,12 @@ export const Academy = () => {
         keywords={["trading academy", "forex education", "algo trading course"]}
       />
 
-      <div className="space-y-16">
+      <div className={`space-y-16 ${mobileFirst.container} ${mobileFirst.section}`}>
         {/* Terminal Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
           <div className="space-y-4">
             <h1 className="text-5xl font-black text-white italic tracking-tighter uppercase leading-[0.8] mb-2">
-              Institutional <span className="text-emerald-500">Academy</span>
+              Institutional <span className="text-[#00E5FF]">Academy</span>
             </h1>
             <p className="text-sm text-white/40 max-w-2xl font-medium uppercase tracking-widest leading-relaxed">
               Curriculum engineered for traders moving from intuition-led entries toward systematic execution, risk discipline, and algorithmic repeatability.
@@ -126,18 +128,18 @@ export const Academy = () => {
 
         {/* Methodology Nodes */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-10 py-12 border-t border-white/5">
-           <div className="p-8 rounded-[2.5rem] bg-white/[0.02] border border-white/5 space-y-4 hover:border-emerald-500/20 transition-all group">
+           <div className="p-8 rounded-[2.5rem] bg-white/[0.02] border border-white/5 space-y-4 hover:border-[#00E5FF]/20 transition-all group">
               <div className="flex items-center gap-3">
-                 <Zap className="w-5 h-5 text-emerald-500" />
+                 <Zap className="w-5 h-5 text-[#00E5FF]" />
                  <h4 className="text-[11px] font-black text-white uppercase tracking-widest">Execution Methodology</h4>
               </div>
               <p className="text-[10px] font-medium text-white/30 uppercase tracking-[0.15em] leading-relaxed">
                  Focused on market structure, directional bias, and the mechanical execution of high-probability trading models.
               </p>
            </div>
-           <div className="p-8 rounded-[2.5rem] bg-white/[0.02] border border-white/5 space-y-4 hover:border-emerald-500/20 transition-all group">
+           <div className="p-8 rounded-[2.5rem] bg-white/[0.02] border border-white/5 space-y-4 hover:border-[#00E5FF]/20 transition-all group">
               <div className="flex items-center gap-3">
-                 <Shield className="w-5 h-5 text-emerald-500" />
+                 <Shield className="w-5 h-5 text-[#00E5FF]" />
                  <h4 className="text-[11px] font-black text-white uppercase tracking-widest">Risk Governance</h4>
               </div>
               <p className="text-[10px] font-medium text-white/30 uppercase tracking-[0.15em] leading-relaxed">
@@ -146,6 +148,6 @@ export const Academy = () => {
            </div>
         </section>
       </div>
-    </>
+    </PageLayout>
   );
 };

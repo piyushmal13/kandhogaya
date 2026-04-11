@@ -5,11 +5,8 @@ import { EcosystemSection } from "../components/home/EcosystemSection";
 import { GlobalReach } from "../components/home/GlobalReach";
 import { FortressHero } from "../components/home/FortressHero";
 import { BrandAuthority } from "../components/home/BrandAuthority";
-import { MetricsTicker } from "../components/home/MetricsTicker";
 import { ProcessBento } from "../components/home/ProcessBento";
 import { WebinarPromo } from "../components/home/WebinarPromo";
-import { JourneySection } from "../components/home/JourneySection";
-import { WhyChooseUsSection } from "../components/home/WhyChooseUsSection";
 import { ConsultationSection } from "../components/home/ConsultationSection";
 import { PartnerLogos } from "../components/ui/PartnerLogos";
 import { TrustGrid } from "../components/home/TrustGrid";
@@ -20,6 +17,7 @@ import { ExitIntentModal } from "../components/ui/ExitIntentModal";
 import { educationalOrganizationSchema, websiteSchema, faqSchema, goldAlgoCourseSchema } from "../utils/structuredData";
 import { useState } from "react";
 import { LazySection } from "../components/ui/LazySection";
+import { PageLayout } from "../components/layout/PageLayout";
 
 // SEO FAQ — targets high-volume Q&A snippets in Google Search
 const homeFaqs = [
@@ -59,7 +57,7 @@ export const Home = () => {
   const [showReviewModal, setShowReviewModal] = useState(false);
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
+    <PageLayout showFooter={true}>
       <ReviewPromptModal isOpen={showReviewModal} onClose={() => setShowReviewModal(false)} />
       <ExitIntentModal />
 
@@ -100,21 +98,9 @@ export const Home = () => {
       {/* === BRAND AUTHORITY — Trust Wall === */}
       <BrandAuthority />
 
-      <MetricsTicker />
-
       {/* === CORE PROMISE — Strategy to Execution === */}
       <LazySection placeholderHeight="800px">
         <ProcessBento />
-      </LazySection>
-
-      {/* === TRUST DIFFERENTIATION — Why choose us === */}
-      <LazySection placeholderHeight="700px">
-        <WhyChooseUsSection />
-      </LazySection>
-
-      {/* === TRUST & AUTHORITY TIMELINE === */}
-      <LazySection placeholderHeight="900px">
-        <JourneySection />
       </LazySection>
 
       {/* === NEXT LIVE WEBINAR — High-conversion section === */}
@@ -159,6 +145,6 @@ export const Home = () => {
       </LazySection>
 
       <NewsletterPopup />
-    </div>
+    </PageLayout>
   );
 };

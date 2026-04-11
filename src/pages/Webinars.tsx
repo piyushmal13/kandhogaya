@@ -5,6 +5,8 @@ import { WebinarCard } from '@/components/institutional/WebinarCard';
 import { VideoPlayer } from '@/components/institutional/VideoPlayer';
 import { Skeleton, WebinarCardSkeleton } from '@/components/ui/Skeleton';
 import { PageMeta } from '@/components/site/PageMeta';
+import { PageLayout } from '@/components/layout/PageLayout';
+import { mobileFirst } from '@/lib/responsive';
 
 export const Webinars = () => {
   const { data: webinars, isLoading } = useWebinars();
@@ -17,18 +19,18 @@ export const Webinars = () => {
   const liveWebinar = webinars?.find(w => w.status === 'live');
 
   return (
-    <>
+    <PageLayout showFooter={true}>
       <PageMeta
         title="Institutional Masterclasses"
         description="Live algorithmic trading sessions and recorded deep-dives from sovereign desks. Access institutional intelligence sessions."
         path="/webinars"
       />
 
-      <div className="space-y-12">
+      <div className={`space-y-12 ${mobileFirst.container} ${mobileFirst.section}`}>
         {/* Header Section */}
         <div className="space-y-4">
           <h1 className="text-5xl font-black text-white italic tracking-tighter uppercase leading-[0.8] mb-4">
-            Institutional <span className="text-emerald-500">Masterclasses</span>
+            Institutional <span className="text-[#00E5FF]">Masterclasses</span>
           </h1>
           <p className="text-sm text-white/40 max-w-2xl font-medium uppercase tracking-widest leading-relaxed">
             Participate in sovereign market breakdowns, systematic workflow walkthroughs, and quantitative execution masterclasses led by the IFX research desk.
@@ -73,14 +75,14 @@ export const Webinars = () => {
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={`pb-4 text-[11px] font-black uppercase tracking-[0.2em] transition-all relative ${
-                  activeTab === tab ? 'text-emerald-500' : 'text-white/30 hover:text-white'
+                  activeTab === tab ? 'text-[#00E5FF]' : 'text-white/30 hover:text-white'
                 }`}
               >
                 {tab === 'upcoming' ? 'Cycle Schedule' : 'Intelligence Archive'}
                 {activeTab === tab && (
                   <motion.div 
                     layoutId="activeTabWebinars"
-                    className="absolute bottom-[-1px] left-0 right-0 h-[2px] bg-emerald-500 shadow-[0_0_10px_#10b981]" 
+                    className="absolute bottom-[-1px] left-0 right-0 h-[2px] bg-[#00E5FF] shadow-[0_0_10px_rgba(0,229,255,0.5)]" 
                   />
                 )}
               </button>
@@ -109,7 +111,7 @@ export const Webinars = () => {
           )}
         </div>
       </div>
-    </>
+    </PageLayout>
   );
 };
 

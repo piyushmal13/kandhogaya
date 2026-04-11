@@ -56,10 +56,20 @@ export function FortressHero() {
     });
   };
 
+  const handleTouch = (e: React.TouchEvent) => {
+    const r = containerRef.current?.getBoundingClientRect();
+    if (!r) return;
+    setMousePos({
+      x: ((e.touches[0].clientX - r.left) / r.width) * 100,
+      y: ((e.touches[0].clientY - r.top) / r.height) * 100,
+    });
+  };
+
   return (
     <section
       ref={containerRef}
       onMouseMove={handleMouseMove}
+      onTouchMove={handleTouch}
       className="relative min-h-screen bg-[#020202] overflow-hidden flex flex-col justify-center"
     >
       {/* ── Mouse-tracking Spotlight ── */}

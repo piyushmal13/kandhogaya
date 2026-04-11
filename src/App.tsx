@@ -73,6 +73,9 @@ const AnimatedRoutes = () => {
         <Suspense fallback={<InstitutionalSkeleton />}>
           <Routes location={location}>
             <Route path="/" element={<Home />} />
+            <Route path="/solutions" element={<Solutions />} />
+            <Route path="/case-studies" element={<CaseStudies />} />
+            <Route path="/consultation" element={<Consultation />} />
             <Route path="/marketplace" element={<Marketplace />} />
             <Route path="/travel" element={<TradersTravel />} />
             <Route path="/results" element={<Results />} />
@@ -103,65 +106,25 @@ const AnimatedRoutes = () => {
   );
 };
 
+const Solutions = lazy(() => import("./pages/Solutions").then(m => ({ default: m.Solutions })));
+const CaseStudies = lazy(() => import("./pages/CaseStudies").then(m => ({ default: m.CaseStudies })));
+const Consultation = lazy(() => import("./pages/Consultation").then(m => ({ default: m.Consultation })));
+
 import { loadSystem } from "./core/systemLoader";
 
 function AppContent() {
-  const location = useLocation();
   useSmoothScroll();
-  
-  const isInstitutional = [
-    '/dashboard', 
-    '/marketplace', 
-    '/academy', 
-    '/webinars', 
-    '/results'
-  ].some(path => location.pathname.startsWith(path));
-
-  const content = <AnimatedRoutes />;
-
-  if (isInstitutional) {
-    return (
-      <DashboardLayout>
-        <Suspense fallback={<InstitutionalSkeleton />}>
-          {content}
-        </Suspense>
-      </DashboardLayout>
-    );
-  }
 
   return (
     <>
       <ScrollToTop />
       <ReferralHandler />
-      <a href="#main-content" className="skip-to-content">
-        Skip to main content
-      </a>
-      <div className="relative min-h-screen overflow-hidden font-sans">
-        <CustomCursor />
-        <div className="noise-overlay" />
-        <div className="noise-fortress" aria-hidden="true" />
-        <SiteBackdrop />
-        
-        <Navbar />
-        
-        <main id="main-content" className="relative z-10">
-          {content}
-        </main>
-        
-        <Footer />
-        
-        <WhatsAppButton />
-        
-        <div 
-          id="regulatory-notice"
-          className="relative w-full bg-[var(--color4)] text-white text-center p-8 md:p-12 text-[10px] md:text-sm font-black uppercase tracking-[0.2em] z-50 border-t border-white/10"
-        >
-          <div className="max-w-7xl mx-auto px-4">
-            <span className="opacity-50">CRITICAL INSTITUTIONAL NOTICE:</span> IFX Trades is strictly an education & research platform. We license algorithms, deliver courses, and provide macro analysis. <strong className="text-white underline">WE ARE NOT A BROKER.</strong> We do not accept deposits, execute trades, or handle client funds. Trading involves significant risk.
-          </div>
-        </div>
-        <SpeedInsights />
-      </div>
+      {/* Global overlays — appear on every page */}
+      <CustomCursor />
+      <WhatsAppButton />
+      <SpeedInsights />
+      {/* Route tree — each page owns its layout via PageLayout */}
+      <AnimatedRoutes />
     </>
   );
 }

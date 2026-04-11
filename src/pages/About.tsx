@@ -5,6 +5,7 @@ import { PageMeta } from "../components/site/PageMeta";
 import { PageSection, SectionHeading } from "../components/site/PageSection";
 import { Reveal } from "../components/site/Reveal";
 import { organizationSchema, breadcrumbSchema } from "../utils/structuredData";
+import { PageLayout } from "../components/layout/PageLayout";
 
 const values = [
   {
@@ -25,6 +26,7 @@ const values = [
 ];
 
 export const About = () => (
+  <PageLayout showFooter={true}>
   <div className="relative overflow-hidden pb-16">
     <PageMeta
       title="About IFXTrades"
@@ -120,4 +122,5 @@ export const About = () => (
       </div>
     </PageSection>
   </div>
+  </PageLayout>
 );
