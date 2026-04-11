@@ -1,180 +1,177 @@
-import React, { useRef, useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { 
-  ArrowRight, 
-  Shield,
-  Activity,
-  Globe,
-  Lock,
-  Zap,
-  CheckCircle2
-} from "lucide-react";
-import { SovereignButton } from "../ui/Button";
-import { supabase } from "../../lib/supabase";
-import { tracker } from "@/core/tracker";
+import React, { useState, useEffect, useRef } from "react";
+import { motion, useScroll, useTransform, useSpring } from "motion/react";
+import { ArrowRight, ChevronDown, Activity, Shield, Cpu, Globe } from "lucide-react";
+import { SovereignButton } from "../ui/SovereignButton";
+import { institutionalVariants, containerVariants, itemVariants } from "@/lib/motion";
 
-const STATS = [
-  { label: "Assets Under Intelligence", value: "$4.2B+" },
-  { label: "Institutional Proxies", value: "148" },
-  { label: "Execution Latency", value: "2.4ms" },
-  { label: "Alpha Signal Accuracy", value: "84.2%" }
-];
+const CodeRain = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const chars = "01010101010101010101";
+    const charArray = chars.split("");
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+    const drops: number[] = [];
+
+    for (let i = 0; i < columns; i++) {
+      drops[i] = 1;
+    }
+
+    const draw = () => {
+      ctx.fillStyle = "rgba(2, 2, 2, 0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "#58F2B6"; // Accent Primary
+      ctx.font = `${fontSize}px monospace`;
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = charArray[Math.floor(Math.random() * charArray.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    };
+
+    const interval = setInterval(draw, 33);
+    const handleResize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  return <canvas ref={canvasRef} className="absolute inset-0 opacity-[0.03] pointer-events-none" />;
+};
 
 export const FortressHero = () => {
-  const [formState, setFormState] = useState<'idle' | 'loading' | 'success'>('idle');
-  const [email, setEmail] = useState("");
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const handleLeadCapture = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email || formState !== 'idle') return;
-
-    setFormState('loading');
-    try {
-      const { error } = await supabase.from("leads").insert([
-        { email, source: "fortress_hero_v10", crm_metadata: { segment: "high_intent_retail" } }
-      ]);
-      
-      if (error) throw error;
-      
-      tracker.track("lead_capture_success", { surface: "fortress_hero" });
-      setFormState('success');
-      setTimeout(() => {
-        setFormState('idle');
-        setEmail("");
-      }, 4000);
-    } catch (err) {
-      console.error(err);
-      setFormState('idle');
-    }
-  };
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePos({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
 
   return (
-    <section className="relative min-h-[90vh] flex flex-col items-center justify-center pt-32 pb-20 overflow-hidden bg-[#10131a]">
-      {/* ── BACKGROUND ARCHITECTURE ── */}
-      <div className="absolute inset-0 z-0">
-        {/* Film Grain & Pulse */}
-        <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
-        
-        {/* Mathematical Grid */}
-        <div className="absolute inset-0 opacity-[0.15] [mask-image:radial-gradient(ellipse_at_center,black,transparent_80%)]">
-          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:100px_100px]" />
-          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:20px_20px]" />
-        </div>
+    <section 
+      ref={containerRef}
+      className="relative min-h-screen flex flex-col items-center justify-center bg-[#020202] overflow-hidden selection:bg-[#58F2B6]/30"
+    >
+      {/* ── SOVEREIGN DEPTH LAYER ── */}
+      <CodeRain />
+      
+      {/* Mouse Tracking Spotlight */}
+      <div 
+        className="pointer-events-none absolute inset-0 z-10 transition-opacity duration-1000"
+        style={{
+          background: `radial-gradient(600px circle at ${mousePos.x}px ${mousePos.y}px, rgba(88, 242, 182, 0.04), transparent 80%)`
+        }}
+      />
 
-        {/* Cinematic Orbs */}
-        <div className="absolute top-[20%] -left-[10%] w-[500px] h-[500px] bg-cyan-500/10 blur-[120px] rounded-full mix-blend-screen animate-pulse" />
-        <div className="absolute bottom-[10%] -right-[5%] w-[400px] h-[400px] bg-emerald-500/10 blur-[100px] rounded-full mix-blend-screen" />
-      </div>
+      {/* Noise Texture */}
+      <div className="absolute inset-0 opacity-[0.02] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] z-20" />
 
-      <div className="relative z-10 container mx-auto px-6">
-        <div className="max-w-5xl mx-auto text-center">
-          
-          {/* ── STATUS BAR ── */}
+      <div className="container mx-auto px-6 relative z-30">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="max-w-6xl mx-auto text-center"
+        >
+          {/* Status Badge */}
           <motion.div 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-white/5 bg-white/[0.02] backdrop-blur-xl mb-12"
+            variants={itemVariants}
+            className="inline-flex items-center gap-3 px-5 py-2 rounded-full border border-white/10 bg-white/[0.02] backdrop-blur-xl mb-10"
           >
             <div className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#58F2B6] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#58F2B6]"></span>
             </div>
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-cyan-400">
-               Institutional Terminal <span className="text-white/40 ml-2">v6.1.0 // Mainframe Active</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#58F2B6]/80">
+              Sovereign Execution Environment <span className="text-white/20 ml-2">v2.0_QUANT</span>
             </span>
           </motion.div>
 
-          {/* ── THE HEADLINE ── */}
+          {/* Headline Engine */}
           <motion.h1 
-            initial={{ opacity: 0, filter: "blur(10px)", y: 20 }}
-            animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="text-5xl md:text-8xl lg:text-9xl font-black text-white tracking-tighter leading-[0.85] uppercase mb-8"
+            variants={itemVariants}
+            className="text-6xl md:text-8xl lg:text-[140px] font-black text-white tracking-tighter leading-[0.85] uppercase mb-10"
           >
-            Engineering <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-br from-cyan-400 via-white to-emerald-400">
-              Sovereign Alpha
+            Institutional <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-br from-[#58F2B6] via-[#F8FAFC] to-[#58F2B6]/40">
+              Intelligence
             </span>
           </motion.h1>
 
           <motion.p 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-12 leading-relaxed"
+            variants={itemVariants}
+            className="text-lg md:text-2xl text-[rgba(248,250,252,0.6)] max-w-3xl mx-auto mb-16 leading-relaxed font-light tracking-wide uppercase"
           >
-            Asia's #1 institutional intelligence node. We engineer algorithmic 
-            liquidity and macroeconomic education for the top 1% of traders.
+            Engineering proprietary algorithmic liquidity and <br className="hidden md:block" />
+            macroeconomic alpha for the world's most disciplined traders.
           </motion.p>
 
-          {/* ── THE ACCESS TERMINAL ── */}
           <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="flex flex-col md:flex-row items-center justify-center gap-4 max-w-2xl mx-auto"
+            variants={itemVariants}
+            className="flex flex-col sm:flex-row items-center justify-center gap-6"
           >
-            <div className="relative w-full group">
-              <div className="absolute inset-0 bg-cyan-500/20 blur-xl opacity-0 group-focus-within:opacity-100 transition-opacity duration-500" />
-              <div className="absolute left-6 top-1/2 -translate-y-1/2 text-cyan-500/50">
-                <Lock className="w-5 h-5" />
-              </div>
-              <input 
-                type="email" 
-                placeholder="Institutional Email Access"
-                className="w-full bg-[#1a1f29] border border-white/5 px-16 py-6 rounded-3xl text-white outline-none focus:border-cyan-500/50 transition-all font-medium"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <SovereignButton 
-              variant="sovereign"
-              size="sovereign-hero"
-              glowEffect
-              onClick={handleLeadCapture}
-              isLoading={formState === 'loading'}
-              rightIcon={formState === 'success' ? <CheckCircle2 /> : <ArrowRight />}
-            >
-              {formState === 'success' ? 'AUTHORIZED' : 'Request Access'}
+            <SovereignButton variant="primary" size="xl" glowEffect>
+              Begin Deployment
+            </SovereignButton>
+            <SovereignButton variant="outline" size="xl">
+              Audit Performance
             </SovereignButton>
           </motion.div>
+        </motion.div>
+      </div>
 
-          {/* ── INSTITUTIONAL TRUST BAR ── */}
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8 }}
-            className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-8 border-t border-white/5 pt-12"
-          >
-            {STATS.map((stat, i) => (
-              <div key={i} className="text-left group">
-                <div className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-2 group-hover:text-cyan-500 transition-colors">
-                  {stat.label}
-                </div>
-                <div className="text-3xl font-black text-white tracking-tight">
-                  {stat.value}
-                </div>
-              </div>
-            ))}
-          </motion.div>
-
+      {/* Metadata Perimeter */}
+      <div className="absolute bottom-20 left-10 hidden xl:flex items-center gap-6">
+        <div className="flex flex-col gap-1">
+          <span className="text-[9px] font-black uppercase tracking-[0.3em] text-[#58F2B6]/40">Live Matrix</span>
+          <div className="flex items-center gap-2">
+            <Cpu className="w-3 h-3 text-[#58F2B6]" />
+            <span className="text-[10px] font-mono text-white/40">Core_01: ACTIVE</span>
+          </div>
+        </div>
+        <div className="h-8 w-px bg-white/10" />
+        <div className="flex flex-col gap-1">
+          <span className="text-[9px] font-black uppercase tracking-[0.3em] text-white/20">Network</span>
+          <div className="flex items-center gap-2">
+            <Globe className="w-3 h-3 text-white/20" />
+            <span className="text-[10px] font-mono text-white/40">Global_Pulse: 100%</span>
+          </div>
         </div>
       </div>
 
-      {/* ── DECORATIVE ELEMENTS ── */}
-      <div className="absolute bottom-10 left-10 hidden lg:flex items-center gap-4">
-        <div className="w-10 h-[1px] bg-white/10" />
-        <div className="text-[9px] font-black uppercase tracking-[0.4em] text-white/30">
-          Mainframe Stability: 100%
-        </div>
-      </div>
-      
-      <div className="absolute bottom-10 right-10 hidden lg:flex items-center gap-4">
-        <div className="text-[9px] font-black uppercase tracking-[0.4em] text-white/30">
-          Pulse Synchronization Active
-        </div>
-        <div className="w-10 h-[1px] bg-white/10" />
-      </div>
+      <motion.div 
+        animate={{ y: [0, 10, 0] }}
+        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 cursor-pointer opacity-20 hover:opacity-100 transition-opacity"
+      >
+        <span className="text-[9px] font-black uppercase tracking-[0.5em] text-white">Initialize Scroll</span>
+        <ChevronDown className="w-4 h-4 text-[#58F2B6]" />
+      </motion.div>
     </section>
   );
 };
