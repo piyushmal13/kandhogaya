@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { BookOpen, Clock, GraduationCap, PlayCircle, Zap, Shield } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
@@ -12,35 +13,14 @@ const getCourseImage = (course: Course) =>
   course.image_url || course.thumbnail_url || `https://picsum.photos/seed/${course.id}/960/540`;
 
 export const Academy = () => {
-  const [courses, setCourses] = useState<Course[]>([]);
-  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    let active = true;
-
-    const fetchCourses = async () => {
-      try {
-        setLoading(true);
-        const data = await getCourses();
-        if (active) {
-          setCourses(data || []);
-        }
-      } catch (error) {
-        console.error("Error fetching courses:", error);
-      } finally {
-        if (active) {
-          setLoading(false);
-        }
-      }
-    };
-
-    fetchCourses();
-
-    return () => {
-      active = false;
-    };
-  }, []);
+  // 🚀 [CTO] Sovereignty over Learning State
+  const { data: courses = [], isLoading: loading } = useQuery({
+    queryKey: ['institutional_academy_courses'],
+    queryFn: () => getCourses(),
+    staleTime: 600000, // 10 minutes (Education catalog is stable)
+  });
 
   const totalLessons = courses.reduce((sum, course) => sum + (course.chapters?.length || 0), 0);
 

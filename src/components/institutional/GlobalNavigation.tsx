@@ -28,13 +28,13 @@ export function GlobalNavigation() {
   return (
     <nav className="h-full flex flex-col bg-black/60 backdrop-blur-3xl border-r border-white/5 shadow-[20px_0_50px_rgba(0,0,0,0.5)]">
       {/* Branding Node */}
-      <div className="h-20 flex items-center px-8 border-b border-white/5 shrink-0">
-        <div className="w-10 h-10 rounded-xl bg-grad-primary flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(16,185,129,0.3)] border border-white/20">
-           <Zap className="w-6 h-6 text-black fill-current" />
+      <div className="h-24 flex items-center px-10 border-b border-white/5 shrink-0">
+        <div className="w-11 h-11 rounded-2xl bg-white/[0.03] flex items-center justify-center shrink-0 shadow-[0_4px_30px_rgba(0,0,0,0.4)] border border-white/5 group-hover:border-cyan-500/30 transition-all">
+           <Zap className="w-6 h-6 text-cyan-400 fill-cyan-400/20" />
         </div>
-        <div className="ml-4 flex flex-col">
-           <span className="font-black uppercase tracking-tighter italic text-xl text-white leading-none">IFX Trades</span>
-           <span className="text-[9px] font-black uppercase tracking-[0.3em] text-emerald-500/60 leading-tight">Sovereign Node</span>
+        <div className="ml-5 flex flex-col">
+           <span className="font-black uppercase tracking-tighter italic text-xl text-white leading-none">IFX <span className="text-cyan-500">Trades</span></span>
+           <span className="text-[8px] font-black uppercase tracking-[0.6em] text-white/20 leading-tight mt-1">Sovereign Node</span>
         </div>
       </div>
 
@@ -59,11 +59,11 @@ export function GlobalNavigation() {
               {isActive && (
                 <motion.div
                   layoutId="activeNavIndicator"
-                  className="absolute left-[-16px] w-2 h-8 bg-emerald-500 rounded-r-full shadow-[0_0_15px_#10b981]"
+                  className="absolute left-[-10px] w-1 h-10 bg-cyan-500 rounded-r-full shadow-[0_0_25px_rgba(0,229,255,0.6)]"
                   transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                 />
               )}
-              <Icon className={cn("w-5 h-5 transition-transform group-hover:scale-110", isActive ? 'text-emerald-500' : 'text-current')} />
+              <Icon className={cn("w-5 h-5 transition-transform group-hover:scale-110", isActive ? 'text-cyan-400' : 'text-current')} />
               <span>{item.label}</span>
               
               {/* Pulse Indicator for High-Activity Surfaces */}
@@ -99,11 +99,11 @@ export function GlobalNavigation() {
           <span>Terminate</span>
         </button>
 
-        <div className="mt-6 p-4 rounded-2xl bg-white/[0.02] border border-white/5">
-           <p className="text-[8px] font-black uppercase tracking-widest text-white/20 mb-1 leading-none">Status</p>
-           <div className="flex items-center gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_5px_#10b981]" />
-              <span className="text-[10px] font-mono text-emerald-500 uppercase tracking-tighter">Link Operational</span>
+        <div className="mt-6 p-5 rounded-3xl bg-white/[0.01] border border-white/5">
+           <p className="text-[7px] font-black uppercase tracking-[0.5em] text-white/10 mb-1 leading-none text-center">Protocol Integrity</p>
+           <div className="flex items-center justify-center gap-2">
+              <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_8px_rgba(0,229,255,0.8)]" />
+              <span className="text-[9px] font-mono text-cyan-500 uppercase tracking-tighter">NODE_SYNC_OK</span>
            </div>
         </div>
       </div>

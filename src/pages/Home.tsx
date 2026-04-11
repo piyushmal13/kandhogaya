@@ -3,7 +3,7 @@ import { PageMeta } from "../components/site/PageMeta";
 import { BlogSection } from "../components/home/BlogSection";
 import { EcosystemSection } from "../components/home/EcosystemSection";
 import { GlobalReach } from "../components/home/GlobalReach";
-import { HeroSection } from "../components/home/HeroSection";
+import { FortressHero } from "../components/home/FortressHero";
 import { MarketTicker } from "../components/home/MarketTicker";
 import { WebinarPromo } from "../components/home/WebinarPromo";
 import { PartnerLogos } from "../components/ui/PartnerLogos";
@@ -89,8 +89,8 @@ export const Home = () => {
         ]}
       />
 
-      {/* === ABOVE THE FOLD — Immediate value, trust-first === */}
-      <HeroSection />
+      {/* === ABOVE THE FOLD — High-Authority Entrance === */}
+      <FortressHero />
       <MarketTicker />
 
       {/* === NEXT LIVE WEBINAR — High-conversion section === */}
@@ -122,11 +122,6 @@ export const Home = () => {
       <LazySection placeholderHeight="1400px">
         <TrustGrid />
         <PartnerLogos />
-      </LazySection>
-
-      {/* === FINAL SIGNUP CTA === */}
-      <LazySection placeholderHeight="400px">
-        <SignupForm />
       </LazySection>
 
       <NewsletterPopup />

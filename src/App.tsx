@@ -38,6 +38,8 @@ const About = lazy(() => import("./pages/About").then(m => ({ default: m.About }
 const Contact = lazy(() => import("./pages/Contact").then(m => ({ default: m.Contact })));
 const NotFound = lazy(() => import("./pages/NotFound").then(m => ({ default: m.NotFound })));
 const InstitutionalError = lazy(() => import("./pages/Error").then(m => ({ default: m.InstitutionalError })));
+const Solutions = lazy(() => import("./pages/Solutions").then(m => ({ default: m.Solutions })));
+const Consultation = lazy(() => import("./pages/Consultation").then(m => ({ default: m.Consultation })));
 const InstitutionalSkeleton = lazy(() => import("./components/institutional/InstitutionalSkeleton").then(m => ({ default: m.InstitutionalSkeleton })));
 const DashboardLayout = lazy(() => import("./components/institutional/DashboardLayout").then(m => ({ default: m.DashboardLayout })));
 
@@ -67,6 +69,8 @@ const AnimatedRoutes = () => {
         <Suspense fallback={<InstitutionalSkeleton />}>
           <Routes location={location}>
             <Route path="/" element={<Home />} />
+            <Route path="/solutions" element={<Solutions />} />
+            <Route path="/consultation" element={<Consultation />} />
             <Route path="/marketplace" element={<Marketplace />} />
             <Route path="/travel" element={<TradersTravel />} />
             <Route path="/results" element={<Results />} />

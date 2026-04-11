@@ -22,7 +22,7 @@ export interface User {
   referred_by?: string;
   created_at: string;
   avatar_url?: string;
-  role: 'user' | 'admin' | 'agent';
+  role: 'user' | 'admin' | 'agent' | 'sales_agent' | 'support' | 'analyst';
 }
 
 // ---------------------------------------------------------------------------

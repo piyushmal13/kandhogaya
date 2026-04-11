@@ -20,7 +20,7 @@ export interface AccessState {
 }
 
 export const useAccess = (): AccessState => {
-  const { user, loading: authLoading } = useAuth();
+  const { user, userProfile, loading: authLoading } = useAuth();
 
   const access = useMemo(() => {
     if (authLoading) return { plan: 'free' as PlanTier, isLoading: true };
@@ -28,7 +28,8 @@ export const useAccess = (): AccessState => {
 
     // 🚀 [IT TEAM] Access Determination Logic
     // Logic: Admin = Elite, otherwise check metadata/licenses
-    const isAdmin = ['admin@ifxtrades.com', 'admin@tradinghub.com', 'piyushmal1301@gmail.com'].includes(user.email || '') || user.user_metadata?.role === 'admin';
+    // DB-Driven RBAC: Check userProfile role instead of hardcoded emails
+    const isAdmin = userProfile?.role === 'admin';
     
     if (isAdmin) return { plan: 'elite' as PlanTier, isLoading: false };
 
@@ -38,7 +39,7 @@ export const useAccess = (): AccessState => {
 
     // Default to free
     return { plan: 'free' as PlanTier, isLoading: false };
-  }, [user, authLoading]);
+  }, [user, userProfile, authLoading]);
 
   return {
     isLoggedIn: !!user,

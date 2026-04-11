@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
+import { useQuery } from '@tanstack/react-query';
 import { motion, AnimatePresence, useScroll, useTransform } from "motion/react";
 import { Zap, ShieldCheck, Activity, TrendingUp } from "lucide-react";
 import { PurchaseModal } from "../components/payments/PurchaseModal";
@@ -12,8 +13,6 @@ import { useToast } from "../contexts/ToastContext";
 import { useNavigate } from "react-router-dom";
 
 export const Marketplace = () => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
   const [selectedAlgo, setSelectedAlgo] = useState<Product | null>(null);
   const [purchaseDetails, setPurchaseDetails] = useState<{ plan: string, amount: number, productId: string } | null>(null);
   const [filter, setFilter] = useState("All");
@@ -24,21 +23,13 @@ export const Marketplace = () => {
   const { info } = useToast();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
-  const fetchProducts = async () => {
-    try {
-      setLoading(true);
-      const data = await productService.getProducts();
-      setProducts(data || []);
-    } catch (error) {
-      console.error("Error fetching products:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // 🚀 [CTO] React-Query Integration: Stale-While-Re-validate Strategy
+  const { data: products = [], isLoading: loading } = useQuery({
+    queryKey: ['institutional_marketplace_products'],
+    queryFn: () => productService.getProducts(),
+    staleTime: 300000, // 5 minutes (Institutional products are stable)
+    refetchInterval: 600000, 
+  });
 
   const handleSubscribe = async (algo: Product, plan: string) => {
     if (!user) {

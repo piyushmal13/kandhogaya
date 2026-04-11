@@ -1,14 +1,13 @@
 import React, { useEffect } from "react";
 import { motion } from "motion/react";
 import { Zap, ShieldCheck } from "lucide-react";
-import { useDataPulse } from "../../hooks/useDataPulse";
+import { useSignals, Signal } from "../../hooks/useSignals";
 import { SignalCardSkeleton } from "../ui/Skeleton";
 import { BlurGate } from "../ui/BlurGate";
-import { Signal } from "../../types";
 import { tracker } from "../../core/tracker";
 
 export const LiveSignalsFeed = () => {
-  const { signals, loading } = useDataPulse();
+  const { data: signals = [], isLoading: loading } = useSignals();
 
   useEffect(() => {
     if (signals.length > 0) {

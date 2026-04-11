@@ -32,7 +32,11 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   useFocusRoute();
 
   return (
-    <div className="flex min-h-screen w-full bg-[#050505] text-white selection:bg-emerald-500/30 overflow-x-hidden">
+    <div className="flex min-h-screen w-full bg-[#050505] text-white selection:bg-emerald-500/30 overflow-x-hidden relative">
+      {/* ── CINEMATIC OVERLAYS ── */}
+      <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-[100] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+      <div className="fixed inset-0 pointer-events-none bg-gradient-to-tr from-cyan-500/[0.02] to-transparent z-[99]" />
+
       {/* ── MOBILE BRIDGE ── */}
       <MobileNavigation />
 

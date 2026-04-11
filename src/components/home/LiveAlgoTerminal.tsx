@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Activity, TrendingUp, TrendingDown, Shield, Lock } from "lucide-react";
-import { useDataPulse } from "../../hooks/useDataPulse";
+import { useSignals } from "../../hooks/useSignals";
 import { useAccess } from "../../hooks/useAccess";
 import { UpgradeModal } from "../ui/UpgradeModal";
 import { tracker } from "../../core/tracker";
@@ -29,8 +29,9 @@ const generateMonthlyResults = () =>
     };
   });
 
+
 export const LiveAlgoTerminal = () => {
-  const { signals } = useDataPulse();
+  const { data: signals = [] } = useSignals();
   const { isElite } = useAccess();
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [isScanning, setIsScanning] = useState(false);

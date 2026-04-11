@@ -2,14 +2,20 @@ import { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Play, Pause, Volume2, VolumeX, Maximize } from 'lucide-react';
 
+interface VideoMarker {
+  time: number; // In seconds
+  label: string;
+}
+
 interface VideoPlayerProps {
   src: string;
   poster?: string;
   title: string;
   isLive?: boolean;
+  markers?: VideoMarker[];
 }
 
-export function VideoPlayer({ src, poster, title, isLive = false }: VideoPlayerProps) {
+export function VideoPlayer({ src, poster, title, isLive = false, markers = [] }: VideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
@@ -128,6 +134,23 @@ export function VideoPlayer({ src, poster, title, isLive = false }: VideoPlayerP
               className="h-full bg-emerald-500 shadow-[0_0_10px_#10b981] transition-all duration-100"
               style={{ width: `${progress}%` }}
             />
+            
+            {/* Event Markers: Institutional Delta Points */}
+            {!isLive && markers.map((marker, i) => {
+              const markerPosition = (marker.time / (videoRef.current?.duration || 1)) * 100;
+              return (
+                <div 
+                  key={i}
+                  className="absolute top-0 bottom-0 w-[2px] bg-cyan-400 group-hover:bg-white transition-colors"
+                  style={{ left: `${markerPosition}%` }}
+                  title={marker.label}
+                >
+                   <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black/90 border border-white/10 rounded text-[8px] font-black uppercase tracking-widest opacity-0 group-hover/progress:opacity-100 whitespace-nowrap">
+                     {marker.label}
+                   </div>
+                </div>
+              );
+            })}
           </div>
 
           {/* Control Buttons */}

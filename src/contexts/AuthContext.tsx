@@ -12,7 +12,7 @@ interface UserProfile {
   id: string;
   email?: string;
   full_name?: string;
-  role: "user" | "admin" | "agent";
+  role: "user" | "admin" | "agent" | "sales_agent" | "support" | "analyst";
   isPro: boolean;
   referred_by?: string;
   avatar_url?: string;

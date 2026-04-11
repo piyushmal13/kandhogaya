@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { productService } from "@/services/productService";
 import { webinarService } from "@/services/webinarService";
@@ -39,34 +40,26 @@ const SIGNAL_PLANS = [
 ];
 
 export const Pricing = () => {
-  const [algos, setAlgos] = useState<Product[]>([]);
-  const [webinars, setWebinars] = useState<Webinar[]>([]);
-  const [loading, setLoading] = useState(true);
+  // 🚀 [CTO] Intelligence Data Rails
+  const { data: algos = [], isLoading: algosLoading } = useQuery({
+    queryKey: ['pricing_algos'],
+    queryFn: () => productService.getAlgoBots(3),
+    staleTime: 600000,
+  });
+
+  const { data: webinarsResult = [], isLoading: webinarsLoading } = useQuery({
+    queryKey: ['pricing_webinars'],
+    queryFn: () => webinarService.getWebinars(),
+    staleTime: 600000,
+  });
+
+  const webinars = useMemo(() => webinarsResult.slice(0, 3), [webinarsResult]);
+  const loading = algosLoading || webinarsLoading;
+
   const [selectedPlan, setSelectedPlan] = useState<{ plan: string, amount: number } | null>(null);
-
-  const fetchData = useCallback(async () => {
-    setLoading(true);
-    console.log("💰 [PRICING FETCH] START");
-    try {
-      const [algoData, webinarData] = await Promise.all([
-        productService.getAlgoBots(3),
-        webinarService.getWebinars()
-      ]);
-      
-      console.log("💰 [PRICING FETCH] RESPONSE", { algos: algoData.length, webinars: webinarData.length });
-      setAlgos(algoData);
-      setWebinars(webinarData.slice(0, 3)); // Match the limit(3) from original logic
-    } catch (err) {
-      console.error("💰 [PRICING FETCH] ERROR:", err);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
   const [pricingViews, setPricingViews] = useState(0);
 
   useEffect(() => {
-    fetchData();
     tracker.track("page_view", { surface: "pricing" });
     
     // Smart Pricing Intelligence
