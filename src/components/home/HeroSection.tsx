@@ -72,63 +72,62 @@ export const HeroSection = () => {
 
   useEffect(() => { fetchRealStats(); }, [fetchRealStats]);
 
-  return (
-    <section 
+  return (    <section 
       ref={containerRef} 
       aria-label="IFX Trades — Institutional Forex Education Platform Hero"
-      className="relative min-h-[100vh] pt-24 sm:pt-32 pb-20 flex flex-col items-center justify-center overflow-hidden bg-[var(--color13)]"
+      className="relative min-h-[100vh] pt-24 sm:pt-32 pb-20 flex flex-col items-center justify-center overflow-hidden bg-black"
     >
-      {/* === SOVEREIGN TERMINAL AMBIENT BACKGROUND === */}
+      {/* === SOVEREIGN ROYALE AMBIENT BACKGROUND === */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSA0MCAwIEwgMCAwIDAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-60" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,var(--color13)_80%)]" />
-        
-        {/* Strategic Glows — primary cyan & secondary gold */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[var(--color14)]/5 blur-[120px] rounded-[100%] mix-blend-screen" />
-        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-[var(--color15)]/5 blur-[140px] rounded-full mix-blend-screen" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.07)_0%,transparent_70%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(212,175,55,0.05)_0%,transparent_50%)]" />
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCI+PHBhdGggZD0iTSA2MCAwIEwgMCAwIDAgNjAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjAyKSIgc3Ryb2tlLXdpZHRoPSIwLjUiLz48L3N2Zz4=')] opacity-40" />
       </div>
 
       <div className="relative z-10 w-full max-w-[1400px] px-6 text-center">
 
         {/* === DOCTORAL STATUS BADGE === */}
         <motion.div
-          initial={{ opacity: 0, y: -40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: [0.23, 1, 0.32, 1] as const }}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, ease: "easeOut" }}
           className="mb-12 flex flex-col sm:flex-row justify-center items-center gap-4"
         >
-          <div className="group inline-flex items-center gap-3 px-6 py-2.5 bg-[var(--color16)] rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.5)] transition-all duration-500 hover:bg-[var(--color17)]">
+          <div className="group inline-flex items-center gap-3 px-6 py-2.5 bg-white/[0.03] border border-white/5 rounded-2xl shadow-2xl backdrop-blur-xl transition-all duration-500 hover:border-emerald-500/30">
             <div className="relative">
-              <div className="w-2 h-2 bg-[var(--color14)] rounded-full animate-ping absolute inset-0" />
-              <div className="w-2.5 h-2.5 bg-[var(--color14)] rounded-full relative z-10 shadow-[0_0_15px_rgba(0,229,255,0.8)]" />
+              <div className="w-2 h-2 bg-emerald-500 rounded-full animate-ping absolute inset-0" />
+              <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full relative z-10 shadow-[0_0_15px_rgba(16,185,129,0.8)]" />
             </div>
-            <span className="text-[10px] font-black text-[var(--color18)] group-hover:text-white uppercase tracking-[0.4em] transition-colors">
-              Sovereign Intelligence Node <span className="text-[var(--color14)] italic ml-1">Active</span>
-            </span>
-          </div>
-          
-          <div className="hidden sm:flex items-center gap-2 px-6 py-2.5 bg-[var(--color19)]/80 backdrop-blur-md rounded-2xl">
-            <Activity className="w-3 h-3 text-[var(--color15)]/80" />
-            <span className="text-[9px] font-black text-[var(--color20)] uppercase tracking-[0.25em]">
-              Terminal v4.0.0 · Core Sync Ready
+            <span className="text-[10px] font-black text-gray-400 group-hover:text-white uppercase tracking-[0.4em] transition-colors">
+              Sovereign Royale Hub <span className="text-emerald-400 italic ml-1">Live</span>
             </span>
           </div>
         </motion.div>
 
         {/* === PRIMARY BLOCK === */}
         <motion.div
-           initial={{ opacity: 0, scale: 0.95 }}
-           animate={{ opacity: 1, scale: 1 }}
-           transition={{ duration: 1.5, ease: [0.23, 1, 0.32, 1] as const }}
+           initial={{ opacity: 0, y: 30 }}
+           animate={{ opacity: 1, y: 0 }}
+           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] as const }}
            className="relative"
         >
-          <h1 className="font-black mb-8 leading-[0.85] tracking-[-0.04em] uppercase font-['Manrope']">
-            <span className="text-5xl sm:text-8xl md:text-[130px] block text-white drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
-              Institutional
-            </span>
-            <span className="text-4xl sm:text-7xl md:text-[100px] block text-transparent bg-clip-text bg-gradient-to-r from-[var(--color21)] to-[var(--color14)] mt-2 filter drop-shadow-[0_10px_20px_rgba(0,229,255,0.15)]">
-              Elite Academy
-            </span>
+          <h1 className="font-serif font-black mb-10 leading-[0.85] tracking-[-0.04em] uppercase">
+            <motion.span 
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="text-5xl sm:text-8xl md:text-[140px] block text-white drop-shadow-[0_20px_50px_rgba(0,0,0,0.8)]"
+            >
+              Imperial
+            </motion.span>
+            <motion.span 
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="text-4xl sm:text-7xl md:text-[110px] block text-transparent bg-clip-text bg-[var(--grad-royale)] mt-1 filter drop-shadow-[0_10px_30px_rgba(16,185,129,0.3)]"
+            >
+              Research
+            </motion.span>
           </h1>
           <div className="absolute -top-10 left-1/2 -translate-x-1/2 text-[9px] font-black text-[var(--color14)]/20 uppercase tracking-[1em] pointer-events-none select-none">
              TRADED BY SOVEREIGN DESKS

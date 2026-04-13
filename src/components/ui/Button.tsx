@@ -33,12 +33,12 @@ export interface SovereignButtonProps extends Omit<ButtonHTMLAttributes<HTMLButt
 }
 
 const variantStyles: Record<ButtonVariant, string> = {
-  sovereign: "bg-gradient-to-br from-[var(--color21)] to-[var(--color14)] text-[var(--color29)] font-black hover:shadow-[0_0_40px_rgba(0,229,255,0.4)] border border-transparent shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)]",
+  sovereign: "bg-[var(--grad-royale)] text-black font-black hover:shadow-[0_0_50px_rgba(16,185,129,0.5)] border-none shadow-[inset_0_2px_4px_rgba(255,255,255,0.4)]",
   execution: "bg-emerald-500 hover:bg-emerald-400 text-black font-black hover:shadow-[0_0_30px_rgba(16,185,129,0.4)] border border-emerald-400/50 shadow-[inset_0_2px_4px_rgba(255,255,255,0.3)]",
-  secondary: "bg-[var(--color16)] hover:bg-[var(--color17)] text-white border border-white/10 hover:border-white/20 shadow-[0_4px_20px_rgba(0,0,0,0.5)]",
-  ghost: "bg-transparent hover:bg-white/5 text-gray-300 hover:text-white",
+  secondary: "bg-white/[0.03] hover:bg-white/[0.07] text-white border border-white/10 hover:border-white/20 shadow-2xl backdrop-blur-md",
+  ghost: "bg-transparent hover:bg-white/5 text-gray-400 hover:text-white",
   danger: "bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 hover:border-red-500/40",
-  'institutional-outline': "bg-transparent border-2 border-[var(--color24)] text-[var(--color23)] hover:bg-[var(--color19)] hover:border-[var(--color14)] hover:text-[var(--color14)]",
+  'institutional-outline': "bg-transparent border-2 border-white/10 text-white hover:bg-white/[0.02] hover:border-emerald-500/40 hover:text-emerald-400",
 };
 
 const sizeStyles: Record<ButtonSize, string> = {

@@ -96,13 +96,13 @@ const EcosystemCard = ({ mod, index }: { mod: typeof modules[0], index: number }
       >
         <Link 
           to={mod.link} 
-          className="block relative h-full p-8 md:p-12 rounded-[2.5rem] bg-[var(--color6)] border border-white/5 overflow-hidden transition-all duration-700 group-hover:bg-[var(--color11)] group-hover:border-white/10 shadow-2xl"
+          className="block relative h-full p-8 md:p-12 rounded-[2.5rem] bg-white/[0.02] border border-white/5 overflow-hidden transition-all duration-700 group-hover:bg-white/[0.04] group-hover:border-emerald-500/20 shadow-2xl"
         >
           {/* Spotlight Background Glow */}
           <motion.div
             className="absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
             style={{
-              background: useMotionTemplate`radial-gradient(800px circle at ${spotlightX}px ${spotlightY}px, rgba(131, 255, 200, 0.04), transparent 40%)`,
+              background: useMotionTemplate`radial-gradient(800px circle at ${spotlightX}px ${spotlightY}px, rgba(16, 185, 129, 0.05), transparent 40%)`,
             }}
           />
           
@@ -110,8 +110,8 @@ const EcosystemCard = ({ mod, index }: { mod: typeof modules[0], index: number }
           <motion.div
             className="absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none rounded-[2.5rem]"
             style={{
-              background: useMotionTemplate`radial-gradient(600px circle at ${spotlightX}px ${spotlightY}px, rgba(131, 255, 200, 0.4), transparent 40%)`,
-              WebkitMask: "linear-gradient(var(--color12) 0 0) content-box, linear-gradient(var(--color12) 0 0)",
+              background: useMotionTemplate`radial-gradient(600px circle at ${spotlightX}px ${spotlightY}px, rgba(16, 185, 129, 0.4), transparent 40%)`,
+              WebkitMask: "linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)",
               WebkitMaskComposite: "xor",
               maskComposite: "exclude",
               padding: "1px",
@@ -124,19 +124,19 @@ const EcosystemCard = ({ mod, index }: { mod: typeof modules[0], index: number }
             style={{ transform: "translateZ(60px)" }}
           >
             {/* Top Right Arrow */}
-            <div className="absolute top-0 right-0 w-10 h-10 md:w-14 md:h-14 rounded-full bg-white/[0.015] flex items-center justify-center border border-white/5 group-hover:bg-[var(--brand)]/5 group-hover:border-[var(--brand)]/20 transition-all duration-700 group-hover:scale-110">
-              <ArrowUpRight className="w-5 h-5 md:w-7 md:h-7 text-white/20 group-hover:text-[var(--brand)] transition-all duration-700" />
+            <div className="absolute top-0 right-0 w-10 h-10 md:w-14 md:h-14 rounded-full bg-white/[0.015] flex items-center justify-center border border-white/5 group-hover:bg-emerald-500/10 group-hover:border-emerald-500/30 transition-all duration-700 group-hover:scale-110">
+              <ArrowUpRight className="w-5 h-5 md:w-7 md:h-7 text-white/20 group-hover:text-emerald-400 transition-all duration-700" />
             </div>
 
-            <div className="w-14 h-14 md:w-20 md:h-20 rounded-2xl md:rounded-[2rem] bg-white/[0.015] border border-white/5 flex items-center justify-center mb-8 md:mb-12 group-hover:bg-[var(--brand)]/5 group-hover:border-[var(--brand)]/20 transition-all duration-700">
-              <mod.icon className="w-7 h-7 md:w-10 md:h-10 text-white/30 group-hover:text-[var(--brand)] transition-all duration-700" />
+            <div className="w-14 h-14 md:w-20 md:h-20 rounded-2xl md:rounded-[2rem] bg-white/[0.015] border border-white/5 flex items-center justify-center mb-8 md:mb-12 group-hover:bg-emerald-500/10 group-hover:border-emerald-500/30 transition-all duration-700">
+              <mod.icon className="w-7 h-7 md:w-10 md:h-10 text-white/30 group-hover:text-emerald-400 transition-all duration-700" />
             </div>
             
-            <h3 className="text-2xl md:text-4xl font-semibold text-white mb-4 md:mb-6 tracking-tight group-hover:text-white transition-all duration-700">
+            <h3 className="text-2xl md:text-5xl font-black text-white mb-4 md:mb-6 tracking-tighter group-hover:text-white transition-all duration-700">
               {mod.title}
             </h3>
             
-            <p className="text-gray-400 text-base md:text-xl leading-relaxed max-w-sm group-hover:text-gray-300 transition-colors duration-700 font-sans font-light">
+            <p className="text-gray-400 text-base md:text-lg leading-relaxed max-w-sm group-hover:text-gray-300 transition-colors duration-700 font-sans font-light">
               {mod.description}
             </p>
           </div>
@@ -148,15 +148,15 @@ const EcosystemCard = ({ mod, index }: { mod: typeof modules[0], index: number }
 
 export const EcosystemSection = () => {
   return (
-    <section className="py-24 md:py-40 bg-[var(--color10)] relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.03),transparent_70%)]" />
+    <section className="py-24 md:py-40 bg-black relative overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_10%,rgba(16,185,129,0.05),transparent_60%)]" />
       
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         <div className="text-center mb-16 md:mb-32">
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/5 border border-emerald-500/10 text-[var(--brand)] text-[11px] font-sans font-medium tracking-[0.3em] uppercase mb-8"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/5 border border-emerald-500/10 text-emerald-400 text-[11px] font-sans font-medium tracking-[0.3em] uppercase mb-8"
           >
             Institutional Core
           </motion.div>
@@ -164,15 +164,15 @@ export const EcosystemSection = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-4xl sm:text-5xl md:text-8xl font-semibold text-white mb-8 md:mb-12 tracking-[-0.04em]"
+            className="text-4xl sm:text-5xl md:text-9xl font-black text-white mb-8 md:mb-12 tracking-tighter"
           >
-            The IFX <span className="gradient-text italic font-serif">Ecosystem</span>
+            THE <span className="text-transparent bg-clip-text bg-[var(--grad-royale)] italic font-serif">IDENTITY</span>
           </motion.h2>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-gray-400 max-w-3xl mx-auto text-lg md:text-2xl leading-relaxed font-sans font-light px-4 opacity-80"
+            className="text-gray-400 max-w-3xl mx-auto text-lg md:text-2xl leading-relaxed font-sans font-light px-4"
           >
             Everything you need for serious market execution, integrated into one powerful platform.
           </motion.p>

@@ -27,112 +27,72 @@
 }
 
 @layer base {
+@layer base {
+@layer base {
   :root {
-    /* ── Verified Institutional Colors (Perfect Schema) ── */
-    --color34: #FFFFFF;
-    --color35: #A1A1AA;
-    --color36: #52525B;
-    --color8: #10B981;
-    --color37: #34D399;
-    --color30: #020617;
-    --color10: #020202;
-    --raised: #0a0a0b;
-    --surface: #121214;
-    --color38: #F59E0B;
-    --color9: #EF4444;
-    --color39: #06B6D4;
-    --color40: #065F46;
-    --color41: #8B5CF6;
-    --color42: #059669;
-    --color43: #000000;
-    --color44: #FBFDFF;
-    --color45: #A5F8D9;
-    --color46: #74E0FF;
-    --color47: #D8EDF3;
-    --color13: #10131A;
-    --brand: var(--color8);
-
-    /* ── Text Scale (Refined for High Authority) ── */
-    --text-primary: var(--color34);
-    --text-secondary: var(--color35);
-    --text-muted: var(--color36);
-
-    /* ── Accent Scale (Sovereign Emerald & Cyan) ── */
-    --accent: var(--color8);
-    --accent-hover: var(--color37);
-    --accent-subtle: rgba(16, 185, 129, 0.08);
-    --accent-fg: var(--color30);
-
-    /* ── Background Scale (Institutional Depth) ── */
-    --bg-base: var(--color10);
-    --bg-raised: var(--raised);
-    --bg-surface: var(--surface);
-
-    /* ── Border Scale (Ultra-Fine Precision) ── */
-    --border-default: rgba(255, 255, 255, 0.04);
-    --border-emphasis: rgba(255, 255, 255, 0.08);
-    --border-hover: rgba(255, 255, 255, 0.12);
-    --border-brand: rgba(16, 185, 129, 0.2);
-
-    /* ── Semantic Colors ── */
-    --success: var(--color8);
-    --warning: var(--color38);
-    --danger: var(--color9);
-    --info: var(--color39);
+    /* ── Institutional Royale Palette (Noir v3 - THE ONE) ── */
+    --bg-base: #000103;     /* Deep Void Black */
+    --bg-raised: #040609;   /* Subtle Surface */
+    --bg-panel: #080A0F;    /* Component Background */
     
-    /* ── Single Brand Color System ── */
-    --brand-dark: var(--color40);
-    --brand-subtle: rgba(16, 185, 129, 0.12);
-    --brand-glow: rgba(16, 185, 129, 0.4);
-    --brand-glow-subtle: rgba(16, 185, 129, 0.1);
+    --brand-primary: #10B981;  /* Sovereign Emerald */
+    --brand-secondary: #D4AF37; /* Imperial Gold */
+    --brand-accent: #00FFA3;   /* Neon Flux */
+    
+    --text-primary: #FFFFFF;
+    --text-secondary: #94A3B8;
+    --text-muted: #475569;
 
-    /* ── Spacing Scale (Institutional Precision) ── */
-    --space-section: 10rem;
-    --space-section-sm: 6rem;
-    --space-content: 5rem;
-    --space-content-sm: 3rem;
+    --border-subtle: rgba(255, 255, 255, 0.04);
+    --border-glow: rgba(16, 185, 129, 0.2);
 
-    /* ── Radius Scale ── */
-    --radius-card: 2.75rem;
-    --radius-panel: 2.25rem;
-    --radius-button: 1.25rem;
-    --radius-pill: 999px;
-    --radius-input: 1rem;
+    /* ── Legacy Variable Mapping (Institutional Reliability) ── */
+    --color10: var(--bg-base);
+    --color13: var(--bg-base);
+    --color30: var(--bg-base);
+    --color8: var(--brand-primary);
+    --color14: var(--brand-accent);
+    --color15: var(--brand-secondary);
+    --color16: var(--bg-raised);
+    --color17: var(--bg-panel);
+    --color18: var(--text-secondary);
+    --color19: rgba(255,255,255,0.02);
+    --color20: var(--text-muted);
+    --color21: #FFFFFF;
+    --color22: var(--bg-panel);
+    --color23: var(--text-primary);
+    --color24: var(--border-subtle);
+    --color25: var(--bg-raised);
+    --color34: #FFFFFF;
+    --color35: #94A3B8;
+    --color36: #475569;
+    --raised: var(--bg-raised);
+    --surface: var(--bg-panel);
 
-    /* ── Shadow Scale ── */
-    --shadow-card: 0 30px 80px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.04);
-    --shadow-panel: 0 18px 44px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.03);
-    --shadow-glow: 0 16px 40px rgba(88, 242, 182, 0.18);
-    --shadow-float: 0 24px 60px rgba(0, 0, 0, 0.35);
+    /* ── Spacing & Effects ── */
+    --radius-card: 40px;
+    --radius-button: 16px;
+    --glass-blur: 40px;
+    --shadow-royale: 0 40px 100px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.03);
 
-    /* ── 200x Elite Evolution Tokens (Apple/Google Tier) ── */
-    --neon-emerald: var(--color8);
-    --neon-cyan: var(--color39);
-    --neon-purple: var(--color41);
-    --glass-bg: rgba(255, 255, 255, 0.015);
-    --glass-border: rgba(255, 255, 255, 0.04);
-    --glass-blur: 32px;
-    --noise-opacity: 0.02;
-
-    /* ── Premium Gradients ── */
-    --grad-sovereign: linear-gradient(135deg, var(--color34) 0%, var(--color35) 100%);
-    --grad-emerald: linear-gradient(135deg, var(--color8) 0%, var(--color42) 100%);
-    --grad-dark: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 100%);
+    /* ── Gradients ── */
+    --grad-royale: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-accent) 50%, var(--brand-secondary) 100%);
+    --grad-noir: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 100%);
 
     color-scheme: dark;
   }
 
   html {
     scroll-behavior: smooth;
+    background: var(--bg-base);
   }
 
   body {
     min-height: 100vh;
-    background-color: var(--color-obsidian);
-    color: #f8fafc;
+    background-color: var(--bg-base);
+    color: var(--text-primary);
     font-family: 'Inter', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
   }
 
