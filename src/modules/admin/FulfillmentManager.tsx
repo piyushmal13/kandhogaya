@@ -7,6 +7,7 @@ import {
 import { supabase } from "../../lib/supabase";
 import { cn } from "../../utils/cn";
 import { tracker } from "@/core/tracker";
+import { revenueSystem } from "../../services/crm/revenueSystem";
 
 export const FulfillmentManager = () => {
   const [receipts, setReceipts] = useState<any[]>([]);
@@ -45,11 +46,50 @@ export const FulfillmentManager = () => {
     
     setProcessingId(receipt.id);
     try {
-      // 1. ORCHESTRATION: Determine fulfillment path (Tier vs Specific Product)
+      // 1. REVENUE ATTRIBUTION: Identify Agent Identity
+      let agentId = null;
+      if (receipt.referred_by_code) {
+        const { data: affData } = await supabase
+          .from('affiliate_codes')
+          .select('user_id')
+          .eq('code', receipt.referred_by_code)
+          .maybeSingle();
+        
+        if (affData) {
+          agentId = affData.user_id;
+        }
+      }
+
+      // 2. REVENUE TRACKING: Insert into Sales Ledger
+      const { error: salesError } = await supabase
+        .from('sales_tracking')
+        .insert({
+          user_id: receipt.user_id,
+          agent_id: agentId,
+          product_id: receipt.product_id,
+          sale_amount: receipt.amount,
+          source: 'manual_verification'
+        });
+
+      if (salesError) console.warn("Institutional Ledger Signal Delay:", salesError);
+
+      // 3. COMMISSION ENGINE: Signal Agent Compensation
+      if (agentId) {
+        await revenueSystem.trackCommission(
+          receipt.user_id, 
+          agentId, 
+          { 
+            type: 'manual_sale', 
+            amount: receipt.amount, 
+            id: receipt.product_id 
+          }
+        );
+      }
+
+      // 4. ENTITLEMENT ORCHESTRATION: Release Assets
       const isTier = ['a1a1a1a1-a1a1-a1a1-a1a1-a1a1a1a1a1a1', 'b2b2b2b2-b2b2-b2b2-b2b2-b2b2b2b2b2b2'].includes(receipt.product_id);
 
       if (isTier) {
-        // TIER FULFILLMENT: Release Global Entitlements
         const features = receipt.product_id === 'b2b2b2b2-b2b2-b2b2-b2b2-b2b2b2b2b2b2' 
           ? ['signals', 'algo', 'webinars'] 
           : ['signals'];
@@ -64,13 +104,9 @@ export const FulfillmentManager = () => {
           expires_at: expiresAt.toISOString()
         }));
 
-        const { error: entError } = await supabase
-          .from('user_entitlements')
-          .insert(entitlementInserts);
-
-        if (entError) throw entError;
+        await supabase.from('user_entitlements').insert(entitlementInserts);
       } else {
-        // PRODUCT FULFILLMENT: Legacy bot license flow
+        // Product Fulfillment
         let { data: bot } = await supabase
           .from('algo_bots')
           .select('id')
@@ -78,7 +114,7 @@ export const FulfillmentManager = () => {
           .maybeSingle();
 
         if (!bot) {
-          const { data: newBot, error: botError } = await supabase
+          const { data: newBot } = await supabase
             .from('algo_bots')
             .insert({
               product_id: receipt.product_id,
@@ -87,29 +123,25 @@ export const FulfillmentManager = () => {
             })
             .select()
             .single();
-          
-          if (botError) throw botError;
           bot = newBot;
         }
 
-        const key = `IFX-${Math.random().toString(36).toUpperCase().substring(2, 6)}-${Math.random().toString(36).toUpperCase().substring(2, 6)}`;
-        const expiresAt = new Date();
-        expiresAt.setDate(expiresAt.getDate() + 30);
+        if (bot) {
+          const key = `IFX-${Math.random().toString(36).toUpperCase().substring(2, 6)}-${Math.random().toString(36).toUpperCase().substring(2, 6)}`;
+          const expiresAt = new Date();
+          expiresAt.setDate(expiresAt.getDate() + 30);
 
-        const { error: licError } = await supabase
-          .from('bot_licenses')
-          .insert({
+          await supabase.from('bot_licenses').insert({
             user_id: receipt.user_id,
             algo_id: bot.id,
             license_key: key,
             is_active: true,
             expires_at: expiresAt.toISOString()
           });
-
-        if (licError) throw licError;
+        }
       }
 
-      // 2. ORCHESTRATION: Finalize Revenue Status
+      // 5. STATUS FINALIZATION
       const { error: updError } = await supabase
         .from('manual_payment_receipts')
         .update({ status: 'approved' })
@@ -117,18 +149,15 @@ export const FulfillmentManager = () => {
 
       if (updError) throw updError;
 
-      // 3. ORCHESTRATION: Track Performance Discovery
       await tracker.track("payment_fulfilled", { 
         receipt_id: receipt.id, 
         user_id: receipt.user_id,
         product_id: receipt.product_id 
       });
       
-      // Local Sync: Zero Latency Refresh
       setReceipts(prev => prev.filter(r => r.id !== receipt.id));
-      console.log(`[REVENUE] Entitlement Released: ${receipt.user_id}`);
     } catch (err) {
-      console.error("Institutional Fulfillment Execution Failure:", err);
+      console.error("Institutional Fulfillment Failure:", err);
     } finally {
       setProcessingId(null);
     }

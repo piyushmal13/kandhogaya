@@ -178,10 +178,10 @@ export const AgentDashboard = () => {
     <DashboardLayout>
       <div className="pb-24">
         <PageMeta 
-          title="Agent Portal" 
-        description="Monitor your institutional referral performance and manage your commissions."
-        path="/agent"
-      />
+          title="Institutional Agent Terminal | Partner Intelligence" 
+          description="Access the IFX Trades Institutional Agent Terminal. Monitor referral performance, track real-time commissions, and manage your partner growth protocols."
+          path="/agent"
+        />
 
       <div className="max-w-7xl mx-auto px-4">
         {/* Header Terminal */}
@@ -197,10 +197,10 @@ export const AgentDashboard = () => {
                 Growth Protocol Active
               </div>
               <h1 className="text-4xl md:text-6xl font-black text-white uppercase italic tracking-tighter leading-none">
-                Agent <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">Terminal</span>
+                Partner <span className="text-transparent bg-clip-text bg-[var(--grad-royale)]">Intelligence</span>
               </h1>
-              <p className="text-gray-500 mt-4 max-w-xl text-sm font-bold uppercase tracking-widest leading-relaxed">
-                Scaled revenue through institutional partnership. Manage your referral network and withdraw commissions with sub-second transparency.
+              <p className="text-gray-500 mt-4 max-w-xl text-[10px] font-black uppercase tracking-[0.2em] leading-relaxed">
+                Execute growth strategies through institutional-grade referral protocols. Harness the power of the IFX ecosystem with sub-second transparency and automated settlement.
               </p>
             </div>
 
@@ -231,7 +231,7 @@ export const AgentDashboard = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1 }}
-                className="p-8 bg-[var(--raised)] border border-white/5 rounded-[2.5rem] relative overflow-hidden group hover:border-white/10 transition-all"
+                className="p-8 bg-[var(--raised)] border border-white/5 rounded-[2.5rem] relative overflow-hidden group hover:border-emerald-500/20 transition-all shadow-2xl"
               >
                  <div className="flex justify-between items-start mb-6">
                     <div className={`w-14 h-14 ${stat.bg} ${stat.color} rounded-2xl flex items-center justify-center border border-white/5 group-hover:scale-110 transition-transform`}>
@@ -284,10 +284,10 @@ export const AgentDashboard = () => {
                       <button 
                         onClick={generateCode}
                         disabled={loading}
-                        className="px-8 py-5 bg-emerald-500 text-black rounded-2xl text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all flex items-center justify-center gap-3 shadow-xl disabled:opacity-50"
+                        className="px-8 py-5 bg-[var(--brand-primary)] text-black rounded-2xl text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all flex items-center justify-center gap-3 shadow-xl disabled:opacity-50"
                       >
                          {loading ? <Activity className="w-4 h-4 animate-spin" /> : <ShieldCheck className="w-4 h-4" />}
-                         Establish ID Profile
+                         Activate Agent Protocol
                       </button>
                     )}
                  </div>

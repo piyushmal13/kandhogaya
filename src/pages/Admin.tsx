@@ -30,8 +30,7 @@ const tabs = [
   { id: "ceo",         name: "Executive Overview",  icon: BarChart3,    group: "COMMAND" },
   { id: "revenue",     name: "Revenue Analytics",   icon: DollarSign,   group: "COMMAND" },
   { id: "leads",       name: "CRM Leads",           icon: Users,        group: "GROWTH" },
-  { id: "fulfillment", name: "Pending Orders",      icon: ShoppingCart, group: "GROWTH" },
-  { id: "payments",    name: "Payment Proofs",      icon: CreditCard,   group: "GROWTH" },
+  { id: "payments",    name: "Revenue Fulfillment", icon: CreditCard,   group: "GROWTH" },
   { id: "agents",      name: "Elite Agents",        icon: Trophy,       group: "GROWTH" },
   { id: "retention",   name: "Retention Hub",       icon: Activity,     group: "GROWTH" },
   { id: "webinars",    name: "Webinar Manager",     icon: Video,        group: "CONTENT" },
@@ -107,11 +106,10 @@ export const Admin = () => {
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
             {activeTab === "ceo"         && <CEOPanel />}
             {activeTab === "revenue"     && <RevenueAnalytics />}
-            {activeTab === "fulfillment" && <FulfillmentManager />}
             {activeTab === "retention"   && <RetentionHub />}
             {activeTab === "agents"      && <AgentSystem />}
             {activeTab === "leads"       && <LeadManager />}
-            {activeTab === "payments"    && <PaymentManager />}
+            {activeTab === "payments"    && <FulfillmentManager />}
             {activeTab === "content"     && <ContentManager />}
             {activeTab === "licenses"    && <LicenseManager />}
             {activeTab === "flags"       && <FeatureFlagManager />}

@@ -155,14 +155,16 @@ export const CEOPanel = () => {
       </div>
 
       {/* Revenue Hero Block */}
-      <div className="bg-gradient-to-br from-emerald-500/15 via-black to-black border border-emerald-500/20 p-10 lg:p-16 rounded-[56px] shadow-2xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 p-16 opacity-[0.04] pointer-events-none">
+      <div className="bg-gradient-to-br from-[#000103] via-[#050505] to-[#10B981]/5 border border-white/5 p-10 lg:p-16 rounded-[56px] shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden group">
+        <div className="absolute top-0 right-0 p-16 opacity-[0.03] group-hover:opacity-[0.06] transition-opacity pointer-events-none">
           <DollarSign className="w-72 h-72 text-emerald-500" />
         </div>
         <div className="absolute top-4 left-4 flex items-center gap-2 px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
-          <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-          <span className="text-[9px] font-black text-emerald-500 uppercase tracking-widest">Live Supabase Feed</span>
+          <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_10px_#10B981]" />
+          <span className="text-[9px] font-black text-emerald-500 uppercase tracking-widest italic">Live Revenue Discovery Signal</span>
         </div>
+
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(16,185,129,0.03),transparent)] pointer-events-none" />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 relative z-10 mt-4">
           <div>
@@ -206,12 +208,12 @@ export const CEOPanel = () => {
           { id: "web",      label: "Webinars",          value: stats.upcomingWebinars,     icon: Video,       color: "text-emerald-400",  bg: "bg-emerald-500/5" },
           { id: "reviews",  label: "Reviews Pending",   value: stats.pendingReviews,       icon: Star,        color: stats.pendingReviews > 0 ? "text-red-400" : "text-gray-600", bg: stats.pendingReviews > 0 ? "bg-red-500/5" : "bg-white/5" },
         ].map(s => (
-          <div key={s.id} className={cn("p-6 rounded-[28px] border border-white/5", s.bg)}>
-            <s.icon className={cn("w-5 h-5 mb-4", s.color)} />
-            <div className={cn("text-3xl font-black tabular-nums tracking-tighter", s.color)}>
+          <div key={s.id} className={cn("p-6 rounded-[28px] border border-white/5 bg-[var(--raised)] backdrop-blur-xl group hover:border-white/10 transition-all", s.bg)}>
+            <s.icon className={cn("w-5 h-5 mb-4 opacity-50 group-hover:opacity-100 transition-opacity", s.color)} />
+            <div className={cn("text-3xl font-black tabular-nums tracking-tighter italic", s.color)}>
               {loading ? "—" : s.value.toLocaleString()}
             </div>
-            <div className="text-[9px] font-black uppercase tracking-widest text-gray-600 mt-2">{s.label}</div>
+            <div className="text-[9px] font-black uppercase tracking-widest text-gray-700 mt-2 group-hover:text-gray-500 transition-colors">{s.label}</div>
           </div>
         ))}
       </div>
@@ -220,7 +222,7 @@ export const CEOPanel = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
         {/* Regional Performance */}
-        <div className="lg:col-span-2 bg-zinc-900 border border-white/10 p-10 rounded-[48px] shadow-2xl">
+        <div className="lg:col-span-2 bg-[var(--raised)] border border-white/5 p-10 rounded-[48px] shadow-2xl">
           <div className="flex items-center justify-between mb-10">
             <h3 className="text-xl font-black text-white uppercase tracking-tighter">Regional Performance</h3>
             <Globe className="w-5 h-5 text-gray-600" />
@@ -249,7 +251,7 @@ export const CEOPanel = () => {
         </div>
 
         {/* Top Agents Leaderboard */}
-        <div className="bg-zinc-900 border border-white/10 p-10 rounded-[48px] shadow-2xl relative overflow-hidden group">
+        <div className="bg-[var(--raised)] border border-white/5 p-10 rounded-[48px] shadow-2xl relative overflow-hidden group">
           <div className="absolute top-0 right-0 p-10 opacity-5 group-hover:opacity-10 transition-all">
             <Trophy className="w-24 h-24 text-amber-500" />
           </div>
@@ -290,7 +292,7 @@ export const CEOPanel = () => {
         </div>
 
         {/* System Health */}
-        <div className="bg-zinc-900 border border-white/10 p-10 rounded-[48px] shadow-2xl space-y-6">
+        <div className="bg-[var(--raised)] border border-white/5 p-10 rounded-[48px] shadow-2xl space-y-6">
           <h3 className="text-xl font-black text-white uppercase tracking-tighter">System Health</h3>
 
           <div className={cn("p-6 rounded-3xl border", healthBg)}>
