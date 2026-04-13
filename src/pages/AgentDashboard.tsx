@@ -13,12 +13,15 @@ import {
   ShieldCheck,
   Activity,
   Zap,
-  LayoutDashboard
+  LayoutDashboard,
+  ShoppingCart,
+  Trophy
 } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "../contexts/AuthContext";
 import { useToast } from "../contexts/ToastContext";
 import { PageMeta } from "../components/site/PageMeta";
+import { DashboardLayout } from "@/components/institutional/DashboardLayout";
 
 export const AgentDashboard = () => {
   const { userProfile, loading: authLoading } = useAuth();
@@ -32,6 +35,7 @@ export const AgentDashboard = () => {
     commissions: 0,
     pendingPayouts: 0
   });
+  const [salesData, setSalesData] = useState<any[]>([]);
 
   // Strict institutional access control
   const isAgent = userProfile?.role === "agent" || userProfile?.role === "admin";
@@ -64,7 +68,7 @@ export const AgentDashboard = () => {
         const { data: comms, error: commError } = await supabase
           .from("commissions")
           .select("amount, status")
-          .filter("agent_id", "in", `(select id from agents where user_id = '${userProfile?.id}')`);
+          .eq("agent_id", userProfile?.id);
           
         let totalEarnings = 0;
         let pendingEarnings = 0;
@@ -80,6 +84,15 @@ export const AgentDashboard = () => {
           commissions: totalEarnings,
           pendingPayouts: pendingEarnings
         });
+
+        // 3. CRM: Fetch Sales Discovery History
+        const { data: sales, error: salesErr } = await supabase
+          .from("sales_tracking")
+          .select("*")
+          .eq("agent_id", userProfile?.id)
+          .order("created_at", { ascending: false });
+
+        if (!salesErr) setSalesData(sales || []);
       }
     } catch (err) {
       console.error("Affiliate Discovery Error:", err);
@@ -127,10 +140,45 @@ export const AgentDashboard = () => {
 
   const referralLink = affiliateCode ? `${globalThis.location.origin}?ref=${affiliateCode}` : "Establishing profile...";
 
+  // 4. CRM: Pipeline Rendering Logic (Extracted for Institutional Stability)
+  let salesPipelineContent;
+  if (loading) {
+    salesPipelineContent = (
+      <div className="py-10 text-center animate-pulse text-[10px] uppercase font-black tracking-widest text-white/20">Syncing CRM...</div>
+    );
+  } else if (salesData.length === 0) {
+    salesPipelineContent = (
+      <div className="py-20 text-center border border-white/5 rounded-3xl bg-white/[0.02]">
+        <p className="text-[10px] text-gray-600 font-bold uppercase tracking-[0.3em] italic leading-relaxed px-10">
+          Institutional signal pipeline empty. <br/>Awaiting market discovery.
+        </p>
+      </div>
+    );
+  } else {
+    salesPipelineContent = salesData.map((sale: any, idx: number) => (
+      <div key={sale.id || idx} className="p-4 bg-white/5 border border-white/5 rounded-2xl flex items-center justify-between group hover:border-[#58F2B6]/30 transition-all">
+        <div className="flex items-center gap-3">
+           <div className="w-8 h-8 rounded-lg bg-[#58F2B6]/10 flex items-center justify-center text-[#58F2B6] border border-[#58F2B6]/20">
+              <ShoppingCart className="w-4 h-4" />
+           </div>
+           <div>
+              <div className="text-[10px] font-black text-white uppercase tracking-wider line-clamp-1">{sale.product_name || 'System License'}</div>
+              <div className="text-[8px] font-bold text-gray-500 uppercase tracking-widest">{new Date(sale.created_at).toLocaleDateString()}</div>
+           </div>
+        </div>
+        <div className="text-right">
+           <div className="text-[11px] font-black text-[#58F2B6] italic">${sale.sale_amount.toLocaleString()}</div>
+           <div className="text-[8px] font-bold text-gray-600 uppercase tracking-widest">Credited</div>
+        </div>
+      </div>
+    ));
+  }
+
   return (
-    <div className="min-h-screen bg-[var(--color10)] pt-32 pb-24">
-      <PageMeta 
-        title="Agent Portal" 
+    <DashboardLayout>
+      <div className="pb-24">
+        <PageMeta 
+          title="Agent Portal" 
         description="Monitor your institutional referral performance and manage your commissions."
         path="/agent"
       />
@@ -172,29 +220,34 @@ export const AgentDashboard = () => {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
-           {[
-             { label: "Total Clicks (Leads)", value: stats.clicks, icon: MousePointer2, color: "text-cyan-400", bg: "bg-cyan-500/10" },
-             { label: "Registrations (Convs)", value: stats.registrations, icon: Users, color: "text-emerald-400", bg: "bg-emerald-500/10" },
-             { label: "Total Earnings", value: `$${stats.commissions.toLocaleString()}`, icon: DollarSign, color: "text-emerald-400", bg: "bg-emerald-500/10" },
-             { label: "Pending Payout", value: `$${stats.pendingPayouts.toLocaleString()}`, icon: TrendingUp, color: "text-amber-400", bg: "bg-amber-500/10" }
-           ].map((stat, i) => (
-             <motion.div 
-               key={stat.label}
-               initial={{ opacity: 0, y: 20 }}
-               animate={{ opacity: 1, y: 0 }}
-               transition={{ delay: i * 0.1 }}
-               className="p-8 bg-[var(--raised)] border border-white/5 rounded-[2.5rem] relative overflow-hidden group hover:border-white/10 transition-all"
-             >
-                <div className={`w-14 h-14 ${stat.bg} ${stat.color} rounded-2xl flex items-center justify-center mb-6 border border-white/5 group-hover:scale-110 transition-transform`}>
-                   <stat.icon className="w-6 h-6" />
-                </div>
-                <div className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 italic">{stat.label}</div>
-                <div className="text-3xl font-black text-white tracking-tighter uppercase">{stat.value}</div>
-                <div className="absolute top-0 right-0 p-8 opacity-5">
-                   <stat.icon className="w-24 h-24" />
-                </div>
-             </motion.div>
-           ))}
+            {[
+              { label: "Total Clicks (Leads)", value: stats.clicks, icon: MousePointer2, color: "text-cyan-400", bg: "bg-cyan-500/10", spark: "M0 20 L20 15 L40 18 L60 10 L80 12 L100 5" },
+              { label: "Registrations (Convs)", value: stats.registrations, icon: Users, color: "text-emerald-400", bg: "bg-emerald-500/10", spark: "M0 20 L20 18 L40 12 L60 14 L80 8 L100 2" },
+              { label: "Total Earnings", value: `$${stats.commissions.toLocaleString()}`, icon: DollarSign, color: "text-emerald-400", bg: "bg-emerald-500/10", spark: "M0 20 L20 19 L40 15 L60 10 L80 5 L100 0" },
+              { label: "Pending Payout", value: `$${stats.pendingPayouts.toLocaleString()}`, icon: TrendingUp, color: "text-amber-400", bg: "bg-amber-500/10", spark: "M0 10 L20 12 L40 10 L60 11 L80 10 L100 9" }
+            ].map((stat, i) => (
+              <motion.div 
+                key={stat.label}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                className="p-8 bg-[var(--raised)] border border-white/5 rounded-[2.5rem] relative overflow-hidden group hover:border-white/10 transition-all"
+              >
+                 <div className="flex justify-between items-start mb-6">
+                    <div className={`w-14 h-14 ${stat.bg} ${stat.color} rounded-2xl flex items-center justify-center border border-white/5 group-hover:scale-110 transition-transform`}>
+                       <stat.icon className="w-6 h-6" />
+                    </div>
+                    <svg className="w-16 h-8 opacity-40 group-hover:opacity-100 transition-opacity" viewBox="0 0 100 20">
+                       <path d={stat.spark} fill="none" stroke="currentColor" strokeWidth="2" className={stat.color} />
+                    </svg>
+                 </div>
+                 <div className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 italic">{stat.label}</div>
+                 <div className="text-3xl font-black text-white tracking-tighter uppercase">{stat.value}</div>
+                 <div className="absolute top-0 right-0 p-8 opacity-5">
+                    <stat.icon className="w-24 h-24" />
+                 </div>
+              </motion.div>
+            ))}
         </div>
 
         {/* Action Board */}
@@ -269,30 +322,28 @@ export const AgentDashboard = () => {
               </div>
            </motion.div>
 
-           {/* Performance Board */}
-           <motion.div 
-             initial={{ opacity: 0, x: 20 }}
-             animate={{ opacity: 1, x: 0 }}
-             className="p-10 bg-[var(--color50)] border border-white/5 rounded-[3rem] flex flex-col"
-           >
-              <h2 className="text-xl font-black text-white uppercase italic tracking-tighter mb-8 flex items-center gap-3">
-                <TrendingUp className="w-5 h-5 text-emerald-500" />
-                Network Feed
-              </h2>
-              
-              <div className="space-y-6 flex-1">
-                 {/* Future Implementation: Stream LIVE tracking events here */}
-                 <div className="text-center text-[10px] text-gray-600 uppercase tracking-widest font-black py-20 italic">
-                    Acquiring Signal Stream...
-                 </div>
-              </div>
+            {/* Performance Board */}
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="p-10 bg-[var(--color50)] border border-white/5 rounded-[3rem] flex flex-col"
+            >
+               <h2 className="text-xl font-black text-white uppercase italic tracking-tighter mb-8 flex items-center gap-3">
+                 <Trophy className="w-5 h-5 text-emerald-500" />
+                 Sales Performance
+               </h2>
+               
+               <div className="space-y-4 flex-1 overflow-y-auto custom-scrollbar pr-2 max-h-[400px]">
+                  {salesPipelineContent}
+               </div>
 
-              <button className="w-full py-4 mt-8 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-white transition-all">
-                 View Historical Logs
-              </button>
-           </motion.div>
+               <button className="w-full py-4 mt-8 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-white transition-all">
+                  Audit Settlement History
+               </button>
+            </motion.div>
+         </div>
         </div>
       </div>
-    </div>
+    </DashboardLayout>
   );
 };

@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { ArrowUpRight } from 'lucide-react';
 import { SovereignButton } from '@/components/ui/SovereignButton';
+import { tracker } from '@/core/tracker';
 
 const STUDIES = [
   {
@@ -8,47 +9,38 @@ const STUDIES = [
     industry: 'Gold / XAUUSD',
     result: '+34% Annualized',
     metric: '$2.4M Net Profit',
-    tags: ['MT5', 'Alpha-HFT', 'Quantum-Risk'],
-    image: 'https://images.unsplash.com/photo-1611974717482-48240acdf16c?q=80&w=2670&auto=format&fit=crop'
+    tags: ['MT5', 'Sovereign-HFT', 'Sovereign-Risk'],
+    image: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&q=80&w=2670&ixlib=rb-4.0.3'
   },
   {
     client: 'Singapore Prop Firm',
     industry: 'Multi-Asset',
     result: '84.2% Win Rate',
-    metric: 'Passed $200K Audit',
-    tags: ['Python', 'Direct API', 'Backtest-v4'],
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2670&auto=format&fit=crop'
+    metric: 'Passed FTMO $200K',
+    tags: ['Python', 'Custom API', 'Sovereign-Backtest'],
+    image: 'https://images.unsplash.com/photo-1642543492481-44e81e3914a7?auto=format&fit=crop&q=80&w=2670&ixlib=rb-4.0.3'
   },
   {
     client: 'European Hedge Fund',
     industry: 'Forex/Indices',
-    result: '-40% Drawdown',
+    result: '-40% Drawdown Reduction',
     metric: 'Sharpe Ratio: 2.1',
-    tags: ['AWS Nodes', 'Low Latency', 'Sentry-Pulse'],
-    image: 'https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?q=80&w=2670&auto=format&fit=crop'
+    tags: ['AWS Lambda', 'Latency Opt', 'Sovereign-Sentry'],
+    image: 'https://images.unsplash.com/photo-1542204165-65bf26472b9b?auto=format&fit=crop&q=80&w=2670&ixlib=rb-4.0.3'
   }
 ];
 
 export function CaseStudyShowcase() {
   return (
-    <section id="case-studies" className="py-32 px-6 bg-black/40 relative overflow-hidden">
-      <div className="absolute inset-0 opacity-[0.02] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
-      
-      <div className="max-w-7xl mx-auto relative z-10">
-        <div className="flex flex-col md:flex-row items-end justify-between mb-20 gap-8">
+    <section id="case-studies" className="py-32 px-6 bg-black/40 border-t border-white/5">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex flex-col md:flex-row items-end justify-between mb-20 gap-6">
           <div className="max-w-2xl">
-            <span className="text-[10px] font-black uppercase tracking-[0.5em] text-primary-400 mb-4 block">
-              Validation Protocol
-            </span>
-            <h2 className="text-5xl lg:text-7xl font-black text-white font-sans mb-4 uppercase tracking-tighter">
-              Proven <span className="text-primary-400">Execution.</span>
-            </h2>
-            <p className="text-xl text-foreground/60 font-light leading-relaxed">
-              Our algorithms don't just work in backtests. They dominate live market liquidity.
-            </p>
+            <h2 className="text-5xl lg:text-7xl font-black text-white font-heading mb-6 uppercase italic tracking-tighter">Proven <span className="text-[#58F2B6]">Execution</span></h2>
+            <p className="text-sm font-medium uppercase tracking-[0.3em] text-white/40">Our algorithms don't just work in backtests. They dominate live markets.</p>
           </div>
-          <SovereignButton variant="outline" size="lg" trackingEvent="view_all_cases">
-            Audit Archive <ArrowUpRight className="ml-2 w-4 h-4" />
+          <SovereignButton variant="secondary" className="px-8" trackingEvent="view_all_case_studies" onClick={() => tracker.track("solutions_case_studies_click")}>
+            View Audit Log <ArrowUpRight className="ml-2 w-4 h-4" />
           </SovereignButton>
         </div>
 
@@ -58,33 +50,28 @@ export function CaseStudyShowcase() {
               key={study.client}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ delay: i * 0.1 }}
               viewport={{ once: true }}
-              className="group relative rounded-[2.5rem] overflow-hidden border border-white/5 bg-[#0A0A0A] hover:border-primary-500/30 transition-all duration-700"
+              className="group relative rounded-[2.5rem] overflow-hidden border border-white/10 bg-white/[0.02] hover:border-[#58F2B6]/40 transition-all duration-700"
             >
-              <div className="aspect-[4/5] overflow-hidden relative">
-                <img 
-                   src={study.image} 
-                   alt={study.client} 
-                   className="w-full h-full object-cover opacity-50 group-hover:opacity-80 group-hover:scale-105 transition-all duration-1000" 
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/20 to-transparent" />
-                
-                <div className="absolute bottom-10 left-10 right-10">
+              <div className="aspect-[4/5] overflow-hidden relative grayscale-[0.5] group-hover:grayscale-0 transition-all duration-700">
+                <img src={study.image} alt={study.client} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-60 mix-blend-overlay group-hover:opacity-100" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#020202] via-[#020202]/80 to-transparent" />
+                <div className="absolute bottom-8 left-8 right-8">
                   <div className="flex flex-wrap gap-2 mb-4">
                     {study.tags.map(tag => (
-                      <span key={tag} className="px-3 py-1 rounded-full bg-black/60 backdrop-blur-xl text-[9px] font-black uppercase tracking-widest text-white/50 border border-white/10">
+                      <span key={tag} className="px-2.5 py-1 rounded-md bg-[#58F2B6]/10 backdrop-blur-md text-[9px] font-black tracking-widest text-[#58F2B6] border border-[#58F2B6]/20 uppercase">
                         {tag}
                       </span>
                     ))}
                   </div>
-                  <h3 className="text-2xl font-black text-white uppercase tracking-tight">{study.client}</h3>
+                  <h3 className="text-2xl font-black italic uppercase tracking-tight text-white">{study.client}</h3>
+                  <div className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 mt-1">{study.industry}</div>
                 </div>
               </div>
-              
-              <div className="p-10 border-t border-white/5 flex flex-col gap-2">
-                <div className="text-4xl font-black text-primary-400 tracking-tighter uppercase">{study.result}</div>
-                <div className="text-xs font-black uppercase tracking-widest text-foreground/30">{study.metric}</div>
+              <div className="p-8 border-t border-white/10 bg-[#020202]">
+                <div className="text-4xl font-black text-[#58F2B6] font-heading tracking-tighter mb-1">{study.result}</div>
+                <div className="text-xs font-bold uppercase tracking-widest text-white/50">{study.metric}</div>
               </div>
             </motion.div>
           ))}

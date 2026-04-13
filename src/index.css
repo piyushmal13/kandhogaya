@@ -22,10 +22,36 @@
   --color-background: #020202;
   --color-foreground: #F8FAFC;
   --color-surface: #0A0A0A;
+  --color-obsidian: #020202;
+  --color-border: rgba(255, 255, 255, 0.08);
 }
 
 @layer base {
   :root {
+    /* ── Verified Institutional Colors (Perfect Schema) ── */
+    --color34: #FFFFFF;
+    --color35: #A1A1AA;
+    --color36: #52525B;
+    --color8: #10B981;
+    --color37: #34D399;
+    --color30: #020617;
+    --color10: #020202;
+    --raised: #0a0a0b;
+    --surface: #121214;
+    --color38: #F59E0B;
+    --color9: #EF4444;
+    --color39: #06B6D4;
+    --color40: #065F46;
+    --color41: #8B5CF6;
+    --color42: #059669;
+    --color43: #000000;
+    --color44: #FBFDFF;
+    --color45: #A5F8D9;
+    --color46: #74E0FF;
+    --color47: #D8EDF3;
+    --color13: #10131A;
+    --brand: var(--color8);
+
     /* ── Text Scale (Refined for High Authority) ── */
     --text-primary: var(--color34);
     --text-secondary: var(--color35);
@@ -49,14 +75,12 @@
     --border-brand: rgba(16, 185, 129, 0.2);
 
     /* ── Semantic Colors ── */
-    /* ── Semantic Alignment ── */
     --success: var(--color8);
     --warning: var(--color38);
     --danger: var(--color9);
     --info: var(--color39);
     
     /* ── Single Brand Color System ── */
-    --brand: var(--color8);
     --brand-dark: var(--color40);
     --brand-subtle: rgba(16, 185, 129, 0.12);
     --brand-glow: rgba(16, 185, 129, 0.4);
@@ -104,15 +128,22 @@
 
   body {
     min-height: 100vh;
-    background-color: var(--color43);
-    color: var(--text-primary);
+    background-color: var(--color-obsidian);
+    color: #f8fafc;
+    font-family: 'Inter', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
   }
 
+  /* Fix for viewport height issues on mobile Safari */
+  .min-h-screen {
+    min-height: 100vh; /* Fallback */
+    min-height: -webkit-fill-available;
+  }
+
   body::selection {
-    background-color: var(--brand);
+    background-color: var(--color-primary-500);
     color: white;
   }
 
@@ -135,7 +166,7 @@
     color: var(--text-primary);
   }
 
-  h1 { @apply text-4xl sm:text-6xl md:text-8xl lg:text-[140px] leading-[0.9] tracking-[-0.05em] font-extrabold pb-4; }
+  h1 { @apply text-3xl sm:text-5xl md:text-7xl lg:text-[120px] leading-[0.9] tracking-[-0.05em] font-extrabold pb-2 break-words; }
   h2 { @apply text-3xl sm:text-5xl md:text-6xl lg:text-8xl leading-[1.0] tracking-[-0.04em] font-bold; }
   h3 { @apply text-2xl sm:text-3xl md:text-5xl leading-tight tracking-[-0.03em]; }
 
@@ -188,6 +219,47 @@
   }
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.2);
+  }
+
+  /* THE "Sovereign" Film Grain - Makes the site feel like a movie, not a website */
+  .noise-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    display: block !important;
+  }
+
+  /* Institutional Glassmorphism */
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+  }
+
+  /* Typography Polish */
+  .font-heading { font-family: 'Outfit', sans-serif; letter-spacing: -0.02em; }
+  .font-mono-institutional { font-family: 'JetBrains Mono', monospace; letter-spacing: 0.05em; }
+
+  /* Mobile-First Layouts */
+  .institutional-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Mobile: 1 col */
+  }
+
+  @media (min-width: 768px) {
+    .institutional-grid {
+      grid-template-columns: repeat(2, 1fr); /* Tablet: 2 col */
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .institutional-grid {
+      grid-template-columns: repeat(3, 1fr); /* Desktop: 3 col */
+    }
   }
 
   /* ── Grid Backdrop ── */
@@ -373,9 +445,6 @@
     @apply my-16 rounded-[40px] border border-white/10 shadow-2xl;
   }
 
-  .noise-overlay {
-    display: none;
-  }
 
   .perspective-container {
     perspective: 2000px;

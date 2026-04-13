@@ -284,11 +284,11 @@ export const WebinarDetail = () => {
             </div>
 
             <div className="mt-12">
-              <ul className="flex border-b border-white/5 mb-8 overflow-x-auto hide-scrollbar" role="tablist">
+              <ul className="flex border-b border-white/5 mb-8 overflow-x-auto hide-scrollbar">
                 {["Overview", "Speaker", "Q&A"].map((tab) => {
                   const isActive = activeTab === tab.toLowerCase();
                   return (
-                  <li key={tab} role="presentation">
+                  <li key={tab}>
                     <button
                       role="tab"
                       aria-selected={isActive}
@@ -316,8 +316,8 @@ export const WebinarDetail = () => {
                           What You'll Learn
                         </h4>
                         <ul className="space-y-3 text-sm">
-                          {webinar.advanced_features?.learning_points?.map((point: string, idx: number) => (
-                            <li key={`lp-${point.slice(0,10)}-${idx}`} className="flex items-start gap-2">
+                          {webinar.advanced_features?.learning_points?.map((point: string) => (
+                            <li key={point} className="flex items-start gap-2">
                               <Check className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" />
                               <span>{point}</span>
                             </li>
@@ -342,7 +342,7 @@ export const WebinarDetail = () => {
                         <div className="absolute inset-0 bg-emerald-500/20 group-hover:opacity-0 transition-opacity" />
                         <img 
                           src={webinar.speaker_profile_url || webinar.speaker_images?.[0] || "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=2000&auto=format&fit=crop"} 
-                          alt={webinar.speaker}
+                          alt={webinar.speaker || "Institutional Speaker"}
                           className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
                         />
                       </div>

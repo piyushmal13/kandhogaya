@@ -128,6 +128,10 @@ export const FeatureFlagManager = () => {
     items: FLAG_REGISTRY.filter(f => f.group === group),
   })).filter(g => g.items.length > 0);
 
+  const saveLabel = dirty.size > 0 
+    ? `Save ${dirty.size} Change${dirty.size === 1 ? "" : "s"}` 
+    : "Saved";
+
   return (
     <div className="space-y-8">
 
@@ -159,7 +163,7 @@ export const FeatureFlagManager = () => {
             className="flex items-center gap-2 px-5 py-2.5 bg-emerald-500 text-black font-black text-xs rounded-xl hover:bg-emerald-400 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {saving ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
-            {dirty.size > 0 ? `Save ${dirty.size} Change${dirty.size > 1 ? "s" : ""}` : "Saved"}
+            {saveLabel}
           </button>
         </div>
       </div>

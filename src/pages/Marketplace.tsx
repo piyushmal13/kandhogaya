@@ -1,7 +1,7 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { useQuery } from '@tanstack/react-query';
-import { motion, AnimatePresence, useScroll, useTransform } from "motion/react";
-import { Zap, ShieldCheck, Activity, TrendingUp } from "lucide-react";
+import { AnimatePresence } from "motion/react";
+import { ShieldCheck, Activity, TrendingUp } from "lucide-react";
 import { PurchaseModal } from "../components/payments/PurchaseModal";
 import { PageMeta } from "../components/site/PageMeta";
 import { productService } from "../services/productService";
@@ -11,6 +11,7 @@ import { MarketplaceGrid } from "../components/institutional/MarketplaceGrid";
 import { useAuth } from "../contexts/AuthContext";
 import { useToast } from "../contexts/ToastContext";
 import { useNavigate } from "react-router-dom";
+import { DashboardLayout } from "@/components/institutional/DashboardLayout";
 
 export const Marketplace = () => {
   const [selectedAlgo, setSelectedAlgo] = useState<Product | null>(null);
@@ -23,11 +24,10 @@ export const Marketplace = () => {
   const { info } = useToast();
   const navigate = useNavigate();
 
-  // 🚀 [CTO] React-Query Integration: Stale-While-Re-validate Strategy
   const { data: products = [], isLoading: loading } = useQuery({
     queryKey: ['institutional_marketplace_products'],
     queryFn: () => productService.getProducts(),
-    staleTime: 300000, // 5 minutes (Institutional products are stable)
+    staleTime: 300000,
     refetchInterval: 600000, 
   });
 
@@ -64,20 +64,19 @@ export const Marketplace = () => {
   });
 
   return (
-    <>
+    <div className="pt-32 pb-24">
       <PageMeta
-        title="Algorithmic Marketplace"
+        title="Algorithmic Marketplace | Sovereign Terminal"
         description="Explore IFXTrades trading algorithms, strategy filters, and subscription-ready systematic products."
         path="/marketplace"
         keywords={["trading algorithms", "algo marketplace", "MT5 trading bots"]}
       />
 
-      <div className="space-y-12">
-        {/* Institutional Header */}
+      <div className="max-w-7xl mx-auto px-4 space-y-12">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
           <div className="space-y-4">
             <h1 className="text-5xl font-black text-white italic tracking-tighter uppercase leading-[0.8]">
-               Quant <span className="text-emerald-500">Terminal</span>
+               Quant <span className="text-[#58F2B6]">Terminal</span>
             </h1>
             <p className="text-sm text-white/40 max-w-2xl font-medium uppercase tracking-widest leading-relaxed">
               Systematic intelligence engineered for institutional liquidity. Execute high-probability models derived from sovereign capital flow and macroeconomic structural analysis.
@@ -91,7 +90,7 @@ export const Marketplace = () => {
                 onClick={() => setFilter(label)}
                 className={`px-6 py-2 rounded-xl text-[10px] font-black tracking-widest uppercase transition-all duration-300 border ${
                   filter === label
-                    ? "bg-emerald-500 text-black border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.3)]"
+                    ? "bg-[#58F2B6] text-black border-[#58F2B6] shadow-[0_0_20px_rgba(88,242,182,0.3)]"
                     : "bg-white/5 text-white/30 hover:text-white border-white/5"
                 }`}
               >
@@ -101,16 +100,15 @@ export const Marketplace = () => {
           </div>
         </div>
 
-        {/* Filters Matrix */}
         <div className="flex flex-wrap items-center gap-12 py-8 border-y border-white/5">
            <div className="flex items-center gap-6">
               <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.3em] font-mono">Terminal Focus</span>
               <div className="flex gap-6">
                 {["All", "Forex", "Indices", "Gold"].map(a => (
-                  <button 
+                   <button 
                     key={a}
                     onClick={() => setAssetFilter(a)}
-                    className={`text-[10px] font-black uppercase tracking-[0.3em] transition-all hover:tracking-[0.4em] ${assetFilter === a ? 'text-emerald-500' : 'text-white/40 hover:text-white'}`}
+                    className={`text-[10px] font-black uppercase tracking-[0.3em] transition-all hover:tracking-[0.4em] ${assetFilter === a ? 'text-[#58F2B6]' : 'text-white/40 hover:text-white'}`}
                   >
                     {a}
                   </button>
@@ -124,7 +122,7 @@ export const Marketplace = () => {
                   <button 
                     key={r}
                     onClick={() => setRiskFilter(r)}
-                    className={`text-[10px] font-black uppercase tracking-[0.3em] transition-all hover:tracking-[0.4em] ${riskFilter === r ? 'text-emerald-500' : 'text-white/40 hover:text-white'}`}
+                    className={`text-[10px] font-black uppercase tracking-[0.3em] transition-all hover:tracking-[0.4em] ${riskFilter === r ? 'text-[#58F2B6]' : 'text-white/40 hover:text-white'}`}
                   >
                     {r}
                   </button>
@@ -139,7 +137,7 @@ export const Marketplace = () => {
             products={filteredProducts.map(algo => ({
               id: algo.id,
               name: algo.name,
-              type: (algo.category?.toLowerCase() === 'course' ? 'course' : 'algorithm') as 'course' | 'algorithm',
+              type: (algo.category?.toLowerCase() === 'course' ? 'course' : 'algorithm'),
               price: algo.price,
               isPremium: algo.price > 150 || algo.category === 'Premium',
               performance: algo.performance ? {
@@ -164,18 +162,17 @@ export const Marketplace = () => {
           )}
         </section>
 
-        {/* Authority Benchmarks */}
         <section className="grid grid-cols-1 md:grid-cols-3 gap-10 pt-12 border-t border-white/5">
           {[
             { icon: ShieldCheck, title: "Verified Integrity", desc: "Every algorithm passes rigorous institutional backtesting on raw exchange tick data." },
             { icon: Activity, title: "Live Telemetry", desc: "Real-time win rates and monthly returns synced directly via MT5/Supabase link." },
             { icon: TrendingUp, title: "Quant Origin", desc: "Built by the proprietary desk managing institutional capital. High-alpha execution." }
-          ].map((item, i) => (
-            <div key={i} className="space-y-4 group">
-              <div className="w-12 h-12 bg-grad-primary/10 rounded-2xl flex items-center justify-center text-emerald-500 border border-emerald-500/20 group-hover:bg-grad-primary/20 transition-all">
+          ].map((item) => (
+            <div key={item.title} className="space-y-4 group">
+              <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-[#58F2B6] border border-white/5 group-hover:bg-[#58F2B6]/10 transition-all">
                 <item.icon className="w-6 h-6" />
               </div>
-              <h3 className="text-[12px] text-white font-black uppercase italic tracking-tighter transition-colors group-hover:text-emerald-400">{item.title}</h3>
+              <h3 className="text-[12px] text-white font-black uppercase italic tracking-tighter transition-colors group-hover:text-[#58F2B6]">{item.title}</h3>
               <p className="text-white/40 text-[10px] font-medium uppercase tracking-widest leading-relaxed">{item.desc}</p>
             </div>
           ))}
@@ -200,6 +197,6 @@ export const Marketplace = () => {
           onClose={() => setPurchaseDetails(null)}
         />
       )}
-    </>
+    </div>
   );
 };

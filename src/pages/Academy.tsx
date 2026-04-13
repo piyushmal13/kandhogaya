@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { BookOpen, Clock, GraduationCap, PlayCircle, Zap, Shield } from "lucide-react";
-import { motion } from "framer-motion";
-import { Link, useNavigate } from "react-router-dom";
+import { Zap, Shield } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { CourseCardSkeleton } from "../components/ui/Skeleton";
 import { AcademyCourseCard } from "../components/institutional/AcademyCourseCard";
 import { PageMeta } from "../components/site/PageMeta";
 import { getCourses } from "../services/apiHandlers";
 import { Course } from "../types";
+import { DashboardLayout } from "@/components/institutional/DashboardLayout";
 
 const getCourseImage = (course: Course) =>
   course.image_url || course.thumbnail_url || `https://picsum.photos/seed/${course.id}/960/540`;
@@ -15,30 +15,26 @@ const getCourseImage = (course: Course) =>
 export const Academy = () => {
   const navigate = useNavigate();
 
-  // 🚀 [CTO] Sovereignty over Learning State
   const { data: courses = [], isLoading: loading } = useQuery({
     queryKey: ['institutional_academy_courses'],
     queryFn: () => getCourses(),
-    staleTime: 600000, // 10 minutes (Education catalog is stable)
+    staleTime: 600000,
   });
 
-  const totalLessons = courses.reduce((sum, course) => sum + (course.chapters?.length || 0), 0);
-
   return (
-    <>
+    <div className="pt-32 pb-24">
       <PageMeta
-        title="Sovereign Trading Academy"
+        title="Sovereign Academy | Institutional Certification"
         description="Explore the IFXTrades Academy for structured trader education across forex, gold, and algorithmic execution workflows."
         path="/academy"
         keywords={["trading academy", "forex education", "algo trading course"]}
       />
 
-      <div className="space-y-16">
-        {/* Terminal Header */}
+      <div className="max-w-7xl mx-auto px-4 space-y-16">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
           <div className="space-y-4">
             <h1 className="text-5xl font-black text-white italic tracking-tighter uppercase leading-[0.8] mb-2">
-              Institutional <span className="text-emerald-500">Academy</span>
+              Institutional <span className="text-[#58F2B6]">Academy</span>
             </h1>
             <p className="text-sm text-white/40 max-w-2xl font-medium uppercase tracking-widest leading-relaxed">
               Curriculum engineered for traders moving from intuition-led entries toward systematic execution, risk discipline, and algorithmic repeatability.
@@ -57,7 +53,6 @@ export const Academy = () => {
           </div>
         </div>
 
-        {/* Course Matrix */}
         <section className="space-y-12">
           {loading ? (
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -104,20 +99,19 @@ export const Academy = () => {
           )}
         </section>
 
-        {/* Methodology Nodes */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-10 py-12 border-t border-white/5">
-           <div className="p-8 rounded-[2.5rem] bg-white/[0.02] border border-white/5 space-y-4 hover:border-emerald-500/20 transition-all group">
+           <div className="p-8 rounded-[2.5rem] bg-white/[0.02] border border-white/5 space-y-4 hover:border-[#58F2B6]/20 transition-all group">
               <div className="flex items-center gap-3">
-                 <Zap className="w-5 h-5 text-emerald-500" />
+                 <Zap className="w-5 h-5 text-[#58F2B6]" />
                  <h4 className="text-[11px] font-black text-white uppercase tracking-widest">Execution Methodology</h4>
               </div>
               <p className="text-[10px] font-medium text-white/30 uppercase tracking-[0.15em] leading-relaxed">
                  Focused on market structure, directional bias, and the mechanical execution of high-probability trading models.
               </p>
            </div>
-           <div className="p-8 rounded-[2.5rem] bg-white/[0.02] border border-white/5 space-y-4 hover:border-emerald-500/20 transition-all group">
+           <div className="p-8 rounded-[2.5rem] bg-white/[0.02] border border-white/5 space-y-4 hover:border-[#58F2B6]/20 transition-all group">
               <div className="flex items-center gap-3">
-                 <Shield className="w-5 h-5 text-emerald-500" />
+                 <Shield className="w-5 h-5 text-[#58F2B6]" />
                  <h4 className="text-[11px] font-black text-white uppercase tracking-widest">Risk Governance</h4>
               </div>
               <p className="text-[10px] font-medium text-white/30 uppercase tracking-[0.15em] leading-relaxed">
@@ -126,6 +120,6 @@ export const Academy = () => {
            </div>
         </section>
       </div>
-    </>
+    </div>
   );
 };

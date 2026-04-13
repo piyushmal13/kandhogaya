@@ -27,10 +27,10 @@ export function initSentry() {
     dsn: SENTRY_DSN,
 
     // Capture 100 % of errors; tune down to 0.1 (10 %) when traffic is high
-    sampleRate: IS_PROD ? 1.0 : 0.0,
+    sampleRate: IS_PROD ? 1 : 0,
 
     // Performance tracing: 10 % of page-loads in production
-    tracesSampleRate: IS_PROD ? 0.1 : 0.0,
+    tracesSampleRate: IS_PROD ? 0.1 : 0,
 
     // Release tied to the Vercel commit SHA for source-map lookup
     release: import.meta.env.VITE_VERCEL_GIT_COMMIT_SHA ?? "dev",
@@ -60,4 +60,4 @@ export function initSentry() {
 }
 
 /** Sentry-aware error boundary (drop-in replacement for the class component) */
-export { Sentry };
+export * as Sentry from "@sentry/react";

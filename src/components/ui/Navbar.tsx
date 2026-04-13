@@ -147,124 +147,114 @@ export const Navbar = () => {
 
       <AnimatePresence>
         {isOpen ? (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsOpen(false)}
-              className="fixed inset-0 z-[60] bg-slate-950/75 backdrop-blur-sm md:hidden"
-            />
+          <motion.div
+            initial={{ opacity: 0, y: -20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.95 }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            className="fixed inset-0 z-[60] flex flex-col bg-[#020202]/95 backdrop-blur-3xl md:hidden overflow-y-auto pt-24 px-6 pb-10"
+          >
+            <div className="absolute top-4 right-6">
+              <button
+                type="button"
+                onClick={() => setIsOpen(false)}
+                className="w-10 h-10 flex items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-400 hover:text-white transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
 
-            <motion.div
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="fixed inset-y-0 right-0 z-[70] w-full max-w-[320px] bg-[var(--color30)]/95 border-l border-white/10 shadow-[-20px_0_60px_rgba(0,0,0,0.5)] backdrop-blur-2xl md:hidden overflow-y-auto"
-            >
-              <div className="p-6 flex flex-col min-h-full">
-                <div className="flex items-center justify-between mb-8">
-                  <Link to="/" onClick={() => setIsOpen(false)} className="flex items-center group">
-                    <div className="flex items-center justify-center transition-all duration-700 h-10 w-10 rounded-xl overflow-hidden">
-                      <ResizedImage src={BRANDING.logoUrl} alt="Logo" className="h-full w-full object-contain" />
-                    </div>
-                  </Link>
-                  <button
-                    type="button"
-                    onClick={() => setIsOpen(false)}
-                    className="w-10 h-10 flex items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-400 hover:text-white transition-colors"
-                  >
-                    <X className="h-5 w-5" />
-                  </button>
-                </div>
-
-                <div className="space-y-6">
-                  <div>
-                    <div className="px-2 mb-4 text-[10px] font-bold uppercase tracking-[0.3em] text-emerald-500/60 font-mono italic">Core Discovery</div>
-                    <div className="grid grid-cols-1 gap-2">
-                      {navLinks.map((link) => (
-                        <Link
-                          key={link.path}
-                          to={link.path}
-                          onClick={() => setIsOpen(false)}
-                          className={cn(
-                            "flex items-center gap-4 rounded-xl border px-4 py-4 transition-all duration-300",
-                            location.pathname === link.path
-                              ? "border-[var(--brand)]/20 bg-[var(--brand)]/10 text-[var(--brand)] shadow-[0_0_20px_rgba(16,185,129,0.05)]"
-                              : "border-white/[0.03] bg-white/[0.02] text-slate-400 hover:border-white/[0.1] hover:bg-white/[0.05]",
-                          )}
-                        >
-                          <link.icon className="h-4 w-4" />
-                          <span className="text-sm font-black uppercase tracking-widest">{link.name}</span>
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <div className="px-2 mb-4 text-[10px] font-bold uppercase tracking-[0.3em] text-slate-600 font-mono italic">Client Control</div>
-                    <div className="grid grid-cols-1 gap-2">
-                      {user ? (
-                        <>
-                          <Link
-                            to="/dashboard"
-                            onClick={() => setIsOpen(false)}
-                            className="flex items-center gap-4 rounded-xl border border-white/[0.03] bg-white/[0.02] px-4 py-4 text-slate-400 hover:border-white/[0.1] hover:bg-white/[0.05]"
-                          >
-                            <LayoutDashboard className="h-4 w-4" />
-                            <span className="text-sm font-black uppercase tracking-widest">Master Console</span>
-                          </Link>
-                          {isAdmin ? (
-                            <Link
-                              to="/admin"
-                              onClick={() => setIsOpen(false)}
-                              className="flex items-center gap-4 rounded-xl border border-[var(--brand)]/20 bg-[var(--brand)]/10 px-4 py-4 text-[var(--brand)] hover:bg-[var(--brand)]/20"
-                            >
-                              <Settings className="h-4 w-4" />
-                              <span className="text-sm font-black uppercase tracking-widest">Admin Terminal</span>
-                            </Link>
-                          ) : null}
-                        </>
-                      ) : (
-                        <Link
-                          to="/login"
-                          onClick={() => setIsOpen(false)}
-                          className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--brand)] px-5 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-950 shadow-[0_10px_30px_rgba(16,185,129,0.2)] hover:bg-white transition-all"
-                        >
-                          Access Portal
-                          <ArrowRight className="h-3 w-3" />
-                        </Link>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-auto pt-10">
-                  {user ? (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        logout();
-                        setIsOpen(false);
-                      }}
-                      className="flex w-full items-center justify-center gap-3 rounded-xl border border-red-500/10 bg-red-500/5 px-5 py-4 text-[10px] font-black text-red-400 uppercase tracking-widest transition-colors hover:bg-red-500/10"
+            <div className="flex flex-col gap-8 flex-1 mt-8">
+              <div className="space-y-4">
+                <div className="text-[10px] font-black uppercase tracking-[0.3em] text-[#58F2B6]/60 mb-2">Core Discovery</div>
+                <div className="flex flex-col gap-3">
+                  {navLinks.map((link, index) => (
+                    <motion.div
+                      key={link.path}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.05 }}
                     >
-                      <LogOut className="h-4 w-4" />
-                      <span>Terminate Session</span>
-                    </button>
-                  ) : null}
-
-                  <div className="mt-8 p-6 rounded-2xl bg-[var(--brand)]/5 border border-[var(--brand)]/10 text-center">
-                    <div className="text-[9px] font-black text-[var(--brand)] uppercase tracking-[0.3em] mb-2">Operational Integrity</div>
-                    <div className="text-[10px] text-slate-500 leading-relaxed font-bold uppercase tracking-widest">
-                      Session secured via <br/> IFX Protocol v2.4
-                    </div>
-                  </div>
+                      <Link
+                        to={link.path}
+                        onClick={() => setIsOpen(false)}
+                        className={cn(
+                          "flex items-center gap-4 rounded-2xl border px-5 py-4 transition-all duration-300",
+                          location.pathname === link.path
+                            ? "border-[#58F2B6]/30 bg-[#58F2B6]/10 text-[#58F2B6] shadow-[0_0_20px_rgba(88,242,182,0.1)]"
+                            : "border-white/5 bg-white/[0.02] text-white/70 hover:border-white/20 hover:text-white hover:bg-white/[0.05]",
+                        )}
+                      >
+                        <link.icon className="h-5 w-5" />
+                        <span className="text-xl font-heading font-bold italic tracking-tight">{link.name}</span>
+                      </Link>
+                    </motion.div>
+                  ))}
                 </div>
               </div>
-            </motion.div>
-          </>
+
+              <div>
+                <div className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 mb-4">Client Control</div>
+                <div className="flex flex-col gap-3">
+                  {user ? (
+                    <>
+                      <Link
+                        to="/dashboard"
+                        onClick={() => setIsOpen(false)}
+                        className="flex items-center gap-4 rounded-2xl border border-white/5 bg-white/[0.02] px-5 py-4 text-white/70 hover:border-white/20 hover:text-white"
+                      >
+                        <LayoutDashboard className="h-5 w-5" />
+                        <span className="text-lg font-heading font-bold italic">Master Console</span>
+                      </Link>
+                      {isAdmin ? (
+                        <Link
+                          to="/admin"
+                          onClick={() => setIsOpen(false)}
+                          className="flex items-center gap-4 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-5 py-4 text-emerald-400 hover:bg-emerald-500/20"
+                        >
+                          <Settings className="h-5 w-5" />
+                          <span className="text-lg font-heading font-bold italic">Admin Terminal</span>
+                        </Link>
+                      ) : null}
+                    </>
+                  ) : (
+                    <Link
+                      to="/login"
+                      onClick={() => setIsOpen(false)}
+                      className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-white px-6 py-5 text-sm font-black uppercase tracking-[0.2em] text-black shadow-[0_10px_40px_rgba(255,255,255,0.2)] hover:scale-[1.02] transition-all"
+                    >
+                      Access Portal
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-8 pt-8 border-t border-white/5">
+              {user ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    logout();
+                    setIsOpen(false);
+                  }}
+                  className="flex w-full items-center justify-center gap-3 rounded-2xl border border-red-500/10 bg-red-500/5 px-6 py-5 text-[11px] font-black text-red-500 uppercase tracking-widest transition-colors hover:bg-red-500/10"
+                >
+                  <LogOut className="h-4 w-4" />
+                  <span>Terminate Session</span>
+                </button>
+              ) : null}
+
+              <div className="mt-8 p-6 rounded-2xl bg-[#58F2B6]/5 border border-[#58F2B6]/10 text-center relative overflow-hidden">
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(88,242,182,0.1),transparent_70%)]" />
+                <div className="relative z-10 text-[9px] font-black text-[#58F2B6] uppercase tracking-[0.3em] mb-2">Operational Integrity</div>
+                <div className="relative z-10 text-[10px] text-white/50 leading-relaxed font-bold uppercase tracking-widest">
+                  Session secured via <br/> IFX Protocol v2.4
+                </div>
+              </div>
+            </div>
+          </motion.div>
         ) : null}
       </AnimatePresence>
     </>

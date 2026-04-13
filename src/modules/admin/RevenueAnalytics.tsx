@@ -26,40 +26,40 @@ export const RevenueAnalytics = () => {
     setLoading(true);
     try {
       const [sales, events] = await Promise.all([
-        safeQuery(
-          supabase
-            .from('sales_tracking')
-            .select(`*, sales_pipeline!inner(attribution_source, agent_code)`)
-            .then() as any,
-          (raw) => raw,
-          "Revenue Sales"
-        ),
-        safeQuery(
-          supabase.from('user_events').select('event_type').then() as any,
-          (raw) => raw,
-          "Revenue Events"
-        )
+        supabase
+          .from('sales_tracking')
+          .select(`
+            *,
+            agent:agent_id(full_name, id),
+            product:product_id(name)
+          `),
+        supabase.from('analytics_events').select('event_type')
       ]);
 
+      const salesData = sales.data || [];
+      const eventsData = events.data || [];
+
       // 3. Analytics: Calculate Metrics
-      const totalMTD = sales?.reduce((sum, s) => sum + (s.sale_amount || 0), 0) || 0;
+      const totalMTD = salesData.reduce((sum, s) => sum + (s.sale_amount || 0), 0) || 0;
       
-      const sourceMap: any = {};
+      const sourceMap: any = { 'Direct': 0, 'Affiliate': 0, 'Internal': 0 };
       const agentMap: any = {};
       
-      sales?.forEach((s: any) => {
-        const src = s.sales_pipeline?.attribution_source || 'direct';
-        const agent = s.sales_pipeline?.agent_code || 'unassigned';
+      salesData.forEach((s: any) => {
+        const src = s.agent_id ? 'Affiliate' : 'Direct';
+        const agent = s.agent?.full_name || 'Direct Sale';
         
         sourceMap[src] = (sourceMap[src] || 0) + (s.sale_amount || 0);
-        agentMap[agent] = (agentMap[agent] || 0) + (s.sale_amount || 0);
+        if (s.agent_id) {
+          agentMap[agent] = (agentMap[agent] || 0) + (s.sale_amount || 0);
+        }
       });
 
       const revenueBySource = Object.entries(sourceMap).map(([name, value]) => ({ name, value }));
       const revenueByAgent = Object.entries(agentMap).map(([name, value]) => ({ name, value }));
       
       // 4. Funnel Logic
-      const counts = events?.reduce((acc: any, curr: any) => {
+      const counts = eventsData.reduce((acc: any, curr: any) => {
         acc[curr.event_type] = (acc[curr.event_type] || 0) + 1;
         return acc;
       }, {}) || {};

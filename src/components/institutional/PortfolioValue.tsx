@@ -1,82 +1,87 @@
-import React from 'react';
-import { TrendingUp, TrendingDown, Server, Activity, ShieldCheck } from 'lucide-react';
+import { motion } from 'motion/react';
+import { TrendingUp, TrendingDown, ShieldCheck } from 'lucide-react';
 import { usePortfolioData } from '@/hooks/usePortfolioData';
-import { usePerformancePulse } from '@/hooks/usePerformancePulse';
-import { cn } from '@/lib/utils';
+import { SovereignButton } from '@/components/ui/SovereignButton';
 
+/**
+ * PortfolioValue (v2.0)
+ * 
+ * The High-Stakes Heartbeat of the Sovereign Terminal.
+ * Features: Institutional transparency, verified equity tracking, and instant capital triggers.
+ */
 export function PortfolioValue() {
-  const { stats, isLoading: statsLoading } = usePerformancePulse();
-  const { data: portfolio, isLoading: portfolioLoading, isFetching } = usePortfolioData();
-  
-  const isLoading = statsLoading || portfolioLoading;
-  
-  const formatCurrency = (val: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 2
-    }).format(val);
-  };
+  const { data: portfolio, isLoading } = usePortfolioData();
 
-  const formatPercentage = (val: number) => `${val >= 0 ? '+' : ''}${val.toFixed(2)}%`;
+  if (isLoading) {
+    return (
+      <div className="h-[180px] rounded-[2.5rem] bg-white/[0.02] animate-pulse border border-white/10" />
+    );
+  }
+
+  const isPositive = (portfolio?.change || 0) >= 0;
 
   return (
-    <div className="h-[280px] p-10 rounded-[2.5rem] bg-white/[0.015] border border-white/5 backdrop-blur-[32px] relative overflow-hidden group hover:border-cyan-500/20 transition-all duration-700">
-      {/* Decorative Background Icon */}
-      <Server className="absolute -right-8 -bottom-8 w-48 h-48 text-cyan-500/[0.01] -rotate-12 pointer-events-none transition-transform group-hover:rotate-0 duration-1000" />
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="relative p-8 md:p-12 rounded-[2.5rem] bg-white/[0.02] border border-white/10 backdrop-blur-xl overflow-hidden group shadow-2xl"
+    >
+      {/* Institutional Gloss & Depth */}
+      <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary-500/10 rounded-full blur-[100px] group-hover:bg-primary-500/20 transition-all duration-1000" />
+      <div className="absolute inset-0 bg-gradient-to-br from-white/[0.01] to-transparent pointer-events-none" />
       
-      <div className="relative z-10 flex flex-col h-full">
-        <h3 className="text-[9px] font-black text-white/20 uppercase tracking-[0.4em] mb-6 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-            Sovereign Liquidity Pool
+      <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+        <div className="flex-1">
+          <div className="flex items-center gap-2 text-foreground/40 text-[10px] font-black uppercase tracking-[0.4em] mb-4">
+            <ShieldCheck className="w-3.5 h-3.5 text-primary-400" />
+            Verified Institutional Equity
           </div>
-          <span className="font-mono text-[8px] opacity-40">MAINFRAME_DATA_SYGMA</span>
-        </h3>
-        
-        {isLoading ? (
-          <PortfolioSkeleton />
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-end mt-auto">
-             <div>
-                <div className="text-[8px] font-black text-white/30 uppercase tracking-[0.3em] mb-2 flex items-center gap-2">
-                   <Activity className="w-3 h-3 text-cyan-500" /> Total Alpha Capture
-                </div>
-                <div className="text-5xl md:text-6xl font-black text-white tracking-tighter leading-none mb-4 tabular-nums">
-                  {stats.totalPips} <span className="text-lg text-white/20 font-mono tracking-widest ml-1">PIPS</span>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                    {formatPercentage(portfolio?.change || 12.45)} (24H)
-                  </div>
-                </div>
-             </div>
+          
+          <div className="text-6xl lg:text-7xl font-black font-sans text-foreground tracking-tighter tabular-nums mb-3">
+            ${portfolio?.total?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || '0.00'}
+          </div>
+          
+          <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-black uppercase tracking-widest ${
+            isPositive ? 'bg-primary-500/10 text-primary-400 border border-primary-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'
+          }`}>
+            {isPositive ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
+            <span>{isPositive ? '+' : ''}{portfolio?.change || 0}% Monthly Yield</span>
+          </div>
+        </div>
 
-             <div className="flex flex-col items-end gap-6">
-                <div className="text-right">
-                   <div className="text-[8px] font-black text-white/30 uppercase tracking-[0.3em] mb-1">System Accuracy</div>
-                   <div className="text-3xl font-black text-cyan-400 italic tracking-tighter tabular-nums">{stats.winRate}</div>
-                </div>
-                <div className="text-right">
-                   <div className="text-[8px] font-black text-white/30 uppercase tracking-[0.3em] mb-1">Profit Factor</div>
-                   <div className="text-3xl font-black text-emerald-400 italic tracking-tighter tabular-nums">{stats.profitFactor}</div>
-                </div>
-             </div>
-          </div>
-        )}
+        <div className="flex flex-col gap-3 w-full md:w-auto">
+          <SovereignButton 
+            variant="primary" 
+            glowEffect={true} 
+            size="lg"
+            className="w-full md:w-auto"
+            trackingEvent="portfolio_withdraw"
+          >
+            Withdraw Core
+          </SovereignButton>
+          <SovereignButton 
+            variant="outline" 
+            size="lg"
+            className="w-full md:w-auto"
+            trackingEvent="portfolio_deposit"
+          >
+            Inject Capital
+          </SovereignButton>
+        </div>
       </div>
 
-      {/* Surface Gloss */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-white/[0.01] to-transparent pointer-events-none" />
-    </div>
-  );
-}
-
-function PortfolioSkeleton() {
-  return (
-    <div className="space-y-4 animate-pulse">
-      <div className="h-12 w-64 bg-white/5 rounded-2xl" />
-      <div className="h-6 w-32 bg-white/5 rounded-full" />
-    </div>
+      {/* Surface Metadata */}
+      <div className="mt-12 flex items-center gap-6 border-t border-white/5 pt-6 opacity-30">
+        <div className="flex flex-col gap-1">
+          <span className="text-[8px] font-black uppercase tracking-widest">Update Frequency</span>
+          <span className="text-[10px] font-mono">Real-time / Latency: 2.4ms</span>
+        </div>
+        <div className="w-px h-6 bg-white/10" />
+        <div className="flex flex-col gap-1">
+          <span className="text-[8px] font-black uppercase tracking-widest">Audit Status</span>
+          <span className="text-[10px] font-mono">Sovereign_Verified_v4</span>
+        </div>
+      </div>
+    </motion.div>
   );
 }

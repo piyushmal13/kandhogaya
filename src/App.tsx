@@ -3,21 +3,15 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from "react-route
 import { motion, AnimatePresence } from "motion/react";
 
 import { ErrorBoundary } from "./components/ui/ErrorBoundary";
+import { ReferralHandler } from "./components/core/ReferralHandler";
 import { AuthProvider } from "./contexts/AuthContext";
 import { DataPulseProvider } from "./hooks/useDataPulse";
 import { ToastProvider } from "./contexts/ToastContext";
-import { Navbar } from "./components/ui/Navbar";
-import { Footer } from "./components/ui/Footer";
-import { WhatsAppButton } from "./components/ui/WhatsAppButton";
-import { ScrollToTop } from "./components/ScrollToTop";
-import { SiteBackdrop } from "./components/site/SiteBackdrop";
 import { StandardLayout } from "./components/site/StandardLayout";
 import { LoadingSpinner } from "./components/ui/LoadingSpinner";
 import { ProtectedRoute } from "./components/ui/ProtectedRoute";
-import { SpeedInsights } from "@vercel/speed-insights/react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./lib/reactQuery";
-import { useReferral } from "./hooks/useReferral";
 
 const Home = lazy(() => import("./pages/Home").then(m => ({ default: m.Home })));
 const Marketplace = lazy(() => import("./pages/Marketplace").then(m => ({ default: m.Marketplace })));
@@ -108,25 +102,16 @@ function AppContent() {
   
   const isInstitutional = [
     '/dashboard', 
-    '/marketplace', 
-    '/academy', 
-    '/webinars', 
-    '/results'
+    '/admin',
+    '/agent',
+    '/affiliate'
   ].some(path => location.pathname.startsWith(path));
 
-  const content = <AnimatedRoutes />;
-
   if (isInstitutional) {
-    return (
-      <DashboardLayout>
-        <Suspense fallback={<InstitutionalSkeleton />}>
-          {content}
-        </Suspense>
-      </DashboardLayout>
-    );
+    return <AnimatedRoutes />;
   }
 
-  return <StandardLayout>{content}</StandardLayout>;
+  return <StandardLayout><AnimatedRoutes /></StandardLayout>;
 }
 
 export default function App() {
@@ -141,6 +126,7 @@ export default function App() {
           <AuthProvider>
             <DataPulseProvider>
               <Router>
+                <ReferralHandler />
                 <AppContent />
               </Router>
             </DataPulseProvider>

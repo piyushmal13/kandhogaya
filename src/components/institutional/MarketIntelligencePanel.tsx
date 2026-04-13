@@ -20,16 +20,16 @@ export function MarketIntelligencePanel() {
           <div className="flex items-center justify-between">
             <h4 className="text-[9px] font-black flex items-center gap-2 uppercase tracking-widest text-emerald-500">
               <Activity className="w-3 h-3" />
-              Live Flow
+              Strategic Intelligence
             </h4>
-            <span className="text-[9px] font-mono text-white/20">Updated 2s ago</span>
+            <span className="text-[9px] font-mono text-white/20 uppercase">Education Feed</span>
           </div>
           <div className="space-y-3">
             {[...Array(5)].map((_, i) => (
               <div key={i} className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.05] hover:border-white/10 transition-colors flex items-center justify-between group">
                 <div className="flex flex-col gap-1">
-                  <span className="text-[11px] font-black uppercase text-white group-hover:text-emerald-400 transition-colors">XAU/USD Order</span>
-                  <span className="text-[9px] font-mono text-white/40">Block Execution 14.5k Lot</span>
+                  <span className="text-[11px] font-black uppercase text-white group-hover:text-emerald-400 transition-colors">Study: Gold Order Flow</span>
+                  <span className="text-[9px] font-mono text-white/40">Macro Scenario Analysis</span>
                 </div>
                 <div className="flex flex-col items-end">
                    <span className="text-xs font-black text-emerald-400 font-mono">+$42.5k</span>

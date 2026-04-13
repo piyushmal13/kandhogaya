@@ -6,15 +6,15 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
  * via Supabase app_metadata. Protects all /api/* privileged routes.
  */
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  const token = (req.headers['authorization'] as string)?.replace('Bearer ', '');
+  const token = req.headers['authorization']?.replace('Bearer ', '');
 
   if (!token) {
     return res.status(401).json({ error: 'UNAUTHORIZED: Missing Bearer token.' });
   }
 
   const supabase = createClient(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
+    process.env.SUPABASE_URL || '',
+    process.env.SUPABASE_SERVICE_ROLE_KEY || ''
   );
 
   const { data, error } = await supabase.auth.admin.getUserById(

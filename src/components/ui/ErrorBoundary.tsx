@@ -1,5 +1,6 @@
 import React, { Component, ErrorInfo } from "react";
 import { RefreshCw, AlertTriangle } from "lucide-react";
+import { Sentry } from "../../lib/sentry";
 
 interface State {
   hasError: boolean;
@@ -28,10 +29,10 @@ export class ErrorBoundary extends Component<{ children: React.ReactNode }, Stat
     if (import.meta.env.DEV) {
       console.error("[ErrorBoundary] Caught:", error, errorInfo);
     }
-    // TODO: Sentry.captureException(error, { extra: errorInfo });
+    Sentry.captureException(error, { extra: errorInfo as any });
   }
 
-  private handleReload = () => {
+  private readonly handleReload = () => {
     this.setState({ hasError: false, errorId: null });
     globalThis.location.reload();
   };

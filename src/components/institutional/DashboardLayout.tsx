@@ -52,12 +52,12 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         contextPanel ? "xl:mr-80" : "" // Alternative: space for right rail if present
       )}>
         {/* TOP BAR: Universal Telemetry */}
-        <header className="h-20 border-b border-white/5 flex items-center justify-between px-10 bg-black/40 backdrop-blur-3xl sticky top-0 z-40">
+        <header className="h-20 border-b border-white/5 flex items-center justify-between px-6 md:px-10 bg-black/40 backdrop-blur-3xl sticky top-0 z-40">
           {topBar}
         </header>
 
         {/* MAIN STAGE: Content Matrix */}
-        <main className="flex-1 flex flex-col pt-10 pb-20 px-10 max-w-7xl w-full mx-auto outline-none" tabIndex={-1}>
+        <main className="flex-1 flex flex-col pt-6 md:pt-10 pb-20 px-4 md:px-10 max-w-7xl w-full mx-auto outline-none" tabIndex={-1}>
           {showBreadcrumb && <Breadcrumb />}
           <div className="flex-1 animate-in fade-in slide-in-from-bottom-2 duration-700">
             {children}

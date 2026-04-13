@@ -8,8 +8,8 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 export default async function handler(_req: VercelRequest, res: VercelResponse) {
   try {
     const supabase = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
+      process.env.SUPABASE_URL || '',
+      process.env.SUPABASE_SERVICE_ROLE_KEY || ''
     );
 
     const { data, error } = await supabase

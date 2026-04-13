@@ -7,7 +7,7 @@ import { initSentry } from './lib/sentry';
 // Boot Sentry before any React code runs
 initSentry();
 
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById('root')).render(
   <StrictMode>
     <App />
   </StrictMode>,

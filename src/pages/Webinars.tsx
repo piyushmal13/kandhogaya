@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { useWebinars } from '@/hooks/useWebinars';
 import { WebinarCard } from '@/components/institutional/WebinarCard';
 import { VideoPlayer } from '@/components/institutional/VideoPlayer';
-import { Skeleton, WebinarCardSkeleton } from '@/components/ui/Skeleton';
+import { WebinarCardSkeleton } from '@/components/ui/Skeleton';
 import { PageMeta } from '@/components/site/PageMeta';
+import { DashboardLayout } from '@/components/institutional/DashboardLayout';
 
 export const Webinars = () => {
   const { data: webinars, isLoading } = useWebinars();
@@ -17,25 +18,23 @@ export const Webinars = () => {
   const liveWebinar = webinars?.find(w => w.status === 'live');
 
   return (
-    <>
+    <div className="pt-32 pb-24">
       <PageMeta
-        title="Institutional Masterclasses"
+        title="Institutional Masterclasses | Sovereign Terminal"
         description="Live algorithmic trading sessions and recorded deep-dives from sovereign desks. Access institutional intelligence sessions."
         path="/webinars"
       />
 
-      <div className="space-y-12">
-        {/* Header Section */}
+      <div className="max-w-7xl mx-auto px-4 space-y-12">
         <div className="space-y-4">
           <h1 className="text-5xl font-black text-white italic tracking-tighter uppercase leading-[0.8] mb-4">
-            Institutional <span className="text-emerald-500">Masterclasses</span>
+            Institutional <span className="text-[#58F2B6]">Masterclasses</span>
           </h1>
           <p className="text-sm text-white/40 max-w-2xl font-medium uppercase tracking-widest leading-relaxed">
             Participate in sovereign market breakdowns, systematic workflow walkthroughs, and quantitative execution masterclasses led by the IFX research desk.
           </p>
         </div>
 
-        {/* Live Stream Surface */}
         <AnimatePresence mode="wait">
           {liveWebinar && (
             <motion.section 
@@ -49,8 +48,7 @@ export const Webinars = () => {
                   <span className="relative flex h-2.5 w-2.5">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
-                  </span>
-                  Direct Link Active
+                  </span> Direct Link Active 
                 </h2>
                 <div className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[9px] font-mono text-white/40 uppercase">
                   Session ID: {liveWebinar.id.slice(0, 8)}
@@ -65,7 +63,6 @@ export const Webinars = () => {
           )}
         </AnimatePresence>
 
-        {/* Intelligence Archive Filters */}
         <div className="space-y-10">
           <div className="flex gap-10 border-b border-white/5">
             {(['upcoming', 'recorded'] as const).map((tab) => (
@@ -73,31 +70,30 @@ export const Webinars = () => {
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={`pb-4 text-[11px] font-black uppercase tracking-[0.2em] transition-all relative ${
-                  activeTab === tab ? 'text-emerald-500' : 'text-white/30 hover:text-white'
+                  activeTab === tab ? 'text-[#58F2B6]' : 'text-white/30 hover:text-white'
                 }`}
               >
                 {tab === 'upcoming' ? 'Cycle Schedule' : 'Intelligence Archive'}
                 {activeTab === tab && (
                   <motion.div 
                     layoutId="activeTabWebinars"
-                    className="absolute bottom-[-1px] left-0 right-0 h-[2px] bg-emerald-500 shadow-[0_0_10px_#10b981]" 
+                    className="absolute bottom-[-1px] left-0 right-0 h-[2px] bg-[#58F2B6] shadow-[0_0_10px_#58F2B6]" 
                   />
                 )}
               </button>
             ))}
           </div>
 
-          {/* Masterclass Grid */}
           {isLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {[...Array(3)].map((_, i) => (
-                <WebinarCardSkeleton key={i} />
+              {["sk1", "sk2", "sk3"].map((key) => (
+                <WebinarCardSkeleton key={key} />
               ))}
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredWebinars?.length ? (
-                filteredWebinars.map((webinar, index) => (
+                filteredWebinars.map((webinar) => (
                   <WebinarCard key={webinar.id} webinar={webinar} />
                 ))
               ) : (
@@ -109,7 +105,7 @@ export const Webinars = () => {
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -5,7 +5,7 @@
  * Run: node scripts/altCheck.js
  * Add to CI: "alt-check": "node scripts/altCheck.js"
  */
-import { readFileSync } from 'fs';
+import { readFileSync } from 'node:fs';
 import { globSync } from 'glob';
 
 const files = globSync('src/**/*.{tsx,jsx}');

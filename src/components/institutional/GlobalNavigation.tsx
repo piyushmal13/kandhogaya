@@ -8,22 +8,32 @@ import {
   LineChart, 
   Settings,
   LogOut,
-  Zap
+  Zap,
+  Shield,
+  Trophy
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
 
-const navItems = [
-  { path: '/dashboard', label: 'Omni-View', icon: LayoutDashboard },
-  { path: '/marketplace', label: 'Marketplace', icon: Store },
-  { path: '/academy', label: 'Academy', icon: GraduationCap },
-  { path: '/webinars', label: 'Webinars', icon: Video },
-  { path: '/results', label: 'Performance', icon: LineChart },
-];
-
 export function GlobalNavigation() {
   const location = useLocation();
-  const { logout } = useAuth(); // Native logout from AuthContext
+  const { logout, userProfile } = useAuth();
+
+  const navItems = [
+    { path: '/dashboard', label: 'Omni-View', icon: LayoutDashboard },
+    { path: '/marketplace', label: 'Marketplace', icon: Store },
+    { path: '/academy', label: 'Academy', icon: GraduationCap },
+    { path: '/webinars', label: 'Webinars', icon: Video },
+    { path: '/results', label: 'Performance', icon: LineChart },
+  ];
+
+  // Conditional Intelligence Layers
+  if (userProfile?.role === 'admin') {
+    navItems.push({ path: '/admin', label: 'Command', icon: Shield });
+  }
+  if (userProfile?.role === 'agent' || userProfile?.role === 'admin') {
+    navItems.push({ path: '/agent', label: 'Growth', icon: Trophy });
+  }
 
   return (
     <nav className="h-full flex flex-col bg-black/60 backdrop-blur-3xl border-r border-white/5 shadow-[20px_0_50px_rgba(0,0,0,0.5)]">

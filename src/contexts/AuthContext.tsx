@@ -172,6 +172,40 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           // Cross-session identification (anon -> user)
           tracker.identify(userId);
           
+          // Institutional Referral Resolution
+          const resolveReferral = async () => {
+            const refCode = localStorage.getItem('ifx_referral_code');
+            if (!refCode) return;
+
+            try {
+              // 1. Discovery: Find the agent linked to this code
+              const { data: codeData } = await supabase
+                .from('affiliate_codes')
+                .select('user_id')
+                .eq('code', refCode)
+                .single();
+
+              if (codeData) {
+                // 2. Attribution: Link user to agent
+                await supabase
+                  .from('users')
+                  .update({ referred_by: codeData.user_id })
+                  .eq('id', userId)
+                  .is('referred_by', null); // Only if not already set
+                
+                // 3. Telemetry: Track the conversion
+                tracker.track("referral_resolved", { code: refCode, agent_id: codeData.user_id });
+                
+                // Clear to prevent multi-attribution
+                localStorage.removeItem('ifx_referral_code');
+              }
+            } catch (err) {
+              console.warn("Referral resolution failed:", err);
+            }
+          };
+
+          resolveReferral();
+          
           if (!user) {
             setUser(newSession.user);
             setSession(newSession);

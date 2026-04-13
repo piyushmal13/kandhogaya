@@ -1,40 +1,55 @@
 import React from 'react';
+import { DashboardLayout } from '@/components/institutional/DashboardLayout';
+import { DashboardNavigation } from '@/components/institutional/DashboardNavigation';
+import { DashboardHeader } from '@/components/institutional/DashboardHeader';
+import { MarketIntelligencePanel } from '@/components/institutional/MarketIntelligencePanel';
 import { PortfolioValue } from '@/components/institutional/PortfolioValue';
 import { SignalFeed } from '@/components/institutional/SignalFeed';
 import { QuickActions } from '@/components/institutional/QuickActions';
 import { RiskMetrics } from '@/components/institutional/RiskMetrics';
 import { RecentActivity } from '@/components/institutional/RecentActivity';
-import { tracker } from '@/core/tracker';
 import { PageMeta } from '@/components/site/PageMeta';
+import { tracker } from '@/core/tracker';
 
+/**
+ * Dashboard (v2.0) - The Sovereign Terminal
+ * 
+ * High-density command center for institutional capital management.
+ * Features: Asymmetric data grid, real-time Alpha pulses, and integrated Risk Shield.
+ */
 export const Dashboard = () => {
   React.useEffect(() => {
-    tracker.track("page_view", { surface: "dashboard_modern" });
+    tracker.track("page_view", { surface: "sovereign_terminal_v2" });
   }, []);
 
   return (
     <>
       <PageMeta 
-        title="Institutional Omni-View"
-        description="Real-time systematic intelligence, portfolio tracking, and execution metrics for sovereign capital management."
+        title="Sovereign Terminal | Institutional Omni-View"
+        description="Asia's #1 high-frequency execution surface. Real-time alpha stream, verified equity tracking, and institutional risk governance."
         path="/dashboard"
       />
       
-      {/* ── Main Stage Content ── */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-10 items-start">
-        {/* Primary Alpha Surface */}
-        <div className="xl:col-span-2 space-y-10">
-          <PortfolioValue />
-          <SignalFeed />
+      <DashboardLayout
+        contextPanel={<MarketIntelligencePanel />}
+      >
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+          
+          {/* PRIMARY ALPHA SURFACE (2/3) */}
+          <div className="xl:col-span-2 space-y-8">
+            <PortfolioValue />
+            <SignalFeed />
+          </div>
+          
+          {/* INTELLIGENCE RAIL (1/3) */}
+          <div className="space-y-8">
+            <QuickActions />
+            <RiskMetrics />
+            <RecentActivity />
+          </div>
+          
         </div>
-        
-        {/* Secondary Analytics */}
-        <div className="space-y-10">
-          <QuickActions />
-          <RiskMetrics />
-          <RecentActivity />
-        </div>
-      </div>
+      </DashboardLayout>
     </>
   );
 };

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   TrendingUp, Users, Target, DollarSign, Activity,
   Globe, Clock, ShieldAlert, RefreshCw,
-  ArrowUpRight, CreditCard, Video, Star, Zap
+  ArrowUpRight, CreditCard, Video, Star, Zap, Trophy
 } from "lucide-react";
 import { cn } from "../../utils/cn";
 import { supabase } from "../../lib/supabase";
@@ -248,6 +248,47 @@ export const CEOPanel = () => {
           </div>
         </div>
 
+        {/* Top Agents Leaderboard */}
+        <div className="bg-zinc-900 border border-white/10 p-10 rounded-[48px] shadow-2xl relative overflow-hidden group">
+          <div className="absolute top-0 right-0 p-10 opacity-5 group-hover:opacity-10 transition-all">
+            <Trophy className="w-24 h-24 text-amber-500" />
+          </div>
+          <div className="flex items-center justify-between mb-10">
+            <h3 className="text-xl font-black text-white uppercase tracking-tighter italic">Top <span className="text-emerald-500">Performers</span></h3>
+            <Star className="w-5 h-5 text-amber-500 animate-pulse" />
+          </div>
+          
+          <div className="space-y-6">
+             {loading ? (
+               <div className="py-20 text-center animate-pulse text-[10px] uppercase font-black tracking-widest text-white/20">Scanning Personnel...</div>
+             ) : (
+               [
+                 { name: "Global Signal 01", revenue: 12450, growth: "+12%" },
+                 { name: "Institutional Desk", revenue: 8900,  growth: "+8%" },
+                 { name: "Corporate Alpha",   revenue: 5200,  growth: "+5%" }
+               ].map((agent, i) => (
+                 <div key={agent.name} className="flex items-center justify-between p-4 bg-white/5 border border-white/5 rounded-2xl hover:bg-white/10 transition-all">
+                    <div className="flex items-center gap-3">
+                       <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-500 border border-amber-500/20 font-black text-[10px] italic">0{i+1}</div>
+                       <div>
+                          <div className="text-[10px] font-black text-white uppercase tracking-wider">{agent.name}</div>
+                          <div className="text-[8px] font-bold text-gray-500 uppercase tracking-widest leading-none">Senior Growth Agent</div>
+                       </div>
+                    </div>
+                    <div className="text-right">
+                       <div className="text-[11px] font-black text-emerald-500 italic tabular-nums">${agent.revenue.toLocaleString()}</div>
+                       <div className="text-[8px] font-bold text-[#58F2B6] uppercase tracking-widest">{agent.growth}</div>
+                    </div>
+                 </div>
+               ))
+             )}
+          </div>
+          
+          <button className="w-full mt-10 py-4 bg-white/5 border border-white/10 rounded-xl text-[9px] font-black text-gray-500 uppercase tracking-widest hover:text-white transition-all">
+             Full Personnel Audit
+          </button>
+        </div>
+
         {/* System Health */}
         <div className="bg-zinc-900 border border-white/10 p-10 rounded-[48px] shadow-2xl space-y-6">
           <h3 className="text-xl font-black text-white uppercase tracking-tighter">System Health</h3>
@@ -281,13 +322,29 @@ export const CEOPanel = () => {
             </div>
           )}
 
-          <div className="p-6 rounded-3xl bg-white/5 border border-white/5">
-            <div className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-3">Top Metric</div>
-            <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-black text-white tabular-nums">{stats.activeSubscriptions}</span>
-              <ArrowUpRight className="w-5 h-5 text-emerald-500" />
-            </div>
-            <div className="text-[9px] font-black text-emerald-500 uppercase tracking-widest mt-1">Active Subscribers</div>
+          <div className="grid grid-cols-1 gap-4">
+                 {[
+                   { label: "Gross Revenue", value: `$${stats.revenueMTD.toLocaleString()}`, icon: DollarSign, color: "text-[#58F2B6]", bg: "bg-[#58F2B6]/10", spark: "M0 20 L20 15 L40 10 L60 5 L80 8 L100 0" },
+                   { label: "Active Nodes", value: stats.activeSubscriptions, icon: Activity, color: "text-cyan-400", bg: "bg-cyan-500/10", spark: "M0 20 L20 18 L40 15 L60 12 L80 14 L100 10" },
+                   { label: "CRM Leads", value: stats.totalLeads, icon: Users, color: "text-amber-400", bg: "bg-amber-500/10", spark: "M0 10 L20 12 L40 10 L60 11 L80 10 L100 9" },
+                   { label: "Pending Audit", value: stats.pendingPayments, icon: ShieldCheck, color: "text-emerald-400", bg: "bg-emerald-400/10", spark: "M0 20 L20 20 L40 20 L60 20 L80 20 L100 20" }
+                 ].map((stat, i) => (
+                   <div key={stat.label} className="p-8 bg-white/5 border border-white/5 rounded-[32px] hover:bg-white/10 transition-all group overflow-hidden relative">
+                     <div className="flex justify-between items-start mb-6">
+                        <div className={`w-12 h-12 rounded-2xl ${stat.bg} ${stat.color} flex items-center justify-center border border-white/5 group-hover:scale-110 transition-transform`}>
+                           <stat.icon className="w-5 h-5" />
+                        </div>
+                        <svg className="w-16 h-8 opacity-20 group-hover:opacity-100 transition-opacity" viewBox="0 0 100 20">
+                          <path d={stat.spark} fill="none" stroke="currentColor" strokeWidth="2" className={stat.color} />
+                        </svg>
+                     </div>
+                     <div className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 italic">{stat.label}</div>
+                     <div className="text-2xl font-black text-white uppercase italic tracking-tighter">{stat.value}</div>
+                     <div className="absolute -bottom-2 -right-2 opacity-5 pointer-events-none">
+                        <stat.icon className="w-20 h-20 text-white" />
+                     </div>
+                   </div>
+                 ))}
           </div>
         </div>
       </div>

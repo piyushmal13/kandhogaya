@@ -38,13 +38,19 @@ export const AgentSystem = () => {
         .select(`
           *,
           leads(email),
-          agents!inner(user_id, code)
+          users:agent_id(full_name, email)
         `);
 
       if (commError) throw commError;
 
+      // Enhance comms with referral codes from the codes we already fetched
+      const enhancedComms = (comms || []).map(comm => ({
+        ...comm,
+        agent_code: codes?.find(c => c.user_id === comm.agent_id)?.code || 'Direct'
+      }));
+
       setAffiliates(codes || []);
-      setCommissions(comms || []);
+      setCommissions(enhancedComms);
     } catch (err: any) {
       console.error("Affiliate Audit Discovery Failure:", err);
       toastError(err.message);
@@ -162,7 +168,8 @@ export const AgentSystem = () => {
                        <div className="flex justify-between items-start">
                           <div>
                              <span className="text-[9px] font-black text-gray-500 uppercase tracking-[0.2em] block mb-1">Affiliate</span>
-                             <span className="text-[11px] font-black text-white uppercase tracking-wider">{comm.agents?.code}</span>
+                             <span className="text-[11px] font-black text-white uppercase tracking-wider">{comm.agent_code}</span>
+                             <span className="text-[8px] font-bold text-gray-600 uppercase tracking-widest block mt-0.5">{comm.users?.email}</span>
                           </div>
                           <div className={cn(
                             "px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest",

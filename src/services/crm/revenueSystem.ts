@@ -14,17 +14,15 @@ export const revenueSystem = {
   trackCommission: async (leadId: string, agentId: string, product: { type: string, amount: number, id?: string }) => {
     // 1. Audit status
     const { data: agent } = await publicSupabase
-      .from('agents')
-      .select('commission, performance_score')
-      .eq('id', agentId)
+      .from('agent_accounts')
+      .select('commission_rate, account_status')
+      .eq('user_id', agentId)
       .single();
 
-    if (!agent) return;
+    if (!agent || agent.account_status !== 'active') return;
 
-    // 2. Decision logic: calculate commission based on agent rate or base
-    const baseRate = agent.commission || 15; // default 15%
-    const bonusRate = agent.performance_score > 90 ? 5 : 0; // +5% for performance
-    const percentage = baseRate + bonusRate;
+    // 2. Decision logic: calculate commission based on agent rate
+    const percentage = Number(agent.commission_rate) || 15; // default 15%
     
     const commissionAmount = (product.amount * percentage) / 100;
 

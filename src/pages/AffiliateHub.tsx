@@ -18,6 +18,7 @@ import { supabase } from "../lib/supabase";
 import { useAuth } from "../contexts/AuthContext";
 import { useToast } from "../contexts/ToastContext";
 import { PageMeta } from "../components/site/PageMeta";
+import { DashboardLayout } from "@/components/institutional/DashboardLayout";
 
 export const AffiliateHub = () => {
   const { userProfile } = useAuth();
@@ -104,7 +105,8 @@ export const AffiliateHub = () => {
   const referralLink = affiliateCode ? `${globalThis.location.origin}?ref=${affiliateCode}` : "Login to generate...";
 
   return (
-    <div className="min-h-screen bg-[var(--color10)] pt-32 pb-24">
+    <DashboardLayout>
+      <div className="pb-24">
       <PageMeta 
         title="Affiliate Hub" 
         description="Monitor your institutional referral performance and management your commissions."
@@ -282,9 +284,10 @@ export const AffiliateHub = () => {
               <button className="w-full py-4 mt-8 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-white transition-all">
                  View Historical Logs
               </button>
-           </motion.div>
+            </motion.div>
+         </div>
         </div>
       </div>
-    </div>
+    </DashboardLayout>
   );
 };
