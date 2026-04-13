@@ -52,9 +52,9 @@ export const Navbar = () => {
 
   return (
     <>
-      <nav className="fixed inset-x-0 top-3 sm:top-6 z-50 px-3 sm:px-12">
-        <div className="mx-auto flex h-14 sm:h-20 max-w-7xl items-center justify-between rounded-full border border-white/5 bg-black/40 px-5 sm:px-8 shadow-[0_32px_80px_rgba(0,0,0,0.6)] backdrop-blur-3xl transition-all duration-700 hover:border-white/10">
-          <Link to="/" className="flex items-center gap-3 group" aria-label="IFX Trades — Institutional Forex Education Platform">
+      <nav className="fixed inset-x-0 top-2 sm:top-6 z-50 px-2 sm:px-12">
+        <div className="mx-auto flex h-14 sm:h-20 max-w-7xl items-center justify-between rounded-full border border-white/5 bg-black/60 sm:bg-black/40 px-4 sm:px-8 shadow-[0_32px_80px_rgba(0,0,0,0.6)] backdrop-blur-3xl transition-all duration-700 hover:border-white/10">
+          <Link to="/" className="flex items-center gap-2 sm:gap-3 group" aria-label="IFX Trades — Institutional Forex Education Platform">
             <div className="flex items-center justify-center transition-all duration-700 group-hover:scale-110 h-10 w-10 sm:h-14 sm:w-14 rounded-xl overflow-hidden bg-black/50 border border-white/10 shadow-[0_0_20px_rgba(255,255,255,0.05)] group-hover:shadow-[0_0_30px_rgba(88,242,182,0.15)] group-hover:border-emerald-500/20">
               <img src={BRANDING.logoUrl} alt="IFX Trades institutional forex education logo" className="h-full w-full object-contain p-1.5" />
             </div>
@@ -112,31 +112,34 @@ export const Navbar = () => {
             </div>
           </div>
 
-          {/* Mobile Logic - Optimized Density */}
-          <div className="md:hidden flex items-center gap-3">
-            {user ? (
-              <div className="flex items-center gap-2">
-                 {isAdmin && (
-                    <Link to="/admin" className="p-2.5 bg-[var(--brand)]/10 border border-[var(--brand)]/20 rounded-xl text-[var(--brand)]">
-                       <Settings className="h-4 w-4" />
-                    </Link>
-                 )}
-                 <Link to="/dashboard" className="p-2.5 bg-white/5 border border-white/10 rounded-xl text-white">
-                    <LayoutDashboard className="h-4 w-4" />
-                 </Link>
-              </div>
-            ) : (
+          {/* Mobile Logic - High-Performance Layout */}
+          <div className="md:hidden flex items-center gap-2">
+            {!user && (
               <Link
                 to="/login"
-                className="rounded-full bg-[var(--brand)]/10 border border-[var(--brand)]/30 px-5 py-2.5 text-[10px] font-black text-white uppercase tracking-[0.2em] hover:bg-[var(--brand)]/20 transition-all duration-500"
+                className="rounded-full bg-[var(--brand)]/10 border border-[var(--brand)]/20 px-4 py-2 text-[9px] font-black text-white uppercase tracking-widest hover:bg-[var(--brand)]/20 transition-all active:scale-95 whitespace-nowrap"
               >
                 Sign In
               </Link>
             )}
+            
+            {user && (
+              <div className="flex items-center gap-2">
+                 {isAdmin && (
+                    <Link to="/admin" className="p-2 bg-[var(--brand)]/10 border border-[var(--brand)]/20 rounded-xl text-[var(--brand)] active:scale-90 transition-transform">
+                       <Settings className="h-4 w-4" />
+                    </Link>
+                 )}
+                 <Link to="/dashboard" className="p-2 bg-white/5 border border-white/10 rounded-xl text-white active:scale-90 transition-transform">
+                    <LayoutDashboard className="h-4 w-4" />
+                 </Link>
+              </div>
+            )}
+
             <button
               type="button"
               onClick={() => setIsOpen((open) => !open)}
-              className="rounded-xl border border-white/10 bg-white/5 p-2.5 text-slate-300 transition-colors hover:text-white"
+              className="rounded-xl border border-white/10 bg-white/5 p-2 text-slate-300 transition-all hover:text-white active:scale-90"
               aria-label="Toggle menu"
             >
               {isOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}

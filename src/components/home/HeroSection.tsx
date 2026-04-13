@@ -111,12 +111,12 @@ export const HeroSection = () => {
            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] as const }}
            className="relative"
         >
-          <h1 className="font-serif font-black mb-10 leading-[0.85] tracking-[-0.04em] uppercase">
+          <h1 className="font-serif font-black mb-8 sm:mb-10 leading-[0.85] tracking-[-0.04em] uppercase">
             <motion.span 
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-5xl sm:text-8xl md:text-[140px] block text-white drop-shadow-[0_20px_50px_rgba(0,0,0,0.8)]"
+              className="text-4xl sm:text-8xl md:text-[140px] block text-white drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)]"
             >
               Imperial
             </motion.span>
@@ -124,12 +124,12 @@ export const HeroSection = () => {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-4xl sm:text-7xl md:text-[110px] block text-transparent bg-clip-text bg-[var(--grad-royale)] mt-1 filter drop-shadow-[0_10px_30px_rgba(16,185,129,0.3)]"
+              className="text-3xl sm:text-7xl md:text-[110px] block text-transparent bg-clip-text bg-[var(--grad-royale)] mt-1 filter drop-shadow-[0_5px_20px_rgba(16,185,129,0.3)]"
             >
               Research
             </motion.span>
           </h1>
-          <div className="absolute -top-10 left-1/2 -translate-x-1/2 text-[9px] font-black text-[var(--color14)]/20 uppercase tracking-[1em] pointer-events-none select-none">
+          <div className="absolute -top-10 left-1/2 -translate-x-1/2 text-[8px] sm:text-[9px] font-black text-[var(--color14)]/20 uppercase tracking-[0.5em] sm:tracking-[1em] pointer-events-none select-none w-full">
              TRADED BY SOVEREIGN DESKS
           </div>
         </motion.div>
@@ -186,11 +186,11 @@ export const HeroSection = () => {
                  }, 800);
                }
             }}
-            className="flex flex-col sm:flex-row items-stretch gap-4"
+            className="flex flex-col sm:flex-row items-stretch gap-4 px-2 sm:px-0"
           >
             <div className="flex-1 relative group/input">
               <div className="absolute left-6 top-1/2 -translate-y-1/2">
-                <Globe className="w-5 h-5 text-[var(--color20)]" />
+                <Globe className="w-4 h-4 sm:w-5 sm:h-5 text-[var(--color20)]" />
               </div>
               <input 
                 name="email"
@@ -198,7 +198,7 @@ export const HeroSection = () => {
                 placeholder="Secure Access Node (Email)"
                 required
                 disabled={formState !== 'idle'}
-                className="w-full bg-[var(--color19)] border-b-2 border-[var(--color24)] px-14 py-5 text-base font-medium text-[var(--color23)] outline-none placeholder:text-[var(--color20)] transition-colors focus:border-[var(--color14)] disabled:opacity-50"
+                className="w-full bg-[var(--color19)] border-b-2 border-[var(--color24)] pl-12 sm:pl-14 pr-6 py-4 sm:py-5 text-sm sm:text-base font-medium text-[var(--color23)] outline-none placeholder:text-[var(--color20)] transition-colors focus:border-[var(--color14)] disabled:opacity-50"
               />
             </div>
             
@@ -212,19 +212,20 @@ export const HeroSection = () => {
               trackingEvent="deploy_terminal"
               leftIcon={formState === 'success' ? <CheckCircle2 className="w-5 h-5" /> : undefined}
               rightIcon={formState === 'idle' ? <ArrowRight className="w-5 h-5" /> : undefined}
+              className="py-4 sm:py-0"
             >
               {formState === 'success' ? 'AUTHORIZED' : 'Deploy Terminal'}
             </Button>
           </form>
 
-          <div className="mt-6 flex flex-wrap justify-center gap-4 sm:gap-8 text-[9px] text-[var(--color18)] font-black uppercase tracking-[0.2em]">
-             <div className="flex items-center gap-2">
+          <div className="mt-6 flex flex-wrap justify-center gap-3 sm:gap-8 text-[8px] sm:text-[9px] text-[var(--color18)] font-black uppercase tracking-[0.2em]">
+             <div className="flex items-center gap-1.5 sm:gap-2">
                <span className="w-1.5 h-1.5 rounded-full bg-[var(--color15)]" /> NO BROKER LOCKS
              </div>
-             <div className="flex items-center gap-2">
+             <div className="flex items-center gap-1.5 sm:gap-2">
                <span className="w-1.5 h-1.5 rounded-full bg-[var(--color15)]" /> INSTITUTIONAL CORE
              </div>
-             <div className="flex items-center gap-2">
+             <div className="flex items-center gap-1.5 sm:gap-2">
                <span className="w-1.5 h-1.5 rounded-full bg-[var(--color14)]" /> {stats.traders} SYNCED
              </div>
           </div>

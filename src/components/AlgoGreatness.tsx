@@ -126,7 +126,7 @@ export const AlgoGreatness = () => {
       )}
 
       {/* Features */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mb-24 md:mb-40 max-w-6xl mx-auto px-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12 mb-20 md:mb-40 max-w-6xl mx-auto px-4">
         {[
           { icon: Cpu, title: "Neural Logic Engine", desc: "Advanced architectural mapping of order-flow imbalances across 28 global currency pairs." },
           { icon: Activity, title: "Systemic Risk Protection", desc: "Dynamic equity protection modules that recalibrate position weighting in volatile conditions." },
@@ -137,12 +137,12 @@ export const AlgoGreatness = () => {
             initial={{ opacity: 0, y: 20 }} 
             whileInView={{ opacity: 1, y: 0 }} 
             viewport={{ once: true }}
-            className="group bg-zinc-900/10 border border-white/5 p-10 md:p-12 rounded-[2.5rem] hover:bg-white/[0.01] hover:border-white/10 transition-all duration-700 shadow-xl"
+            className="group bg-zinc-900/10 border border-white/5 p-8 md:p-12 rounded-[2.5rem] hover:bg-white/[0.01] hover:border-white/10 transition-all duration-700 shadow-xl"
           >
-            <div className="w-16 h-16 rounded-[1.5rem] bg-[var(--brand)]/5 border border-[var(--brand)]/10 flex items-center justify-center mb-8 group-hover:bg-[var(--brand)]/10 group-hover:border-[var(--brand)]/20 transition-all duration-700">
-              <feat.icon className="w-8 h-8 text-[var(--brand)] group-hover:scale-110 transition-transform duration-700" />
+            <div className="w-14 h-14 md:w-16 md:h-16 rounded-[1.2rem] md:rounded-[1.5rem] bg-[var(--brand)]/5 border border-[var(--brand)]/10 flex items-center justify-center mb-6 md:mb-8 group-hover:bg-[var(--brand)]/10 group-hover:border-[var(--brand)]/20 transition-all duration-700">
+              <feat.icon className="w-7 h-7 md:w-8 md:h-8 text-[var(--brand)] group-hover:scale-110 transition-transform duration-700" />
             </div>
-            <h3 className="text-xl md:text-2xl font-semibold text-white mb-4 tracking-tight">{feat.title}</h3>
+            <h3 className="text-xl md:text-2xl font-bold text-white mb-3 md:mb-4 tracking-tight leading-tight">{feat.title}</h3>
             <p className="text-gray-400 text-sm md:text-lg font-light leading-relaxed group-hover:text-gray-300 transition-colors duration-700">{feat.desc}</p>
           </motion.div>
         ))}
@@ -170,26 +170,26 @@ export const AlgoGreatness = () => {
               initial={{ opacity: 0, y: 20 }} 
               whileInView={{ opacity: 1, y: 0 }} 
               viewport={{ once: true }}
-              className="min-w-[280px] md:min-w-0 bg-[var(--color6)] border border-white/5 p-6 md:p-8 rounded-[2.5rem] relative hover:bg-white/[0.01] hover:border-white/10 transition-all duration-700 group shadow-2xl"
+              className="min-w-[300px] xs:min-w-[340px] md:min-w-0 bg-[var(--color6)] border border-white/5 p-8 rounded-[2.5rem] relative hover:bg-white/[0.01] hover:border-white/10 transition-all duration-700 group shadow-2xl snap-center"
             >
-              <div className="absolute -top-4 right-10 bg-[var(--brand)]/10 border border-[var(--brand)]/20 text-[var(--brand)] text-[10px] md:text-[11px] font-sans font-medium uppercase tracking-[0.2em] px-4 py-1.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-700 transform translate-y-2 group-hover:translate-y-0 backdrop-blur-xl">
+              <div className="absolute -top-4 right-10 bg-[var(--brand)]/10 border border-[var(--brand)]/20 text-[var(--brand)] text-[10px] font-sans font-medium uppercase tracking-[0.2em] px-4 py-1.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-700 transform translate-y-2 group-hover:translate-y-0 backdrop-blur-xl">
                 Verified System
               </div>
-              <div className="flex gap-1.5 mb-8 md:mb-10">
+              <div className="flex gap-1.5 mb-8">
                 {Array.from({ length: rev.rating || 5 }).map((_, j) => (
                   <Star key={`${rev.id || rev.name}-star-${j}`} className="w-4 h-4 text-[var(--brand)] fill-[var(--brand)] opacity-60" />
                 ))}
               </div>
-              <p className="text-gray-300 mb-10 md:mb-12 text-sm md:text-lg font-light leading-[1.8] opacity-90 group-hover:opacity-100 transition-opacity">"{rev.text}"</p>
-              <div className="flex items-center gap-4 md:gap-5">
-                <div className="w-10 h-10 md:w-12 md:h-12 bg-white/[0.02] border border-white/5 rounded-full flex items-center justify-center text-[var(--brand)] font-sans font-medium text-xl md:text-2xl group-hover:bg-[var(--brand)]/5 group-hover:border-[var(--brand)]/20 transition-all duration-700">
+              <p className="text-gray-300 mb-10 text-sm md:text-lg font-light leading-[1.8] opacity-90 group-hover:opacity-100 transition-opacity">"{rev.text}"</p>
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-white/[0.02] border border-white/5 rounded-full flex items-center justify-center text-[var(--brand)] font-sans font-medium text-lg md:text-2xl group-hover:bg-[var(--brand)]/5 group-hover:border-[var(--brand)]/20 transition-all duration-700">
                   {rev.name?.charAt(0) || "U"}
                 </div>
                 <div>
                   <div className="text-white font-semibold text-sm md:text-lg flex items-center gap-2 mb-1">
                     {rev.name} <CheckCircle2 className="w-4 h-4 text-[var(--brand)] opacity-60" />
                   </div>
-                  <div className="text-[10px] md:text-[11px] text-gray-500 font-sans font-medium uppercase tracking-[0.2em] opacity-60">{rev.role}</div>
+                  <div className="text-[10px] text-gray-500 font-sans font-medium uppercase tracking-[0.2em] opacity-60">{rev.role}</div>
                 </div>
               </div>
             </motion.div>

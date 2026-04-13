@@ -96,7 +96,7 @@ const EcosystemCard = ({ mod, index }: { mod: typeof modules[0], index: number }
       >
         <Link 
           to={mod.link} 
-          className="block relative h-full p-8 md:p-12 rounded-[2.5rem] bg-white/[0.02] border border-white/5 overflow-hidden transition-all duration-700 group-hover:bg-white/[0.04] group-hover:border-emerald-500/20 shadow-2xl"
+          className="block relative h-full p-6 sm:p-8 md:p-12 rounded-[2.5rem] bg-white/[0.02] border border-white/5 overflow-hidden transition-all duration-700 group-hover:bg-white/[0.04] group-hover:border-emerald-500/20 shadow-2xl"
         >
           {/* Spotlight Background Glow */}
           <motion.div
@@ -121,22 +121,22 @@ const EcosystemCard = ({ mod, index }: { mod: typeof modules[0], index: number }
           {/* 3D Content Container */}
           <div 
             className="relative z-10 flex flex-col h-full" 
-            style={{ transform: "translateZ(60px)" }}
+            style={{ transform: "translateZ(30px)" }} // Reduced Z for mobile stability
           >
             {/* Top Right Arrow */}
             <div className="absolute top-0 right-0 w-10 h-10 md:w-14 md:h-14 rounded-full bg-white/[0.015] flex items-center justify-center border border-white/5 group-hover:bg-emerald-500/10 group-hover:border-emerald-500/30 transition-all duration-700 group-hover:scale-110">
-              <ArrowUpRight className="w-5 h-5 md:w-7 md:h-7 text-white/20 group-hover:text-emerald-400 transition-all duration-700" />
+              <ArrowUpRight className="w-4 h-4 md:w-7 md:h-7 text-white/20 group-hover:text-emerald-400 transition-all duration-700" />
             </div>
 
-            <div className="w-14 h-14 md:w-20 md:h-20 rounded-2xl md:rounded-[2rem] bg-white/[0.015] border border-white/5 flex items-center justify-center mb-8 md:mb-12 group-hover:bg-emerald-500/10 group-hover:border-emerald-500/30 transition-all duration-700">
-              <mod.icon className="w-7 h-7 md:w-10 md:h-10 text-white/30 group-hover:text-emerald-400 transition-all duration-700" />
+            <div className="w-12 h-12 md:w-20 md:h-20 rounded-2xl md:rounded-[2rem] bg-white/[0.015] border border-white/5 flex items-center justify-center mb-6 md:mb-12 group-hover:bg-emerald-500/10 group-hover:border-emerald-500/30 transition-all duration-700">
+              <mod.icon className="w-6 h-6 md:w-10 md:h-10 text-white/30 group-hover:text-emerald-400 transition-all duration-700" />
             </div>
             
-            <h3 className="text-2xl md:text-5xl font-black text-white mb-4 md:mb-6 tracking-tighter group-hover:text-white transition-all duration-700">
+            <h3 className="text-xl sm:text-2xl md:text-5xl font-black text-white mb-3 md:mb-6 tracking-tighter group-hover:text-white transition-all duration-700 leading-tight">
               {mod.title}
             </h3>
             
-            <p className="text-gray-400 text-base md:text-lg leading-relaxed max-w-sm group-hover:text-gray-300 transition-colors duration-700 font-sans font-light">
+            <p className="text-gray-400 text-sm sm:text-base md:text-lg leading-relaxed max-w-sm group-hover:text-gray-300 transition-colors duration-700 font-sans font-light">
               {mod.description}
             </p>
           </div>

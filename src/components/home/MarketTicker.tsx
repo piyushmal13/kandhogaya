@@ -58,11 +58,11 @@ export const MarketTicker = () => {
   const scrollingData = [...data, ...data, ...data];
 
   return (
-    <section className="relative h-12 md:h-14 border-y border-white/5 bg-black/80 backdrop-blur-3xl overflow-hidden z-[40]">
+    <section className="relative h-10 sm:h-12 md:h-14 border-y border-white/5 bg-black/80 backdrop-blur-3xl overflow-hidden z-[40]">
       {/* Label for Institutional Origin */}
-      <div className="absolute left-0 top-0 bottom-0 z-20 px-4 sm:px-8 bg-black flex items-center gap-2 border-r border-white/5 shadow-[20px_0_40px_rgba(0,0,0,0.8)]">
-        <Activity className="w-3 h-3 text-emerald-500 animate-pulse" />
-        <span className="text-[10px] font-black text-white uppercase tracking-[0.2em]">Live Feed</span>
+      <div className="absolute left-0 top-0 bottom-0 z-20 px-3 sm:px-8 bg-black flex items-center gap-2 border-r border-white/5 shadow-[15px_0_30px_rgba(0,0,0,0.8)]">
+        <Activity className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-emerald-500 animate-pulse" />
+        <span className="text-[8px] sm:text-[10px] font-black text-white uppercase tracking-[0.2em]">Live</span>
         <div className="hidden sm:flex items-center gap-1 ml-2 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20">
           <ShieldCheck className="w-2.5 h-2.5 text-emerald-500" />
           <span className="text-[8px] font-bold text-emerald-500 uppercase tracking-tighter">Verified</span>
@@ -74,7 +74,7 @@ export const MarketTicker = () => {
         <motion.div
           animate={{ x: ["0%", "-33.33%"] }}
           transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-          className="flex whitespace-nowrap pl-32 md:pl-48 lg:pl-64"
+          className="flex whitespace-nowrap pl-24 sm:pl-32 md:pl-48 lg:pl-64"
         >
           {scrollingData.map((item, i) => (
             <div 
