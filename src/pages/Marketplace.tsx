@@ -11,7 +11,6 @@ import { MarketplaceGrid } from "../components/institutional/MarketplaceGrid";
 import { useAuth } from "../contexts/AuthContext";
 import { useToast } from "../contexts/ToastContext";
 import { useNavigate } from "react-router-dom";
-import { DashboardLayout } from "@/components/institutional/DashboardLayout";
 
 export const Marketplace = () => {
   const [selectedAlgo, setSelectedAlgo] = useState<Product | null>(null);

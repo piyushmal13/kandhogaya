@@ -174,9 +174,6 @@ export const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({ products, isLo
               </Button>
             </div>
           </div>
-        </motion.article>
-      ))}
-    </div>
 
           {/* Background Ambient Glow (GPU Accelerated) */}
           <div className="absolute -inset-2 bg-emerald-500/10 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none -z-10" />
