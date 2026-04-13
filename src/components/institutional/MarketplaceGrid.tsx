@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Activity, Lock, TrendingUp } from 'lucide-react';
+import { Lock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Button } from '../ui/Button';
@@ -59,8 +59,8 @@ export const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({ products, isLo
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {new Array(6).fill(null).map((_, i) => (
-          <SkeletonCard key={`skel-asset-${i}`} />
+        {[1, 2, 3, 4, 5, 6].map((id) => (
+          <SkeletonCard key={`skel-asset-${id}`} />
         ))}
       </div>
     );
