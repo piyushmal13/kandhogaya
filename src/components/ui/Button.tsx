@@ -33,8 +33,8 @@ export interface SovereignButtonProps extends Omit<ButtonHTMLAttributes<HTMLButt
 }
 
 const variantStyles: Record<ButtonVariant, string> = {
-  sovereign: "bg-[var(--grad-royale)] text-black font-black hover:shadow-[0_0_50px_rgba(16,185,129,0.5)] border-none shadow-[inset_0_2px_4px_rgba(255,255,255,0.4)]",
-  execution: "bg-emerald-500 hover:bg-emerald-400 text-black font-black hover:shadow-[0_0_30px_rgba(16,185,129,0.4)] border border-emerald-400/50 shadow-[inset_0_2px_4px_rgba(255,255,255,0.3)]",
+  sovereign: "bg-[var(--grad-royale)] text-black font-black hover:shadow-[0_0_50px_rgba(16,185,129,0.5)] border-none shadow-[inset_0_2px_4px_rgba(255,255,255,0.4),0_0_0_1px_rgba(0,0,0,0.1)]",
+  execution: "bg-emerald-500 hover:bg-emerald-400 text-black font-black hover:shadow-[0_0_30px_rgba(16,185,129,0.4)] border border-emerald-400/50 shadow-[inset_0_2px_4px_rgba(255,255,255,0.3),0_0_0_1px_rgba(0,0,0,0.1)]",
   secondary: "bg-white/[0.03] hover:bg-white/[0.07] text-white border border-white/10 hover:border-white/20 shadow-2xl backdrop-blur-md",
   ghost: "bg-transparent hover:bg-white/5 text-gray-400 hover:text-white",
   danger: "bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 hover:border-red-500/40",

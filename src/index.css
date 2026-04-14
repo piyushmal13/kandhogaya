@@ -145,13 +145,16 @@
   }
 
   h1 {
-    @apply text-3xl sm:text-5xl md:text-7xl lg:text-[120px] leading-[0.9] tracking-[-0.05em] font-extrabold pb-2 break-words;
+    @apply text-4xl sm:text-6xl md:text-7xl lg:text-[100px] leading-[0.95] tracking-[-0.05em] font-extrabold pb-2 break-words;
+    font-size: clamp(2.5rem, 8vw, 6.25rem);
   }
   h2 {
-    @apply text-2xl sm:text-5xl md:text-6xl lg:text-8xl leading-[1.0] tracking-[-0.04em] font-bold;
+    @apply text-3xl sm:text-5xl md:text-6xl lg:text-8xl leading-[1.0] tracking-[-0.04em] font-bold;
+    font-size: clamp(2rem, 6vw, 5rem);
   }
   h3 {
     @apply text-xl sm:text-3xl md:text-5xl leading-tight tracking-[-0.03em];
+    font-size: clamp(1.5rem, 4vw, 3rem);
   }
 
   p {
@@ -222,8 +225,23 @@
     border: 1px solid var(--glass-border);
     backdrop-filter: blur(var(--glass-blur)) saturate(160%);
     -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
-    @apply transition-all duration-700 rounded-[2.5rem];
+    @apply transition-all duration-700 rounded-[1.5rem] sm:rounded-[2.5rem];
     box-shadow: var(--shadow-card);
+    position: relative;
+  }
+  
+  .glass-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.1), transparent);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
   }
 
   .glass-card-hover {

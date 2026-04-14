@@ -15,7 +15,7 @@ export const HeroSection = () => {
   return (
     <section 
       ref={sectionRef} 
-      className="relative min-h-[95svh] bg-[#020202] text-[#FAFAFA] flex flex-col justify-between pt-36 pb-12 px-6 lg:px-12 font-sans selection:bg-white selection:text-black overflow-hidden"
+      className="relative min-h-[92svh] sm:min-h-[95svh] bg-[#020202] text-[#FAFAFA] flex flex-col justify-between pt-24 sm:pt-36 pb-12 px-6 lg:px-12 font-sans selection:bg-white selection:text-black overflow-hidden"
     >
       {/* 🧱 STRUCTURAL GRID OVERLAY (Stark, Silent) */}
       <div className="absolute inset-0 pointer-events-none z-0">
@@ -32,14 +32,14 @@ export const HeroSection = () => {
         className="relative z-10 w-full max-w-[1440px] mx-auto flex-1 flex flex-col justify-center"
       >
         {/* TOP META ROW */}
-        <div className="flex justify-between items-center border-b border-white/[0.08] pb-4 mb-20 text-[9px] uppercase tracking-[0.25em] font-bold text-white/40">
+        <div className="flex justify-between items-center border-b border-white/[0.08] pb-4 mb-12 sm:mb-20 text-[9px] uppercase tracking-[0.25em] font-bold text-white/40">
           <span className="text-white">IFX_TRADES // ASIA DESK</span>
-          <span>Macro Research & Algorithmic Education</span>
+          <span className="hidden sm:inline text-right">Macro Research & Algorithmic Education</span>
         </div>
 
         {/* DOMINANT TYPOGRAPHY */}
         <div className="max-w-[1000px]">
-          <h1 className="text-[3.5rem] sm:text-6xl md:text-[6rem] lg:text-[8rem] leading-[0.85] font-serif tracking-[-0.04em] mb-10 text-white">
+          <h1 className="text-[2.8rem] sm:text-6xl md:text-[6rem] lg:text-[8rem] leading-[0.95] sm:leading-[0.85] font-serif tracking-[-0.04em] mb-10 text-white break-words">
             <span className="block italic text-white/60 mb-2">Systematic</span>
             <span className="block font-black uppercase tracking-tight">Intelligence.</span>
           </h1>
@@ -57,7 +57,6 @@ export const HeroSection = () => {
               if(!email) return;
               setStatus('loading');
               
-              // Only insert if supabase is defined
               if (supabase) {
                 await supabase.from("leads").insert([{ email, source: "hero_institutional" }]);
               }
@@ -65,28 +64,29 @@ export const HeroSection = () => {
               setStatus('success');
               setTimeout(() => setStatus('idle'), 5000);
             }} 
-            className="flex items-end gap-6 max-w-lg"
+            className="flex flex-col sm:flex-row items-stretch sm:items-end gap-8 sm:gap-6 max-w-lg"
           >
-            <div className="w-full relative">
-              <span className="absolute -top-6 left-0 text-[9px] uppercase tracking-[0.2em] text-white/30 font-bold">Encrypted Intake</span>
+            <div className="flex-1 relative">
+              <span className="absolute -top-6 left-0 text-[10px] uppercase tracking-[0.2em] text-white/30 font-bold">Encrypted Intake</span>
               <input 
                 name="email"
                 type="email" 
                 required
                 disabled={status !== 'idle'}
                 placeholder="PROSPECTIVE CLIENT EMAIL" 
-                className="bg-transparent border-b border-white/20 text-white pb-3 w-full focus:outline-none focus:border-white transition-colors text-[11px] font-mono tracking-[0.1em] placeholder:text-white/20 disabled:opacity-40"
+                className="bg-transparent border-b border-white/20 text-white pb-3 w-full focus:outline-none focus:border-white transition-colors text-xs font-mono tracking-[0.1em] placeholder:text-white/10 disabled:opacity-40"
               />
             </div>
             <button 
               disabled={status !== 'idle'}
-              className="shrink-0 pb-3 text-[11px] uppercase font-bold tracking-[0.2em] text-white/60 hover:text-white transition-colors border-b border-transparent hover:border-white flex items-center gap-2 group disabled:opacity-50"
+              className="shrink-0 pb-3 text-xs uppercase font-bold tracking-[0.2em] text-white/60 hover:text-white transition-colors border-b border-transparent hover:border-white flex items-center justify-between sm:justify-start gap-2 group disabled:opacity-50"
             >
+              <span className="sm:hidden text-white/30 text-[9px] font-mono">Action // </span>
               {status === 'success' ? 'Verified' : 'Access Desk'}
               {status === 'success' ? (
                 <Check className="w-3.5 h-3.5 text-emerald-400" />
               ) : (
-                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               )}
             </button>
           </form>

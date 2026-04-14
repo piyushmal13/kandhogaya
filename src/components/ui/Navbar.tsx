@@ -100,13 +100,20 @@ export const Navbar = () => {
           </Link>
 
           {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-1">
+          <div 
+            className="hidden md:flex items-center gap-1"
+            role="navigation"
+            aria-label="Main Navigation"
+            itemScope
+            itemType="https://schema.org/SiteNavigationElement"
+          >
             {navLinks.map((link) => {
               const isActive = location.pathname === link.path;
               return (
                 <Link
                   key={link.path}
                   to={link.path}
+                  itemProp="url"
                   className={cn(
                     "relative px-3 py-2 text-[10px] font-black uppercase tracking-[0.25em] transition-all duration-300 rounded-lg group/link",
                     isActive
@@ -114,7 +121,7 @@ export const Navbar = () => {
                       : "text-white/40 hover:text-white hover:bg-white/[0.04]"
                   )}
                 >
-                  {link.name}
+                  <span itemProp="name">{link.name}</span>
                   {isActive && (
                     <motion.div
                       layoutId="navbar-indicator"

@@ -63,80 +63,68 @@ export const Home = () => {
 
       {/* === FULL SEO METADATA — Keyword-dominant, intent-matched === */}
       <PageMeta
-        title="IFX Trades | Best Forex & Algo Trading Course in India & Dubai"
-        description="Asia's #1 institutional forex education platform. Master algo trading, live trading webinars & XAUUSD gold signals. Best forex course in India & Dubai. Join 12,400+ elite traders."
+        title="IFX Trades | Asia's Premier Institutional Algorithmic Training Desk"
+        description="Master the markets with institutional-grade algorithmic execution, quantitative research, and macro diagnostics. Asia's most advanced desk for professional traders."
         path="/"
         keywords={[
           "IFX Trades",
-          "forex education Asia",
-          "best algo trading course India",
-          "best algo trading course Dubai",
-          "institutional forex education",
-          "forex academy India",
-          "forex webinar India",
-          "live forex trading webinar 2026",
-          "gold trading signals XAUUSD",
-          "automated forex trading strategies",
-          "AI forex trading bot MT5",
-          "quantitative trading course India",
-          "prop firm challenge strategy",
-          "forex signals India live",
-          "forex trading course for beginners India",
-          "best online forex course UAE",
+          "institutional algorithmic trading",
+          "quantitative analysis Dubai",
+          "macro research India",
+          "XAUUSD algo execution",
+          "professional trader infrastructure",
+          "sovereign desk training",
         ]}
         structuredData={[
           educationalOrganizationSchema(),
           websiteSchema(),
           goldAlgoCourseSchema(),
           faqSchema(homeFaqs),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Marketplace", path: "/marketplace" },
+            { name: "Webinars", path: "/webinars" },
+          ]),
         ]}
       />
 
       <div className="noise-overlay" />
 
-      {/* === ABOVE THE FOLD — Immediate value, trust-first === */}
+      {/* === ABOVE THE FOLD — Dominant, Silent === */}
       <HeroSection />
       
-      <div className="relative z-10 -mt-10 mb-20">
+      <div className="relative z-10 -mt-20 mb-32">
          <MarketTicker />
       </div>
 
-      {/* === NEXT LIVE WEBINAR — High-conversion section === */}
-      <LazySection placeholderHeight="600px">
-        <WebinarPromo />
-      </LazySection>
-
-      {/* === PLATFORM ECOSYSTEM === */}
+      {/* === INFRASTRUCTURE & ECOSYSTEM — Direct value === */}
       <LazySection placeholderHeight="800px">
         <EcosystemSection />
       </LazySection>
 
-      {/* === GLOBAL REACH / GLOBE === */}
+      {/* === GLOBAL REACH / TELEMETRY === */}
       <LazySection placeholderHeight="700px">
         <GlobalReach />
       </LazySection>
 
-      {/* === ALGO FLAGSHIP PRODUCT === */}
-      <LazySection placeholderHeight="600px">
+      {/* === FLAGSHIP ALGO MODULE — The purchase target === */}
+      <LazySection placeholderHeight="600px" className="py-24 sm:py-32">
         <AlgoGreatness />
       </LazySection>
 
-      {/* === BLOG / THOUGHT LEADERSHIP === */}
-      <LazySection placeholderHeight="800px">
-        <BlogSection />
-      </LazySection>
-
-      {/* === INSTITUTIONAL ECOSYSTEM + PARTNERS === */}
+      {/* === CORPORATE TRUST LAYER === */}
       <LazySection placeholderHeight="1400px">
-        <div className="py-20 bg-black/40">
+        <div className="py-24 sm:py-40 bg-black/40 border-y border-white/5">
            <TrustGrid />
+           <div className="mt-20">
+             <PartnerLogos />
+           </div>
         </div>
-        <PartnerLogos />
       </LazySection>
 
-      {/* === FINAL SIGNUP CTA === */}
+      {/* === CONVERSION ACQUISITION === */}
       <LazySection placeholderHeight="400px">
-        <div className="py-32 border-t border-white/5 bg-gradient-to-b from-transparent to-[#58F2B6]/5">
+        <div className="py-32 mb-20">
            <SignupForm />
         </div>
       </LazySection>

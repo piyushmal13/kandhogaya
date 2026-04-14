@@ -188,10 +188,10 @@ export const EcosystemSection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-            className="text-4xl sm:text-6xl md:text-9xl font-black text-white mb-8 tracking-tighter leading-[0.88]"
+            className="text-4xl sm:text-6xl md:text-7xl lg:text-[100px] font-black text-white mb-8 tracking-tighter leading-[0.95] max-w-4xl mx-auto"
           >
             THE{" "}
-            <span className="italic font-serif text-gradient-emerald">IDENTITY</span>
+            <span className="italic font-serif text-gradient-emerald">INFRASTRUCTURE</span>
           </motion.h2>
 
           <motion.p
