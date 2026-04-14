@@ -329,7 +329,7 @@ export const WebinarDetail = () => {
                           <ShieldCheck className="w-4 h-4 text-emerald-500" />
                           Institutional Security
                         </h4>
-                        <p className="text-sm">All methods shared are compliant with strictly monitored institutional risk management standards, including execution latency minimization and drawdown protection.</p>
+                        <p className="text-sm">All methods shared are compliant with strictly monitored institutional risk management standards, including execution speed optimization and drawdown protection.</p>
                       </div>
                     </div>
                   </div>

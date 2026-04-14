@@ -30,7 +30,7 @@ const TIERS = [
     price: 'Custom',
     timeline: '8-12 Weeks',
     description: 'High-frequency or complex multi-strategy systems.',
-    features: ['HFT Capable Architecture', 'Custom Infrastructure Setup', 'Multi-Account Management', '24/7 Monitoring', 'Dedicated Engineering Lead'],
+    features: ['High-Performance Architecture', 'Custom Infrastructure Setup', 'Multi-Account Management', '24/7 Monitoring', 'Dedicated Engineering Lead'],
     icon: Gauge,
     popular: false
   }

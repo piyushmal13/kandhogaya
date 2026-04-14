@@ -5,7 +5,7 @@ import { fetchReviews } from "../services/reviewService";
 import { getProducts } from "../services/apiHandlers";
 import { Product } from "../types";
 
-const algoKeywords = ['algo', 'algorithm', 'logic', 'hft', 'pattern', 'neural', 'automated', 'system', 'win rate', 'latency'];
+const algoKeywords = ['algo', 'algorithm', 'logic', 'analytical', 'pattern', 'neural', 'automated', 'system', 'win rate', 'institutional'];
 
 const isAlgoReview = (rev: any) => {
   const role = rev.role?.toLowerCase() || '';

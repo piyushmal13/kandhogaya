@@ -100,18 +100,20 @@ import { loadSystem } from "./core/systemLoader";
 function AppContent() {
   const location = useLocation();
   
-  const isInstitutional = [
-    '/dashboard', 
-    '/admin',
-    '/agent',
-    '/affiliate'
+  // Specific routes that might need a clean slate (blank canvas)
+  const isPlainLayout = [
+    '/login',
   ].some(path => location.pathname.startsWith(path));
 
-  if (isInstitutional) {
+  if (isPlainLayout) {
     return <AnimatedRoutes />;
   }
 
-  return <StandardLayout><AnimatedRoutes /></StandardLayout>;
+  return (
+    <StandardLayout>
+      <AnimatedRoutes />
+    </StandardLayout>
+  );
 }
 
 export default function App() {

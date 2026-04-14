@@ -94,7 +94,7 @@ export const GlobalReach = () => {
               className="text-base md:text-xl mb-12 max-w-xl mx-auto lg:mx-0 leading-relaxed opacity-60"
               style={{ color: 'var(--text-muted)' }}
             >
-              Our low-latency trading infrastructure and intelligence hubs serve thousands of active traders in major financial centers and emerging markets worldwide.
+              Our high-performance trading infrastructure and intelligence hubs serve thousands of active traders in major financial centers and emerging markets worldwide.
             </motion.p>
 
             <motion.div 

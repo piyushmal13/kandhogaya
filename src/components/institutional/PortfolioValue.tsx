@@ -74,7 +74,7 @@ export function PortfolioValue() {
       <div className="mt-12 flex items-center gap-6 border-t border-white/5 pt-6 opacity-30">
         <div className="flex flex-col gap-1">
           <span className="text-[8px] font-black uppercase tracking-widest">Update Frequency</span>
-          <span className="text-[10px] font-mono">Real-time / Latency: 2.4ms</span>
+          <span className="text-[10px] font-mono">Educational Demo Feed</span>
         </div>
         <div className="w-px h-6 bg-white/10" />
         <div className="flex flex-col gap-1">

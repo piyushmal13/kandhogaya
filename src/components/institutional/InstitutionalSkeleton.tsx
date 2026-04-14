@@ -1,53 +1,48 @@
 import { Skeleton } from "../ui/Skeleton";
 
 /**
- * Institutional Route Loading State.
- * Prevents white flashes during route transitions by providing a 
- * mirrored layout of the Sovereign Dashboard.
+ * Institutional Route Loading State (v2.0 - One Page Terminal)
+ * Prevents navigation flashes by providing a mirrored loading state 
+ * for the new 'Royale Noir' layout hierarchy.
  */
 export function InstitutionalSkeleton() {
   return (
-    <div className="min-h-screen bg-[#050505] flex">
-      {/* Sidebar Placeholder */}
-      <div className="w-72 hidden lg:block border-r border-white/5 bg-black/40 p-8 space-y-6">
-         <Skeleton height="40px" width="40px" className="rounded-xl" />
-         <div className="space-y-2">
-            {[...Array(6)].map((_, i) => (
-              <Skeleton key={i} height="48px" className="rounded-2xl w-full" />
-            ))}
+    <div className="min-h-screen bg-[#030406] flex flex-col pt-24">
+      
+      {/* Simulation Header */}
+      <div className="w-full max-w-7xl mx-auto px-6 mb-12 flex items-center justify-between">
+         <div className="space-y-4">
+            <Skeleton height="12px" width="100px" className="rounded-full opacity-20" />
+            <Skeleton height="40px" width="300px" className="rounded-xl" />
          </div>
+         <Skeleton height="48px" width="120px" className="rounded-2xl" />
       </div>
       
-      <div className="flex-1 flex flex-col">
-        {/* Header Placeholder */}
-        <div className="h-20 border-b border-white/5 bg-black/20 px-10 flex items-center justify-between">
-           <Skeleton height="24px" width="200px" />
-           <Skeleton height="40px" width="120px" className="rounded-full" />
-        </div>
-        
-        {/* Content Matrix Placeholder */}
-        <main className="flex-1 p-10 space-y-12 max-w-7xl w-full mx-auto">
-          <Skeleton height="12px" width="150px" className="mb-8" />
+      {/* Content Matrix Placeholder */}
+      <main className="flex-1 w-full max-w-7xl mx-auto px-6 space-y-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           
-          <div className="space-y-4">
-             <Skeleton height="48px" width="300px" />
-             <Skeleton height="16px" width="500px" />
+          {/* Main Surface */}
+          <div className="lg:col-span-2 space-y-10">
+            <Skeleton height="300px" className="rounded-[3rem] w-full" />
+            <div className="space-y-6">
+               <Skeleton height="20px" width="200px" />
+               <div className="grid grid-cols-2 gap-6">
+                  <Skeleton height="120px" className="rounded-[2rem]" />
+                  <Skeleton height="120px" className="rounded-[2rem]" />
+               </div>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="p-8 rounded-[2.5rem] bg-white/[0.02] border border-white/5 space-y-6">
-                <Skeleton height="200px" className="rounded-3xl w-full" />
-                <div className="space-y-3">
-                   <Skeleton height="20px" width="80%" />
-                   <Skeleton height="12px" />
-                   <Skeleton height="12px" width="60%" />
-                </div>
-              </div>
-            ))}
+          {/* Rail Surface */}
+          <div className="space-y-10">
+             <Skeleton height="400px" className="rounded-[3.5rem] w-full" />
+             <Skeleton height="200px" className="rounded-[2.5rem] w-full" />
           </div>
-        </main>
-      </div>
+
+        </div>
+      </main>
+      
     </div>
   );
 }

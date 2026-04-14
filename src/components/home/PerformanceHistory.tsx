@@ -131,7 +131,7 @@ export const PerformanceHistory = () => {
             </div>
             <div className="text-[10px] md:text-xs text-gray-600 font-sans font-light tracking-wide text-center md:text-right opacity-60">
               *Audit logs verified by proprietary backtesting engine. <br className="hidden md:block"/> 
-              Live execution results may vary based on slippage and latency.
+              Live execution results may vary based on slippage and market conditions.
             </div>
           </div>
         </motion.div>

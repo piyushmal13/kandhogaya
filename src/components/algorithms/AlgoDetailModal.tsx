@@ -148,7 +148,7 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
                       <Activity className="w-4 h-4 md:w-5 md:h-5 text-emerald-500" />
                       Execution Engine
                     </h4>
-                    <p className="text-gray-400 text-xs md:text-sm">Low-latency execution optimized for institutional liquidity providers and minimal slippage.</p>
+                    <p className="text-gray-400 text-xs md:text-sm">High-performance execution optimized for institutional liquidity providers and minimal slippage.</p>
                   </div>
                 </div>
               </div>

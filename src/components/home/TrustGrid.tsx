@@ -14,7 +14,7 @@ const PILLARS = [
   {
     icon: Target,
     title: "Precision Execution",
-    desc: "Low-latency algorithmic execution systems designed for MT5 and institutional liquidity pools.",
+    desc: "High-performance algorithmic execution systems designed for MT5 and institutional liquidity pools.",
     color: "text-cyan-400",
     bg: "bg-cyan-500/10"
   },

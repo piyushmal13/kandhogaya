@@ -7,14 +7,14 @@ const modules = [
   {
     id: "signals",
     title: "AI Signal Intelligence",
-    description: "Multi-layered HFT algorithms processing 40+ asset classes with institutional-grade entry precision.",
+    description: "Multi-layered analytical algorithms processing 40+ asset classes with institutional-grade entry precision.",
     icon: Zap,
     link: "/signals",
   },
   {
     id: "algorithms",
     title: "Enterprise Execution",
-    description: "Low-latency trading architecture with direct API integration and systematic risk management.",
+    description: "High-performance trading architecture with direct API integration and systematic risk management.",
     icon: Cpu,
     link: "/products",
   },

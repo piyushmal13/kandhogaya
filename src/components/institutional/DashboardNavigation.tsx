@@ -15,7 +15,7 @@ import { Link, useLocation } from 'react-router-dom';
 export function DashboardNavigation() {
   const location = useLocation();
   const navItems = [
-    { icon: LayoutDashboard, label: 'Omni-View', path: '/dashboard' },
+    { icon: LayoutDashboard, label: 'Master Terminal', path: '/dashboard' },
     { icon: Terminal, label: 'Execution', path: '/marketplace' },
     { icon: Shield, label: 'Risk Shield', path: '/risk' },
     { icon: BookOpen, label: 'Academy', path: '/academy' },

@@ -15,7 +15,7 @@ const testimonials = [
     avatar: "https://i.pravatar.cc/80?u=sarahj",
   },
   {
-    quote: "The latency is non-existent. As soon as I get the WhatsApp notification, the price is still valid.",
+    quote: "The speed is incredible. As soon as I get the WhatsApp notification, the price is still valid.",
     author: "Ahmed K.",
     location: "Dubai",
     avatar: "https://i.pravatar.cc/80?u=ahmedk",

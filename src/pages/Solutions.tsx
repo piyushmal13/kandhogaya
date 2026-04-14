@@ -16,12 +16,12 @@ export const Solutions = () => {
     <main className="min-h-screen bg-[#020202] text-[#F8FAFC] selection:bg-[#58F2B6]/30">
       <PageMeta 
         title="Institutional Solutions | Bespoke Algorithmic Engineering"
-        description="Asia's #1 institutional engineering hub. Custom algorithmic development, HFT execution licenses, and private strategic consulting for elite capital deployments."
+        description="Asia's #1 institutional engineering hub. Custom algorithmic development, Educational Data Licenses, and private strategic consulting for elite capital deployments."
         path="/solutions"
         keywords={[
           "custom algorithmic trading bot",
           "MT5 expert advisor development",
-          "institutional HFT bridge",
+          "institutional config bridge",
           "trading system engineering",
           "private quant consulting",
           "bespoke financial automation"

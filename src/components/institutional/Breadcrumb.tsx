@@ -29,7 +29,7 @@ export function Breadcrumb() {
       {
         '@type': 'ListItem',
         position: 1,
-        name: 'Omni-View',
+        name: 'Master Terminal',
         item: 'https://ifxtrades.com/dashboard'
       },
       ...items.map((item, index) => ({

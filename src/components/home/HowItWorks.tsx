@@ -15,7 +15,7 @@ const STEPS = [
   {
     icon: <Code2 className="w-8 h-8" />,
     title: "Quant Engineering",
-    description: "Hypotheses are translated into low-latency C++ / Python algorithmic structures.",
+    description: "Hypotheses are translated into high-performance C++ / Python algorithmic structures.",
     span: "col-span-12 md:col-span-5",
     color: "bg-purple-500/5 border-purple-500/20 text-purple-400"
   },

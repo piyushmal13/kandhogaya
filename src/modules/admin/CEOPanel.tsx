@@ -324,30 +324,7 @@ export const CEOPanel = () => {
             </div>
           )}
 
-          <div className="grid grid-cols-1 gap-4">
-                 {[
-                   { label: "Gross Revenue", value: `$${stats.revenueMTD.toLocaleString()}`, icon: DollarSign, color: "text-[#58F2B6]", bg: "bg-[#58F2B6]/10", spark: "M0 20 L20 15 L40 10 L60 5 L80 8 L100 0" },
-                   { label: "Active Nodes", value: stats.activeSubscriptions, icon: Activity, color: "text-cyan-400", bg: "bg-cyan-500/10", spark: "M0 20 L20 18 L40 15 L60 12 L80 14 L100 10" },
-                   { label: "CRM Leads", value: stats.totalLeads, icon: Users, color: "text-amber-400", bg: "bg-amber-500/10", spark: "M0 10 L20 12 L40 10 L60 11 L80 10 L100 9" },
-                   { label: "Pending Audit", value: stats.pendingPayments, icon: ShieldCheck, color: "text-emerald-400", bg: "bg-emerald-400/10", spark: "M0 20 L20 20 L40 20 L60 20 L80 20 L100 20" }
-                 ].map((stat, i) => (
-                   <div key={stat.label} className="p-8 bg-white/5 border border-white/5 rounded-[32px] hover:bg-white/10 transition-all group overflow-hidden relative">
-                     <div className="flex justify-between items-start mb-6">
-                        <div className={`w-12 h-12 rounded-2xl ${stat.bg} ${stat.color} flex items-center justify-center border border-white/5 group-hover:scale-110 transition-transform`}>
-                           <stat.icon className="w-5 h-5" />
-                        </div>
-                        <svg className="w-16 h-8 opacity-20 group-hover:opacity-100 transition-opacity" viewBox="0 0 100 20">
-                          <path d={stat.spark} fill="none" stroke="currentColor" strokeWidth="2" className={stat.color} />
-                        </svg>
-                     </div>
-                     <div className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 italic">{stat.label}</div>
-                     <div className="text-2xl font-black text-white uppercase italic tracking-tighter">{stat.value}</div>
-                     <div className="absolute -bottom-2 -right-2 opacity-5 pointer-events-none">
-                        <stat.icon className="w-20 h-20 text-white" />
-                     </div>
-                   </div>
-                 ))}
-          </div>
+
         </div>
       </div>
 

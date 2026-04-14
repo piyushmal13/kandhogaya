@@ -9,7 +9,7 @@ const STUDIES = [
     industry: 'Gold / XAUUSD',
     result: '+34% Annualized',
     metric: '$2.4M Net Profit',
-    tags: ['MT5', 'Sovereign-HFT', 'Sovereign-Risk'],
+    tags: ['MT5', 'Sovereign-Config', 'Sovereign-Risk'],
     image: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&q=80&w=2670&ixlib=rb-4.0.3'
   },
   {
@@ -25,7 +25,7 @@ const STUDIES = [
     industry: 'Forex/Indices',
     result: '-40% Drawdown Reduction',
     metric: 'Sharpe Ratio: 2.1',
-    tags: ['AWS Lambda', 'Latency Opt', 'Sovereign-Sentry'],
+    tags: ['AWS Lambda', 'Performance Opt', 'Sovereign-Sentry'],
     image: 'https://images.unsplash.com/photo-1542204165-65bf26472b9b?auto=format&fit=crop&q=80&w=2670&ixlib=rb-4.0.3'
   }
 ];

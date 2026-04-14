@@ -20,7 +20,7 @@ export const StandardLayout = ({ children }: { children: React.ReactNode }) => {
       <a href="#main-content" className="skip-to-content">
         Skip to main content
       </a>
-      <div className="relative min-h-screen overflow-hidden font-sans">
+      <div className="relative min-h-screen overflow-x-hidden font-sans">
         <div className="noise-overlay" />
         <SiteBackdrop />
         

@@ -6,7 +6,7 @@ const MILESTONES = [
   { year: "2018", title: "Inception of Sovereign Alpha", desc: "First proprietary liquidity model deployed on XAUUSD." },
   { year: "2020", title: "Institutional Node Expansion", desc: "IFX Trades established as the primary intelligence hub for retail quant groups." },
   { year: "2022", title: "The $1B Benchmark", desc: "Systems surpass $1B in cumulative client-managed execution volume." },
-  { year: "2024", title: "Quantum Era Integration", desc: "Migration to low-latency execution clusters across HK and London nodes." },
+  { year: "2024", title: "Quantum Era Integration", desc: "Migration to high-performance execution clusters across HK and London nodes." },
   { year: "2026", title: "The Sovereign Frontier", desc: "Global expansion into bespoke algorithmic private-banking solutions." },
 ];
 

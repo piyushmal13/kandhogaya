@@ -25,7 +25,7 @@ export const Dashboard = () => {
   return (
     <>
       <PageMeta 
-        title="Sovereign Terminal | Institutional Omni-View"
+        title="Master Terminal | Institutional Hub"
         description="Asia's #1 high-frequency execution surface. Real-time alpha stream, verified equity tracking, and institutional risk governance."
         path="/dashboard"
       />

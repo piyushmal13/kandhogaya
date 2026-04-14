@@ -112,7 +112,7 @@ const SUCCESS_STORIES = [
     company: "Hedge Fund Analyst",
     location: "Singapore",
     quote: "The macro research and XAUUSD signals from IFX are the most consistent I've seen from any education platform in Asia.",
-    result: "84.2% signal accuracy",
+    result: "Sovereign Tier Access",
     avatar: "M",
     rating: 5,
   },
@@ -272,26 +272,7 @@ export const PartnerLogos = () => {
           </div>
         </div>
 
-        {/* === AGGREGATE TRUST BAR === */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="flex flex-wrap justify-center items-center gap-6 pt-10 border-t border-white/5 text-center"
-        >
-          {[
-            { label: "Overall Rating", value: "4.9 / 5.0" },
-            { label: "Students Certified", value: "12,400+" },
-            { label: "Countries", value: "40+" },
-            { label: "Satisfaction Rate", value: "97.8%" },
-          ].map((item) => (
-            <div key={item.label} className="flex flex-col items-center px-6 sm:px-8 border-r border-white/5 last:border-r-0">
-              <span className="text-xl sm:text-2xl font-black text-white">{item.value}</span>
-              <span className="text-[10px] text-gray-600 font-medium uppercase tracking-widest mt-1">{item.label}</span>
-            </div>
-          ))}
-        </motion.div>
-      </div>
+        </div>
     </section>
   );
 };
