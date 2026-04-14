@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "motion/react";
-import { 
-  ArrowRight, 
+import { motion, AnimatePresence, useScroll, useTransform, useSpring } from "motion/react";
+import {
+  ArrowRight,
   Shield,
   Award,
   TrendingUp,
@@ -10,19 +10,20 @@ import {
   Zap,
   Globe,
   Lock,
-  Activity
+  Activity,
+  ChevronDown,
 } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { Button } from "../ui/Button";
 import { tracker } from "@/core/tracker";
 import { getCache, setCache } from "@/utils/cache";
+import { AnimatedCandlesticks } from "../ui/AnimatedCandlesticks";
 
-// INSTITUTIONAL TRUST BADGES — E-E-A-T SIGNAL MAXIMUM
 const TRUST_SIGNALS = [
-  { icon: Users, label: "12,400+ Analysts", sub: "Terminal Access" },
-  { icon: Award, label: "Institutional Hub", sub: "Asia's Core Desk" },
-  { icon: TrendingUp, label: "84.2% Alpha", sub: "Verified Pulse" },
-  { icon: Shield, label: "Systemic Focus", sub: "Risk-Locked" },
+  { icon: Users, label: "Institutional", sub: "Grade Access" },
+  { icon: Award, label: "Deterministic", sub: "Data Models" },
+  { icon: TrendingUp, label: "Quantitative", sub: "Execution" },
+  { icon: Shield, label: "Risk Assessed", sub: "Zero Breach" },
 ];
 
 const FEATURES = [
@@ -32,251 +33,355 @@ const FEATURES = [
   "Asia's Premier Strategic Training Desk",
 ];
 
+const TICKER_ITEMS = [
+  { pair: "XAU/USD", price: "2,341.80", change: "+1.24%", up: true },
+  { pair: "EUR/USD", price: "1.0842", change: "+0.31%", up: true },
+  { pair: "GBP/USD", price: "1.2718", change: "-0.18%", up: false },
+  { pair: "USD/JPY", price: "153.42", change: "+0.44%", up: true },
+  { pair: "BTC/USD", price: "67,421", change: "+2.11%", up: true },
+  { pair: "BTC/USD", price: "67,421", change: "+2.11%", up: true },
+];
+
 export const HeroSection = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [formState, setFormState] = useState<'idle' | 'loading' | 'success'>('idle');
+  const sectionRef = useRef<HTMLElement>(null);
+  const [formState, setFormState] = useState<"idle" | "loading" | "success">("idle");
   const [activeFeature, setActiveFeature] = useState(0);
-  const [stats, setStats] = useState({
-    traders: "12,400+",
-  });
+  const [stats, setStats] = useState({ traders: "12,400+" });
+  const [isMounted, setIsMounted] = useState(false);
+
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
+  const heroY = useTransform(scrollYProgress, [0, 0.6], [0, 80]);
+  const heroScale = useTransform(scrollYProgress, [0, 0.6], [1, 0.96]);
 
   useEffect(() => {
-    tracker.track("page_view", { surface: "home_v2_royale" });
+    setIsMounted(true);
+    tracker.track("page_view", { surface: "home_v3_elite" });
   }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setActiveFeature(prev => (prev + 1) % FEATURES.length);
-    }, 4000);
+      setActiveFeature((prev) => (prev + 1) % FEATURES.length);
+    }, 3500);
     return () => clearInterval(interval);
   }, []);
 
   const fetchRealStats = useCallback(async () => {
-    const cacheKey = "hero_stats_v8_royale";
+    const cacheKey = "hero_stats_v9_elite";
     const cached = getCache(cacheKey);
     if (cached) { setStats(cached); return; }
     try {
-      const { count } = await supabase.from('users').select('*', { count: 'exact', head: true });
+      const { count } = await supabase.from("users").select("*", { count: "exact", head: true });
       if (count !== null) {
-        const newStats = { 
-          traders: `${(count + 12400).toLocaleString()}+`,
-        };
+        const newStats = { traders: `${(count + 12400).toLocaleString()}+` };
         setCache(cacheKey, newStats, 60000);
         setStats(newStats);
       }
-    } catch (e) { 
-        console.error("Stats fetch error:", e); 
+    } catch (e) {
+      console.error("Stats fetch error:", e);
     }
   }, []);
 
   useEffect(() => { fetchRealStats(); }, [fetchRealStats]);
 
   return (
-    <section 
-      ref={containerRef} 
-      className="relative min-h-[100vh] pt-32 pb-24 flex flex-col items-center justify-center overflow-hidden bg-black"
+    <section
+      ref={sectionRef}
+      className="relative min-h-[100svh] flex flex-col items-center justify-center overflow-hidden bg-[#020202]"
+      aria-label="IFX Trades — Asia's #1 Institutional Forex Education Platform"
     >
-      {/* === CINEMATIC BACKGROUND ENGINE === */}
-      <div className="absolute inset-0 z-0 select-none pointer-events-none">
-        {/* Animated Radial Gradients */}
-        <motion.div 
-          animate={{ 
-            opacity: [0.3, 0.5, 0.3],
-            scale: [1, 1.1, 1]
-          }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[120%] h-[60%] bg-[radial-gradient(ellipse_at_center,rgba(88,242,182,0.12)_0%,transparent_70%)] blur-[120px]" 
+      {/* ===== CINEMATIC BACKGROUND ===== */}
+      <div className="absolute inset-0 z-0 pointer-events-none select-none" aria-hidden>
+        {/* Primary radial glow */}
+        <motion.div
+          animate={{ opacity: [0.25, 0.45, 0.25], scale: [1, 1.08, 1] }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[-15%] left-1/2 -translate-x-1/2 w-[140%] h-[70%] bg-[radial-gradient(ellipse_at_center,rgba(16,185,129,0.13)_0%,transparent_65%)] blur-[80px]"
         />
-        
-        {/* Gold Glow */}
-        <div className="absolute top-[20%] right-[-10%] w-[50%] h-[50%] bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.08)_0%,transparent_60%)] blur-[100px]" />
-        
-        {/* Particle Overlay (Simulated Video) */}
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05] contrast-150 brightness-150" />
-        
-        {/* Grid Infrastructure */}
-        <div className="absolute inset-0 opacity-[0.15]" 
-             style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)', backgroundSize: '80px 80px' }} />
+        {/* Gold accent right */}
+        <div className="absolute top-[15%] right-[-5%] w-[45%] h-[55%] bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.07)_0%,transparent_60%)] blur-[90px]" />
+        {/* Blue accent left */}
+        <div className="absolute bottom-[10%] left-[-5%] w-[35%] h-[45%] bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.05)_0%,transparent_60%)] blur-[100px]" />
+
+        {/* Dot-grid infrastructure */}
+        <div
+          className="absolute inset-0 opacity-[0.12]"
+          style={{
+            backgroundImage: "radial-gradient(rgba(255,255,255,0.35) 1px, transparent 1px)",
+            backgroundSize: "32px 32px",
+            maskImage: "radial-gradient(ellipse 80% 60% at 50% 50%, black, transparent)",
+          }}
+        />
+
+        {/* Scanline subtle */}
+        <motion.div
+          className="absolute inset-0"
+          style={{ background: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.05) 2px, rgba(0,0,0,0.05) 4px)" }}
+        />
       </div>
 
-      <div className="relative z-10 w-full max-w-[1400px] px-6 text-center">
-        
-        {/* === ACCESS LEVEL INDICATOR === */}
+      {/* ===== SCROLLED PARALLAX WRAPPER ===== */}
+      <motion.div
+        style={{ opacity: heroOpacity, y: heroY, scale: heroScale }}
+        className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-8 pt-28 pb-16 flex flex-col items-center"
+      >
+        {/* ===== LIVE SIGNAL BADGE ===== */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.2, ease: "circOut" }}
-          className="mb-12 flex justify-center"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="mb-8 md:mb-12"
         >
-          <div className="group inline-flex items-center gap-4 px-6 py-2.5 bg-white/[0.03] border border-white/10 rounded-2xl backdrop-blur-3xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-700 hover:border-emerald-500/30">
-            <div className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-            </div>
-            <span className="text-[10px] sm:text-[11px] font-black text-white/50 group-hover:text-white uppercase tracking-[0.4em] transition-colors flex items-center gap-2">
-              IFX Sovereign Cluster <span className="w-px h-3 bg-white/10 mx-1" /> <span className="text-emerald-400 italic">Access Live</span>
+          <div className="group inline-flex items-center gap-3 px-5 py-2.5 bg-white/[0.02] border border-white/[0.05] rounded-full backdrop-blur-xl transition-all duration-500 cursor-default">
+            <span className="text-[9px] sm:text-[11px] font-black uppercase tracking-[0.35em] text-white/40 group-hover:text-white/70 transition-colors">
+              IFX Sovereign Culture
+              <span className="mx-2 w-px h-3 inline-block bg-white/10 align-middle" />
+              <span className="text-white/50 italic">Intelligence Hub</span>
             </span>
           </div>
         </motion.div>
 
-        {/* === INSTITUTIONAL HIERARCHY TITLE === */}
-        <div className="relative mb-12">
-          <motion.h1 
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.5, ease: [0.23, 1, 0.32, 1] }}
-            className="font-serif font-black leading-[0.85] tracking-[-0.05em] uppercase"
+        {/* ===== HERO HEADLINE ===== */}
+        <div className="relative text-center mb-8 overflow-hidden">
+          <motion.div
+            initial={{ opacity: 0, y: 60, filter: "blur(20px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
           >
-            <span className="text-5xl sm:text-8xl md:text-[150px] lg:text-[180px] block text-white drop-shadow-[0_20px_50px_rgba(0,0,0,0.9)]">
-              Imperial
-            </span>
-            <span className="text-4xl sm:text-7xl md:text-[120px] lg:text-[140px] block text-transparent bg-clip-text bg-[var(--grad-royale)] mt-2 filter drop-shadow-[0_10px_30px_rgba(16,185,129,0.3)] italic">
-              Research
-            </span>
-          </motion.h1>
-          
-          <motion.div 
-             initial={{ opacity: 0 }}
-             animate={{ opacity: 1 }}
-             transition={{ delay: 1, duration: 1.5 }}
-             className="absolute -top-16 left-1/2 -translate-x-1/2 w-full pointer-events-none"
+            <h1 className="font-serif font-black leading-[0.83] tracking-[-0.04em] uppercase text-center">
+              <span
+                className="block text-white"
+                style={{ fontSize: "clamp(3rem, 12vw, 11rem)", letterSpacing: "-0.05em" }}
+              >
+                Imperial
+              </span>
+              <span
+                className="block italic"
+                style={{
+                  fontSize: "clamp(2.5rem, 10vw, 9rem)",
+                  letterSpacing: "-0.04em",
+                  background: "linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.4) 100%)",
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  color: "transparent",
+                }}
+              >
+                Research
+              </span>
+            </h1>
+          </motion.div>
+
+          {/* Watermark */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.5, duration: 2 }}
+            className="absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap"
+            aria-hidden
           >
-            <span className="text-[9px] sm:text-[11px] font-black text-white/10 uppercase tracking-[1.5em] block translate-x-[0.75em]">
+            <span className="text-[9px] font-black text-white/[0.06] uppercase tracking-[2em] block translate-x-[1em]">
               Proprietary Macro Intelligence
             </span>
           </motion.div>
         </div>
 
-        {/* === ALPHA STREAM SELECTOR === */}
+        {/* ===== ROTATING FEATURE STRIP ===== */}
         <motion.div
-          initial={{ opacity: 0, filter: "blur(10px)" }}
-          animate={{ opacity: 1, filter: "blur(0px)" }}
-          transition={{ duration: 1, delay: 0.5 }}
-          className="mb-20 min-h-[3rem]"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+          className="mb-12 h-14 flex items-center"
         >
           <AnimatePresence mode="wait">
             <motion.div
               key={activeFeature}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.8, ease: "circOut" }}
-              className="inline-flex items-center gap-4 px-10 py-5 bg-white/[0.02] border border-white/5 rounded-[2rem] shadow-2xl backdrop-blur-xl"
+              initial={{ opacity: 0, y: 10, filter: "blur(8px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              exit={{ opacity: 0, y: -10, filter: "blur(8px)" }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="inline-flex items-center gap-3 px-7 py-3.5 bg-white/[0.025] border border-white/[0.07] rounded-2xl backdrop-blur-xl shadow-xl"
             >
-              <Zap className="w-5 h-5 text-emerald-400 animate-pulse" />
-              <span className="text-sm sm:text-xl font-bold text-white/80 tracking-tight">
+              <Zap className="w-4 h-4 text-emerald-400 shrink-0" aria-hidden />
+              <span className="text-sm sm:text-base font-semibold text-white/75 tracking-tight">
                 {FEATURES[activeFeature]}
               </span>
             </motion.div>
           </AnimatePresence>
         </motion.div>
 
-        {/* === SOVEREIGN HUB ENTRANCE === */}
-        <motion.div 
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, delay: 0.8 }}
-          className="w-full max-w-2xl mx-auto relative px-4 sm:px-0"
-        >
-          <div className="absolute inset-0 bg-[var(--brand-primary)]/5 blur-[100px] -z-10 rounded-full" />
-          
-          <form 
-            onSubmit={async (e) => {
-               e.preventDefault();
-               if (formState !== 'idle') return;
-               const input = (e.currentTarget.elements.namedItem("email") as HTMLInputElement);
-               const email = input?.value;
-               if (email) {
-                 setFormState('loading');
-                  try {
-                    await supabase.from("leads").insert([{ email, source: "homepage_royale_v1" }]);
-                  } catch (err) { }
-                 setTimeout(() => {
-                   setFormState('success');
-                   if (input) input.value = '';
-                   setTimeout(() => setFormState('idle'), 4000);
-                 }, 1200);
-               }
-            }}
-            className="flex flex-col sm:flex-row items-stretch gap-4 p-2 bg-white/[0.02] border border-white/10 rounded-[2.5rem] backdrop-blur-3xl group transition-all duration-500 hover:border-white/20 hover:bg-white/[0.04]"
+        {/* ===== MAIN CONTENT GRID ===== */}
+        <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center max-w-7xl mx-auto">
+
+          {/* Left — CTA Column */}
+          <motion.div
+            initial={{ opacity: 0, x: -40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            className="flex flex-col items-center lg:items-start text-center lg:text-left"
           >
-            <div className="flex-1 relative">
-              <div className="absolute left-6 top-1/2 -translate-y-1/2">
-                <Lock className="w-5 h-5 text-white/20 group-hover:text-emerald-400 transition-colors" />
-              </div>
-              <input 
-                name="email"
-                type="email"
-                placeholder="Institutional ID (Email Address)"
-                required
-                disabled={formState !== 'idle'}
-                className="w-full bg-transparent pl-14 pr-6 py-5 text-base font-bold text-white outline-none placeholder:text-white/20 disabled:opacity-50"
-              />
-            </div>
-            
-            <Button
-              type="submit"
-              variant="sovereign"
-              size="sovereign-hero"
-              glowEffect={true}
-              isLoading={formState === 'loading'}
-              disabled={formState !== 'idle' && formState !== 'loading'}
-              trackingEvent="access_sovereign_hub"
-              className="rounded-[2rem] sm:px-10"
+            <p className="text-gray-400 text-sm sm:text-base leading-relaxed mb-10 max-w-md font-light">
+              The premier institutional platform for algorithmic execution frameworks and macroeconomic intelligence.
+            </p>
+
+            {/* Email CTA */}
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                if (formState !== "idle") return;
+                const input = (e.currentTarget.elements.namedItem("email") as HTMLInputElement);
+                const email = input?.value;
+                if (email) {
+                  setFormState("loading");
+                  try {
+                    await supabase.from("leads").insert([{ email, source: "homepage_elite_v3" }]);
+                  } catch {}
+                  setTimeout(() => {
+                    setFormState("success");
+                    if (input) input.value = "";
+                    setTimeout(() => setFormState("idle"), 5000);
+                  }, 1200);
+                }
+              }}
+              className="w-full max-w-lg flex flex-col sm:flex-row gap-3 p-2 bg-white/[0.03] border border-white/[0.08] rounded-2xl backdrop-blur-xl group hover:border-white/[0.15] hover:bg-white/[0.05] transition-all duration-500 shadow-[0_20px_60px_rgba(0,0,0,0.4)]"
             >
-              <span className="flex items-center gap-3">
-                {formState === 'success' ? (
-                  <>CONNECTED <CheckCircle2 className="w-5 h-5" /></>
-                ) : (
-                  <>Access Sovereign Hub <ArrowRight className="w-5 h-5" /></>
-                )}
-              </span>
-            </Button>
-          </form>
+              <div className="flex-1 relative flex items-center">
+                <Lock className="w-4 h-4 text-white/20 group-hover:text-emerald-400 absolute left-4 transition-colors duration-400" aria-hidden />
+                <input
+                  id="hero-email"
+                  name="email"
+                  type="email"
+                  placeholder="Your institutional email"
+                  required
+                  disabled={formState !== "idle"}
+                  aria-label="Email address"
+                  className="w-full bg-transparent pl-12 pr-4 py-3.5 text-sm font-medium text-white placeholder:text-white/25 outline-none disabled:opacity-40"
+                />
+              </div>
+              <Button
+                type="submit"
+                variant="sovereign"
+                size="md"
+                glowEffect
+                isLoading={formState === "loading"}
+                disabled={formState !== "idle" && formState !== "loading"}
+                trackingEvent="hero_cta_email"
+                className="rounded-xl px-7 py-3.5 shrink-0 text-sm"
+              >
+                <span className="flex items-center gap-2">
+                  {formState === "success" ? (
+                    <><CheckCircle2 className="w-4 h-4" /> Connected</>
+                  ) : (
+                    <>Access Hub <ArrowRight className="w-4 h-4" /></>
+                  )}
+                </span>
+              </Button>
+            </form>
 
-          {/* Verification Labels */}
-          <div className="mt-8 flex flex-wrap justify-center gap-8">
-             {[
-               { label: "NO Broker Ties", icon: Globe },
-               { label: "Sovereign Audit", icon: Shield },
-               { label: `${stats.traders} Synchronized`, icon: Activity }
-             ].map((label, idx) => (
-                <div key={idx} className="flex items-center gap-2.5">
-                   <label.icon className="w-3.5 h-3.5 text-emerald-500/50" />
-                   <span className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">{label.label}</span>
+            <div className="mt-5 flex flex-wrap justify-center lg:justify-start gap-6">
+              {[
+                { label: "No Broker Ties", icon: Globe },
+                { label: "Sovereign Verified", icon: Shield },
+                { label: `${stats.traders} Members`, icon: Activity },
+              ].map((item, idx) => (
+                <div key={idx} className="flex items-center gap-2">
+                  <item.icon className="w-3.5 h-3.5 text-emerald-500/50" aria-hidden />
+                  <span className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">{item.label}</span>
                 </div>
-             ))}
-          </div>
-        </motion.div>
+              ))}
+            </div>
+          </motion.div>
 
-        {/* === DATA GRID PREVIEW === */}
-        <motion.div 
-          initial={{ opacity: 0, y: 60 }}
+          {/* Right — Algo Terminal */}
+          <motion.div
+            initial={{ opacity: 0, x: 40, y: 20 }}
+            animate={{ opacity: 1, x: 0, y: 0 }}
+            transition={{ duration: 1.2, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            className="relative"
+          >
+            {/* Terminal Window */}
+            <div className="relative rounded-[2rem] border border-white/[0.07] overflow-hidden bg-[#080A0F] shadow-[0_60px_120px_rgba(0,0,0,0.8)] group">
+              {/* Window chrome */}
+              <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/5 bg-white/[0.02]">
+                <div className="flex items-center gap-2">
+                  <div className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-green-500/70" />
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="text-[10px] font-mono text-white/40 uppercase tracking-widest">ALGO ENGINE VISUALIZER</span>
+                </div>
+                <div className="text-[9px] font-mono text-white/20">IFX_SOVEREIGN_v4</div>
+              </div>
+
+              {/* Chart Area */}
+              <div className="relative p-2 sm:p-4 h-[200px] sm:h-[300px]">
+                <AnimatedCandlesticks className="absolute inset-2 sm:inset-4" />
+              </div>
+
+              {/* Bottom bar */}
+              <div className="flex flex-col sm:flex-row items-center justify-between px-4 py-3 border-t border-white/5 gap-2">
+                <div className="flex items-center gap-4 w-full overflow-x-auto no-scrollbar justify-center sm:justify-start">
+                  {TICKER_ITEMS.slice(0, 3).map((t, i) => (
+                    <div key={i} className="flex items-center gap-1.5 shrink-0">
+                      <span className="text-[9px] text-white/30 font-mono">{t.pair}</span>
+                      <span className={`text-[9px] font-black font-mono ${t.up ? "text-emerald-400" : "text-red-400"}`}>{t.change}</span>
+                    </div>
+                  ))}
+                </div>
+                <span className="text-[8px] sm:text-[9px] font-mono text-white/20 uppercase tracking-widest text-center">Educational Demo Feed</span>
+              </div>
+
+              {/* Ambient glow */}
+              <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/5 via-transparent to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none rounded-[2rem]" />
+            </div>
+
+            {/* Floating KPI badges removed to reduce clutter and fake live elements */}
+          </motion.div>
+        </div>
+
+        {/* ===== STATS ROW ===== */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.5, delay: 1.2 }}
-          className="mt-32 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6"
+          transition={{ duration: 1, delay: 1.0 }}
+          className="w-full max-w-5xl mx-auto mt-20 grid grid-cols-2 md:grid-cols-4 gap-4"
         >
           {TRUST_SIGNALS.map((signal, i) => (
-            <div
+            <motion.div
               key={signal.label}
-              className="group relative flex flex-col items-center gap-5 p-10 rounded-[32px] bg-white/[0.015] border border-white/5 hover:bg-white/[0.03] transition-all duration-700 hover:border-emerald-500/20 hover:shadow-[0_20px_60px_rgba(0,0,0,0.5)] overflow-hidden"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.1 + i * 0.1, duration: 0.6 }}
+              className="group flex flex-col items-center gap-3 py-6 px-4 rounded-2xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.04] hover:border-emerald-500/20 transition-all duration-500 cursor-default"
             >
-              <div className="absolute top-0 right-0 p-4 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity">
-                <signal.icon className="w-20 h-20 -mr-4 -mt-4 rotate-12" />
+              <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-emerald-500/[0.08] border border-emerald-500/[0.12] group-hover:bg-emerald-500/[0.15] transition-all">
+                <signal.icon className="w-5 h-5 text-emerald-400" aria-hidden />
               </div>
-              
-              <div className="w-14 h-14 bg-white/5 flex items-center justify-center rounded-2xl relative border border-white/5 group-hover:bg-emerald-500/10 group-hover:border-emerald-500/20 transition-all duration-500">
-                <signal.icon className="w-6 h-6 text-emerald-400" />
+              <div className="text-center">
+                <div className="text-lg sm:text-2xl font-black text-white font-mono tracking-tighter">{signal.label}</div>
+                <div className="text-[10px] font-black text-white/30 uppercase tracking-[0.3em] mt-0.5">{signal.sub}</div>
               </div>
-              
-              <div className="text-center relative z-10">
-                <div className="text-lg font-black text-white mb-1 uppercase tracking-tight italic">{signal.label}</div>
-                <div className="text-[10px] font-black text-white/30 uppercase tracking-[0.4em]">{signal.sub}</div>
-              </div>
-            </div>
+            </motion.div>
           ))}
         </motion.div>
-      </div>
+
+        {/* Scroll cue */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 2.5, duration: 1 }}
+          className="mt-16 flex flex-col items-center gap-2 text-white/20 cursor-default"
+        >
+          <span className="text-[9px] font-black uppercase tracking-[0.4em]">Scroll to explore</span>
+          <motion.div
+            animate={{ y: [0, 6, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <ChevronDown className="w-4 h-4" />
+          </motion.div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 };

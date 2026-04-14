@@ -8,6 +8,7 @@ import { productService } from "../services/productService";
 import { Product } from "../types";
 import { AlgoDetailModal } from "../components/algorithms/AlgoDetailModal";
 import { MarketplaceGrid } from "../components/institutional/MarketplaceGrid";
+import { AnimatedAlgoCube } from "../components/animations/AnimatedAlgoCube";
 import { useAuth } from "../contexts/AuthContext";
 import { useToast } from "../contexts/ToastContext";
 import { useNavigate } from "react-router-dom";
@@ -72,16 +73,24 @@ export const Marketplace = () => {
       />
 
       <div className="max-w-7xl mx-auto px-4 space-y-12">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
-          <div className="space-y-4">
-            <h1 className="text-6xl md:text-[120px] font-serif font-black text-white italic tracking-tighter uppercase leading-[0.8] drop-shadow-2xl">
-               Quant <span className="text-emerald-400">Terminal</span>
+        
+        {/* Animated 3D Algo Intro Section */}
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-12 py-10">
+          <div className="space-y-6 flex-1 z-10">
+            <h1 className="text-6xl md:text-[100px] lg:text-[120px] font-serif font-black text-white italic tracking-tighter uppercase leading-[0.8] drop-shadow-2xl">
+               Quant <br className="hidden lg:block"/><span className="text-emerald-400">Terminal</span>
             </h1>
-            <p className="text-sm text-gray-500 max-w-2xl font-medium uppercase tracking-[0.3em] leading-relaxed">
-              Systematic intelligence engineered for institutional liquidity. Execute high-probability models derived from sovereign capital flow and macroeconomic structural analysis.
+            <p className="text-sm text-gray-400 max-w-xl font-medium uppercase tracking-[0.3em] leading-relaxed">
+              Systematic intelligence engineered for institutional liquidity. Scroll to unfold the neural architecture behind our high-probability models.
             </p>
           </div>
-          
+          <div className="flex-1 w-full flex justify-center lg:justify-end min-h-[400px]">
+            <AnimatedAlgoCube className="w-full scale-75 md:scale-100 origin-center lg:origin-right" />
+          </div>
+        </div>
+
+        {/* Filter Bar */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 pt-10 border-t border-white/[0.05]">
           <div className="flex flex-wrap gap-4">
             {["All", "Scalping", "Swing", "Trend Following"].map((label) => (
               <button
