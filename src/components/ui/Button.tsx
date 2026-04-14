@@ -1,4 +1,4 @@
-import React, { ButtonHTMLAttributes, forwardRef, ElementType, useImperativeHandle, useRef, useState } from 'react';
+import React, { ButtonHTMLAttributes, forwardRef, useImperativeHandle, useRef, useState } from 'react';
 // motion import removed
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -70,7 +70,7 @@ export const Button = forwardRef<HTMLButtonElement, SovereignButtonProps>(
     forwardedRef
   ) => {
     const internalRef = useRef<HTMLButtonElement>(null);
-    useImperativeHandle(forwardedRef, () => internalRef.current!);
+    useImperativeHandle(forwardedRef, () => internalRef.current);
     
     const [isPressed, setIsPressed] = useState(false);
     // Remote Feature Flag - Defaults to local prop if flag query is unavailable
@@ -101,7 +101,11 @@ export const Button = forwardRef<HTMLButtonElement, SovereignButtonProps>(
         {glowEffect && remoteGlowEnabled && !disabled && (
           <div className={cn(
             "absolute -inset-1 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 -z-10 mix-blend-screen",
-            variant === 'sovereign' ? 'bg-[var(--color14)]/40' : variant === 'execution' ? 'bg-emerald-500/40' : 'bg-white/10'
+            (() => {
+              if (variant === 'sovereign') return 'bg-[var(--color14)]/40';
+              if (variant === 'execution') return 'bg-emerald-500/40';
+              return 'bg-white/10';
+            })()
           )} />
         )}
         

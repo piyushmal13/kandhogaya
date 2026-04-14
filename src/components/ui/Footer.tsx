@@ -71,16 +71,19 @@ export const Footer = () => (
           </div>
           
           <div className="flex items-center gap-3">
-            {[`https://instagram.com/${BRANDING.name}`, `https://linkedin.com/company/${BRANDING.name}`].map((url, i) => (
+            {[
+              { Icon: InstagramIcon, url: `https://instagram.com/${BRANDING.name}` },
+              { Icon: LinkedinIcon, url: `https://linkedin.com/company/${BRANDING.name}` }
+            ].map((social) => (
               <a 
-                key={i} 
-                href={url} 
+                key={social.url} 
+                href={social.url} 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="p-2.5 border border-white/5 rounded-xl bg-white/[0.02] text-gray-400 hover:text-emerald-400 hover:border-emerald-500/20 hover:bg-emerald-500/10 transition-all"
                 itemProp="sameAs"
               >
-                {i === 0 ? <InstagramIcon className="w-[18px] h-[18px]" /> : <LinkedinIcon className="w-[18px] h-[18px]" />}
+                <social.Icon className="w-[18px] h-[18px]" />
               </a>
             ))}
           </div>

@@ -79,9 +79,9 @@ const TiltCard = ({ mod, index }: { mod: typeof modules[0]; index: number }) => 
   const accentHex = accent;
   const accentRgba = (opacity: number) => {
     // hex to rgba helper
-    const r = parseInt(accent.slice(1, 3), 16);
-    const g = parseInt(accent.slice(3, 5), 16);
-    const b = parseInt(accent.slice(5, 7), 16);
+    const r = Number.parseInt(accent.slice(1, 3), 16);
+    const g = Number.parseInt(accent.slice(3, 5), 16);
+    const b = Number.parseInt(accent.slice(5, 7), 16);
     return `rgba(${r},${g},${b},${opacity})`;
   };
 

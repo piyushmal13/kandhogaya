@@ -1,14 +1,10 @@
-import React, { useState } from "react";
-import { motion } from "motion/react";
-import { ArrowRight, Shield, Play } from "lucide-react";
+import React, { useState } from 'react';
 import { AlgoGreatness } from "@/components/AlgoGreatness";
 import { PageMeta } from "@/components/site/PageMeta";
-import { BlogSection } from "@/components/home/BlogSection";
 import { EcosystemSection } from "@/components/home/EcosystemSection";
 import { GlobalReach } from "@/components/home/GlobalReach";
 import { HeroSection } from "@/components/home/HeroSection";
 import { MarketTicker } from "@/components/home/MarketTicker";
-import { WebinarPromo } from "@/components/home/WebinarPromo";
 import { PartnerLogos } from "@/components/ui/PartnerLogos";
 import { TrustGrid } from "@/components/home/TrustGrid";
 import { NewsletterPopup } from "@/components/ui/NewsletterPopup";
@@ -16,8 +12,7 @@ import { SignupForm } from "@/components/ui/SignupForm";
 import { ReviewPromptModal } from "@/components/ui/ReviewPromptModal";
 import { ExitIntentModal } from "@/components/ui/ExitIntentModal";
 import { LazySection } from "@/components/ui/LazySection";
-import { SovereignButton } from "@/components/ui/SovereignButton";
-import { educationalOrganizationSchema, websiteSchema, faqSchema, goldAlgoCourseSchema } from "@/utils/structuredData";
+import { educationalOrganizationSchema, websiteSchema, faqSchema, goldAlgoCourseSchema, breadcrumbSchema } from "@/utils/structuredData";
 
 // SEO FAQ — targets high-volume Q&A snippets in Google Search
 const homeFaqs = [

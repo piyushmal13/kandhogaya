@@ -100,9 +100,8 @@ export const Navbar = () => {
           </Link>
 
           {/* Desktop Nav */}
-          <div 
+          <nav 
             className="hidden md:flex items-center gap-1"
-            role="navigation"
             aria-label="Main Navigation"
             itemScope
             itemType="https://schema.org/SiteNavigationElement"
@@ -132,7 +131,7 @@ export const Navbar = () => {
                 </Link>
               );
             })}
-          </div>
+          </nav>
 
           {/* Desktop Auth */}
           <div className="hidden md:flex items-center gap-3">
