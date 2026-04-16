@@ -36,6 +36,8 @@ export const AgentDashboard = () => {
     pendingPayouts: 0
   });
   const [salesData, setSalesData] = useState<any[]>([]);
+  const [leadsData, setLeadsData] = useState<any[]>([]);
+  const [activeTab, setActiveTab] = useState<'sales' | 'leads'>('sales');
 
   // Strict institutional access control
   const isAgent = userProfile?.role === "agent" || userProfile?.role === "admin";
@@ -93,6 +95,15 @@ export const AgentDashboard = () => {
           .order("created_at", { ascending: false });
 
         if (!salesErr) setSalesData(sales || []);
+
+        // 4. CRM: Fetch Leads associated with this agent code
+        const { data: agentLeads, error: leadsErr } = await supabase
+          .from("leads")
+          .select("*")
+          .eq("referred_by_code", data.code)
+          .order("created_at", { ascending: false });
+
+        if (!leadsErr) setLeadsData(agentLeads || []);
       }
     } catch (err) {
       console.error("Affiliate Discovery Error:", err);
@@ -138,6 +149,28 @@ export const AgentDashboard = () => {
     return <Navigate to="/dashboard" />;
   }
 
+  return (
+    <AgentContent 
+      userProfile={userProfile}
+      stats={stats}
+      salesData={salesData}
+      leadsData={leadsData}
+      loading={loading}
+      copied={copied}
+      affiliateCode={affiliateCode}
+      fetchAffiliateData={fetchAffiliateData}
+      copyLink={copyLink}
+      generateCode={generateCode}
+    />
+  );
+};
+
+// Extracted AgentContent to reduce cognitive complexity
+const AgentContent = ({
+  userProfile, stats, salesData, leadsData, loading,
+  copied, affiliateCode, fetchAffiliateData, copyLink, generateCode
+}: any) => {
+  const [activeTab, setActiveTab] = useState<'sales' | 'leads'>('sales');
   const referralLink = affiliateCode ? `${globalThis.location.origin}?ref=${affiliateCode}` : "Establishing profile...";
 
   // 4. CRM: Pipeline Rendering Logic (Extracted for Institutional Stability)
@@ -169,6 +202,34 @@ export const AgentDashboard = () => {
         <div className="text-right">
            <div className="text-[11px] font-black text-[#58F2B6] italic">${sale.sale_amount.toLocaleString()}</div>
            <div className="text-[8px] font-bold text-gray-600 uppercase tracking-widest">Credited</div>
+        </div>
+      </div>
+    ));
+  }
+
+  let leadsPipelineContent;
+  if (loading) {
+    leadsPipelineContent = (
+      <div className="py-10 text-center animate-pulse text-[10px] uppercase font-black tracking-widest text-white/20">Syncing CRM...</div>
+    );
+  } else if (leadsData.length === 0) {
+    leadsPipelineContent = (
+      <div className="py-20 text-center border border-white/5 rounded-3xl bg-white/[0.02]">
+        <p className="text-[10px] text-gray-600 font-bold uppercase tracking-[0.3em] italic leading-relaxed px-10">
+          No acquired prospects yet. <br/>Awaiting market discovery.
+        </p>
+      </div>
+    );
+  } else {
+    leadsPipelineContent = leadsData.map((lead: any, idx: number) => (
+      <div key={lead.id || idx} className="p-4 bg-white/5 border border-white/5 rounded-2xl flex items-center justify-between group hover:border-[#58F2B6]/30 transition-all">
+        <div className="flex flex-col gap-1">
+          <div className="text-[11px] font-black text-white uppercase tracking-wider">{lead.name || 'Anonymous Prospect'}</div>
+          <div className="text-[9px] font-bold text-gray-500 uppercase tracking-widest">{lead.email}</div>
+        </div>
+        <div className="flex flex-col items-end gap-1">
+           <div className="text-[10px] font-black text-[#58F2B6] italic uppercase">{lead.status || 'NEW'}</div>
+           <div className="text-[8px] font-bold text-gray-600 uppercase tracking-widest">{new Date(lead.created_at).toLocaleDateString()}</div>
         </div>
       </div>
     ));
@@ -328,17 +389,33 @@ export const AgentDashboard = () => {
               animate={{ opacity: 1, x: 0 }}
               className="p-10 bg-[var(--color50)] border border-white/5 rounded-[3rem] flex flex-col"
             >
-               <h2 className="text-xl font-black text-white uppercase italic tracking-tighter mb-8 flex items-center gap-3">
-                 <Trophy className="w-5 h-5 text-emerald-500" />
-                 Sales Performance
-               </h2>
+               <div className="flex items-center justify-between mb-8">
+                 <h2 className="text-xl font-black text-white uppercase italic tracking-tighter flex items-center gap-3">
+                   <Trophy className="w-5 h-5 text-emerald-500" />
+                   Performance CRM
+                 </h2>
+                 <div className="flex gap-2">
+                   <button 
+                     onClick={() => setActiveTab('sales')}
+                     className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all ${activeTab === 'sales' ? 'bg-emerald-500/20 text-emerald-500' : 'text-gray-500 hover:text-white'}`}
+                   >
+                     Sales
+                   </button>
+                   <button 
+                     onClick={() => setActiveTab('leads')}
+                     className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all ${activeTab === 'leads' ? 'bg-emerald-500/20 text-emerald-500' : 'text-gray-500 hover:text-white'}`}
+                   >
+                     Prospects
+                   </button>
+                 </div>
+               </div>
                
                <div className="space-y-4 flex-1 overflow-y-auto custom-scrollbar pr-2 max-h-[400px]">
-                  {salesPipelineContent}
+                  {activeTab === 'sales' ? salesPipelineContent : leadsPipelineContent}
                </div>
 
                <button className="w-full py-4 mt-8 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-white transition-all">
-                  Audit Settlement History
+                  Audit {activeTab === 'sales' ? 'Settlement' : 'Prospect'} History
                </button>
             </motion.div>
          </div>

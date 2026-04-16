@@ -99,12 +99,12 @@ export const HeroSection = () => {
         className="relative z-10 w-full max-w-[1440px] mx-auto flex flex-wrap gap-x-16 gap-y-8 border-t border-white/[0.08] pt-6 text-[10px] uppercase font-bold tracking-[0.15em]"
       >
         <div className="flex flex-col gap-1.5">
-          <span className="text-white/30">Architecture</span>
-          <span className="text-white">Deterministic Execution</span>
+          <span className="text-white/30">Curriculum</span>
+          <span className="text-white">Quantitative Mastery</span>
         </div>
         <div className="flex flex-col gap-1.5">
-          <span className="text-white/30">Latency Theory</span>
-          <span className="text-white">Sub-Millisecond Design</span>
+          <span className="text-white/30">Analytics Framework</span>
+          <span className="text-white">Macro Edge Design</span>
         </div>
         <div className="flex flex-col gap-1.5">
           <span className="text-white/30">Market Scope</span>
@@ -112,7 +112,7 @@ export const HeroSection = () => {
         </div>
         <div className="flex flex-col gap-1.5 ml-auto">
           <span className="text-white/30 text-right">System Status</span>
-          <span className="text-emerald-400 flex items-center gap-2 justify-end">
+          <span className="text-[10px] font-mono text-emerald-400 flex items-center gap-2 justify-end">
             <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
             Operational
           </span>

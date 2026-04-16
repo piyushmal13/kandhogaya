@@ -61,11 +61,11 @@ export const MarketTicker = () => {
     <section className="relative h-10 sm:h-12 md:h-14 border-y border-white/5 bg-black/80 backdrop-blur-3xl overflow-hidden z-[40]">
       {/* Label for Institutional Origin */}
       <div className="absolute left-0 top-0 bottom-0 z-20 px-3 sm:px-8 bg-black flex items-center gap-2 border-r border-white/5 shadow-[15px_0_30px_rgba(0,0,0,0.8)]">
-        <Activity className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-emerald-500 animate-pulse" />
-        <span className="text-[8px] sm:text-[10px] font-black text-white uppercase tracking-[0.2em]">Live</span>
-        <div className="hidden sm:flex items-center gap-1 ml-2 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20">
-          <ShieldCheck className="w-2.5 h-2.5 text-emerald-500" />
-          <span className="text-[8px] font-bold text-emerald-500 uppercase tracking-tighter">Verified</span>
+        <Activity className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-cyan-500 animate-pulse" />
+        <span className="text-[8px] sm:text-[10px] font-black text-cyan-500 uppercase tracking-[0.2em] italic">Educational Demo</span>
+        <div className="hidden sm:flex items-center gap-1 ml-2 px-2 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/20">
+          <ShieldCheck className="w-2.5 h-2.5 text-cyan-500" />
+          <span className="text-[8px] font-bold text-cyan-500 uppercase tracking-tighter">Simulated</span>
         </div>
       </div>
 
