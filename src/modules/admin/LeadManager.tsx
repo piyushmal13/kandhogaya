@@ -8,13 +8,17 @@ import {
 import { cn } from "../../utils/cn";
 import { useCRM } from "../../hooks/useCRM";
 
+import { useRealtime } from "../../hooks/useRealtime";
+import { Lead } from "../../types";
+
 /**
  * LeadManager - Institutional Prospect Acquisition Matrix
- * Strict Component Logic: Hook-Driven State Acquisition
+ * Transitioned to LIVE STREAM for zero-latency discovery.
  */
 export const LeadManager = () => {
-  const { leads, loading, page, fetchHistory } = useCRM();
+  const { data: leads, loading } = useRealtime<Lead>('leads');
   const [searchTerm, setSearchTerm] = useState("");
+  const [page, setPage] = useState(0);
 
   const filteredLeads = leads.filter(l => 
     l.name?.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -67,34 +71,51 @@ export const LeadManager = () => {
             {(() => {
                let color = 'bg-gray-600';
                let glow = '';
-               if (lead.status === 'converted') {
+               if (lead.stage === 'CONVERTED') {
                  color = 'bg-emerald-500';
                  glow = 'shadow-[0_0_8px_rgba(16,185,129,0.5)]';
-               } else if (lead.status === 'interested' || lead.status === 'HIGH_INTENT') {
+               } else if (lead.stage === 'HIGH_INTENT' || lead.stage === 'INTERESTED') {
                  color = 'bg-cyan-500';
+               } else if (lead.stage === 'PAYMENT_PENDING') {
+                 color = 'bg-amber-500';
                }
                return <div className={cn("w-1.5 h-1.5 rounded-full animate-pulse", color, glow)} />;
             })()}
-            <span className="text-[10px] font-black text-white uppercase tracking-widest italic">{lead.status}</span>
+            <span className="text-[10px] font-black text-white uppercase tracking-widest italic">{lead.stage}</span>
           </div>
         </td>
         <td className="px-8 py-6">
-          <span className="text-[11px] font-black text-amber-500 italic">${(lead.ltv_projected || 0).toLocaleString()}</span>
+          <div className="flex items-center gap-4">
+             <div className="flex-1 h-1 bg-white/5 rounded-full overflow-hidden w-16">
+                <div 
+                   className="h-full bg-[#58F2B6]" 
+                   style={{ width: `${lead.conversion_probability || 0}%` }}
+                />
+             </div>
+             <span className="text-[11px] font-black text-[#58F2B6] italic">{lead.conversion_probability || 0}%</span>
+          </div>
+        </td>
+        <td className="px-8 py-6 text-center">
+          <span className={cn(
+             "text-[11px] font-black italic",
+             (lead.score || 0) > 70 ? "text-emerald-400" : (lead.score || 0) > 40 ? "text-cyan-400" : "text-gray-500"
+          )}>
+             {lead.score || 0}
+          </span>
         </td>
         <td className="px-8 py-6">
-          <span className="text-[11px] font-black text-white italic">${(lead.revenue_mtd || 0).toLocaleString()}</span>
-        </td>
-        <td className="px-8 py-6">
-          {lead.referred_by_code ? (
+          {lead.assigned_agent_code || lead.referred_by_code ? (
             <div className="flex flex-col">
-               <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest italic">{lead.referred_by_code}</span>
-               <span className="text-[8px] font-bold text-gray-600 uppercase tracking-widest mt-1">Affiliate Signal</span>
+               <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest italic">{lead.assigned_agent_code || lead.referred_by_code}</span>
+               <span className="text-[8px] font-bold text-gray-600 uppercase tracking-widest mt-1">
+                 {lead.assigned_agent_name ? `Via ${lead.assigned_agent_name}` : 'Affiliate Signal'}
+               </span>
             </div>
           ) : (
-            <span className="text-[10px] font-black text-gray-700 uppercase tracking-widest italic">Direct</span>
+            <span className="text-[10px] font-black text-gray-700 uppercase tracking-widest italic">Direct Discovery</span>
           )}
         </td>
-        <td className="px-8 py-6">
+        <td className="px-8 py-6 text-right">
           <span className="text-[10px] font-black text-gray-600 uppercase tracking-widest">{new Date(lead.created_at).toLocaleDateString()}</span>
         </td>
       </tr>
@@ -107,7 +128,13 @@ export const LeadManager = () => {
       {/* 1. Prospect Discovery Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h2 className="text-3xl font-black text-white italic tracking-tighter uppercase">Lead Acquisition Matrix</h2>
+          <div className="flex items-center gap-3">
+            <h2 className="text-3xl font-black text-white italic tracking-tighter uppercase">Lead Acquisition Matrix</h2>
+            <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+               <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+               <span className="text-[8px] font-black text-emerald-500 uppercase tracking-widest">Live Discovery</span>
+            </div>
+          </div>
           <p className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] mt-2">Institutional Prospect Auditing v6.0</p>
         </div>
 
@@ -170,11 +197,11 @@ export const LeadManager = () => {
             <thead>
               <tr className="border-b border-white/5 bg-white/5">
                 <th className="px-8 py-6 text-[9px] font-black text-gray-400 uppercase tracking-[0.3em]">Institutional Identity</th>
-                <th className="px-8 py-6 text-[9px] font-black text-gray-400 uppercase tracking-[0.3em]">Status Mapping</th>
-                 <th className="px-8 py-6 text-[9px] font-black text-gray-400 uppercase tracking-[0.3em]">LTV Forecast</th>
-                 <th className="px-8 py-6 text-[9px] font-black text-gray-400 uppercase tracking-[0.3em]">Revenue MTD</th>
-                 <th className="px-8 py-6 text-[9px] font-black text-gray-400 uppercase tracking-[0.3em]">Referral Signal</th>
-                 <th className="px-8 py-6 text-[9px] font-black text-gray-400 uppercase tracking-[0.3em]">Discovery Date</th>
+                <th className="px-8 py-6 text-[9px] font-black text-gray-400 uppercase tracking-[0.3em]">Lifecycle Stage</th>
+                 <th className="px-8 py-6 text-[9px] font-black text-gray-400 uppercase tracking-[0.3em]">Conversion Prob.</th>
+                 <th className="px-8 py-6 text-[9px] font-black text-gray-400 uppercase tracking-[0.3em] text-center">Score</th>
+                 <th className="px-8 py-6 text-[9px] font-black text-gray-400 uppercase tracking-[0.3em]">Attribution code</th>
+                 <th className="px-8 py-6 text-[9px] font-black text-gray-400 uppercase tracking-[0.3em] text-right">Discovery Date</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
@@ -190,15 +217,15 @@ export const LeadManager = () => {
           </div>
           <div className="flex items-center gap-2">
             <button 
-              disabled={page === 0 || loading}
-              onClick={() => fetchHistory(page - 1)}
+              disabled={loading}
+              onClick={() => setPage(page - 1)}
               className="p-2 bg-zinc-900 border border-white/10 rounded-xl hover:border-emerald-500 disabled:opacity-30 disabled:hover:border-white/10 transition-all group"
             >
               <ChevronLeft className="w-4 h-4 text-gray-500 group-hover:text-emerald-500" />
             </button>
             <button 
               disabled={loading || leads.length < 20}
-              onClick={() => fetchHistory(page + 1)}
+              onClick={() => setPage(page + 1)}
               className="p-2 bg-zinc-900 border border-white/10 rounded-xl hover:border-emerald-500 disabled:opacity-30 disabled:hover:border-white/10 transition-all group"
             >
               <ChevronRight className="w-4 h-4 text-gray-500 group-hover:text-emerald-500" />

@@ -298,18 +298,23 @@ export interface BotLicense {
 
 export interface Lead {
   id: string;
-  name: string;
   email: string;
-  status: 'cold' | 'warm' | 'hot' | 'active' | 'churned' | 'converted' | 'interested' | 'HIGH_INTENT';
   source?: string;
   created_at: string;
-  revenue_mtd: number;
-  ltv_projected: number;
-  last_active_symbol?: string;
-  engagement_score?: number;
+  stage: 'NEW' | 'INTERESTED' | 'HIGH_INTENT' | 'PAYMENT_PENDING' | 'CONVERTED';
+  score?: number;
+  is_hot?: boolean;
+  last_action_at?: string;
+  conversion_probability?: number;
+  priority_tag?: string;
   referred_by_code?: string;
-  metadata?: Record<string, any>;
+  assigned_to?: string; // agent_id
+  crm_metadata?: Record<string, any>;
+  metadata?: Record<string, any>; // legacy compatibility
+
   // UI Virtual Fields (Joined)
+  name?: string; // Falls back to email in mapper
+  status?: string; // Maps from 'stage' in mapper
   active_licenses?: number;
   webinar_count?: number;
 }

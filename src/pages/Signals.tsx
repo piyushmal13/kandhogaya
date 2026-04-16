@@ -149,7 +149,7 @@ const SignalPreview = () => (
         >
           <div className="text-emerald-400 font-bold text-4xl mb-1">+450</div>
           <div className="text-xs uppercase tracking-widest font-mono mb-3" style={{ color: "var(--text-muted)" }}>
-            Pips Captured
+            Points (Demo)
           </div>
           <div className="h-1.5 w-full rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.05)" }}>
             <motion.div
@@ -173,7 +173,7 @@ const SignalPreview = () => (
           <div>
             <div className="text-white font-bold text-lg">94%</div>
             <div className="text-xs uppercase tracking-widest" style={{ color: "var(--text-muted)" }}>
-              Accuracy
+              Fidelity
             </div>
           </div>
         </motion.div>
@@ -703,16 +703,15 @@ const FinalCTA = () => (
 export const Signals = () => (
   <div className="min-h-screen" style={{ background: "var(--bg-base)" }}>
     <PageMeta
-      title="Live Trading Signals"
-      description="Access IFXTrades live signal workflows — institutional-grade forex and gold signals with exact entry, stop loss, and take profit. Join 12,400+ traders."
+      title="Quantitative Model Alerts"
+      description="Access IFXTrades model workflows — institutional-grade forex and gold setups with exact entry, stop loss, and take profit for educational demonstration. Join 12,400+ members."
       path="/signals"
       keywords={[
-        "forex signals",
-        "gold signals",
-        "live trading signals",
-        "XAUUSD signals",
-        "WhatsApp trading signals",
-        "forex signal service",
+        "quantitative models",
+        "educational signals",
+        "algo trading workflows",
+        "institutional research",
+        "market setups",
       ]}
       structuredData={[
         breadcrumbSchema([
@@ -721,16 +720,16 @@ export const Signals = () => (
         ]),
         faqSchema([
           {
-            question: "How are IFXTrades signals delivered?",
-            answer: "Signals are delivered instantly via a private WhatsApp channel with exact entry, stop loss, and take profit levels for gold (XAUUSD) and major forex pairs.",
+            question: "How are IFXTrades workflows delivered?",
+            answer: "Educational model alerts are delivered instantly via a private WhatsApp channel with exact entry, stop loss, and take profit zones.",
           },
           {
-            question: "What is the accuracy rate of IFXTrades signals?",
-            answer: "Our signals maintain an 82.4% win rate based on trailing twelve-month performance data, with a profit factor of 3.24.",
+            question: "What is the fidelity rate of IFXTrades models?",
+            answer: "Our models maintain an 82.4% historical simulation fidelity based on trailing twelve-month performance data.",
           },
           {
             question: "How much do the signal plans cost?",
-            answer: "Plans start at $20/month for 1-month access, $50 for 3 months, and $80 for 6 months. All plans include daily signals with exact entry, SL, and TP levels.",
+            answer: "Plans start at $20/month for 1-month access, $50 for 3 months, and $80 for 6 months. All plans include daily educational setups.",
           },
         ]),
       ]}

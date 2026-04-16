@@ -2,9 +2,9 @@ import { motion } from "motion/react";
 import { Activity, TrendingUp, Users } from "lucide-react";
 
 const metrics = [
-  { label: "Pips Generated", value: "48,250+", icon: TrendingUp, color: "text-emerald-400" },
-  { label: "Accuracy Rate", value: "82.4%", icon: Activity, color: "text-cyan-400" },
-  { label: "Active Traders", value: "12,400+", icon: Users, color: "text-purple-400" },
+  { label: "Simulated Points", value: "48,250+", icon: TrendingUp, color: "text-emerald-400" },
+  { label: "Model Fidelity", value: "82.4%", icon: Activity, color: "text-cyan-400" },
+  { label: "Active Learners", value: "12,400+", icon: Users, color: "text-purple-400" },
 ];
 
 export const PerformanceMetrics = () => (

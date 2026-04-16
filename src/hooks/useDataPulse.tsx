@@ -7,8 +7,8 @@ import { supabase, safeQuery } from "../lib/supabase";
 import { Signal, Webinar, MarketPair } from "../types";
 
 export interface DashboardStats {
-  winRate: string;
-  totalPips: number;
+  fidelityScale: string;
+  totalPoints: number;
 }
 
 interface DataPulseContextType {
@@ -59,8 +59,8 @@ export const DataPulseProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const performanceStats: DashboardStats = useMemo(() => {
     const perfData = Array.isArray(perfResult) ? perfResult[0] : (perfResult?.data || perfResult);
     return {
-      winRate: perfData?.win_rate || "74%",
-      totalPips: perfData?.total_pips || 12000
+      fidelityScale: perfData?.win_rate ? `${perfData.win_rate}%` : "74%",
+      totalPoints: perfData?.total_pips || 12000
     };
   }, [perfResult]);
 

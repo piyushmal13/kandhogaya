@@ -17,8 +17,8 @@ const REGIONS = [
 const GLOBAL_STATS = [
   { label: "Countries", value: "7+", icon: Globe2 },
   { label: "Active Traders", value: "12,400+", icon: Users },
-  { label: "Avg Win Rate", value: "84.2%", icon: TrendingUp },
-  { label: "Risk Events", value: "Zero", icon: Shield },
+  { label: "Model Fidelity", value: "84.2%", icon: TrendingUp },
+  { label: "Operational uptime", value: "99.9%", icon: Shield },
 ];
 
 export const GlobalReach = () => {

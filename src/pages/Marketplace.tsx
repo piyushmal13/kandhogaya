@@ -172,8 +172,8 @@ export const Marketplace = () => {
 
         <section className="grid grid-cols-1 md:grid-cols-3 gap-10 pt-12 border-t border-white/5">
           {[
-            { icon: ShieldCheck, title: "Verified Integrity", desc: "Every algorithm passes rigorous institutional backtesting on raw exchange tick data." },
-            { icon: Activity, title: "Live Telemetry", desc: "Real-time win rates and monthly returns synced directly via MT5/Supabase link." },
+            { icon: ShieldCheck, title: "Verified Integrity", desc: "Every model passes rigorous institutional backtesting for educational simulation." },
+            { icon: Activity, title: "Fidelity Telemetry", desc: "Real-time model fidelity and simulated monthly projections synced seamlessly." },
             { icon: TrendingUp, title: "Quant Origin", desc: "Built by the proprietary desk managing institutional capital. High-alpha execution." }
           ].map((item) => (
             <div key={item.title} className="space-y-4 group">

@@ -30,10 +30,10 @@ export const Results = () => {
   return (
     <div className="pt-32 pb-24">
       <PageMeta
-        title="Verified Trading Performance | Sovereign Terminal"
-        description="Review IFX Trades audited performance results: 82.4% win rate, 3.24 profit factor, equity growth."
+        title="Verified Quantitative Performance | Sovereign Terminal"
+        description="Review IFX Trades audited quantitative model results: 82.4% fidelity, 3.24 profit factor, equity growth."
         path="/results"
-        keywords={["forex trading results", "verified trading performance"]}
+        keywords={["forex quantitative results", "verified model performance"]}
       />
 
       <div className="max-w-7xl mx-auto px-4 space-y-16">
@@ -49,7 +49,7 @@ export const Results = () => {
           
           <div className="flex gap-8">
              <div className="flex flex-col items-end">
-                <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.3em] mb-1 leading-none">Pips Captured</span>
+                <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.3em] mb-1 leading-none">Yield Points Captured</span>
                 <span className="text-xl font-black text-[#58F2B6] font-mono tracking-tighter">
                    +{results.reduce((acc, r) => acc + (r.pips || 0), 0).toLocaleString() || "48,240"}
                 </span>
@@ -96,6 +96,8 @@ export const Results = () => {
                         textTransform: "uppercase"
                       }}
                       itemStyle={{ color: "#58F2B6" }}
+                      labelFormatter={(label) => `Cycle: ${label}`}
+                      formatter={(value: any) => [`${value} Points`, 'Yield Integrity']}
                     />
                     <Area type="monotone" dataKey="pips" stroke="#58F2B6" strokeWidth={3} fill="url(#ifxCurve)" />
                   </AreaChart>

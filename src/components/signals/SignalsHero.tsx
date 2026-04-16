@@ -53,7 +53,7 @@ export const SignalsHero = () => {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ background: "var(--accent)" }} />
             <span className="relative inline-flex rounded-full h-2 w-2" style={{ background: "var(--accent)" }} />
           </span>
-          LIVE SIGNAL DESK ACTIVE
+          QUANTITATIVE RESEARCH DESK ACTIVE
         </motion.div>
 
         <motion.h1
@@ -63,7 +63,7 @@ export const SignalsHero = () => {
           className="text-5xl md:text-8xl font-bold text-white tracking-tighter mb-8 leading-tight"
         >
           Algorithmic Execution. <br />
-          <span className="site-title-gradient">Zero Emotion.</span>
+          <span className="site-title-gradient">Zero Bias.</span>
         </motion.h1>
 
         <motion.p
@@ -73,9 +73,7 @@ export const SignalsHero = () => {
           className="text-lg md:text-2xl mb-12 max-w-3xl mx-auto leading-relaxed font-light"
           style={{ color: "var(--text-muted)" }}
         >
-          Institutional-grade trade setups parsed by our active neural engine and
-          delivered directly to your phone. We analyze global liquidity voids and
-          execute with precision.
+          Institutional-grade educational models parsed by our active neural engine. We analyze global liquidity voids to demonstrate precise simulation environments.
         </motion.p>
 
         <motion.button
@@ -89,14 +87,14 @@ export const SignalsHero = () => {
             color: "var(--accent-fg)",
             boxShadow: "0 0 60px rgba(88,242,182,0.4)",
           }}
-          aria-label="Join the Signal Desk — scroll to pricing"
+          aria-label="Access Quantitative Models — scroll to pricing"
         >
           <div
             className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500"
             aria-hidden="true"
           />
           <span className="relative z-10 flex items-center gap-2">
-            Join the Signal Desk
+            Access Quantitative Models
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
           </span>
         </motion.button>

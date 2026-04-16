@@ -5,17 +5,17 @@ import { cn } from "@/utils/cn";
 
 interface StatsGridProps {
   licenseCount: number;
-  winRate: string;
+  fidelityRate: string;
   signalCount: number;
-  totalPips: number;
+  totalPoints: number;
 }
 
-export const StatsGrid: React.FC<StatsGridProps> = ({ licenseCount, winRate, signalCount, totalPips }) => {
+export const StatsGrid: React.FC<StatsGridProps> = ({ licenseCount, fidelityRate, signalCount, totalPoints }) => {
   const statsConfig = [
     { label: "Active Engines", value: licenseCount, icon: Activity, color: "text-emerald-500", helper: "ALGO CLEARANCE" },
-    { label: "Alpha Win Rate", value: winRate, icon: Target, color: "text-cyan-500", helper: "PROBABILISTIC" },
+    { label: "Alpha Fidelity", value: fidelityRate, icon: Target, color: "text-cyan-500", helper: "PROBABILISTIC" },
     { label: "Signal Velocity", value: signalCount, icon: Zap, color: "text-emerald-500", helper: "DAILY PULSE" },
-    { label: "Systemic Pips", value: totalPips.toLocaleString(), icon: Clock, color: "text-emerald-500", helper: "NET ACCRUAL" }
+    { label: "Yield Points", value: totalPoints.toLocaleString(), icon: Clock, color: "text-emerald-500", helper: "NET ACCRUAL" }
   ];
 
   return (

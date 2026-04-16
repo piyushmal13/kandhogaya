@@ -22,6 +22,8 @@ import { useAuth } from "../contexts/AuthContext";
 import { useToast } from "../contexts/ToastContext";
 import { PageMeta } from "../components/site/PageMeta";
 import { DashboardLayout } from "@/components/institutional/DashboardLayout";
+import { useRealtime } from "../hooks/useRealtime";
+import { Lead } from "../types";
 
 export const AgentDashboard = () => {
   const { userProfile, loading: authLoading } = useAuth();
@@ -41,6 +43,10 @@ export const AgentDashboard = () => {
 
   // Strict institutional access control
   const isAgent = userProfile?.role === "agent" || userProfile?.role === "admin";
+
+  // REALTIME DISCOVERY: Sub-second performance tracking
+  const { data: liveSales } = useRealtime<any>("sales_tracking", `agent_id=${userProfile?.id}`);
+  const { data: liveLeads } = useRealtime<Lead>("leads", `referred_by_code='${affiliateCode}'`);
 
   useEffect(() => {
     if (userProfile?.id && isAgent) {
@@ -153,8 +159,8 @@ export const AgentDashboard = () => {
     <AgentContent 
       userProfile={userProfile}
       stats={stats}
-      salesData={salesData}
-      leadsData={leadsData}
+      salesData={liveSales.length > 0 ? liveSales : salesData}
+      leadsData={liveLeads.length > 0 ? liveLeads : leadsData}
       loading={loading}
       copied={copied}
       affiliateCode={affiliateCode}
@@ -228,7 +234,7 @@ const AgentContent = ({
           <div className="text-[9px] font-bold text-gray-500 uppercase tracking-widest">{lead.email}</div>
         </div>
         <div className="flex flex-col items-end gap-1">
-           <div className="text-[10px] font-black text-[#58F2B6] italic uppercase">{lead.status || 'NEW'}</div>
+           <div className="text-[10px] font-black text-[#58F2B6] italic uppercase">{lead.stage || lead.status || 'NEW'}</div>
            <div className="text-[8px] font-bold text-gray-600 uppercase tracking-widest">{new Date(lead.created_at).toLocaleDateString()}</div>
         </div>
       </div>

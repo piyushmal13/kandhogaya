@@ -12,19 +12,35 @@ export const SignupForm = () => {
     if (!supabase) return;
     setStatus('loading');
     
-    const { error } = await supabase.auth.signInWithOtp({ 
-        email,
-        options: { emailRedirectTo: window.location.origin + '/dashboard' }
-    });
+    try {
+      // 1. CRM ATTRIBUTION: Capture referral code from URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const refCode = urlParams.get('ref') || null;
 
-    if (error) {
-      console.error(error);
-      setStatus('error');
-      setTimeout(() => setStatus('idle'), 4000);
-    } else {
+      // 2. LEAD DISCOVERY: Create a warm lead record
+      await supabase.from('leads').upsert({
+        email: email.toLowerCase(),
+        source: 'Landing Page OTP',
+        referred_by_code: refCode,
+        stage: 'NEW',
+        last_action_at: new Date().toISOString()
+      }, { onConflict: 'email' });
+
+      // 3. AUTHENTICATION: Trigger OTP
+      const { error: authError } = await supabase.auth.signInWithOtp({ 
+          email,
+          options: { emailRedirectTo: window.location.origin + '/dashboard' }
+      });
+
+      if (authError) throw authError;
+
       setStatus('success');
       setEmail("");
       setTimeout(() => setStatus('idle'), 5000);
+    } catch (error) {
+      console.error("[Institutional CRM]: Lead Acquisition Failure.", error);
+      setStatus('error');
+      setTimeout(() => setStatus('idle'), 4000);
     }
   };
 

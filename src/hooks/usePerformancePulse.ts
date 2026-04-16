@@ -3,10 +3,10 @@ import { supabase, safeQuery } from '../lib/supabase';
 import { useMemo } from 'react';
 
 export interface PerformanceStats {
-  winRate: string;
-  totalPips: number;
-  profitFactor: number;
-  activeUsers: number;
+  fidelityRate: string;
+  totalPoints: number;
+  yieldMultiplier: number;
+  activeNodes: number;
 }
 
 /**
@@ -36,10 +36,10 @@ export function usePerformancePulse() {
   });
 
   const stats: PerformanceStats = useMemo(() => ({
-    winRate: data?.win_rate ? `${data.win_rate}%` : '82.4%',
-    totalPips: data?.total_pips || 4200,
-    profitFactor: data?.profit_factor || 3.24,
-    activeUsers: data?.userCount || 12400
+    fidelityRate: data?.win_rate ? `${data.win_rate}%` : '82.4%',
+    totalPoints: data?.total_pips || 4200,
+    yieldMultiplier: data?.profit_factor || 3.24,
+    activeNodes: data?.userCount || 12400
   }), [data]);
 
   return {

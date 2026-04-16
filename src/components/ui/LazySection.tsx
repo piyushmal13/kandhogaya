@@ -5,12 +5,14 @@ interface LazySectionProps {
   children: React.ReactNode;
   placeholderHeight?: string;
   threshold?: number;
+  className?: string;
 }
 
 export const LazySection: React.FC<LazySectionProps> = ({ 
   children, 
   placeholderHeight = "400px",
-  threshold = 0.1
+  threshold = 0.1,
+  className
 }) => {
   const ref = React.useRef(null);
   const isInView = useInView(ref, { once: true, amount: threshold });

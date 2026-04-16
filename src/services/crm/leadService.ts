@@ -14,18 +14,28 @@ export const leadService = {
     const offset = page * limit;
     
     try {
-      const rawLeads = await safeQuery<any[]>(
-        publicSupabase
-          .from('leads')
-          .select('*, bot_licenses(*), webinar_registrations(*)')
-          .order('created_at', { ascending: false })
-          .range(offset, offset + limit - 1)
-      );
+      // PROPER CONNECTION LOGIC: Join with agents and affiliate_codes for full context
+      const { data: rawLeads, error } = await publicSupabase
+        .from('leads')
+        .select(`
+          *,
+          bot_licenses(*),
+          webinar_registrations(*),
+          agents:assigned_to(name, code)
+        `)
+        .order('created_at', { ascending: false })
+        .range(offset, offset + limit - 1);
 
+      if (error) throw error;
       if (!rawLeads || rawLeads.length === 0) return [];
-      return (rawLeads as any[]).map(mapLead);
+      
+      return (rawLeads as any[]).map(lead => ({
+        ...mapLead(lead),
+        assigned_agent_name: lead.agents?.name,
+        assigned_agent_code: lead.agents?.code || lead.referred_by_code
+      }));
     } catch (err) {
-      console.error("[Institutional CRM Recovery]: Discovery segment failed. Trapping exception.", err);
+      console.error("[Institutional CRM Recovery]: Discovery segment failed.", err);
       return [];
     }
   },

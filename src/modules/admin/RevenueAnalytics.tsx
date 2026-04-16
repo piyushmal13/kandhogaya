@@ -107,7 +107,7 @@ export const RevenueAnalytics = () => {
           { id: "rev", label: "Gross MTD Revenue", value: `$${data.totalMTD.toLocaleString()}`, icon: DollarSign, color: "text-emerald-500", detail: "+14.8%" },
           { id: "conv", label: "Funnel Conversion", value: "4.2%", icon: Target, color: "text-cyan-500", detail: "Institutional Benchmark" },
           { id: "deal", label: "Average Deal Size", value: "$124", icon: ShoppingCart, color: "text-purple-500", detail: "Pro Tier Leading" },
-          { id: "momentum", label: "Active Momentum", value: "High", icon: Activity, color: "text-amber-500", detail: "15 Signals/Hr" }
+          { id: "momentum", label: "Active Momentum", value: "High", icon: Activity, color: "text-amber-500", detail: "98% Engagement" }
         ].map((s) => (
           <div key={s.id} className="bg-zinc-900 border border-white/10 p-10 rounded-[48px] shadow-2xl relative overflow-hidden group">
             <div className={cn("absolute -top-4 -right-4 p-8 opacity-5 group-hover:opacity-10 transition-opacity", s.color)}>

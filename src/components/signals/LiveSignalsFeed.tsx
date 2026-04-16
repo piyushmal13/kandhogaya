@@ -22,7 +22,7 @@ export const LiveSignalsFeed = () => {
           <div className="flex items-center gap-4">
             <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_15px_rgba(16,185,129,0.5)]" aria-hidden="true" />
             <h2 className="text-xl font-bold text-white tracking-tight uppercase font-mono">
-              Live Signal Pulse
+              Quantitative Alert Pulse
             </h2>
           </div>
           <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10">
@@ -36,7 +36,7 @@ export const LiveSignalsFeed = () => {
         <BlurGate 
           requiredPlan="pro" 
           title="Institutional Parameters Locked"
-          description="Real-time Entry, SL, and TP for institutional setups require an active Pro subscription. High-fidelity signal discovery remains active for your strategy review."
+          description="Educational Entry, Risk Parameter structure, and TP projections for institutional setups require an active Pro subscription. High-fidelity signal discovery remains active for your strategy review."
         >
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {loading
