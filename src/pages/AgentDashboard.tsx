@@ -40,7 +40,6 @@ export const AgentDashboard = () => {
   });
   const [salesData, setSalesData] = useState<any[]>([]);
   const [leadsData, setLeadsData] = useState<any[]>([]);
-  const [activeTab, setActiveTab] = useState<'sales' | 'leads'>('sales');
 
   // Strict institutional access control
   const isAgent = userProfile?.role === "agent" || userProfile?.role === "admin";
@@ -182,67 +181,50 @@ const AgentContent = ({
   const [activeTab, setActiveTab] = useState<'sales' | 'leads'>('sales');
   const referralLink = affiliateCode ? `${globalThis.location.origin}?ref=${affiliateCode}` : "Establishing profile...";
 
-  // 4. CRM: Pipeline Rendering Logic (Extracted for Institutional Stability)
-  let salesPipelineContent;
-  if (loading) {
-    salesPipelineContent = (
-      <div className="py-10 text-center animate-pulse text-[10px] uppercase font-black tracking-widest text-white/20">Syncing CRM...</div>
-    );
-  } else if (salesData.length === 0) {
-    salesPipelineContent = (
+  // Sub-component for clean pipeline rendering
+  const PipelineList = ({ data, type, loading }: { data: any[], type: 'sales' | 'leads', loading: boolean }) => {
+    if (loading) return <div className="py-10 text-center animate-pulse text-[10px] uppercase font-black tracking-widest text-white/20">Syncing CRM...</div>;
+    if (data.length === 0) return (
       <div className="py-20 text-center border border-white/5 rounded-3xl bg-white/[0.02]">
         <p className="text-[10px] text-gray-600 font-bold uppercase tracking-[0.3em] italic leading-relaxed px-10">
-          Institutional signal pipeline empty. <br/>Awaiting market discovery.
+          {type === 'sales' ? 'Institutional signal pipeline empty.' : 'No acquired prospects yet.'} <br/>Awaiting market discovery.
         </p>
       </div>
     );
-  } else {
-    salesPipelineContent = salesData.map((sale: any, idx: number) => (
-      <div key={sale.id || idx} className="p-4 bg-white/5 border border-white/5 rounded-2xl flex items-center justify-between group hover:border-[#58F2B6]/30 transition-all">
-        <div className="flex items-center gap-3">
-           <div className="w-8 h-8 rounded-lg bg-[#58F2B6]/10 flex items-center justify-center text-[#58F2B6] border border-[#58F2B6]/20">
-              <ShoppingCart className="w-4 h-4" />
-           </div>
-           <div>
-              <div className="text-[10px] font-black text-white uppercase tracking-wider line-clamp-1">{sale.product_name || 'System License'}</div>
-              <div className="text-[8px] font-bold text-gray-500 uppercase tracking-widest">{new Date(sale.created_at).toLocaleDateString()}</div>
-           </div>
-        </div>
-        <div className="text-right">
-           <div className="text-[11px] font-black text-[#58F2B6] italic">${sale.sale_amount.toLocaleString()}</div>
-           <div className="text-[8px] font-bold text-gray-600 uppercase tracking-widest">Credited</div>
-        </div>
-      </div>
-    ));
-  }
 
-  let leadsPipelineContent;
-  if (loading) {
-    leadsPipelineContent = (
-      <div className="py-10 text-center animate-pulse text-[10px] uppercase font-black tracking-widest text-white/20">Syncing CRM...</div>
-    );
-  } else if (leadsData.length === 0) {
-    leadsPipelineContent = (
-      <div className="py-20 text-center border border-white/5 rounded-3xl bg-white/[0.02]">
-        <p className="text-[10px] text-gray-600 font-bold uppercase tracking-[0.3em] italic leading-relaxed px-10">
-          No acquired prospects yet. <br/>Awaiting market discovery.
-        </p>
-      </div>
-    );
-  } else {
-    leadsPipelineContent = leadsData.map((lead: any, idx: number) => (
-      <div key={lead.id || idx} className="p-4 bg-white/5 border border-white/5 rounded-2xl flex items-center justify-between group hover:border-[#58F2B6]/30 transition-all">
-        <div className="flex flex-col gap-1">
-          <div className="text-[11px] font-black text-white uppercase tracking-wider">{lead.name || 'Anonymous Prospect'}</div>
-          <div className="text-[9px] font-bold text-gray-500 uppercase tracking-widest">{lead.email}</div>
-        </div>
-        <div className="flex flex-col items-end gap-1">
-           <div className="text-[10px] font-black text-[#58F2B6] italic uppercase">{lead.stage || lead.status || 'NEW'}</div>
-           <div className="text-[8px] font-bold text-gray-600 uppercase tracking-widest">{lead.created_at ? new Date(lead.created_at).toLocaleDateString() : 'N/A'}</div>
-        </div>
+    return data.map((item: any, idx: number) => (
+      <div key={item.id || idx} className="p-4 bg-white/5 border border-white/5 rounded-2xl flex items-center justify-between group hover:border-[#58F2B6]/30 transition-all">
+        {type === 'sales' ? (
+          <>
+            <div className="flex items-center gap-3">
+               <div className="w-8 h-8 rounded-lg bg-[#58F2B6]/10 flex items-center justify-center text-[#58F2B6] border border-[#58F2B6]/20">
+                  <ShoppingCart className="w-4 h-4" />
+               </div>
+               <div>
+                  <div className="text-[10px] font-black text-white uppercase tracking-wider line-clamp-1">{item.product_name || 'System License'}</div>
+                  <div className="text-[8px] font-bold text-gray-500 uppercase tracking-widest">{new Date(item.created_at).toLocaleDateString()}</div>
+               </div>
+            </div>
+            <div className="text-right">
+               <div className="text-[11px] font-black text-[#58F2B6] italic">${item.sale_amount.toLocaleString()}</div>
+               <div className="text-[8px] font-bold text-gray-600 uppercase tracking-widest">Credited</div>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="flex flex-col gap-1">
+              <div className="text-[11px] font-black text-white uppercase tracking-wider">{item.name || 'Anonymous Prospect'}</div>
+              <div className="text-[9px] font-bold text-gray-500 uppercase tracking-widest">{item.email}</div>
+            </div>
+            <div className="flex flex-col items-end gap-1">
+               <div className="text-[10px] font-black text-[#58F2B6] italic uppercase">{item.stage || item.status || 'NEW'}</div>
+               <div className="text-[8px] font-bold text-gray-600 uppercase tracking-widest">{item.created_at ? new Date(item.created_at).toLocaleDateString() : 'N/A'}</div>
+            </div>
+          </>
+        )}
       </div>
     ));
-  }
+  };
 
   return (
     <DashboardLayout>
@@ -420,7 +402,11 @@ const AgentContent = ({
                </div>
                
                <div className="space-y-4 flex-1 overflow-y-auto custom-scrollbar pr-2 max-h-[400px]">
-                  {activeTab === 'sales' ? salesPipelineContent : leadsPipelineContent}
+                  <PipelineList 
+                    data={activeTab === 'sales' ? salesData : leadsData} 
+                    type={activeTab} 
+                    loading={loading} 
+                  />
                </div>
 
                <button className="w-full py-4 mt-8 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-white transition-all">

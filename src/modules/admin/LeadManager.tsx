@@ -95,12 +95,15 @@ export const LeadManager = () => {
           </div>
         </td>
         <td className="px-8 py-6 text-center">
-          <span className={cn(
-             "text-[11px] font-black italic",
-             (lead.score || 0) > 70 ? "text-emerald-400" : (lead.score || 0) > 40 ? "text-cyan-400" : "text-gray-500"
-          )}>
-             {lead.score || 0}
-          </span>
+          {(() => {
+            const score = lead.score || 0;
+            const scoreColor = score > 70 ? "text-emerald-400" : score > 40 ? "text-cyan-400" : "text-gray-500";
+            return (
+              <span className={cn("text-[11px] font-black italic", scoreColor)}>
+                {score}
+              </span>
+            );
+          })()}
         </td>
         <td className="px-8 py-6">
           {lead.assigned_agent_code || lead.referred_by_code ? (

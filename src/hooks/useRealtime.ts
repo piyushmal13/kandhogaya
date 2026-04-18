@@ -35,32 +35,34 @@ export function useRealtime<T extends { id: string | number }>(
     fetchInitial();
 
     // 2. LIVE SYNCHRONIZATION: Subscribe to change stream
+    const handlePayload = (payload: RealtimePostgresChangesPayload<T>) => {
+      setData((current) => {
+        const safeCurrent = Array.isArray(current) ? current : [];
+        
+        // Hardening: Defensive checks for payload integrity
+        if (!payload || (!payload.new && !payload.old)) return safeCurrent;
+
+        if (payload.eventType === 'INSERT' && payload.new) {
+          return [payload.new, ...safeCurrent].slice(0, 50);
+        }
+        if (payload.eventType === 'UPDATE' && payload.new) {
+          return safeCurrent.map(item => item.id === payload.new.id ? payload.new : item);
+        }
+        if (payload.eventType === 'DELETE' && payload.old) {
+          return safeCurrent.filter(item => item.id !== payload.old.id);
+        }
+        return safeCurrent;
+      });
+      
+      if (onUpdate) onUpdate(payload);
+    };
+
     const channel = supabase
-      .channel(`realtime_${table}`)
+      .channel(`${table}_realtime_${filter?.replaceAll(/[^a-zA-Z0-9]/g, '_') || 'all'}`)
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table, filter },
-        (payload: RealtimePostgresChangesPayload<T>) => {
-          setData((current) => {
-            const safeCurrent = Array.isArray(current) ? current : [];
-            
-            // Hardening: Defensive checks for payload integrity
-            if (!payload || (!payload.new && !payload.old)) return safeCurrent;
-
-            if (payload.eventType === 'INSERT' && payload.new) {
-              return [payload.new, ...safeCurrent].slice(0, 50);
-            }
-            if (payload.eventType === 'UPDATE' && payload.new) {
-              return safeCurrent.map(item => item.id === payload.new.id ? payload.new : item);
-            }
-            if (payload.eventType === 'DELETE' && payload.old) {
-              return safeCurrent.filter(item => item.id !== payload.old.id);
-            }
-            return safeCurrent;
-          });
-          
-          if (onUpdate) onUpdate(payload);
-        }
+        handlePayload
       )
       .subscribe();
 
