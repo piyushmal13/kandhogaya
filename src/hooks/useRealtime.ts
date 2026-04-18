@@ -22,7 +22,7 @@ export function useRealtime<T extends { id: string | number }>(
       if (filter) {
         // Simple equality filter for now
         const [column, value] = filter.split('=');
-        query = query.eq(column.trim(), value.trim().replace(/['"]/g, ''));
+        query = query.eq(column.trim(), value.trim().replaceAll(/['"]/g, ''));
       }
       
       const { data: initialData, error } = await query.order('created_at', { ascending: false }).limit(50);

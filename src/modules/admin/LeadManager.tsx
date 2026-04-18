@@ -6,7 +6,6 @@ import {
   TrendingUp
 } from "lucide-react";
 import { cn } from "../../utils/cn";
-import { useCRM } from "../../hooks/useCRM";
 
 import { useRealtime } from "../../hooks/useRealtime";
 import { Lead } from "../../types";

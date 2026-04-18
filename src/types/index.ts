@@ -317,6 +317,8 @@ export interface Lead {
   status?: string; // Maps from 'stage' in mapper
   active_licenses?: number;
   webinar_count?: number;
+  assigned_agent_code?: string;
+  assigned_agent_name?: string;
 }
 
 export interface WebinarRegistration {

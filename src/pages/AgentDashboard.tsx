@@ -18,6 +18,7 @@ import {
   Trophy
 } from "lucide-react";
 import { supabase } from "../lib/supabase";
+import { ErrorBoundary } from "../components/ui/ErrorBoundary";
 import { useAuth } from "../contexts/AuthContext";
 import { useToast } from "../contexts/ToastContext";
 import { PageMeta } from "../components/site/PageMeta";
