@@ -9,10 +9,11 @@ import { cn } from "../../utils/cn";
 
 import { useRealtime } from "../../hooks/useRealtime";
 import { Lead } from "../../types";
-import { ErrorBoundary } from "../../components/ui/ErrorBoundary";
 
 const ScoreBadge = ({ score }: { score: number }) => {
-  const scoreColor = score > 70 ? "text-emerald-400" : score > 40 ? "text-cyan-400" : "text-gray-500";
+  let scoreColor = "text-gray-500";
+  if (score > 70) scoreColor = "text-emerald-400";
+  else if (score > 40) scoreColor = "text-cyan-400";
   return (
     <span className={cn("text-[11px] font-black italic", scoreColor)}>
       {score}
