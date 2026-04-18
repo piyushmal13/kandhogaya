@@ -35,25 +35,25 @@ export function useRealtime<T extends { id: string | number }>(
     fetchInitial();
 
     // 2. LIVE SYNCHRONIZATION: Subscribe to change stream
-    const handlePayload = (payload: RealtimePostgresChangesPayload<T>) => {
-      setData((current) => {
-        const safeCurrent = Array.isArray(current) ? current : [];
-        
-        // Hardening: Defensive checks for payload integrity
-        if (!payload || (!payload.new && !payload.old)) return safeCurrent;
+    // Pure state reducer for institutional data merging
+    const applyDelta = (current: T[], payload: RealtimePostgresChangesPayload<T>): T[] => {
+      const safeCurrent = Array.isArray(current) ? current : [];
+      if (!payload || (!payload.new && !payload.old)) return safeCurrent;
 
-        if (payload.eventType === 'INSERT' && payload.new) {
-          return [payload.new, ...safeCurrent].slice(0, 50);
-        }
-        if (payload.eventType === 'UPDATE' && payload.new) {
-          return safeCurrent.map(item => item.id === payload.new.id ? payload.new : item);
-        }
-        if (payload.eventType === 'DELETE' && payload.old) {
-          return safeCurrent.filter(item => item.id !== payload.old.id);
-        }
-        return safeCurrent;
-      });
-      
+      switch (payload.eventType) {
+        case 'INSERT':
+          return payload.new ? [payload.new, ...safeCurrent].slice(0, 50) : safeCurrent;
+        case 'UPDATE':
+          return payload.new ? safeCurrent.map(item => item.id === payload.new.id ? payload.new : item) : safeCurrent;
+        case 'DELETE':
+          return payload.old ? safeCurrent.filter(item => item.id !== payload.old.id) : safeCurrent;
+        default:
+          return safeCurrent;
+      }
+    };
+
+    const handlePayload = (payload: RealtimePostgresChangesPayload<T>) => {
+      setData((current) => applyDelta(current, payload));
       if (onUpdate) onUpdate(payload);
     };
 

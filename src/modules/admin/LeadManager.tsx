@@ -9,6 +9,16 @@ import { cn } from "../../utils/cn";
 
 import { useRealtime } from "../../hooks/useRealtime";
 import { Lead } from "../../types";
+import { ErrorBoundary } from "../../components/ui/ErrorBoundary";
+
+const ScoreBadge = ({ score }: { score: number }) => {
+  const scoreColor = score > 70 ? "text-emerald-400" : score > 40 ? "text-cyan-400" : "text-gray-500";
+  return (
+    <span className={cn("text-[11px] font-black italic", scoreColor)}>
+      {score}
+    </span>
+  );
+};
 
 /**
  * LeadManager - Institutional Prospect Acquisition Matrix
@@ -95,15 +105,7 @@ export const LeadManager = () => {
           </div>
         </td>
         <td className="px-8 py-6 text-center">
-          {(() => {
-            const score = lead.score || 0;
-            const scoreColor = score > 70 ? "text-emerald-400" : score > 40 ? "text-cyan-400" : "text-gray-500";
-            return (
-              <span className={cn("text-[11px] font-black italic", scoreColor)}>
-                {score}
-              </span>
-            );
-          })()}
+          <ScoreBadge score={lead.score || 0} />
         </td>
         <td className="px-8 py-6">
           {lead.assigned_agent_code || lead.referred_by_code ? (

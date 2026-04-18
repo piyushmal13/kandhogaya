@@ -173,6 +173,51 @@ export const AgentDashboard = () => {
   );
 };
 
+// Sub-component for clean pipeline rendering
+const PipelineList = ({ data, type, loading }: { data: any[], type: 'sales' | 'leads', loading: boolean }) => {
+  if (loading) return <div className="py-10 text-center animate-pulse text-[10px] uppercase font-black tracking-widest text-white/20">Syncing CRM...</div>;
+  if (data.length === 0) return (
+    <div className="py-20 text-center border border-white/5 rounded-3xl bg-white/[0.02]">
+      <p className="text-[10px] text-gray-600 font-bold uppercase tracking-[0.3em] italic leading-relaxed px-10">
+        {type === 'sales' ? 'Institutional signal pipeline empty.' : 'No acquired prospects yet.'} <br/>Awaiting market discovery.
+      </p>
+    </div>
+  );
+
+  return data.map((item: any, idx: number) => (
+    <div key={item.id || idx} className="p-4 bg-white/5 border border-white/5 rounded-2xl flex items-center justify-between group hover:border-[#58F2B6]/30 transition-all">
+      {type === 'sales' ? (
+        <>
+          <div className="flex items-center gap-3">
+             <div className="w-8 h-8 rounded-lg bg-[#58F2B6]/10 flex items-center justify-center text-[#58F2B6] border border-[#58F2B6]/20">
+                <ShoppingCart className="w-4 h-4" />
+             </div>
+             <div>
+                <div className="text-[10px] font-black text-white uppercase tracking-wider line-clamp-1">{item.product_name || 'System License'}</div>
+                <div className="text-[8px] font-bold text-gray-500 uppercase tracking-widest">{new Date(item.created_at).toLocaleDateString()}</div>
+             </div>
+          </div>
+          <div className="text-right">
+             <div className="text-[11px] font-black text-[#58F2B6] italic">${item.sale_amount.toLocaleString()}</div>
+             <div className="text-[8px] font-bold text-gray-600 uppercase tracking-widest">Credited</div>
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="flex flex-col gap-1">
+            <div className="text-[11px] font-black text-white uppercase tracking-wider">{item.name || 'Anonymous Prospect'}</div>
+            <div className="text-[9px] font-bold text-gray-500 uppercase tracking-widest">{item.email}</div>
+          </div>
+          <div className="flex flex-col items-end gap-1">
+             <div className="text-[10px] font-black text-[#58F2B6] italic uppercase">{item.stage || item.status || 'NEW'}</div>
+             <div className="text-[8px] font-bold text-gray-600 uppercase tracking-widest">{item.created_at ? new Date(item.created_at).toLocaleDateString() : 'N/A'}</div>
+          </div>
+        </>
+      )}
+    </div>
+  ));
+};
+
 // Extracted AgentContent to reduce cognitive complexity
 const AgentContent = ({
   userProfile, stats, salesData, leadsData, loading,
@@ -181,50 +226,6 @@ const AgentContent = ({
   const [activeTab, setActiveTab] = useState<'sales' | 'leads'>('sales');
   const referralLink = affiliateCode ? `${globalThis.location.origin}?ref=${affiliateCode}` : "Establishing profile...";
 
-  // Sub-component for clean pipeline rendering
-  const PipelineList = ({ data, type, loading }: { data: any[], type: 'sales' | 'leads', loading: boolean }) => {
-    if (loading) return <div className="py-10 text-center animate-pulse text-[10px] uppercase font-black tracking-widest text-white/20">Syncing CRM...</div>;
-    if (data.length === 0) return (
-      <div className="py-20 text-center border border-white/5 rounded-3xl bg-white/[0.02]">
-        <p className="text-[10px] text-gray-600 font-bold uppercase tracking-[0.3em] italic leading-relaxed px-10">
-          {type === 'sales' ? 'Institutional signal pipeline empty.' : 'No acquired prospects yet.'} <br/>Awaiting market discovery.
-        </p>
-      </div>
-    );
-
-    return data.map((item: any, idx: number) => (
-      <div key={item.id || idx} className="p-4 bg-white/5 border border-white/5 rounded-2xl flex items-center justify-between group hover:border-[#58F2B6]/30 transition-all">
-        {type === 'sales' ? (
-          <>
-            <div className="flex items-center gap-3">
-               <div className="w-8 h-8 rounded-lg bg-[#58F2B6]/10 flex items-center justify-center text-[#58F2B6] border border-[#58F2B6]/20">
-                  <ShoppingCart className="w-4 h-4" />
-               </div>
-               <div>
-                  <div className="text-[10px] font-black text-white uppercase tracking-wider line-clamp-1">{item.product_name || 'System License'}</div>
-                  <div className="text-[8px] font-bold text-gray-500 uppercase tracking-widest">{new Date(item.created_at).toLocaleDateString()}</div>
-               </div>
-            </div>
-            <div className="text-right">
-               <div className="text-[11px] font-black text-[#58F2B6] italic">${item.sale_amount.toLocaleString()}</div>
-               <div className="text-[8px] font-bold text-gray-600 uppercase tracking-widest">Credited</div>
-            </div>
-          </>
-        ) : (
-          <>
-            <div className="flex flex-col gap-1">
-              <div className="text-[11px] font-black text-white uppercase tracking-wider">{item.name || 'Anonymous Prospect'}</div>
-              <div className="text-[9px] font-bold text-gray-500 uppercase tracking-widest">{item.email}</div>
-            </div>
-            <div className="flex flex-col items-end gap-1">
-               <div className="text-[10px] font-black text-[#58F2B6] italic uppercase">{item.stage || item.status || 'NEW'}</div>
-               <div className="text-[8px] font-bold text-gray-600 uppercase tracking-widest">{item.created_at ? new Date(item.created_at).toLocaleDateString() : 'N/A'}</div>
-            </div>
-          </>
-        )}
-      </div>
-    ));
-  };
 
   return (
     <DashboardLayout>
