@@ -32,46 +32,61 @@ const STUDIES = [
 
 export function CaseStudyShowcase() {
   return (
-    <section id="case-studies" className="py-32 px-6 bg-black/40 border-t border-white/5">
+    <section id="case-studies" className="py-32 md:py-48 px-6 bg-[#020202] border-t border-white/[0.05] relative overflow-hidden">
+      {/* Background Decor */}
+      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-emerald-500/5 blur-[150px] rounded-full opacity-10 -z-10" />
+
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row items-end justify-between mb-20 gap-6">
+        <div className="flex flex-col md:flex-row items-end justify-between mb-32 gap-10">
           <div className="max-w-2xl">
-            <h2 className="text-5xl lg:text-7xl font-black text-white font-heading mb-6 uppercase italic tracking-tighter">Proven <span className="text-[#58F2B6]">Execution</span></h2>
-            <p className="text-sm font-medium uppercase tracking-[0.3em] text-white/40">Our algorithms don't just work in backtests. They dominate live markets.</p>
+            <motion.h2 
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              className="text-shimmer mb-8"
+            >
+              Proven <br />
+              <span className="italic font-serif text-gradient-emerald">Execution.</span>
+            </motion.h2>
+            <p className="text-[10px] font-black uppercase tracking-[0.4em] text-white/30 italic">
+              Our algorithms don't just work in backtests. They dominate live markets.
+            </p>
           </div>
-          <SovereignButton variant="secondary" className="px-8" trackingEvent="view_all_case_studies" onClick={() => tracker.track("solutions_case_studies_click")}>
-            View Audit Log <ArrowUpRight className="ml-2 w-4 h-4" />
-          </SovereignButton>
+          <button 
+            onClick={() => tracker.track("solutions_case_studies_click")}
+            className="group px-10 py-5 border border-white/[0.08] text-white font-black text-[10px] uppercase tracking-[0.3em] rounded-2xl transition-all duration-500 hover:bg-white/[0.04] hover:border-white/[0.2] active:scale-95 flex items-center gap-3"
+          >
+            Access Institutional Audits <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+          </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {STUDIES.map((study, i) => (
             <motion.div
               key={study.client}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ delay: i * 0.1, duration: 0.8 }}
               viewport={{ once: true }}
-              className="group relative rounded-[2.5rem] overflow-hidden border border-white/10 bg-white/[0.02] hover:border-[#58F2B6]/40 transition-all duration-700"
+              className="group relative rounded-[3.5rem] overflow-hidden border border-white/[0.06] bg-[#080B12] transition-all duration-700 hover:border-emerald-500/30 hover:shadow-2xl"
             >
-              <div className="aspect-[4/5] overflow-hidden relative grayscale-[0.5] group-hover:grayscale-0 transition-all duration-700">
-                <img src={study.image} alt={study.client} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-60 mix-blend-overlay group-hover:opacity-100" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#020202] via-[#020202]/80 to-transparent" />
-                <div className="absolute bottom-8 left-8 right-8">
-                  <div className="flex flex-wrap gap-2 mb-4">
+              <div className="aspect-[4/5] overflow-hidden relative grayscale-[0.8] group-hover:grayscale-0 transition-all duration-1000 ease-out">
+                <img src={study.image} alt={study.client} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 opacity-40 mix-blend-overlay group-hover:opacity-100" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#080B12] via-[#080B12]/60 to-transparent" />
+                <div className="absolute bottom-10 left-10 right-10">
+                  <div className="flex flex-wrap gap-2.5 mb-6">
                     {study.tags.map(tag => (
-                      <span key={tag} className="px-2.5 py-1 rounded-md bg-[#58F2B6]/10 backdrop-blur-md text-[9px] font-black tracking-widest text-[#58F2B6] border border-[#58F2B6]/20 uppercase">
+                      <span key={tag} className="px-3 py-1.5 rounded-lg bg-emerald-500/10 backdrop-blur-xl text-[8px] font-black tracking-widest text-emerald-500 border border-emerald-500/20 uppercase italic">
                         {tag}
                       </span>
                     ))}
                   </div>
-                  <h3 className="text-2xl font-black italic uppercase tracking-tight text-white">{study.client}</h3>
-                  <div className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 mt-1">{study.industry}</div>
+                  <h3 className="text-3xl font-black italic uppercase tracking-tighter text-white mb-2">{study.client}</h3>
+                  <div className="text-[10px] font-black uppercase tracking-[0.4em] text-white/20">{study.industry}</div>
                 </div>
               </div>
-              <div className="p-8 border-t border-white/10 bg-[#020202]">
-                <div className="text-4xl font-black text-[#58F2B6] font-heading tracking-tighter mb-1">{study.result}</div>
-                <div className="text-xs font-bold uppercase tracking-widest text-white/50">{study.metric}</div>
+              <div className="p-10 border-t border-white/[0.06] bg-[#080B12]">
+                <div className="text-5xl font-black text-emerald-500 tracking-tighter mb-2 italic">{study.result}</div>
+                <div className="text-[10px] font-black uppercase tracking-[0.4em] text-white/30">{study.metric}</div>
               </div>
             </motion.div>
           ))}

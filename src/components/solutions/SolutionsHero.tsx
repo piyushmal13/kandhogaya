@@ -11,38 +11,40 @@ import { SovereignButton } from '@/components/ui/SovereignButton';
  */
 export function SolutionsHero() {
   return (
-    <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden bg-background py-20">
-      {/* Background: Depth Grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808010_1px,transparent_1px),linear-gradient(to_bottom,#80808010_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_80%)]" />
+    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-[#020202] py-32 md:py-64">
+      {/* Background: Depth Grid & Ambient Glow */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.08)_0%,transparent_70%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:60px_60px]" />
+        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.02]" />
+      </div>
       
       <motion.div 
         variants={staggerContainer}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        className="relative z-10 max-w-6xl mx-auto px-6 text-center"
+        className="relative z-10 max-w-7xl mx-auto px-6 text-center"
       >
         <motion.div 
           variants={institutionalVariants}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-500/10 border border-primary-500/20 text-primary-400 text-xs font-bold uppercase tracking-widest mb-8"
+          className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-emerald-500/[0.04] border border-emerald-500/[0.15] text-emerald-500 text-[10px] font-black uppercase tracking-[0.4em] mb-12"
         >
-          <Cpu className="w-3 h-3" />
+          <Cpu className="w-4 h-4" />
           <span>Bespoke Algorithmic Engineering</span>
         </motion.div>
 
         <motion.h1 
           variants={institutionalVariants}
-          className="text-5xl md:text-7xl lg:text-8xl font-black font-sans tracking-tighter text-foreground mb-8 leading-[0.9] uppercase"
+          className="text-shimmer mb-10 leading-[0.9]"
         >
           Custom Systems <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600">
-            Built For Alpha
-          </span>
+          <span className="italic font-serif text-gradient-emerald">Built For Alpha.</span>
         </motion.h1>
 
         <motion.p 
           variants={institutionalVariants}
-          className="text-lg md:text-xl text-foreground/60 max-w-3xl mx-auto mb-12 leading-relaxed font-light tracking-wide uppercase"
+          className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto mb-16 leading-relaxed font-light tracking-wide"
         >
           We don't sell courses. We engineer proprietary trading edges. <br className="hidden md:block" />
           From strategy conceptualization to full-scale deployment on institutional infrastructure.
@@ -50,27 +52,22 @@ export function SolutionsHero() {
 
         <motion.div 
           variants={institutionalVariants}
-          className="flex flex-col sm:flex-row gap-6 justify-center items-center"
+          className="flex flex-col sm:flex-row gap-8 justify-center items-center"
         >
-          <SovereignButton 
-            variant="primary" 
-            glowEffect={true} 
-            size="xl"
-            trackingEvent="solutions_cta_start"
+          <button 
             onClick={() => document.getElementById('configurator')?.scrollIntoView({ behavior: 'smooth' })}
+            className="group relative px-12 py-6 bg-white text-black font-black text-[11px] uppercase tracking-[0.3em] rounded-2xl overflow-hidden transition-all duration-500 hover:scale-[1.05] hover:shadow-[0_20px_40px_rgba(255,255,255,0.1)] active:scale-95 flex items-center gap-4"
           >
             Build Your System
-            <Zap className="ml-2 w-5 h-5" />
-          </SovereignButton>
+            <Zap className="w-5 h-5 group-hover:scale-125 transition-transform text-emerald-600" />
+          </button>
           
-          <SovereignButton 
-            variant="secondary" 
-            size="xl"
-            trackingEvent="solutions_case_studies"
+          <button 
             onClick={() => document.getElementById('case-studies')?.scrollIntoView({ behavior: 'smooth' })}
+            className="group px-12 py-6 border border-white/[0.08] text-white font-black text-[11px] uppercase tracking-[0.3em] rounded-2xl transition-all duration-500 hover:bg-white/[0.04] hover:border-white/[0.2] active:scale-95"
           >
             View Case Studies
-          </SovereignButton>
+          </button>
         </motion.div>
       </motion.div>
     </section>

@@ -6,24 +6,27 @@ import { Link } from "react-router-dom";
 
 const REGIONS = [
   { name: "Dubai", flag: "🇦🇪", lat: 25.2048, lng: 55.2708 },
-  { name: "India", flag: "🇮🇳", lat: 20.5937, lng: 78.9629 },
-  { name: "Thailand", flag: "🇹🇭", lat: 15.87, lng: 100.9925 },
-  { name: "Laos", flag: "🇱🇦", lat: 19.8563, lng: 102.4955 },
-  { name: "South Africa", flag: "🇿🇦", lat: -30.5595, lng: 22.9375 },
-  { name: "Russia", flag: "🇷🇺", lat: 61.524, lng: 105.3188 },
-  { name: "Pakistan", flag: "🇵🇰", lat: 30.3753, lng: 69.3451 },
+  { name: "Mumbai", flag: "🇮🇳", lat: 19.076, lng: 72.8777 },
+  { name: "London", flag: "🇬🇧", lat: 51.5074, lng: -0.1278 },
+  { name: "Singapore", flag: "🇸🇬", lat: 1.3521, lng: 103.8198 },
+  { name: "New York", flag: "🇺🇸", lat: 40.7128, lng: -74.006 },
+  { name: "Tokyo", flag: "🇯🇵", lat: 35.6762, lng: 139.6503 },
+  { name: "Zurich", flag: "🇨🇭", lat: 47.3769, lng: 8.5417 },
 ];
 
 const GLOBAL_STATS = [
-  { label: "Countries", value: "7+", icon: Globe2 },
-  { label: "Active Traders", value: "12,400+", icon: Users },
+  { label: "Partner Desks", value: "12+", icon: Globe2 },
+  { label: "Elite Alumni", value: "8,200+", icon: Users },
   { label: "Model Fidelity", value: "84.2%", icon: TrendingUp },
-  { label: "Operational uptime", value: "99.9%", icon: Shield },
+  { label: "Academic Uptime", value: "99.9%", icon: Shield },
 ];
 
 export const GlobalReach = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const pointerInteracting = useRef(null);
+  const pointerInteractionMovement = useRef(0);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [r, setR] = useState(0);
 
   useEffect(() => {
     let phi = 0;
@@ -43,19 +46,21 @@ export const GlobalReach = () => {
       phi: 0,
       theta: 0.25,
       dark: 1,
-      diffuse: 1.4,
-      mapSamples: 20000,
-      mapBrightness: 14,
-      baseColor: [0.15, 0.18, 0.2],
-      markerColor: [0.06, 0.73, 0.5],
-      glowColor: [0.04, 0.12, 0.08],
+      diffuse: 1.2,
+      mapSamples: 25000,
+      mapBrightness: 8,
+      baseColor: [0.05, 0.05, 0.05],
+      markerColor: [16/255, 185/255, 129/255],
+      glowColor: [16/255, 185/255, 129/255],
       markers: REGIONS.map((r) => ({
         location: [r.lat, r.lng] as [number, number],
-        size: 0.06,
+        size: 0.1,
       })),
       onRender: (state) => {
-        state.phi = phi;
-        phi += 0.004;
+        if (!pointerInteracting.current) {
+          phi += 0.005;
+        }
+        state.phi = phi + r;
         state.width = width * 2;
         state.height = width * 2;
       },
@@ -67,71 +72,73 @@ export const GlobalReach = () => {
       globe.destroy();
       window.removeEventListener("resize", onResize);
     };
-  }, []);
+  }, [r]);
 
   return (
     <section
-      className="py-24 md:py-48 relative overflow-hidden bg-[#020202]"
+      className="py-32 md:py-64 relative overflow-hidden bg-[#020202]"
       aria-labelledby="global-heading"
     >
       {/* Ambient bg */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden>
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[60%] bg-[radial-gradient(ellipse_60%_50%_at_50%_10%,rgba(16,185,129,0.06),transparent)]" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[80%] bg-[radial-gradient(ellipse_60%_50%_at_50%_10%,rgba(16,185,129,0.1),transparent)]" />
+        <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 relative z-10">
-        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+      <div className="max-w-7xl mx-auto px-6 sm:px-12 relative z-10">
+        <div className="flex flex-col lg:flex-row items-center gap-20 lg:gap-32">
           {/* Text Content */}
           <div className="flex-1 text-center lg:text-left order-2 lg:order-1">
             <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/[0.06] border border-emerald-500/[0.12] text-emerald-400 text-[10px] font-black uppercase tracking-[0.3em] mb-8"
+              className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-emerald-500/[0.04] border border-emerald-500/[0.15] text-emerald-500 text-[10px] font-black uppercase tracking-[0.4em] mb-10"
             >
-              <Globe2 className="w-3.5 h-3.5" aria-hidden />
-              Global Infrastructure
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              Global Sovereign Network
             </motion.div>
 
             <motion.h2
               id="global-heading"
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.08 }}
-              className="text-4xl sm:text-6xl md:text-8xl font-black text-white tracking-tighter mb-8 leading-[0.9]"
+              transition={{ duration: 0.8 }}
+              className="text-5xl sm:text-7xl md:text-9xl font-black text-white tracking-tighter mb-10 leading-[0.85] uppercase"
             >
-              Powering{" "}
-              <span className="italic font-serif text-gradient-emerald">Traders</span>
-              <br className="hidden md:block" /> Across the Globe
+              Institutional <br />
+              <span className="italic font-serif text-gradient-emerald">Reach.</span>
             </motion.h2>
 
             <motion.p
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.16 }}
-              className="text-gray-400 text-base md:text-lg mb-12 max-w-lg mx-auto lg:mx-0 leading-relaxed"
+              transition={{ delay: 0.2 }}
+              className="text-gray-400 text-lg md:text-xl mb-16 max-w-xl mx-auto lg:mx-0 leading-relaxed font-light"
             >
-              Our high-performance intelligence hubs serve thousands of active traders
-              in major financial centers and emerging markets worldwide.
+              Our high-fidelity intelligence hubs bridge the gap between retail limitations and institutional execution protocols across the world's most liquid hubs.
             </motion.p>
 
             {/* Region tags */}
             <motion.div
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.24 }}
-              className="flex flex-wrap justify-center lg:justify-start gap-2 mb-12"
+              transition={{ delay: 0.3 }}
+              className="flex flex-wrap justify-center lg:justify-start gap-3 mb-16"
             >
               {REGIONS.map((region) => (
                 <div
                   key={region.name}
-                  className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:border-emerald-500/20 hover:bg-emerald-500/[0.03] transition-all duration-300 cursor-default"
+                  className="group inline-flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-white/[0.02] border border-white/[0.08] hover:border-emerald-500/30 hover:bg-emerald-500/[0.05] transition-all duration-500 cursor-default"
                 >
-                  <span className="text-sm">{region.flag}</span>
-                  <span className="text-[10px] font-black text-white/50 uppercase tracking-wider">
+                  <span className="text-lg grayscale group-hover:grayscale-0 transition-all">{region.flag}</span>
+                  <span className="text-[11px] font-black text-white/40 group-hover:text-white transition-colors uppercase tracking-[0.2em]">
                     {region.name}
                   </span>
                 </div>
@@ -140,48 +147,67 @@ export const GlobalReach = () => {
 
             {/* CTA */}
             <motion.div
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.32 }}
+              transition={{ delay: 0.4 }}
             >
               <Link
                 to="/academy"
-                data-cursor="JOIN"
-                className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-emerald-500 text-black font-black text-sm uppercase tracking-[0.15em] hover:bg-emerald-400 transition-all duration-300 hover:scale-[1.03] active:scale-[0.97] shadow-[0_0_30px_rgba(16,185,129,0.2)] hover:shadow-[0_0_50px_rgba(16,185,129,0.35)]"
+                className="group relative inline-flex items-center gap-4 px-10 py-5 rounded-full bg-white text-black font-black text-xs uppercase tracking-[0.3em] hover:bg-emerald-500 transition-all duration-500 hover:scale-[1.05] active:scale-[0.95] overflow-hidden"
               >
-                Join the Network
-                <ArrowRight className="w-4 h-4" aria-hidden />
+                <span className="relative z-10">Access Academy Desk</span>
+                <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-2 transition-transform" />
               </Link>
             </motion.div>
           </div>
 
-          {/* Globe */}
+          {/* Globe Container */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.85 }}
-            whileInView={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
+            whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-            className="flex-1 w-full max-w-[300px] sm:max-w-[400px] lg:max-w-[520px] aspect-square relative mx-auto order-1 lg:order-2"
+            transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }}
+            className="flex-1 w-full max-w-[320px] sm:max-w-[500px] lg:max-w-[700px] aspect-square relative mx-auto order-1 lg:order-2"
           >
             {/* Globe glow */}
-            <div className="absolute inset-[-20%] bg-emerald-500/[0.08] blur-[100px] rounded-full pointer-events-none animate-pulse" aria-hidden />
-            <canvas
-              ref={canvasRef}
-              style={{ width: "100%", height: "100%", contain: "layout paint size" }}
-              className={`transition-opacity duration-1000 ${isLoaded ? "opacity-100" : "opacity-0"}`}
-              aria-label="Interactive 3D globe showing IFX Trades global presence"
-            />
+            <div className="absolute inset-[-10%] bg-emerald-500/[0.1] blur-[120px] rounded-full pointer-events-none animate-pulse" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <canvas
+                ref={canvasRef}
+                onPointerDown={(e) => {
+                  pointerInteracting.current = e.clientX - pointerInteractionMovement.current;
+                  canvasRef.current!.style.cursor = 'grabbing';
+                }}
+                onPointerUp={() => {
+                  pointerInteracting.current = null;
+                  canvasRef.current!.style.cursor = 'grab';
+                }}
+                onPointerOut={() => {
+                  pointerInteracting.current = null;
+                  canvasRef.current!.style.cursor = 'grab';
+                }}
+                onMouseMove={(e) => {
+                  if (pointerInteracting.current !== null) {
+                    const delta = e.clientX - pointerInteracting.current;
+                    pointerInteractionMovement.current = delta;
+                    setR(delta / 200);
+                  }
+                }}
+                style={{ width: "100%", height: "100%", cursor: 'grab', contain: "layout paint size" }}
+                className={`transition-opacity duration-2000 ${isLoaded ? "opacity-100" : "opacity-0"}`}
+              />
+            </div>
           </motion.div>
         </div>
 
         {/* Stats row */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.3, duration: 0.8 }}
-          className="mt-20 md:mt-28 grid grid-cols-2 md:grid-cols-4 gap-4"
+          transition={{ delay: 0.5, duration: 1 }}
+          className="mt-32 md:mt-48 grid grid-cols-2 md:grid-cols-4 gap-6"
         >
           {GLOBAL_STATS.map((stat, i) => (
             <motion.div
@@ -189,16 +215,16 @@ export const GlobalReach = () => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.35 + i * 0.08 }}
-              className="flex flex-col items-center gap-3 py-6 px-4 rounded-2xl bg-white/[0.02] border border-white/[0.05] hover:border-emerald-500/15 transition-all duration-500 cursor-default group"
+              transition={{ delay: 0.6 + i * 0.1 }}
+              className="group relative flex flex-col items-center gap-5 py-10 px-6 rounded-[2.5rem] bg-white/[0.02] border border-white/[0.08] hover:border-emerald-500/20 hover:bg-emerald-500/[0.03] transition-all duration-700 cursor-default"
             >
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/[0.08] border border-emerald-500/[0.12] flex items-center justify-center group-hover:scale-110 transition-transform">
-                <stat.icon className="w-5 h-5 text-emerald-400" aria-hidden />
+              <div className="w-14 h-14 rounded-2xl bg-emerald-500/[0.08] border border-emerald-500/[0.15] flex items-center justify-center group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                <stat.icon className="w-6 h-6 text-emerald-500" />
               </div>
-              <div className="text-xl sm:text-2xl font-black text-white font-mono tracking-tighter">
+              <div className="text-3xl sm:text-4xl font-black text-white font-mono tracking-tighter">
                 {stat.value}
               </div>
-              <div className="text-[10px] font-black text-white/30 uppercase tracking-[0.3em]">
+              <div className="text-[11px] font-black text-white/20 uppercase tracking-[0.4em] group-hover:text-emerald-500/50 transition-colors">
                 {stat.label}
               </div>
             </motion.div>

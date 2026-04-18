@@ -143,7 +143,15 @@ export const LeadManager = () => {
             onClick={() => {
               const csv = [
                 ["ID", "Name", "Email", "Status", "Source", "Referrer", "Discovery Date"],
-                ...filteredLeads.map(l => [l.id, l.name || 'Anonymous', l.email, l.status, l.source || 'Direct', l.referred_by_code || 'None', new Date(l.created_at || "").toLocaleDateString()])
+                ...filteredLeads.map(l => [
+                  l.id, 
+                  l.name || 'Anonymous', 
+                  l.email || 'N/A', 
+                  l.status || l.stage || 'NEW', 
+                  l.source || 'Direct', 
+                  l.referred_by_code || 'None', 
+                  l.created_at ? new Date(l.created_at).toLocaleDateString() : 'N/A'
+                ])
               ].map(e => e.join(",")).join("\n");
               const blob = new Blob([csv], { type: 'text/csv' });
               const url = globalThis.URL.createObjectURL(blob);

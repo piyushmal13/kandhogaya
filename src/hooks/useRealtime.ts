@@ -26,8 +26,8 @@ export function useRealtime<T extends { id: string | number }>(
       }
       
       const { data: initialData, error } = await query.order('created_at', { ascending: false }).limit(50);
-      if (!error && initialData) {
-        setData(initialData as T[]);
+      if (!error) {
+        setData((initialData as T[]) || []);
       }
       setLoading(false);
     };
@@ -42,16 +42,21 @@ export function useRealtime<T extends { id: string | number }>(
         { event: '*', schema: 'public', table, filter },
         (payload: RealtimePostgresChangesPayload<T>) => {
           setData((current) => {
-            if (payload.eventType === 'INSERT') {
-              return [payload.new, ...current].slice(0, 50);
+            const safeCurrent = Array.isArray(current) ? current : [];
+            
+            // Hardening: Defensive checks for payload integrity
+            if (!payload || (!payload.new && !payload.old)) return safeCurrent;
+
+            if (payload.eventType === 'INSERT' && payload.new) {
+              return [payload.new, ...safeCurrent].slice(0, 50);
             }
-            if (payload.eventType === 'UPDATE') {
-              return current.map(item => item.id === payload.new.id ? payload.new : item);
+            if (payload.eventType === 'UPDATE' && payload.new) {
+              return safeCurrent.map(item => item.id === payload.new.id ? payload.new : item);
             }
-            if (payload.eventType === 'DELETE') {
-              return current.filter(item => item.id !== payload.old.id);
+            if (payload.eventType === 'DELETE' && payload.old) {
+              return safeCurrent.filter(item => item.id !== payload.old.id);
             }
-            return current;
+            return safeCurrent;
           });
           
           if (onUpdate) onUpdate(payload);
@@ -64,5 +69,5 @@ export function useRealtime<T extends { id: string | number }>(
     };
   }, [table, filter]);
 
-  return { data, loading };
+  return { data: Array.isArray(data) ? data : [], loading };
 }

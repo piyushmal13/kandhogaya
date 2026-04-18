@@ -14,90 +14,77 @@ export const SignalsHero = () => {
   return (
     <section
       ref={ref}
-      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-32 pb-24"
-      style={{ background: "linear-gradient(180deg, var(--bg-base), var(--color7))" }}
+      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-32 pb-24 md:pt-48 md:pb-32 bg-[#020202]"
     >
+      {/* Premium Atmospheric Background */}
       <motion.div
         style={{ y, opacity }}
-        className="absolute inset-0 overflow-hidden pointer-events-none will-change-transform"
+        className="absolute inset-0 overflow-hidden pointer-events-none"
         aria-hidden="true"
       >
-        <div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-[1400px] h-[600px] opacity-80"
-          style={{ background: "radial-gradient(ellipse at top, rgba(88,242,182,0.12), transparent 70%)" }}
-        />
-        <div
-          className="absolute inset-0"
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.08)_0%,transparent_70%)]" />
+        <div 
+          className="absolute inset-0 opacity-[0.03]"
           style={{
-            backgroundImage:
-              "linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)",
-            backgroundSize: "120px 120px",
-            maskImage: "radial-gradient(ellipse at center, black 70%, transparent 100%)",
+            backgroundImage: "url('/grid.svg')",
+            backgroundSize: "60px 60px",
+            maskImage: "radial-gradient(ellipse at center, black 40%, transparent 100%)",
           }}
         />
+        {/* Animated Particles or Floaters could go here */}
       </motion.div>
 
-      <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
+      <div className="max-w-6xl mx-auto px-6 text-center relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono tracking-widest mb-6 border"
-          style={{
-            background: "var(--accent-subtle)",
-            borderColor: "rgba(88,242,182,0.2)",
-            color: "var(--accent)",
-          }}
+          className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-emerald-500/[0.04] border border-emerald-500/[0.15] text-emerald-500 text-[10px] font-black uppercase tracking-[0.4em] mb-12"
         >
-          <span className="relative flex h-2 w-2" aria-hidden="true">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ background: "var(--accent)" }} />
-            <span className="relative inline-flex rounded-full h-2 w-2" style={{ background: "var(--accent)" }} />
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
           </span>
-          QUANTITATIVE RESEARCH DESK ACTIVE
+          Sovereign Research Desk Active
         </motion.div>
 
         <motion.h1
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1 }}
-          className="text-5xl md:text-8xl font-bold text-white tracking-tighter mb-8 leading-tight"
+          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+          className="text-shimmer mb-10 leading-[0.9]"
         >
-          Algorithmic Execution. <br />
-          <span className="site-title-gradient">Zero Bias.</span>
+          Research Intelligence. <br />
+          <span className="italic font-serif text-gradient-emerald">High Fidelity.</span>
         </motion.h1>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-lg md:text-2xl mb-12 max-w-3xl mx-auto leading-relaxed font-light"
-          style={{ color: "var(--text-muted)" }}
+          transition={{ duration: 1, delay: 0.2 }}
+          className="text-lg md:text-2xl text-gray-400 max-w-3xl mx-auto leading-relaxed font-light mb-16"
         >
-          Institutional-grade educational models parsed by our active neural engine. We analyze global liquidity voids to demonstrate precise simulation environments.
+          Institutional-grade research models parsed by our active neural engine. We analyze global liquidity voids to demonstrate precise simulation environments for sophisticated participants.
         </motion.p>
 
-        <motion.button
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          onClick={() => document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" })}
-          className="group relative px-10 py-5 font-bold text-lg rounded-2xl overflow-hidden flex items-center gap-3 mx-auto transition-all duration-300"
-          style={{
-            background: "var(--accent)",
-            color: "var(--accent-fg)",
-            boxShadow: "0 0 60px rgba(88,242,182,0.4)",
-          }}
-          aria-label="Access Quantitative Models — scroll to pricing"
+          transition={{ duration: 1, delay: 0.4 }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-6"
         >
-          <div
-            className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500"
-            aria-hidden="true"
-          />
-          <span className="relative z-10 flex items-center gap-2">
-            Access Quantitative Models
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
-          </span>
-        </motion.button>
+          <button
+            onClick={() => document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" })}
+            className="group relative px-12 py-5 bg-white text-black font-black text-[11px] uppercase tracking-[0.3em] rounded-2xl overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-[0_20px_40px_rgba(255,255,255,0.1)] active:scale-95"
+          >
+            Access Research Models
+          </button>
+          <button
+            onClick={() => document.getElementById("performance")?.scrollIntoView({ behavior: "smooth" })}
+            className="px-12 py-5 bg-white/[0.03] text-white/60 border border-white/[0.08] font-black text-[11px] uppercase tracking-[0.3em] rounded-2xl transition-all duration-500 hover:bg-white/[0.06] hover:text-white"
+          >
+            Audit Performance
+          </button>
+        </motion.div>
       </div>
     </section>
   );

@@ -30,22 +30,27 @@ interface PricingPlan {
 // ── Signal Preview Section ──
 const SignalPreview = () => (
   <section
-    className="py-24 border-y border-[var(--border-default)] overflow-hidden"
-    style={{ background: "var(--bg-raised)" }}
+    className="py-32 md:py-48 px-6 bg-[#020202] border-y border-white/[0.05] relative overflow-hidden"
     aria-labelledby="signal-preview-heading"
   >
-    <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+    <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-emerald-500/5 blur-[150px] rounded-full opacity-10 -z-10" />
+
+    <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
       <div>
-        <h2 id="signal-preview-heading" className="text-3xl md:text-5xl font-bold text-white mb-6">
+        <motion.h2 
+          initial={{ opacity: 0, x: -30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          className="text-shimmer mb-10"
+        >
           Precision Signals. <br />
-          <span className="site-title-gradient">Zero Ambiguity.</span>
-        </h2>
-        <p className="text-xl mb-10 leading-relaxed font-light" style={{ color: "var(--text-muted)" }}>
+          <span className="italic font-serif text-gradient-emerald">Zero Ambiguity.</span>
+        </motion.h2>
+        <p className="text-lg text-gray-400 mb-12 font-light leading-relaxed max-w-xl">
           Every signal is filtered through our quantitative execution engine. We provide
           exact entry zones, algorithmic take-profit structures, and rigid capital protection.
         </p>
 
-        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-6" aria-label="Signal features">
+        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-8" aria-label="Signal features">
           {[
             "Daily Trade Setups",
             "Gold (XAUUSD) Focus",
@@ -54,127 +59,105 @@ const SignalPreview = () => (
             "Market Commentary",
             "24/7 Support",
           ].map((feature) => (
-            <li key={feature} className="flex items-center gap-3" style={{ color: "var(--text-secondary)" }}>
-              <div
-                className="w-5 h-5 rounded-full flex items-center justify-center shrink-0"
-                style={{ background: "var(--accent-subtle)" }}
-                aria-hidden="true"
-              >
-                <Check className="w-3 h-3 text-emerald-400" />
+            <li key={feature} className="flex items-center gap-4">
+              <div className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0 bg-emerald-500/10 border border-emerald-500/20 text-emerald-500">
+                <Check className="w-3.5 h-3.5" />
               </div>
-              <span className="text-sm font-medium">{feature}</span>
+              <span className="text-[11px] font-black uppercase tracking-[0.2em] text-white/40 italic">{feature}</span>
             </li>
           ))}
         </ul>
       </div>
 
       <motion.div
-        initial={{ opacity: 0, x: 50 }}
-        whileInView={{ opacity: 1, x: 0 }}
+        initial={{ opacity: 0, scale: 0.9 }}
+        whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true }}
         className="relative"
-        aria-label="WhatsApp signal preview"
       >
         <motion.div
-          whileHover={{ rotateY: -5, rotateX: 5 }}
-          className="w-[320px] md:w-[360px] mx-auto bg-black border-[8px] border-zinc-800 rounded-[3rem] overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.8)] relative transition-transform duration-500 ease-out"
-          style={{ perspective: "1000px" }}
+          whileHover={{ rotateY: -10, rotateX: 5 }}
+          className="w-[320px] md:w-[380px] mx-auto bg-[#020202] border-[12px] border-white/[0.05] rounded-[4rem] overflow-hidden shadow-[0_60px_120px_rgba(0,0,0,0.8)] relative transition-all duration-1000 ease-out group"
+          style={{ perspective: "2000px" }}
         >
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-36 h-7 bg-zinc-800 rounded-b-2xl z-20" aria-hidden="true" />
-          <div className="bg-[var(--color54)] h-[640px] w-full flex flex-col">
-            <div className="bg-[var(--color55)] p-4 pt-12 flex items-center gap-3 shadow-md z-10">
-              <div className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white font-bold" aria-hidden="true">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-8 bg-white/[0.05] rounded-b-3xl z-20" />
+          <div className="bg-[#080B12] h-[680px] w-full flex flex-col relative">
+            <div className="bg-[#0C0F18]/80 backdrop-blur-xl p-6 pt-14 flex items-center gap-4 border-b border-white/[0.05] z-10">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-500 flex items-center justify-center text-black font-black italic shadow-[0_10px_30px_rgba(16,185,129,0.3)]">
                 IFX
               </div>
               <div>
-                <div className="text-white font-medium text-sm">IFXTrades VIP Signals</div>
-                <div className="text-gray-400 text-xs">tap here for group info</div>
+                <div className="text-white font-black uppercase tracking-widest text-[10px] italic">IFX Research VIP</div>
+                <div className="text-emerald-500/40 text-[9px] font-black uppercase tracking-widest mt-0.5 animate-pulse">Synchronized</div>
               </div>
             </div>
 
-            <div className="flex-1 p-4 space-y-4 overflow-y-auto">
+            <div className="flex-1 p-6 space-y-6 overflow-y-auto">
               <div className="flex justify-center">
-                <span className="bg-[var(--color56)] text-[var(--color57)] text-[10px] px-3 py-1.5 rounded-lg font-medium">
-                  TODAY
+                <span className="bg-white/[0.03] text-white/20 text-[8px] px-4 py-2 rounded-xl font-black uppercase tracking-widest border border-white/[0.05]">
+                  Live Stream: Today
                 </span>
               </div>
 
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="bg-[var(--color55)] rounded-lg rounded-tl-none p-3 max-w-[85%] shadow-sm"
-                role="article"
-                aria-label="Trading signal"
+                className="bg-[#0C0F18] border border-white/[0.08] rounded-[2rem] rounded-tl-none p-6 max-w-[90%] shadow-2xl"
               >
-                <div className="text-[var(--color58)] text-sm font-mono leading-relaxed whitespace-pre-line">
-                  <span className="font-bold text-emerald-400">⚡ NEW SIGNAL ALERT{"\n\n"}</span>
-                  <span className="font-bold">XAUUSD (GOLD) BUY{"\n"}</span>
+                <div className="text-white/80 text-[11px] font-mono leading-relaxed whitespace-pre-line uppercase tracking-widest">
+                  <span className="font-black text-emerald-500 italic">⚡ NODE EXECUTION{"\n\n"}</span>
+                  <span className="font-black text-white italic">XAUUSD BUY{"\n"}</span>
                   Entry: 2400.50 - 2402.00{"\n\n"}
                   TP 1: 2405.00{"\n"}TP 2: 2410.00{"\n"}TP 3: 2425.00{"\n\n"}
                   SL: 2392.00{"\n\n"}
-                  <span className="italic text-xs text-gray-400">
-                    Risk: 1-2% per trade. Wait for 15m candle close.
+                  <span className="italic text-[9px] text-white/20 font-black">
+                    Audit: 1-2% Risk. Wait for H1 Confirm.
                   </span>
                 </div>
-                <div className="text-[10px] text-[var(--color57)] text-right mt-1 flex items-center justify-end gap-1">
-                  10:42 AM <Check className="w-3 h-3 text-emerald-400" aria-hidden="true" />
+                <div className="text-[9px] text-white/20 text-right mt-4 flex items-center justify-end gap-2 font-black">
+                  10:42 UTC <Check className="w-3 h-3 text-emerald-500" />
                 </div>
               </motion.div>
 
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8 }}
-                className="bg-[var(--color55)] rounded-lg rounded-tl-none p-3 max-w-[85%] shadow-sm"
+                transition={{ delay: 0.5 }}
+                className="bg-emerald-500/[0.03] border border-emerald-500/20 rounded-[2rem] rounded-tl-none p-6 max-w-[90%] shadow-2xl"
               >
-                <div className="text-[var(--color58)] text-sm font-mono leading-relaxed">
-                  <span className="font-bold text-emerald-400">✅ TP 1 HIT (+45 Pips) </span>{"\n"}
-                  Move SL to Breakeven. Secure partial profits.
+                <div className="text-emerald-500 text-[11px] font-mono leading-relaxed uppercase tracking-widest">
+                  <span className="font-black italic">✅ ALPHA TARGET 1 HIT{"\n"}</span>
+                  Yield: +45 Pips. SL to BE.
                 </div>
-                <div className="text-[10px] text-[var(--color57)] text-right mt-1 flex items-center justify-end gap-1">
-                  11:15 AM <Check className="w-3 h-3 text-emerald-400" aria-hidden="true" />
+                <div className="text-[9px] text-emerald-500/40 text-right mt-4 flex items-center justify-end gap-2 font-black">
+                  11:15 UTC <Check className="w-3 h-3 text-emerald-500" />
                 </div>
               </motion.div>
             </div>
           </div>
         </motion.div>
 
+        {/* Floating Badges */}
         <motion.div
-          animate={{ y: [0, -30, 0], rotate: [0, 5, 0] }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute -right-16 top-1/4 backdrop-blur-2xl p-6 rounded-3xl border border-[var(--border-default)] shadow-[var(--shadow-float)] hidden lg:block z-30"
-          style={{ background: "rgba(15,26,46,0.85)" }}
-          aria-hidden="true"
+          animate={{ y: [0, -40, 0] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute -right-12 top-1/4 p-8 rounded-[2.5rem] border border-white/[0.08] bg-[#0C0F18]/80 backdrop-blur-3xl shadow-2xl hidden lg:block z-30"
         >
-          <div className="text-emerald-400 font-bold text-4xl mb-1">+450</div>
-          <div className="text-xs uppercase tracking-widest font-mono mb-3" style={{ color: "var(--text-muted)" }}>
-            Points (Demo)
-          </div>
-          <div className="h-1.5 w-full rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.05)" }}>
-            <motion.div
-              animate={{ width: ["0%", "100%", "0%"] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-              className="h-full bg-emerald-400"
-            />
-          </div>
+          <div className="text-emerald-500 font-black text-5xl mb-2 italic tracking-tighter">+450</div>
+          <div className="text-[9px] font-black uppercase tracking-[0.4em] text-white/20 italic">Points Realized</div>
         </motion.div>
 
         <motion.div
-          animate={{ y: [0, 40, 0], rotate: [0, -10, 0] }}
-          transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-          className="absolute -left-12 bottom-1/4 backdrop-blur-2xl p-5 rounded-3xl border border-[var(--border-default)] shadow-[var(--shadow-float)] hidden lg:flex items-center gap-4 z-30"
-          style={{ background: "rgba(15,26,46,0.85)" }}
-          aria-hidden="true"
+          animate={{ y: [0, 40, 0] }}
+          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          className="absolute -left-12 bottom-1/4 p-6 rounded-[2.5rem] border border-white/[0.08] bg-[#0C0F18]/80 backdrop-blur-3xl shadow-2xl hidden lg:flex items-center gap-6 z-30"
         >
-          <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ background: "var(--accent-subtle)" }}>
-            <Activity className="w-6 h-6 text-emerald-400" />
+          <div className="w-14 h-14 rounded-2xl bg-emerald-500/[0.05] border border-emerald-500/20 flex items-center justify-center">
+            <Activity className="w-7 h-7 text-emerald-500" />
           </div>
           <div>
-            <div className="text-white font-bold text-lg">94%</div>
-            <div className="text-xs uppercase tracking-widest" style={{ color: "var(--text-muted)" }}>
-              Fidelity
-            </div>
+            <div className="text-white font-black text-2xl italic tracking-tighter">94%</div>
+            <div className="text-[9px] font-black uppercase tracking-[0.4em] text-white/20 italic">Execution Fidelity</div>
           </div>
         </motion.div>
       </motion.div>
@@ -557,75 +540,79 @@ const PricingSection = () => {
   return (
     <section
       id="pricing"
-      className="py-24 relative"
-      style={{ background: "var(--bg-base)" }}
+      className="py-32 md:py-48 bg-[#020202] relative overflow-hidden"
       aria-labelledby="pricing-heading"
     >
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 id="pricing-heading" className="text-3xl md:text-5xl font-bold text-white mb-4">
-            Simple, Transparent Pricing
-          </h2>
-          <p style={{ color: "var(--text-muted)" }}>Choose the plan that fits your trading goals.</p>
-          <div
-            className="inline-block mt-4 px-4 py-1 rounded-full text-xs font-bold animate-pulse"
-            style={{ background: "rgba(248,113,113,0.1)", borderColor: "rgba(248,113,113,0.2)", color: "var(--color59)", border: "1px solid" }}
-            role="alert"
-            aria-live="polite"
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="text-center mb-32 relative">
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            id="pricing-heading" 
+            className="text-shimmer mb-8 text-center"
           >
-            ⚠️ Limited membership slots available for this month
-          </div>
+            Sovereign <br />
+            <span className="italic font-serif text-gradient-emerald">Membership.</span>
+          </motion.h2>
+          <p className="text-[11px] font-black uppercase tracking-[0.4em] text-white/30 italic">Choose the plan that fits your trading goals.</p>
+          
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            className="inline-block mt-12 px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-[0.3em] bg-emerald-500 text-black shadow-[0_10px_30px_rgba(16,185,129,0.3)] italic"
+            role="alert"
+          >
+            ⚠️ Restricted Nodes: Limited capacity for this cycle
+          </motion.div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          {plans.map((plan) => (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-6xl mx-auto">
+          {plans.map((plan, idx) => (
             <motion.div
               key={plan.duration}
-              whileHover={{ y: -10 }}
-              className="relative rounded-3xl p-8 border flex flex-col"
-              style={{
-                background: plan.popular ? "var(--bg-raised)" : "var(--bg-surface)",
-                borderColor: plan.popular ? "var(--accent)" : "var(--border-default)",
-                boxShadow: plan.popular ? "0 0 30px rgba(88,242,182,0.15)" : undefined,
-              }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ delay: idx * 0.1, duration: 0.8 }}
+              className={cn(
+                "relative rounded-[3.5rem] p-12 border flex flex-col transition-all duration-700 group",
+                plan.popular 
+                  ? "bg-emerald-500/[0.03] border-emerald-500/30 shadow-[0_40px_80px_rgba(16,185,129,0.1)] scale-[1.05] z-10" 
+                  : "bg-white/[0.01] border-white/[0.06] hover:bg-white/[0.02] hover:border-white/[0.15]"
+              )}
             >
               {plan.popular && (
-                <div
-                  className="absolute -top-4 left-1/2 -translate-x-1/2 text-xs font-bold px-4 py-1.5 rounded-full shadow-lg"
-                  style={{ background: "var(--accent)", color: "var(--accent-fg)" }}
-                  aria-label="Most popular plan"
-                >
+                <div className="absolute -top-5 left-1/2 -translate-x-1/2 px-6 py-2 bg-emerald-500 text-black text-[9px] font-black uppercase tracking-[0.3em] rounded-full shadow-[0_10px_30px_rgba(16,185,129,0.4)] italic">
                   MOST POPULAR
                 </div>
               )}
 
               {Boolean(plan.savings) && (
-                <div
-                  className="absolute top-4 right-4 text-[10px] font-bold px-2 py-1 rounded border"
-                  style={{ color: "var(--accent)", background: "var(--accent-subtle)", borderColor: "rgba(88,242,182,0.2)" }}
-                >
+                <div className="absolute top-8 right-8 text-[8px] font-black px-3 py-1.5 rounded-lg border border-emerald-500/20 bg-emerald-500/10 text-emerald-500 uppercase tracking-widest italic">
                   SAVE ${plan.savings}
                 </div>
               )}
 
-              <div className="mb-8">
-                <h3 className="font-medium mb-2" style={{ color: "var(--text-muted)" }}>
-                  {plan.duration} Access
+              <div className="mb-12">
+                <h3 className="text-xl font-black text-white/40 mb-4 uppercase tracking-[0.3em] italic">
+                  {plan.duration}
                 </h3>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-4xl font-bold text-white">${plan.price}</span>
+                  <span className="text-sm font-black text-emerald-500/40 uppercase tracking-widest">$</span>
+                  <span className="text-6xl font-black text-white tracking-tighter tabular-nums italic">{plan.price}</span>
                   {Boolean(plan.originalPrice) && (
-                    <span className="text-lg line-through" style={{ color: "var(--text-muted)" }}>
+                    <span className="text-2xl line-through text-white/10 ml-3 italic" style={{ textDecorationThickness: '2px' }}>
                       ${plan.originalPrice}
                     </span>
                   )}
                 </div>
               </div>
 
-              <ul className="space-y-4 mb-8 flex-1" aria-label={`${plan.duration} plan features`}>
+              <ul className="space-y-6 mb-12 flex-1" aria-label={`${plan.duration} plan features`}>
                 {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-center gap-3 text-sm" style={{ color: "var(--text-secondary)" }}>
-                    <Check className="w-4 h-4 text-emerald-400 shrink-0" aria-hidden="true" />
+                  <li key={feature} className="flex items-center gap-4 text-[11px] font-black uppercase tracking-widest text-white/50">
+                    <div className="w-5 h-5 rounded-lg flex items-center justify-center shrink-0 border border-emerald-500/20 bg-emerald-500/10 text-emerald-500">
+                      <Check className="w-3 h-3" />
+                    </div>
                     {feature}
                   </li>
                 ))}
@@ -633,15 +620,14 @@ const PricingSection = () => {
 
               <button
                 onClick={() => handleJoin(plan)}
-                className="w-full py-4 rounded-[var(--radius-button)] font-bold transition-all duration-300"
-                style={
-                  plan.popular
-                    ? { background: "var(--accent)", color: "var(--accent-fg)" }
-                    : { background: "rgba(255,255,255,0.05)", color: "white", border: "1px solid var(--border-default)" }
-                }
-                aria-label={`Join ${plan.duration} plan for $${plan.price}`}
+                className={cn(
+                  "w-full py-6 rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] transition-all duration-500 italic",
+                  plan.popular 
+                    ? "bg-white text-black hover:scale-[1.02] shadow-[0_20px_40px_rgba(255,255,255,0.1)]" 
+                    : "bg-white/5 text-white hover:bg-white/10 hover:scale-[1.02]"
+                )}
               >
-                Join Now
+                Execute Access
               </button>
             </motion.div>
           ))}
@@ -665,36 +651,43 @@ const PricingSection = () => {
 // ── Final CTA ──
 const FinalCTA = () => (
   <section
-    className="py-24 relative overflow-hidden"
-    style={{ background: "var(--bg-base)" }}
+    className="py-48 md:py-64 relative overflow-hidden bg-[#020202]"
     aria-labelledby="final-cta-heading"
   >
-    <div
-      className="absolute inset-0 blur-[100px] pointer-events-none opacity-30"
-      style={{ background: "var(--accent-subtle)" }}
-      aria-hidden="true"
-    />
-    <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
-      <h2 id="final-cta-heading" className="text-4xl md:text-6xl font-bold text-white mb-8 tracking-tighter">
-        Start Receiving <br /> Professional Signals Today.
-      </h2>
-      <div className="flex flex-col sm:flex-row justify-center gap-4">
+    <div className="absolute inset-0 pointer-events-none">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-emerald-500/10 blur-[150px] rounded-full opacity-20" />
+    </div>
+
+    <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
+      <motion.h2 
+        initial={{ opacity: 0, scale: 0.95 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        id="final-cta-heading" 
+        className="text-shimmer mb-16 text-center leading-[0.9]"
+      >
+        Start Receiving <br />
+        <span className="italic font-serif text-gradient-emerald">Sovereign Signals.</span>
+      </motion.h2>
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="flex flex-col sm:flex-row justify-center gap-8"
+      >
         <button
           onClick={() => document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" })}
-          className="px-8 py-4 font-bold rounded-[var(--radius-button)] flex items-center justify-center gap-2 transition-colors"
-          style={{ background: "var(--accent)", color: "var(--accent-fg)" }}
+          className="px-12 py-6 font-black text-[11px] uppercase tracking-[0.3em] rounded-2xl bg-white text-black hover:scale-[1.05] transition-all duration-500 shadow-[0_20px_40px_rgba(255,255,255,0.1)] italic flex items-center justify-center gap-4"
         >
-          <Smartphone className="w-5 h-5" aria-hidden="true" />
-          Join WhatsApp Channel
+          <Smartphone className="w-5 h-5" />
+          Join WhatsApp Desk
         </button>
         <button
           onClick={() => document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" })}
-          className="px-8 py-4 font-bold rounded-[var(--radius-button)] border border-[var(--border-default)] transition-colors hover:bg-white/5"
-          style={{ background: "rgba(255,255,255,0.05)", color: "white" }}
+          className="px-12 py-6 font-black text-[11px] uppercase tracking-[0.3em] rounded-2xl border border-white/[0.08] text-white hover:bg-white/[0.04] transition-all duration-500 italic"
         >
           View Pricing
         </button>
-      </div>
+      </motion.div>
     </div>
   </section>
 );

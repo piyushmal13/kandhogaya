@@ -156,18 +156,20 @@ export const AgentDashboard = () => {
   }
 
   return (
-    <AgentContent 
-      userProfile={userProfile}
-      stats={stats}
-      salesData={liveSales.length > 0 ? liveSales : salesData}
-      leadsData={liveLeads.length > 0 ? liveLeads : leadsData}
-      loading={loading}
-      copied={copied}
-      affiliateCode={affiliateCode}
-      fetchAffiliateData={fetchAffiliateData}
-      copyLink={copyLink}
-      generateCode={generateCode}
-    />
+      <ErrorBoundary>
+        <AgentContent 
+          userProfile={userProfile}
+          stats={stats}
+          salesData={liveSales.length > 0 ? liveSales : salesData}
+          leadsData={liveLeads.length > 0 ? liveLeads : leadsData}
+          loading={loading}
+          copied={copied}
+          affiliateCode={affiliateCode}
+          fetchAffiliateData={fetchAffiliateData}
+          copyLink={copyLink}
+          generateCode={generateCode}
+        />
+      </ErrorBoundary>
   );
 };
 
@@ -235,7 +237,7 @@ const AgentContent = ({
         </div>
         <div className="flex flex-col items-end gap-1">
            <div className="text-[10px] font-black text-[#58F2B6] italic uppercase">{lead.stage || lead.status || 'NEW'}</div>
-           <div className="text-[8px] font-bold text-gray-600 uppercase tracking-widest">{new Date(lead.created_at).toLocaleDateString()}</div>
+           <div className="text-[8px] font-bold text-gray-600 uppercase tracking-widest">{lead.created_at ? new Date(lead.created_at).toLocaleDateString() : 'N/A'}</div>
         </div>
       </div>
     ));

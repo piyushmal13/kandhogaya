@@ -80,7 +80,7 @@ export const AgentSystem = () => {
 
   const filteredAffiliates = affiliates.filter(a => 
     a.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    a.users?.email.toLowerCase().includes(searchTerm.toLowerCase())
+    a.users?.email?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (

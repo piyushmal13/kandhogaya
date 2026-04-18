@@ -21,61 +21,48 @@ const steps = [
 
 export const HowItWorks = () => (
   <section
-    className="py-24"
-    style={{ background: "var(--bg-base)" }}
+    className="py-32 md:py-48 bg-[#020202] relative overflow-hidden"
     aria-labelledby="how-it-works-heading"
   >
-    <div className="max-w-7xl mx-auto px-4">
-      <div className="text-center mb-16">
-        <h2 id="how-it-works-heading" className="text-3xl md:text-5xl font-bold text-white mb-4">
-          How It Works
-        </h2>
-        <p style={{ color: "var(--text-muted)" }}>
-          From analysis to execution in three simple steps.
+    <div className="max-w-7xl mx-auto px-6">
+      <div className="text-center mb-24">
+        <motion.h2 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          id="how-it-works-heading" 
+          className="text-shimmer mb-6"
+        >
+          Institutional <br />
+          <span className="italic font-serif text-gradient-emerald">Onboarding.</span>
+        </motion.h2>
+        <p className="text-[11px] font-black uppercase tracking-[0.4em] text-white/20 italic">
+          From analysis to execution in three synchronized steps.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
         <div
-          className="hidden md:block absolute top-12 left-0 right-0 h-0.5"
-          style={{
-            background:
-              "linear-gradient(to right, transparent, rgba(88,242,182,0.2), transparent)",
-          }}
+          className="hidden md:block absolute top-20 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent"
           aria-hidden="true"
         />
 
         {steps.map((step, i) => (
           <motion.div
             key={step.title}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: i * 0.2 }}
+            transition={{ delay: i * 0.2, duration: 0.8 }}
             className="relative flex flex-col items-center text-center group"
           >
-            <div
-              className="w-24 h-24 rounded-2xl border flex items-center justify-center mb-6 relative z-10 transition-colors duration-500 shadow-2xl group-hover:border-[var(--accent)]/50"
-              style={{
-                background: "var(--bg-raised)",
-                borderColor: "var(--border-default)",
-              }}
-            >
-              <step.icon className="w-10 h-10 text-emerald-400" aria-hidden="true" />
-              <div
-                className="absolute -top-3 -right-3 w-8 h-8 rounded-full font-bold flex items-center justify-center text-sm border-4"
-                style={{
-                  background: "var(--accent)",
-                  color: "var(--accent-fg)",
-                  borderColor: "var(--bg-base)",
-                }}
-                aria-hidden="true"
-              >
-                {i + 1}
+            <div className="w-40 h-40 rounded-[2.5rem] bg-[#080B12] border border-white/[0.06] flex items-center justify-center mb-10 relative z-10 transition-all duration-700 group-hover:border-emerald-500/30 group-hover:shadow-[0_40px_80px_rgba(16,185,129,0.1)]">
+              <step.icon className="w-12 h-12 text-white/20 group-hover:text-emerald-500 transition-colors duration-700" />
+              <div className="absolute -top-4 -right-4 w-12 h-12 rounded-2xl bg-emerald-500 text-black font-black flex items-center justify-center text-[10px] border-4 border-[#020202] shadow-xl italic">
+                0{i + 1}
               </div>
             </div>
-            <h3 className="text-xl font-bold text-white mb-3">{step.title}</h3>
-            <p className="text-sm leading-relaxed max-w-xs" style={{ color: "var(--text-muted)" }}>
+            <h3 className="text-xl font-black text-white mb-4 uppercase tracking-[0.3em] italic">{step.title}</h3>
+            <p className="text-[11px] font-black uppercase tracking-widest text-white/30 leading-relaxed max-w-[200px] italic">
               {step.desc}
             </p>
           </motion.div>

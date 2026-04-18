@@ -22,133 +22,166 @@ export const Results = () => {
   const featured = results.find(r => r.is_featured) || results.at(-1) || {};
 
   const stats = [
-    { label: "Win Rate", value: featured.win_rate ? `${featured.win_rate}%` : "82.4%", icon: Target, color: "text-[#58F2B6]" },
+    { label: "Win Rate", value: featured.win_rate ? `${featured.win_rate}%` : "82.4%", icon: Target, color: "text-emerald-500" },
     { label: "Profit Factor", value: featured.profit_factor || "3.24", icon: TrendingUp, color: "text-white" },
-    { label: "Risk Management", value: featured.risk_reward || "1:3.5", icon: ShieldCheck, color: "text-[#58F2B6]" },
+    { label: "Risk Management", value: featured.risk_reward || "1:3.5", icon: ShieldCheck, color: "text-emerald-500" },
   ];
 
   return (
-    <div className="pt-32 pb-24">
+    <div className="pt-48 pb-32 bg-[#020202] relative overflow-hidden">
+      {/* Background Decor */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.06)_0%,transparent_70%)]" />
+        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.02]" />
+      </div>
+
       <PageMeta
         title="Verified Quantitative Performance | Sovereign Terminal"
         description="Review IFX Trades audited quantitative model results: 82.4% fidelity, 3.24 profit factor, equity growth."
         path="/results"
-        keywords={["forex quantitative results", "verified model performance"]}
       />
 
-      <div className="max-w-7xl mx-auto px-4 space-y-16">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
-          <div className="space-y-4">
-            <h1 className="text-5xl font-black text-white italic tracking-tighter uppercase leading-[0.8] mb-2">
-              Performance <span className="text-[#58F2B6]">Telemetry</span>
+      <div className="max-w-7xl mx-auto px-6 sm:px-12 relative z-10">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-12 mb-32">
+          <div className="space-y-10">
+            <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-emerald-500/[0.04] border border-emerald-500/[0.15] text-emerald-500 text-[10px] font-black uppercase tracking-[0.4em]">
+              Audited Performance Data
+            </div>
+            <h1 className="text-shimmer leading-[0.9]">
+              Performance <br />
+              <span className="italic font-serif text-gradient-emerald">Telemetry.</span>
             </h1>
-            <p className="text-sm text-white/40 max-w-2xl font-medium uppercase tracking-widest leading-relaxed">
+            <p className="text-lg text-gray-400 max-w-2xl font-light leading-relaxed">
               Real-time audit of systematic execution cycles. Every data point represents a verified sequence within the IFX Sovereign Cluster.
             </p>
           </div>
           
-          <div className="flex gap-8">
+          <div className="flex gap-12">
              <div className="flex flex-col items-end">
-                <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.3em] mb-1 leading-none">Yield Points Captured</span>
-                <span className="text-xl font-black text-[#58F2B6] font-mono tracking-tighter">
+                <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em] mb-3">Yield Points Captured</span>
+                <span className="text-4xl font-black text-emerald-500 font-mono tracking-tighter italic">
                    +{results.reduce((acc, r) => acc + (r.pips || 0), 0).toLocaleString() || "48,240"}
                 </span>
              </div>
           </div>
         </div>
 
-        <div className="grid gap-10 lg:grid-cols-[1.6fr_0.9fr]">
-          <div className="p-10 rounded-[2.5rem] bg-white/[0.02] border border-white/5 space-y-8">
+        <div className="grid gap-12 lg:grid-cols-[1.6fr_0.9fr] mb-32">
+          <motion.div 
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="p-12 rounded-[3.5rem] bg-[#080B12] border border-white/[0.06] space-y-10 shadow-2xl"
+          >
             <div className="flex items-center justify-between">
-               <h3 className="text-[10px] font-black text-white uppercase tracking-[0.3em] flex items-center gap-3">
-                  <Activity className="w-4 h-4 text-[#58F2B6]" />
-                  Equity Curve
+               <h3 className="text-[10px] font-black text-white uppercase tracking-[0.4em] flex items-center gap-4">
+                  <Activity className="w-4 h-4 text-emerald-500" />
+                  Equity Curve Analysis
                </h3>
-               <div className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[9px] font-mono text-white/40 uppercase">
+               <div className="px-4 py-2 bg-emerald-500/[0.05] border border-emerald-500/[0.1] rounded-full text-[9px] font-black text-emerald-500/60 uppercase tracking-widest italic">
                   Verified Tick Data
                </div>
             </div>
 
-            <div className="h-[360px] w-full">
+            <div className="h-[400px] w-full">
               {loading ? (
                 <div className="flex h-full items-center justify-center">
-                   <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#58F2B6] border-t-transparent" />
+                   <div className="h-10 w-10 animate-spin rounded-full border-2 border-emerald-500 border-t-transparent" />
                 </div>
               ) : (
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={results}>
                     <defs>
                       <linearGradient id="ifxCurve" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#58F2B6" stopOpacity={0.2} />
-                        <stop offset="95%" stopColor="#58F2B6" stopOpacity={0} />
+                        <stop offset="5%" stopColor="#10B981" stopOpacity={0.15} />
+                        <stop offset="95%" stopColor="#10B981" stopOpacity={0} />
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.02)" vertical={false} />
-                    <XAxis dataKey="month" stroke="rgba(255,255,255,0.1)" tick={{ fontSize: 10, fontWeight: 900 }} />
-                    <YAxis stroke="rgba(255,255,255,0.1)" tick={{ fontSize: 10, fontWeight: 900 }} />
+                    <XAxis dataKey="month" stroke="rgba(255,255,255,0.05)" tick={{ fontSize: 9, fontWeight: 900, letterSpacing: '0.1em' }} />
+                    <YAxis stroke="rgba(255,255,255,0.05)" tick={{ fontSize: 9, fontWeight: 900, letterSpacing: '0.1em' }} />
                     <Tooltip
                       contentStyle={{
-                        backgroundColor: "#000",
-                        border: "1px solid rgba(255,255,255,0.1)",
-                        borderRadius: "16px",
-                        fontSize: "10px",
+                        backgroundColor: "#080B12",
+                        border: "1px solid rgba(16,185,129,0.1)",
+                        borderRadius: "20px",
+                        fontSize: "9px",
                         fontWeight: "900",
-                        textTransform: "uppercase"
+                        textTransform: "uppercase",
+                        letterSpacing: "0.2em"
                       }}
-                      itemStyle={{ color: "#58F2B6" }}
+                      itemStyle={{ color: "#10B981" }}
                       labelFormatter={(label) => `Cycle: ${label}`}
                       formatter={(value: any) => [`${value} Points`, 'Yield Integrity']}
                     />
-                    <Area type="monotone" dataKey="pips" stroke="#58F2B6" strokeWidth={3} fill="url(#ifxCurve)" />
+                    <Area type="monotone" dataKey="pips" stroke="#10B981" strokeWidth={3} fill="url(#ifxCurve)" />
                   </AreaChart>
                 </ResponsiveContainer>
               )}
             </div>
-          </div>
+          </motion.div>
 
-          <div className="space-y-6">
-            {stats.map((stat) => (
-              <div key={stat.label} className="p-8 rounded-3xl bg-white/[0.02] border border-white/5 hover:border-[#58F2B6]/20 transition-all group">
-                <div className="flex items-center gap-6">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/5 border border-white/5 group-hover:bg-[#58F2B6]/10 transition-all">
+          <div className="space-y-8">
+            {stats.map((stat, idx) => (
+              <motion.div 
+                key={stat.label} 
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: idx * 0.1 }}
+                className="p-10 rounded-[2.5rem] bg-[#080B12] border border-white/[0.06] hover:border-emerald-500/20 transition-all duration-700 group hover:shadow-xl"
+              >
+                <div className="flex items-center gap-8">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-[1.5rem] bg-white/[0.03] border border-white/[0.06] group-hover:bg-emerald-500/10 group-hover:text-emerald-500 transition-all duration-700">
                     <stat.icon className={cn("h-7 w-7", stat.color)} />
                   </div>
                   <div>
-                    <div className="text-3xl font-black tracking-tighter text-white italic">{stat.value}</div>
-                    <div className="mt-1 text-[9px] font-black uppercase tracking-[0.3em] text-white/20 group-hover:text-[#58F2B6]/60 transition-colors">{stat.label}</div>
+                    <div className="text-4xl font-black tracking-tighter text-white italic mb-1">{stat.value}</div>
+                    <div className="text-[9px] font-black uppercase tracking-[0.4em] text-white/20 group-hover:text-emerald-500/60 transition-colors duration-700">{stat.label}</div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
 
-            <div className="p-8 rounded-[2.5rem] bg-white/5 border border-white/5 space-y-4">
-              <div className="flex items-center gap-3">
-                 <Award className="w-5 h-5 text-[#58F2B6]" />
-                 <h3 className="text-[11px] font-black text-white uppercase tracking-widest">Audit Posture</h3>
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="p-10 rounded-[3rem] bg-emerald-500/[0.02] border border-emerald-500/[0.1] space-y-6"
+            >
+              <div className="flex items-center gap-4">
+                 <Award className="w-5 h-5 text-emerald-500" />
+                 <h3 className="text-[10px] font-black text-white uppercase tracking-[0.4em]">Audit Posture</h3>
               </div>
-              <p className="text-[10px] font-medium text-white/30 uppercase tracking-[0.15em] leading-relaxed">
+              <p className="text-[11px] font-light text-white/30 uppercase tracking-[0.2em] leading-relaxed italic">
                  Every masterclass cycle and algorithmic signal is registered on the sovereign blockchain node for immutable verification.
               </p>
-            </div>
+            </motion.div>
           </div>
         </div>
 
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-10 py-12 border-t border-white/5">
-           <div className="p-10 rounded-[3rem] bg-white/[0.02] border border-white/5 space-y-6 group hover:border-[#58F2B6]/20 transition-all">
-              <Award className="h-10 w-10 text-[#58F2B6]" />
-              <h3 className="text-2xl font-black text-white uppercase italic tracking-tighter">Verified Reporting</h3>
-              <p className="text-[11px] text-white/40 uppercase tracking-widest leading-relaxed">
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-12 py-24 border-t border-white/[0.05]">
+           <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              className="p-12 rounded-[4rem] bg-[#080B12] border border-white/[0.06] space-y-8 group hover:border-emerald-500/30 transition-all duration-700"
+            >
+              <Award className="h-12 w-12 text-emerald-500" />
+              <h3 className="text-3xl font-black text-white uppercase italic tracking-tighter">Verified Reporting</h3>
+              <p className="text-[11px] text-white/30 uppercase tracking-[0.2em] leading-relaxed font-light">
                 We align with institutional standards of transparency. No vanity metrics, just equity trends and risk posture audit.
               </p>
-           </div>
+           </motion.div>
 
-           <div className="p-10 rounded-[3rem] bg-white/[0.03] border border-white/10 space-y-6 group hover:border-[#58F2B6]/20 transition-all">
-              <CheckCircle2 className="h-10 w-10 text-[#58F2B6]" />
-              <h3 className="text-2xl font-black text-white uppercase italic tracking-tighter">Join the Discipline</h3>
-              <p className="text-[11px] text-white/40 uppercase tracking-widest leading-relaxed">
+           <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              className="p-12 rounded-[4rem] bg-[#080B12] border border-white/[0.06] space-y-8 group hover:border-emerald-500/30 transition-all duration-700"
+            >
+              <CheckCircle2 className="h-12 w-12 text-emerald-500" />
+              <h3 className="text-3xl font-black text-white uppercase italic tracking-tighter">Join the Discipline</h3>
+              <p className="text-[11px] text-white/30 uppercase tracking-[0.2em] leading-relaxed font-light">
                 Transition from discretionary noise to sovereign execution. Gain access to the full institutional track record.
               </p>
-           </div>
+           </motion.div>
         </section>
       </div>
     </div>

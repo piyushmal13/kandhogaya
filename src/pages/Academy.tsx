@@ -22,7 +22,7 @@ export const Academy = () => {
   });
 
   return (
-    <div className="pt-32 pb-24">
+    <div className="pt-32 pb-24 md:pt-64 md:pb-48">
       <PageMeta
         title="Sovereign Academy | Institutional Certification"
         description="Explore the IFXTrades Academy for structured trader education across forex, gold, and algorithmic execution workflows."
@@ -30,25 +30,33 @@ export const Academy = () => {
         keywords={["trading academy", "forex education", "algo trading course"]}
       />
 
-      <div className="max-w-7xl mx-auto px-4 space-y-16">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
-          <div className="space-y-4">
-            <h1 className="text-5xl font-black text-white italic tracking-tighter uppercase leading-[0.8] mb-2">
-              Institutional <span className="text-[#58F2B6]">Academy</span>
+      <div className="max-w-7xl mx-auto px-6 sm:px-12 space-y-16 md:space-y-32">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-12 md:gap-20">
+          <div className="space-y-10 flex-1 text-center lg:text-left">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-emerald-500/[0.04] border border-emerald-500/[0.15] text-emerald-500 text-[10px] font-black uppercase tracking-[0.4em]"
+            >
+              Academic Sovereign Network
+            </motion.div>
+            <h1 className="text-shimmer mb-6">
+              Elite <br />
+              <span className="italic font-serif text-gradient-emerald">Curriculum.</span>
             </h1>
-            <p className="text-sm text-white/40 max-w-2xl font-medium uppercase tracking-widest leading-relaxed">
+            <p className="text-lg md:text-xl text-gray-400 max-w-2xl font-light leading-relaxed mx-auto lg:mx-0">
               Curriculum engineered for traders moving from intuition-led entries toward systematic execution, risk discipline, and algorithmic repeatability.
             </p>
           </div>
           
-          <div className="flex gap-8">
-             <div className="flex flex-col items-end">
-                <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.3em] mb-1 leading-none">Modules</span>
-                <span className="text-xl font-black text-white font-mono">{loading ? "--" : courses.length}</span>
+          <div className="flex justify-center lg:justify-end gap-12 md:gap-16 border-t lg:border-t-0 lg:border-l border-white/5 pt-12 lg:pt-0 lg:pl-16">
+             <div className="flex flex-col items-center lg:items-end">
+                <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em] mb-3 leading-none">Modules</span>
+                <span className="text-4xl md:text-5xl font-black text-white font-mono tracking-tighter">{loading ? "--" : courses.length}</span>
              </div>
-             <div className="flex flex-col items-end">
-                <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.3em] mb-1 leading-none">Catalog</span>
-                <span className="text-xl font-black text-white font-mono">v5.0</span>
+             <div className="flex flex-col items-center lg:items-end">
+                <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em] mb-3 leading-none">Catalog</span>
+                <span className="text-4xl md:text-5xl font-black text-white font-mono tracking-tighter italic text-emerald-500">v6.0</span>
              </div>
           </div>
         </div>

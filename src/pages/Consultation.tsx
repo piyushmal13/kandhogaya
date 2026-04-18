@@ -83,141 +83,168 @@ export const Consultation = () => {
   }
 
   return (
-    <div className="py-20 md:py-32">
+    <div className="py-32 md:py-64 relative overflow-hidden bg-[#020202]">
+      {/* Dynamic Ambient Background */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.05)_0%,transparent_70%)]" />
+        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.02]" />
+      </div>
+
       <PageMeta 
-        title="Institutional Consultation"
-        description="Book a strategic session with the IFX Trades proprietary desk leads."
+        title="Institutional Consultation | Sovereign Boardroom"
+        description="Book a strategic session with the IFX Trades proprietary desk leads. Elite quantitative architecture and risk governance."
         path="/consultation"
       />
 
-      <div className="container mx-auto px-6">
-        <div className="grid lg:grid-cols-2 gap-20 items-center">
+      <div className="max-w-7xl mx-auto px-6 sm:px-12 relative z-10">
+        <div className="grid lg:grid-cols-2 gap-20 md:gap-32 items-center">
           
           {/* ── LEFT: REPUTATION & VALUE ── */}
-          <div className="space-y-12">
-            <div className="space-y-6">
-              <h1 className="text-5xl md:text-7xl font-black text-white leading-[0.85] uppercase tracking-tighter italic">
+          <div className="space-y-16">
+            <motion.div 
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="space-y-10"
+            >
+              <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-emerald-500/[0.04] border border-emerald-500/[0.15] text-emerald-500 text-[10px] font-black uppercase tracking-[0.4em]">
+                Executive Access Tier
+              </div>
+              <h1 className="text-shimmer leading-[0.9]">
                 Strategic <br />
-                <span className="text-cyan-500">Boardroom</span>
+                <span className="italic font-serif text-gradient-emerald">Boardroom.</span>
               </h1>
-              <p className="text-xl text-gray-400 leading-relaxed max-w-xl">
+              <p className="text-lg md:text-xl text-gray-400 leading-relaxed max-w-xl font-light">
                 Elevate beyond retail methodologies. Engage in a deep-dive analysis 
                 of your execution engine with IFX Trades' senior quantitative architects.
               </p>
-            </div>
+            </motion.div>
 
-            <div className="grid sm:grid-cols-1 gap-6">
+            <div className="space-y-6">
               {BENEFITS.map((benefit, i) => (
-                <div key={i} className="flex items-start gap-6 p-6 rounded-3xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.04] transition-colors group">
-                  <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 flex items-center justify-center text-cyan-500 group-hover:bg-cyan-500/20 transition-all shrink-0">
+                <motion.div 
+                  key={i} 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  className="flex items-start gap-8 p-8 rounded-[2.5rem] border border-white/[0.05] bg-white/[0.02] hover:bg-white/[0.04] transition-all duration-500 group"
+                >
+                  <div className="w-14 h-14 rounded-2xl bg-emerald-500/[0.05] border border-emerald-500/[0.1] flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-black transition-all shrink-0">
                     <benefit.icon className="w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-black text-white uppercase tracking-tight mb-1">{benefit.title}</h3>
-                    <p className="text-gray-500 text-sm leading-relaxed">{benefit.desc}</p>
+                    <h3 className="text-[13px] font-black text-white uppercase tracking-[0.2em] mb-2">{benefit.title}</h3>
+                    <p className="text-gray-500 text-sm leading-relaxed font-light">{benefit.desc}</p>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
 
-            <div className="flex items-center gap-4 text-emerald-500">
+            <div className="flex items-center gap-4 text-emerald-500/60">
                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-               <span className="text-xs font-black uppercase tracking-[0.3em]">3 Open Slots This Week</span>
+               <span className="text-[10px] font-black uppercase tracking-[0.4em]">3 Open Slots This Week</span>
             </div>
           </div>
 
           {/* ── RIGHT: THE FORM ── */}
-          <div className="relative">
-            <div className="absolute -inset-1 blur-3xl opacity-20 bg-cyan-500 -z-10" />
-            <div className="bg-[#1a1f29] border border-white/5 p-8 md:p-12 rounded-[3rem] shadow-2xl">
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 ml-4">Full Name</label>
-                    <div className="relative">
-                      <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
-                      <input 
-                        required
-                        type="text" 
-                        value={formData.name}
-                        onChange={(e) => setFormData({...formData, name: e.target.value})}
-                        className="w-full bg-black/40 border border-white/5 px-12 py-4 rounded-2xl text-white outline-none focus:border-cyan-500/50 transition-all font-medium"
-                      />
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="relative"
+          >
+            <div className="absolute -inset-1 blur-3xl opacity-20 bg-emerald-500 -z-10" />
+            <div className="bg-[#080B12] border border-white/[0.08] p-10 md:p-16 rounded-[3.5rem] shadow-[0_40px_80px_rgba(0,0,0,0.6)]">
+              <form onSubmit={handleSubmit} className="space-y-10">
+                <div className="space-y-8">
+                  <div className="grid md:grid-cols-2 gap-8">
+                    <div className="space-y-3">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-2">Full Name</label>
+                      <div className="relative">
+                        <User className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
+                        <input 
+                          required
+                          type="text" 
+                          value={formData.name}
+                          onChange={(e) => setFormData({...formData, name: e.target.value})}
+                          className="w-full bg-black/40 border border-white/[0.08] px-14 py-5 rounded-2xl text-white outline-none focus:border-emerald-500/50 transition-all font-medium text-sm"
+                          placeholder="Johnathan Doe"
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-2">Institutional Email</label>
+                      <div className="relative">
+                        <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
+                        <input 
+                          required
+                          type="email" 
+                          value={formData.email}
+                          onChange={(e) => setFormData({...formData, email: e.target.value})}
+                          className="w-full bg-black/40 border border-white/[0.08] px-14 py-5 rounded-2xl text-white outline-none focus:border-emerald-500/50 transition-all font-medium text-sm"
+                          placeholder="j.doe@institution.com"
+                        />
+                      </div>
                     </div>
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 ml-4">Institutional Email</label>
-                    <div className="relative">
-                      <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
-                      <input 
-                        required
-                        type="email" 
-                        value={formData.email}
-                        onChange={(e) => setFormData({...formData, email: e.target.value})}
-                        className="w-full bg-black/40 border border-white/5 px-12 py-4 rounded-2xl text-white outline-none focus:border-cyan-500/50 transition-all font-medium"
-                      />
+
+                  <div className="grid md:grid-cols-2 gap-8">
+                    <div className="space-y-3">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-2">Mobile / Telegram</label>
+                      <div className="relative">
+                        <Phone className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
+                        <input 
+                          required
+                          type="tel" 
+                          value={formData.phone}
+                          onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                          className="w-full bg-black/40 border border-white/[0.08] px-14 py-5 rounded-2xl text-white outline-none focus:border-emerald-500/50 transition-all font-medium text-sm"
+                          placeholder="+1 (555) 000-0000"
+                        />
+                      </div>
                     </div>
+                    <div className="space-y-3">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-2">Strategy Focus</label>
+                      <div className="relative">
+                        <select 
+                          value={formData.strategy}
+                          onChange={(e) => setFormData({...formData, strategy: e.target.value})}
+                          className="w-full bg-black/40 border border-white/[0.08] px-6 py-5 rounded-2xl text-white outline-none focus:border-emerald-500/50 transition-all font-black uppercase tracking-[0.2em] text-[10px] appearance-none"
+                        >
+                          <option value="Algo Trading">Algo Trading Masterclass</option>
+                          <option value="Macro Research">Macro Intelligence Hub</option>
+                          <option value="Hybrid">Hybrid (Retail to Institutional)</option>
+                        </select>
+                        <ArrowRight className="absolute right-5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20 rotate-90" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-2">Additional Intel</label>
+                    <textarea 
+                      rows={4}
+                      value={formData.notes}
+                      onChange={(e) => setFormData({...formData, notes: e.target.value})}
+                      placeholder="Tell us about your current desk setup or trading history..."
+                      className="w-full bg-black/40 border border-white/[0.08] px-6 py-5 rounded-2xl text-white outline-none focus:border-emerald-500/50 transition-all font-medium text-sm resize-none"
+                    />
                   </div>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 ml-4">Mobile / Telegram</label>
-                    <div className="relative">
-                      <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
-                      <input 
-                        required
-                        type="tel" 
-                        value={formData.phone}
-                        onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                        className="w-full bg-black/40 border border-white/5 px-12 py-4 rounded-2xl text-white outline-none focus:border-cyan-500/50 transition-all font-medium"
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 ml-4">Strategy Interest</label>
-                    <select 
-                      value={formData.strategy}
-                      onChange={(e) => setFormData({...formData, strategy: e.target.value})}
-                      className="w-full bg-black/40 border border-white/5 px-6 py-4 rounded-2xl text-white outline-none focus:border-cyan-500/50 transition-all font-medium appearance-none"
-                    >
-                      <option value="Algo Trading">Algo Trading Masterclass</option>
-                      <option value="Macro Research">Macro Intelligence Hub</option>
-                      <option value="Hybrid">Hybrid (Retail to Institutional)</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 ml-4">Additional Intel</label>
-                  <textarea 
-                    rows={4}
-                    value={formData.notes}
-                    onChange={(e) => setFormData({...formData, notes: e.target.value})}
-                    placeholder="Tell us about your current desk setup or trading history..."
-                    className="w-full bg-black/40 border border-white/5 px-6 py-4 rounded-2xl text-white outline-none focus:border-cyan-500/50 transition-all font-medium resize-none"
-                  />
-                </div>
-
-                <SovereignButton 
-                  fluid
-                  variant="sovereign"
-                  size="lg"
-                  glowEffect
-                  isLoading={formState === 'loading'}
+                <button 
+                  disabled={formState === 'loading'}
                   type="submit"
-                  rightIcon={<ArrowRight />}
+                  className="w-full group relative px-12 py-6 bg-white text-black font-black text-[11px] uppercase tracking-[0.3em] rounded-2xl overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:shadow-[0_20px_40px_rgba(255,255,255,0.1)] active:scale-95 flex items-center justify-center gap-4"
                 >
-                  Confirm Strategic Request
-                </SovereignButton>
+                  {formState === 'loading' ? (
+                    <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <>
+                      Confirm Strategic Request
+                      <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+                    </>
+                  )}
+                </button>
                 
-                <p className="text-[9px] text-center font-black uppercase tracking-widest text-white/20">
-                  Data Encrypted via Sovereign SSL // Zero Broker Leakage Policy
-                </p>
-              </form>
-            </div>
-          </div>
-
         </div>
       </div>
     </div>

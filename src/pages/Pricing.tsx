@@ -68,66 +68,86 @@ export const Pricing = () => {
     setPricingViews(views);
   }, []);
 
-  console.log("RENDER PRICING DATA:", { algos, webinars });
-
   return (
-    <div className="relative min-h-screen bg-black pt-32 pb-20 px-4">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-20 relative">
+    <div className="relative min-h-screen bg-[#020202] pt-48 pb-32 px-6 overflow-hidden">
+      {/* Background Decor */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.06)_0%,transparent_70%)]" />
+        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.02]" />
+      </div>
+
+      <div className="max-w-7xl mx-auto relative z-10">
+        <div className="text-center mb-32 relative">
           {pricingViews >= 3 && (
-            <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-emerald-500 text-black px-6 py-2 rounded-full font-black text-[10px] uppercase tracking-widest animate-bounce">
-               Limited Time Growth Offer Activated: 10% Discount on Checkout
-            </div>
+            <motion.div 
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="absolute -top-16 left-1/2 -translate-x-1/2 bg-emerald-500 text-black px-8 py-3 rounded-full font-black text-[10px] uppercase tracking-[0.3em] shadow-[0_20px_40px_rgba(16,185,129,0.3)] z-50 italic"
+            >
+               Growth Incentive Activated: 10% Discount at Auth
+            </motion.div>
           )}
-          <h1 className="text-5xl md:text-7xl font-black text-white mb-6 uppercase tracking-tighter italic">
-            Institutional <span className="text-emerald-500">Access.</span>
-          </h1>
-          <p className="text-gray-500 text-lg font-bold uppercase tracking-widest max-w-2xl mx-auto leading-relaxed">
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-shimmer mb-10 text-center"
+          >
+            Sovereign <br />
+            <span className="italic font-serif text-gradient-emerald">Access.</span>
+          </motion.h1>
+          <p className="text-[11px] font-black uppercase tracking-[0.4em] text-white/30 max-w-2xl mx-auto italic">
             Choose your execution tier and unlock professional trading workflows.
           </p>
         </div>
 
         {/* --- Signal Plans --- */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-32">
-          {SIGNAL_PLANS.map((plan) => (
-            <div 
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12 mb-48">
+          {SIGNAL_PLANS.map((plan, idx) => (
+            <motion.div 
               key={plan.id}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: idx * 0.1 }}
               className={cn(
-                "relative p-10 rounded-[48px] border transition-all duration-500 group",
+                "relative p-12 rounded-[3.5rem] border transition-all duration-700 group flex flex-col",
                 plan.popular 
-                  ? "bg-emerald-500/5 border-emerald-500/30 scale-105 shadow-[0_0_80px_rgba(16,185,129,0.1)] z-10" 
-                  : "bg-white/5 border-white/10 hover:border-white/20"
+                  ? "bg-emerald-500/[0.03] border-emerald-500/30 shadow-[0_40px_80px_rgba(16,185,129,0.1)] scale-[1.05] z-10" 
+                  : "bg-white/[0.01] border-white/[0.06] hover:bg-white/[0.02] hover:border-white/[0.15]"
               )}
             >
               {plan.popular && (
-                <div className="absolute -top-5 left-1/2 -translate-x-1/2 px-6 py-2 bg-emerald-500 text-black text-[10px] font-black uppercase tracking-widest rounded-full shadow-xl">
+                <div className="absolute -top-5 left-1/2 -translate-x-1/2 px-6 py-2 bg-emerald-500 text-black text-[9px] font-black uppercase tracking-[0.3em] rounded-full shadow-[0_10px_30px_rgba(16,185,129,0.4)] italic">
                   Most Popular
                 </div>
               )}
               
-              <div className="mb-10 text-center">
-                <h3 className="text-2xl font-black text-white mb-2 uppercase tracking-tight italic">{plan.name}</h3>
-                <div className="flex items-end justify-center gap-1">
-                  <span className="text-5xl font-black text-white tracking-tighter tabular-nums">${plan.price}</span>
-                  <span className="text-gray-500 text-sm font-bold uppercase tracking-widest mb-2">/mo</span>
+              <div className="mb-12 text-center">
+                <h3 className="text-2xl font-black text-white mb-6 uppercase tracking-widest italic">{plan.name}</h3>
+                <div className="flex items-baseline justify-center gap-2">
+                  <span className="text-sm font-black text-emerald-500/40 uppercase tracking-widest">$</span>
+                  <span className="text-6xl font-black text-white tracking-tighter tabular-nums italic">{plan.price}</span>
+                  <span className="text-white/20 text-[10px] font-black uppercase tracking-[0.3em] ml-2">/mo</span>
                 </div>
               </div>
 
-              <div className="space-y-4 mb-10">
+              <div className="space-y-6 mb-12 flex-grow">
                 {plan.features.map((feature) => (
-                  <div key={feature} className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 shrink-0 mt-0.5">
+                  <div key={feature} className="flex items-start gap-4">
+                    <div className={cn(
+                      "w-5 h-5 rounded-lg flex items-center justify-center shrink-0 mt-0.5 border transition-all duration-700",
+                      plan.popular ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" : "bg-white/5 text-white/20 border-white/10"
+                    )}>
                       <Check className="w-3 h-3" />
                     </div>
-                    <span className="text-sm text-gray-300 font-medium leading-tight">{feature}</span>
+                    <span className="text-[11px] font-black uppercase tracking-widest text-white/50">{feature}</span>
                   </div>
                 ))}
                 {plan.notIncluded.map((feature) => (
-                  <div key={feature} className="flex items-start gap-3 opacity-30">
-                    <div className="w-5 h-5 flex items-center justify-center text-gray-500 shrink-0 mt-0.5">
+                  <div key={feature} className="flex items-start gap-4 opacity-15">
+                    <div className="w-5 h-5 flex items-center justify-center text-white/20 shrink-0 mt-0.5">
                       <X className="w-3 h-3" />
                     </div>
-                    <span className="text-sm text-gray-500 font-medium leading-tight">{feature}</span>
+                    <span className="text-[11px] font-black uppercase tracking-widest text-white/40">{feature}</span>
                   </div>
                 ))}
               </div>
@@ -138,51 +158,54 @@ export const Pricing = () => {
                   setSelectedPlan({ plan: plan.id, amount: plan.price });
                 }}
                 className={cn(
-                  "w-full py-5 rounded-3xl font-black text-[11px] uppercase tracking-[0.2em] transition-all",
+                  "w-full py-6 rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] transition-all duration-500 italic",
                   plan.popular 
-                    ? "bg-emerald-500 text-black hover:bg-white shadow-xl shadow-emerald-500/20" 
-                    : "bg-white/10 text-white hover:bg-white/20"
+                    ? "bg-white text-black hover:scale-[1.02] shadow-[0_20px_40px_rgba(255,255,255,0.1)]" 
+                    : "bg-white/5 text-white hover:bg-white/10 hover:scale-[1.02]"
                 )}
               >
-                Get Started
+                Execute Access
               </button>
-            </div>
+            </motion.div>
           ))}
         </div>
 
         {/* --- Performance Algos --- */}
-        <div className="mb-32">
-          <div className="flex items-center justify-between mb-12">
+        <div className="mb-48">
+          <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-6">
             <div>
-              <h2 className="text-3xl font-black text-white uppercase tracking-tighter italic">Algorithmic Execution</h2>
-              <p className="text-gray-500 text-[10px] font-black uppercase tracking-widest mt-2">Professional quantitative trading engines</p>
+              <h2 className="text-4xl font-black text-white uppercase tracking-tighter italic mb-4">Algorithmic Execution</h2>
+              <p className="text-white/20 text-[10px] font-black uppercase tracking-[0.4em] italic">Professional quantitative trading engines</p>
             </div>
+            <Link to="/marketplace" className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500 hover:text-white transition-colors flex items-center gap-2 italic group">
+              View All Engines <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
+            </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {loading ? (
-              [1, 2, 3].map(i => <div key={i} className="h-64 bg-white/5 rounded-[48px] animate-pulse" />)
+              [1, 2, 3].map(i => <div key={i} className="h-80 bg-white/5 rounded-[3.5rem] animate-pulse" />)
             ) : (
               algos.map((algo) => (
-                <div key={algo.id} className="p-10 rounded-[48px] bg-white/5 border border-white/10 hover:border-emerald-500/30 transition-all flex flex-col justify-between group">
+                <div key={algo.id} className="p-12 rounded-[3.5rem] bg-[#080B12] border border-white/[0.06] hover:border-emerald-500/30 transition-all duration-700 flex flex-col justify-between group hover:shadow-2xl">
                   <div>
-                    <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 mb-8 group-hover:bg-emerald-500 group-hover:text-black transition-all">
-                      <Zap className="w-6 h-6" />
+                    <div className="w-16 h-16 rounded-2xl bg-emerald-500/[0.03] border border-emerald-500/10 flex items-center justify-center text-emerald-500/60 mb-10 group-hover:bg-emerald-500 group-hover:text-black transition-all duration-700">
+                      <Zap className="w-7 h-7" />
                     </div>
-                    <h3 className="text-xl font-black text-white mb-2 uppercase tracking-tight italic">{algo.name}</h3>
-                    <p className="text-sm text-gray-400 mb-8 line-clamp-2 leading-relaxed">{algo.description}</p>
+                    <h3 className="text-2xl font-black text-white mb-4 uppercase tracking-tighter italic">{algo.name}</h3>
+                    <p className="text-[11px] text-white/30 mb-10 line-clamp-2 leading-relaxed font-light">{algo.description}</p>
                   </div>
-                  <div className="flex items-center justify-between pt-8 border-t border-white/5">
+                  <div className="flex items-center justify-between pt-10 border-t border-white/[0.06]">
                     <div className="flex flex-col">
-                      <span className="text-gray-500 text-[9px] font-black uppercase tracking-widest">Pricing</span>
-                      <span className="text-white font-black text-xl tabular-nums">${algo.price}</span>
+                      <span className="text-white/20 text-[9px] font-black uppercase tracking-[0.4em] mb-1">Entry Value</span>
+                      <span className="text-white font-black text-2xl tabular-nums italic">${algo.price}</span>
                     </div>
                     <Link 
                       to="/marketplace" 
                       onClick={() => tracker.track("algo_click", { product: algo.name, price: algo.price })}
-                      className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center hover:bg-emerald-500 hover:text-black transition-all"
+                      className="w-14 h-14 rounded-2xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-center hover:bg-emerald-500 hover:text-black transition-all duration-700"
                     >
-                      <ArrowRight className="w-5 h-5" />
+                      <ArrowRight className="w-6 h-6" />
                     </Link>
                   </div>
                 </div>
@@ -192,42 +215,46 @@ export const Pricing = () => {
         </div>
 
         {/* --- Upcoming Webinars --- */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div className="p-1.5 rounded-[56px] bg-gradient-to-br from-emerald-400 to-cyan-500 shadow-2xl shadow-emerald-500/20">
-            <div className="p-14 rounded-[52px] bg-black">
-              <h2 className="text-4xl font-black text-white mb-6 uppercase tracking-tighter italic">Live Training</h2>
-              <p className="text-gray-400 font-medium leading-relaxed mb-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <motion.div 
+            whileHover={{ scale: 1.01 }}
+            className="p-[1px] rounded-[4rem] bg-gradient-to-br from-emerald-500/40 via-white/10 to-transparent transition-all duration-700"
+          >
+            <div className="p-16 rounded-[4rem] bg-[#080B12] relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-emerald-500/10 blur-[100px] rounded-full opacity-20 -z-10" />
+              <h2 className="text-5xl font-black text-white mb-8 uppercase tracking-tighter italic">Live Training</h2>
+              <p className="text-white/40 text-[13px] font-light leading-relaxed mb-12 max-w-lg">
                 Join our elite analysts for sessions on market structure, institutional order flow, and quantitative risk management.
               </p>
-              <Link to="/webinars" className="inline-flex items-center gap-3 px-10 py-5 bg-emerald-500 text-black font-black text-[11px] uppercase tracking-[0.2em] rounded-2xl hover:bg-white transition-all shadow-xl shadow-emerald-500/20">
+              <Link to="/webinars" className="inline-flex items-center gap-4 px-12 py-6 bg-white text-black font-black text-[11px] uppercase tracking-[0.3em] rounded-2xl hover:scale-[1.05] transition-all duration-500 shadow-[0_20px_40px_rgba(255,255,255,0.1)] italic">
                 View Calendar <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
-          </div>
+          </motion.div>
 
-          <div className="space-y-6">
+          <div className="space-y-8">
             {loading ? (
-              [1, 2].map(i => <div key={i} className="h-32 bg-white/5 rounded-[40px] animate-pulse" />)
+              [1, 2].map(i => <div key={i} className="h-40 bg-white/5 rounded-[3.5rem] animate-pulse" />)
             ) : (
               webinars.map((webinar) => (
-                <div key={webinar.id} className="p-8 rounded-[40px] bg-white/5 border border-white/10 hover:bg-white/10 transition-all flex items-center justify-between group">
-                  <div className="flex items-center gap-6">
-                    <div className="w-16 h-16 rounded-[24px] bg-white/5 flex items-center justify-center text-gray-400 group-hover:text-emerald-500 transition-colors">
-                      <Monitor className="w-7 h-7" />
+                <div key={webinar.id} className="p-10 rounded-[3.5rem] bg-[#080B12] border border-white/[0.06] hover:bg-white/[0.02] hover:border-emerald-500/30 transition-all duration-700 flex items-center justify-between group">
+                  <div className="flex items-center gap-8">
+                    <div className="w-20 h-20 rounded-[2rem] bg-white/[0.03] border border-white/[0.06] flex items-center justify-center text-white/20 group-hover:text-emerald-500 group-hover:bg-emerald-500/10 transition-all duration-700">
+                      <Monitor className="w-8 h-8" />
                     </div>
                     <div>
-                      <h4 className="text-white font-black uppercase tracking-tight italic line-clamp-1">{webinar.title}</h4>
-                      <div className="flex items-center gap-4 mt-2">
-                        <span className="flex items-center gap-1.5 text-gray-500 text-[10px] font-black uppercase tracking-widest">
-                          <Clock className="w-3 h-3 text-emerald-500" />
+                      <h4 className="text-2xl font-black text-white uppercase tracking-tighter italic line-clamp-1 mb-3">{webinar.title}</h4>
+                      <div className="flex items-center gap-6">
+                        <span className="flex items-center gap-2 text-white/20 text-[10px] font-black uppercase tracking-[0.3em]">
+                          <Clock className="w-3.5 h-3.5 text-emerald-500/40" />
                           {new Date(webinar.date_time).toLocaleDateString()}
                         </span>
-                        <span className="px-3 py-1 bg-emerald-500/10 text-emerald-400 text-[9px] font-black uppercase tracking-widest rounded-lg">LIVE SESSION</span>
+                        <span className="px-3 py-1 bg-emerald-500/10 text-emerald-500 text-[9px] font-black uppercase tracking-widest rounded-lg italic border border-emerald-500/20">Live Session</span>
                       </div>
                     </div>
                   </div>
-                  <Link to="/webinars" className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center hover:bg-emerald-500 hover:text-black transition-all">
-                    <ArrowRight className="w-5 h-5" />
+                  <Link to="/webinars" className="w-14 h-14 rounded-2xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-center hover:bg-emerald-500 hover:text-black transition-all duration-700">
+                    <ArrowRight className="w-6 h-6" />
                   </Link>
                 </div>
               ))

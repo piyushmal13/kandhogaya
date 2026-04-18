@@ -72,22 +72,52 @@ export const Marketplace = () => {
         keywords={["trading algorithms", "algo marketplace", "MT5 trading bots"]}
       />
 
-      <div className="max-w-7xl mx-auto px-4 space-y-12">
+      <div className="max-w-7xl mx-auto px-6 sm:px-12 space-y-20 md:space-y-32">
         
-        {/* Animated 3D Algo Intro Section */}
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-12 py-10">
-          <div className="space-y-6 flex-1 z-10">
-            <h1 className="text-6xl md:text-[100px] lg:text-[120px] font-serif font-black text-white italic tracking-tighter uppercase leading-[0.8] drop-shadow-2xl">
-               Quant <br className="hidden lg:block"/><span className="text-emerald-400">Terminal</span>
+        {/* Cinematic Header Section */}
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+          className="flex flex-col lg:flex-row items-center justify-between gap-16 md:gap-24 py-10 md:py-20"
+        >
+          <div className="space-y-10 flex-1 z-10 text-center lg:text-left">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-emerald-500/[0.04] border border-emerald-500/[0.15] text-emerald-500 text-[10px] font-black uppercase tracking-[0.4em]"
+            >
+              Institutional Neural Suite
+            </motion.div>
+            <h1 className="mb-10 text-shimmer">
+              The Master <br />
+              <span className="italic font-serif text-gradient-emerald">Terminal.</span>
             </h1>
-            <p className="text-sm text-gray-400 max-w-xl font-medium uppercase tracking-[0.3em] leading-relaxed">
-              Systematic intelligence engineered for institutional liquidity. Scroll to unfold the neural architecture behind our high-probability models.
+            <p className="text-lg md:text-xl text-gray-400 max-w-xl font-light leading-relaxed mx-auto lg:mx-0">
+              Access the same systematic architecture used by proprietary desks. Our algorithms prioritize capital preservation and high-fidelity execution logic.
             </p>
+            <div className="flex flex-wrap justify-center lg:justify-start gap-4">
+               <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/[0.02] border border-white/[0.08]">
+                  <Activity className="w-4 h-4 text-emerald-500" />
+                  <span className="text-[10px] font-black uppercase tracking-widest text-white/40">Real-time Telemetry</span>
+               </div>
+               <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/[0.02] border border-white/[0.08]">
+                  <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                  <span className="text-[10px] font-black uppercase tracking-widest text-white/40">Equity Hardening</span>
+               </div>
+            </div>
           </div>
-          <div className="flex-1 w-full flex justify-center lg:justify-end min-h-[400px]">
-            <AnimatedAlgoCube className="w-full scale-75 md:scale-100 origin-center lg:origin-right" />
+          <div className="flex-1 w-full flex justify-center lg:justify-end min-h-[400px] md:min-h-[600px] perspective-container">
+            <motion.div
+              initial={{ scale: 0.8, rotate: 10, opacity: 0 }}
+              animate={{ scale: 1, rotate: 0, opacity: 1 }}
+              transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }}
+              className="w-full h-full flex items-center justify-center"
+            >
+              <AnimatedAlgoCube className="w-full scale-90 md:scale-125" />
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Filter Bar */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 pt-10 border-t border-white/[0.05]">
