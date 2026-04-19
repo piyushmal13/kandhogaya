@@ -1,98 +1,101 @@
 import React, { useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform, useMotionTemplate } from "motion/react";
 import { Link } from "react-router-dom";
-import { Zap, Cpu, Video, GraduationCap, ArrowUpRight, BarChart2, BookOpen } from "lucide-react";
+import { Zap, Cpu, Video, GraduationCap, ArrowUpRight, BarChart2, BookOpen, ChevronRight } from "lucide-react";
 
 const modules = [
   {
     id: "signals",
     title: "AI Signal Intelligence",
-    description: "Multi-layered analytical algorithms processing 40+ asset classes with institutional-grade precision.",
+    description: "Institutional-grade XAUUSD signals. Multi-layer quantitative models, not retail indicators.",
     icon: Zap,
     link: "/signals",
     accent: "#10B981",
-    size: "lg", // takes 2 cols on large
+    tag: "LIVE SIGNALS",
+    size: "lg",
   },
   {
     id: "algorithms",
-    title: "Enterprise Execution",
-    description: "High-performance architecture with systematic risk management.",
+    title: "Algo Masterclass",
+    description: "MT5 Expert Advisor engineering, Python automation, and systematic risk frameworks.",
     icon: Cpu,
     link: "/marketplace",
     accent: "#06B6D4",
+    tag: "FLAGSHIP",
     size: "sm",
   },
   {
     id: "academy",
     title: "Professional Academy",
-    description: "Certification tracks and advanced development for sophisticated traders.",
+    description: "Certified institutional training tracks for serious traders at every level.",
     icon: GraduationCap,
     link: "/academy",
     accent: "#8B5CF6",
+    tag: "CERTIFIED",
     size: "sm",
   },
   {
     id: "webinars",
-    title: "Volatility Desk",
-    description: "Live market-flow visualization and strategic trade ideation from senior institutional analysts.",
+    title: "Live Masterclasses",
+    description: "Real-time market flow analysis and trade ideation from senior institutional desks.",
     icon: Video,
     link: "/webinars",
     accent: "#D4AF37",
+    tag: "WEEKLY",
     size: "sm",
   },
   {
     id: "blog",
-    title: "Macro Intelligence",
-    description: "Deep-dive research articles, market commentary, and institutional-grade analysis.",
+    title: "Macro Research",
+    description: "Deep-dive institutional commentary on XAUUSD, macro flows, and global markets.",
     icon: BookOpen,
     link: "/blog",
     accent: "#F43F5E",
+    tag: "NEW",
     size: "sm",
   },
 ];
 
+const hexToRgba = (hex: string, opacity: number) => {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r},${g},${b},${opacity})`;
+};
+
 const TiltCard = ({ mod, index }: { mod: typeof modules[0]; index: number }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const mouseXSpring = useSpring(x, { stiffness: 200, damping: 25 });
-  const mouseYSpring = useSpring(y, { stiffness: 200, damping: 25 });
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["5deg", "-5deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-5deg", "5deg"]);
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
   const spotX = useMotionValue(0);
   const spotY = useMotionValue(0);
+
+  const springX = useSpring(mx, { stiffness: 180, damping: 22 });
+  const springY = useSpring(my, { stiffness: 180, damping: 22 });
+  const rotateX = useTransform(springY, [-0.5, 0.5], ["6deg", "-6deg"]);
+  const rotateY = useTransform(springX, [-0.5, 0.5], ["-6deg", "6deg"]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!ref.current) return;
     const rect = ref.current.getBoundingClientRect();
-    const mx = e.clientX - rect.left;
-    const my = e.clientY - rect.top;
-    spotX.set(mx);
-    spotY.set(my);
-    x.set(mx / rect.width - 0.5);
-    y.set(my / rect.height - 0.5);
+    spotX.set(e.clientX - rect.left);
+    spotY.set(e.clientY - rect.top);
+    mx.set((e.clientX - rect.left) / rect.width - 0.5);
+    my.set((e.clientY - rect.top) / rect.height - 0.5);
   };
 
-  const handleMouseLeave = () => { x.set(0); y.set(0); };
+  const handleMouseLeave = () => { mx.set(0); my.set(0); };
 
-  const accent = mod.accent;
-  const accentHex = accent;
-  const accentRgba = (opacity: number) => {
-    // hex to rgba helper
-    const r = Number.parseInt(accent.slice(1, 3), 16);
-    const g = Number.parseInt(accent.slice(3, 5), 16);
-    const b = Number.parseInt(accent.slice(5, 7), 16);
-    return `rgba(${r},${g},${b},${opacity})`;
-  };
+  const isLarge = mod.size === "lg";
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40, filter: "blur(12px)" }}
+      initial={{ opacity: 0, y: 36, filter: "blur(10px)" }}
       whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ delay: index * 0.1, duration: 1, ease: [0.16, 1, 0.3, 1] }}
-      style={{ perspective: "1200px" }}
-      className="h-full min-h-[240px] md:min-h-[280px]"
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ delay: index * 0.08, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+      style={{ perspective: "1000px" }}
+      className={`h-full ${isLarge ? "min-h-[300px]" : "min-h-[220px] md:min-h-[260px]"}`}
     >
       <motion.div
         ref={ref}
@@ -103,22 +106,21 @@ const TiltCard = ({ mod, index }: { mod: typeof modules[0]; index: number }) => 
       >
         <Link
           to={mod.link}
-          data-cursor="EXPLORE"
-          className="flex flex-col h-full p-7 md:p-10 rounded-[2.5rem] bg-[#080B12] border border-white/[0.05] overflow-hidden transition-all duration-700 group-hover:border-white/10"
-          style={{ boxShadow: `0 40px 80px rgba(0,0,0,0.5)` }}
+          className="flex flex-col h-full p-7 md:p-9 rounded-[2rem] bg-[#080B12] border border-white/[0.05] overflow-hidden transition-all duration-500 group-hover:border-white/[0.1]"
+          style={{ boxShadow: "0 30px 60px rgba(0,0,0,0.45)" }}
         >
-          {/* Spotlight */}
+          {/* Spotlight glow */}
           <motion.div
-            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+            className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
             style={{
-              background: useMotionTemplate`radial-gradient(600px circle at ${spotX}px ${spotY}px, ${accentRgba(0.06)}, transparent 40%)`,
+              background: useMotionTemplate`radial-gradient(500px circle at ${spotX}px ${spotY}px, ${hexToRgba(mod.accent, 0.07)}, transparent 45%)`,
             }}
           />
-          {/* Edge glow on hover */}
+          {/* Border glow */}
           <motion.div
-            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-[2.5rem]"
+            className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[2rem]"
             style={{
-              background: useMotionTemplate`radial-gradient(400px circle at ${spotX}px ${spotY}px, ${accentRgba(0.35)}, transparent 40%)`,
+              background: useMotionTemplate`radial-gradient(350px circle at ${spotX}px ${spotY}px, ${hexToRgba(mod.accent, 0.3)}, transparent 45%)`,
               WebkitMask: "linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)",
               WebkitMaskComposite: "xor",
               maskComposite: "exclude",
@@ -126,33 +128,53 @@ const TiltCard = ({ mod, index }: { mod: typeof modules[0]; index: number }) => 
             }}
           />
 
-          {/* 3D content */}
-          <div className="relative z-10 flex flex-col h-full" style={{ transform: "translateZ(24px)" }}>
+          {/* 3D Content */}
+          <div className="relative z-10 flex flex-col h-full" style={{ transform: "translateZ(20px)" }}>
+            {/* Top row */}
             <div className="flex items-start justify-between mb-auto">
-              <div
-                className="w-12 h-12 rounded-2xl flex items-center justify-center border transition-all duration-500 group-hover:scale-110"
-                style={{
-                  background: accentRgba(0.08),
-                  borderColor: accentRgba(0.15),
-                }}
-              >
-                <mod.icon className="w-5 h-5" style={{ color: accentHex }} aria-hidden />
+              <div className="flex items-center gap-3">
+                <div
+                  className="w-11 h-11 rounded-xl flex items-center justify-center border transition-transform duration-300 group-hover:scale-110"
+                  style={{
+                    background: hexToRgba(mod.accent, 0.08),
+                    borderColor: hexToRgba(mod.accent, 0.15),
+                  }}
+                >
+                  <mod.icon className="w-5 h-5" style={{ color: mod.accent }} aria-hidden />
+                </div>
+                <span
+                  className="px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-[0.25em]"
+                  style={{
+                    color: mod.accent,
+                    background: hexToRgba(mod.accent, 0.08),
+                    border: `1px solid ${hexToRgba(mod.accent, 0.15)}`,
+                  }}
+                >
+                  {mod.tag}
+                </span>
               </div>
               <div
-                className="w-9 h-9 rounded-full border flex items-center justify-center transition-all duration-500 group-hover:scale-110"
-                style={{ borderColor: accentRgba(0.15), background: accentRgba(0.05) }}
+                className="w-8 h-8 rounded-full border flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:scale-110"
+                style={{ borderColor: hexToRgba(mod.accent, 0.2) }}
               >
-                <ArrowUpRight className="w-4 h-4 text-white/30 group-hover:text-white transition-colors duration-500" aria-hidden />
+                <ArrowUpRight className="w-3.5 h-3.5 text-white/50" />
               </div>
             </div>
 
-            <div className="mt-8">
-              <h3 className="text-xl md:text-2xl font-black text-white mb-3 tracking-tight leading-tight">
+            {/* Text */}
+            <div className={isLarge ? "mt-10" : "mt-8"}>
+              <h3 className={`font-black text-white mb-2.5 tracking-tight leading-tight ${isLarge ? "text-2xl md:text-3xl" : "text-lg md:text-xl"}`}>
                 {mod.title}
               </h3>
-              <p className="text-sm text-gray-500 leading-relaxed">
+              <p className={`text-white/35 leading-relaxed ${isLarge ? "text-sm md:text-base" : "text-[13px]"}`}>
                 {mod.description}
               </p>
+              <div
+                className="mt-5 flex items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.2em] opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300"
+                style={{ color: mod.accent }}
+              >
+                Explore <ChevronRight className="w-3 h-3" />
+              </div>
             </div>
           </div>
         </Link>
@@ -163,51 +185,65 @@ const TiltCard = ({ mod, index }: { mod: typeof modules[0]; index: number }) => 
 
 export const EcosystemSection = () => {
   return (
-    <section className="py-24 md:py-40 bg-[#020202] relative overflow-hidden" aria-labelledby="ecosystem-heading">
+    <section className="py-24 md:py-36 bg-[#020202] relative overflow-hidden" aria-labelledby="ecosystem-heading">
+      {/* Background ambient */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden>
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[100%] h-[50%] bg-[radial-gradient(ellipse_70%_50%_at_center_top,rgba(16,185,129,0.05),transparent)]" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[55%] bg-[radial-gradient(ellipse_65%_50%_at_50%_0%,rgba(16,185,129,0.055),transparent)]" />
+        <div className="absolute bottom-0 w-full h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-8 relative z-10">
         {/* Header */}
-        <div className="text-center mb-16 md:mb-24">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.92 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/[0.05] border border-emerald-500/[0.1] text-emerald-400 text-[10px] font-black uppercase tracking-[0.35em] mb-8"
-          >
-            <BarChart2 className="w-3.5 h-3.5" aria-hidden />
-            Institutional Core
-          </motion.div>
+        <div className="mb-16 md:mb-20 flex flex-col lg:flex-row lg:items-end gap-8 justify-between">
+          <div>
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/[0.06] border border-emerald-500/[0.12] text-emerald-400 text-[10px] font-black uppercase tracking-[0.3em] mb-7"
+            >
+              <BarChart2 className="w-3.5 h-3.5" aria-hidden />
+              Institutional Core
+            </motion.div>
 
-          <motion.h2
-            id="ecosystem-heading"
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-            className="text-4xl sm:text-6xl md:text-7xl lg:text-[100px] font-black text-white mb-8 tracking-tighter leading-[0.95] max-w-4xl mx-auto"
-          >
-            THE{" "}
-            <span className="italic font-serif text-gradient-emerald">INFRASTRUCTURE</span>
-          </motion.h2>
+            <motion.h2
+              id="ecosystem-heading"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.08, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="text-4xl sm:text-6xl md:text-7xl lg:text-[90px] font-black text-white tracking-tighter leading-[0.9] max-w-3xl"
+            >
+              Everything{" "}
+              <span
+                className="italic font-serif"
+                style={{
+                  background: "linear-gradient(135deg, #10B981, #00FFA3)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
+                serious
+              </span>{" "}
+              traders need.
+            </motion.h2>
+          </div>
 
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="text-gray-500 max-w-2xl mx-auto text-lg leading-relaxed"
+            transition={{ delay: 0.16 }}
+            className="text-white/35 max-w-sm text-[15px] leading-relaxed lg:text-right lg:pb-3"
           >
-            Everything serious traders need — integrated into a single, institutional-grade platform.
+            Every module is interconnected — signals feed academy, academy feeds algorithms, algorithms feed results.
           </motion.p>
         </div>
 
-        {/* Bento grid — large + small cards */}
+        {/* Bento Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
-          {/* Row 1: one wide card (2 cols) + one small */}
+          {/* Row 1 */}
           <div className="lg:col-span-2">
             <TiltCard mod={modules[0]} index={0} />
           </div>
@@ -215,7 +251,7 @@ export const EcosystemSection = () => {
             <TiltCard mod={modules[1]} index={1} />
           </div>
 
-          {/* Row 2: three equal cards */}
+          {/* Row 2 */}
           {modules.slice(2).map((mod, i) => (
             <div key={mod.id} className="lg:col-span-1">
               <TiltCard mod={mod} index={i + 2} />

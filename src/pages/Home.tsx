@@ -5,8 +5,11 @@ import { EcosystemSection } from "@/components/home/EcosystemSection";
 import { GlobalReach } from "@/components/home/GlobalReach";
 import { HeroSection } from "@/components/home/HeroSection";
 import { MarketTicker } from "@/components/home/MarketTicker";
+import { StatsSection } from "@/components/home/StatsSection";
 import { PartnerLogos } from "@/components/ui/PartnerLogos";
 import { TrustGrid } from "@/components/home/TrustGrid";
+import { WebinarPromo } from "@/components/home/WebinarPromo";
+import { PerformanceHistory } from "@/components/home/PerformanceHistory";
 import { NewsletterPopup } from "@/components/ui/NewsletterPopup";
 import { SignupForm } from "@/components/ui/SignupForm";
 import { ReviewPromptModal } from "@/components/ui/ReviewPromptModal";
@@ -56,7 +59,7 @@ export const Home = () => {
       <ReviewPromptModal isOpen={showReviewModal} onClose={() => setShowReviewModal(false)} />
       <ExitIntentModal />
 
-      {/* === FULL SEO METADATA — Keyword-dominant, intent-matched === */}
+      {/* === FULL SEO METADATA === */}
       <PageMeta
         title="IFX Trades | Asia's Premier Institutional Algorithmic Training Desk"
         description="Master the markets with institutional-grade algorithmic execution, quantitative research, and macro diagnostics. Asia's most advanced desk for professional traders."
@@ -85,16 +88,37 @@ export const Home = () => {
 
       <div className="noise-overlay" />
 
-      {/* === ABOVE THE FOLD — Dominant, Silent === */}
+      {/* === ABOVE THE FOLD === */}
       <HeroSection />
-      
-      <div className="relative z-10 -mt-20 mb-32">
-         <MarketTicker />
+
+      {/* === MARKET TICKER — Educational Demo Feed === */}
+      <div className="relative z-10">
+        <MarketTicker />
       </div>
 
-      {/* === INFRASTRUCTURE & ECOSYSTEM — Direct value === */}
-      <LazySection placeholderHeight="800px">
+      {/* === STATS STRIP === */}
+      <LazySection placeholderHeight="200px">
+        <StatsSection />
+      </LazySection>
+
+      {/* === ECOSYSTEM BENTO GRID === */}
+      <LazySection placeholderHeight="900px">
         <EcosystemSection />
+      </LazySection>
+
+      {/* === FLAGSHIP ALGO MODULE === */}
+      <LazySection placeholderHeight="600px" className="py-24 sm:py-32">
+        <AlgoGreatness />
+      </LazySection>
+
+      {/* === UPCOMING WEBINAR === */}
+      <LazySection placeholderHeight="600px">
+        <WebinarPromo />
+      </LazySection>
+
+      {/* === PERFORMANCE HISTORY === */}
+      <LazySection placeholderHeight="700px">
+        <PerformanceHistory />
       </LazySection>
 
       {/* === GLOBAL REACH / TELEMETRY === */}
@@ -102,25 +126,20 @@ export const Home = () => {
         <GlobalReach />
       </LazySection>
 
-      {/* === FLAGSHIP ALGO MODULE — The purchase target === */}
-      <LazySection placeholderHeight="600px" className="py-24 sm:py-32">
-        <AlgoGreatness />
-      </LazySection>
-
       {/* === CORPORATE TRUST LAYER === */}
-      <LazySection placeholderHeight="1400px">
-        <div className="py-24 sm:py-40 bg-black/40 border-y border-white/5">
-           <TrustGrid />
-           <div className="mt-20">
-             <PartnerLogos />
-           </div>
+      <LazySection placeholderHeight="1200px">
+        <div className="border-y border-white/[0.04]">
+          <TrustGrid />
+          <div className="py-12 border-t border-white/[0.04]">
+            <PartnerLogos />
+          </div>
         </div>
       </LazySection>
 
       {/* === CONVERSION ACQUISITION === */}
       <LazySection placeholderHeight="400px">
-        <div className="py-32 mb-20">
-           <SignupForm />
+        <div className="py-28">
+          <SignupForm />
         </div>
       </LazySection>
 

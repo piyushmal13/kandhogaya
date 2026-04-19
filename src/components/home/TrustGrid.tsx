@@ -1,200 +1,189 @@
-import React from 'react';
-import { motion } from 'motion/react';
-import { ShieldCheck, Target, Zap, TrendingUp, Globe, Award, ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { motion } from "motion/react";
+import { ShieldCheck, Target, Zap, TrendingUp, Globe, Award, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 // ─── NO BUSINESS LOGIC — Pure UI component ───────────────────────────────────
-// All data is static config. No Supabase. No state. Safe to fully refactor JSX.
-// ─────────────────────────────────────────────────────────────────────────────
-
-const SNAP = [0.4, 0, 0.2, 1] as const;
 
 const PILLARS = [
   {
     icon: ShieldCheck,
-    title: "Institutional Integrity",
-    desc: "Rigorous quantitative models verified through exchange tick-data backtesting. Zero retail manipulation.",
-    color: "text-emerald-400",
-    borderColor: "border-emerald-500/[0.12]",
-    glowClass: "group-hover:shadow-[0_0_30px_rgba(16,185,129,0.08)]",
-    barColor: "bg-emerald-500",
+    title: "100% Education. Zero Broker Affiliation.",
+    desc: "We do not accept deposits, execute client trades, or hold funds. Rigorously verified by regulatory compliance standards across India and UAE.",
+    color: "#10B981",
     num: "01",
   },
   {
     icon: Target,
-    title: "Precision Execution",
-    desc: "High-performance algorithmic execution systems designed for MT5 and institutional liquidity pools.",
-    color: "text-cyan-400",
-    borderColor: "border-cyan-500/[0.12]",
-    glowClass: "group-hover:shadow-[0_0_30px_rgba(6,182,212,0.08)]",
-    barColor: "bg-cyan-400",
+    title: "Precision Execution Architecture",
+    desc: "High-performance MT5 Expert Advisor systems designed to execute at institutional liquidity pools, not retail market orders.",
+    color: "#06B6D4",
     num: "02",
   },
   {
     icon: TrendingUp,
-    title: "Performance Audited",
-    desc: "Every signal is archived for transparency. Institutional-grade win-rates, independently verified.",
-    color: "text-violet-400",
-    borderColor: "border-violet-500/[0.12]",
-    glowClass: "group-hover:shadow-[0_0_30px_rgba(139,92,246,0.08)]",
-    barColor: "bg-violet-400",
+    title: "Performance Independently Audited",
+    desc: "Every signal is archived with timestamped entries and exits. Our 36-month audit log is transparent and independently verified.",
+    color: "#8B5CF6",
     num: "03",
   },
   {
     icon: Zap,
-    title: "Market Intelligence",
-    desc: "Proprietary XAUUSD macro research and precision signals delivered via the Sovereign Terminal.",
-    color: "text-[var(--brand-secondary)]",
-    borderColor: "border-yellow-600/[0.12]",
-    glowClass: "group-hover:shadow-[0_0_30px_rgba(212,175,55,0.08)]",
-    barColor: "bg-[var(--brand-secondary)]",
+    title: "XAUUSD Macro Intelligence",
+    desc: "Proprietary gold macro research built on institutional order flow, COT data, and macro catalysts — not retail chart patterns.",
+    color: "#D4AF37",
     num: "04",
   },
   {
     icon: Globe,
-    title: "Global Compliance",
-    desc: "Operational across India, Dubai, and Singapore. Adhering to the highest educational standards.",
-    color: "text-blue-400",
-    borderColor: "border-blue-500/[0.12]",
-    glowClass: "group-hover:shadow-[0_0_30px_rgba(59,130,246,0.08)]",
-    barColor: "bg-blue-400",
+    title: "India · Dubai · Singapore",
+    desc: "Operationally compliant across three jurisdictions. Our education desk is trusted by traders in 40+ countries worldwide.",
+    color: "#3B82F6",
     num: "05",
   },
   {
     icon: Award,
-    title: "Certified Excellence",
-    desc: "Recipient of Asia's Top Forex Intelligence Award 2025. Leading the algorithmic revolution.",
-    color: "text-rose-400",
-    borderColor: "border-rose-500/[0.12]",
-    glowClass: "group-hover:shadow-[0_0_30px_rgba(244,63,94,0.08)]",
-    barColor: "bg-rose-400",
+    title: "Asia's Top Intelligence Award 2025",
+    desc: "Recognised as Asia's leading institutional forex education platform for quantitative curriculum and outcomes excellence.",
+    color: "#F43F5E",
     num: "06",
   },
 ];
 
+const SNAP = [0.4, 0, 0.2, 1] as const;
+
 export const TrustGrid = () => {
   return (
     <section
-      className="py-24 md:py-40 bg-[#020202] border-t border-white/[0.04] relative overflow-hidden"
+      className="py-24 md:py-36 bg-[#020202] relative overflow-hidden"
       aria-labelledby="trust-heading"
     >
       {/* Ambient */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[50%] bg-[radial-gradient(ellipse_80%_50%_at_center,rgba(16,185,129,0.03),transparent)]" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[40%] bg-[radial-gradient(ellipse_70%_45%_at_50%_0%,rgba(16,185,129,0.04),transparent)]" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-8 relative z-10">
-        {/* ── Section Header ── */}
-        <div className="mb-16 md:mb-24">
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.28, ease: SNAP }}
-            className="flex items-center gap-3 mb-8"
-          >
-            <div className="h-px w-8 bg-[var(--brand-primary)]" />
-            <span
-              className="text-[9px] uppercase text-[var(--brand-primary)] font-black"
-              style={{ fontFamily: 'IBM Plex Mono, monospace', letterSpacing: '0.35em' }}
+        {/* Header */}
+        <div className="mb-16 md:mb-20 flex flex-col md:flex-row md:items-end gap-8 justify-between">
+          <div>
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, ease: SNAP }}
+              className="flex items-center gap-3 mb-7"
             >
-              INSTITUTIONAL_BLUEPRINT
-            </span>
-          </motion.div>
+              <div className="h-px w-8 bg-emerald-500" />
+              <span
+                className="text-[9px] uppercase text-emerald-500 font-black"
+                style={{ fontFamily: "IBM Plex Mono, monospace", letterSpacing: "0.35em" }}
+              >
+                Why IFX Trades
+              </span>
+            </motion.div>
 
-          <motion.h2
-            id="trust-heading"
-            initial={{ opacity: 0, y: 18 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.06, duration: 0.35, ease: SNAP }}
-            className="text-4xl sm:text-6xl md:text-8xl font-black text-white tracking-tighter leading-[0.88] mb-5"
-          >
-            The{" "}
-            <span className="italic font-serif text-gradient-emerald">Corporate</span>
-            {" "}Ecosystem
-          </motion.h2>
+            <motion.h2
+              id="trust-heading"
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.06, duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
+              className="text-4xl sm:text-6xl md:text-7xl font-black text-white tracking-tighter leading-[0.9] max-w-2xl"
+            >
+              Built on a{" "}
+              <span
+                className="italic font-serif"
+                style={{
+                  background: "linear-gradient(135deg, #10B981, #00FFA3)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
+                different
+              </span>{" "}
+              standard.
+            </motion.h2>
+          </div>
 
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.12, duration: 0.3, ease: SNAP }}
-            className="text-white/40 max-w-2xl text-base md:text-lg leading-relaxed"
+            transition={{ delay: 0.14, duration: 0.5 }}
+            className="text-white/35 max-w-sm text-[15px] leading-relaxed md:text-right md:pb-2"
           >
-            Designed by quants. Executed by machines. Trusted by thousands of elite traders across Asia.
+            Designed by quants. Trusted by thousands of professional traders across Asia since 2022.
           </motion.p>
         </div>
 
-        {/* ── Pillar Grid ── */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+        {/* Pillar Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/[0.05] rounded-[2rem] overflow-hidden border border-white/[0.06]">
           {PILLARS.map((pillar, i) => (
             <motion.div
               key={pillar.title}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}
-              transition={{ delay: i * 0.06, duration: 0.3, ease: SNAP }}
-              className={`group relative p-8 md:p-10 rounded-[1.75rem] bg-[#080B12] border ${pillar.borderColor} ${pillar.glowClass} hover:border-white/[0.09] transition-all duration-150 overflow-hidden`}
+              transition={{ delay: i * 0.06, duration: 0.55, ease: SNAP }}
+              className="group relative p-8 md:p-10 bg-[#020202] hover:bg-[#080B12] transition-colors duration-300 overflow-hidden"
             >
               {/* Number watermark */}
               <div
-                className="absolute top-6 right-7 text-6xl font-black text-white/[0.02] select-none leading-none"
+                className="absolute top-5 right-6 text-7xl font-black text-white/[0.025] select-none leading-none"
                 aria-hidden="true"
-                style={{ fontFamily: 'IBM Plex Mono, monospace' }}
+                style={{ fontFamily: "IBM Plex Mono, monospace" }}
               >
                 {pillar.num}
               </div>
 
+              {/* Hover accent line */}
+              <div
+                className="absolute top-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                style={{ background: `linear-gradient(90deg, transparent, ${pillar.color}40, transparent)` }}
+              />
+
               {/* Icon */}
-              <div className={`w-11 h-11 rounded-xl border ${pillar.borderColor} flex items-center justify-center mb-8 group-hover:scale-105 transition-transform duration-150 ${pillar.color}`}>
-                <pillar.icon className="w-5 h-5" aria-hidden="true" />
+              <div
+                className="w-11 h-11 rounded-xl flex items-center justify-center mb-7 group-hover:scale-110 transition-transform duration-200"
+                style={{
+                  background: `${pillar.color}12`,
+                  border: `1px solid ${pillar.color}22`,
+                }}
+              >
+                <pillar.icon className="w-5 h-5" style={{ color: pillar.color }} aria-hidden="true" />
               </div>
 
-              <h3 className="text-[15px] font-black text-white mb-3 tracking-tight group-hover:text-white transition-colors duration-150">
-                {pillar.title}
-              </h3>
-              <p className="text-[13px] text-white/35 leading-[1.8]">{pillar.desc}</p>
-
-              {/* Hover reveal footer */}
-              <div className="mt-6 pt-5 border-t border-white/[0.04] flex items-center justify-between opacity-0 group-hover:opacity-100 translate-y-1.5 group-hover:translate-y-0 transition-all duration-150">
-                <span
-                  className={`text-[9px] font-black uppercase ${pillar.color}`}
-                  style={{ fontFamily: 'IBM Plex Mono, monospace', letterSpacing: '0.3em' }}
-                >
-                  PROTOCOL_VERIFIED
-                </span>
-                <div className={`h-px w-6 ${pillar.barColor} rounded-full opacity-50`} />
-              </div>
+              <h3 className="text-[15px] font-black text-white mb-3 tracking-tight leading-tight">{pillar.title}</h3>
+              <p className="text-[13px] text-white/35 leading-[1.85]">{pillar.desc}</p>
             </motion.div>
           ))}
         </div>
 
-        {/* ── Bottom CTA — Institutional Gold accent ── */}
+        {/* Bottom CTA */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.25, duration: 0.3, ease: SNAP }}
-          className="mt-16 md:mt-24 flex flex-col sm:flex-row items-center justify-between gap-6 p-8 md:p-10 rounded-[1.75rem] bg-white/[0.012] border border-white/[0.06]"
+          transition={{ delay: 0.25, duration: 0.5, ease: SNAP }}
+          className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-6 p-8 md:p-10 rounded-[1.75rem] border border-white/[0.07] bg-gradient-to-br from-emerald-500/[0.04] to-transparent"
         >
           <div>
             <div className="text-white font-black text-xl md:text-2xl tracking-tight mb-2">
-              Ready to elevate your trading?
+              Ready to trade with institutional precision?
             </div>
             <div
-              className="text-white/35 text-[12px] uppercase tracking-wider"
-              style={{ fontFamily: 'IBM Plex Mono, monospace' }}
+              className="text-white/30 text-[11px] uppercase tracking-wider"
+              style={{ fontFamily: "IBM Plex Mono, monospace" }}
             >
-              12,400+ institutional traders // Zero broker affiliation // Pure education
+              12,400+ professional traders · Zero broker conflict · Pure education
             </div>
           </div>
           <Link
             to="/academy"
-            data-cursor="START"
-            className="shrink-0 inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-[var(--brand-primary)] text-black font-black text-[11px] uppercase tracking-[0.15em] hover:bg-[var(--color-primary-400)] transition-all duration-150 hover:scale-[1.02] active:scale-[0.98] shadow-[0_0_24px_rgba(16,185,129,0.2)] hover:shadow-[0_0_40px_rgba(16,185,129,0.3)] whitespace-nowrap"
+            className="shrink-0 inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl bg-emerald-500 text-black font-black text-[11px] uppercase tracking-[0.15em] hover:bg-emerald-400 transition-all duration-150 hover:scale-[1.02] active:scale-[0.98] shadow-[0_0_30px_rgba(16,185,129,0.25)] hover:shadow-[0_0_50px_rgba(16,185,129,0.35)] whitespace-nowrap"
           >
-            Get Started <ArrowRight className="w-4 h-4" aria-hidden="true" />
+            Join the Academy <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </Link>
         </motion.div>
       </div>

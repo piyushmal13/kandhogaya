@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, useInView } from "motion/react";
+import { TrendingUp, Users, Video, Globe } from "lucide-react";
 
 // ─── LOCKED: DO NOT MODIFY ────────────────────────────────────────────────────
 // useCountUp: RAF-based count animation with cubic ease-out — pure math, no deps
@@ -11,41 +12,41 @@ const SNAP = [0.4, 0, 0.2, 1] as const;
 
 const stats = [
   {
-    label: "Elite Students",
+    label: "Elite Students Trained",
     value: "12,400",
     suffix: "+",
     sub: "India, Dubai & Global",
-    color: "text-white",
-    accentColor: "bg-white",
+    icon: Users,
+    color: "#10B981",
   },
   {
     label: "Course Completion Rate",
     value: "94",
     suffix: "%",
-    sub: "Industry-Leading Outcomes",
-    color: "text-emerald-400",
-    accentColor: "bg-emerald-400",
+    sub: "Industry-leading outcomes",
+    icon: TrendingUp,
+    color: "#00FFA3",
   },
   {
     label: "Live Webinars Hosted",
     value: "280",
     suffix: "+",
     sub: "Since 2022",
-    color: "text-[var(--brand-accent)]",
-    accentColor: "bg-[var(--brand-accent)]",
+    icon: Video,
+    color: "#D4AF37",
   },
   {
     label: "Countries Reached",
     value: "40",
     suffix: "+",
-    sub: "Global Community",
-    color: "text-[var(--brand-secondary)]",
-    accentColor: "bg-[var(--brand-secondary)]",
+    sub: "Global community",
+    icon: Globe,
+    color: "#8B5CF6",
   },
 ];
 
 // LOCKED — RAF count-up engine
-const useCountUp = (end: number, trigger: boolean, duration: number = 1800) => {
+const useCountUp = (end: number, trigger: boolean, duration = 1800) => {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
@@ -69,13 +70,14 @@ const StatItem = ({ stat, i }: { stat: typeof stats[0]; i: number }) => {
   const isInView = useInView(ref, { once: true, margin: "-50px" });
   const regex = /(\d+(\.\d+)?)/;
   const match = regex.exec(stat.value);
-  const numericValue = match ? Number.parseFloat(match[0]) : 0;
-  const hasDecimal = stat.value.includes('.');
-  // LOCKED — useCountUp trigger
+  const numericValue = match ? parseFloat(match[0]) : 0;
+  const hasDecimal = stat.value.includes(".");
   const animatedValue = useCountUp(numericValue, isInView, 1800);
   const formattedCount = hasDecimal
     ? animatedValue.toFixed(1)
     : Math.floor(animatedValue).toLocaleString();
+
+  const Icon = stat.icon;
 
   return (
     <motion.div
@@ -83,39 +85,52 @@ const StatItem = ({ stat, i }: { stat: typeof stats[0]; i: number }) => {
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ delay: i * 0.09, duration: 0.35, ease: SNAP }}
-      className="relative p-10 md:p-14 flex flex-col justify-start group border-b lg:border-b-0 lg:border-r border-white/[0.05] last:border-r-0 hover:bg-white/[0.012] transition-colors duration-150 overflow-hidden"
+      transition={{ delay: i * 0.09, duration: 0.55, ease: SNAP }}
+      className="group relative flex flex-col p-10 md:p-12 cursor-default"
     >
-      {/* Subtle ambient glow on hover */}
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-gradient-to-tr from-[var(--brand-primary)]/[0.04] via-transparent to-transparent pointer-events-none" />
+      {/* Vertical divider (right) — not on last col */}
+      <div className="absolute top-0 right-0 bottom-0 w-px bg-white/[0.05] hidden lg:block last:hidden" />
+      {/* Horizontal divider (bottom) on mobile/tablet */}
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-white/[0.05] lg:hidden" />
 
-      {/* Data label — IBM Plex Mono, precision */}
+      {/* Hover glow */}
       <div
-        className="text-[9px] md:text-[10px] font-black uppercase mb-6 md:mb-10 opacity-40 group-hover:opacity-70 transition-opacity duration-150 text-white/60"
-        style={{ fontFamily: 'IBM Plex Mono, monospace', letterSpacing: '0.3em' }}
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+        style={{ background: `radial-gradient(ellipse 70% 60% at 30% 50%, ${stat.color}08, transparent)` }}
+      />
+
+      {/* Icon */}
+      <div
+        className="w-11 h-11 rounded-xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-200"
+        style={{ background: `${stat.color}10`, border: `1px solid ${stat.color}20` }}
+      >
+        <Icon className="w-5 h-5" style={{ color: stat.color }} aria-hidden />
+      </div>
+
+      {/* Label */}
+      <div
+        className="text-[9px] font-black uppercase tracking-[0.3em] text-white/25 mb-5 group-hover:text-white/45 transition-colors duration-200"
+        style={{ fontFamily: "IBM Plex Mono, monospace" }}
       >
         {stat.label}
       </div>
 
-      {/* Animated value — IBM Plex Mono, dominant size */}
+      {/* Animated number */}
       <div
-        className={`text-5xl md:text-7xl lg:text-[5.5rem] font-black tracking-tight mb-4 transition-transform duration-150 group-hover:translate-x-0.5 tabular-nums ${stat.color}`}
-        style={{ fontFamily: 'IBM Plex Mono, monospace' }}
+        className="text-5xl md:text-6xl lg:text-7xl font-black tracking-tight mb-3 tabular-nums"
+        style={{ fontFamily: "IBM Plex Mono, monospace", color: stat.color }}
       >
         {formattedCount}{stat.suffix}
       </div>
 
-      {/* Sub-label */}
-      <div
-        className="text-[9px] md:text-[11px] font-medium flex items-center gap-2.5 opacity-50 group-hover:opacity-80 transition-opacity duration-150 text-white/50"
-        style={{ fontFamily: 'IBM Plex Mono, monospace', letterSpacing: '0.12em' }}
-      >
-        <div className={`w-1.5 h-1.5 rounded-full ${stat.accentColor} animate-pulse`} />
-        <span className="uppercase tracking-wide">{stat.sub}</span>
+      {/* Sub */}
+      <div className="flex items-center gap-2 text-[10px] font-medium text-white/30 uppercase tracking-[0.15em]">
+        <div
+          className="w-1.5 h-1.5 rounded-full animate-pulse"
+          style={{ background: stat.color }}
+        />
+        {stat.sub}
       </div>
-
-      {/* Bottom separator line — appears on hover */}
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--brand-primary)]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-150" />
     </motion.div>
   );
 };
@@ -123,31 +138,35 @@ const StatItem = ({ stat, i }: { stat: typeof stats[0]; i: number }) => {
 export const StatsSection = () => {
   return (
     <section
-      className="py-24 md:py-32 bg-[var(--bg-base)] relative overflow-hidden"
+      className="py-16 md:py-24 bg-[#020202] relative overflow-hidden border-y border-white/[0.05]"
       aria-label="IFX Trades platform statistics"
     >
-      {/* Radial ambient */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.025),transparent_65%)] pointer-events-none" aria-hidden="true" />
+      {/* Subtle ambient */}
+      <div
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full pointer-events-none"
+        aria-hidden
+        style={{ background: "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(16,185,129,0.025), transparent)" }}
+      />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        {/* Section label */}
+        {/* Label */}
         <motion.div
-          initial={{ opacity: 0, y: 12 }}
+          initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.3, ease: SNAP }}
-          className="flex items-center gap-3 mb-12 md:mb-16"
+          transition={{ duration: 0.4, ease: SNAP }}
+          className="flex items-center gap-3 mb-10"
         >
-          <div className="h-px w-8 bg-[var(--brand-primary)]" />
+          <div className="h-px w-8 bg-emerald-500" />
           <span
-            className="text-[9px] uppercase text-[var(--brand-primary)] font-black"
-            style={{ fontFamily: 'IBM Plex Mono, monospace', letterSpacing: '0.35em' }}
+            className="text-[9px] uppercase text-emerald-500 font-black"
+            style={{ fontFamily: "IBM Plex Mono, monospace", letterSpacing: "0.35em" }}
           >
-            PLATFORM_TELEMETRY
+            Platform Telemetry
           </span>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 site-panel overflow-hidden border border-white/[0.05] shadow-[0_40px_100px_rgba(0,0,0,0.5)]">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 border border-white/[0.06] rounded-[2rem] overflow-hidden">
           {stats.map((stat, i) => (
             <StatItem key={stat.label} stat={stat} i={i} />
           ))}

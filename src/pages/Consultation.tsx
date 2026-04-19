@@ -244,7 +244,9 @@ export const Consultation = () => {
                     </>
                   )}
                 </button>
-                
+              </form>
+            </div>
+          </motion.div>
         </div>
       </div>
     </div>

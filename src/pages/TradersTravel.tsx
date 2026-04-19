@@ -177,8 +177,5 @@ export const TradersTravel = () => {
 
       </div>
     </div>
-
-      </div>
-    </div>
   );
 };
