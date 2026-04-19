@@ -106,7 +106,7 @@ const TiltCard = ({ mod, index }: { mod: typeof modules[0]; index: number }) => 
       >
         <Link
           to={mod.link}
-          className="flex flex-col h-full p-7 md:p-9 rounded-[2rem] bg-[#080B12] border border-white/[0.05] overflow-hidden transition-all duration-500 group-hover:border-white/[0.1]"
+          className="flex flex-col h-full p-7 md:p-9 rounded-[2rem] bg-[#030406] border border-white/[0.05] overflow-hidden transition-all duration-500 group-hover:border-white/[0.1]"
           style={{ boxShadow: "0 30px 60px rgba(0,0,0,0.45)" }}
         >
           {/* Spotlight glow */}
@@ -185,7 +185,7 @@ const TiltCard = ({ mod, index }: { mod: typeof modules[0]; index: number }) => 
 
 export const EcosystemSection = () => {
   return (
-    <section className="py-24 md:py-36 bg-[#020202] relative overflow-hidden" aria-labelledby="ecosystem-heading">
+    <section className="py-24 md:py-36 bg-[#010203] relative overflow-hidden" aria-labelledby="ecosystem-heading">
       {/* Background ambient */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden>
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[55%] bg-[radial-gradient(ellipse_65%_50%_at_50%_0%,rgba(16,185,129,0.055),transparent)]" />

@@ -4,69 +4,75 @@ import {
   ArrowUpRight,
   ShieldCheck,
   Star,
+  Activity,
+  TerminalSquare
 } from "lucide-react";
 
 import { BRANDING } from "../../constants/branding";
 import { InstagramIcon, LinkedinIcon } from "./Icons";
 
 export const Footer = () => (
-  <footer className="relative overflow-hidden border-t border-white/[0.04] pt-32 bg-[#020202]">
-    {/* Ambient bg */}
+  <footer className="relative overflow-hidden border-t border-white/[0.03] pt-32 lg:pt-48 pb-12 bg-[#010203]">
+    {/* Deep Void Ambient background */}
     <div className="absolute inset-0 pointer-events-none" aria-hidden>
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(ellipse_60%_80%_at_50%_0%,rgba(16,185,129,0.025),transparent)]" />
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[1200px] h-[500px] bg-[radial-gradient(ellipse_at_bottom,rgba(16,185,129,0.03),transparent_70%)]" />
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/[0.05] to-transparent" />
     </div>
 
-    <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
-      {/* --- Optimized SEO Sitemapping --- */}
+    <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-12">
+      {/* --- Master Terminal SEO Sitemapping --- */}
       <div 
-        className="grid gap-12 lg:grid-cols-4 mb-20 md:mb-32"
+        className="grid gap-16 lg:grid-cols-12 mb-24 md:mb-32"
         itemScope
         itemType="https://schema.org/Organization"
       >
         <meta itemProp="url" content="https://ifxtrades.com" />
         <meta itemProp="logo" content="https://ifxtrades.com/logo.png" />
         
-        {/* --- Column 1: Brand & Identity --- */}
-        <div>
+        {/* --- Column 1: Brand & Identity (Spans more columns) --- */}
+        <div className="lg:col-span-5 pr-0 lg:pr-12">
           <Link to="/" className="flex items-center gap-4 group mb-10" aria-label="Go to Home">
-            <div className="flex items-center justify-center transition-all duration-700 h-10 w-10 sm:h-12 sm:w-12 rounded-xl overflow-hidden group-hover:scale-110 border border-white/10 bg-[#080B12]">
+            <div className="flex items-center justify-center transition-all duration-700 h-12 w-12 sm:h-14 sm:w-14 rounded-2xl overflow-hidden group-hover:scale-105 border border-white/5 bg-[#030406] shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
               <img
                 src={BRANDING.logoUrl}
                 alt={BRANDING.name}
-                className="h-full w-full object-contain p-1"
+                className="h-full w-full object-contain p-1.5"
                 itemProp="image"
               />
             </div>
-            <div className="text-[10px] font-black tracking-[0.4em] text-emerald-500/50 uppercase">Institutional DNA</div>
+            <div className="flex flex-col">
+              <div className="text-[10px] font-black tracking-[0.4em] text-white uppercase leading-tight mb-1">IFX TRADES</div>
+              <div className="text-[9px] font-black tracking-[0.3em] text-emerald-500/60 uppercase">Institutional DNA</div>
+            </div>
           </Link>
-          <p className="text-sm leading-[1.8] text-gray-500 font-medium max-w-xs mb-8" itemProp="description">
-            The global benchmark for Institutional Market Intelligence and algorithmic execution. Engineered for elite education in Dubai, India, and globally.
+          <p className="text-[13px] leading-[2] text-[#8A9AAB] font-light max-w-sm mb-10" itemProp="description">
+            The global benchmark for systematic market intelligence and algorithmic execution. Engineered for elite capital scaling in Dubai, India, and beyond.
           </p>
 
           <div 
-            className="inline-flex items-center gap-3 px-4 py-2.5 bg-white/[0.03] border border-white/[0.05] rounded-full mb-8 hover:bg-white/[0.05] transition-colors cursor-default"
+            className="inline-flex items-center gap-4 px-5 py-3 bg-white/[0.02] border border-white/[0.04] rounded-2xl mb-10 hover:bg-white/[0.04] hover:border-white/[0.08] transition-all cursor-default shadow-lg"
             itemProp="aggregateRating"
             itemScope
             itemType="https://schema.org/AggregateRating"
           >
              <meta itemProp="ratingValue" content="4.9" />
              <meta itemProp="reviewCount" content="12400" />
-             <div className="flex items-center gap-0.5">
-               {[1,2,3,4,5].map(i => <Star key={i} className="w-3 h-3 text-emerald-400 fill-emerald-400" aria-hidden="true" />)}
+             <div className="flex items-center gap-1">
+               {[1,2,3,4,5].map(i => <Star key={i} className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400" aria-hidden="true" />)}
              </div>
-             <span className="text-[9px] font-black text-white/80 uppercase tracking-widest italic border-l border-white/20 pl-3">
-               Rated 4.9/5
+             <span className="text-[9px] font-black text-white/80 uppercase tracking-[0.25em] italic border-l border-white/10 pl-4 py-1">
+               Elite Status
              </span>
           </div>
 
-          <div className="flex flex-col gap-4 text-[10px] font-black text-white/40 uppercase tracking-[0.2em] mb-10">
-             <div className="flex items-start gap-3" itemProp="address" itemScope itemType="https://schema.org/PostalAddress">
-               <ShieldCheck className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-               <span className="leading-relaxed">Dubai Desk: <span className="text-white/60" itemProp="addressLocality">Bussiness Bay</span>, <span itemProp="addressCountry">UAE</span></span>
+          <div className="flex flex-col gap-5 text-[9px] font-black text-[#4F5A69] uppercase tracking-[0.25em] mb-12">
+             <div className="flex items-start gap-4" itemProp="address" itemScope itemType="https://schema.org/PostalAddress">
+               <ShieldCheck className="w-4 h-4 text-emerald-500/50 shrink-0 mt-px" />
+               <span className="leading-relaxed mt-0.5">Global Desk: <span className="text-white/60" itemProp="addressLocality">Business Bay</span>, <span itemProp="addressCountry">UAE</span></span>
              </div>
-             <div className="flex items-start gap-3" itemProp="address" itemScope itemType="https://schema.org/PostalAddress">
-               <ShieldCheck className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-               <span className="leading-relaxed">India Desk: <span className="text-white/60" itemProp="addressLocality">Greater Noida</span>, <span itemProp="addressRegion">UP</span></span>
+             <div className="flex items-start gap-4" itemProp="address" itemScope itemType="https://schema.org/PostalAddress">
+               <Activity className="w-4 h-4 text-emerald-500/50 shrink-0 mt-px" />
+               <span className="leading-relaxed mt-0.5">Asia Desk: <span className="text-white/60" itemProp="addressLocality">Greater Noida</span>, <span itemProp="addressRegion">India</span></span>
              </div>
           </div>
           
@@ -80,56 +86,62 @@ export const Footer = () => (
                 href={social.url} 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="p-2.5 border border-white/5 rounded-xl bg-white/[0.02] text-gray-400 hover:text-emerald-400 hover:border-emerald-500/20 hover:bg-emerald-500/10 transition-all"
+                className="p-3 border border-white/[0.05] rounded-xl bg-[#030406] text-[#4F5A69] hover:text-emerald-400 hover:border-emerald-500/30 hover:bg-emerald-500/10 hover:scale-105 transition-all duration-300 shadow-md"
                 itemProp="sameAs"
+                aria-label="Social Link"
               >
-                <social.Icon className="w-[18px] h-[18px]" />
+                <social.Icon className="w-5 h-5" />
               </a>
             ))}
           </div>
         </div>
 
-        {/* --- Column 2: Market Operations --- */}
-        <div>
-          <h4 className="mb-8 text-[11px] font-black uppercase tracking-[0.3em] text-white">Market Operations</h4>
-          <ul className="space-y-4 text-sm text-gray-500 font-medium">
-            <li><Link to="/travel" className="hover:text-emerald-400 transition-colors flex items-center gap-2 group">Traders Travel <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" /></Link></li>
-            <li><Link to="/marketplace" className="hover:text-emerald-400 transition-colors flex items-center gap-2 group">Execution Algos <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" /></Link></li>
-            <li><Link to="/results" className="hover:text-emerald-400 transition-colors flex items-center gap-2 group">System Backtesting <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" /></Link></li>
-          </ul>
-        </div>
+        {/* --- Navigation Columns --- */}
+        <div className="lg:col-span-7 grid grid-cols-2 md:grid-cols-3 gap-10">
+          {/* --- Column 2: Master Terminal --- */}
+          <div>
+            <h4 className="mb-10 text-[10px] font-black uppercase tracking-[0.3em] text-white flex items-center gap-2">
+              <TerminalSquare className="w-3.5 h-3.5 text-emerald-500/50" /> Protocol
+            </h4>
+            <ul className="space-y-5 text-[13px] text-[#8A9AAB] font-light">
+              <li><Link to="/marketplace" className="hover:text-emerald-400 transition-colors flex items-center gap-2 group">Execution Desk <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
+              <li><Link to="/signals" className="hover:text-emerald-400 transition-colors flex items-center gap-2 group">Live Signals <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
+              <li><Link to="/results" className="hover:text-emerald-400 transition-colors flex items-center gap-2 group">Audit Logs <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
+            </ul>
+          </div>
 
-        {/* --- Column 3: Trading Academy --- */}
-        <div>
-          <h4 className="mb-8 text-[11px] font-black uppercase tracking-[0.3em] text-white">Trading Academy</h4>
-          <ul className="space-y-4 text-sm text-gray-500 font-medium">
-            <li><Link to="/academy" className="hover:text-emerald-400 transition-colors">Forex School</Link></li>
-            <li><Link to="/blog" className="hover:text-emerald-400 transition-colors">Macro Intelligence</Link></li>
-            <li><Link to="/webinars" className="hover:text-emerald-400 transition-colors">Live Desk Sessions</Link></li>
-          </ul>
-        </div>
+          {/* --- Column 3: Quantitative Edge --- */}
+          <div>
+            <h4 className="mb-10 text-[10px] font-black uppercase tracking-[0.3em] text-white">Knowledge</h4>
+            <ul className="space-y-5 text-[13px] text-[#8A9AAB] font-light">
+              <li><Link to="/academy" className="hover:text-emerald-400 transition-colors">Quant Curriculum</Link></li>
+              <li><Link to="/blog" className="hover:text-emerald-400 transition-colors">Macro Intelligence</Link></li>
+              <li><Link to="/webinars" className="hover:text-emerald-400 transition-colors">Desk Sessions</Link></li>
+            </ul>
+          </div>
 
-        {/* --- Column 4: Client Services --- */}
-        <div>
-          <h4 className="mb-8 text-[11px] font-black uppercase tracking-[0.3em] text-white">Administration</h4>
-          <ul className="space-y-4 text-sm text-gray-500 font-medium">
-            <li><Link to="/about" className="hover:text-emerald-400 transition-colors">Corporate Headquarters</Link></li>
-            <li><Link to="/contact" className="hover:text-emerald-400 transition-colors">Compliance Control</Link></li>
-            <li><Link to="/hiring" className="hover:text-emerald-400 transition-colors">Executive Careers</Link></li>
-          </ul>
+          {/* --- Column 4: Infrastructure --- */}
+          <div className="col-span-2 md:col-span-1">
+            <h4 className="mb-10 text-[10px] font-black uppercase tracking-[0.3em] text-white">Infrastructure</h4>
+            <ul className="space-y-5 text-[13px] text-[#8A9AAB] font-light">
+              <li><Link to="/about" className="hover:text-emerald-400 transition-colors">Operations</Link></li>
+              <li><Link to="/hiring" className="hover:text-emerald-400 transition-colors">Desk Recruiting</Link></li>
+              <li><Link to="/contact" className="hover:text-emerald-400 transition-colors">Support Portal</Link></li>
+            </ul>
+          </div>
         </div>
       </div>
 
-      {/* --- Minimalist Footer Base --- */}
-      <div className="pt-8 pb-10 border-t border-white/[0.04] flex flex-col md:flex-row items-center justify-between gap-6">
-        <div className="text-[10px] font-black text-gray-600 uppercase tracking-[0.25em]">
-          &copy; {new Date().getFullYear()} {BRANDING.name} · Institutional Grid · v2.4
+      {/* --- Minimalist Master Base --- */}
+      <div className="pt-8 pb-4 border-t border-white/[0.04] flex flex-col lg:flex-row items-center justify-between gap-8">
+        <div className="text-[9px] font-black text-[#4F5A69] uppercase tracking-[0.3em] text-center lg:text-left">
+          &copy; {new Date().getFullYear()} {BRANDING.name}. <br className="lg:hidden mt-2"/> MASTER TERMINAL OS · BUILD V5.0
         </div>
 
-        <div className="flex flex-wrap items-center justify-center gap-6 text-[10px] font-black text-gray-500 uppercase tracking-[0.2em]">
+        <div className="flex flex-wrap items-center justify-center gap-8 text-[9px] font-black text-[#4F5A69] uppercase tracking-[0.25em]">
            <Link to="/privacy" className="hover:text-white transition-colors">Privacy</Link>
            <Link to="/terms" className="hover:text-white transition-colors">Terms</Link>
-           <Link to="/risk" className="hover:text-red-400 text-red-500/50 transition-colors">Risk Protocol</Link>
+           <Link to="/risk" className="hover:text-red-400/80 text-red-500/50 transition-colors">Risk Protocol</Link>
         </div>
       </div>
     </div>

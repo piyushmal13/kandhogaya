@@ -12,11 +12,12 @@ import { LoadingSpinner } from "./components/ui/LoadingSpinner";
 import { ProtectedRoute } from "./components/ui/ProtectedRoute";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./lib/reactQuery";
+import { loadSystem } from "./core/systemLoader";
 
 const Home = lazy(() => import("./pages/Home").then(m => ({ default: m.Home })));
 const Marketplace = lazy(() => import("./pages/Marketplace").then(m => ({ default: m.Marketplace })));
 const Results = lazy(() => import("./pages/Results").then(m => ({ default: m.Results })));
-const TradersTravel = lazy(() => import("./pages/TradersTravel").then(m => ({ default: m.TradersTravel })));
+const Signals = lazy(() => import("./pages/Signals").then(m => ({ default: m.Signals })));
 const Academy = lazy(() => import("./pages/Academy").then(m => ({ default: m.Academy })));
 const CourseDetail = lazy(() => import("./pages/CourseDetail").then(m => ({ default: m.CourseDetail })));
 const Webinars = lazy(() => import("./pages/Webinars").then(m => ({ default: m.Webinars })));
@@ -43,12 +44,6 @@ const RiskDisclosure = lazy(() => import("./pages/legal/RiskDisclosure").then(m 
 const CookiePolicy = lazy(() => import("./pages/legal/CookiePolicy").then(m => ({ default: m.CookiePolicy })));
 const AffiliateHub = lazy(() => import("./pages/AffiliateHub").then(m => ({ default: m.AffiliateHub })));
 
-const PageLoader = () => (
-  <div className="flex min-h-[60vh] items-center justify-center">
-    <LoadingSpinner />
-  </div>
-);
-
 const AnimatedRoutes = () => {
   const location = useLocation();
   return (
@@ -66,13 +61,10 @@ const AnimatedRoutes = () => {
             <Route path="/solutions" element={<Solutions />} />
             <Route path="/consultation" element={<Consultation />} />
             <Route path="/marketplace" element={<Marketplace />} />
-            <Route path="/travel" element={<TradersTravel />} />
+            <Route path="/signals" element={<Signals />} />
             <Route path="/results" element={<Results />} />
             <Route path="/academy" element={<Academy />} />
             <Route path="/academy/:courseId" element={<CourseDetail />} />
-            <Route path="/courses" element={<Academy />} />
-            <Route path="/course" element={<Academy />} />
-            <Route path="/algo" element={<Marketplace />} />
             <Route path="/webinars" element={<Webinars />} />
             <Route path="/webinars/:id" element={<WebinarDetail />} />
             <Route path="/blog" element={<Blog />} />
@@ -97,15 +89,9 @@ const AnimatedRoutes = () => {
   );
 };
 
-import { loadSystem } from "./core/systemLoader";
-
 function AppContent() {
   const location = useLocation();
-  
-  // Specific routes that might need a clean slate (blank canvas)
-  const isPlainLayout = [
-    '/login',
-  ].some(path => location.pathname.startsWith(path));
+  const isPlainLayout = ['/login'].some(path => location.pathname.startsWith(path));
 
   if (isPlainLayout) {
     return <AnimatedRoutes />;

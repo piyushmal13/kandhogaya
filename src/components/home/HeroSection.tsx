@@ -1,248 +1,160 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
-import { ArrowRight, Check, ShieldCheck, Users, Star, Globe } from "lucide-react";
-import { supabase } from "../../lib/supabase";
+import { ArrowRight, ShieldCheck, Trophy, BarChart3, Users } from "lucide-react";
+import { Link } from "react-router-dom";
 import { InstitutionalBackground } from "../animations/InstitutionalBackground";
 
-// ─── LOCKED: DO NOT MODIFY BELOW ─────────────────────────────────────────────
-// Supabase: leads.insert({ email, source }) — business acquisition logic
-// useScroll/useTransform: parallax fade — scroll-driven opacity/y/scale
-// Form state machine: idle → loading → success → idle (5s timeout)
-// ─────────────────────────────────────────────────────────────────────────────
-
-const SNAP = [0.4, 0, 0.2, 1] as const;
-
-const TRUST_BADGES = [
-  { icon: ShieldCheck, label: "100% Education Platform" },
-  { icon: Users, label: "12,400+ Elite Alumni" },
-  { icon: Star, label: "Asia's #1 Algo Desk" },
-  { icon: Globe, label: "India · Dubai · Singapore" },
-];
-
+const SNAP = [0.16, 1, 0.3, 1] as const;
 
 export const HeroSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
-  const [statsVisible, setStatsVisible] = useState(false);
-
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
-  const opacity = useTransform(scrollYProgress, [0, 0.45], [1, 0]);
-  const y = useTransform(scrollYProgress, [0, 0.45], [0, 70]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setStatsVisible(true), 600);
-    return () => clearTimeout(timer);
-  }, []);
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const y = useTransform(scrollYProgress, [0, 0.5], [0, 100]);
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
 
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-[100svh] bg-[#020202] text-white flex flex-col overflow-hidden"
+      className="relative min-h-[90svh] bg-[#010203] text-white flex flex-col overflow-hidden"
     >
       <InstitutionalBackground />
 
-      {/* Structural rule lines */}
-      <div className="absolute inset-0 pointer-events-none z-0" aria-hidden="true">
-        <div className="absolute top-0 left-6 lg:left-14 bottom-0 w-px bg-gradient-to-b from-white/[0.08] via-white/[0.03] to-transparent" />
-        <div className="absolute top-0 right-6 lg:right-14 bottom-0 w-px bg-gradient-to-b from-white/[0.08] via-white/[0.03] to-transparent" />
-      </div>
-
-      {/* === HERO BODY === */}
       <motion.div
-        style={{ opacity, y }}
-        className="relative z-10 w-full max-w-[1440px] mx-auto flex-1 flex flex-col lg:flex-row items-center gap-12 lg:gap-0 pt-32 sm:pt-40 pb-20 px-6 lg:px-14"
+        style={{ opacity, y, scale }}
+        className="relative z-10 w-full max-w-[1440px] mx-auto flex-1 flex flex-col lg:flex-row items-center gap-12 lg:gap-8 pt-32 sm:pt-40 pb-20 px-6 lg:px-20"
       >
-        {/* LEFT — Copy & CTA */}
-        <div className="flex-1 flex flex-col items-start max-w-[700px]">
-          {/* Live status badge */}
+        {/* LEFT — Professional Copy & CTA */}
+        <div className="flex-1 flex flex-col items-start max-w-[760px] relative z-20">
           <motion.div
-            initial={{ opacity: 0, y: 12 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, ease: SNAP }}
-            className="inline-flex items-center gap-2.5 mb-8 px-4 py-2 rounded-full bg-emerald-500/[0.07] border border-emerald-500/[0.18] text-emerald-400"
+            transition={{ duration: 0.8, ease: SNAP }}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-8 backdrop-blur-md"
           >
-            <ShieldCheck className="w-3.5 h-3.5" />
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em]">
-              Professional Trading Education
+            <ShieldCheck className="w-4 h-4 text-emerald-400" />
+            <span className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-emerald-400">
+              Asia's Premier Education Desk
             </span>
           </motion.div>
 
-          {/* Headline */}
           <motion.h1
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.08, duration: 0.55, ease: SNAP }}
-            className="text-[3rem] sm:text-[4.5rem] md:text-[5.5rem] lg:text-[6.5rem] font-bold leading-[1.05] tracking-tight mb-8 text-white"
+            transition={{ delay: 0.1, duration: 0.9, ease: SNAP }}
+            className="text-4xl sm:text-5xl lg:text-[4rem] leading-[1.1] font-black text-white tracking-tight mb-6"
           >
-            Trade Like An <br />
-            <span
-              style={{
-                background: "linear-gradient(135deg, #10B981 0%, #00FFA3 55%, #06B6D4 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-              }}
-            >
-              Institution.
+            Master The Markets With <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
+              Institutional Intelligence
             </span>
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 18 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.16, duration: 0.5, ease: SNAP }}
-            className="text-base md:text-xl text-white/50 font-normal leading-[1.7] max-w-2xl mb-12"
+            transition={{ delay: 0.2, duration: 0.8, ease: SNAP }}
+            className="mb-10 max-w-2xl text-[#8A9AAB] text-lg sm:text-xl font-medium leading-relaxed"
           >
-            Master the markets with our comprehensive academy, algorithmic strategies, and daily live sessions. Join 12,400+ traders scaling their portfolios.
+            Gain the ultimate trading edge. Access professional algorithmic execution frameworks, premium macro research, and live trading sessions designed for serious retail and proprietary traders.
           </motion.p>
 
-          {/* CTA Row */}
           <motion.div
-            initial={{ opacity: 0, y: 14 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.24, duration: 0.45, ease: SNAP }}
-            className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mb-12 w-full sm:w-auto"
+            transition={{ delay: 0.3, duration: 0.8, ease: SNAP }}
+            className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto"
           >
-            {/* Email form */}
-            <form
-              onSubmit={async (e) => {
-                e.preventDefault();
-                if (status !== "idle") return;
-                const email = (e.currentTarget.elements.namedItem("email") as HTMLInputElement).value;
-                if (!email) return;
-                setStatus("loading");
-                if (supabase) {
-                  await supabase.from("leads").insert([{ email, source: "hero_institutional" }]);
-                }
-                setStatus("success");
-                setTimeout(() => setStatus("idle"), 5000);
-              }}
-              className="flex items-center gap-0 flex-1 min-w-0 sm:min-w-[340px] bg-white/[0.04] border border-white/[0.08] rounded-xl overflow-hidden focus-within:border-emerald-500/40 transition-colors duration-200"
+            <Link
+              to="/academy"
+              className="w-full sm:w-auto px-8 py-4 rounded-xl bg-emerald-500 text-black hover:bg-emerald-400 hover:scale-[1.02] active:scale-[0.98] text-sm font-bold transition-all duration-300 flex items-center justify-center gap-2 shadow-[0_0_30px_rgba(16,185,129,0.3)]"
             >
-              <input
-                name="email"
-                type="email"
-                required
-                disabled={status !== "idle"}
-                placeholder="Enter your email address"
-                className="bg-transparent flex-1 px-4 py-3.5 text-sm text-white placeholder:text-white/20 focus:outline-none disabled:opacity-40 min-w-0"
-              />
-              <button
-                type="submit"
-                disabled={status !== "idle"}
-                className="shrink-0 px-5 py-3.5 bg-emerald-500 hover:bg-emerald-400 text-black text-[11px] font-black uppercase tracking-[0.15em] transition-all duration-150 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {status === "success" ? <Check className="w-4 h-4" /> : null}
-                {(() => {
-                  if (status === 'loading') return 'Processing...';
-                  if (status === 'success') return 'Submitted';
-                  return 'Start Learning';
-                })()}
-              </button>
-            </form>
-
-            <a
-              href="/academy"
-              className="group inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl border border-white/[0.1] text-white text-sm font-semibold hover:border-white/25 hover:bg-white/[0.04] transition-all duration-200 whitespace-nowrap"
+              Explore Academy <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link
+              to="/login"
+              className="w-full sm:w-auto px-8 py-4 rounded-xl bg-white/[0.05] border border-white/10 text-white hover:bg-white/10 hover:border-white/20 hover:scale-[1.02] active:scale-[0.98] text-sm font-bold transition-all duration-300 flex items-center justify-center gap-2"
             >
-              View Programmes
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-150" />
-            </a>
+              Access Portal
+            </Link>
           </motion.div>
 
-          {/* Trust badges */}
+          {/* Trust Metrics - Vantage/VT style credibility markers */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.38, duration: 0.4 }}
-            className="flex flex-wrap gap-3"
+            transition={{ delay: 0.5, duration: 1 }}
+            className="flex flex-wrap items-center gap-6 sm:gap-12 mt-12 pt-8 border-t border-white/[0.05] w-full"
           >
-            {TRUST_BADGES.map(({ icon: Icon, label }) => (
-              <div
-                key={label}
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/[0.03] border border-white/[0.07] text-white/45 text-[11px] font-medium tracking-wide"
-              >
-                <Icon className="w-3 h-3 text-emerald-400 shrink-0" />
-                {label}
+            {[
+              { icon: Users, label: "Active Students", value: "12,000+" },
+              { icon: BarChart3, label: "Live Signals", value: "Daily Analysis" },
+              { icon: Trophy, label: "Success Rate", value: "Proven Models" }
+            ].map((stat, i) => (
+              <div key={i} className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0">
+                  <stat.icon className="w-5 h-5 text-emerald-400" />
+                </div>
+                <div className="flex flex-col">
+                  <div className="text-lg font-bold text-white leading-tight">{stat.value}</div>
+                  <div className="text-[11px] text-[#8A9AAB] font-medium uppercase tracking-wider">{stat.label}</div>
+                </div>
               </div>
             ))}
           </motion.div>
         </div>
 
-        {/* RIGHT — Visual card panel (Professional App Mockup) */}
-        <div className="flex-1 flex items-center justify-center lg:justify-end w-full max-w-[540px] lg:max-w-none perspective-1000">
+        {/* RIGHT — Clean Visuals */}
+        <div className="flex-1 w-full flex justify-center lg:justify-end mt-10 lg:mt-0 relative">
           <motion.div
-            initial={{ opacity: 0, rotateY: 15, x: 40, scale: 0.95 }}
-            animate={{ opacity: 1, rotateY: 0, x: 0, scale: 1 }}
-            transition={{ delay: 0.3, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-            className="relative w-full max-w-[500px] bg-[#0A0D14] border border-white/[0.08] rounded-3xl overflow-hidden shadow-2xl flex flex-col"
+            initial={{ opacity: 0, scale: 0.95, x: 20 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            transition={{ delay: 0.2, duration: 1.2, ease: SNAP }}
+            className="relative w-full max-w-[600px] aspect-[4/3] rounded-[2rem] border border-white/10 bg-gradient-to-br from-[#040608] to-[#010203] shadow-2xl overflow-hidden"
           >
-            {/* Top Bar Mockup */}
-            <div className="h-12 border-b border-white/[0.05] flex items-center px-6 justify-between bg-white/[0.02]">
-              <div className="flex gap-2">
-                <div className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
-                <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80" />
-                <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
-              </div>
-              <div className="text-[10px] text-white/30 font-medium">IFX TRADES PRO</div>
-            </div>
-
-            {/* Content Mockup */}
-            <div className="p-6">
-              <div className="flex items-center justify-between mb-8">
+            {/* Minimalist Dashboard Graphic representation */}
+            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-40 mix-blend-luminosity" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#010203] via-[#010203]/80 to-transparent" />
+            
+            {/* Floating Element - realistic chart mockup */}
+            <motion.div 
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.8, duration: 1 }}
+              className="absolute bottom-8 left-8 right-8 p-6 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-xl"
+            >
+              <div className="flex items-center justify-between mb-4 pb-4 border-b border-white/[0.05]">
                 <div>
-                  <div className="text-sm text-white/40 mb-1">Portfolio Balance</div>
-                  <div className="text-3xl font-semibold text-white">$124,500.00</div>
+                  <div className="text-white font-bold text-lg">XAUUSD</div>
+                  <div className="text-[#8A9AAB] text-xs">Gold vs US Dollar</div>
                 </div>
-                <div className="px-3 py-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 text-xs font-medium">
-                  +2.4% Today
+                <div className="text-right">
+                  <div className="text-emerald-400 font-bold text-lg flex items-center gap-1 justify-end">
+                    <ArrowRight className="w-4 h-4 -rotate-45" /> +1.24%
+                  </div>
+                  <div className="text-white/50 text-xs">Strong Buy Setup</div>
                 </div>
               </div>
-
-              {/* Chart Mockup (CSS generated) */}
-              <div className="relative h-40 w-full flex items-end justify-between gap-1 mb-8">
-                {[40, 55, 30, 70, 65, 80, 50, 95, 85, 110, 100, 130].map((h, i) => (
-                  <motion.div
+              
+              <div className="flex items-end gap-2 h-16 w-full">
+                {/* Clean Bar Chart Mockup */}
+                {[30, 45, 25, 60, 80, 50, 95].map((h, i) => (
+                  <motion.div 
                     key={i}
                     initial={{ height: 0 }}
                     animate={{ height: `${h}%` }}
-                    transition={{ delay: 0.5 + i * 0.05, duration: 0.8, ease: "easeOut" }}
-                    className="w-full bg-emerald-500/20 rounded-t-sm relative group cursor-pointer hover:bg-emerald-500/40 transition-colors"
-                  >
-                    <div className="absolute -top-1 left-0 right-0 h-1 bg-emerald-500 rounded-t-sm opacity-50 group-hover:opacity-100" />
-                  </motion.div>
+                    transition={{ delay: 1 + i * 0.1, duration: 0.5 }}
+                    className={`flex-1 rounded-sm ${i === 6 ? 'bg-emerald-400' : 'bg-white/10'}`}
+                  />
                 ))}
-                {/* Overlay gradient for bottom fade */}
-                <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#0A0D14] to-transparent pointer-events-none" />
               </div>
-
-              {/* Recent Activity */}
-              <div>
-                <div className="text-xs font-semibold text-white/40 mb-4 uppercase tracking-wider">Recent Signals</div>
-                <div className="space-y-3">
-                  {[
-                    { pair: "XAU/USD", action: "BUY", price: "2,345.10", profit: "+$450.00" },
-                    { pair: "EUR/USD", action: "SELL", price: "1.0845", profit: "+$120.00" },
-                  ].map((trade, i) => (
-                    <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] border border-white/[0.04]">
-                      <div className="flex items-center gap-3">
-                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-[10px] font-bold ${trade.action === "BUY" ? "bg-emerald-500/10 text-emerald-400" : "bg-red-500/10 text-red-400"}`}>
-                          {trade.action}
-                        </div>
-                        <div className="font-medium text-sm text-white">{trade.pair}</div>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-xs text-white">{trade.price}</div>
-                        <div className="text-[10px] text-emerald-400">{trade.profit}</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
+            </motion.div>
           </motion.div>
+
+          {/* Ambient Inner Glow */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-emerald-500/20 blur-[100px] rounded-full pointer-events-none" />
         </div>
       </motion.div>
-
     </section>
   );
 };

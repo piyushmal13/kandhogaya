@@ -55,7 +55,7 @@ export const Home = () => {
   const [showReviewModal, setShowReviewModal] = useState(false);
 
   return (
-    <div className="min-h-screen relative overflow-hidden bg-[#020202]">
+    <div className="min-h-screen relative overflow-hidden bg-[#010203]">
       <ReviewPromptModal isOpen={showReviewModal} onClose={() => setShowReviewModal(false)} />
       <ExitIntentModal />
 
@@ -71,7 +71,7 @@ export const Home = () => {
           "macro research India",
           "XAUUSD algo execution",
           "professional trader infrastructure",
-          "sovereign desk training",
+          "master terminal training",
         ]}
         structuredData={[
           educationalOrganizationSchema(),
