@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { motion } from "motion/react";
 import { 
   Shield, 
-  Clock, 
   MessageSquare, 
   BarChart, 
   CheckCircle2, 
@@ -10,7 +9,6 @@ import {
   User,
   Mail,
   Phone,
-  Briefcase
 } from "lucide-react";
 import { SovereignButton } from "../components/ui/Button";
 import { PageMeta } from "../components/site/PageMeta";
@@ -75,7 +73,7 @@ export const Consultation = () => {
         <p className="text-gray-400 max-w-md mx-auto mb-12">
           Your institutional consultation request has been logged. A senior desk analyst will reach out to verify your credentials within 24 business hours.
         </p>
-        <SovereignButton variant="secondary" onClick={() => window.location.href = "/"}>
+        <SovereignButton variant="secondary" onClick={() => globalThis.location.href = "/"}>
           Return to Terminal
         </SovereignButton>
       </div>
@@ -122,7 +120,7 @@ export const Consultation = () => {
             <div className="space-y-6">
               {BENEFITS.map((benefit, i) => (
                 <motion.div 
-                  key={i} 
+                  key={benefit.title} 
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.1 }}
@@ -157,10 +155,11 @@ export const Consultation = () => {
                 <div className="space-y-8">
                   <div className="grid md:grid-cols-2 gap-8">
                     <div className="space-y-3">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-2">Full Name</label>
+                      <label htmlFor="full-name" className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-2">Full Name</label>
                       <div className="relative">
                         <User className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
                         <input 
+                          id="full-name"
                           required
                           type="text" 
                           value={formData.name}
@@ -171,10 +170,11 @@ export const Consultation = () => {
                       </div>
                     </div>
                     <div className="space-y-3">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-2">Institutional Email</label>
+                      <label htmlFor="institutional-email" className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-2">Institutional Email</label>
                       <div className="relative">
                         <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
                         <input 
+                          id="institutional-email"
                           required
                           type="email" 
                           value={formData.email}
@@ -188,10 +188,11 @@ export const Consultation = () => {
 
                   <div className="grid md:grid-cols-2 gap-8">
                     <div className="space-y-3">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-2">Mobile / Telegram</label>
+                      <label htmlFor="mobile-telegram" className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-2">Mobile / Telegram</label>
                       <div className="relative">
                         <Phone className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
                         <input 
+                          id="mobile-telegram"
                           required
                           type="tel" 
                           value={formData.phone}
@@ -202,9 +203,10 @@ export const Consultation = () => {
                       </div>
                     </div>
                     <div className="space-y-3">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-2">Strategy Focus</label>
+                      <label htmlFor="strategy-focus" className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-2">Strategy Focus</label>
                       <div className="relative">
                         <select 
+                          id="strategy-focus"
                           value={formData.strategy}
                           onChange={(e) => setFormData({...formData, strategy: e.target.value})}
                           className="w-full bg-black/40 border border-white/[0.08] px-6 py-5 rounded-2xl text-white outline-none focus:border-emerald-500/50 transition-all font-black uppercase tracking-[0.2em] text-[10px] appearance-none"
@@ -219,8 +221,9 @@ export const Consultation = () => {
                   </div>
 
                   <div className="space-y-3">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-2">Additional Intel</label>
+                    <label htmlFor="additional-intel" className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-2">Additional Intel</label>
                     <textarea 
+                      id="additional-intel"
                       rows={4}
                       value={formData.notes}
                       onChange={(e) => setFormData({...formData, notes: e.target.value})}

@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
 import { Play, Pause, Volume2, VolumeX, Maximize } from 'lucide-react';
 
 interface VideoMarker {
@@ -15,7 +15,7 @@ interface VideoPlayerProps {
   markers?: VideoMarker[];
 }
 
-export function VideoPlayer({ src, poster, title, isLive = false, markers = [] }: VideoPlayerProps) {
+export function VideoPlayer({ src, poster, title, isLive = false, markers = [] }: Readonly<VideoPlayerProps>) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
@@ -36,8 +36,8 @@ export function VideoPlayer({ src, poster, title, isLive = false, markers = [] }
         }
       }
     };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    globalThis.addEventListener('keydown', handleKeyDown);
+    return () => globalThis.removeEventListener('keydown', handleKeyDown);
   }, [isPlaying, isMuted]); // Added dependencies to ensure fresh state in closure if needed, though toggle functions likely handle it
 
   const togglePlay = () => {
@@ -70,8 +70,8 @@ export function VideoPlayer({ src, poster, title, isLive = false, markers = [] }
 
   const handleTimeUpdate = () => {
     if (videoRef.current) {
-      const progress = (videoRef.current.currentTime / videoRef.current.duration) * 100;
-      setProgress(progress);
+      const progressValue = (videoRef.current.currentTime / videoRef.current.duration) * 100;
+      setProgress(progressValue);
     }
   };
 
@@ -104,7 +104,9 @@ export function VideoPlayer({ src, poster, title, isLive = false, markers = [] }
         controls={false} // Custom controls for institutional styling
         playsInline
         tabIndex={0}
-      />
+      >
+        <track kind="captions" />
+      </video>
 
       {/* Custom Controls Overlay */}
       <motion.div 
@@ -115,12 +117,20 @@ export function VideoPlayer({ src, poster, title, isLive = false, markers = [] }
       >
         <div className="pointer-events-auto">
           {/* Progress Bar */}
-          <div className="group/progress mb-4 h-1 hover:h-1.5 bg-white/20 rounded-full overflow-hidden transition-all cursor-pointer"
+          <div className="group/progress mb-4 h-1 hover:h-1.5 bg-white/20 rounded-full overflow-hidden transition-all cursor-pointer relative"
                role="slider"
                aria-label="Video progress"
                aria-valuenow={Math.round(progress)}
                aria-valuemin={0}
                aria-valuemax={100}
+               tabIndex={0}
+               onKeyDown={(e) => {
+                 if (e.key === 'ArrowRight' && videoRef.current) {
+                   videoRef.current.currentTime += 5;
+                 } else if (e.key === 'ArrowLeft' && videoRef.current) {
+                   videoRef.current.currentTime -= 5;
+                 }
+               }}
                onClick={(e) => {
                  if (videoRef.current) {
                    const rect = e.currentTarget.getBoundingClientRect();
@@ -136,11 +146,11 @@ export function VideoPlayer({ src, poster, title, isLive = false, markers = [] }
             />
             
             {/* Event Markers: Institutional Delta Points */}
-            {!isLive && markers.map((marker, i) => {
+            {!isLive && markers.map((marker) => {
               const markerPosition = (marker.time / (videoRef.current?.duration || 1)) * 100;
               return (
                 <div 
-                  key={i}
+                  key={marker.time}
                   className="absolute top-0 bottom-0 w-[2px] bg-cyan-400 group-hover:bg-white transition-colors"
                   style={{ left: `${markerPosition}%` }}
                   title={marker.label}

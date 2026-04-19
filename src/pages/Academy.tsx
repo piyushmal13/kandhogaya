@@ -83,7 +83,7 @@ export const Academy = () => {
         <section className="space-y-12">
           {loading ? (
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-              {[...new Array(3)].map((_, i) => (
+              {Array.from({ length: 3 }).map((_, i) => (
                 <CourseCardSkeleton key={`skeleton-${i}`} />
               ))}
             </div>

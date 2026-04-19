@@ -196,7 +196,7 @@ export const Marketplace = () => {
         {selectedProduct && (
           <AlgoDetailModal
             onClose={() => setSelectedProduct(null)}
-            product={selectedProduct}
+            algo={selectedProduct}
             onSubscribe={handleSubscribe}
           />
         )}

@@ -167,7 +167,11 @@ export const HeroSection = () => {
                 className="shrink-0 px-5 py-3.5 bg-emerald-500 hover:bg-emerald-400 text-black text-[11px] font-black uppercase tracking-[0.15em] transition-all duration-150 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {status === "success" ? <Check className="w-4 h-4" /> : null}
-                {status === "loading" ? "…" : status === "success" ? "Done" : "Get Access"}
+                {(() => {
+                  if (status === 'loading') return '…';
+                  if (status === 'success') return 'Done';
+                  return 'Get Access';
+                })()}
               </button>
             </form>
 

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Breadcrumb } from './Breadcrumb';
-// import { Footer } from './Footer'; // Redundant with StandardLayout
 import { DashboardNavigation } from './DashboardNavigation';
 import { useFocusRoute } from '@/hooks/useFocusRoute';
 import { cn } from '@/lib/utils';

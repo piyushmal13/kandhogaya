@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
 import { Calendar, Clock, Users } from 'lucide-react';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { SovereignButton } from '@/components/ui/Button';
@@ -24,10 +24,38 @@ export interface Webinar {
   streaming_url?: string; // For live view
 }
 
-export function WebinarCard({ webinar }: { webinar: Webinar }) {
+export function WebinarCard({ webinar }: Readonly<{ webinar: Webinar }>) {
   const { isEnabled: isRegistrationOpen } = useFeatureFlag('webinar_registration_open', true);
   const isLive = webinar.status === 'live';
   const isRecorded = webinar.status === 'recorded';
+
+  const renderStatusBadge = () => {
+    if (isLive) {
+      return (
+        <span className="px-3 py-1 rounded-full bg-red-500 text-white text-[10px] font-black uppercase tracking-widest animate-pulse border border-white/20">
+          LIVE NOW
+        </span>
+      );
+    }
+    if (isRecorded) {
+      return (
+        <span className="px-3 py-1 rounded-full bg-white/10 text-white text-[10px] font-black uppercase tracking-widest border border-white/10 backdrop-blur-md">
+          ARCHIVED
+        </span>
+      );
+    }
+    return (
+      <span className="px-3 py-1 rounded-full bg-emerald-500/80 text-black text-[10px] font-black uppercase tracking-widest">
+        UPCOMING
+      </span>
+    );
+  };
+
+  const getButtonContent = () => {
+    if (!isRegistrationOpen) return 'Registration Offline';
+    if (webinar.attendees >= webinar.maxSeats) return 'Capacity Reached';
+    return isLive ? 'Link to Session' : 'Claim Seat';
+  };
   
   const formatDate = (iso: string) => new Date(iso).toLocaleDateString('en-US', {
     month: 'short',
@@ -94,19 +122,7 @@ export function WebinarCard({ webinar }: { webinar: Webinar }) {
         
         {/* Status Badge */}
         <div className="absolute top-4 left-4">
-          {isLive ? (
-            <span className="px-3 py-1 rounded-full bg-red-500 text-white text-[10px] font-black uppercase tracking-widest animate-pulse border border-white/20">
-              LIVE NOW
-            </span>
-          ) : isRecorded ? (
-            <span className="px-3 py-1 rounded-full bg-white/10 text-white text-[10px] font-black uppercase tracking-widest border border-white/10 backdrop-blur-md">
-              ARCHIVED
-            </span>
-          ) : (
-            <span className="px-3 py-1 rounded-full bg-emerald-500/80 text-black text-[10px] font-black uppercase tracking-widest">
-              UPCOMING
-            </span>
-          )}
+          {renderStatusBadge()}
         </div>
 
         {/* Premium Badge */}
@@ -175,7 +191,7 @@ export function WebinarCard({ webinar }: { webinar: Webinar }) {
               fluid
               className="rounded-2xl"
               trackingEvent="webinar_watch_recording"
-              onClick={() => webinar.recordingUrl && window.open(webinar.recordingUrl, '_blank')}
+              onClick={() => webinar.recordingUrl && globalThis.open(webinar.recordingUrl, '_blank')}
             >
               Analyze Recording
             </SovereignButton>
@@ -188,9 +204,7 @@ export function WebinarCard({ webinar }: { webinar: Webinar }) {
               disabled={!isRegistrationOpen || webinar.attendees >= webinar.maxSeats}
               trackingEvent={`webinar_register_${webinar.id}`}
             >
-              {!isRegistrationOpen ? 'Registration Offline' : 
-               webinar.attendees >= webinar.maxSeats ? 'Capacity Reached' : 
-               isLive ? 'Link to Session' : 'Claim Seat'}
+              {getButtonContent()}
             </SovereignButton>
           )}
         </div>
