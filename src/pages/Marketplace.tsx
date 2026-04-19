@@ -30,9 +30,9 @@ export const Marketplace = () => {
   });
 
   const categories = [
-    { id: "all", label: "Global Pool" },
-    { id: "algorithm", label: "Execution Desks" },
-    { id: "course", label: "Intel Streams" },
+    { id: "all", label: "All Assets" },
+    { id: "algorithm", label: "Trading Systems" },
+    { id: "course", label: "Education" },
   ];
 
   const filteredProducts = products.filter((p: Product) => {
@@ -125,16 +125,16 @@ export const Marketplace = () => {
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-emerald-500/[0.04] border border-emerald-500/[0.15] text-emerald-400 text-[10px] font-black uppercase tracking-[0.4em]"
+              className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-emerald-500/[0.04] border border-emerald-500/[0.15] text-emerald-400 text-[10px] font-bold uppercase tracking-[0.2em]"
             >
-              Execution Desk Registry
+              Asset Catalog
             </motion.div>
-            <h1 className="text-shimmer mb-6 text-white tracking-[-0.05em] leading-[0.9]">
-              Strategic <br />
-              <span className="italic font-serif text-gradient-emerald">Allocations.</span>
+            <h1 className="text-5xl md:text-7xl font-bold mb-6 text-white tracking-tight leading-[0.9]">
+              Institutional <br />
+              <span className="text-emerald-400">Allocations.</span>
             </h1>
-            <p className="text-lg md:text-xl text-white/40 max-w-2xl font-light leading-relaxed">
-              Proprietary execution models and systematic architecture protocols designed for high-net-worth liquidity and institutional risk governance.
+            <p className="text-base md:text-xl text-white/40 max-w-2xl font-medium leading-relaxed">
+              Professional execution models and systematic trading protocols designed for high-performance capital management and institutional risk governance.
             </p>
           </div>
 

@@ -6,38 +6,38 @@ import { Zap, Cpu, Video, GraduationCap, ArrowUpRight, BarChart2, BookOpen, Chev
 const modules = [
   {
     id: "signals",
-    title: "Quantitative Intelligence",
-    description: "Institutional-grade signal architecture focused on XAUUSD and global macro liquidity nodes.",
+    title: "Market Signals",
+    description: "Real-time trading signals for XAUUSD and major currency pairs, driven by institutional order flow analysis.",
     icon: Zap,
     link: "/signals",
     accent: "#10B981",
-    tag: "LIVE FEED",
+    tag: "LIVE",
     size: "lg",
   },
   {
     id: "algorithms",
-    title: "Execution Desk",
-    description: "Systematic MT5 engineering, Python-based automation, and institutional risk governance.",
+    title: "Trading Systems",
+    description: "Fully automated MT5 algorithmic solutions with rigorous risk management and verified performance.",
     icon: Cpu,
     link: "/marketplace",
     accent: "#06B6D4",
-    tag: "CORE",
+    tag: "SYSTEMS",
     size: "sm",
   },
   {
     id: "academy",
-    title: "Institutional Academy",
-    description: "Certified professional training tracks designed for capital managers and high-net-worth desks.",
+    title: "Trading Academy",
+    description: "Professional education tracks covering price action, liquidity, and systematic trading methodologies.",
     icon: GraduationCap,
     link: "/academy",
     accent: "#8B5CF6",
-    tag: "CERTIFIED",
+    tag: "EDUCATION",
     size: "sm",
   },
   {
     id: "webinars",
-    title: "Macro Flows",
-    description: "Real-time session analysis and proprietary trade ideation from the Master Terminal.",
+    title: "Live Analysis",
+    description: "Daily interactive sessions covering market preparation, live execution, and trade reviews.",
     icon: Video,
     link: "/webinars",
     accent: "#D4AF37",
@@ -46,8 +46,8 @@ const modules = [
   },
   {
     id: "blog",
-    title: "Strategic Research",
-    description: "Deep-dive institutional intelligence on global macro-economics and XAUUSD performance.",
+    title: "Market Research",
+    description: "Daily research reports and deep-dives into global macro-economics and technical analysis.",
     icon: BookOpen,
     link: "/blog",
     accent: "#F43F5E",
@@ -213,20 +213,10 @@ export const EcosystemSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.08, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="text-4xl sm:text-6xl md:text-7xl lg:text-[90px] font-black text-white tracking-tighter leading-[0.9] max-w-3xl"
+              className="text-4xl sm:text-6xl md:text-7xl lg:text-[80px] font-bold text-white tracking-tight leading-[1] max-w-4xl"
             >
-              Everything{" "}
-              <span
-                className="italic font-serif"
-                style={{
-                  background: "linear-gradient(135deg, #10B981, #00FFA3)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                }}
-              >
-                serious
-              </span>{" "}
-              traders need.
+              The Full <br />
+              <span className="text-emerald-400">Trading Ecosystem.</span>
             </motion.h2>
           </div>
 

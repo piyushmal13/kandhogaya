@@ -173,10 +173,10 @@ export const TrustGrid = () => {
               Ready to trade with institutional precision?
             </div>
             <div
-              className="text-white/30 text-[11px] uppercase tracking-wider"
+              className="text-white/30 text-[11px] uppercase tracking-[0.2em]"
               style={{ fontFamily: "IBM Plex Mono, monospace" }}
             >
-              12,400+ professional traders · Zero broker conflict · Pure education
+              Institutional Access · Secure Connection · Global Desk
             </div>
           </div>
           <Link

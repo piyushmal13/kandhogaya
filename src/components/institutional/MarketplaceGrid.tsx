@@ -49,7 +49,7 @@ const LiveIndicator = () => (
       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
       <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
     </span>
-    <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest font-mono italic">Flux Live</span>
+    <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest font-mono">Live Execution</span>
   </div>
 );
 
@@ -100,9 +100,9 @@ export const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({ products, isLo
               </div>
               
               {showPremiumBadges && product.isPremium && (
-                <div className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-gold/10 border border-gold/30">
-                  <Lock className="w-3.5 h-3.5 text-gold" />
-                  <span className="text-[10px] font-black text-gold uppercase tracking-[0.2em]">Imperial</span>
+                <div className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30">
+                  <Lock className="w-3.5 h-3.5 text-amber-500" />
+                  <span className="text-[10px] font-bold text-amber-500 uppercase tracking-[0.2em]">Premium</span>
                 </div>
               )}
             </div>
@@ -123,21 +123,21 @@ export const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({ products, isLo
                 {product.description || "Institutional grade execution model designed for liquid equity and sovereign debt markets."}
               </p>
 
-              {/* Hardware Accelerated Performance Grid */}
+              {/* Performance Grid */}
               {product.type === 'algorithm' && product.performance && (
                 <div className="grid grid-cols-2 gap-6 py-6 border-y border-white/5 my-8">
                   <div className="space-y-1">
-                    <span className="text-[10px] font-black text-gray-600 uppercase tracking-widest">Alpha Pulse</span>
+                    <span className="text-[10px] font-bold text-white/30 uppercase tracking-widest">Win Rate</span>
                     <div className="flex items-center gap-2">
-                       <span className="text-2xl font-black text-emerald-400 font-mono tracking-tighter">
+                       <span className="text-2xl font-bold text-emerald-400 font-mono tracking-tight">
                         {product.performance.winRate}%
                       </span>
                     </div>
                   </div>
                   <div className="space-y-1">
-                    <span className="text-[10px] font-black text-gray-600 uppercase tracking-widest">Momentum</span>
+                    <span className="text-[10px] font-bold text-white/30 uppercase tracking-widest">Target Return</span>
                     <div className="flex items-center gap-2">
-                       <span className="text-2xl font-black text-white font-mono tracking-tighter">
+                       <span className="text-2xl font-bold text-white font-mono tracking-tight">
                         {product.performance.monthlyReturn || '12.4'}%
                       </span>
                     </div>
@@ -149,11 +149,11 @@ export const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({ products, isLo
             {/* Footer: Pricing & Action */}
             <div className="mt-10 flex items-center justify-between">
               <div itemProp="offers" itemScope itemType="https://schema.org/Offer" className="flex flex-col">
-                <span className="text-[10px] font-black text-gray-600 uppercase tracking-widest mb-1.5">Node Value</span>
+                <span className="text-[10px] font-bold text-white/30 uppercase tracking-widest mb-1.5">Starting From</span>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-lg font-black text-white">$</span>
+                  <span className="text-lg font-bold text-white">$</span>
                   <span 
-                    className="text-3xl font-black text-white tracking-tighter"
+                    className="text-3xl font-bold text-white tracking-tight"
                     itemProp="price"
                   >
                     {product.price}
@@ -165,12 +165,12 @@ export const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({ products, isLo
               <Button
                 variant="sovereign"
                 size="lg"
-                className="rounded-[20px]"
+                className="rounded-xl px-8"
                 onClick={() => onSelect?.(product)}
                 trackingEvent="view_product"
                 trackingData={{ productId: product.id, productName: product.name }}
               >
-                Deploy Node
+                Access System
               </Button>
             </div>
           </div>

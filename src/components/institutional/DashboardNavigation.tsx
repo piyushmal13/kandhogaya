@@ -15,21 +15,21 @@ import { Link, useLocation } from 'react-router-dom';
 export function DashboardNavigation() {
   const location = useLocation();
   const navItems = [
-    { icon: LayoutDashboard, label: 'Master Terminal', path: '/dashboard' },
-    { icon: Terminal, label: 'Execution', path: '/marketplace' },
-    { icon: Shield, label: 'Risk Shield', path: '/risk' },
+    { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
+    { icon: Terminal, label: 'Marketplace', path: '/marketplace' },
+    { icon: Shield, label: 'Signals', path: '/risk' },
     { icon: BookOpen, label: 'Academy', path: '/academy' },
     { icon: BarChart3, label: 'Performance', path: '/results' },
-    { icon: Settings, label: 'Configurations', path: '/settings' },
+    { icon: Settings, label: 'Settings', path: '/settings' },
   ];
 
   return (
     <div className="flex flex-col h-full">
       <div className="h-16 flex items-center px-6 border-b border-white/5 shrink-0">
-        <div className="w-8 h-8 rounded-lg bg-grad-primary flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(16,185,129,0.3)]">
-           <Zap className="w-5 h-5 text-black fill-current" />
+        <div className="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+           <Zap className="w-5 h-5 text-black" />
         </div>
-        <span className="ml-3 font-black uppercase tracking-tighter italic text-xl text-white">IFX Pulse</span>
+        <span className="ml-3 font-bold uppercase tracking-widest text-lg text-white">IFX TRADES</span>
       </div>
 
       <nav className="flex-1 py-8 px-4 space-y-2">
@@ -57,9 +57,9 @@ export function DashboardNavigation() {
       </nav>
 
       <div className="p-6 border-t border-white/5">
-        <div className="p-4 rounded-2xl bg-grad-primary/5 border border-white/5">
-          <p className="text-[9px] font-black text-white/40 uppercase tracking-widest mb-1">Account Tier</p>
-          <p className="text-[11px] font-black text-emerald-500 uppercase italic tracking-tighter">Sovereign Alpha</p>
+        <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/5">
+          <p className="text-[9px] font-bold text-white/20 uppercase tracking-[0.2em] mb-1">Account Tier</p>
+          <p className="text-[11px] font-bold text-emerald-500 uppercase tracking-widest">Premium Access</p>
         </div>
       </div>
     </div>

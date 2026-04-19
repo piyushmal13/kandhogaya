@@ -77,6 +77,8 @@ export function VideoPlayer({ src, poster, title, isLive = false, markers = [] }
 
   return (
     <div 
+      role="region"
+      aria-label="Institutional Video Player"
       className="relative group rounded-xl overflow-hidden bg-black/40 border border-white/10"
       onMouseEnter={() => setShowControls(true)}
       onMouseLeave={() => isPlaying && setShowControls(false)}
@@ -88,7 +90,7 @@ export function VideoPlayer({ src, poster, title, isLive = false, markers = [] }
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
           </span>
-          LIVE
+          {' '}LIVE
         </div>
       )}
 

@@ -55,27 +55,27 @@ export const Academy = () => {
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-emerald-500/[0.04] border border-emerald-500/[0.15] text-emerald-400 text-[10px] font-black uppercase tracking-[0.4em]"
+              className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-emerald-500/[0.04] border border-emerald-500/[0.15] text-emerald-400 text-[10px] font-bold uppercase tracking-[0.2em]"
             >
-              Academic Sovereign Network
+              Professional Education
             </motion.div>
-            <h1 className="text-shimmer mb-6 text-white tracking-[-0.05em] leading-[0.9]">
+            <h1 className="text-5xl md:text-7xl font-bold mb-6 text-white tracking-tight leading-[0.9]">
               Elite <br />
-              <span className="italic font-serif text-gradient-emerald">Curriculum.</span>
+              <span className="text-emerald-400">Curriculum.</span>
             </h1>
-            <p className="text-lg md:text-xl text-white/40 max-w-2xl font-light leading-relaxed mx-auto lg:mx-0">
+            <p className="text-base md:text-xl text-white/40 max-w-2xl font-medium leading-relaxed mx-auto lg:mx-0">
               Curriculum engineered for traders moving from intuition-led entries toward systematic execution, risk discipline, and algorithmic repeatability.
             </p>
           </div>
           
           <div className="flex justify-center lg:justify-end gap-12 md:gap-16 border-t lg:border-t-0 lg:border-l border-white/5 pt-12 lg:pt-0 lg:pl-16">
              <div className="flex flex-col items-center lg:items-end">
-                <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em] mb-3 leading-none font-mono">Modules</span>
-                <span className="text-4xl md:text-6xl font-black text-white font-mono tracking-tighter tabular-nums">{loading ? "--" : courses.length}</span>
+                <span className="text-[10px] font-bold text-white/20 uppercase tracking-[0.2em] mb-3 leading-none">Programmes</span>
+                <span className="text-4xl md:text-6xl font-bold text-white tabular-nums">{loading ? "--" : courses.length}</span>
              </div>
              <div className="flex flex-col items-center lg:items-end">
-                <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em] mb-3 leading-none font-mono">Catalog</span>
-                <span className="text-4xl md:text-6xl font-black text-white font-mono tracking-tighter italic text-emerald-500">v7.0</span>
+                <span className="text-[10px] font-bold text-white/20 uppercase tracking-[0.2em] mb-3 leading-none">Catalogue</span>
+                <span className="text-4xl md:text-6xl font-bold text-emerald-500">2024</span>
              </div>
           </div>
         </div>
@@ -91,8 +91,8 @@ export const Academy = () => {
             <>
               {courses.length === 0 ? (
                 <div className="bg-white/[0.02] border border-white/5 rounded-[3rem] p-20 text-center">
-                   <div className="text-xl font-black text-white/20 uppercase italic transition-colors">Course nodes offline</div>
-                   <p className="text-[9px] font-black text-white/10 uppercase tracking-[0.3em] mt-3 font-mono">Re-synchronizing with the learning cluster.</p>
+                   <div className="text-xl font-bold text-white/30 uppercase tracking-widest">No Programmes Available</div>
+                   <p className="text-[10px] font-bold text-white/10 uppercase tracking-[0.2em] mt-3">Please check back later or contact institutional support.</p>
                 </div>
               ) : (
                 <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-3">

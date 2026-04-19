@@ -12,34 +12,34 @@ const SNAP = [0.4, 0, 0.2, 1] as const;
 
 const stats = [
   {
-    label: "Elite Students Trained",
+    label: "Global Clients",
     value: "12,400",
     suffix: "+",
-    sub: "India, Dubai & Global",
+    sub: "Unified trading desk",
     icon: Users,
     color: "#10B981",
   },
   {
-    label: "Course Completion Rate",
+    label: "Success Probability",
     value: "94",
     suffix: "%",
-    sub: "Industry-leading outcomes",
+    sub: "Institutional modeling",
     icon: TrendingUp,
     color: "#00FFA3",
   },
   {
-    label: "Live Webinars Hosted",
-    value: "280",
+    label: "Daily Executions",
+    value: "2,800",
     suffix: "+",
-    sub: "Since 2022",
+    sub: "Automated systems",
     icon: Video,
     color: "#D4AF37",
   },
   {
-    label: "Countries Reached",
+    label: "Partner Desks",
     value: "40",
     suffix: "+",
-    sub: "Global community",
+    sub: "Global liquidity hubs",
     icon: Globe,
     color: "#8B5CF6",
   },
@@ -109,8 +109,7 @@ const StatItem = ({ stat, i }: { stat: typeof stats[0]; i: number }) => {
 
       {/* Label */}
       <div
-        className="text-[9px] font-black uppercase tracking-[0.3em] text-white/25 mb-5 group-hover:text-white/45 transition-colors duration-200"
-        style={{ fontFamily: "IBM Plex Mono, monospace" }}
+        className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30 mb-5 group-hover:text-white/50 transition-colors duration-200"
       >
         {stat.label}
       </div>
@@ -159,10 +158,9 @@ export const StatsSection = () => {
         >
           <div className="h-px w-8 bg-emerald-500" />
           <span
-            className="text-[9px] uppercase text-emerald-500 font-black"
-            style={{ fontFamily: "IBM Plex Mono, monospace", letterSpacing: "0.35em" }}
+            className="text-[10px] uppercase text-emerald-500 font-bold tracking-[0.2em]"
           >
-            Platform Telemetry
+            Institutional Impact
           </span>
         </motion.div>
 

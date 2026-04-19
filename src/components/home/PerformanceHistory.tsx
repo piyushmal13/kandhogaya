@@ -43,16 +43,16 @@ export const PerformanceHistory = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/[0.06] border border-emerald-500/[0.12] text-emerald-400 text-[10px] font-black uppercase tracking-[0.3em] mb-8">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/[0.06] border border-emerald-500/[0.12] text-emerald-400 text-[10px] font-bold uppercase tracking-[0.2em] mb-8">
             <Activity className="w-3.5 h-3.5" aria-hidden />
-            Historical Validation
+            Verified Results
           </div>
-          <h2 id="performance-heading" className="text-4xl sm:text-6xl md:text-8xl font-black text-white mb-6 tracking-tighter leading-[0.9]">
-            Institutional <br className="hidden md:block" />
-            <span className="italic font-serif text-gradient-emerald">Performance</span>
+          <h2 id="performance-heading" className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 tracking-tight leading-[1.1]">
+            Audited Trading <br className="hidden md:block" />
+            <span className="text-emerald-400">Track Record</span>
           </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
-            36-month rolling audit of our primary algorithmic execution clusters. Transparent, data-driven, verified.
+          <p className="text-white/50 max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
+            36-month transparent overview of our algorithmic trading performance. Verified by independent analytical tools.
           </p>
         </motion.div>
       </div>
@@ -66,28 +66,28 @@ export const PerformanceHistory = () => {
           className="bg-[#080B12] p-8 md:p-14 rounded-[2.5rem] border border-white/[0.06] relative overflow-hidden group shadow-[0_40px_80px_rgba(0,0,0,0.5)] card-shine"
         >
           {/* Header Row */}
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-16 gap-10">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-12 gap-10">
             <div className="flex items-center gap-6">
               <div className="w-14 h-14 rounded-2xl bg-emerald-500/[0.08] border border-emerald-500/[0.15] flex items-center justify-center">
                 <BarChart3 className="w-7 h-7 text-emerald-400" />
               </div>
               <div>
-                <h3 className="text-white font-black text-2xl md:text-3xl tracking-tight mb-2">System Audit Log</h3>
-                <p className="text-gray-500 text-[10px] md:text-xs font-black uppercase tracking-[0.3em]">3-YEAR PERFORMANCE MATRIX</p>
+                <h3 className="text-white font-semibold text-2xl tracking-tight mb-1">Monthly Performance</h3>
+                <p className="text-white/40 text-[11px] font-medium uppercase tracking-[0.1em]">3-Year Overview</p>
               </div>
             </div>
             
             <div className="flex gap-12 items-center">
               <div className="flex flex-col">
-                <span className="text-[10px] font-black text-emerald-500/70 uppercase tracking-widest mb-2">Success Metric</span>
-                <span className="text-3xl md:text-5xl font-mono font-black text-emerald-400 flex items-center gap-3 tracking-tighter">
-                  +1,240% <TrendingUp className="w-6 h-6 opacity-60" />
+                <span className="text-[11px] font-semibold text-emerald-500/80 uppercase tracking-wider mb-2">Total Return</span>
+                <span className="text-3xl md:text-4xl font-mono font-bold text-emerald-400 flex items-center gap-2 tracking-tight">
+                  +1,240% <TrendingUp className="w-5 h-5 opacity-60" />
                 </span>
               </div>
               <div className="flex flex-col">
-                <span className="text-[10px] font-black text-white/30 uppercase tracking-widest mb-2">Max Retraction</span>
-                <span className="text-3xl md:text-5xl font-mono font-black text-red-400 flex items-center gap-3 tracking-tighter">
-                  -8.2% <TrendingDown className="w-6 h-6 opacity-60" />
+                <span className="text-[11px] font-semibold text-white/40 uppercase tracking-wider mb-2">Max Drawdown</span>
+                <span className="text-3xl md:text-4xl font-mono font-bold text-red-400 flex items-center gap-2 tracking-tight">
+                  -8.2% <TrendingDown className="w-5 h-5 opacity-60" />
                 </span>
               </div>
             </div>
@@ -129,7 +129,7 @@ export const PerformanceHistory = () => {
           <div className="mt-16 pt-10 border-t border-white/[0.06] flex flex-col md:flex-row justify-between items-end gap-10">
             <div className="flex flex-wrap gap-12">
               {[
-                { label: "Win Probability", value: "84.2%", icon: Crosshair },
+                { label: "Win Rate", value: "84.2%", icon: Crosshair },
                 { label: "Sharpe Ratio", value: "3.24", icon: Activity },
                 { label: "Profit Factor", value: "2.1", icon: TrendingUp }
               ].map((item, i) => (
@@ -142,9 +142,9 @@ export const PerformanceHistory = () => {
                 >
                   <div className="flex items-center gap-1.5 mb-2">
                     <item.icon className="w-3.5 h-3.5 text-emerald-500/70" />
-                    <div className="text-[10px] md:text-[11px] font-black text-white/40 uppercase tracking-[0.2em]">{item.label}</div>
+                    <div className="text-[11px] font-semibold text-white/50 uppercase tracking-wider">{item.label}</div>
                   </div>
-                  <div className="font-mono font-black text-xl md:text-3xl tracking-tighter text-white">{item.value}</div>
+                  <div className="font-mono font-bold text-xl md:text-2xl tracking-tight text-white">{item.value}</div>
                 </motion.div>
               ))}
             </div>

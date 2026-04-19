@@ -70,7 +70,13 @@ export const ProductManager = () => {
 
   const handleEdit = (product: Product) => {
     setEditingId(product.id);
-    setEditForm(product);
+    setEditForm({
+      ...product,
+      // Flatten performance results for easier editing
+      perf_win_rate: (product as any).performance?.win_rate || 0,
+      perf_monthly_return: (product as any).performance?.monthly_return || 0,
+      perf_drawdown: (product as any).performance?.drawdown || 0
+    } as any);
   };
 
   const handleCancel = () => {
@@ -83,56 +89,59 @@ export const ProductManager = () => {
     
     setLoading(true);
     
-    // Ensure performance_data is valid JSON before saving
     let dataToSave = { ...editForm };
+    const performanceUpdate = {
+      win_rate: (dataToSave as any).perf_win_rate || 0,
+      monthly_return: (dataToSave as any).perf_monthly_return || 0,
+      drawdown: (dataToSave as any).perf_drawdown || 0,
+      is_live: true,
+      last_updated: new Date().toISOString()
+    };
+
     delete (dataToSave as any).type;
     delete (dataToSave as any).reviews;
     delete (dataToSave as any).variants;
+    delete (dataToSave as any).performance;
+    delete (dataToSave as any).perf_win_rate;
+    delete (dataToSave as any).perf_monthly_return;
+    delete (dataToSave as any).perf_drawdown;
     
-    if (typeof dataToSave.performance_data === 'string') {
-      try {
-        dataToSave.performance_data = JSON.parse(dataToSave.performance_data);
-      } catch (e) {
-        console.error("Invalid JSON:", e);
-        alert("Performance Data must be valid JSON.");
-        setLoading(false);
-        return;
+    // ... JSON parsing logic ...
+    const parseJson = (val: any) => {
+      if (typeof val === 'string') {
+        try { return JSON.parse(val); } catch (e) { return null; }
       }
-    }
-    if (typeof dataToSave.q_and_a === 'string') {
-      try {
-        dataToSave.q_and_a = JSON.parse(dataToSave.q_and_a);
-      } catch (e) {
-        console.error("Invalid JSON:", e);
-        alert("Q&A Data must be valid JSON.");
-        setLoading(false);
-        return;
-      }
-    }
-    if (typeof dataToSave.long_plan_offers === 'string') {
-      try {
-        dataToSave.long_plan_offers = JSON.parse(dataToSave.long_plan_offers);
-      } catch (e) {
-        console.error("Invalid JSON:", e);
-        alert("Long Plan Offers must be valid JSON.");
-        setLoading(false);
-        return;
-      }
-    }
+      return val;
+    };
+
+    dataToSave.performance_data = parseJson(dataToSave.performance_data);
+    dataToSave.q_and_a = parseJson(dataToSave.q_and_a);
+    dataToSave.long_plan_offers = parseJson(dataToSave.long_plan_offers);
 
     try {
       if (!session) throw new Error("No active session");
       
-      // INSTITUTIONAL FIX: Bypassing broken Express route, updating via direct Supabase Client
+      // Update Product
       const { error: updateError } = await supabase
         .from('products')
         .update(dataToSave)
         .eq('id', editingId);
       
       if (updateError) throw updateError;
+
+      // Update/Insert Performance Result
+      const { error: perfError } = await supabase
+        .from('performance_results')
+        .upsert({
+          product_id: editingId,
+          ...performanceUpdate
+        }, { onConflict: 'product_id' });
+
+      if (perfError) console.error("Performance Update Error:", perfError);
       
       setEditingId(null);
       fetchProducts();
+      alert("Institutional Asset Updated Successfully.");
     } catch (error: unknown) {
       const err = error as Error;
       alert("Institutional Data Error: " + err.message);
@@ -291,8 +300,38 @@ export const ProductManager = () => {
                     </div>
                   </div>
 
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                      <label className="block text-[10px] font-bold text-emerald-500 uppercase tracking-widest mb-2">Live Win Rate (%)</label>
+                      <input 
+                        type="number"
+                        value={(editForm as any).perf_win_rate || 0} 
+                        onChange={e => setEditForm({...editForm, perf_win_rate: Number.parseFloat(e.target.value)} as any)}
+                        className="w-full bg-black border border-white/10 rounded-xl px-4 py-2 text-white outline-none focus:border-emerald-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-bold text-emerald-500 uppercase tracking-widest mb-2">Monthly Return (%)</label>
+                      <input 
+                        type="number"
+                        value={(editForm as any).perf_monthly_return || 0} 
+                        onChange={e => setEditForm({...editForm, perf_monthly_return: Number.parseFloat(e.target.value)} as any)}
+                        className="w-full bg-black border border-white/10 rounded-xl px-4 py-2 text-white outline-none focus:border-emerald-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-bold text-emerald-500 uppercase tracking-widest mb-2">Max Drawdown (%)</label>
+                      <input 
+                        type="number"
+                        value={(editForm as any).perf_drawdown || 0} 
+                        onChange={e => setEditForm({...editForm, perf_drawdown: Number.parseFloat(e.target.value)} as any)}
+                        className="w-full bg-black border border-white/10 rounded-xl px-4 py-2 text-white outline-none focus:border-emerald-500"
+                      />
+                    </div>
+                  </div>
+
                   <div>
-                    <label htmlFor="description" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Description</label>
+                    <label htmlFor="description" className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Institutional Description</label>
                     <textarea 
                       id="description"
                       value={editForm.description || ""} 

@@ -71,6 +71,8 @@ const AnimatedRoutes = () => {
             <Route path="/academy" element={<Academy />} />
             <Route path="/academy/:courseId" element={<CourseDetail />} />
             <Route path="/courses" element={<Academy />} />
+            <Route path="/course" element={<Academy />} />
+            <Route path="/algo" element={<Marketplace />} />
             <Route path="/webinars" element={<Webinars />} />
             <Route path="/webinars/:id" element={<WebinarDetail />} />
             <Route path="/blog" element={<Blog />} />

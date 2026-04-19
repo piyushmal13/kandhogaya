@@ -14,12 +14,6 @@ const REGIONS = [
   { name: "Zurich", flag: "🇨🇭", lat: 47.3769, lng: 8.5417, key: false },
 ];
 
-const GLOBAL_STATS = [
-  { label: "Partner Desks", value: "12+", icon: Globe2, color: "#10B981" },
-  { label: "Elite Alumni", value: "8,200+", icon: Users, color: "#06B6D4" },
-  { label: "Signal Accuracy", value: "84.2%", icon: TrendingUp, color: "#D4AF37" },
-  { label: "Platform Uptime", value: "99.9%", icon: Shield, color: "#8B5CF6" },
-];
 
 export const GlobalReach = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -213,38 +207,6 @@ export const GlobalReach = () => {
           </motion.div>
         </div>
 
-        {/* Stats row */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.3, duration: 0.8 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/[0.05] rounded-[2rem] overflow-hidden border border-white/[0.06]"
-        >
-          {GLOBAL_STATS.map((stat, i) => (
-            <motion.div
-              key={stat.label}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4 + i * 0.07 }}
-              className="group flex flex-col items-center gap-4 py-10 px-6 bg-[#020202] hover:bg-[#080B12] transition-colors duration-300 cursor-default"
-            >
-              <div
-                className="w-12 h-12 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
-                style={{ background: `${stat.color}12`, border: `1px solid ${stat.color}22` }}
-              >
-                <stat.icon className="w-5 h-5" style={{ color: stat.color }} />
-              </div>
-              <div className="text-3xl sm:text-4xl font-black text-white font-mono tracking-tight tabular-nums">
-                {stat.value}
-              </div>
-              <div className="text-[10px] font-black text-white/25 uppercase tracking-[0.35em] group-hover:text-white/50 transition-colors">
-                {stat.label}
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
       </div>
     </section>
   );

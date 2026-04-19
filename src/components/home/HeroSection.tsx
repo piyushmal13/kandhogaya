@@ -19,38 +19,6 @@ const TRUST_BADGES = [
   { icon: Globe, label: "India · Dubai · Singapore" },
 ];
 
-// Animated number counter
-const useCounter = (target: number, trigger: boolean, duration = 1600) => {
-  const [value, setValue] = useState(0);
-  useEffect(() => {
-    if (!trigger) return;
-    let start: number | null = null;
-    const step = (ts: number) => {
-      if (!start) start = ts;
-      const progress = Math.min((ts - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setValue(Math.floor(eased * target));
-      if (progress < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  }, [target, trigger, duration]);
-  return value;
-};
-
-const StatPill = ({ value, suffix, label, trigger }: { value: number; suffix: string; label: string; trigger: boolean }) => {
-  const count = useCounter(value, trigger);
-  return (
-    <div className="flex flex-col items-center sm:items-start gap-0.5 px-6 py-4 border-r border-white/[0.06] last:border-r-0">
-      <span
-        className="text-2xl sm:text-3xl font-black text-white tabular-nums tracking-tight"
-        style={{ fontFamily: "IBM Plex Mono, monospace" }}
-      >
-        {count.toLocaleString()}{suffix}
-      </span>
-      <span className="text-[10px] font-semibold text-white/35 uppercase tracking-[0.2em]">{label}</span>
-    </div>
-  );
-};
 
 export const HeroSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
@@ -93,12 +61,9 @@ export const HeroSection = () => {
             transition={{ duration: 0.4, ease: SNAP }}
             className="inline-flex items-center gap-2.5 mb-8 px-4 py-2 rounded-full bg-emerald-500/[0.07] border border-emerald-500/[0.18] text-emerald-400"
           >
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
-            </span>
-            <span className="text-[10px] font-black uppercase tracking-[0.35em]" style={{ fontFamily: "IBM Plex Mono, monospace" }}>
-              Desk Active · Asia Quant Network
+            <ShieldCheck className="w-3.5 h-3.5" />
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em]">
+              Professional Trading Education
             </span>
           </motion.div>
 
@@ -107,17 +72,17 @@ export const HeroSection = () => {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.08, duration: 0.55, ease: SNAP }}
-            className="text-[3rem] sm:text-[4.5rem] md:text-[6rem] lg:text-[7rem] font-black leading-[0.9] tracking-[-0.05em] mb-10 text-white"
+            className="text-[3rem] sm:text-[4.5rem] md:text-[5.5rem] lg:text-[6.5rem] font-bold leading-[1.05] tracking-tight mb-8 text-white"
           >
-            Institutional <br />
-            <span className="italic font-serif"
+            Trade Like An <br />
+            <span
               style={{
-                background: "linear-gradient(135deg, #10B981 0%, #00FFA3 55%, #D4AF37 100%)",
+                background: "linear-gradient(135deg, #10B981 0%, #00FFA3 55%, #06B6D4 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
               }}
             >
-              Capital Intelligence.
+              Institution.
             </span>
           </motion.h1>
 
@@ -125,9 +90,9 @@ export const HeroSection = () => {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.16, duration: 0.5, ease: SNAP }}
-            className="text-base md:text-xl text-white/40 font-light leading-[1.7] max-w-2xl mb-12 tracking-tight"
+            className="text-base md:text-xl text-white/50 font-normal leading-[1.7] max-w-2xl mb-12"
           >
-            Access the same systematic architecture and macro diagnostics used by the world's most advanced proprietary desks. Precise execution, verified results.
+            Master the markets with our comprehensive academy, algorithmic strategies, and daily live sessions. Join 12,400+ traders scaling their portfolios.
           </motion.p>
 
           {/* CTA Row */}
@@ -168,9 +133,9 @@ export const HeroSection = () => {
               >
                 {status === "success" ? <Check className="w-4 h-4" /> : null}
                 {(() => {
-                  if (status === 'loading') return '…';
-                  if (status === 'success') return 'Done';
-                  return 'Get Access';
+                  if (status === 'loading') return 'Processing...';
+                  if (status === 'success') return 'Submitted';
+                  return 'Start Learning';
                 })()}
               </button>
             </form>
@@ -203,114 +168,81 @@ export const HeroSection = () => {
           </motion.div>
         </div>
 
-        {/* RIGHT — Visual card panel */}
-        <div className="flex-1 flex items-center justify-center lg:justify-end w-full max-w-[540px] lg:max-w-none">
+        {/* RIGHT — Visual card panel (Professional App Mockup) */}
+        <div className="flex-1 flex items-center justify-center lg:justify-end w-full max-w-[540px] lg:max-w-none perspective-1000">
           <motion.div
-            initial={{ opacity: 0, x: 40, scale: 0.97 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            transition={{ delay: 0.3, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="relative w-full max-w-[480px]"
+            initial={{ opacity: 0, rotateY: 15, x: 40, scale: 0.95 }}
+            animate={{ opacity: 1, rotateY: 0, x: 0, scale: 1 }}
+            transition={{ delay: 0.3, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+            className="relative w-full max-w-[500px] bg-[#0A0D14] border border-white/[0.08] rounded-3xl overflow-hidden shadow-2xl flex flex-col"
           >
-            {/* Glow halo */}
-            <div className="absolute inset-[-20%] bg-emerald-500/[0.07] blur-[80px] rounded-full pointer-events-none" />
+            {/* Top Bar Mockup */}
+            <div className="h-12 border-b border-white/[0.05] flex items-center px-6 justify-between bg-white/[0.02]">
+              <div className="flex gap-2">
+                <div className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
+                <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80" />
+                <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
+              </div>
+              <div className="text-[10px] text-white/30 font-medium">IFX TRADES PRO</div>
+            </div>
 
-            {/* Main card */}
-            <div className="relative bg-[#080B12] border border-white/[0.07] rounded-[2rem] p-8 overflow-hidden shadow-[0_40px_100px_rgba(0,0,0,0.7)]">
-              {/* Corner accent */}
-              <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-bl from-emerald-500/[0.06] to-transparent rounded-[2rem] pointer-events-none" />
-
-              {/* Header */}
+            {/* Content Mockup */}
+            <div className="p-6">
               <div className="flex items-center justify-between mb-8">
                 <div>
-                  <div className="text-[9px] font-black uppercase tracking-[0.35em] text-white/25 mb-1" style={{ fontFamily: "IBM Plex Mono, monospace" }}>
-                    GOLD ALGO MASTERCLASS
-                  </div>
-                  <div className="text-white font-black text-lg tracking-tight">XAUUSD Intelligence</div>
+                  <div className="text-sm text-white/40 mb-1">Portfolio Balance</div>
+                  <div className="text-3xl font-semibold text-white">$124,500.00</div>
                 </div>
-                <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
-                  <div className="w-3 h-3 rounded-full bg-emerald-400 animate-pulse" />
+                <div className="px-3 py-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 text-xs font-medium">
+                  +2.4% Today
                 </div>
               </div>
 
-              {/* Algo performance bars */}
-              <div className="space-y-4 mb-8">
-                {[
-                  { label: "Macro Alpha Model", pct: 84, color: "#10B981" },
-                  { label: "Risk Calibration", pct: 96, color: "#00FFA3" },
-                  { label: "Signal Precision", pct: 78, color: "#D4AF37" },
-                  { label: "Drawdown Control", pct: 91, color: "#06B6D4" },
-                ].map(({ label, pct, color }, i) => (
-                  <div key={label}>
-                    <div className="flex justify-between text-[10px] font-black uppercase tracking-[0.2em] mb-1.5">
-                      <span className="text-white/40">{label}</span>
-                      <span style={{ color }}>{pct}%</span>
-                    </div>
-                    <div className="h-1 bg-white/[0.04] rounded-full overflow-hidden">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: `${pct}%` }}
-                        transition={{ delay: 0.6 + i * 0.1, duration: 1, ease: [0.16, 1, 0.3, 1] }}
-                        className="h-full rounded-full"
-                        style={{ background: color }}
-                      />
-                    </div>
-                  </div>
+              {/* Chart Mockup (CSS generated) */}
+              <div className="relative h-40 w-full flex items-end justify-between gap-1 mb-8">
+                {[40, 55, 30, 70, 65, 80, 50, 95, 85, 110, 100, 130].map((h, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ height: 0 }}
+                    animate={{ height: `${h}%` }}
+                    transition={{ delay: 0.5 + i * 0.05, duration: 0.8, ease: "easeOut" }}
+                    className="w-full bg-emerald-500/20 rounded-t-sm relative group cursor-pointer hover:bg-emerald-500/40 transition-colors"
+                  >
+                    <div className="absolute -top-1 left-0 right-0 h-1 bg-emerald-500 rounded-t-sm opacity-50 group-hover:opacity-100" />
+                  </motion.div>
                 ))}
+                {/* Overlay gradient for bottom fade */}
+                <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#0A0D14] to-transparent pointer-events-none" />
               </div>
 
-              {/* Signal feed */}
-              <div className="border-t border-white/[0.06] pt-6">
-                <div className="text-[9px] font-black uppercase tracking-[0.35em] text-white/20 mb-4" style={{ fontFamily: "IBM Plex Mono, monospace" }}>
-                  Latest Signal · XAU/USD
-                </div>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="text-2xl font-black text-white font-mono tracking-tight">2,338.40</div>
-                    <div className="text-emerald-400 text-xs font-black mt-0.5">+1.24% · BUY ZONE ACTIVE</div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-[10px] text-white/20 mb-1" style={{ fontFamily: "IBM Plex Mono, monospace" }}>TP1 / TP2</div>
-                    <div className="text-sm font-black text-white/60 font-mono">2,355 / 2,380</div>
-                  </div>
+              {/* Recent Activity */}
+              <div>
+                <div className="text-xs font-semibold text-white/40 mb-4 uppercase tracking-wider">Recent Signals</div>
+                <div className="space-y-3">
+                  {[
+                    { pair: "XAU/USD", action: "BUY", price: "2,345.10", profit: "+$450.00" },
+                    { pair: "EUR/USD", action: "SELL", price: "1.0845", profit: "+$120.00" },
+                  ].map((trade, i) => (
+                    <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] border border-white/[0.04]">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-[10px] font-bold ${trade.action === "BUY" ? "bg-emerald-500/10 text-emerald-400" : "bg-red-500/10 text-red-400"}`}>
+                          {trade.action}
+                        </div>
+                        <div className="font-medium text-sm text-white">{trade.pair}</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-xs text-white">{trade.price}</div>
+                        <div className="text-[10px] text-emerald-400">{trade.profit}</div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
-
-            {/* Floating badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.9, duration: 0.4 }}
-              className="absolute -bottom-5 -left-4 bg-[#0C0F18] border border-white/[0.08] rounded-2xl px-4 py-3 shadow-[0_20px_40px_rgba(0,0,0,0.5)]"
-            >
-              <div className="flex items-center gap-2.5">
-                <div className="w-7 h-7 rounded-lg bg-yellow-500/10 flex items-center justify-center">
-                  <Star className="w-3.5 h-3.5 text-yellow-400" />
-                </div>
-                <div>
-                  <div className="text-white text-xs font-black">Asia's #1 Rated</div>
-                  <div className="text-white/30 text-[9px]">Algo Trading Education</div>
-                </div>
-              </div>
-            </motion.div>
           </motion.div>
         </div>
       </motion.div>
 
-      {/* === STATS BAR === */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5, duration: 0.4, ease: SNAP }}
-        className="relative z-10 w-full border-t border-white/[0.06] bg-black/60 backdrop-blur-xl"
-      >
-        <div className="max-w-[1440px] mx-auto flex flex-wrap justify-center sm:justify-start divide-x divide-white/[0.06]">
-          <StatPill value={12400} suffix="+" label="Elite Alumni" trigger={statsVisible} />
-          <StatPill value={280} suffix="+" label="Webinars Hosted" trigger={statsVisible} />
-          <StatPill value={94} suffix="%" label="Course Completion" trigger={statsVisible} />
-          <StatPill value={40} suffix="+" label="Countries Reached" trigger={statsVisible} />
-        </div>
-      </motion.div>
     </section>
   );
 };
