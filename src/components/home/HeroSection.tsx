@@ -107,17 +107,17 @@ export const HeroSection = () => {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.08, duration: 0.55, ease: SNAP }}
-            className="text-[3.4rem] sm:text-[5rem] md:text-[6.5rem] lg:text-[7.5rem] font-black leading-[0.86] tracking-[-0.04em] mb-8 text-white uppercase"
+            className="text-[3rem] sm:text-[4.5rem] md:text-[6rem] lg:text-[7rem] font-black leading-[0.9] tracking-[-0.05em] mb-10 text-white"
           >
-            Master the{" "}
-            <span className="italic font-serif not-italic"
+            Institutional <br />
+            <span className="italic font-serif"
               style={{
                 background: "linear-gradient(135deg, #10B981 0%, #00FFA3 55%, #D4AF37 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
               }}
             >
-              Markets.
+              Capital Intelligence.
             </span>
           </motion.h1>
 
@@ -125,9 +125,9 @@ export const HeroSection = () => {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.16, duration: 0.5, ease: SNAP }}
-            className="text-base md:text-lg text-white/50 font-light leading-[1.85] max-w-xl mb-10 tracking-tight"
+            className="text-base md:text-xl text-white/40 font-light leading-[1.7] max-w-2xl mb-12 tracking-tight"
           >
-            Institutional-grade algorithmic execution, XAUUSD macro research, and certified professional training — built for serious traders across Asia.
+            Access the same systematic architecture and macro diagnostics used by the world's most advanced proprietary desks. Precise execution, verified results.
           </motion.p>
 
           {/* CTA Row */}

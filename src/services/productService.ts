@@ -11,14 +11,31 @@ export const productService = {
   getProducts: async (): Promise<Product[]> => {
     console.log("📦 [PRODUCT FETCH] START (Intelligence Deep Join Strategy)");
     try {
-        const query = supabase
-          .from("products")
-          .select("*")
-          .order("created_at", { ascending: false });
+      const { data: products, error: pError } = await supabase
+        .from("products")
+        .select("*")
+        .order("created_at", { ascending: false });
 
-      let products = await safeQuery<Product[]>(query);
-      console.log("📦 [PRODUCT FETCH] RESPONSE", products.length, "products");
-      return products || [];
+      if (pError) throw pError;
+
+      const { data: perfData, error: perfError } = await supabase
+        .from("performance_results")
+        .select("*");
+
+      if (perfError) {
+        console.warn("⚠️ [PRODUCT FETCH] Performance join failed, proceeding with base models.");
+      }
+
+      const enrichedProducts = (products || []).map(product => {
+        const perf = (perfData || []).find(p => p.product_id === product.id);
+        return {
+          ...product,
+          performance: perf || undefined
+        };
+      });
+
+      console.log("📦 [PRODUCT FETCH] RESPONSE", enrichedProducts.length, "enriched products");
+      return enrichedProducts as Product[];
     } catch (error) {
       console.error("📦 [PRODUCT FETCH] ERROR", error);
       return [];

@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { Calendar, Clock, Users } from 'lucide-react';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { SovereignButton } from '@/components/ui/Button';

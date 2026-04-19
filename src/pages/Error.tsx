@@ -1,6 +1,6 @@
 import { DashboardLayout } from '../components/institutional/DashboardLayout';
 import { SovereignButton } from '../components/ui/Button';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { AlertTriangle, Home } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 

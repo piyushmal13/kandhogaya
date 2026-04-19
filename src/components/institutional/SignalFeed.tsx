@@ -1,6 +1,6 @@
 import { Activity, ArrowUpRight, ArrowDownRight } from 'lucide-react';
 import { SovereignButton } from '@/components/ui/SovereignButton';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from "motion/react";
 import { useSignals } from '@/hooks/useSignals';
 
 /**

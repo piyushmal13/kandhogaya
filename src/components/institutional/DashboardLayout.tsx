@@ -1,6 +1,7 @@
 import React from 'react';
 import { Breadcrumb } from './Breadcrumb';
-import { Footer } from './Footer';
+// import { Footer } from './Footer'; // Redundant with StandardLayout
+import { DashboardNavigation } from './DashboardNavigation';
 import { useFocusRoute } from '@/hooks/useFocusRoute';
 import { cn } from '@/lib/utils';
 import { motion } from "motion/react";
@@ -13,33 +14,33 @@ interface DashboardLayoutProps {
 }
 
 /**
- * INSTITUTIONAL DASHBOARD LAYOUT (v7.0 - Royale Noir One-Page)
- * Refactored to eliminate sidebar redundancy and align with StandardLayout.
- * Now provides a focused 'One-Page' terminal experience with high-density data support.
+ * INSTITUTIONAL DASHBOARD LAYOUT (v8.0 - Royale Noir Terminal)
+ * Provides a persistent sidebar for high-frequency navigation and a 
+ * flexible grid for terminal modules.
  */
 export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ 
   children, 
   contextPanel,
   showBreadcrumb = true
 }) => {
-  // Hardening: Accessibility and focus management
   useFocusRoute();
 
   return (
-    <div className="min-h-screen w-full bg-[#030406] text-white selection:bg-emerald-500/30 overflow-x-hidden relative pt-20">
+    <div className="min-h-screen w-full bg-[#030406] text-white selection:bg-emerald-500/30 overflow-x-hidden relative flex">
       
-      {/* === CINEMATIC RIG === */}
-      <div className="fixed inset-0 pointer-events-none opacity-[0.04] z-[60] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
-      <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(circle_at_50%_0%,rgba(16,185,129,0.06),transparent_70%)] z-[59]" />
+      {/* === PERSISTENT SIDEBAR === */}
+      <aside className="hidden lg:flex flex-col w-72 h-screen sticky top-0 border-r border-white/5 bg-[#050709] z-50">
+        <DashboardNavigation />
+      </aside>
 
       <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "circOut" }}
-        className="relative z-10 w-full"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="relative z-10 flex-1 flex flex-col min-w-0"
       >
         <div className={cn(
-          "mx-auto w-full transition-all duration-700 ease-in-out px-4 sm:px-8 md:px-12",
+          "w-full transition-all duration-700 ease-in-out px-4 sm:px-8 md:px-12 pt-24",
           contextPanel ? "max-w-[1800px]" : "max-w-[1400px]"
         )}>
           
@@ -48,7 +49,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             {/* === MAIN EXECUTION SURFACE === */}
             <main className="flex-1 flex flex-col outline-none" tabIndex={-1}>
               {showBreadcrumb && (
-                <div className="mb-8 p-1 bg-white/[0.02] border border-white/5 inline-flex rounded-xl">
+                <div className="mb-8 p-1 bg-white/[0.02] border border-white/5 inline-flex rounded-xl self-start">
                   <Breadcrumb />
                 </div>
               )}
@@ -73,10 +74,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             )}
           </div>
 
-          {/* STANDARDIZED FOOTER */}
-          <div className="mt-20 border-t border-white/5 pt-10 pb-20">
-            <Footer />
-          </div>
+          {/* Footer removed to prevent duplication with StandardLayout */}
         </div>
       </motion.div>
     </div>

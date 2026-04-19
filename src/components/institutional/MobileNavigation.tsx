@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useLocation, NavLink } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { Menu, X, Zap } from 'lucide-react';
 import { GlobalNavigation } from './GlobalNavigation';
 

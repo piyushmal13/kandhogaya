@@ -89,27 +89,28 @@
   }
 
   /* ── Fluid Typography Scale ── */
+  /* NOTE: Restrained scale — using Sentence Case by default for premium editorial feel */
   h1 {
-    @apply font-black tracking-[-0.05em] leading-[0.85] uppercase;
-    font-size: clamp(3.5rem, 12vw, 10rem);
+    @apply font-black tracking-[-0.05em] leading-[0.95];
+    font-size: clamp(2.5rem, 8vw, 6rem);
   }
   h2 {
-    @apply font-black tracking-[-0.04em] leading-[0.9] uppercase;
-    font-size: clamp(2.5rem, 8vw, 6.5rem);
+    @apply font-black tracking-[-0.04em] leading-[1.0];
+    font-size: clamp(2rem, 5vw, 4rem);
   }
   h3 {
-    @apply font-black tracking-[-0.03em] leading-[1.0] uppercase;
-    font-size: clamp(1.75rem, 5vw, 3.5rem);
+    @apply font-bold tracking-[-0.03em] leading-[1.1];
+    font-size: clamp(1.5rem, 3.5vw, 2.5rem);
   }
   
   p {
     @apply font-light leading-relaxed text-gray-400;
-    font-size: clamp(0.95rem, 2.5vw, 1.125rem);
+    font-size: clamp(0.9rem, 2vw, 1.05rem);
   }
 
   /* ── Mobile Container Padding ── */
   .max-w-7xl {
-    @apply px-6 sm:px-12 lg:px-16;
+    @apply px-6 sm:px-10 lg:px-16;
   }
 }
 
@@ -185,7 +186,15 @@
   }
   /* Connected panel — gap-px technique for Bloomberg grid look */
   .site-panel {
-    @apply rounded-[2rem] overflow-hidden;
+    @apply rounded-2xl overflow-hidden bg-white/[0.03] border border-white/[0.07];
+  }
+  /* Muted panel for metric cards */
+  .site-panel-muted {
+    @apply rounded-2xl bg-white/[0.02] border border-white/[0.05] transition-all duration-300 hover:border-white/[0.1];
+  }
+  /* Eyebrow pill badge */
+  .site-pill {
+    @apply px-4 py-1.5 rounded-full bg-emerald-500/[0.06] border border-emerald-500/[0.15] text-emerald-400;
   }
   /* Subtle light-leak shimmer on hover */
   .card-shine {
