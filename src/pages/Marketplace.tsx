@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "motion/react";
-import { Search, SlidersHorizontal, Terminal, ShieldAlert, Activity, ShieldCheck, TrendingUp } from "lucide-react";
+import { Search, ShieldAlert, Activity, ShieldCheck, TrendingUp } from "lucide-react";
 import { PageMeta } from "../components/site/PageMeta";
 import { MarketplaceGrid } from "../components/institutional/MarketplaceGrid";
 import { AlgoDetailModal } from "../components/algorithms/AlgoDetailModal";
@@ -38,7 +38,7 @@ export const Marketplace = () => {
   const filteredProducts = products.filter((p: Product) => {
     const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
                          p.description?.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = activeCategory === "all" || p.type === activeCategory;
+    const matchesCategory = activeCategory === "all" || p.category === activeCategory;
     return matchesSearch && matchesCategory;
   });
 
@@ -65,6 +65,49 @@ export const Marketplace = () => {
     });
     
     setSelectedProduct(null);
+  };
+
+  const renderGrid = () => {
+    if (isLoading) {
+      return <MarketplaceGrid products={[]} isLoading={true} />;
+    }
+    
+    if (filteredProducts.length > 0) {
+      return (
+        <MarketplaceGrid
+          products={filteredProducts.map((p: Product) => ({
+            id: p.id,
+            name: p.name,
+            type: p.category as any,
+            price: p.price,
+            category: p.category,
+            description: p.description,
+            isPremium: p.price > 1000,
+            performance: p.performance ? {
+              winRate: p.performance.win_rate || 72,
+              monthlyReturn: p.performance.monthly_return || 12.4,
+              sharpe: (p.performance as any).sharpe_ratio || 2.1
+            } : undefined
+          }))}
+          onSelect={(p) => {
+            const original = products.find(o => o.id === p.id);
+            if (original) setSelectedProduct(original);
+          }}
+        />
+      );
+    }
+
+    return (
+      <div className="py-32 flex flex-col items-center justify-center space-y-6 text-center border border-dashed border-white/5 rounded-[3rem]">
+        <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center">
+           <ShieldAlert className="w-8 h-8 text-white/20" />
+        </div>
+        <div className="space-y-2">
+           <h3 className="text-xl font-bold text-white italic">No Assets Matching Filter</h3>
+           <p className="text-[10px] font-black text-white/10 uppercase tracking-[0.3em] font-mono">Adjust your criteria or re-sync with Global Pool</p>
+        </div>
+      </div>
+    );
   };
 
   const content = (
@@ -127,40 +170,7 @@ export const Marketplace = () => {
 
         {/* Assets Grid */}
         <div className="relative min-h-[400px]">
-          {isLoading ? (
-            <MarketplaceGrid products={[]} isLoading={true} />
-          ) : filteredProducts.length > 0 ? (
-            <MarketplaceGrid
-              products={filteredProducts.map((p: Product) => ({
-                id: p.id,
-                name: p.name,
-                type: p.type as any,
-                price: p.price,
-                category: p.category,
-                description: p.description,
-                isPremium: p.price > 1000,
-                performance: p.performance ? {
-                  winRate: p.performance.win_rate || 72,
-                  monthlyReturn: p.performance.monthly_return || 12.4,
-                  sharpe: (p.performance as any).sharpe_ratio || 2.1
-                } : undefined
-              }))}
-              onSelect={(p) => {
-                const original = products.find(o => o.id === p.id);
-                if (original) setSelectedProduct(original);
-              }}
-            />
-          ) : (
-            <div className="py-32 flex flex-col items-center justify-center space-y-6 text-center border border-dashed border-white/5 rounded-[3rem]">
-              <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center">
-                 <ShieldAlert className="w-8 h-8 text-white/20" />
-              </div>
-              <div className="space-y-2">
-                 <h3 className="text-xl font-bold text-white italic">No Assets Matching Filter</h3>
-                 <p className="text-[10px] font-black text-white/10 uppercase tracking-[0.3em] font-mono">Adjust your criteria or re-sync with Global Pool</p>
-              </div>
-            </div>
-          )}
+          {renderGrid()}
         </div>
 
         {/* Bottom Trust Row */}
@@ -169,8 +179,8 @@ export const Marketplace = () => {
              { icon: ShieldCheck, title: "Verified Integrity", desc: "Every model passes rigorous institutional backtesting for educational simulation." },
              { icon: Activity, title: "Fidelity Telemetry", desc: "Real-time model fidelity and simulated monthly projections synced seamlessly." },
              { icon: TrendingUp, title: "Quant Origin", desc: "Built by the proprietary desk managing institutional capital. High-alpha execution." }
-           ].map((item, i) => (
-             <div key={i} className="space-y-4 group">
+           ].map((item) => (
+             <div key={item.title} className="space-y-4 group">
                 <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-emerald-400 border border-white/5 group-hover:bg-emerald-500/10 transition-all">
                    <item.icon className="w-6 h-6" />
                 </div>
@@ -185,7 +195,6 @@ export const Marketplace = () => {
       <AnimatePresence>
         {selectedProduct && (
           <AlgoDetailModal
-            isOpen={!!selectedProduct}
             onClose={() => setSelectedProduct(null)}
             product={selectedProduct}
             onSubscribe={handleSubscribe}

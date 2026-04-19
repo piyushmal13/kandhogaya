@@ -83,13 +83,13 @@ export const Academy = () => {
         <section className="space-y-12">
           {loading ? (
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-              {[...Array(3)].map((_, i) => (
-                <CourseCardSkeleton key={i} />
+              {[...new Array(3)].map((_, i) => (
+                <CourseCardSkeleton key={`skeleton-${i}`} />
               ))}
             </div>
           ) : (
             <>
-              {!courses.length ? (
+              {courses.length === 0 ? (
                 <div className="bg-white/[0.02] border border-white/5 rounded-[3rem] p-20 text-center">
                    <div className="text-xl font-black text-white/20 uppercase italic transition-colors">Course nodes offline</div>
                    <p className="text-[9px] font-black text-white/10 uppercase tracking-[0.3em] mt-3 font-mono">Re-synchronizing with the learning cluster.</p>
@@ -107,7 +107,7 @@ export const Academy = () => {
                           title: course.title,
                           instructor: persona,
                           thumbnailUrl: getCourseImage(course),
-                          duration: typeof course.duration === 'string' ? parseInt(course.duration) || 60 : 60,
+                          duration: typeof course.duration === 'string' ? Number.parseInt(course.duration, 10) || 60 : 60,
                           moduleCount: course.chapters?.length || course.lessons?.length || 0,
                           level: (course.level?.toLowerCase() === 'advanced' ? 'institutional' : course.level?.toLowerCase() || 'beginner') as any,
                           isPremium: course.price > 0,
