@@ -10,9 +10,8 @@ import {
   Menu,
   MessageSquare,
   Settings,
-  Video,
   X,
-  Plane,
+  Zap,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { BRANDING } from "../../constants/branding";
@@ -39,7 +38,6 @@ export const Navbar = () => {
   const handleScroll = useCallback(() => {
     const y = window.scrollY;
     setScrolled(y > 20);
-    // Hide on scroll-down, show on scroll-up (after 100px threshold)
     if (y > 100) {
       setHidden(y > lastY + 8);
     } else {
@@ -55,10 +53,9 @@ export const Navbar = () => {
 
   const navLinks = [
     { name: "Home", path: "/", icon: Home },
-    { name: "Courses", path: "/academy", icon: BookOpen },
-    { name: "Algos", path: "/marketplace", icon: BarChart3 },
-    { name: "Travel", path: "/travel", icon: Plane },
-    { name: "Webinars", path: "/webinars", icon: Video },
+    { name: "Academy", path: "/academy", icon: BookOpen },
+    { name: "Marketplace", path: "/marketplace", icon: BarChart3 },
+    { name: "Signals", path: "/risk", icon: Zap },
     { name: "Blog", path: "/blog", icon: MessageSquare },
   ];
 

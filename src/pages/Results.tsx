@@ -4,7 +4,7 @@ import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YA
 import { PageMeta } from "../components/site/PageMeta";
 import { getPerformanceResults } from "../services/apiHandlers";
 import { cn } from "@/lib/utils";
-import { DashboardLayout } from "@/components/institutional/DashboardLayout";
+import { motion } from "motion/react";
 
 export const Results = () => {
   const [results, setResults] = useState<any[]>([]);
@@ -36,8 +36,8 @@ export const Results = () => {
       </div>
 
       <PageMeta
-        title="Verified Quantitative Performance | Sovereign Terminal"
-        description="Review IFX Trades audited quantitative model results: 82.4% fidelity, 3.24 profit factor, equity growth."
+        title="Verified Strategy Performance | IFX TRADES"
+        description="Review IFX TRADES audited performance data: 82.4% win rate, 3.24 profit factor, consistent equity growth."
         path="/results"
       />
 
@@ -49,16 +49,16 @@ export const Results = () => {
             </div>
             <h1 className="text-shimmer leading-[0.9]">
               Performance <br />
-              <span className="italic font-serif text-gradient-emerald">Telemetry.</span>
+              <span className="italic font-serif text-gradient-emerald">Analytics.</span>
             </h1>
             <p className="text-lg text-gray-400 max-w-2xl font-light leading-relaxed">
-              Real-time audit of systematic execution cycles. Every data point represents a verified sequence within the IFX Sovereign Cluster.
+              Transparent reporting of systematic trading performance. Every data point represents a verified outcome within the IFX Execution Engine.
             </p>
           </div>
           
           <div className="flex gap-12">
              <div className="flex flex-col items-end">
-                <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em] mb-3">Yield Points Captured</span>
+                <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em] mb-3">Pips Captured</span>
                 <span className="text-4xl font-black text-emerald-500 font-mono tracking-tighter italic">
                    +{results.reduce((acc, r) => acc + (r.pips || 0), 0).toLocaleString() || "48,240"}
                 </span>
@@ -78,7 +78,7 @@ export const Results = () => {
                   Equity Curve Analysis
                </h3>
                <div className="px-4 py-2 bg-emerald-500/[0.05] border border-emerald-500/[0.1] rounded-full text-[9px] font-black text-emerald-500/60 uppercase tracking-widest italic">
-                  Verified Tick Data
+                  Verified Strategy Data
                </div>
             </div>
 
@@ -110,8 +110,8 @@ export const Results = () => {
                         letterSpacing: "0.2em"
                       }}
                       itemStyle={{ color: "#10B981" }}
-                      labelFormatter={(label) => `Cycle: ${label}`}
-                      formatter={(value: any) => [`${value} Points`, 'Yield Integrity']}
+                      labelFormatter={(label) => `Period: ${label}`}
+                      formatter={(value: any) => [`${value} Pips`, 'Strategy Performance']}
                     />
                     <Area type="monotone" dataKey="pips" stroke="#10B981" strokeWidth={3} fill="url(#ifxCurve)" />
                   </AreaChart>
@@ -149,10 +149,10 @@ export const Results = () => {
             >
               <div className="flex items-center gap-4">
                  <Award className="w-5 h-5 text-emerald-500" />
-                 <h3 className="text-[10px] font-black text-white uppercase tracking-[0.4em]">Audit Posture</h3>
+                 <h3 className="text-[10px] font-black text-white uppercase tracking-[0.4em]">Verification Standards</h3>
               </div>
               <p className="text-[11px] font-light text-white/30 uppercase tracking-[0.2em] leading-relaxed italic">
-                 Every masterclass cycle and algorithmic signal is registered on the sovereign blockchain node for immutable verification.
+                 Every strategy execution and algorithmic trade is logged within our proprietary verification protocol for absolute transparency.
               </p>
             </motion.div>
           </div>
@@ -177,9 +177,9 @@ export const Results = () => {
               className="p-12 rounded-[4rem] bg-[#080B12] border border-white/[0.06] space-y-8 group hover:border-emerald-500/30 transition-all duration-700"
             >
               <CheckCircle2 className="h-12 w-12 text-emerald-500" />
-              <h3 className="text-3xl font-black text-white uppercase italic tracking-tighter">Join the Discipline</h3>
+              <h3 className="text-3xl font-black text-white uppercase italic tracking-tighter">Professional Execution</h3>
               <p className="text-[11px] text-white/30 uppercase tracking-[0.2em] leading-relaxed font-light">
-                Transition from discretionary noise to sovereign execution. Gain access to the full institutional track record.
+                Transition from discretionary noise to systematic execution. Gain access to our full institutional track record.
               </p>
            </motion.div>
         </section>

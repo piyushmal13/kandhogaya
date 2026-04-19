@@ -120,7 +120,7 @@ export const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({ products, isLo
                 className="text-gray-400 text-base leading-relaxed line-clamp-2 font-medium opacity-80"
                 itemProp="description"
               >
-                {product.description || "Institutional grade execution model designed for liquid equity and sovereign debt markets."}
+                {product.description || "Institutional grade execution model designed for liquid indices and global currency markets."}
               </p>
 
               {/* Performance Grid */}

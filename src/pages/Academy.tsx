@@ -24,7 +24,7 @@ const getInstitutionalPersona = (course: Course) => {
     };
   }
   return {
-    name: "IFX Sovereign Desk",
+    name: "IFX Quantitative Desk",
     credentials: "Institutional Macro Team",
     avatarUrl: ""
   };
@@ -43,8 +43,8 @@ export const Academy = () => {
   const content = (
     <div className={user ? "pb-24" : "pt-32 pb-24 md:pt-48 md:pb-48"}>
       <PageMeta
-        title="Sovereign Academy | Institutional Certification"
-        description="Explore the IFXTrades Academy for structured trader education across forex, gold, and algorithmic execution workflows."
+        title="IFX Academy | Institutional Certification"
+        description="Explore the IFX TRADES Academy for structured trader education across forex, gold, and algorithmic execution workflows."
         path="/academy"
         keywords={["trading academy", "forex education", "algo trading course"]}
       />
@@ -84,7 +84,7 @@ export const Academy = () => {
           {loading ? (
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {Array.from({ length: 3 }).map((_, i) => (
-                <CourseCardSkeleton key={`skeleton-${i}`} />
+                <CourseCardSkeleton key={`academy-skeleton-${i}`} />
               ))}
             </div>
           ) : (

@@ -13,6 +13,7 @@ import { PerformanceMetrics } from "../components/signals/PerformanceMetrics";
 import { HowItWorks } from "../components/signals/HowItWorks";
 import { SignalTestimonials } from "../components/signals/SignalTestimonials";
 import { breadcrumbSchema, faqSchema } from "../utils/structuredData";
+import { cn } from "@/lib/utils";
 
 // ── Types ──
 type PlanDuration = "1 Month" | "3 Months" | "6 Months";
@@ -105,7 +106,7 @@ const SignalPreview = () => (
                 className="bg-[#0C0F18] border border-white/[0.08] rounded-[2rem] rounded-tl-none p-6 max-w-[90%] shadow-2xl"
               >
                 <div className="text-white/80 text-[11px] font-mono leading-relaxed whitespace-pre-line uppercase tracking-widest">
-                  <span className="font-black text-emerald-500 italic">⚡ NODE EXECUTION{"\n\n"}</span>
+                  <span className="font-black text-emerald-500 italic">⚡ SIGNAL ALERT{"\n\n"}</span>
                   <span className="font-black text-white italic">XAUUSD BUY{"\n"}</span>
                   Entry: 2400.50 - 2402.00{"\n\n"}
                   TP 1: 2405.00{"\n"}TP 2: 2410.00{"\n"}TP 3: 2425.00{"\n\n"}
@@ -126,7 +127,7 @@ const SignalPreview = () => (
                 className="bg-emerald-500/[0.03] border border-emerald-500/20 rounded-[2rem] rounded-tl-none p-6 max-w-[90%] shadow-2xl"
               >
                 <div className="text-emerald-500 text-[11px] font-mono leading-relaxed uppercase tracking-widest">
-                  <span className="font-black italic">✅ ALPHA TARGET 1 HIT{"\n"}</span>
+                  <span className="font-black italic">✅ TARGET 1 REACHED{"\n"}</span>
                   Yield: +45 Pips. SL to BE.
                 </div>
                 <div className="text-[9px] text-emerald-500/40 text-right mt-4 flex items-center justify-end gap-2 font-black">
@@ -199,25 +200,23 @@ const PaymentModal = ({ plan, onClose }: { plan: PricingPlan; onClose: () => voi
           aria-modal="true"
           aria-labelledby="auth-required-title"
         >
-          <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6" style={{ background: "var(--accent-subtle)" }}>
+          <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6" style={{ background: "rgba(16, 185, 129, 0.1)" }}>
             <Lock className="w-8 h-8 text-emerald-400" aria-hidden="true" />
           </div>
           <h3 id="auth-required-title" className="text-2xl font-bold text-white mb-2">Authentication Required</h3>
-          <p className="mb-8" style={{ color: "var(--text-muted)" }}>
+          <p className="mb-8 text-gray-400">
             Please log in to your account to join the Signal Desk and complete your membership.
           </p>
           <div className="flex gap-3">
             <button
               onClick={onClose}
-              className="flex-1 py-3 rounded-[var(--radius-button)] font-bold transition-colors"
-              style={{ background: "rgba(255,255,255,0.05)", color: "white" }}
+              className="flex-1 py-3 rounded-xl font-bold transition-colors bg-white/5 text-white"
             >
               Cancel
             </button>
             <Link
               to="/login"
-              className="flex-1 py-3 rounded-[var(--radius-button)] font-bold text-center transition-colors"
-              style={{ background: "var(--accent)", color: "var(--accent-fg)" }}
+              className="flex-1 py-3 rounded-xl font-bold text-center transition-colors bg-emerald-500 text-black"
             >
               Log In
             </Link>
@@ -257,8 +256,7 @@ const PaymentModal = ({ plan, onClose }: { plan: PricingPlan; onClose: () => voi
     }
   };
 
-  const inputClass = "w-full border border-[var(--border-default)] rounded-[var(--radius-input)] px-4 py-3 text-white outline-none transition-colors focus:border-[var(--accent)]/50";
-  const inputStyle = { background: "rgba(0,0,0,0.5)" };
+  const inputClass = "w-full border border-white/10 rounded-xl px-4 py-3 text-white outline-none transition-colors focus:border-emerald-500/50 bg-black/50";
 
   return (
     <motion.div
@@ -272,17 +270,16 @@ const PaymentModal = ({ plan, onClose }: { plan: PricingPlan; onClose: () => voi
         initial={{ scale: 0.95, y: 20 }}
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.95, y: 20 }}
-        className="site-panel w-full max-w-lg overflow-hidden"
+        className="site-panel w-full max-w-lg overflow-hidden bg-[#080B12] border border-white/10 rounded-[2.5rem]"
         role="dialog"
         aria-modal="true"
         aria-labelledby="payment-modal-title"
       >
-        <div className="flex justify-between items-center p-6 border-b border-[var(--border-default)]">
+        <div className="flex justify-between items-center p-6 border-b border-white/5">
           <h3 id="payment-modal-title" className="text-xl font-bold text-white">Complete Your Membership</h3>
           <button
             onClick={onClose}
-            className="transition-colors hover:text-white"
-            style={{ color: "var(--text-muted)" }}
+            className="transition-colors hover:text-white text-gray-500"
             aria-label="Close payment modal"
           >
             <X className="w-5 h-5" />
@@ -292,17 +289,16 @@ const PaymentModal = ({ plan, onClose }: { plan: PricingPlan; onClose: () => voi
         <div className="p-6">
           {success ? (
             <div className="text-center py-8">
-              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ background: "var(--accent-subtle)" }}>
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 bg-emerald-500/10">
                 <Check className="w-8 h-8 text-emerald-400" />
               </div>
               <h4 className="text-2xl font-bold text-white mb-2">Payment Submitted!</h4>
-              <p className="mb-6" style={{ color: "var(--text-muted)" }}>
+              <p className="mb-6 text-gray-400">
                 We've received your payment details. Our team will verify and add you to the VIP channel within 1–2 hours.
               </p>
               <button
                 onClick={onClose}
-                className="w-full py-3 rounded-[var(--radius-button)] font-bold"
-                style={{ background: "var(--accent)", color: "var(--accent-fg)" }}
+                className="w-full py-3 rounded-xl font-bold bg-emerald-500 text-black"
               >
                 Close
               </button>
@@ -310,11 +306,10 @@ const PaymentModal = ({ plan, onClose }: { plan: PricingPlan; onClose: () => voi
           ) : (
             <>
               <div
-                className="rounded-[var(--radius-input)] p-4 mb-6 flex justify-between items-center"
-                style={{ background: "rgba(255,255,255,0.05)" }}
+                className="rounded-xl p-4 mb-6 flex justify-between items-center bg-white/5"
               >
                 <div>
-                  <div className="text-sm" style={{ color: "var(--text-muted)" }}>Selected Plan</div>
+                  <div className="text-sm text-gray-400">Selected Plan</div>
                   <div className="text-white font-bold">{plan.duration} Access</div>
                 </div>
                 <div className="text-right">
@@ -326,20 +321,19 @@ const PaymentModal = ({ plan, onClose }: { plan: PricingPlan; onClose: () => voi
               {step === 1 ? (
                 <div className="space-y-6">
                   <div className="text-center">
-                    <p className="mb-4" style={{ color: "var(--text-muted)" }}>Scan QR Code to Pay via UPI</p>
-                    <div className="w-48 h-48 bg-white mx-auto rounded-[var(--radius-input)] flex items-center justify-center mb-4">
+                    <p className="mb-4 text-gray-400">Scan QR Code to Pay via UPI</p>
+                    <div className="w-48 h-48 bg-white mx-auto rounded-xl flex items-center justify-center mb-4">
                       <img
                         src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=ifxtrades@upi&pn=IFXTrades&am=${plan.price}&cu=USD`}
                         alt="UPI QR Code for payment"
                         className="w-40 h-40"
                       />
                     </div>
-                    <p className="text-xs" style={{ color: "var(--text-muted)" }}>UPI ID: ifxtrades@upi</p>
+                    <p className="text-xs text-gray-500">UPI ID: ifxtrades@upi</p>
                   </div>
                   <button
                     onClick={() => setStep(2)}
-                    className="w-full py-3 rounded-[var(--radius-button)] font-bold transition-colors"
-                    style={{ background: "var(--accent)", color: "var(--accent-fg)" }}
+                    className="w-full py-3 rounded-xl font-bold transition-colors bg-emerald-500 text-black"
                   >
                     I have made the payment
                   </button>
@@ -355,33 +349,32 @@ const PaymentModal = ({ plan, onClose }: { plan: PricingPlan; onClose: () => voi
                     ] as const
                   ).map(({ label, key, type, placeholder }) => (
                     <div key={key}>
-                      <label className="block text-xs mb-1 font-semibold uppercase tracking-wider" style={{ color: "var(--text-muted)" }}>
+                      <label className="block text-xs mb-1 font-semibold uppercase tracking-wider text-gray-500">
                         {label}
                       </label>
                       <input
                         required
                         type={type}
                         className={inputClass}
-                        style={inputStyle}
                         placeholder={placeholder}
-                        value={formData[key]}
+                        value={formData[key as keyof typeof formData]}
                         onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
                       />
                     </div>
                   ))}
 
                   <div>
-                    <span className="block text-xs mb-1 font-semibold uppercase tracking-wider" style={{ color: "var(--text-muted)" }}>
+                    <span className="block text-xs mb-1 font-semibold uppercase tracking-wider text-gray-500">
                       Payment Screenshot
                     </span>
-                    <label className="border-2 border-dashed rounded-[var(--radius-input)] p-4 text-center hover:border-[var(--accent)]/50 transition-colors cursor-pointer relative block" style={{ borderColor: "var(--border-default)" }}>
+                    <label className="border-2 border-dashed rounded-xl p-4 text-center hover:border-emerald-500/50 transition-colors cursor-pointer relative block border-white/10">
                       <input type="file" accept="image/*" onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer" required aria-label="Upload payment screenshot" />
                       {file ? (
                         <div className="text-emerald-400 text-sm flex items-center justify-center gap-2">
                           <Check className="w-4 h-4" aria-hidden="true" /> {file.name}
                         </div>
                       ) : (
-                        <div className="text-sm flex flex-col items-center gap-2" style={{ color: "var(--text-muted)" }}>
+                        <div className="text-sm flex flex-col items-center gap-2 text-gray-500">
                           <Upload className="w-6 h-6" aria-hidden="true" />
                           <span>Click to upload screenshot</span>
                         </div>
@@ -393,16 +386,14 @@ const PaymentModal = ({ plan, onClose }: { plan: PricingPlan; onClose: () => voi
                     <button
                       type="button"
                       onClick={() => setStep(1)}
-                      className="flex-1 py-3 rounded-[var(--radius-button)] font-bold transition-colors"
-                      style={{ background: "rgba(255,255,255,0.05)", color: "white" }}
+                      className="flex-1 py-3 rounded-xl font-bold transition-colors bg-white/5 text-white"
                     >
                       Back
                     </button>
                     <button
                       type="submit"
                       disabled={uploading}
-                      className="flex-1 py-3 rounded-[var(--radius-button)] font-bold transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
-                      style={{ background: "var(--accent)", color: "var(--accent-fg)" }}
+                      className="flex-1 py-3 rounded-xl font-bold transition-colors disabled:opacity-50 flex items-center justify-center gap-2 bg-emerald-500 text-black"
                     >
                       {uploading ? (
                         <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
@@ -433,31 +424,30 @@ const RetentionModal = ({ onAccept, onClose }: { onAccept: () => void; onClose: 
     <motion.div
       initial={{ scale: 0.9, y: 20 }}
       animate={{ scale: 1, y: 0 }}
-      className="site-panel w-full max-w-md p-8 text-center relative overflow-hidden"
+      className="site-panel w-full max-w-md p-8 text-center relative overflow-hidden bg-[#080B12] border border-white/10 rounded-[2.5rem]"
       role="dialog"
       aria-modal="true"
       aria-labelledby="retention-modal-title"
     >
       <div
-        className="absolute top-0 left-0 w-full h-1"
-        style={{ background: "linear-gradient(to right, var(--accent), var(--color46))" }}
+        className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-emerald-800"
         aria-hidden="true"
       />
 
-      <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse" style={{ background: "var(--accent-subtle)" }}>
+      <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse bg-emerald-500/10">
         <ArrowRight className="w-8 h-8 text-emerald-400" aria-hidden="true" />
       </div>
 
       <h3 id="retention-modal-title" className="text-2xl font-bold text-white mb-2">Wait! Don't Miss Out</h3>
-      <p className="mb-6" style={{ color: "var(--text-muted)" }}>
+      <p className="mb-6 text-gray-400">
         We really want you to experience the power of our institutional signals. Here is a one-time offer just for you.
       </p>
 
-      <div className="rounded-[var(--radius-input)] p-4 mb-8 border border-[var(--border-default)]" style={{ background: "rgba(255,255,255,0.05)" }}>
-        <div className="text-sm mb-1" style={{ color: "var(--text-muted)" }}>6 Months Access</div>
+      <div className="rounded-xl p-4 mb-8 border border-white/10 bg-white/5">
+        <div className="text-sm mb-1 text-gray-500">6 Months Access</div>
         <div className="flex items-center justify-center gap-3">
-          <span className="text-2xl line-through" style={{ color: "var(--text-muted)" }}>$80</span>
-          <ArrowRight className="w-4 h-4" style={{ color: "var(--text-muted)" }} aria-hidden="true" />
+          <span className="text-2xl line-through text-gray-500">$80</span>
+          <ArrowRight className="w-4 h-4 text-gray-500" aria-hidden="true" />
           <span className="text-4xl font-bold text-emerald-400">$56</span>
         </div>
         <div className="text-xs text-emerald-400 font-bold mt-2 uppercase tracking-wider">
@@ -468,15 +458,13 @@ const RetentionModal = ({ onAccept, onClose }: { onAccept: () => void; onClose: 
       <div className="space-y-3">
         <button
           onClick={onAccept}
-          className="w-full py-3 rounded-[var(--radius-button)] font-bold transition-colors"
-          style={{ background: "var(--accent)", color: "var(--accent-fg)", boxShadow: "var(--shadow-glow)" }}
+          className="w-full py-3 rounded-xl font-bold transition-colors bg-emerald-500 text-black shadow-[0_0_30px_rgba(16,185,129,0.3)]"
         >
           Claim 30% Discount
         </button>
         <button
           onClick={onClose}
-          className="w-full py-3 text-sm font-medium transition-colors hover:text-white"
-          style={{ color: "var(--text-muted)" }}
+          className="w-full py-3 text-sm font-medium transition-colors hover:text-white text-gray-500"
         >
           No thanks, I'll pass on profit
         </button>
@@ -551,7 +539,7 @@ const PricingSection = () => {
             id="pricing-heading" 
             className="text-shimmer mb-8 text-center"
           >
-            Sovereign <br />
+            Elite <br />
             <span className="italic font-serif text-gradient-emerald">Membership.</span>
           </motion.h2>
           <p className="text-[11px] font-black uppercase tracking-[0.4em] text-white/30 italic">Choose the plan that fits your trading goals.</p>
@@ -562,7 +550,7 @@ const PricingSection = () => {
             className="inline-block mt-12 px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-[0.3em] bg-emerald-500 text-black shadow-[0_10px_30px_rgba(16,185,129,0.3)] italic"
             role="alert"
           >
-            ⚠️ Restricted Nodes: Limited capacity for this cycle
+            ⚠️ Limited Intake: Capacity for this cycle is restricted
           </motion.div>
         </div>
 
@@ -627,7 +615,7 @@ const PricingSection = () => {
                     : "bg-white/5 text-white hover:bg-white/10 hover:scale-[1.02]"
                 )}
               >
-                Execute Access
+                Get Access
               </button>
             </motion.div>
           ))}
@@ -666,7 +654,7 @@ const FinalCTA = () => (
         className="text-shimmer mb-16 text-center leading-[0.9]"
       >
         Start Receiving <br />
-        <span className="italic font-serif text-gradient-emerald">Sovereign Signals.</span>
+        <span className="italic font-serif text-gradient-emerald">Institutional Signals.</span>
       </motion.h2>
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
@@ -679,7 +667,7 @@ const FinalCTA = () => (
           className="px-12 py-6 font-black text-[11px] uppercase tracking-[0.3em] rounded-2xl bg-white text-black hover:scale-[1.05] transition-all duration-500 shadow-[0_20px_40px_rgba(255,255,255,0.1)] italic flex items-center justify-center gap-4"
         >
           <Smartphone className="w-5 h-5" />
-          Join WhatsApp Desk
+          Join Signal Desk
         </button>
         <button
           onClick={() => document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" })}
@@ -694,10 +682,10 @@ const FinalCTA = () => (
 
 // ── Page ──
 export const Signals = () => (
-  <div className="min-h-screen" style={{ background: "var(--bg-base)" }}>
+  <div className="min-h-screen" style={{ background: "#020202" }}>
     <PageMeta
-      title="Quantitative Model Alerts"
-      description="Access IFXTrades model workflows — institutional-grade forex and gold setups with exact entry, stop loss, and take profit for educational demonstration. Join 12,400+ members."
+      title="Quantitative Model Alerts | IFX TRADES"
+      description="Access IFX TRADES model workflows — institutional-grade forex and gold setups with exact entry, stop loss, and take profit for educational demonstration. Join 12,400+ members."
       path="/signals"
       keywords={[
         "quantitative models",
@@ -713,11 +701,11 @@ export const Signals = () => (
         ]),
         faqSchema([
           {
-            question: "How are IFXTrades workflows delivered?",
+            question: "How are IFX TRADES workflows delivered?",
             answer: "Educational model alerts are delivered instantly via a private WhatsApp channel with exact entry, stop loss, and take profit zones.",
           },
           {
-            question: "What is the fidelity rate of IFXTrades models?",
+            question: "What is the fidelity rate of IFX TRADES models?",
             answer: "Our models maintain an 82.4% historical simulation fidelity based on trailing twelve-month performance data.",
           },
           {
