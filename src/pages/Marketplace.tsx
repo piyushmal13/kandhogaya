@@ -104,7 +104,7 @@ export const Marketplace = () => {
         </div>
         <div className="space-y-2">
            <h3 className="text-xl font-bold text-white italic">No Assets Matching Filter</h3>
-           <p className="text-[10px] font-black text-white/10 uppercase tracking-[0.3em] font-mono">Adjust your criteria or re-sync with Global Pool</p>
+           <p className="text-[10px] font-black text-white/10 uppercase tracking-[0.3em] font-mono">Adjust your criteria or refresh the catalog</p>
         </div>
       </div>
     );
@@ -114,7 +114,7 @@ export const Marketplace = () => {
     <div className={user ? "pb-24" : "pt-32 pb-24 md:pt-48 md:pb-48"}>
       <PageMeta
         title="Execution Desk | Institutional Assets"
-        description="Access the IFX Sovereign Execution Desk. High-frequency algorithmic models and institutional macro intelligence."
+        description="Access the IFX TRADES Execution Desk. High-frequency algorithmic models and institutional macro intelligence."
         path="/marketplace"
       />
 
@@ -144,7 +144,7 @@ export const Marketplace = () => {
               <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20 group-focus-within:text-emerald-500 transition-colors" />
               <input
                 type="text"
-                placeholder="Search Asset ID..."
+                placeholder="Search Asset..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full bg-white/[0.02] border border-white/5 rounded-2xl py-4 pl-12 pr-6 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-emerald-500/30 focus:bg-white/[0.04] transition-all"
@@ -157,8 +157,8 @@ export const Marketplace = () => {
                   onClick={() => setActiveCategory(cat.id)}
                   className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
                     activeCategory === cat.id
-                      ? "bg-emerald-500 text-black"
-                      : "text-white/40 hover:text-white hover:bg-white/5"
+                       ? "bg-emerald-500 text-black"
+                       : "text-white/40 hover:text-white hover:bg-white/5"
                   }`}
                 >
                   {cat.label}
@@ -177,8 +177,8 @@ export const Marketplace = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 py-16 border-t border-white/5">
            {[
              { icon: ShieldCheck, title: "Verified Integrity", desc: "Every model passes rigorous institutional backtesting for educational simulation." },
-             { icon: Activity, title: "Fidelity Telemetry", desc: "Real-time model fidelity and simulated monthly projections synced seamlessly." },
-             { icon: TrendingUp, title: "Quant Origin", desc: "Built by the proprietary desk managing institutional capital. High-alpha execution." }
+             { icon: Activity, title: "Performance Tracking", desc: "Real-time performance metrics and simulated monthly projections synced seamlessly." },
+             { icon: TrendingUp, title: "Quantitative Strategy", desc: "Built by our specialized desk managing institutional research and macro strategy." }
            ].map((item) => (
              <div key={item.title} className="space-y-4 group">
                 <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-emerald-400 border border-white/5 group-hover:bg-emerald-500/10 transition-all">
