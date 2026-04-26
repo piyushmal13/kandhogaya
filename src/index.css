@@ -139,32 +139,13 @@
     100% { background-position: 200% center; }
   }
 
-  /* ── Glassmorphism 100x Upgrades ── */
-  .glass-panel {
-    background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.005) 100%);
-    backdrop-filter: blur(48px) saturate(200%);
-    -webkit-backdrop-filter: blur(48px) saturate(200%);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.1);
-  }
-
-  .glass-card {
-    background: rgba(10, 13, 18, 0.6);
-    backdrop-filter: blur(40px);
-    -webkit-backdrop-filter: blur(40px);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    box-shadow: var(--shadow-card);
-    @apply transition-all duration-700 rounded-[2.5rem];
-  }
-
-  .glass-card:hover {
-    border-color: rgba(255, 255, 255, 0.12);
-    box-shadow: var(--shadow-card), var(--shadow-glow-emerald);
-  }
-
   /* ── Interactive Magnetic Button Base ── */
   .magnetic-btn {
-    @apply relative overflow-hidden transition-all duration-500 ease-out;
+    position: relative;
+    overflow: hidden;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 500ms;
   }
   .magnetic-btn::after {
     content: '';
@@ -180,18 +161,71 @@
 }
 
 @layer utilities {
-  .text-gradient-emerald {
-    @apply bg-clip-text text-transparent bg-gradient-to-br from-emerald-300 via-emerald-500 to-emerald-800;
+  .glass-panel {
+    background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.005) 100%);
+    backdrop-filter: blur(48px) saturate(200%);
+    -webkit-backdrop-filter: blur(48px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.1);
   }
+
+  .glass-card {
+    background: rgba(10, 13, 18, 0.6);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: var(--shadow-card);
+    border-radius: 2.5rem;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 700ms;
+  }
+
+  .glass-card:hover {
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: var(--shadow-card), var(--shadow-glow-emerald);
+  }
+
+  .text-gradient-emerald {
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    background-image: linear-gradient(to bottom right, var(--color-emerald-300), var(--color-emerald-500), var(--color-emerald-800));
+  }
+
   .text-gradient-gold {
-    @apply bg-clip-text text-transparent bg-gradient-to-br from-[#FFF5D1] via-[#D4AF37] to-[#8A6D1C];
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    background-image: linear-gradient(to bottom right, #FFF5D1, #D4AF37, #8A6D1C);
   }
   
   .site-panel {
-    @apply rounded-3xl overflow-hidden glass-panel;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.005) 100%);
+    backdrop-filter: blur(48px) saturate(200%);
+    -webkit-backdrop-filter: blur(48px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.1);
   }
+
   .site-pill {
-    @apply px-5 py-2 rounded-full bg-white/[0.03] border border-white/[0.08] text-white/70 backdrop-blur-md text-[10px] font-black uppercase tracking-[0.2em] shadow-lg;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-radius: 9999px;
+    background-color: rgba(255, 255, 255, 0.03);
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   }
   
   /* Noise Overlay */
