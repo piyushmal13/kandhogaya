@@ -1,57 +1,57 @@
 import React, { useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform, useMotionTemplate } from "motion/react";
 import { Link } from "react-router-dom";
-import { Zap, Cpu, Video, GraduationCap, ArrowUpRight, BarChart2, BookOpen, ChevronRight } from "lucide-react";
+import { Cpu, Video, ArrowUpRight, BarChart2, BookOpen, ChevronRight, Brain, ShieldCheck } from "lucide-react";
 
 const modules = [
   {
-    id: "signals",
-    title: "Market Signals",
-    description: "Real-time trading signals for XAUUSD and major currency pairs, driven by institutional order flow analysis.",
-    icon: Zap,
-    link: "/signals",
+    id: "quantx",
+    title: "Neural Logic Execution",
+    description: "Our flagship multi-layer AI intelligence system. Unlike static, dead systems, QuantX dynamically adapts to live market conditions for precision execution.",
+    icon: Brain,
+    link: "/quantx",
     accent: "#10B981",
-    tag: "LIVE",
+    tag: "ELITE",
     size: "lg",
   },
   {
-    id: "algorithms",
-    title: "Trading Systems",
-    description: "Fully automated MT5 algorithmic solutions with rigorous risk management and verified performance.",
-    icon: Cpu,
-    link: "/marketplace",
+    id: "competitive_edge",
+    title: "The Institutional Edge",
+    description: "We don't sell retail dreams. We deliver an algorithmic system that actually works in live markets, giving you a distinct advantage over standard retail traders.",
+    icon: ShieldCheck,
+    link: "/quantx",
     accent: "#06B6D4",
-    tag: "SYSTEMS",
-    size: "sm",
-  },
-  {
-    id: "academy",
-    title: "Trading Academy",
-    description: "Professional education tracks covering price action, liquidity, and systematic trading methodologies.",
-    icon: GraduationCap,
-    link: "/academy",
-    accent: "#8B5CF6",
-    tag: "EDUCATION",
+    tag: "ADVANTAGE",
     size: "sm",
   },
   {
     id: "webinars",
-    title: "Live Analysis",
-    description: "Daily interactive sessions covering market preparation, live execution, and trade reviews.",
+    title: "Live Strategy Sessions",
+    description: "Join our developers in real-time as they break down algorithmic logic, execution models, and market regimes.",
     icon: Video,
     link: "/webinars",
     accent: "#D4AF37",
-    tag: "SESSIONS",
+    tag: "MASTERCLASS",
     size: "sm",
   },
   {
-    id: "blog",
-    title: "Market Research",
-    description: "Daily research reports and deep-dives into global macro-economics and technical analysis.",
+    id: "adaptive_systems",
+    title: "Adaptive Self-Learning",
+    description: "Our models employ deep-learning loops to evolve alongside shifting market regimes, keeping you consistently ahead of the curve.",
+    icon: Cpu,
+    link: "/quantx",
+    accent: "#8B5CF6",
+    tag: "TECHNOLOGY",
+    size: "sm",
+  },
+  {
+    id: "macro_research",
+    title: "Macro-Economic Research",
+    description: "Daily deep-dives into global macro-economics, providing the fundamental backdrop that powers our algorithmic risk adjustments.",
     icon: BookOpen,
     link: "/blog",
     accent: "#F43F5E",
-    tag: "REPORTS",
+    tag: "INTELLIGENCE",
     size: "sm",
   },
 ];
@@ -215,8 +215,8 @@ export const EcosystemSection = () => {
               transition={{ delay: 0.08, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               className="text-4xl sm:text-6xl md:text-7xl lg:text-[80px] font-bold text-white tracking-tight leading-[1] max-w-4xl"
             >
-              The Full <br />
-              <span className="text-emerald-400">Trading Ecosystem.</span>
+              The Next-Gen <br />
+              <span className="text-emerald-400">Algorithmic Ecosystem.</span>
             </motion.h2>
           </div>
 
@@ -227,7 +227,7 @@ export const EcosystemSection = () => {
             transition={{ delay: 0.16 }}
             className="text-white/35 max-w-sm text-[15px] leading-relaxed lg:text-right lg:pb-3"
           >
-            Every module is interconnected — signals feed academy, academy feeds algorithms, algorithms feed results.
+            A cohesive architecture of adaptive algorithms, macro intelligence, and live execution strategy—built to dominate live markets.
           </motion.p>
         </div>
 

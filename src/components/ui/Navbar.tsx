@@ -53,9 +53,9 @@ export const Navbar = () => {
 
   const navLinks = [
     { name: "Terminal", path: "/", icon: Home },
-    { name: "Academy", path: "/academy", icon: BookOpen },
+    { name: "Ecosystem", path: "/quantx", icon: Zap },
+    { name: "Webinars", path: "/webinars", icon: BookOpen },
     { name: "Marketplace", path: "/marketplace", icon: BarChart3 },
-    { name: "Signals", path: "/signals", icon: Zap },
     { name: "Blog", path: "/blog", icon: MessageSquare },
   ];
 

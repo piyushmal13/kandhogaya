@@ -6,7 +6,6 @@ import { SiteBackdrop } from "./SiteBackdrop";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { ScrollToTop } from "../ScrollToTop";
 import { useReferral } from "../../hooks/useReferral";
-import { CustomCursor } from "../ui/CustomCursor";
 
 const ReferralHandler = () => {
   useReferral();
@@ -16,12 +15,8 @@ const ReferralHandler = () => {
 export const StandardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
-      <CustomCursor />
       <ScrollToTop />
       <ReferralHandler />
-      <a href="#main-content" className="skip-to-content">
-        Skip to main content
-      </a>
       <div className="relative min-h-screen overflow-x-hidden font-sans">
         <div className="noise-overlay" />
         <SiteBackdrop />
