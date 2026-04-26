@@ -13,7 +13,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./lib/reactQuery";
 import { loadSystem } from "./core/systemLoader";
 
-const Home = lazy(() => import("./pages/Home").then(m => ({ default: m.Home })));
+const Home = lazy(() => import("./pages/Home"));
 const Marketplace = lazy(() => import("./pages/Marketplace").then(m => ({ default: m.Marketplace })));
 
 const Webinars = lazy(() => import("./pages/Webinars").then(m => ({ default: m.Webinars })));

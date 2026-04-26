@@ -36,6 +36,7 @@ export default defineConfig(({mode}) => {
             'vendor-motion': ['motion'],
             'vendor-charts': ['recharts'],
             'vendor-ui': ['lucide-react', 'clsx', 'tailwind-merge'],
+            'vendor-supabase': ['@supabase/supabase-js'],
           }
         }
       }

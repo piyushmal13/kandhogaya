@@ -8,6 +8,7 @@ import { cn } from "@/utils/cn";
 import { PurchaseModal } from "@/components/payments/PurchaseModal";
 import { Product, Webinar } from "@/types";
 import { tracker } from "@/core/tracker";
+import { motion } from "motion/react";
 
 const SIGNAL_PLANS = [
   {
