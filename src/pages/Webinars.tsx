@@ -9,10 +9,10 @@ import { StandardLayout } from '@/components/site/StandardLayout';
 
 export const Webinars = () => {
   const { data: webinars, isLoading } = useWebinars();
-  const [activeTab, setActiveTab] = useState<'upcoming' | 'recorded'>('upcoming');
+  const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
 
   const filteredWebinars = webinars?.filter(w => 
-    activeTab === 'upcoming' ? w.status !== 'recorded' : w.status === 'recorded'
+    activeTab === 'upcoming' ? w.status !== 'past' : w.status === 'past'
   );
 
   const liveWebinar = webinars?.find(w => w.status === 'live');
@@ -71,7 +71,7 @@ export const Webinars = () => {
 
           <div className="relative z-10 space-y-10">
             <div className="flex flex-wrap gap-6 md:gap-10 border-b border-white/5 pb-2">
-              {(['upcoming', 'recorded'] as const).map((tab) => (
+              {(['upcoming', 'past'] as const).map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}

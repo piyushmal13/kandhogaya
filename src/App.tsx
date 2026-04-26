@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from "react-route
 import { motion, AnimatePresence } from "motion/react";
 
 import { ErrorBoundary } from "./components/ui/ErrorBoundary";
-import { ReferralHandler } from "./components/core/ReferralHandler";
 import { AuthProvider } from "./contexts/AuthContext";
 import { DataPulseProvider } from "./hooks/useDataPulse";
 import { ToastProvider } from "./contexts/ToastContext";
@@ -111,7 +110,6 @@ export default function App() {
           <AuthProvider>
             <DataPulseProvider>
               <Router>
-                <ReferralHandler />
                 <AppContent />
               </Router>
             </DataPulseProvider>

@@ -51,6 +51,8 @@ export const mapWebinar = (raw: any): Webinar => ({
     { question: "Is this suitable for retail traders?", answer: "This is advanced institutional methodology, but broken down so independent retail traders can execute it." },
     { question: "Do I need MT4 or MT5 to apply this?", answer: "The frameworks are platform agnostic, though examples will predominantly feature MT5 and Binance execution." }
   ],
+  recording_url: raw.recording_url,
+  streaming_url: raw.streaming_url,
 });
 
 export const mapLead = (raw: any): any => ({

@@ -2,32 +2,12 @@ import { motion } from 'motion/react';
 import { Calendar, Clock, Users } from 'lucide-react';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { SovereignButton } from '@/components/ui/Button';
-
-export interface Webinar {
-  id: string;
-  title: string;
-  description: string;
-  startDate: string; // ISO 8601
-  endDate: string;
-  duration: string; // "PT1H30M" format for Schema.org
-  instructor: {
-    name: string;
-    avatar: string;
-    credentials: string;
-  };
-  imageUrl: string;
-  attendees: number;
-  maxSeats: number;
-  isPremium: boolean;
-  status: 'upcoming' | 'live' | 'recorded';
-  recordingUrl?: string;
-  streaming_url?: string; // For live view
-}
+import { Webinar } from '@/types';
 
 export function WebinarCard({ webinar }: Readonly<{ webinar: Webinar }>) {
   const { isEnabled: isRegistrationOpen } = useFeatureFlag('webinar_registration_open', true);
   const isLive = webinar.status === 'live';
-  const isRecorded = webinar.status === 'recorded';
+  const isRecorded = webinar.status === 'past'; // Global type uses 'past' instead of 'recorded'
 
   const renderStatusBadge = () => {
     if (isLive) {
@@ -51,9 +31,12 @@ export function WebinarCard({ webinar }: Readonly<{ webinar: Webinar }>) {
     );
   };
 
+  const attendees = webinar.registration_count || 0;
+  const maxSeats = webinar.max_attendees || 500;
+
   const getButtonContent = () => {
     if (!isRegistrationOpen) return 'Registration Offline';
-    if (webinar.attendees >= webinar.maxSeats) return 'Capacity Reached';
+    if (attendees >= maxSeats) return 'Capacity Reached';
     return isLive ? 'Link to Session' : 'Claim Seat';
   };
   
@@ -63,13 +46,16 @@ export function WebinarCard({ webinar }: Readonly<{ webinar: Webinar }>) {
     year: 'numeric'
   });
 
+  const endDate = new Date(new Date(webinar.date_time).getTime() + 3600000).toISOString();
+  const duration = "PT1H";
+
   const schemaData = {
     '@context': 'https://schema.org',
     '@type': 'Event',
     name: webinar.title,
-    startDate: webinar.startDate,
-    endDate: webinar.endDate,
-    duration: webinar.duration,
+    startDate: webinar.date_time,
+    endDate: endDate,
+    duration: duration,
     eventStatus: isLive ? 'https://schema.org/EventLive' : 'https://schema.org/EventScheduled',
     eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
     location: {
@@ -83,16 +69,16 @@ export function WebinarCard({ webinar }: Readonly<{ webinar: Webinar }>) {
     },
     performer: {
       '@type': 'Person',
-      name: webinar.instructor.name
+      name: webinar.speaker || webinar.speaker_name || "Institutional Lead"
     },
-    image: webinar.imageUrl,
+    image: webinar.webinar_image_url || "",
     description: webinar.description,
     offers: {
       '@type': 'Offer',
-      price: webinar.isPremium ? '19.99' : '0',
+      price: webinar.is_paid ? (webinar.price || '19.99').toString() : '0',
       priceCurrency: 'USD',
       availability: isRegistrationOpen ? 'https://schema.org/InStock' : 'https://schema.org/SoldOut',
-      validFrom: webinar.startDate
+      validFrom: webinar.date_time
     }
   };
 
@@ -112,7 +98,7 @@ export function WebinarCard({ webinar }: Readonly<{ webinar: Webinar }>) {
       {/* Event Image */}
       <div className="relative h-48 overflow-hidden">
         <img 
-          src={webinar.imageUrl} 
+          src={webinar.webinar_image_url || "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop"} 
           alt={webinar.title}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
           itemProp="image"
@@ -126,7 +112,7 @@ export function WebinarCard({ webinar }: Readonly<{ webinar: Webinar }>) {
         </div>
 
         {/* Premium Badge */}
-        {webinar.isPremium && (
+        {webinar.is_paid && (
           <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-amber-500 text-black text-[10px] font-black uppercase tracking-widest shadow-lg">
             PREMIUM
           </div>
@@ -149,17 +135,17 @@ export function WebinarCard({ webinar }: Readonly<{ webinar: Webinar }>) {
         <div className="flex flex-wrap gap-6 text-[10px] font-black uppercase tracking-[0.15em] text-white/60 py-4 border-y border-white/5">
           <div className="flex items-center gap-2">
             <Calendar className="w-4 h-4 text-emerald-500" />
-            <time itemProp="startDate" dateTime={webinar.startDate}>
-              {formatDate(webinar.startDate)}
+            <time itemProp="startDate" dateTime={webinar.date_time}>
+              {formatDate(webinar.date_time)}
             </time>
           </div>
           <div className="flex items-center gap-2">
             <Clock className="w-4 h-4 text-emerald-500" />
-            <span itemProp="duration">{webinar.duration}</span>
+            <span itemProp="duration">{duration}</span>
           </div>
           <div className="flex items-center gap-2">
             <Users className="w-4 h-4 text-emerald-500" />
-            <span>{webinar.attendees}/{webinar.maxSeats} Units</span>
+            <span>{attendees}/{maxSeats} Units</span>
           </div>
         </div>
 
@@ -167,18 +153,18 @@ export function WebinarCard({ webinar }: Readonly<{ webinar: Webinar }>) {
         <div className="flex items-center gap-4 pt-2">
           <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full ring-2 ring-emerald-500/20">
             <img 
-              src={webinar.instructor.avatar} 
-              alt={webinar.instructor.name}
+              src={webinar.speaker_images?.[0] || webinar.speaker_profile_url || "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=2000&auto=format&fit=crop"} 
+              alt={webinar.speaker || webinar.speaker_name || "Institutional Lead"}
               className="w-full h-full object-cover"
               itemProp="performer"
             />
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-[11px] font-black text-white uppercase tracking-wider truncate" itemProp="organizer">
-              {webinar.instructor.name}
+              {webinar.speaker || webinar.speaker_name || "Institutional Lead"}
             </p>
             <p className="text-[9px] font-medium text-white/20 uppercase tracking-widest truncate">
-              {webinar.instructor.credentials}
+              Lead Strategist
             </p>
           </div>
         </div>
@@ -191,7 +177,7 @@ export function WebinarCard({ webinar }: Readonly<{ webinar: Webinar }>) {
               fluid
               className="rounded-2xl"
               trackingEvent="webinar_watch_recording"
-              onClick={() => webinar.recordingUrl && globalThis.open(webinar.recordingUrl, '_blank')}
+              onClick={() => webinar.recording_url && globalThis.open(webinar.recording_url, '_blank')}
             >
               Analyze Recording
             </SovereignButton>
@@ -201,7 +187,7 @@ export function WebinarCard({ webinar }: Readonly<{ webinar: Webinar }>) {
               fluid
               className="rounded-2xl"
               glowEffect={isLive}
-              disabled={!isRegistrationOpen || webinar.attendees >= webinar.maxSeats}
+              disabled={!isRegistrationOpen || attendees >= maxSeats}
               trackingEvent={`webinar_register_${webinar.id}`}
             >
               {getButtonContent()}

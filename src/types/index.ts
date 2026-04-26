@@ -60,6 +60,8 @@ export interface Webinar {
   registration_count: number;
   metadata?: Record<string, any>;
   sponsors?: WebinarSponsor[];
+  recording_url?: string;
+  streaming_url?: string;
 }
 
 // ---------------------------------------------------------------------------
