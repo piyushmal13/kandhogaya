@@ -7,7 +7,6 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { DataPulseProvider } from "./hooks/useDataPulse";
 import { ToastProvider } from "./contexts/ToastContext";
 import { StandardLayout } from "./components/site/StandardLayout";
-import { LoadingSpinner } from "./components/ui/LoadingSpinner";
 import { ProtectedRoute } from "./components/ui/ProtectedRoute";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./lib/reactQuery";
