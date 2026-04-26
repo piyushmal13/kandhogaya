@@ -17,8 +17,12 @@ export const Webinars = () => {
 
   const liveWebinar = webinars?.find(w => w.status === 'live');
 
-  return (
-    <div className="pt-32 pb-24">
+    <div className="relative pt-32 pb-24 min-h-screen overflow-hidden">
+      {/* Background Ambience */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[120%] h-[60%] bg-[radial-gradient(ellipse_at_center,rgba(16,185,129,0.06)_0%,transparent_60%)] blur-3xl" />
+        <div className="dot-grid absolute inset-0 opacity-[0.03]" />
+      </div>
       <PageMeta
         title="Institutional Masterclasses | Sovereign Terminal"
         description="Live algorithmic trading sessions and recorded deep-dives from sovereign desks. Access institutional intelligence sessions."
@@ -26,9 +30,9 @@ export const Webinars = () => {
       />
 
       <div className="max-w-7xl mx-auto px-4 space-y-12">
-        <div className="space-y-4">
-          <h1 className="text-5xl font-black text-white italic tracking-tighter uppercase leading-[0.8] mb-4">
-            Institutional <span className="text-[#58F2B6]">Masterclasses</span>
+        <div className="relative z-10 space-y-4">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tighter mb-4 text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
+            Institutional Masterclasses
           </h1>
           <p className="text-sm text-white/40 max-w-2xl font-medium uppercase tracking-widest leading-relaxed">
             Participate in sovereign market breakdowns, systematic workflow walkthroughs, and quantitative execution masterclasses led by the IFX research desk.
@@ -63,8 +67,8 @@ export const Webinars = () => {
           )}
         </AnimatePresence>
 
-        <div className="space-y-10">
-          <div className="flex gap-10 border-b border-white/5">
+        <div className="relative z-10 space-y-10">
+          <div className="flex flex-wrap gap-6 md:gap-10 border-b border-white/5 pb-2">
             {(['upcoming', 'recorded'] as const).map((tab) => (
               <button
                 key={tab}

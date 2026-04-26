@@ -135,10 +135,10 @@ export const Login = () => {
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="relative z-10 w-full max-w-md rounded-[2.5rem] border border-white/10 bg-zinc-900/65 p-10 shadow-2xl backdrop-blur-xl"
+        className="relative z-10 w-full max-w-[380px] rounded-[2rem] border border-white/10 bg-zinc-900/65 p-8 shadow-2xl backdrop-blur-xl"
       >
-        <div className="mb-10 text-center">
-          <div className="mx-auto mb-6 flex h-16 w-auto items-center justify-center">
+        <div className="mb-8 text-center">
+          <div className="mx-auto mb-5 flex h-12 w-auto items-center justify-center">
             <img src={BRANDING.logoUrl} alt={`${BRANDING.name} logo`} className="h-full w-auto object-contain" />
           </div>
           <p className="text-sm text-gray-500">Access the operating surface for disciplined retail traders.</p>
@@ -148,7 +148,7 @@ export const Login = () => {
           <button
             type="button"
             onClick={handleGoogleLogin}
-            className="flex w-full items-center justify-center gap-3 rounded-2xl bg-white py-4 font-bold text-black shadow-lg transition-all hover:bg-emerald-300"
+            className="flex w-full items-center justify-center gap-3 rounded-xl bg-white py-3 font-bold text-black shadow-lg transition-all hover:bg-emerald-300"
           >
             <Globe className="h-5 w-5" />
             Continue with Google
@@ -169,7 +169,7 @@ export const Login = () => {
                 type="email"
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
-                className="w-full rounded-2xl border border-white/10 bg-black/50 px-5 py-4 text-white outline-none transition-all focus:border-emerald-500"
+                className="w-full rounded-xl border border-white/10 bg-black/50 px-4 py-3 text-white outline-none transition-all focus:border-emerald-500"
                 placeholder="name@company.com"
               />
             </div>
@@ -183,7 +183,7 @@ export const Login = () => {
                   type="password"
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
-                  className="w-full rounded-2xl border border-white/10 bg-black/50 px-5 py-4 text-white outline-none transition-all focus:border-emerald-500"
+                  className="w-full rounded-xl border border-white/10 bg-black/50 px-4 py-3 text-white outline-none transition-all focus:border-emerald-500"
                   placeholder="********"
                 />
               </div>
@@ -202,7 +202,7 @@ export const Login = () => {
                     type="text"
                     value={token}
                     onChange={(event) => setToken(event.target.value)}
-                    className="w-full rounded-2xl border border-white/10 bg-black/50 px-5 py-4 text-white outline-none transition-all focus:border-emerald-500 text-center text-2xl tracking-[0.5em] font-mono"
+                    className="w-full rounded-xl border border-white/10 bg-black/50 px-4 py-3 text-white outline-none transition-all focus:border-emerald-500 text-center text-xl tracking-[0.5em] font-mono"
                     placeholder="000000"
                     maxLength={6}
                   />
@@ -212,7 +212,7 @@ export const Login = () => {
 
             <button
               disabled={loading}
-              className="w-full rounded-2xl bg-emerald-500 py-4 font-bold text-black shadow-lg shadow-emerald-500/20 transition-all hover:bg-emerald-400 disabled:opacity-50"
+              className="w-full rounded-xl bg-emerald-500 py-3 font-bold text-black shadow-lg shadow-emerald-500/20 transition-all hover:bg-emerald-400 disabled:opacity-50"
             >
               {getButtonText()}
             </button>

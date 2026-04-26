@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-import { BRANDING } from "../../constants/branding";
+import { BRANDING, PAGE_META_KEYWORDS } from "../../constants/branding";
 
 export interface PageMetaProps {
   title: string;
@@ -13,20 +13,7 @@ export interface PageMetaProps {
   structuredData?: Record<string, unknown> | Array<Record<string, unknown>>;
 }
 
-const DEFAULT_KEYWORDS = [
-  "IFX Trades",
-  "forex education Asia",
-  "best algo trading course India",
-  "best algo trading course Dubai",
-  "institutional forex education",
-  "forex academy India",
-  "forex webinar India 2026",
-  "gold trading signals XAUUSD",
-  "automated forex trading strategies",
-  "AI forex trading bot MT5",
-  "quantitative trading course India",
-  "forex signals India live",
-];
+const DEFAULT_KEYWORDS = PAGE_META_KEYWORDS;
 
 const getAbsoluteUrl = (path: string) => {
   if (path.startsWith("http://") || path.startsWith("https://")) {

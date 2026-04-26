@@ -16,10 +16,7 @@ import { loadSystem } from "./core/systemLoader";
 
 const Home = lazy(() => import("./pages/Home").then(m => ({ default: m.Home })));
 const Marketplace = lazy(() => import("./pages/Marketplace").then(m => ({ default: m.Marketplace })));
-const Results = lazy(() => import("./pages/Results").then(m => ({ default: m.Results })));
-const Signals = lazy(() => import("./pages/Signals").then(m => ({ default: m.Signals })));
-const Academy = lazy(() => import("./pages/Academy").then(m => ({ default: m.Academy })));
-const CourseDetail = lazy(() => import("./pages/CourseDetail").then(m => ({ default: m.CourseDetail })));
+
 const Webinars = lazy(() => import("./pages/Webinars").then(m => ({ default: m.Webinars })));
 const WebinarDetail = lazy(() => import("./pages/WebinarDetail").then(m => ({ default: m.WebinarDetail })));
 const Blog = lazy(() => import("./pages/Blog").then(m => ({ default: m.Blog })));
@@ -43,6 +40,7 @@ const TermsOfService = lazy(() => import("./pages/legal/TermsOfService").then(m 
 const RiskDisclosure = lazy(() => import("./pages/legal/RiskDisclosure").then(m => ({ default: m.RiskDisclosure })));
 const CookiePolicy = lazy(() => import("./pages/legal/CookiePolicy").then(m => ({ default: m.CookiePolicy })));
 const AffiliateHub = lazy(() => import("./pages/AffiliateHub").then(m => ({ default: m.AffiliateHub })));
+const QuantX = lazy(() => import("./pages/QuantX").then(m => ({ default: m.QuantX })));
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -61,10 +59,7 @@ const AnimatedRoutes = () => {
             <Route path="/solutions" element={<Solutions />} />
             <Route path="/consultation" element={<Consultation />} />
             <Route path="/marketplace" element={<Marketplace />} />
-            <Route path="/signals" element={<Signals />} />
-            <Route path="/results" element={<Results />} />
-            <Route path="/academy" element={<Academy />} />
-            <Route path="/academy/:courseId" element={<CourseDetail />} />
+            <Route path="/quantx" element={<QuantX />} />
             <Route path="/webinars" element={<Webinars />} />
             <Route path="/webinars/:id" element={<WebinarDetail />} />
             <Route path="/blog" element={<Blog />} />

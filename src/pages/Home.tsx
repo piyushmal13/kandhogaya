@@ -1,82 +1,61 @@
-import React, { useState } from 'react';
-import { AlgoGreatness } from "@/components/AlgoGreatness";
-import { PageMeta } from "@/components/site/PageMeta";
-import { EcosystemSection } from "@/components/home/EcosystemSection";
-import { GlobalReach } from "@/components/home/GlobalReach";
-import { HeroSection } from "@/components/home/HeroSection";
-import { MarketTicker } from "@/components/home/MarketTicker";
-import { StatsSection } from "@/components/home/StatsSection";
-import { PartnerLogos } from "@/components/ui/PartnerLogos";
-import { TrustGrid } from "@/components/home/TrustGrid";
-import { WebinarPromo } from "@/components/home/WebinarPromo";
-import { PerformanceHistory } from "@/components/home/PerformanceHistory";
-import { NewsletterPopup } from "@/components/ui/NewsletterPopup";
-import { SignupForm } from "@/components/ui/SignupForm";
-import { ReviewPromptModal } from "@/components/ui/ReviewPromptModal";
-import { ExitIntentModal } from "@/components/ui/ExitIntentModal";
-import { LazySection } from "@/components/ui/LazySection";
-import { educationalOrganizationSchema, websiteSchema, faqSchema, goldAlgoCourseSchema, breadcrumbSchema } from "@/utils/structuredData";
+import React from "react";
+import { PageMeta } from "../components/site/PageMeta";
+import { StandardLayout } from "../components/site/StandardLayout";
 
-// SEO FAQ — targets high-volume Q&A snippets in Google Search
+// Institutional Components
+import { FortressHero } from "../components/home/FortressHero";
+import { BrandAuthority } from "../components/home/BrandAuthority";
+import { TrustGrid } from "../components/home/TrustGrid";
+import { PerformanceHistory } from "../components/home/PerformanceHistory";
+import { GlobalReach } from "../components/home/GlobalReach";
+import { WebinarPromo } from "../components/home/WebinarPromo";
+import { HowItWorks } from "../components/home/HowItWorks";
+import { JourneySection } from "../components/home/JourneySection";
+import { ConsultationSection } from "../components/home/ConsultationSection";
+
+import { faqSchema, educationalOrganizationSchema, websiteSchema, breadcrumbSchema } from "../utils/structuredData";
+
 const homeFaqs = [
   {
     question: "What is IFX Trades?",
     answer:
-      "IFX Trades is Asia's #1 institutional forex education platform, providing proprietary macro research, the Gold Algo Masterclass, live trading webinars, and algorithmic execution training for retail and professional traders across India, Dubai, and globally.",
+      "IFX Trades is Asia's #1 institutional forex education and research platform, providing professional quantitative analysis and algorithmic infrastructure for modern market participants.",
   },
   {
-    question: "What is the best algo trading course in India and Dubai?",
+    question: "Do you provide financial advice or signals?",
     answer:
-      "IFX Trades offers the Gold Algo Masterclass — the leading institutional algorithmic trading course in India and Dubai. It covers XAUUSD macro analysis, Python-based automation, MT5 Expert Advisor development, and systematic risk management.",
+      "No. IFX Trades is strictly an educational and research desk. We do not provide financial advice, trading signals, or manage funds. All materials are for research and educational purposes only.",
   },
   {
-    question: "How do I join a free forex webinar?",
+    question: "How can I access the institutional research?",
     answer:
-      "You can register for free forex trading webinars on the IFX Trades Webinars page. We run live sessions covering gold trading, forex signals, and algo trading strategies for traders in India, UAE, and across Asia.",
-  },
-  {
-    question: "What forex signals does IFX Trades provide?",
-    answer:
-      "IFX Trades provides live institutional-grade forex signals focused on XAUUSD (Gold), major currency pairs, and key global indices. Signals are based on quantitative macro analysis, not retail technical indicators.",
+      "Access is provided through our Master Terminal desk. Professional members gain access to our quantitative analysis, macro research, and execution infrastructure frameworks.",
   },
   {
     question: "Is IFX Trades a broker?",
     answer:
-      "No. IFX Trades is strictly an education and research organization. We do not accept deposits, execute trades, or hold client funds. We are a 100% education platform for forex, algo trading, and macro research.",
-  },
-  {
-    question: "What markets are covered in IFX Trades research?",
-    answer:
-      "Our macro research focuses on XAUUSD (Gold), EURUSD, GBPUSD, USDJPY, and key global indices. Our algo trading courses cover both forex and cross-asset quantitative frameworks.",
+      "No. IFX Trades is strictly an education and research organization. We do not accept deposits, execute trades, hold client funds, or provide brokerage services.",
   },
 ];
 
-export const Home = () => {
-  const [showReviewModal, setShowReviewModal] = useState(false);
-
+const Home = () => {
   return (
-    <div className="min-h-screen relative overflow-hidden bg-[#010203]">
-      <ReviewPromptModal isOpen={showReviewModal} onClose={() => setShowReviewModal(false)} />
-      <ExitIntentModal />
-
-      {/* === FULL SEO METADATA === */}
+    <StandardLayout>
       <PageMeta
-        title="IFX Trades | Asia's Premier Institutional Algorithmic Training Desk"
-        description="Master the markets with institutional-grade algorithmic execution, quantitative research, and macro diagnostics. Asia's most advanced desk for professional traders."
+        title="Institutional Algorithmic Research & Education"
+        description="Asia's #1 Institutional Research Desk. Professional quantitative analysis, macro intelligence, and algorithmic education for modern market participants."
         path="/"
         keywords={[
           "IFX Trades",
-          "institutional algorithmic trading",
+          "institutional forex research",
           "quantitative analysis Dubai",
           "macro research India",
-          "XAUUSD algo execution",
           "professional trader infrastructure",
           "master terminal training",
         ]}
         structuredData={[
           educationalOrganizationSchema(),
           websiteSchema(),
-          goldAlgoCourseSchema(),
           faqSchema(homeFaqs),
           breadcrumbSchema([
             { name: "Home", path: "/" },
@@ -86,64 +65,36 @@ export const Home = () => {
         ]}
       />
 
-      <div className="noise-overlay" />
+      <main>
+        {/* L1: Sovereign Execution Hero */}
+        <FortressHero />
 
-      {/* === ABOVE THE FOLD === */}
-      <HeroSection />
+        {/* L2: Partner Matrix & Authority */}
+        <BrandAuthority />
 
-      {/* === MARKET TICKER — Educational Demo Feed === */}
-      <div className="relative z-10">
-        <MarketTicker />
-      </div>
+        {/* L3: Why Institutional Standard */}
+        <TrustGrid />
 
-      {/* === STATS STRIP === */}
-      <LazySection placeholderHeight="200px">
-        <StatsSection />
-      </LazySection>
+        {/* L4: Quantitative Lifecycle */}
+        <HowItWorks />
 
-      {/* === ECOSYSTEM BENTO GRID === */}
-      <LazySection placeholderHeight="900px">
-        <EcosystemSection />
-      </LazySection>
-
-      {/* === FLAGSHIP ALGO MODULE === */}
-      <LazySection placeholderHeight="600px" className="py-24 sm:py-32">
-        <AlgoGreatness />
-      </LazySection>
-
-      {/* === UPCOMING WEBINAR === */}
-      <LazySection placeholderHeight="600px">
-        <WebinarPromo />
-      </LazySection>
-
-      {/* === PERFORMANCE HISTORY === */}
-      <LazySection placeholderHeight="700px">
+        {/* L5: Institutional Performance Registry */}
         <PerformanceHistory />
-      </LazySection>
 
-      {/* === GLOBAL REACH / TELEMETRY === */}
-      <LazySection placeholderHeight="700px">
+        {/* L6: Engineering Journey */}
+        <JourneySection />
+
+        {/* L7: Global Network */}
         <GlobalReach />
-      </LazySection>
 
-      {/* === CORPORATE TRUST LAYER === */}
-      <LazySection placeholderHeight="1200px">
-        <div className="border-y border-white/[0.04]">
-          <TrustGrid />
-          <div className="py-12 border-t border-white/[0.04]">
-            <PartnerLogos />
-          </div>
-        </div>
-      </LazySection>
+        {/* L8: Masterclass Engagement */}
+        <WebinarPromo />
 
-      {/* === CONVERSION ACQUISITION === */}
-      <LazySection placeholderHeight="400px">
-        <div className="py-28">
-          <SignupForm />
-        </div>
-      </LazySection>
-
-      <NewsletterPopup />
-    </div>
+        {/* L9: Capital Inquiry / Consultation */}
+        <ConsultationSection />
+      </main>
+    </StandardLayout>
   );
 };
+
+export default Home;

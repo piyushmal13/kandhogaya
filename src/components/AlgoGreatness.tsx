@@ -183,68 +183,6 @@ export const AlgoGreatness = () => {
           ))}
         </motion.div>
 
-        {/* ── Live Algo Terminal + Chart ── */}
-        <motion.div
-          ref={terminalRef}
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="relative mb-20 md:mb-32"
-        >
-          {/* Glow */}
-          <div className="absolute -inset-4 bg-emerald-500/5 rounded-[3rem] blur-3xl" aria-hidden />
-
-          <div className="relative rounded-[2rem] sm:rounded-[2.5rem] bg-[#08090E] border border-white/[0.07] overflow-hidden shadow-[0_60px_120px_rgba(0,0,0,0.8)]">
-            {/* Window chrome */}
-            <div className="flex items-center justify-between px-5 sm:px-8 py-4 border-b border-white/[0.05] bg-white/[0.015]">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-red-500/60" />
-                <div className="w-3 h-3 rounded-full bg-yellow-500/60" />
-                <div className="w-3 h-3 rounded-full bg-green-500/60" />
-              </div>
-              <div className="flex items-center gap-2">
-                <motion.span
-                  animate={{ opacity: [0.5, 1, 0.5] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                  className="w-1.5 h-1.5 rounded-full bg-emerald-500"
-                />
-                <span className="text-[10px] font-mono text-emerald-400/60 uppercase tracking-[0.3em]">
-                  {featuredAlgo?.name || "QUANTITATIVE TERMINAL"}
-                </span>
-              </div>
-              <span className="text-[9px] font-mono text-white/15 hidden sm:block">EDUCATIONAL VISUALIZER</span>
-            </div>
-
-            {/* Chart */}
-            <div className="relative h-[260px] sm:h-[320px] md:h-[380px] p-6">
-              {isTerminalInView && <AnimatedCandlesticks className="absolute inset-6" />}
-            </div>
-
-            {/* Video section if available */}
-            {videoUrl && (
-              <div className="border-t border-white/[0.05] aspect-video">
-                <iframe
-                  src={videoUrl}
-                  title={`${featuredAlgo?.name || "Algo"} Strategy Breakdown`}
-                  className="w-full h-full border-0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  loading="lazy"
-                />
-              </div>
-            )}
-
-            {/* Scan line */}
-            <motion.div
-              className="absolute inset-0 pointer-events-none"
-              style={{ background: "linear-gradient(180deg, transparent 0%, rgba(16,185,129,0.025) 40%, transparent 100%)", height: "30%" }}
-              animate={{ y: ["-100%", "500%"] }}
-              transition={{ duration: 5, repeat: Infinity, ease: "linear", repeatDelay: 3 }}
-              aria-hidden
-            />
-          </div>
-        </motion.div>
 
         {/* ── Feature Cards ── */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-8 mb-24 md:mb-40">
