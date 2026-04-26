@@ -97,8 +97,10 @@
     font-family: var(--font-sans);
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
-    selection-background-color: var(--brand-primary);
-    selection-color: #000;
+  ::selection {
+    background-color: var(--brand-primary);
+    color: #000;
+  }
   }
 
   /* ── Ultra-Fluid Typography Scale ── */
@@ -219,7 +221,7 @@
     background-color: rgba(255, 255, 255, 0.03);
     border-width: 1px;
     border-color: rgba(255, 255, 255, 0.08);
-    color: rgba(255, 255, 255, 0.7);
+    color: #ffffff;
     backdrop-filter: blur(12px);
     font-size: 10px;
     font-weight: 900;
