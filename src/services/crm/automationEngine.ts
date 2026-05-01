@@ -33,9 +33,10 @@ export const automationEngine = {
     // 1. Audit Assignment status
     const { data: lead } = await publicSupabase
       .from('leads')
-      .select('assigned_to, anon_id, user_id(full_name)')
-      .eq('id', leadId).single();
-    
+      .select('assigned_to, email')
+      .eq('id', leadId)
+      .maybeSingle();
+
     if (!lead?.assigned_to) {
       const agentId = await automationEngine.discoverRoundRobinAgent();
       if (agentId) {
@@ -51,11 +52,11 @@ export const automationEngine = {
         // Increment agent load
         await publicSupabase.rpc('increment_agent_load', { agent_id: agentId });
 
-        // 2. [PHASE 6] Enqueue External Notification
-        const { data: agentProfile } = await publicSupabase.from('agents').select('phone').eq('id', agentId).single();
+        // [PHASE 6] Enqueue External Notification
+        const { data: agentProfile } = await publicSupabase.from('agents').select('phone').eq('id', agentId).maybeSingle();
         
         if (agentProfile?.phone) {
-          const leadName = (lead.user_id as any)?.full_name || lead.anon_id;
+          const leadName = lead.email || 'Anonymous Lead';
           notificationEngine.enqueue({
             recipient: agentProfile.phone,
             channel: 'WHATSAPP',

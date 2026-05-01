@@ -29,16 +29,18 @@ export const useFeatureFlag = (flagName: string, defaultValue: boolean = false) 
       // 2. Fetch from Database
       try {
         const { data, error } = await supabase
-          .from('platform_flags')
-          .select('is_enabled')
-          .eq('flag_name', flagName)
-          .single();
+          .from('feature_flags')
+          .select('enabled')
+          .eq('key', flagName)
+          .maybeSingle();
 
-        if (error) throw error;
+        // Only throw on real errors, not on "no rows found" (PGRST116)
+        if (error && error.code !== 'PGRST116') throw error;
 
-        if (isMounted && data) {
-          setIsEnabled(data.is_enabled);
-          setCache(`ff_${flagName}`, data.is_enabled, 300); // 5 min TTL
+        if (isMounted) {
+          const val = data?.enabled ?? defaultValue;
+          setIsEnabled(val);
+          setCache(`ff_${flagName}`, val, 300); // 5 min TTL
         }
       } catch (err: any) {
         // Silent Degradation — do not spike the UI if DB is under load

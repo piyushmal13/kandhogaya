@@ -14,16 +14,13 @@ export const leadService = {
     const offset = page * limit;
     
     try {
-      // PROPER CONNECTION LOGIC: Join with agents and affiliate_codes for full context
+      // Schema-aligned: only columns confirmed in the live leads table
       const { data: rawLeads, error } = await publicSupabase
         .from('leads')
         .select(`
           id, email, source, created_at, stage, score, is_hot, 
           last_action_at, conversion_probability, priority_tag, 
-          referred_by_code, assigned_to, crm_metadata,
-          bot_licenses(id, license_key, is_active),
-          webinar_registrations(id, webinar_id, attended),
-          agents:assigned_to(name:full_name)
+          referred_by_code, assigned_to, crm_metadata
         `)
         .order('created_at', { ascending: false })
         .range(offset, offset + limit - 1);
@@ -31,11 +28,7 @@ export const leadService = {
       if (error) throw error;
       if (!rawLeads || rawLeads.length === 0) return [];
       
-      return (rawLeads).map(lead => ({
-        ...mapLead(lead),
-        assigned_agent_name: lead.agents?.name,
-        assigned_agent_code: lead.agents?.code || lead.referred_by_code
-      }));
+      return rawLeads.map(lead => mapLead(lead));
     } catch (err) {
       console.error("[Institutional CRM Recovery]: Discovery segment failed.", err);
       return [];

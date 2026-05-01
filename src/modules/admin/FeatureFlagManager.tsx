@@ -7,6 +7,63 @@ import { supabase } from "../../lib/supabase";
 // Flag Definitions — add new flags here. They are stored in platform_flags table.
 // ──────────────────────────────────────────────────────────────────────────────
 const FLAG_REGISTRY: { key: string; label: string; description: string; group: string; danger?: boolean }[] = [
+  // ── Core Module Toggles (live in DB) ──
+  {
+    key:         "signals",
+    label:       "Signals Module",
+    description: "Enables the /signals page and live signal feed.",
+    group:       "Modules",
+  },
+  {
+    key:         "algo",
+    label:       "Algo Marketplace",
+    description: "Enables the /marketplace page for algo product listings.",
+    group:       "Modules",
+  },
+  {
+    key:         "academy",
+    label:       "Academy Module",
+    description: "Enables the /academy page and course catalog.",
+    group:       "Modules",
+  },
+  {
+    key:         "webinars",
+    label:       "Webinars Module",
+    description: "Enables the /webinars page and registration flow.",
+    group:       "Modules",
+  },
+  {
+    key:         "marketplace",
+    label:       "Marketplace Module",
+    description: "Enables the /marketplace route globally.",
+    group:       "Modules",
+  },
+  {
+    key:         "admin_panel",
+    label:       "Admin Panel",
+    description: "Enables access to the /admin route for authorized users.",
+    group:       "System",
+    danger:      true,
+  },
+  {
+    key:         "sponsor_banners",
+    label:       "Sponsor Banners",
+    description: "Displays partner/sponsor logos in header and event pages.",
+    group:       "Branding",
+  },
+  {
+    key:         "affiliate_system",
+    label:       "Affiliate System",
+    description: "Activates agent referral tracking and /agent dashboard.",
+    group:       "Growth",
+  },
+  {
+    key:         "beta_signals",
+    label:       "Beta Signals",
+    description: "Exposes experimental signal algorithms to beta users.",
+    group:       "Products",
+  },
+  // ── Management Flags ──
   {
     key:         "show_retail_brokers",
     label:       "Show Retail Broker Logos",
@@ -18,6 +75,12 @@ const FLAG_REGISTRY: { key: string; label: string; description: string; group: s
     key:         "webinar_registration_open",
     label:       "Webinar Registration Open",
     description: "Enables the Register button across all webinar pages.",
+    group:       "Webinars",
+  },
+  {
+    key:         "webinar_realtime_updates",
+    label:       "Webinar Realtime Updates",
+    description: "Enables realtime Postgres subscription on the webinars table.",
     group:       "Webinars",
   },
   {
@@ -49,7 +112,7 @@ const FLAG_REGISTRY: { key: string; label: string; description: string; group: s
 
 type FlagState = Record<string, boolean>;
 
-const GROUP_ORDER = ["Branding", "Webinars", "Growth", "Products", "Marketing", "System"];
+const GROUP_ORDER = ["Modules", "Branding", "Webinars", "Growth", "Products", "Marketing", "System"];
 
 // ──────────────────────────────────────────────────────────────────────────────
 
@@ -70,14 +133,14 @@ export const FeatureFlagManager = () => {
     setLoading(true);
     try {
       const { data, error } = await supabase
-        .from("platform_flags")
-        .select("key, value");
+        .from("feature_flags")
+        .select("key, enabled");
 
       if (error) throw error;
 
       const remote: FlagState = {};
-      (data ?? []).forEach((row: { key: string; value: boolean }) => {
-        remote[row.key] = row.value;
+      (data ?? []).forEach((row: { key: string; enabled: boolean }) => {
+        remote[row.key] = row.enabled;
       });
 
       // Backfill any registry flag not yet in the DB with `false`
@@ -107,9 +170,9 @@ export const FeatureFlagManager = () => {
     if (dirty.size === 0) return;
     setSaving(true);
     try {
-      const upserts = [...dirty].map(key => ({ key, value: flags[key], updated_at: new Date().toISOString() }));
+      const upserts = [...dirty].map(key => ({ key, enabled: flags[key] }));
       const { error } = await supabase
-        .from("platform_flags")
+        .from("feature_flags")
         .upsert(upserts, { onConflict: "key" });
 
       if (error) throw error;
@@ -128,9 +191,11 @@ export const FeatureFlagManager = () => {
     items: FLAG_REGISTRY.filter(f => f.group === group),
   })).filter(g => g.items.length > 0);
 
-  const saveLabel = dirty.size > 0 
-    ? `Save ${dirty.size} Change${dirty.size === 1 ? "" : "s"}` 
-    : "Saved";
+  const getSaveLabel = () => {
+    if (dirty.size === 0) return "Saved";
+    return `Save ${dirty.size} Change${dirty.size === 1 ? "" : "s"}`;
+  };
+  const saveLabel = getSaveLabel();
 
   return (
     <div className="space-y-8">
@@ -263,8 +328,8 @@ export const FeatureFlagManager = () => {
       <div className="flex items-start gap-2 text-[10px] text-gray-700 font-mono">
         <AlertCircle className="w-3.5 h-3.5 shrink-0 mt-0.5 text-gray-700" />
         <span>
-          Requires a <code className="text-gray-500">platform_flags (key text PRIMARY KEY, value boolean, updated_at timestamptz)</code> table in Supabase.
-          Run the migration in <code className="text-gray-500">scripts/migrations/platform_flags.sql</code> if not yet applied.
+          Connected to <code className="text-gray-500">feature_flags (id uuid, key text UNIQUE, enabled boolean, created_at timestamptz)</code> in Supabase.
+          Uses <code className="text-gray-500">upsert + on_conflict=key</code> — safe to run multiple times.
         </span>
       </div>
     </div>

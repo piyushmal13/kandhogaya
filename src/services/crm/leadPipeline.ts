@@ -3,9 +3,15 @@ import { publicSupabase, safeQuery } from "../../lib/supabase";
 import { automationEngine } from "./automationEngine";
 
 /**
- * Institutional Lead Decision Engine (v1.24)
- * Refined behavioral scoring + transition logic.
- * Admissions are strictly audited.
+ * Institutional Lead Decision Engine (v1.24 — Schema-Aligned)
+ * Adapted to actual `leads` table schema:
+ *   id, email, source, stage, score, is_hot, last_action_at,
+ *   crm_metadata, assigned_to, urgency_triggered_at,
+ *   reengagement_triggered_at, conversion_probability,
+ *   priority_tag, referred_by_code
+ *
+ * NOTE: user_id and anon_id do NOT exist in the live schema.
+ * Behavioral tracking uses session-level metadata stored in crm_metadata.
  */
 
 const SCORING_MAP: Record<string, number> = {
@@ -27,39 +33,51 @@ export type LeadStage = 'NEW' | 'INTERESTED' | 'HIGH_INTENT' | 'PAYMENT_PENDING'
 export const leadPipeline = {
   /**
    * Decision Engine: Processes events and updates intelligence.
+   * Identifies lead by email from supabase session, or skips if anonymous.
    */
-  processEvent: async (userId: string | null, anonId: string | null, eventType: string) => {
-    // 1. Audit delta
+  processEvent: async (userId: string | null, _anonId: string | null, eventType: string) => {
     const scoreDelta = SCORING_MAP[eventType] || 0;
     if (scoreDelta === 0) return;
 
-    // 2. Discover lead
+    // Only process events for authenticated users who have an email we can look up
+    if (!userId) return;
+
+    // Resolve user email from auth
+    let userEmail: string | null = null;
+    try {
+      const { data: { user } } = await publicSupabase.auth.getUser();
+      userEmail = user?.email ?? null;
+    } catch {
+      return;
+    }
+
+    if (!userEmail) return;
+
+    // Look up lead by email (the only stable identifier in the live schema)
     const query = publicSupabase
       .from('leads')
-      .select('id, user_id, anon_id, score, stage, is_hot');
-    
-    if (userId) query.eq('user_id', userId);
-    else if (anonId) query.eq('anon_id', anonId);
-    else return;
+      .select('id, email, score, stage, is_hot')
+      .eq('email', userEmail)
+      .limit(1);
 
-    const [lead] = await safeQuery<any[]>(query.limit(1));
+    const [lead] = await safeQuery<any[]>(query);
 
     if (!lead) {
-      // Create and score new lead
+      // Create new lead entry
       const newLead = {
-        user_id: userId,
-        anon_id: anonId,
+        email: userEmail,
+        source: 'organic',
         score: scoreDelta,
         stage: leadPipeline.inferStage(scoreDelta, eventType),
         last_action_at: new Date().toISOString(),
-        is_hot: scoreDelta >= HOT_LEAD_THRESHOLD
+        is_hot: scoreDelta >= HOT_LEAD_THRESHOLD,
+        crm_metadata: { first_event: eventType }
       };
-      
       await publicSupabase.from('leads').insert([newLead]);
       return;
     }
 
-    // 3. Update existing lead intelligence
+    // Update existing lead
     const score = (lead.score || 0) + scoreDelta;
     const stage = leadPipeline.inferStage(score, eventType, lead.stage);
 
@@ -75,7 +93,7 @@ export const leadPipeline = {
       .update(updatedLead)
       .eq('id', lead.id);
 
-    // 4. Trigger Instant Automation Reaction (Phase 5)
+    // Trigger automation reaction
     automationEngine.reactToLeadUpdate(lead.id, updatedLead).then();
   },
 
@@ -83,14 +101,10 @@ export const leadPipeline = {
    * Stage Inference Logic
    */
   inferStage: (score: number, lastEvent: string, currentStage: string = 'NEW'): LeadStage => {
-    // Priority 1: Direct behavioral triggers
-     if (lastEvent === 'payment_uploaded' || lastEvent === 'purchase_attempt') return 'PAYMENT_PENDING';
-     if (lastEvent === 'converted_success') return 'CONVERTED';
-
-     // Priority 2: Milestone scoring thresholds
-     if (score >= 40) return 'HIGH_INTENT';
-     if (score >= 15) return 'INTERESTED';
-     
-     return currentStage as LeadStage;
+    if (lastEvent === 'payment_uploaded' || lastEvent === 'purchase_attempt') return 'PAYMENT_PENDING';
+    if (lastEvent === 'converted_success') return 'CONVERTED';
+    if (score >= 40) return 'HIGH_INTENT';
+    if (score >= 15) return 'INTERESTED';
+    return currentStage as LeadStage;
   }
 };

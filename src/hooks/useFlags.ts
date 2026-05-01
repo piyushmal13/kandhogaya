@@ -4,23 +4,47 @@ import { CACHE_TIERS } from '../lib/reactQuery';
 
 // ── Type ──────────────────────────────────────────────────────────────────────
 type FlagKey =
+  // Core module toggles (present in DB)
+  | 'signals'
+  | 'algo'
+  | 'academy'
+  | 'webinars'
+  | 'marketplace'
+  | 'admin_panel'
+  | 'sponsor_banners'
+  | 'affiliate_system'
+  | 'beta_signals'
+  // Management flags (upserted at boot)
   | 'show_retail_brokers'
   | 'webinar_registration_open'
   | 'show_affiliate_hub'
   | 'algo_marketplace_live'
   | 'urgency_banner_active'
-  | 'maintenance_mode';
+  | 'maintenance_mode'
+  | 'webinar_realtime_updates';
 
 type Flags = Record<FlagKey, boolean>;
 
 // ── Defaults (shown when Supabase is unreachable) ─────────────────────────────
 const FLAG_DEFAULTS: Flags = {
+  // Core modules
+  signals:                   true,
+  algo:                      true,
+  academy:                   true,
+  webinars:                  true,
+  marketplace:               true,
+  admin_panel:               true,
+  sponsor_banners:           true,
+  affiliate_system:          true,
+  beta_signals:              false,
+  // Management
   show_retail_brokers:       false,
   webinar_registration_open: true,
   show_affiliate_hub:        true,
   algo_marketplace_live:     true,
   urgency_banner_active:     true,
   maintenance_mode:          false,
+  webinar_realtime_updates:  false,
 };
 
 // ── Hook ──────────────────────────────────────────────────────────────────────
@@ -43,8 +67,8 @@ export function useFlags() {
     queryKey:  ['flags'],
     queryFn:   async (): Promise<Flags> => {
       const { data, error } = await supabase
-        .from('platform_flags')
-        .select('key, value');
+        .from('feature_flags')
+        .select('key, enabled');
 
       if (error) {
         // Table not yet created — return defaults silently
@@ -53,8 +77,8 @@ export function useFlags() {
       }
 
       const remote: Partial<Flags> = {};
-      (data ?? []).forEach((row: { key: string; value: boolean }) => {
-        remote[row.key as FlagKey] = row.value;
+      (data ?? []).forEach((row: { key: string; enabled: boolean }) => {
+        remote[row.key as FlagKey] = row.enabled;
       });
 
       // Merge with defaults so any missing flags stay safe

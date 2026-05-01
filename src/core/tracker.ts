@@ -70,7 +70,10 @@ class Tracker {
         });
 
       // 3. Automated CRM Lifecycle Logic (Non-blocking)
-      leadPipeline.processEvent(userId, this.anonId, eventType).then();
+      leadPipeline.processEvent(userId, this.anonId, eventType).catch(err => {
+         // Silently handle schema-drift in lead pipeline
+         console.warn("[CRM] Lead Pipeline Latency/Schema Drift:", err.message);
+      });
 
     } catch (err) {
       console.error("[CRM] Tracking Life-cycle Exception:", err);
@@ -103,13 +106,19 @@ class Tracker {
       .is('user_id', null)
       .then();
 
-    // Link in lead table
-    supabase
-      .from('leads')
-      .update({ user_id: userId })
-      .eq('anon_id', this.anonId)
-      .is('user_id', null)
-      .then();
+    // Link anon behavioral data to authenticated user via email
+    // (user_id and anon_id columns do not exist in the live leads schema)
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user?.email) {
+        await supabase
+          .from('leads')
+          .update({ crm_metadata: { linked_user_id: userId } })
+          .eq('email', user.email);
+      }
+    } catch {
+       // Table or column missing — silently skip
+    }
   }
 }
 
