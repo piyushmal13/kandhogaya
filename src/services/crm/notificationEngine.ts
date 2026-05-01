@@ -70,7 +70,7 @@ export const notificationEngine = {
     try {
       // Channel-specific logic (currently deep-link generation for WhatsApp)
       if (item.channel === 'WHATSAPP') {
-        const payload = item.payload;
+        // const payload = item.payload;
         // const msg = encodeURIComponent(
         //   `*IFX TRADES ALERT*: ${payload.message}\n\n` +
         //   `User: ${payload.user_name}\n` +

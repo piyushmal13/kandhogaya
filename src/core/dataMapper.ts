@@ -65,7 +65,7 @@ export async function safeQuery<T>(
       return result.map(mapper);
     }
 
-    return result as T[];
+    return result;
   } catch (err) {
     console.error(`[${context}] Critical Execution Error:`, err);
     return [];
