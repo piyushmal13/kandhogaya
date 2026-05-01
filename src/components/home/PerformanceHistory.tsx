@@ -157,7 +157,7 @@ export const PerformanceHistory = () => {
                 </div>
                 <div className="text-[10px] text-white/30 font-medium tracking-wide">
                   Audit logs verified by proprietary backtesting engine. <br className="hidden md:block"/> 
-                  Live execution results may vary.
+                  Demo environment results may vary.
                 </div>
               </div>
             </div>

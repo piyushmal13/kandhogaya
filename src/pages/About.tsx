@@ -64,7 +64,7 @@ export const About = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}>
-              <StatCard label="Execution Velocity" value="< 5ms" sub="Latency Precision" />
+              <StatCard label="Model Velocity" value="Optimized" sub="Compute Precision" />
             </motion.div>
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
               <StatCard label="Quant Volume" value="$2.4B+" sub="Processed Monthly" />
@@ -93,7 +93,7 @@ export const About = () => {
                 {[
                   "Direct-to-Bank Order Flow Analysis",
                   "RSA-Secured Algorithmic Licenses",
-                  "Low-Latency Execution Infrastructure",
+                  "Institutional Education Infrastructure",
                   "Zero Conflict-of-Interest Model"
                 ].map((item, idx) => (
                   <div key={idx} className="flex items-center gap-4 group">

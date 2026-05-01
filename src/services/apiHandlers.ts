@@ -84,7 +84,7 @@ export const getProducts = async () => {
 export const getProductById = async (id: string) => {
   const { data, error } = await supabase
     .from("products")
-    .select("id, name, description, price, category, video_explanation_url, image_url, is_active, metadata, created_at")
+    .select("id, name, description, price, category, video_explanation_url, image_url, created_at, performance_data, long_plan_offers")
     .eq("id", id)
     .single();
   
@@ -132,7 +132,7 @@ export const getBlogPosts = async (page = 0, pageSize = 9, searchQuery = "") => 
   try {
     let query = supabase
       .from('content_posts')
-      .select('id, author_id, category_id, title, slug, content_type, status, featured_image, published_at, created_at, author:users!content_posts_author_id_fkey(full_name, avatar_url)')
+      .select('id, author_id, category, title, slug, content_type, status, featured_image, image_url, created_at, metadata, author_bio')
       .eq('status', 'published')
       .order('created_at', { ascending: false })
       .range(page * pageSize, (page + 1) * pageSize - 1);
@@ -156,7 +156,7 @@ export const getBlogPosts = async (page = 0, pageSize = 9, searchQuery = "") => 
 export const getBlogPostBySlug = async (slug: string) => {
   const { data, error } = await supabase
     .from('content_posts')
-    .select('id, author_id, category_id, title, slug, content_type, status, body, featured_image, data, published_at, created_at, author:users!content_posts_author_id_fkey(full_name, avatar_url)')
+    .select('id, author_id, category, title, slug, content_type, status, body, content, featured_image, image_url, created_at, metadata, author_bio')
     .eq('slug', slug)
     .single();
   
@@ -416,7 +416,7 @@ export const getPerformanceResults = async () => {
   return safeQuery<any[]>(
     supabase
       .from("performance_results")
-      .select("id, month, year, return_pct, win_rate, created_at")
+      .select("id, month, year, return_pct, win_rate, pips, created_at")
       .order("created_at", { ascending: true })
   );
 };

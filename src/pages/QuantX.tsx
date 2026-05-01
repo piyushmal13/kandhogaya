@@ -155,7 +155,7 @@ export const QuantX = () => {
               <ArchitectureNode title="Market Data" icon={Database} subtext="L-Feed" active />
               <ArchitectureNode title="Core Analyzer" icon={Brain} subtext="Engine-v8" active />
               <ArchitectureNode title="Risk Engine" icon={ShieldAlert} subtext="Strict-Mode" active />
-              <ArchitectureNode title="Execution Bridge" icon={Zap} subtext="0.1ms Latency" active />
+              <ArchitectureNode title="Execution Model" icon={Zap} subtext="Demo Environment" active />
               <ArchitectureNode title="Optimization" icon={RefreshCcw} subtext="Auto-Recal" active />
             </div>
           </div>
@@ -243,7 +243,7 @@ export const QuantX = () => {
                   </div>
                   <div>
                     <h4 className="text-xl font-bold mb-3">MT5 Core Bridge</h4>
-                    <p className="text-white/40 leading-relaxed">Low-latency Python-to-MQL5 bridge ensuring execution occurs within milliseconds of AI confirmation.</p>
+                    <p className="text-white/40 leading-relaxed">High-performance data pipeline ensuring strategy signals occur within milliseconds of AI confirmation in the demo environment.</p>
                   </div>
                 </div>
                 

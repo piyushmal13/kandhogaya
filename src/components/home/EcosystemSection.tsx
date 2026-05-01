@@ -227,7 +227,7 @@ export const EcosystemSection = () => {
             transition={{ delay: 0.16 }}
             className="text-white/35 max-w-sm text-[15px] leading-relaxed lg:text-right lg:pb-3"
           >
-            A cohesive architecture of adaptive algorithms, macro intelligence, and live execution strategy—built to dominate live markets.
+            A cohesive architecture of adaptive algorithms, macro intelligence, and execution models—built to simulate live markets.
           </motion.p>
         </div>
 

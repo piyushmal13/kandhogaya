@@ -111,7 +111,7 @@ export const LiveSignalsFeed = () => {
                               <Zap className="w-4 h-4 text-emerald-500" />
                            </div>
                            <div className="flex flex-col">
-                              <span className="text-[9px] font-black text-white/20 uppercase tracking-widest leading-none mb-1">Time Latency</span>
+                              <span className="text-[9px] font-black text-white/20 uppercase tracking-widest leading-none mb-1">Time Delta</span>
                               <time className="text-[10px] font-black text-white/40 uppercase tracking-widest leading-none">
                                 {new Date(signal.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                               </time>
