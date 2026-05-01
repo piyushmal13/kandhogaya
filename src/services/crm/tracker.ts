@@ -54,7 +54,7 @@ class Tracker {
 
     // Silent background execution
     publicSupabase
-      .from('user_events')
+      .from('analytics_events')
       .insert([payload])
       .then(({ error }) => {
          if (error) console.warn('[CRM] Event drop:', error.message);
@@ -80,7 +80,7 @@ class Tracker {
     
     // Update existing anon events to this user (retroactive intelligence)
     publicSupabase
-      .from('user_events')
+      .from('analytics_events')
       .update({ user_id: userId })
       .eq('anon_id', this.anonId)
       .is('user_id', null)

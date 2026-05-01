@@ -69,7 +69,7 @@ export const getSignals = async () => {
   return safeQuery<Signal[]>(
     supabase
       .from("signals")
-      .select("id, pair, direction, entry, sl, tp, status, result_pips, created_at, metadata")
+      .select("id, asset, direction, entry_price, stop_loss, take_profit, status, created_at")
       .order("created_at", { ascending: false })
       .limit(50)
   );
@@ -84,7 +84,7 @@ export const getProducts = async () => {
 export const getProductById = async (id: string) => {
   const { data, error } = await supabase
     .from("products")
-    .select("id, name, description, price, category, video_url, thumbnail_url, is_active, metadata, created_at")
+    .select("id, name, description, price, category, video_explanation_url, image_url, is_active, metadata, created_at")
     .eq("id", id)
     .single();
   
@@ -132,7 +132,7 @@ export const getBlogPosts = async (page = 0, pageSize = 9, searchQuery = "") => 
   try {
     let query = supabase
       .from('content_posts')
-      .select('*, author:users!content_posts_author_id_fkey(full_name, avatar_url)')
+      .select('id, author_id, category_id, title, slug, content_type, status, featured_image, published_at, created_at, author:users!content_posts_author_id_fkey(full_name, avatar_url)')
       .eq('status', 'published')
       .order('created_at', { ascending: false })
       .range(page * pageSize, (page + 1) * pageSize - 1);
@@ -156,7 +156,7 @@ export const getBlogPosts = async (page = 0, pageSize = 9, searchQuery = "") => 
 export const getBlogPostBySlug = async (slug: string) => {
   const { data, error } = await supabase
     .from('content_posts')
-    .select('*, author:users!content_posts_author_id_fkey(full_name, avatar_url)')
+    .select('id, author_id, category_id, title, slug, content_type, status, body, featured_image, data, published_at, created_at, author:users!content_posts_author_id_fkey(full_name, avatar_url)')
     .eq('slug', slug)
     .single();
   
@@ -284,7 +284,7 @@ export const sendContactMessage = async (name: string, email: string, subject: s
     await safeExecute(() =>
       withTimeout(
         supabase.from("contact_messages").insert([
-          { full_name: name, email, subject, message }
+          { name: name, email, subject, message }
         ])
       )
     );
@@ -343,7 +343,7 @@ export const submitPaymentProof = async (userId: string, plan: string, amount: n
         user_id: userId,
         plan,
         amount,
-        screenshot_url: screenshotUrl,
+        proof_url: screenshotUrl,
         status: "pending"
       }]);
 

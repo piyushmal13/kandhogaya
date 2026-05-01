@@ -12,7 +12,7 @@ export const productService = {
     try {
       const { data: products, error } = await supabase
         .from("products")
-        .select("id, name, description, price, category, video_url, thumbnail_url, is_active, metadata, created_at")
+        .select("id, name, description, price, category, video_explanation_url, image_url, is_active, metadata, created_at")
         .eq("is_active", true)
         .order("created_at", { ascending: false });
 
@@ -37,12 +37,22 @@ export const productService = {
     }
   },
 
-  getAlgoBots: async (limit = 3): Promise<any[]> => {
     try {
       const query = supabase
         .from("algo_bots")
-        .select("id, name, description, price, category, thumbnail_url, win_rate, metadata")
-        .eq("is_active", true)
+        .select(`
+          id, 
+          name, 
+          version, 
+          download_url,
+          product:product_id (
+            description,
+            price,
+            category,
+            image_url,
+            metadata
+          )
+        `)
         .limit(limit);
 
       return await safeQuery<any[]>(query) || [];

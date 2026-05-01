@@ -14,10 +14,10 @@ export const webinarService = {
       const query = supabase
         .from("webinars")
         .select(`
-          id, title, description, date_time, speaker, speaker_name,
-          speaker_images, is_paid, price, max_attendees, registration_count,
-          status, thumbnail_url, recording_url, metadata,
-          sponsors:webinar_sponsors(id, name, logo_url)
+          id, title, description, date_time, speaker_name,
+          speaker_images, type, max_attendees, registration_count,
+          status, webinar_image_url, recording_url, sponsor_logos,
+          q_and_a, about_content, advanced_features
         `)
         .eq("status", "scheduled")
         .order("date_time", { ascending: true })
@@ -35,10 +35,10 @@ export const webinarService = {
       const { data, error } = await supabase
         .from("webinars")
         .select(`
-          id, title, description, date_time, speaker, speaker_name,
-          speaker_images, is_paid, price, max_attendees, registration_count,
-          status, thumbnail_url, recording_url, metadata,
-          sponsors:webinar_sponsors(id, name, logo_url)
+          id, title, description, date_time, speaker_name,
+          speaker_images, type, max_attendees, registration_count,
+          status, webinar_image_url, recording_url, sponsor_logos,
+          q_and_a, about_content, advanced_features
         `)
         .eq("id", id)
         .single();

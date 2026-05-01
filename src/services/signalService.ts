@@ -13,7 +13,7 @@ export const signalService = {
     try {
       const query = supabase
         .from("signals")
-        .select("id, pair, direction, entry, sl, tp, status, result_pips, created_at, metadata")
+        .select("id, asset, direction, entry_price, stop_loss, take_profit, status, created_at")
         .order("created_at", { ascending: false })
         .limit(50);
 

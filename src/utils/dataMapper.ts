@@ -27,11 +27,11 @@ export const mapWebinar = (raw: any): Webinar => ({
   id: raw.id,
   title: raw.title || 'Untitled Session',
   description: raw.description || '',
-  speaker: raw.speaker || raw.speaker_name || 'Institutional Lead',
+  speaker: raw.speaker_name || 'Institutional Lead',
   speaker_name: raw.speaker_name || '',
   date_time: raw.date_time,
-  is_paid: Boolean(raw.is_paid),
-  price: Number(raw.price) || 0,
+  is_paid: raw.type === 'paid',
+  price: 0, // No price column in webinars table, type='paid' indicates cost exists.
   registration_count: Number(raw.registration_count) || 0,
   max_attendees: Number(raw.max_attendees) || 500,
   status: raw.status || 'upcoming',
@@ -40,11 +40,10 @@ export const mapWebinar = (raw: any): Webinar => ({
   speaker_images: Array.isArray(raw.speaker_images) && raw.speaker_images.length > 0 ? raw.speaker_images : [
     "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=2000&auto=format&fit=crop"
   ],
+  thumbnail_url: raw.webinar_image_url || "https://images.unsplash.com/photo-1591696208162-a93795a74838?q=80&w=2070&auto=format&fit=crop",
   sponsor_logos: Array.isArray(raw.sponsor_logos) ? raw.sponsor_logos : [],
   sponsors: Array.isArray(raw.sponsors) && raw.sponsors.length > 0 ? raw.sponsors : [
-    { id: "sp-1", webinar_id: raw.id, name: "Binance", tier: "Headline", logo_url: "https://cryptologos.cc/logos/binance-coin-bnb-logo.svg" },
-    { id: "sp-2", webinar_id: raw.id, name: "TradingView", tier: "Partner", logo_url: "https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/v1481103649/k4c5p4t2gqjymnld10c9.png" },
-    { id: "sp-3", webinar_id: raw.id, name: "MetaTrader 4", tier: "Co-Sponsor", logo_url: "https://upload.wikimedia.org/wikipedia/commons/2/23/MetaTrader_4_logo.png" }
+    { id: "sp-1", name: "IFX Intelligence", logo_url: "https://cryptologos.cc/logos/binance-coin-bnb-logo.svg" },
   ],
   q_and_a: Array.isArray(raw.q_and_a) && raw.q_and_a.length > 0 ? raw.q_and_a : [
     { question: "Will recordings be provided?", answer: "Yes, all registered attendees receive full institutional playback access for 30 days." },

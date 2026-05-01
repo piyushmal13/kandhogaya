@@ -18,10 +18,12 @@ export const leadService = {
       const { data: rawLeads, error } = await publicSupabase
         .from('leads')
         .select(`
-          *,
-          bot_licenses(*),
-          webinar_registrations(*),
-          agents:assigned_to(name, code)
+          id, email, source, created_at, stage, score, is_hot, 
+          last_action_at, conversion_probability, priority_tag, 
+          referred_by_code, assigned_to, crm_metadata,
+          bot_licenses(id, license_key, is_active),
+          webinar_registrations(id, webinar_id, attended),
+          agents:assigned_to(name:full_name)
         `)
         .order('created_at', { ascending: false })
         .range(offset, offset + limit - 1);

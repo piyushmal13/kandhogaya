@@ -24,6 +24,8 @@ ALTER TABLE users ADD COLUMN IF NOT EXISTS full_name TEXT;
 ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar_url TEXT;
 ALTER TABLE users ADD COLUMN IF NOT EXISTS role TEXT DEFAULT 'user';
 ALTER TABLE users ADD COLUMN IF NOT EXISTS referred_by UUID;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS phone TEXT;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS crm_metadata JSONB DEFAULT '{}';
 
 -- 2. Product Service (Algos/Bots)
 CREATE TABLE IF NOT EXISTS products (
@@ -249,16 +251,62 @@ CREATE TABLE IF NOT EXISTS agent_accounts (
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
     account_status TEXT DEFAULT 'pending',
     commission_rate DECIMAL(5,2) DEFAULT 10.00,
+    is_online BOOLEAN DEFAULT true,
+    current_load INTEGER DEFAULT 0,
+    performance_score DECIMAL(5,2) DEFAULT 0,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- Idempotent column additions for agent_accounts
+ALTER TABLE agent_accounts ADD COLUMN IF NOT EXISTS is_online BOOLEAN DEFAULT true;
+ALTER TABLE agent_accounts ADD COLUMN IF NOT EXISTS current_load INTEGER DEFAULT 0;
+ALTER TABLE agent_accounts ADD COLUMN IF NOT EXISTS performance_score DECIMAL(5,2) DEFAULT 0;
+
+-- Create agents view for compatibility with legacy services
+CREATE OR REPLACE VIEW agents AS
+SELECT 
+    u.id,
+    u.full_name as name,
+    u.email,
+    u.phone,
+    aa.account_status,
+    aa.is_online,
+    aa.current_load,
+    aa.performance_score
+FROM users u
+JOIN agent_accounts aa ON u.id = aa.user_id;
 
 -- 9. Marketing & Support
 CREATE TABLE IF NOT EXISTS leads (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     email TEXT UNIQUE NOT NULL,
+    user_id UUID REFERENCES users(id),
+    anon_id TEXT,
     source TEXT,
+    score INTEGER DEFAULT 0,
+    stage TEXT DEFAULT 'NEW',
+    is_hot BOOLEAN DEFAULT false,
+    last_action_at TIMESTAMPTZ,
+    conversion_probability DECIMAL(5,2) DEFAULT 0,
+    priority_tag TEXT,
+    assigned_to UUID REFERENCES users(id),
+    referred_by_code TEXT,
+    crm_metadata JSONB DEFAULT '{}',
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- Idempotent column additions for leads
+ALTER TABLE leads ADD COLUMN IF NOT EXISTS user_id UUID REFERENCES users(id);
+ALTER TABLE leads ADD COLUMN IF NOT EXISTS anon_id TEXT;
+ALTER TABLE leads ADD COLUMN IF NOT EXISTS score INTEGER DEFAULT 0;
+ALTER TABLE leads ADD COLUMN IF NOT EXISTS stage TEXT DEFAULT 'NEW';
+ALTER TABLE leads ADD COLUMN IF NOT EXISTS is_hot BOOLEAN DEFAULT false;
+ALTER TABLE leads ADD COLUMN IF NOT EXISTS last_action_at TIMESTAMPTZ;
+ALTER TABLE leads ADD COLUMN IF NOT EXISTS conversion_probability DECIMAL(5,2) DEFAULT 0;
+ALTER TABLE leads ADD COLUMN IF NOT EXISTS priority_tag TEXT;
+ALTER TABLE leads ADD COLUMN IF NOT EXISTS assigned_to UUID REFERENCES users(id);
+ALTER TABLE leads ADD COLUMN IF NOT EXISTS referred_by_code TEXT;
+ALTER TABLE leads ADD COLUMN IF NOT EXISTS crm_metadata JSONB DEFAULT '{}';
 
 CREATE TABLE IF NOT EXISTS contact_messages (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -300,6 +348,18 @@ CREATE TABLE IF NOT EXISTS "payment-proofs" (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+CREATE TABLE IF NOT EXISTS notification_queue (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    recipient TEXT NOT NULL,
+    channel TEXT NOT NULL,
+    priority TEXT DEFAULT 'MEDIUM',
+    payload JSONB DEFAULT '{}',
+    status TEXT DEFAULT 'PENDING',
+    attempts INTEGER DEFAULT 0,
+    sent_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 -- 11. Legacy Algorithms (Optional)
 CREATE TABLE IF NOT EXISTS algorithms (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -311,10 +371,16 @@ CREATE TABLE IF NOT EXISTS algorithms (
 CREATE TABLE IF NOT EXISTS analytics_events (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID REFERENCES users(id),
+    anon_id TEXT,
     event_type TEXT NOT NULL,
+    priority TEXT DEFAULT 'LOW',
     metadata JSONB DEFAULT '{}',
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- Idempotent column additions for analytics_events
+ALTER TABLE analytics_events ADD COLUMN IF NOT EXISTS anon_id TEXT;
+ALTER TABLE analytics_events ADD COLUMN IF NOT EXISTS priority TEXT DEFAULT 'LOW';
 
 -- Indexes for performance
 CREATE INDEX IF NOT EXISTS idx_content_slug ON content_posts(slug);
