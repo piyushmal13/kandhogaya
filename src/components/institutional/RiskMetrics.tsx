@@ -9,7 +9,7 @@ import { ShieldAlert, Info } from 'lucide-react';
 export function RiskMetrics() {
   const metrics = [
     { label: 'Drawdown Max', value: '4.2%', status: 'Safe', color: '#58F2B6', width: '42%' },
-    { label: 'Exposure Ratio', value: '1:30', status: 'Optimal', color: '#58F2B6', width: '30%' },
+    { label: 'Margin Efficiency', value: '82%', status: 'Optimal', color: '#58F2B6', width: '82%' },
     { label: 'Volatility Guard', value: 'Active', status: 'Locked', color: '#58F2B6', width: '100%' },
   ] as const;
 

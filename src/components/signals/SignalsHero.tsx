@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
-import { ArrowRight, Zap } from "lucide-react";
+
 
 export const SignalsHero = () => {
   const ref = useRef<HTMLElement>(null);
@@ -44,7 +44,7 @@ export const SignalsHero = () => {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
           </span>
-          Sovereign Research Desk Active
+          <span className="ml-2">Sovereign Research Desk Active</span>
         </motion.div>
 
         <motion.h1

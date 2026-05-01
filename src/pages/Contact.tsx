@@ -182,7 +182,7 @@ export const Contact = () => {
                   >
                     <option>General Inquiry</option>
                     <option>Algo Licensing</option>
-                    <option>Signal Subscription</option>
+                    <option>Bespoke Engineering</option>
                     <option>Partnership</option>
                   </select>
                 </div>

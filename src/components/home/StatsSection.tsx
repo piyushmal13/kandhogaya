@@ -28,7 +28,7 @@ const stats = [
     color: "#00FFA3",
   },
   {
-    label: "Daily Executions",
+    label: "Daily Logic Validations",
     value: "2,800",
     suffix: "+",
     sub: "Automated systems",
@@ -70,7 +70,7 @@ const StatItem = ({ stat, i }: { stat: typeof stats[0]; i: number }) => {
   const isInView = useInView(ref, { once: true, margin: "-50px" });
   const regex = /(\d+(\.\d+)?)/;
   const match = regex.exec(stat.value);
-  const numericValue = match ? parseFloat(match[0]) : 0;
+  const numericValue = match ? Number.parseFloat(match[0]) : 0;
   const hasDecimal = stat.value.includes(".");
   const animatedValue = useCountUp(numericValue, isInView, 1800);
   const formattedCount = hasDecimal

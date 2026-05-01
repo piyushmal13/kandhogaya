@@ -1,7 +1,6 @@
 import { motion } from 'motion/react';
 import { institutionalVariants, staggerContainer } from '@/lib/motion';
 import { Cpu, Zap } from 'lucide-react';
-import { SovereignButton } from '@/components/ui/SovereignButton';
 
 /**
  * SolutionsHero (v2.0)

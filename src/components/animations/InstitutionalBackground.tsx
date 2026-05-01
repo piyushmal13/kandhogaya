@@ -16,8 +16,8 @@ export const InstitutionalBackground = () => {
     if (!ctx) return;
 
     let animationFrameId: number;
-    let width = window.innerWidth;
-    let height = window.innerHeight;
+    let width = globalThis.innerWidth;
+    let height = globalThis.innerHeight;
 
     // Mouse tracking — reactive to cursor position
     const mouse = { x: width / 2, y: height / 2 };
@@ -29,74 +29,71 @@ export const InstitutionalBackground = () => {
 
     const particleCount = Math.min(Math.floor(width / 14), 70);
 
-    class Particle {
+    interface Particle {
       x: number;
       y: number;
-      ox: number; // origin x
-      oy: number; // origin y
       vx: number;
       vy: number;
       size: number;
       isGold: boolean;
-
-      constructor() {
-        this.x = Math.random() * width;
-        this.y = Math.random() * height;
-        this.ox = this.x;
-        this.oy = this.y;
-        this.vx = (Math.random() - 0.5) * 0.35;
-        this.vy = (Math.random() - 0.5) * 0.35;
-        this.size = Math.random() * 1.5 + 0.5;
-        // 8% of particles glow gold — institutional gold accents
-        this.isGold = Math.random() < 0.08;
-      }
-
-      update() {
-        // Subtle mouse repulsion — responds to cursor, max 80px radius
-        const dx = this.x - mouse.x;
-        const dy = this.y - mouse.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 80) {
-          const force = (80 - dist) / 80;
-          this.vx += (dx / dist) * force * 0.4;
-          this.vy += (dy / dist) * force * 0.4;
-        }
-
-        // Velocity damping — precision drift, not bounce
-        this.vx *= 0.97;
-        this.vy *= 0.97;
-
-        this.x += this.vx;
-        this.y += this.vy;
-
-        // Wrap instead of bounce — seamless
-        if (this.x < 0) this.x = width;
-        if (this.x > width) this.x = 0;
-        if (this.y < 0) this.y = height;
-        if (this.y > height) this.y = 0;
-      }
-
-      draw() {
-        if (!ctx) return;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = this.isGold
-          ? 'rgba(212, 175, 55, 0.6)' // --brand-secondary gold
-          : 'rgba(16, 185, 129, 0.25)'; // --brand-primary emerald
-        ctx.fill();
-      }
     }
+
+    const createParticle = (): Particle => {
+      return {
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: (Math.random() - 0.5) * 0.35,
+        size: Math.random() * 1.5 + 0.5,
+        isGold: Math.random() < 0.08,
+      };
+    };
+
+    const updateParticle = (p: Particle) => {
+      // Subtle mouse repulsion — responds to cursor, max 80px radius
+      const dx = p.x - mouse.x;
+      const dy = p.y - mouse.y;
+      const dist = Math.hypot(dx, dy);
+      if (dist < 80 && dist > 0) {
+        const force = (80 - dist) / 80;
+        p.vx += (dx / dist) * force * 0.4;
+        p.vy += (dy / dist) * force * 0.4;
+      }
+
+      // Velocity damping — precision drift, not bounce
+      p.vx *= 0.97;
+      p.vy *= 0.97;
+
+      p.x += p.vx;
+      p.y += p.vy;
+
+      // Wrap instead of bounce — seamless
+      if (p.x < 0) p.x = width;
+      if (p.x > width) p.x = 0;
+      if (p.y < 0) p.y = height;
+      if (p.y > height) p.y = 0;
+    };
+
+    const drawParticle = (p: Particle) => {
+      if (!ctx) return;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = p.isGold
+        ? 'rgba(212, 175, 55, 0.6)' // --brand-secondary gold
+        : 'rgba(16, 185, 129, 0.25)'; // --brand-primary emerald
+      ctx.fill();
+    };
 
     const particles: Particle[] = [];
 
     const init = () => {
-      width = window.innerWidth;
-      height = window.innerHeight;
+      width = globalThis.innerWidth;
+      height = globalThis.innerHeight;
       canvas.width = width;
       canvas.height = height;
       particles.length = 0;
       for (let i = 0; i < particleCount; i++) {
-        particles.push(new Particle());
+        particles.push(createParticle());
       }
     };
 
@@ -130,7 +127,7 @@ export const InstitutionalBackground = () => {
       ctx.fill();
 
       // Particles
-      particles.forEach(p => { p.update(); p.draw(); });
+      particles.forEach(p => { updateParticle(p); drawParticle(p); });
 
       // Connections — emerald network lines
       ctx.lineWidth = 0.4;
@@ -138,7 +135,7 @@ export const InstitutionalBackground = () => {
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+          const dist = Math.hypot(dx, dy);
 
           if (dist < 130) {
             const alpha = 0.12 * (1 - dist / 130);
@@ -158,15 +155,15 @@ export const InstitutionalBackground = () => {
       animationFrameId = requestAnimationFrame(animate);
     };
 
-    window.addEventListener('mousemove', onMouseMove, { passive: true });
-    window.addEventListener('resize', init);
+    globalThis.addEventListener('mousemove', onMouseMove, { passive: true });
+    globalThis.addEventListener('resize', init);
     init();
     animate();
 
     return () => {
       cancelAnimationFrame(animationFrameId);
-      window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('resize', init);
+      globalThis.removeEventListener('mousemove', onMouseMove);
+      globalThis.removeEventListener('resize', init);
     };
   }, []);
 
@@ -174,6 +171,7 @@ export const InstitutionalBackground = () => {
     <canvas
       ref={canvasRef}
       aria-hidden="true"
+      tabIndex={-1}
       className="absolute inset-0 pointer-events-none z-0"
       style={{ opacity: 0.65 }}
     />

@@ -3,7 +3,6 @@ import { motion } from "motion/react";
 import { fetchTravelTrips, TravelTrip } from "../services/travelService";
 import { Plane, MapPin, Calendar, Users, ArrowRight, Star, ShieldCheck } from "lucide-react";
 import { PageMeta } from "../components/site/PageMeta";
-import { breadcrumbSchema } from "../utils/structuredData";
 
 export const TradersTravel = () => {
   const [trips, setTrips] = useState<TravelTrip[]>([]);

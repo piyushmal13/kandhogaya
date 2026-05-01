@@ -42,7 +42,6 @@ export const Footer = () => (
             </div>
             <div className="flex flex-col">
               <div className="text-[10px] font-black tracking-[0.4em] text-white uppercase leading-tight mb-1">IFX TRADES</div>
-              <div className="text-[9px] font-black tracking-[0.3em] text-emerald-500/60 uppercase">Institutional DNA</div>
             </div>
           </Link>
           <p className="text-[13px] leading-[2] text-[#8A9AAB] font-light max-w-sm mb-10" itemProp="description">
@@ -105,7 +104,6 @@ export const Footer = () => (
             </h4>
             <ul className="space-y-5 text-[13px] text-[#8A9AAB] font-light">
               <li><Link to="/marketplace" className="hover:text-emerald-400 transition-colors flex items-center gap-2 group">Execution Desk <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
-              <li><Link to="/signals" className="hover:text-emerald-400 transition-colors flex items-center gap-2 group">Live Signals <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
               <li><Link to="/results" className="hover:text-emerald-400 transition-colors flex items-center gap-2 group">Audit Logs <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
             </ul>
           </div>
@@ -135,7 +133,7 @@ export const Footer = () => (
       {/* --- Minimalist Master Base --- */}
       <div className="pt-8 pb-4 border-t border-white/[0.04] flex flex-col lg:flex-row items-center justify-between gap-8">
         <div className="text-[9px] font-black text-[#4F5A69] uppercase tracking-[0.3em] text-center lg:text-left">
-          &copy; {new Date().getFullYear()} {BRANDING.name}. <br className="lg:hidden mt-2"/> MASTER TERMINAL OS · BUILD V5.0
+          &copy; {new Date().getFullYear()} {BRANDING.name}.
         </div>
 
         <div className="flex flex-wrap items-center justify-center gap-8 text-[9px] font-black text-[#4F5A69] uppercase tracking-[0.25em]">

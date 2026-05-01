@@ -93,9 +93,9 @@ export function SignalFeed() {
                     variant="outline" 
                     size="sm"
                     className="h-8 px-4"
-                    trackingEvent={`signal_execute_${signal.id}`}
+                    trackingEvent={`signal_view_${signal.id}`}
                   >
-                    Execute Signal
+                    View Research
                   </SovereignButton>
                 </div>
               </motion.div>

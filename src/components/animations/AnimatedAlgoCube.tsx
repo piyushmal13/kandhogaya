@@ -8,15 +8,15 @@ export const AnimatedAlgoCube = ({ className = "" }: { className?: string }) => 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       const { clientX, clientY } = e;
-      const { innerWidth, innerHeight } = window;
+      const { innerWidth, innerHeight } = globalThis;
       setMousePos({
         x: (clientX / innerWidth - 0.5) * 20,
         y: (clientY / innerHeight - 0.5) * 20,
       });
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    globalThis.addEventListener('mousemove', handleMouseMove);
+    return () => globalThis.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
   const smoothMouseX = useSpring(mousePos.x, { stiffness: 50, damping: 20 });
@@ -77,7 +77,8 @@ export const AnimatedAlgoCube = ({ className = "" }: { className?: string }) => 
             <rect x="20" y="20" width="160" height="160" fill="url(#core-grad)" stroke="#10b981" strokeWidth="1.5" strokeOpacity="0.4" rx="12" />
             {/* Grid Lines */}
             {Array.from({length: 8}).map((_, i) => (
-              <React.Fragment key={`grid-${i}`}>
+              // eslint-disable-next-line react/no-array-index-key
+              <React.Fragment key={`grid-line-${i}`}>
                 <line x1={20 + i*20} y1="20" x2={20 + i*20} y2="180" stroke="#10b981" strokeWidth="0.5" strokeOpacity="0.4" />
                 <line x1="20" y1={20 + i*20} x2="180" y2={20 + i*20} stroke="#10b981" strokeWidth="0.5" strokeOpacity="0.4" />
               </React.Fragment>
@@ -98,7 +99,8 @@ export const AnimatedAlgoCube = ({ className = "" }: { className?: string }) => 
               {x: 40, y: 100}, {x: 100, y: 100}, {x: 160, y: 100},
               {x: 40, y: 160}, {x: 100, y: 160}, {x: 160, y: 160}
             ].map((node, i) => (
-              <circle key={`node-${i}`} cx={node.x} cy={node.y} r="5" fill="#34d399" className="animate-pulse shadow-[0_0_10px_#10b981]" style={{ animationDelay: `${i * 0.15}s` }} />
+              // eslint-disable-next-line react/no-array-index-key
+              <circle key={`node-point-${i}`} cx={node.x} cy={node.y} r="5" fill="#34d399" className="animate-pulse shadow-[0_0_10px_#10b981]" style={{ animationDelay: `${i * 0.15}s` }} />
             ))}
             {/* Connections */}
             <path d="M 40 40 L 100 100 L 160 40" fill="none" stroke="#34d399" strokeWidth="1.5" strokeOpacity="0.6" strokeDasharray="6 4" />

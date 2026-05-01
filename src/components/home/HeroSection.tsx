@@ -88,8 +88,8 @@ export const HeroSection = () => {
               { icon: Users, label: "Active Professionals", value: "12,000+" },
               { icon: BarChart3, label: "Macro Insights", value: "Daily Analysis" },
               { icon: Trophy, label: "Success Rate", value: "Proven Models" }
-            ].map((stat, i) => (
-              <div key={i} className="flex items-center gap-3">
+            ].map((stat) => (
+              <div key={stat.label} className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0">
                   <stat.icon className="w-5 h-5 text-emerald-400" />
                 </div>

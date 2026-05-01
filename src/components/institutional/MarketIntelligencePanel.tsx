@@ -32,10 +32,10 @@ export function MarketIntelligencePanel() {
                   <span className="text-[9px] font-mono text-white/40">Macro Scenario Analysis</span>
                 </div>
                 <div className="flex flex-col items-end">
-                   <span className="text-xs font-black text-emerald-400 font-mono">+$42.5k</span>
+                   <span className="text-xs font-black text-emerald-400 font-mono">2.1% Vol</span>
                    <div className="flex items-center gap-1">
                       <TrendingUp className="w-2 h-2 text-emerald-500" />
-                      <span className="text-[8px] text-white/20 uppercase tracking-tighter">Settled</span>
+                      <span className="text-[8px] text-white/20 uppercase tracking-tighter">Verified</span>
                    </div>
                 </div>
               </div>

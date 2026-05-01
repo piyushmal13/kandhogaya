@@ -1,4 +1,4 @@
-import { publicSupabase, safeQuery } from "../../lib/supabase";
+import { publicSupabase } from "../../lib/supabase";
 import { mapLead } from "../../utils/dataMapper";
 import { Lead } from "../../types";
 
@@ -29,7 +29,7 @@ export const leadService = {
       if (error) throw error;
       if (!rawLeads || rawLeads.length === 0) return [];
       
-      return (rawLeads as any[]).map(lead => ({
+      return (rawLeads).map(lead => ({
         ...mapLead(lead),
         assigned_agent_name: lead.agents?.name,
         assigned_agent_code: lead.agents?.code || lead.referred_by_code

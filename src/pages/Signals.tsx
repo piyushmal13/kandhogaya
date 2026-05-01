@@ -127,7 +127,7 @@ const SignalPreview = () => (
                 className="bg-emerald-500/[0.03] border border-emerald-500/20 rounded-[2rem] rounded-tl-none p-6 max-w-[90%] shadow-2xl"
               >
                 <div className="text-emerald-500 text-[11px] font-mono leading-relaxed uppercase tracking-widest">
-                  <span className="font-black italic">✅ TARGET 1 REACHED{"\n"}</span>
+                  <span className="font-black italic">✅ TARGET 1 REACHED</span>{"\n"}
                   Yield: +45 Pips. SL to BE.
                 </div>
                 <div className="text-[9px] text-emerald-500/40 text-right mt-4 flex items-center justify-end gap-2 font-black">
@@ -357,7 +357,7 @@ const PaymentModal = ({ plan, onClose }: { plan: PricingPlan; onClose: () => voi
                         type={type}
                         className={inputClass}
                         placeholder={placeholder}
-                        value={formData[key as keyof typeof formData]}
+                        value={formData[key]}
                         onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
                       />
                     </div>

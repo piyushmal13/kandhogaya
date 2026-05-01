@@ -41,7 +41,7 @@ export const About = () => (
     />
 
     <PageHero
-      eyebrow="Institutional DNA"
+      eyebrow="Market Authority"
       title={
         <>
           Built to translate <span className="site-title-gradient">institutional-grade thinking</span> into retail execution.
@@ -69,7 +69,7 @@ export const About = () => (
           <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
             <div className="text-[11px] uppercase tracking-[0.32em] text-emerald-200/80">What We Build</div>
             <ul className="mt-3 space-y-3 text-sm text-slate-300">
-              <li>Live signal infrastructure for structured execution.</li>
+              <li>Quantitative research for structured execution.</li>
               <li>Algorithm licensing and systematic strategy layers.</li>
               <li>Education workflows that reinforce risk discipline.</li>
             </ul>
@@ -88,7 +88,7 @@ export const About = () => (
           />
           <div className="grid gap-4 md:grid-cols-2">
             <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
-              <div className="text-lg font-semibold text-white">Signals with context</div>
+              <div className="text-lg font-semibold text-white">Research with context</div>
               <p className="mt-3 text-sm leading-7 text-slate-300">
                 We do not ship random entries. Signals are framed with setup logic, risk boundaries, and follow-through management.
               </p>

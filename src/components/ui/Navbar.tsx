@@ -303,9 +303,9 @@ export const Navbar = () => {
             <div className="mt-10 p-6 rounded-[1.5rem] bg-emerald-500/[0.05] border border-emerald-500/[0.1] text-center">
               <div className="flex items-center justify-center gap-2 mb-2">
                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <div className="text-[10px] font-black text-emerald-400 uppercase tracking-[0.4em]">Master Terminal OS</div>
+                <div className="text-[10px] font-black text-emerald-400 uppercase tracking-[0.4em]">IFX Desk Acknowledged</div>
               </div>
-              <div className="text-[11px] text-white/30 font-mono tracking-widest">SESSION SECURED · V5.0</div>
+              <div className="text-[11px] text-white/30 font-mono tracking-widest">SESSION SECURED</div>
             </div>
           </motion.div>
         )}

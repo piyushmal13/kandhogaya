@@ -1,6 +1,5 @@
 import React from "react";
 import { PageMeta } from "../components/site/PageMeta";
-import { StandardLayout } from "../components/site/StandardLayout";
 
 // Institutional Components
 import { FortressHero } from "../components/home/FortressHero";
@@ -40,7 +39,7 @@ const homeFaqs = [
 
 const Home = () => {
   return (
-    <StandardLayout>
+    <>
       <PageMeta
         title="Institutional Algorithmic Research & Education"
         description="Asia's #1 Institutional Research Desk. Professional quantitative analysis, macro intelligence, and algorithmic education for modern market participants."
@@ -93,7 +92,7 @@ const Home = () => {
         {/* L9: Capital Inquiry / Consultation */}
         <ConsultationSection />
       </main>
-    </StandardLayout>
+    </>
   );
 };
 

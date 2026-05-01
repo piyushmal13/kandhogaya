@@ -173,6 +173,41 @@ export const Marketplace = () => {
           {renderGrid()}
         </div>
 
+        {/* Custom Strategy Engineering Block */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          className="relative group p-10 md:p-16 rounded-[3rem] bg-gradient-to-br from-emerald-500/[0.03] to-transparent border border-emerald-500/10 overflow-hidden"
+        >
+           <div className="absolute top-0 right-0 p-8 opacity-10">
+              <ShieldCheck className="w-32 h-32 text-emerald-400" />
+           </div>
+           
+           <div className="relative z-10 max-w-3xl space-y-8">
+              <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[9px] font-black uppercase tracking-[0.2em]">
+                 Bespoke Development
+              </div>
+              <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight italic uppercase">
+                 Custom Strategy <br />
+                 <span className="text-emerald-400">Engineering Desk.</span>
+              </h2>
+              <p className="text-base text-white/50 leading-relaxed font-medium">
+                 Already have a winning strategy? Our quantitative engineering desk takes custom orders to transform your manual logic into high-frequency algorithmic infrastructure. From PineScript to enterprise MQL5 and Python deployment.
+              </p>
+              <div className="flex flex-wrap gap-4 pt-4">
+                 <button 
+                   onClick={() => navigate('/contact?ref=custom-algo')}
+                   className="px-8 py-4 bg-emerald-500 text-black text-[10px] font-black uppercase tracking-widest rounded-2xl hover:bg-emerald-400 transition-all shadow-[0_10px_30px_rgba(16,185,129,0.3)] active:scale-95"
+                 >
+                   Submit Strategy Logic
+                 </button>
+                 <div className="flex items-center gap-3 px-6 py-4 bg-white/5 border border-white/5 rounded-2xl text-[10px] font-black text-white/40 uppercase tracking-widest">
+                    <Activity className="w-4 h-4 text-emerald-500/50" /> Fully Encrypted Protocol
+                 </div>
+              </div>
+           </div>
+        </motion.div>
+
         {/* Bottom Trust Row */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 py-16 border-t border-white/5">
            {[

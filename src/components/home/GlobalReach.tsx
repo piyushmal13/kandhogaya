@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import createGlobe from "cobe";
 import { motion } from "motion/react";
-import { MapPin, Users, TrendingUp, Shield, ArrowRight, Globe2 } from "lucide-react";
+import { MapPin, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const REGIONS = [
@@ -28,7 +28,7 @@ export const GlobalReach = () => {
     const onResize = () => {
       if (canvasRef.current) width = canvasRef.current.offsetWidth;
     };
-    window.addEventListener("resize", onResize);
+    globalThis.addEventListener("resize", onResize);
     onResize();
 
     if (!canvasRef.current) return;
@@ -63,7 +63,7 @@ export const GlobalReach = () => {
     setTimeout(() => setIsLoaded(true), 250);
     return () => {
       globe.destroy();
-      window.removeEventListener("resize", onResize);
+      globalThis.removeEventListener("resize", onResize);
     };
   }, [r]);
 
@@ -94,7 +94,7 @@ export const GlobalReach = () => {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
               </span>
-              Global Sovereign Network
+              {" "}Global Sovereign Network
             </motion.div>
 
             <motion.h2
@@ -107,7 +107,7 @@ export const GlobalReach = () => {
             >
               Where{" "}
               <span
-                className="italic font-serif"
+                className="italic font-serif mx-3"
                 style={{
                   background: "linear-gradient(135deg, #10B981, #00FFA3)",
                   WebkitBackgroundClip: "text",
@@ -115,8 +115,8 @@ export const GlobalReach = () => {
                 }}
               >
                 Asia
-              </span>{" "}
-              trades.
+              </span>
+              {" "}trades.
             </motion.h2>
 
             <motion.p

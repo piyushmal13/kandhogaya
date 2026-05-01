@@ -18,7 +18,7 @@ export const Webinars = () => {
   const liveWebinar = webinars?.find(w => w.status === 'live');
 
   return (
-    <StandardLayout>
+    <>
       <div className="relative pt-32 pb-24 min-h-screen overflow-hidden">
         {/* Background Ambience */}
         <div className="absolute inset-0 pointer-events-none" aria-hidden>
@@ -112,7 +112,7 @@ export const Webinars = () => {
           </div>
         </div>
       </div>
-    </StandardLayout>
+    </>
   );
 };
 

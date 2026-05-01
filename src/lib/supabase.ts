@@ -28,21 +28,8 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   }
 });
 
-// Resilience Heartbeat Logic
+// Resilience Heartbeat Logic - DISABLED to prevent continuous fetch loops
 let isHealthy = true;
-const checkHealth = async () => {
-  try {
-    const { error } = await supabase.from('leads').select('count', { count: 'exact', head: true }).limit(1);
-    isHealthy = !error;
-  } catch {
-    isHealthy = false;
-  }
-};
-
-// Continuous Health Monitoring
-if (typeof globalThis !== 'undefined' && globalThis.window) {
-  setInterval(checkHealth, 30000); // Audit cluster every 30s
-}
 
 export const getSupabaseHealth = () => isHealthy;
 

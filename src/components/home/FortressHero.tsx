@@ -108,7 +108,7 @@ export const FortressHero = () => {
               <span className="relative inline-flex rounded-full h-2 w-2 bg-[#58F2B6]"></span>
             </div>
             <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#58F2B6]/80">
-              Sovereign Execution Environment <span className="text-white/20 ml-2">v2.0_QUANT</span>
+              Sovereign Execution Environment <span className="text-white/20 ml-2">v2.0_ELITE</span>
             </span>
           </motion.div>
 

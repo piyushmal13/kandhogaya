@@ -1,2 +1,0 @@
-path,type,exports,props,accessibility,reuseScore,todoComments,size
-src/components/ui/Button.tsx,UI Component,SovereignButton,{'glowEffect':'boolean'},{"ARIA":true},5,0,120

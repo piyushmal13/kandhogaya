@@ -46,7 +46,9 @@ const IntelligenceLayer = ({ number, title, description, inputs, outputs, icon: 
         
         <div className="grid grid-cols-2 gap-8">
           <div>
-            <span className="block text-[10px] font-black tracking-[0.2em] text-white/20 uppercase mb-3">Core Inputs</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#58F2B6]/80">
+              Sovereign Execution Environment <span className="text-white/20 ml-2">v2.0_ELITE</span>
+            </span>
             <ul className="space-y-2">
               {inputs.map((input: string) => (
                 <li key={input} className="text-sm text-white/60 flex items-center gap-2">
@@ -95,8 +97,8 @@ export const QuantX = () => {
   return (
     <div ref={containerRef} className="min-h-screen bg-[#010203] text-white selection:bg-emerald-500/30">
       <PageMeta 
-        title="QuantX Ecosystem | Master Intelligence Trading System"
-        description="Explore the multi-layer AI architecture behind QuantX. From market regime detection to autonomous execution and self-learning loops."
+        title="QuantX Ecosystem | Institutional Intelligence Trading System"
+        description="Explore the multi-layer architecture behind QuantX. From market regime detection to autonomous execution and recursive feedback loops."
       />
 
       {/* Hero Section */}
@@ -151,9 +153,9 @@ export const QuantX = () => {
             
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4 relative z-10">
               <ArchitectureNode title="Market Data" icon={Database} subtext="L-Feed" active />
-              <ArchitectureNode title="AI Analyzer" icon={Brain} subtext="Neural-V3" active />
+              <ArchitectureNode title="Core Analyzer" icon={Brain} subtext="Engine-v8" active />
               <ArchitectureNode title="Risk Engine" icon={ShieldAlert} subtext="Strict-Mode" active />
-              <ArchitectureNode title="MT5 Bridge" icon={Zap} subtext="0.1ms Latency" active />
+              <ArchitectureNode title="Execution Bridge" icon={Zap} subtext="0.1ms Latency" active />
               <ArchitectureNode title="Optimization" icon={RefreshCcw} subtext="Auto-Recal" active />
             </div>
           </div>
@@ -283,7 +285,7 @@ export const QuantX = () => {
                       <Cpu size={40} />
                     </div>
                     <div className="text-[10px] font-black tracking-[0.5em] text-emerald-500 uppercase mb-2">Recursive Engine</div>
-                    <div className="text-2xl font-bold">V3.8.2 ACTIVE</div>
+                    <div className="text-2xl font-bold">CORE ACTIVE</div>
                   </div>
                 </div>
               </div>

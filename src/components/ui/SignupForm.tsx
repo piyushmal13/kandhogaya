@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { supabase } from "../../lib/supabase";
-import { ArrowRight, ShieldCheck, Lock, Fingerprint, Cpu, Globe } from "lucide-react";
+import { ArrowRight, ShieldCheck, Lock, Cpu, Globe } from "lucide-react";
 
 export const SignupForm = () => {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!supabase) return;
     setStatus('loading');
     
     try {
-      const urlParams = new URLSearchParams(window.location.search);
+      const urlParams = new URLSearchParams(globalThis.location.search);
       const refCode = urlParams.get('ref') || null;
 
       await supabase.from('leads').upsert({
@@ -26,7 +26,7 @@ export const SignupForm = () => {
 
       const { error: authError } = await supabase.auth.signInWithOtp({ 
           email,
-          options: { emailRedirectTo: window.location.origin + '/dashboard' }
+          options: { emailRedirectTo: globalThis.location.origin + '/dashboard' }
       });
 
       if (authError) throw authError;

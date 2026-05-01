@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
 import { Check, Code, Cpu, Gauge } from 'lucide-react';
-import { SovereignButton } from '@/components/ui/SovereignButton';
 
 const TIERS = [
   {

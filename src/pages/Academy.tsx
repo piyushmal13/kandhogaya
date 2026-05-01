@@ -84,6 +84,7 @@ export const Academy = () => {
           {loading ? (
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {Array.from({ length: 3 }).map((_, i) => (
+                // eslint-disable-next-line react/no-array-index-key
                 <CourseCardSkeleton key={`academy-skeleton-${i}`} />
               ))}
             </div>

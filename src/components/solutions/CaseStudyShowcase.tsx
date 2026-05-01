@@ -1,6 +1,5 @@
 import { motion } from 'motion/react';
 import { ArrowUpRight } from 'lucide-react';
-import { SovereignButton } from '@/components/ui/SovereignButton';
 import { tracker } from '@/core/tracker';
 
 const STUDIES = [

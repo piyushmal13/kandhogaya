@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useFeatureFlag } from './useFeatureFlag';
 import { webinarService } from '@/services/webinarService';
-import { Webinar } from '@/types';
 
 export function useWebinars() {
   const { isEnabled: enableRealtime } = useFeatureFlag('webinar_realtime_updates', true);

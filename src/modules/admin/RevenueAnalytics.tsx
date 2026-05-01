@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { 
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
-  PieChart, Pie, Cell, LineChart, Line, AreaChart, Area, BarChart, Bar
+  PieChart, Pie, LineChart, Line, AreaChart, Area, BarChart, Bar
 } from "recharts";
+// @ts-ignore - Cell is deprecated but required for Pie chart coloring
+import { Cell } from "recharts";
 import { 
   TrendingUp, DollarSign, ShoppingCart, 
   Target, Activity, Filter, RefreshCw, ArrowUpRight
 } from "lucide-react";
 import { cn } from "../../utils/cn";
 import { supabase } from "../../lib/supabase";
-import { safeQuery } from "@/core/dataMapper";
 
 export const RevenueAnalytics = () => {
   const [data, setData] = useState<any>({
@@ -150,8 +151,9 @@ export const RevenueAnalytics = () => {
                   paddingAngle={8}
                   dataKey="value"
                 >
-                  {data.revenueBySource.map((entry: any) => (
-                    <Cell key={`cell-${entry.name}`} fill={COLORS[data.revenueBySource.indexOf(entry) % COLORS.length]} />
+                  {data.revenueBySource.map((entry: any, index: number) => (
+                    /* @ts-ignore - Cell is deprecated */
+                    <Cell key={`cell-${entry.name}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
                 <Tooltip 

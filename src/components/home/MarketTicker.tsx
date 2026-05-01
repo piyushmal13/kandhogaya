@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "motion/react";
-import { TrendingUp, TrendingDown, Activity, ShieldCheck } from "lucide-react";
+import { TrendingUp, TrendingDown, ShieldCheck } from "lucide-react";
 import { marketService } from "../../services/marketService";
 
 interface MarketItem {
@@ -56,7 +56,8 @@ const TickerCell = ({ item, idx }: { item: MarketItem; idx: number }) => (
 const TickerSkeleton = () => (
   <div className="flex h-full items-center gap-14 pl-56 animate-pulse opacity-50" aria-hidden="true">
     {[80, 64, 96, 72, 88].map((w, i) => (
-      <div key={i} className="flex items-center gap-4">
+      // eslint-disable-next-line react/no-array-index-key
+      <div key={`skeleton-item-${i}`} className="flex items-center gap-4">
         <div className="h-1.5 rounded-full bg-white/[0.05]" style={{ width: `${w * 0.35}rem` }} />
         <div className="h-1.5 rounded-full bg-white/[0.03]" style={{ width: `${w * 0.45}rem` }} />
         <div className="h-5 w-14 rounded-md bg-white/[0.04]" />
@@ -126,7 +127,7 @@ export const MarketTicker = () => {
             className="flex whitespace-nowrap pl-32 sm:pl-40 md:pl-56 lg:pl-64"
           >
             {scrollingData.map((item, i) => (
-              <TickerCell key={`${item.id}-${i}`} item={item} idx={i} />
+              <TickerCell key={`${item.symbol}-${i}`} item={item} idx={i} />
             ))}
           </motion.div>
         )}

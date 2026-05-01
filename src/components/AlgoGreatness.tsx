@@ -1,12 +1,10 @@
-import React, { useRef, useEffect } from "react";
-import { motion, useInView, useAnimationControls } from "motion/react";
-import { AnimatedCandlesticks } from "./ui/AnimatedCandlesticks";
-import { Star, ShieldCheck, Activity, CheckCircle2, Cpu, Zap, ArrowRight } from "lucide-react";
+import React, { useRef, useEffect, useState } from "react";
+import { motion, useInView } from "motion/react";
+import { ShieldCheck, Activity, Cpu, Zap, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { fetchReviews } from "../services/reviewService";
 import { getProducts } from "../services/apiHandlers";
 import { Product } from "../types";
-import { useState } from "react";
 
 const algoKeywords = ["algo", "algorithm", "logic", "analytical", "pattern", "neural", "automated", "system", "win rate", "institutional"];
 
@@ -55,8 +53,7 @@ const CountUp = ({ target, suffix = "" }: { target: string; suffix?: string }) =
   const ref = useRef<HTMLSpanElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const isFloat = target.includes(".");
-  const num = parseFloat(target);
-  const controls = useAnimationControls();
+  const num = Number.parseFloat(target);
 
   useEffect(() => {
     if (!isInView) return;
@@ -83,24 +80,13 @@ const CountUp = ({ target, suffix = "" }: { target: string; suffix?: string }) =
 };
 
 export const AlgoGreatness = () => {
-  const [reviews, setReviews] = useState<any[]>([]);
   const [featuredAlgo, setFeaturedAlgo] = useState<Product | null>(null);
-  const [stats, setStats] = useState({ avg: 4.9, count: 1200 });
   const sectionRef = useRef<HTMLDivElement>(null);
-  const terminalRef = useRef<HTMLDivElement>(null);
-  const isTerminalInView = useInView(terminalRef, { once: true, margin: "-80px" });
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [reviewData, products] = await Promise.all([fetchReviews(), getProducts()]);
-        if (reviewData && reviewData.length > 0) {
-          const filtered = reviewData.filter(isAlgoReview);
-          setReviews(filtered.length > 0 ? filtered.slice(0, 3) : reviewData.slice(0, 3));
-          const relevant = filtered.length > 0 ? filtered : reviewData;
-          const avg = relevant.reduce((a: number, c: any) => a + (c.rating || 5), 0) / relevant.length;
-          setStats({ avg: parseFloat(avg.toFixed(1)), count: reviewData.length > 100 ? reviewData.length : 1200 + reviewData.length });
-        }
+        const [, products] = await Promise.all([fetchReviews(), getProducts()]);
         if (products?.length > 0) {
           const gold = products.find((p: Product) => p.name.includes("Gold"));
           setFeaturedAlgo(gold || products[0]);
@@ -112,17 +98,6 @@ export const AlgoGreatness = () => {
     loadData();
   }, []);
 
-  const getEmbedUrl = (url?: string): string | null => {
-    if (!url) return null;
-    try {
-      if (url.includes("youtube.com/shorts/")) return url.replace("youtube.com/shorts/", "youtube.com/embed/");
-      if (url.includes("youtube.com/watch?v=")) return url.replace("watch?v=", "embed/");
-      if (url.includes("youtu.be/")) return url.replace("youtu.be/", "youtube.com/embed/");
-      return url;
-    } catch { return url; }
-  };
-
-  const videoUrl = getEmbedUrl((featuredAlgo as any)?.video_explanation_url);
 
   return (
     <section ref={sectionRef} className="relative py-24 md:py-40 bg-[#020202] overflow-hidden border-t border-white/[0.04]" aria-labelledby="algo-heading">
