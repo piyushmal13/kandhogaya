@@ -1,4 +1,4 @@
-import { publicSupabase, safeQuery } from "../../lib/supabase";
+import { publicSupabase } from "../../lib/supabase";
 import { notificationEngine } from "./notificationEngine";
 
 /**
