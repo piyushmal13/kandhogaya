@@ -40,7 +40,7 @@ export const mapWebinar = (raw: any): Webinar => ({
   speaker_images: Array.isArray(raw.speaker_images) && raw.speaker_images.length > 0 ? raw.speaker_images : [
     "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=2000&auto=format&fit=crop"
   ],
-  thumbnail_url: raw.webinar_image_url || "https://images.unsplash.com/photo-1591696208162-a93795a74838?q=80&w=2070&auto=format&fit=crop",
+  webinar_image_url: raw.webinar_image_url || "https://images.unsplash.com/photo-1591696208162-a93795a74838?q=80&w=2070&auto=format&fit=crop",
   sponsor_logos: Array.isArray(raw.sponsor_logos) ? raw.sponsor_logos : [],
   sponsors: Array.isArray(raw.sponsors) && raw.sponsors.length > 0 ? raw.sponsors : [
     { id: "sp-1", name: "IFX Intelligence", logo_url: "https://cryptologos.cc/logos/binance-coin-bnb-logo.svg" },
