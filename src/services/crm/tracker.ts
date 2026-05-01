@@ -16,14 +16,14 @@ export interface TrackingEvent {
 const STORAGE_KEY = 'ifx_anon_id';
 
 class Tracker {
-  private anonId: string;
+  private readonly anonId: string;
 
   constructor() {
     this.anonId = this.initializeAnonId();
   }
 
   private initializeAnonId(): string {
-    if (typeof window === 'undefined') return 'server';
+    if (typeof globalThis.window === 'undefined') return 'server';
     let id = localStorage.getItem(STORAGE_KEY);
     if (!id) {
       id = `anon_${Math.random().toString(36).substring(2, 11)}_${Date.now()}`;
@@ -46,8 +46,8 @@ class Tracker {
       priority,
       metadata: {
         ...event.metadata,
-        url: typeof window !== 'undefined' ? window.location.href : '',
-        referrer: typeof document !== 'undefined' ? document.referrer : '',
+        url: typeof globalThis.window !== 'undefined' ? globalThis.window.location.href : '',
+        referrer: typeof globalThis.document !== 'undefined' ? globalThis.document.referrer : '',
         timestamp: new Date().toISOString()
       }
     };

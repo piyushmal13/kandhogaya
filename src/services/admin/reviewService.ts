@@ -13,7 +13,7 @@ export const reviewService = {
     const offset = page * limit;
     let query = supabase
       .from('reviews')
-      .select('id, user_id, rating, content, status, source, created_at, priority, ip_address, flagged, name, text')
+      .select('id, user_id, rating, text, status, source, created_at, priority, ip_address, flagged, name, role, region')
       .order('priority', { ascending: false })
       .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1);

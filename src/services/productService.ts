@@ -12,8 +12,7 @@ export const productService = {
     try {
       const { data: products, error } = await supabase
         .from("products")
-        .select("id, name, description, price, category, video_explanation_url, image_url, is_active, metadata, created_at")
-        .eq("is_active", true)
+        .select("id, name, description, price, category, video_explanation_url, image_url, created_at, performance_data, long_plan_offers")
         .order("created_at", { ascending: false });
 
       if (error) throw error;
@@ -36,7 +35,7 @@ export const productService = {
       return [];
     }
   },
-
+  getAlgoBots: async (limit: number = 10): Promise<any[]> => {
     try {
       const query = supabase
         .from("algo_bots")

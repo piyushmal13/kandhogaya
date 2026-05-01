@@ -53,7 +53,7 @@ export const DataPulseProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
   const { data: perfResult, refetch: refetchPerf } = useQuery({
     queryKey: ['pulse_performance'],
-    queryFn: () => safeQuery<any>(supabase.from('performance_results').select('id, win_rate, total_pips, return_pct, is_featured').eq('is_featured', true).maybeSingle()),
+    queryFn: () => safeQuery<any>(supabase.from('performance_results').select('id, win_rate, pips, return_pct, is_featured').eq('is_featured', true).maybeSingle()),
     staleTime: 30 * 60_000, // 30 min — performance history is static
     gcTime: 60 * 60_000,
   });
@@ -64,7 +64,7 @@ export const DataPulseProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     const perfData = Array.isArray(perfResult) ? perfResult[0] : (perfResult?.data || perfResult);
     return {
       fidelityScale: perfData?.win_rate ? `${perfData.win_rate}%` : "74%",
-      totalPoints: perfData?.total_pips || 12000
+      totalPoints: perfData?.pips || 12000
     };
   }, [perfResult]);
 

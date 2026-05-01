@@ -1,6 +1,6 @@
 # 🏛️ IFX TRADES — SYSTEM BLUEPRINT v1.0
 > **Sovereign Truth Document** — Update after EVERY session. This is the AI's memory.
-> Last updated: 2026-05-01 | Stack: React 19 + Vite 6 + Tailwind 4 + Supabase + Express
+> Last updated: 2026-05-02 | Stack: React 19 + Vite 6 + Tailwind 4 + Supabase + Express
 
 ---
 
@@ -65,4 +65,5 @@ Phase 1: Retail → Imperial Research theme
 Phase 2: AnimatedAlgoCube, custom cursor, candlesticks
 Phase 3: Webinar routing, blog/marketplace hardening
 Phase 4: Full lint/TS/a11y sweep
-Phase 5 (current): Video hero, performance-first luxury, system_blueprint created
+Phase 5: Video hero, performance-first luxury, system_blueprint created
+Phase 6 (current): Infrastructure stabilization, Supabase MCP tool connectivity restored (docs feature bypassed)

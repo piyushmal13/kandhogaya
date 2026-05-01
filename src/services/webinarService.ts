@@ -11,20 +11,22 @@ import { mapWebinar } from "../utils/dataMapper";
 export const webinarService = {
   getWebinars: async (): Promise<Webinar[]> => {
     try {
+      // Fetch ALL webinars regardless of status — the UI tabs filter client-side.
+      // Production DB uses 'upcoming', 'live', 'past' — NOT 'scheduled'.
       const query = supabase
         .from("webinars")
         .select(`
           id, title, description, date_time, speaker_name,
           speaker_images, type, max_attendees, registration_count,
           status, webinar_image_url, recording_url, sponsor_logos,
-          q_and_a, about_content, advanced_features
+          q_and_a, about_content, advanced_features, streaming_url
         `)
-        .eq("status", "scheduled")
         .order("date_time", { ascending: true })
-        .limit(20);
+        .limit(50);
 
       const rawData = await safeQuery<any[]>(query);
-      return (rawData as any[]).map(mapWebinar);
+      if (!rawData || !Array.isArray(rawData)) return [];
+      return rawData.map(mapWebinar);
     } catch {
       return [];
     }

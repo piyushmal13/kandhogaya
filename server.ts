@@ -29,9 +29,26 @@ const __dirname = path.dirname(__filename);
 const JWT_SECRET = process.env.JWT_SECRET || "hub-secret-2024";
 const supabaseUrl = process.env.VITE_SUPABASE_URL || "https://placeholder.supabase.co";
 const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY || "placeholder";
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY && process.env.SUPABASE_SERVICE_ROLE_KEY !== "your-service-role-key-here" 
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY && 
+                          !process.env.SUPABASE_SERVICE_ROLE_KEY.includes("your-service")
   ? process.env.SUPABASE_SERVICE_ROLE_KEY 
   : undefined;
+
+// Robust Verification Bridge
+const verifyConnection = async () => {
+  try {
+    const testClient = createClient(supabaseUrl, supabaseAnonKey);
+    const { error } = await testClient.from('products').select('id').limit(1);
+    if (error) {
+      logger.warn({ error: error.message }, "Supabase connectivity warning during startup");
+    } else {
+      logger.info("Supabase Research Connection: ESTABLISHED");
+    }
+  } catch (err) {
+    logger.error({ err }, "Supabase initialization crash");
+  }
+};
+verifyConnection();
 
 if (!process.env.VITE_SUPABASE_URL || !process.env.VITE_SUPABASE_ANON_KEY) {
   logger.error("Missing required environment variables (VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY). Exiting.");
@@ -151,7 +168,7 @@ async function startServer() {
         ...helmet.contentSecurityPolicy.getDefaultDirectives(),
         "img-src": ["'self'", "data:", "https://grainy-gradients.vercel.app", "https://*.supabase.co"],
         "script-src": ["'self'", "'unsafe-inline'", "https://*.supabase.co"],
-        "connect-src": ["'self'", "https://*.supabase.co", "https://*.replicate.com"],
+        "connect-src": ["'self'", "https://*.supabase.co", "wss://*.supabase.co", "https://api.twelvedata.com", "https://*.replicate.com"],
         "font-src": ["'self'", "https://fonts.gstatic.com"],
       },
     },
@@ -192,12 +209,26 @@ async function startServer() {
     });
   });
 
-  // Public config for the frontend to pick up keys if they weren't baked in at build time
+  // Research Config & Flags
   app.get("/api/config", (req, res) => {
     res.json({
-      supabaseUrl: process.env.VITE_SUPABASE_URL,
-      supabaseAnonKey: process.env.VITE_SUPABASE_ANON_KEY
+      supabaseUrl,
+      supabaseAnonKey
     });
+  });
+
+  app.get("/api/flags", async (req, res) => {
+    try {
+      const { data, error } = await supabase.from('feature_flags').select('key, enabled');
+      if (error) throw error;
+      const flags = (data || []).reduce((acc: any, curr: any) => {
+        acc[curr.key] = curr.enabled;
+        return acc;
+      }, {});
+      res.json(flags);
+    } catch (err) {
+      res.json({ maintenance_mode: false, webinar_registration_open: true });
+    }
   });
 
   // Serve uploads directory
@@ -226,7 +257,8 @@ async function startServer() {
       req.user = { ...authUser, role: isAdmin ? 'admin' : 'user' };
       next();
     } catch (e: any) {
-      logger.error({ err: e, token }, "Authentication failed");
+      const errorMessage = e instanceof Error ? e.message : "Authentication failed";
+      logger.error({ err: e, token }, errorMessage);
       res.status(401).json({ error: "Invalid token" });
     }
   };
@@ -341,6 +373,7 @@ async function startServer() {
         .from('bot_licenses')
         .select('*', { count: 'exact', head: true })
         .eq('is_active', true);
+
       const { data: sales } = await req.supabase.from('sales_tracking').select('sale_amount');
       const totalRev = sales?.reduce((acc: any, curr: any) => acc + (curr.sale_amount || 0), 0) || 0;
       res.json({ total_users: usersCount || 0, active_subscriptions: subsCount || 0, revenue_mtd: totalRev });
@@ -457,7 +490,7 @@ async function startServer() {
 
   app.post("/api/admin/reviews", authenticate, async (req: any, res) => {
     if (req.user.role !== "admin") return res.status(403).json({ error: "Forbidden" });
-    const { data, error } = await req.supabase.from('reviews').insert([req.body]).select().single();
+    const { error } = await req.supabase.from('reviews').insert([req.body]).select().single();
     if (error) return res.status(500).json({ error: error.message });
     res.json({ success: true });
   });

@@ -4,6 +4,7 @@ import { Calendar, ArrowRight, ShieldCheck, Mic2, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 
 import { getWebinars, subscribeToWebinars } from "../../services/apiHandlers";
+import { mapWebinar } from "../../utils/dataMapper";
 
 export const WebinarPromo = () => {
   const [webinar, setWebinar] = useState<any>(null);
@@ -23,7 +24,7 @@ export const WebinarPromo = () => {
 
     const subscription = subscribeToWebinars((payload: any) => {
       if (webinar && payload.new.id === webinar.id) {
-        setWebinar(payload.new);
+        setWebinar(mapWebinar(payload.new));
       }
     });
 

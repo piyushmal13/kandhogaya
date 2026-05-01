@@ -11,11 +11,11 @@ export const loadSystem = async () => {
   try {
     const { data } = await supabase
       .from("feature_flags")
-      .select("key, value, is_enabled");
+      .select("key, enabled");
 
     if (data) {
       // Map is_enabled (DB column) to enabled (featureFlags engine)
-      setFlags(data.map((f: any) => ({ key: f.key, enabled: f.is_enabled ?? false })));
+      setFlags(data.map((f: any) => ({ key: f.key, enabled: f.enabled ?? false })));
     }
 
     // Silent background inactivity check
@@ -30,8 +30,8 @@ export const loadSystem = async () => {
         async () => {
           const { data: updated } = await supabase
             .from("feature_flags")
-            .select("key, value, is_enabled");
-          if (updated) setFlags(updated.map((f: any) => ({ key: f.key, enabled: f.is_enabled ?? false })));
+            .select("key, enabled");
+          if (updated) setFlags(updated.map((f: any) => ({ key: f.key, enabled: f.enabled ?? false })));
         }
       )
       .subscribe();

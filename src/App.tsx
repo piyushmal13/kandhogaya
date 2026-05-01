@@ -23,9 +23,13 @@ const Login = lazy(() => import("./pages/Login").then(m => ({ default: m.Login }
 const Dashboard = lazy(() => import("./pages/Dashboard").then(m => ({ default: m.Dashboard })));
 const Admin = lazy(() => import("./pages/Admin").then(m => ({ default: m.Admin })));
 const AgentDashboard = lazy(() => import("./pages/AgentDashboard").then(m => ({ default: m.AgentDashboard })));
-const Hiring = lazy(() => import("./pages/Hiring").then(m => ({ default: m.Hiring })));
-const About = lazy(() => import("./pages/About").then(m => ({ default: m.About })));
 const Contact = lazy(() => import("./pages/Contact").then(m => ({ default: m.Contact })));
+const About = lazy(() => import("./pages/About").then(m => ({ default: m.About })));
+const Signals = lazy(() => import("./pages/Signals").then(m => ({ default: m.Signals })));
+const Results = lazy(() => import("./pages/Results").then(m => ({ default: m.Results })));
+const Academy = lazy(() => import("./pages/Academy").then(m => ({ default: m.Academy })));
+const Pricing = lazy(() => import("./pages/Pricing").then(m => ({ default: m.Pricing })));
+const Hiring = lazy(() => import("./pages/Hiring").then(m => ({ default: m.Hiring })));
 const NotFound = lazy(() => import("./pages/NotFound").then(m => ({ default: m.NotFound })));
 const InstitutionalError = lazy(() => import("./pages/Error").then(m => ({ default: m.InstitutionalError })));
 const Solutions = lazy(() => import("./pages/Solutions").then(m => ({ default: m.Solutions })));
@@ -67,6 +71,10 @@ const AnimatedRoutes = () => {
             <Route path="/admin" element={<ProtectedRoute adminOnly><Admin /></ProtectedRoute>} />
             <Route path="/agent" element={<ProtectedRoute><AgentDashboard /></ProtectedRoute>} />
             <Route path="/affiliate" element={<ProtectedRoute><AffiliateHub /></ProtectedRoute>} />
+            <Route path="/signals" element={<Signals />} />
+            <Route path="/results" element={<Results />} />
+            <Route path="/academy" element={<Academy />} />
+            <Route path="/pricing" element={<Pricing />} />
             <Route path="/hiring" element={<Hiring />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />

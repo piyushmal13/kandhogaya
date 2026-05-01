@@ -147,6 +147,7 @@ CREATE TABLE IF NOT EXISTS webinars (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+ALTER TABLE webinars ADD COLUMN IF NOT EXISTS recording_url TEXT;
 ALTER TABLE webinars ADD COLUMN IF NOT EXISTS type TEXT DEFAULT 'free';
 ALTER TABLE webinars ADD COLUMN IF NOT EXISTS speaker_name TEXT;
 ALTER TABLE webinars ADD COLUMN IF NOT EXISTS speaker_profile_url TEXT;
@@ -412,3 +413,69 @@ CREATE POLICY "Admins can insert audit logs" ON audit_logs FOR INSERT WITH CHECK
 
 CREATE INDEX IF NOT EXISTS idx_audit_logs_actor ON audit_logs(actor_id);
 CREATE INDEX IF NOT EXISTS idx_audit_logs_created_at ON audit_logs(created_at DESC);
+
+-- 12. Systems & Intelligence Hub
+CREATE TABLE IF NOT EXISTS system_logs (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    type TEXT NOT NULL,
+    message TEXT NOT NULL,
+    severity TEXT DEFAULT 'info',
+    user_id UUID REFERENCES users(id),
+    metadata JSONB DEFAULT '{}',
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- RPC functions for high-stakes intelligence updates
+CREATE OR REPLACE FUNCTION update_lead_score(p_user_id UUID, p_increment INTEGER)
+RETURNS VOID AS 
+BEGIN
+    UPDATE leads 
+    SET score = score + p_increment,
+        last_action_at = NOW()
+    WHERE user_id = p_user_id;
+END;
+ LANGUAGE plpgsql;
+
+-- 13. Institutional Performance & Feature Management
+CREATE TABLE IF NOT EXISTS feature_flags (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    key TEXT UNIQUE NOT NULL,
+    value JSONB DEFAULT '{}',
+    enabled BOOLEAN DEFAULT true,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS performance_results (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    month TEXT NOT NULL,
+    year INTEGER NOT NULL,
+    win_rate DECIMAL(5,2),
+    pips INTEGER,
+    return_pct DECIMAL(10,2),
+    is_featured BOOLEAN DEFAULT false,
+    metadata JSONB DEFAULT '{}',
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(month, year)
+);
+
+-- Final Column Audit (Production Resilience)
+ALTER TABLE webinars ADD COLUMN IF NOT EXISTS type TEXT DEFAULT 'free';
+ALTER TABLE webinars ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'upcoming';
+ALTER TABLE webinars ADD COLUMN IF NOT EXISTS date_time TIMESTAMPTZ;
+
+ALTER TABLE leads ADD COLUMN IF NOT EXISTS crm_metadata JSONB DEFAULT '{}';
+
+-- Seed initial feature flags if missing
+INSERT INTO feature_flags (key, enabled)
+VALUES 
+    ('maintenance_mode', false),
+    ('beta_signals', true),
+    ('webinar_registration_open', true)
+ON CONFLICT (key) DO NOTHING;
+
+-- Seed initial performance placeholders
+INSERT INTO performance_results (month, year, win_rate, pips, return_pct, is_featured)
+VALUES 
+    ('January', 2026, 74.5, 3200, 12.4, true),
+    ('February', 2026, 78.2, 4100, 15.1, true)
+ON CONFLICT (month, year) DO NOTHING;
