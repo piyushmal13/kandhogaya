@@ -163,7 +163,7 @@ export const reviewService = {
    * Institutional Acquisition flow with fraud detection.
    */
   submitReview: async (review: Partial<Review>) => {
-    const isSpam = await reviewService.detectFraud(review.user_id as string, review.ip_address as string);
+    const isSpam = await reviewService.detectFraud(review.user_id || '', review.ip_address || '');
     const priority = reviewService.calculatePriority(review.rating || 0, review.source);
 
     const { error } = await supabase.from('reviews').insert([{
