@@ -22,8 +22,6 @@ export const useReferral = () => {
         timestamp: new Date().toISOString(),
         protocol: "growth_engine_sprint4"
       });
-
-      console.log(`[Attribution] Referral signal captured: ${refCode}`);
     }
   }, [refCode]);
 };

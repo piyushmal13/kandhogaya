@@ -1,5 +1,5 @@
 import React, { useState, useEffect, SyntheticEvent } from "react";
-import { ShieldCheck, Search, Trash2, Zap, Copy, Clock, User } from "lucide-react";
+import { ShieldCheck, Trash2, Zap, Copy, Clock, User } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { Dialog } from "../../components/ui/Dialog";
 import { cn } from "../../utils/cn";
@@ -23,7 +23,6 @@ export const LicenseManager = () => {
       });
       if (res.ok) {
         const data = await res.json();
-        console.log("[Admin] Licenses Discovered:", data.length);
         setLicenses(data);
       }
     } catch (err) {
@@ -105,16 +104,18 @@ export const LicenseManager = () => {
           <form onSubmit={handleGenerateLicense} className="space-y-8">
             <div className="space-y-6">
               <div className="space-y-2">
-                <label className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 px-1">Trader ID (UUID)</label>
+                <label htmlFor="userId" className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 px-1">Trader ID (UUID)</label>
                 <input 
+                  id="userId"
                   value={licenseUserId} onChange={e => setLicenseUserId(e.target.value)} 
                   placeholder="Paste Supabase User ID"
                   className="w-full bg-black border border-white/5 focus:border-emerald-500/50 rounded-2xl p-4 text-white text-sm outline-none transition-all" 
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 px-1">Target Engine ID</label>
+                <label htmlFor="algoId" className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 px-1">Target Engine ID</label>
                 <input 
+                  id="algoId"
                   value={licenseAlgoId} onChange={e => setLicenseAlgoId(e.target.value)} 
                   placeholder="Paste Bot ID"
                   className="w-full bg-black border border-white/5 focus:border-emerald-500/50 rounded-2xl p-4 text-white text-sm outline-none transition-all" 

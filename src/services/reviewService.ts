@@ -9,7 +9,7 @@ export const fetchReviews = async () => {
 
   const res = await supabase
     .from('reviews')
-    .select('*')
+    .select('id, name, content, rating, created_at, avatar_url, verified_trade, trade_type, pnl')
     .order('created_at', { ascending: false });
     
   const data = res?.data ?? [];

@@ -61,23 +61,22 @@ export const notificationEngine = {
   process: async (queueId: string) => {
     const { data: item } = await publicSupabase
       .from('notification_queue')
-      .select('*')
+      .select('id, recipient, channel, payload, status, attempts')
       .eq('id', queueId)
       .single();
 
-    if (!item || item.status !== 'PENDING') return;
+    if (item?.status !== 'PENDING') return;
 
     try {
       // Channel-specific logic (currently deep-link generation for WhatsApp)
       if (item.channel === 'WHATSAPP') {
         const payload = item.payload;
-        const msg = encodeURIComponent(
-          `*IFX TRADES ALERT*: ${payload.message}\n\n` +
-          `User: ${payload.user_name}\n` +
-          `Score: ${payload.lead_score || 'N/A'}\n` +
-          `Action: ${payload.action_link}`
-        );
-        
+        // const msg = encodeURIComponent(
+        //   `*IFX TRADES ALERT*: ${payload.message}\n\n` +
+        //   `User: ${payload.user_name}\n` +
+        //   `Score: ${payload.lead_score || 'N/A'}\n` +
+        //   `Action: ${payload.action_link}`
+        // );
         // WhatsApp API Trigger or Deep-link (Admin view)
         // console.log(`[WHATSAPP_PULSE]: https://wa.me/${item.recipient}?text=${msg}`);
       }

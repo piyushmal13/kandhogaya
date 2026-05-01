@@ -22,7 +22,7 @@ export const UrgencyBanner = ({ leadId }: { leadId?: string }) => {
       // 1. Audit active signal volatility
       const { data: signal } = await publicSupabase
         .from('signals')
-        .select('*')
+        .select('id, pair, created_at')
         .order('created_at', { ascending: false })
         .limit(1)
         .single();

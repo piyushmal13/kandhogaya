@@ -22,7 +22,7 @@ export const ProductManager = () => {
     setLoading(true);
     const res = await supabase
       .from('products')
-      .select('*')
+      .select('id, name, description, price, category, image_url, strategy_graph_url, backtesting_result_url, video_explanation_url, long_plan_offers, q_and_a, terms_and_conditions, performance_data, created_at, strategy_details, risk_profile')
       .order('created_at', { ascending: false });
     
     if (res?.data) {
@@ -48,7 +48,7 @@ export const ProductManager = () => {
       setLoading(true);
       const res = await supabase
         .from('products')
-        .select('*')
+        .select('id, name, description, price, category, image_url, strategy_graph_url, backtesting_result_url, video_explanation_url, long_plan_offers, q_and_a, terms_and_conditions, performance_data, created_at, strategy_details, risk_profile')
         .order('created_at', { ascending: false });
       
       if (!isMounted) return;
@@ -109,7 +109,7 @@ export const ProductManager = () => {
     // ... JSON parsing logic ...
     const parseJson = (val: any) => {
       if (typeof val === 'string') {
-        try { return JSON.parse(val); } catch (e) { return null; }
+        try { return JSON.parse(val); } catch (e) { console.warn("Parse error:", e); return null; }
       }
       return val;
     };
@@ -302,8 +302,9 @@ export const ProductManager = () => {
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
-                      <label className="block text-[10px] font-bold text-emerald-500 uppercase tracking-widest mb-2">Live Win Rate (%)</label>
+                      <label htmlFor="liveWinRate" className="block text-[10px] font-bold text-emerald-500 uppercase tracking-widest mb-2">Live Win Rate (%)</label>
                       <input 
+                        id="liveWinRate"
                         type="number"
                         value={(editForm as any).perf_win_rate || 0} 
                         onChange={e => setEditForm({...editForm, perf_win_rate: Number.parseFloat(e.target.value)} as any)}
@@ -311,8 +312,9 @@ export const ProductManager = () => {
                       />
                     </div>
                     <div>
-                      <label className="block text-[10px] font-bold text-emerald-500 uppercase tracking-widest mb-2">Monthly Return (%)</label>
+                      <label htmlFor="monthlyReturn" className="block text-[10px] font-bold text-emerald-500 uppercase tracking-widest mb-2">Monthly Return (%)</label>
                       <input 
+                        id="monthlyReturn"
                         type="number"
                         value={(editForm as any).perf_monthly_return || 0} 
                         onChange={e => setEditForm({...editForm, perf_monthly_return: Number.parseFloat(e.target.value)} as any)}
@@ -320,8 +322,9 @@ export const ProductManager = () => {
                       />
                     </div>
                     <div>
-                      <label className="block text-[10px] font-bold text-emerald-500 uppercase tracking-widest mb-2">Max Drawdown (%)</label>
+                      <label htmlFor="maxDrawdown" className="block text-[10px] font-bold text-emerald-500 uppercase tracking-widest mb-2">Max Drawdown (%)</label>
                       <input 
+                        id="maxDrawdown"
                         type="number"
                         value={(editForm as any).perf_drawdown || 0} 
                         onChange={e => setEditForm({...editForm, perf_drawdown: Number.parseFloat(e.target.value)} as any)}

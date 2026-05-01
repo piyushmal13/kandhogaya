@@ -115,6 +115,36 @@
     <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
 
     <!-- ═══════════════════════════════════════════════════════════
+         JSON-LD STRUCTURED DATA (SEO & SITELINKS)
+    ═══════════════════════════════════════════════════════════ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "IFX Trades",
+      "url": "https://ifxtrades.com/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://ifxtrades.com/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "IFX Trades",
+      "url": "https://ifxtrades.com",
+      "logo": "https://ifxtrades.com/logo.png",
+      "sameAs": [
+        "https://www.linkedin.com/company/ifxtrades",
+        "https://twitter.com/ifxtrades"
+      ]
+    }
+    </script>
+
+    <!-- ═══════════════════════════════════════════════════════════
          GOOGLE ANALYTICS — Measurement & Conversion Tracking  
     ═══════════════════════════════════════════════════════════ -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-GK6Z1JKXS4"></script>

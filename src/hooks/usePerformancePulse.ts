@@ -20,7 +20,7 @@ export function usePerformancePulse() {
     queryKey: ['institutional_performance'],
     queryFn: async () => {
       const [performanceRes, usersCountRes] = await Promise.all([
-        safeQuery<any>(supabase.from('performance_results').select('*').eq('is_featured', true).maybeSingle()),
+        safeQuery<any>(supabase.from('performance_results').select('id, win_rate, total_pips, profit_factor, is_featured').eq('is_featured', true).maybeSingle()),
         supabase.from('users').select('id', { count: 'exact', head: true })
       ]);
 

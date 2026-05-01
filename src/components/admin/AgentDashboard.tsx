@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "motion/react";
-import { Users, Flame, UserPlus, Target, Search, MoreVertical, ShieldAlert } from "lucide-react";
+import { MoreVertical, ShieldAlert } from "lucide-react";
 import { publicSupabase, safeQuery } from "../../lib/supabase";
 import { cn } from "../../utils/cn";
 
@@ -20,13 +20,13 @@ export const AgentDashboard = () => {
     try {
       const [leadsRes, agentsRes] = await Promise.all([
         safeQuery<any[]>(publicSupabase.from('leads').select('*, user_id!left(email, full_name)')),
-        safeQuery<any[]>(publicSupabase.from('agents').select('*'))
+        safeQuery<any[]>(publicSupabase.from('agents').select('id, name'))
       ]);
 
       setLeads(leadsRes || []);
       setAgents(agentsRes || []);
     } catch (err) {
-      console.error("[CRM] Agent Discovery Error:", err);
+      console.warn("Failed to fetch agent data:", err);
     } finally {
       setLoading(false);
     }

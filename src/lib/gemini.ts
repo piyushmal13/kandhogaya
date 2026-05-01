@@ -36,11 +36,3 @@ export async function generate<T>(systemPrompt: string, userPrompt: string, mode
   }
 }
 
-/* sanity‑check */
-export async function test() {
-  const result = await ai.models.generateContent({
-    model: 'gemini-2.5-flash',
-    contents: 'Say the model name you are using.',
-  });
-  console.log('Gemini says:', result.text);
-}

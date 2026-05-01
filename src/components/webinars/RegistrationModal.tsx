@@ -205,9 +205,9 @@ export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationM
               </div>
               
               <div className="flex justify-between items-center pt-4 border-t border-white/5">
-                <div className="text-gray-400 text-xs uppercase tracking-wider">Registration Fee</div>
-                <div className="text-xl font-bold text-white">
-                  {webinar.is_paid ? `$${webinar.price}` : "Free"}
+                <div className="text-gray-400 text-xs uppercase tracking-wider">Commitment Fee (Refundable)</div>
+                <div className="text-xl font-bold text-emerald-400">
+                  {webinar.is_paid && webinar.price > 1 ? `$${webinar.price}` : "$1.00"}
                 </div>
               </div>
             </div>
@@ -277,7 +277,7 @@ export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationM
                   <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" />
                 ) : (
                   <>
-                    {webinar.is_paid ? "Proceed to Payment" : "Complete Registration"}
+                    {webinar.is_paid && webinar.price > 1 ? `Pay $${webinar.price} via Stripe` : "Pay $1 Commitment Fee (Stripe)"}
                     <ArrowRight className="w-5 h-5" />
                   </>
                 )}

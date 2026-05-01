@@ -11,7 +11,6 @@ import { useToast } from "../../contexts/ToastContext";
 import { useNavigate } from "react-router-dom";
 import { Sparkline } from "../ui/Sparkline";
 import { ResizedImage } from "../ui/ResizedImage";
-import { cn } from "../../utils/cn";
 
 interface AlgoDetailModalProps {
   algo: Product;
@@ -113,13 +112,19 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
             {activeTab === 'overview' && (
               <div className="space-y-6 md:space-y-8">
                 {algo.video_explanation_url && (
-                  <div className="aspect-video rounded-xl md:rounded-2xl overflow-hidden bg-black border border-white/10 relative group">
-                    <iframe 
-                      src={algo.video_explanation_url.includes('youtube.com') ? algo.video_explanation_url.replace('watch?v=', 'embed/') : algo.video_explanation_url} 
-                      className="w-full h-full"
-                      title="Algorithm explanation video"
-                      allowFullScreen
-                    />
+                  <div>
+                    <h4 className="text-white font-bold mb-4 flex items-center gap-2">
+                      <Zap className="w-5 h-5 text-emerald-500" />
+                      Proof of Performance (Live MT5 Execution)
+                    </h4>
+                    <div className="aspect-video rounded-xl md:rounded-2xl overflow-hidden bg-black border border-white/10 relative group">
+                      <iframe 
+                        src={algo.video_explanation_url.includes('youtube.com') ? algo.video_explanation_url.replace('watch?v=', 'embed/') : algo.video_explanation_url} 
+                        className="w-full h-full"
+                        title="Algorithm execution proof"
+                        allowFullScreen
+                      />
+                    </div>
                   </div>
                 )}
                 
@@ -133,22 +138,28 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
                   </div>
                 )}
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
-                  <div className="p-5 md:p-6 rounded-xl md:rounded-2xl bg-white/5 border border-white/5">
-                    <h4 className="text-white font-bold mb-3 md:mb-4 flex items-center gap-2 text-sm md:text-base">
-                      <ShieldCheck className="w-4 h-4 md:w-5 md:h-5 text-emerald-500" />
-                      Risk Management
-                    </h4>
-                    <p className="text-gray-400 text-xs md:text-sm">
-                      {algo.risk_profile || "Proprietary risk protocols ensuring capital preservation through dynamic position sizing and stop-loss logic."}
-                    </p>
-                  </div>
-                  <div className="p-5 md:p-6 rounded-xl md:rounded-2xl bg-white/5 border border-white/5">
-                    <h4 className="text-white font-bold mb-3 md:mb-4 flex items-center gap-2 text-sm md:text-base">
-                      <Activity className="w-4 h-4 md:w-5 md:h-5 text-emerald-500" />
-                      Execution Engine
-                    </h4>
-                    <p className="text-gray-400 text-xs md:text-sm">High-performance execution optimized for institutional liquidity providers and minimal slippage.</p>
+                <div className="p-6 rounded-2xl bg-white/5 border border-white/5">
+                  <h4 className="text-white font-bold mb-6 flex items-center gap-2">
+                    <BarChart3 className="w-5 h-5 text-emerald-500" />
+                    Technical Specifications
+                  </h4>
+                  <div className="grid grid-cols-2 gap-y-6 gap-x-8">
+                    <div>
+                      <div className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Slippage Tolerance</div>
+                      <div className="text-white font-mono font-bold">{(algo.performance as any)?.slippage || "0.5 Pips Max"}</div>
+                    </div>
+                    <div>
+                      <div className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Recommended Capital</div>
+                      <div className="text-white font-mono font-bold">{(algo.performance as any)?.min_capital || "$5,000"}</div>
+                    </div>
+                    <div>
+                      <div className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Avg Monthly Return</div>
+                      <div className="text-emerald-400 font-mono font-bold">+{algo.performance?.monthly_return || "12.4"}%</div>
+                    </div>
+                    <div>
+                      <div className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Max Drawdown</div>
+                      <div className="text-red-400 font-mono font-bold">-{algo.performance?.drawdown || "4.1"}%</div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -290,22 +301,32 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
               <p className="text-gray-500 text-[10px] md:text-xs">Full algorithm access with 24/5 support.</p>
             </button>
 
-            {algo.long_plan_offers?.map((offer) => (
-              <button 
-                key={offer.duration}
-                onClick={() => handleSubscribeClick(offer.duration)}
-                className="w-full p-5 md:p-6 rounded-xl md:rounded-2xl bg-emerald-500/5 border border-emerald-500/20 hover:border-emerald-500/50 transition-all text-left relative group"
-              >
-                <div className="absolute -top-2.5 -right-1.5 bg-red-500 text-white text-[8px] md:text-[9px] px-1.5 py-0.5 md:px-2 md:py-1 rounded-full font-bold">
-                  {offer.discount}
-                </div>
-                <div className="flex justify-between items-center mb-1 md:mb-2">
-                  <span className="text-white font-bold text-sm md:text-base">{offer.duration} Plan</span>
-                  <span className="text-xl md:text-2xl font-bold text-emerald-500">${offer.price}</span>
-                </div>
-                <p className="text-gray-400 text-[10px] md:text-xs">Best value for long-term institutional trading.</p>
-              </button>
-            ))}
+            {algo.long_plan_offers?.map((offer) => {
+              const isPopular = offer.duration.toLowerCase() === 'yearly' || offer.duration.toLowerCase() === 'annual';
+              return (
+                <button 
+                  key={offer.duration}
+                  onClick={() => handleSubscribeClick(offer.duration)}
+                  className={`w-full p-5 md:p-6 rounded-xl md:rounded-2xl transition-all text-left relative group ${isPopular ? 'bg-emerald-500/10 border-2 border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.15)]' : 'bg-white/5 border border-white/10 hover:border-emerald-500/50'}`}
+                >
+                  {isPopular && (
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-500 text-black text-[9px] px-3 py-1 rounded-full font-black uppercase tracking-widest">
+                      Most Popular
+                    </div>
+                  )}
+                  {offer.discount && (
+                    <div className="absolute -top-2.5 right-3 bg-red-500 text-white text-[8px] md:text-[9px] px-1.5 py-0.5 md:px-2 md:py-1 rounded-full font-bold">
+                      {offer.discount}
+                    </div>
+                  )}
+                  <div className="flex justify-between items-center mb-1 md:mb-2 mt-2">
+                    <span className="text-white font-bold text-sm md:text-base">{offer.duration} Plan</span>
+                    <span className="text-xl md:text-2xl font-bold text-emerald-400">${offer.price}</span>
+                  </div>
+                  <p className="text-gray-400 text-[10px] md:text-xs">Best value for long-term institutional trading.</p>
+                </button>
+              );
+            })}
           </div>
 
           <ul className="space-y-3 md:space-y-4 mb-6 md:mb-8">

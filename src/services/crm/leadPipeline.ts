@@ -36,7 +36,7 @@ export const leadPipeline = {
     // 2. Discover lead
     const query = publicSupabase
       .from('leads')
-      .select('*');
+      .select('id, user_id, anon_id, score, stage, is_hot');
     
     if (userId) query.eq('user_id', userId);
     else if (anonId) query.eq('anon_id', anonId);

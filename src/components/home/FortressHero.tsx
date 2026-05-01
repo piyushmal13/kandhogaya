@@ -7,273 +7,7 @@ import { Link } from "react-router-dom";
 const EASING = [0.4, 0, 0.2, 1] as const;
 const ENTRY   = [0.16, 1, 0.3, 1] as const;
 
-// ─── ROCKET FLAME ENGINE (Canvas — GPU compositor, zero main-thread cost) ─────
-const RocketFlame = React.memo(() => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    let animId: number;
-    let W = canvas.offsetWidth;
-    let H = canvas.offsetHeight;
-
-    const setSize = () => {
-      const dpr = Math.min(window.devicePixelRatio, 2);
-      W = canvas.offsetWidth;
-      H = canvas.offsetHeight;
-      canvas.width = W * dpr;
-      canvas.height = H * dpr;
-      ctx.scale(dpr, dpr);
-    };
-
-    // Particle pool
-    interface Particle {
-      x: number; y: number;
-      vx: number; vy: number;
-      life: number; maxLife: number;
-      size: number; type: "flame" | "spark" | "smoke" | "star";
-    }
-
-    const particles: Particle[] = [];
-    let frame = 0;
-
-    const spawn = (type: Particle["type"], count: number) => {
-      for (let i = 0; i < count; i++) {
-        const cx = W / 2;
-        const cy = H * 0.62; // rocket nozzle position
-
-        if (type === "flame") {
-          particles.push({
-            x: cx + (Math.random() - 0.5) * 18,
-            y: cy + Math.random() * 8,
-            vx: (Math.random() - 0.5) * 1.2,
-            vy: Math.random() * 4.5 + 1.5,
-            life: 1, maxLife: 55 + Math.random() * 35,
-            size: Math.random() * 14 + 6,
-            type: "flame"
-          });
-        } else if (type === "spark") {
-          const angle = Math.PI / 2 + (Math.random() - 0.5) * 1.2;
-          const speed = Math.random() * 3.5 + 1;
-          particles.push({
-            x: cx + (Math.random() - 0.5) * 12,
-            y: cy,
-            vx: Math.cos(angle) * speed,
-            vy: Math.sin(angle) * speed + 1,
-            life: 1, maxLife: 35 + Math.random() * 20,
-            size: Math.random() * 2.5 + 0.8,
-            type: "spark"
-          });
-        } else if (type === "smoke") {
-          particles.push({
-            x: cx + (Math.random() - 0.5) * 30,
-            y: cy + Math.random() * 20 + 10,
-            vx: (Math.random() - 0.5) * 0.6,
-            vy: Math.random() * 1.2 + 0.4,
-            life: 1, maxLife: 90 + Math.random() * 60,
-            size: Math.random() * 40 + 20,
-            type: "smoke"
-          });
-        } else {
-          // ambient stars
-          particles.push({
-            x: Math.random() * W,
-            y: Math.random() * H * 0.55,
-            vx: 0, vy: 0,
-            life: Math.random(), maxLife: 80 + Math.random() * 120,
-            size: Math.random() * 1.8 + 0.3,
-            type: "star"
-          });
-        }
-      }
-    };
-
-    // Seed stars
-    for (let i = 0; i < 160; i++) spawn("star", 1);
-
-    const draw = () => {
-      ctx.clearRect(0, 0, W, H);
-
-      // Sky gradient — deep space → launch glow
-      const sky = ctx.createLinearGradient(0, 0, 0, H);
-      sky.addColorStop(0,    "rgba(1, 2, 3, 1)");
-      sky.addColorStop(0.45, "rgba(2, 4, 8, 1)");
-      sky.addColorStop(0.7,  "rgba(4, 8, 6, 1)");
-      sky.addColorStop(1,    "rgba(10, 20, 12, 1)");
-      ctx.fillStyle = sky;
-      ctx.fillRect(0, 0, W, H);
-
-      // Horizon glow (launch pad light)
-      const cx = W / 2;
-      const hGlow = ctx.createRadialGradient(cx, H * 0.65, 0, cx, H * 0.65, W * 0.55);
-      hGlow.addColorStop(0,   "rgba(16, 185, 129, 0.18)");
-      hGlow.addColorStop(0.4, "rgba(16, 185, 129, 0.06)");
-      hGlow.addColorStop(1,   "transparent");
-      ctx.fillStyle = hGlow;
-      ctx.fillRect(0, 0, W, H);
-
-      // Spawn particles
-      if (frame % 2 === 0) spawn("flame", 4);
-      if (frame % 3 === 0) spawn("spark", 3);
-      if (frame % 12 === 0) spawn("smoke", 1);
-      if (frame % 90 === 0) spawn("star", 3);
-
-      // Update + draw particles
-      for (let i = particles.length - 1; i >= 0; i--) {
-        const p = particles[i];
-        p.life += 1;
-        const t = p.life / p.maxLife;
-
-        if (t >= 1) { particles.splice(i, 1); continue; }
-
-        p.x += p.vx;
-        p.y += p.vy;
-        if (p.type === "flame" || p.type === "smoke") p.size += 0.25;
-
-        const alpha = p.type === "star"
-          ? 0.4 + 0.6 * Math.sin(p.life * 0.08 + p.x)
-          : 1 - Math.pow(t, 0.6);
-
-        if (p.type === "flame") {
-          // Core flame: white → yellow → orange → transparent
-          const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
-          const brightness = 1 - t * 0.8;
-          grad.addColorStop(0,   `rgba(255, 255, ${Math.floor(220 * brightness)}, ${alpha * 0.95})`);
-          grad.addColorStop(0.3, `rgba(255, ${Math.floor(200 * brightness)}, 60, ${alpha * 0.7})`);
-          grad.addColorStop(0.6, `rgba(16, 185, 129, ${alpha * 0.3})`);
-          grad.addColorStop(1,   "transparent");
-          ctx.fillStyle = grad;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-          ctx.fill();
-        } else if (p.type === "spark") {
-          ctx.fillStyle = `rgba(255, ${Math.floor(180 + 75 * (1 - t))}, 40, ${alpha})`;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.size * (1 - t * 0.5), 0, Math.PI * 2);
-          ctx.fill();
-          // Spark trail
-          ctx.strokeStyle = `rgba(255, 200, 60, ${alpha * 0.3})`;
-          ctx.lineWidth = p.size * 0.4;
-          ctx.beginPath();
-          ctx.moveTo(p.x, p.y);
-          ctx.lineTo(p.x - p.vx * 6, p.y - p.vy * 6);
-          ctx.stroke();
-        } else if (p.type === "smoke") {
-          const sGrad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
-          sGrad.addColorStop(0,   `rgba(40, 50, 45, ${alpha * 0.25})`);
-          sGrad.addColorStop(0.5, `rgba(20, 30, 25, ${alpha * 0.1})`);
-          sGrad.addColorStop(1,   "transparent");
-          ctx.fillStyle = sGrad;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-          ctx.fill();
-        } else {
-          // Star
-          ctx.fillStyle = `rgba(200, 235, 220, ${alpha})`;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-          ctx.fill();
-        }
-      }
-
-      // Rocket silhouette
-      const ry = H * 0.18; // rocket top Y
-      const rh = H * 0.44; // rocket body height
-      const rw = W * 0.028;
-      const rcy = H * 0.62; // nozzle Y
-
-      // Body
-      ctx.save();
-      ctx.shadowBlur = 30;
-      ctx.shadowColor = "rgba(16, 185, 129, 0.5)";
-      const bodyGrad = ctx.createLinearGradient(cx - rw, ry, cx + rw, ry);
-      bodyGrad.addColorStop(0,   "rgba(10, 20, 15, 0.95)");
-      bodyGrad.addColorStop(0.3, "rgba(40, 70, 55, 0.95)");
-      bodyGrad.addColorStop(0.5, "rgba(60, 100, 80, 0.9)");
-      bodyGrad.addColorStop(0.7, "rgba(40, 70, 55, 0.95)");
-      bodyGrad.addColorStop(1,   "rgba(10, 20, 15, 0.95)");
-      ctx.fillStyle = bodyGrad;
-      ctx.beginPath();
-      ctx.moveTo(cx, ry); // nose tip
-      ctx.bezierCurveTo(cx - rw * 0.2, ry + rh * 0.1, cx - rw, ry + rh * 0.25, cx - rw, ry + rh * 0.7);
-      ctx.lineTo(cx - rw * 1.4, rcy);
-      ctx.lineTo(cx + rw * 1.4, rcy);
-      ctx.lineTo(cx + rw, ry + rh * 0.7);
-      ctx.bezierCurveTo(cx + rw, ry + rh * 0.25, cx + rw * 0.2, ry + rh * 0.1, cx, ry);
-      ctx.closePath();
-      ctx.fill();
-      ctx.restore();
-
-      // Nozzle ring
-      ctx.fillStyle = "rgba(16, 185, 129, 0.7)";
-      ctx.beginPath();
-      ctx.ellipse(cx, rcy, rw * 1.2, rw * 0.35, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Fin (left)
-      ctx.fillStyle = "rgba(20, 40, 30, 0.9)";
-      ctx.beginPath();
-      ctx.moveTo(cx - rw, ry + rh * 0.65);
-      ctx.lineTo(cx - rw * 3.2, rcy + 10);
-      ctx.lineTo(cx - rw * 1.4, rcy);
-      ctx.closePath();
-      ctx.fill();
-
-      // Fin (right)
-      ctx.beginPath();
-      ctx.moveTo(cx + rw, ry + rh * 0.65);
-      ctx.lineTo(cx + rw * 3.2, rcy + 10);
-      ctx.lineTo(cx + rw * 1.4, rcy);
-      ctx.closePath();
-      ctx.fill();
-
-      // Window glow
-      const winY = ry + rh * 0.32;
-      const winGrad = ctx.createRadialGradient(cx, winY, 0, cx, winY, rw * 0.6);
-      winGrad.addColorStop(0,   "rgba(100, 230, 180, 0.9)");
-      winGrad.addColorStop(0.5, "rgba(16, 185, 129, 0.5)");
-      winGrad.addColorStop(1,   "transparent");
-      ctx.fillStyle = winGrad;
-      ctx.beginPath();
-      ctx.arc(cx, winY, rw * 0.6, 0, Math.PI * 2);
-      ctx.fill();
-
-      // IFX lettering — tiny on fuselage
-      ctx.fillStyle = "rgba(16, 185, 129, 0.6)";
-      ctx.font = `bold ${Math.max(7, rw * 0.6)}px 'IBM Plex Mono', monospace`;
-      ctx.textAlign = "center";
-      ctx.fillText("IFX", cx, winY + rh * 0.18);
-
-      frame++;
-      animId = requestAnimationFrame(draw);
-    };
-
-    const ro = new ResizeObserver(() => { setSize(); });
-    ro.observe(canvas.parentElement || canvas);
-    setSize();
-    draw();
-
-    return () => {
-      cancelAnimationFrame(animId);
-      ro.disconnect();
-    };
-  }, []);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      aria-hidden="true"
-      className="absolute inset-0 w-full h-full pointer-events-none"
-      style={{ willChange: "transform" }}
-    />
-  );
-});
-
-RocketFlame.displayName = "RocketFlame";
+import { CinematicRocket } from "../animations/CinematicRocket";
 
 // ─── SCROLL TICKER ─────────────────────────────────────────────────────────────
 const TICKERS = [
@@ -336,9 +70,8 @@ export const FortressHero = () => {
       <motion.div
         style={{ scale, willChange: "transform" }}
         className="absolute inset-0 origin-center"
-        aria-hidden="true"
       >
-        <RocketFlame />
+        <CinematicRocket />
       </motion.div>
 
       {/* ── GRADIENT OVERLAY (text readability) ── */}
@@ -370,7 +103,7 @@ export const FortressHero = () => {
         >
           {[...TICKERS, ...TICKERS, ...TICKERS].map((t, i) => (
             <span
-              key={i}
+              key={`${t}-${i}`}
               className="text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-emerald-400/70"
             >
               {t}
@@ -382,7 +115,7 @@ export const FortressHero = () => {
       {/* ── MAIN CONTENT ── */}
       <motion.div
         style={{ opacity, y: textY }}
-        className="relative z-20 flex-1 flex flex-col items-center justify-center px-6 pt-12 pb-28 text-center"
+        className="relative z-20 flex-1 flex flex-col items-center justify-center px-6 pt-8 pb-16 md:pt-12 md:pb-28 text-center"
       >
         {/* Status badge */}
         <motion.div
@@ -405,8 +138,8 @@ export const FortressHero = () => {
           initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.12, duration: 0.85, ease: ENTRY }}
-          className="font-black text-white tracking-[-0.04em] leading-[0.88] uppercase max-w-5xl mx-auto mb-6"
-          style={{ fontSize: "clamp(3.2rem, 9vw, 9rem)" }}
+          className="font-black text-white tracking-[-0.04em] leading-[0.88] uppercase max-w-5xl mx-auto mb-6 px-2"
+          style={{ fontSize: "clamp(2.4rem, 10vw, 9rem)" }}
         >
           Trade Like{" "}
           <span

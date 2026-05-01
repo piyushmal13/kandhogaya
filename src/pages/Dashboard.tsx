@@ -1,13 +1,12 @@
 import React from 'react';
 import { DashboardLayout } from '@/components/institutional/DashboardLayout';
-import { DashboardNavigation } from '@/components/institutional/DashboardNavigation';
-import { DashboardHeader } from '@/components/institutional/DashboardHeader';
 import { MarketIntelligencePanel } from '@/components/institutional/MarketIntelligencePanel';
 import { PortfolioValue } from '@/components/institutional/PortfolioValue';
 import { SignalFeed } from '@/components/institutional/SignalFeed';
 import { QuickActions } from '@/components/institutional/QuickActions';
 import { RiskMetrics } from '@/components/institutional/RiskMetrics';
 import { RecentActivity } from '@/components/institutional/RecentActivity';
+import { LicenseVault } from '@/components/institutional/LicenseVault';
 import { PageMeta } from '@/components/site/PageMeta';
 import { tracker } from '@/core/tracker';
 
@@ -44,6 +43,7 @@ export const Dashboard = () => {
           {/* INTELLIGENCE RAIL (1/3) */}
           <div className="space-y-8">
             <QuickActions />
+            <LicenseVault />
             <RiskMetrics />
             <RecentActivity />
           </div>

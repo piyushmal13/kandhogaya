@@ -23,7 +23,7 @@ export const adminLogService = {
       const offset = page * limit;
       let query = supabase
         .from('system_logs')
-        .select('*')
+        .select('id, type, message, metadata, user_id, severity, created_at')
         .order('created_at', { ascending: false })
         .range(offset, offset + limit - 1);
 

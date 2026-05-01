@@ -13,7 +13,7 @@ export const reviewService = {
     const offset = page * limit;
     let query = supabase
       .from('reviews')
-      .select('*')
+      .select('id, user_id, rating, content, status, source, created_at, priority, ip_address, flagged, name, text')
       .order('priority', { ascending: false })
       .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1);
@@ -23,7 +23,7 @@ export const reviewService = {
 
     const { data, error } = await query;
     if (error) throw error;
-    return data as Review[] || [];
+    return data || [];
   },
 
   /**
@@ -54,7 +54,7 @@ export const reviewService = {
    * Orchestrates high-stakes approval with CRM integration.
    */
   approveReview: async (id: string, adminId: string) => {
-    const { data: review } = await supabase.from('reviews').select('*').eq('id', id).single();
+    const { data: review } = await supabase.from('reviews').select('id, rating, user_id').eq('id', id).single();
     if (!review) return false;
 
     const { error } = await supabase
@@ -125,6 +125,7 @@ export const reviewService = {
 
       return true;
     } catch (err) {
+      console.warn("Rejection failed:", err);
       return false;
     }
   },

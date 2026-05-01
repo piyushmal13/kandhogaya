@@ -1,9 +1,7 @@
 import { 
   Webinar, 
   Signal, 
-  Product, 
-  User,
-  Review
+  Product
 } from "@/types";
 import { PostgrestResponse, PostgrestSingleResponse } from "@supabase/supabase-js";
 
@@ -62,9 +60,6 @@ export async function safeQuery<T>(
     if (!data) return [];
 
     const result = Array.isArray(data) ? data : [data];
-    
-    // Log discovery for institutional auditing
-    console.log(`[${context}] Data Discovered:`, result.length);
 
     if (mapper) {
       return result.map(mapper);

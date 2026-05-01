@@ -56,6 +56,7 @@ export const Navbar = () => {
     { name: "Ecosystem", path: "/quantx", icon: Zap },
     { name: "Webinars", path: "/webinars", icon: BookOpen },
     { name: "Marketplace", path: "/marketplace", icon: BarChart3 },
+    { name: "About", path: "/about", icon: Zap },
     { name: "Blog", path: "/blog", icon: MessageSquare },
   ];
 

@@ -15,7 +15,6 @@ export const ReferralHandler = () => {
     const refCode = params.get('ref');
 
     if (refCode) {
-      console.log(`[Referral Signal] Attribution established: ${refCode}`);
       localStorage.setItem('ifx_referral_code', refCode);
       
       // Update session session storage for current workflow

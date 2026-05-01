@@ -1,123 +1,153 @@
-import { ArrowRight, Globe2, ShieldCheck, Workflow } from "lucide-react";
+import React from 'react';
+import { motion } from 'motion/react';
+import { Shield, Zap, Globe, Target, BarChart3, Users } from 'lucide-react';
+import { Navbar } from '@/components/ui/Navbar';
+import { Footer } from '@/components/ui/Footer';
 
-import { PageHero } from "../components/site/PageHero";
-import { PageMeta } from "../components/site/PageMeta";
-import { PageSection, SectionHeading } from "../components/site/PageSection";
-import { Reveal } from "../components/site/Reveal";
-import { organizationSchema, breadcrumbSchema } from "../utils/structuredData";
-
-const values = [
-  {
-    title: "Execution Discipline",
-    description: "Every IFXTrades product is built around repeatable process, measurable risk, and post-trade review.",
-    icon: ShieldCheck,
-  },
-  {
-    title: "Global Market Context",
-    description: "We frame retail decisions with the same macro, liquidity, and order-flow context used by professional desks.",
-    icon: Globe2,
-  },
-  {
-    title: "Systems Thinking",
-    description: "Signals, education, and algorithms are designed as one operating model instead of disconnected products.",
-    icon: Workflow,
-  },
-];
-
-export const About = () => (
-  <div className="relative overflow-hidden pb-16">
-    <PageMeta
-      title="About IFXTrades"
-      description="Learn how IFXTrades combines institutional market structure, trader education, and algorithmic systems into one execution-focused platform."
-      path="/about"
-      keywords={["about IFXTrades", "institutional trading team", "algorithmic trading firm"]}
-      structuredData={[
-        organizationSchema(),
-        breadcrumbSchema([
-          { name: "Home", path: "/" },
-          { name: "About", path: "/about" },
-        ]),
-      ]}
-    />
-
-    <PageHero
-      eyebrow="Market Authority"
-      title={
-        <>
-          Built to translate <span className="site-title-gradient">institutional-grade thinking</span> into retail execution.
-        </>
-      }
-      description="IFXTrades was built for traders who want more than alerts and aesthetics. We combine market intelligence, systematic execution, and practical education into one disciplined surface."
-      actions={[
-        { label: "Explore Results", to: "/results", icon: <ArrowRight className="h-4 w-4" /> },
-        { label: "Contact Desk", to: "/contact", variant: "secondary" },
-      ]}
-      metrics={[
-        { label: "Founded", value: "2018", helper: "Built around disciplined retail execution" },
-        { label: "Countries", value: "110+", helper: "Global trader participation" },
-        { label: "Algorithms", value: "15+", helper: "Systematic tools and strategy modules" },
-        { label: "Research Cadence", value: "Daily", helper: "Signals, webinars, and analysis" },
-      ]}
-      aside={
-        <div className="space-y-4">
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
-            <div className="text-[11px] uppercase tracking-[0.32em] text-emerald-200/80">Mission</div>
-            <p className="mt-3 text-sm leading-7 text-slate-300">
-              Give serious retail traders access to the tools, process, and market context normally reserved for professional dealing environments.
-            </p>
-          </div>
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
-            <div className="text-[11px] uppercase tracking-[0.32em] text-emerald-200/80">What We Build</div>
-            <ul className="mt-3 space-y-3 text-sm text-slate-300">
-              <li>Quantitative research for structured execution.</li>
-              <li>Algorithm licensing and systematic strategy layers.</li>
-              <li>Education workflows that reinforce risk discipline.</li>
-            </ul>
-          </div>
-        </div>
-      }
-    />
-
-    <PageSection>
-      <div className="grid gap-6 lg:grid-cols-[1.2fr_.8fr]">
-        <Reveal className="site-panel p-8 md:p-10">
-          <SectionHeading
-            eyebrow="Why We Exist"
-            title="Retail traders need better infrastructure, not more noise."
-            description="For too long, retail traders have had to stitch together fragmented tools, inconsistent education, and reactive decision making. IFXTrades exists to replace that with a coordinated execution stack."
-          />
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
-              <div className="text-lg font-semibold text-white">Research with context</div>
-              <p className="mt-3 text-sm leading-7 text-slate-300">
-                We do not ship random entries. Signals are framed with setup logic, risk boundaries, and follow-through management.
-              </p>
-            </div>
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
-              <div className="text-lg font-semibold text-white">Education with transfer value</div>
-              <p className="mt-3 text-sm leading-7 text-slate-300">
-                The academy and webinar stack is structured so traders can apply the process independently, not just watch content passively.
-              </p>
-            </div>
-          </div>
-        </Reveal>
-
-        <div className="grid gap-6">
-          {values.map((value, index) => (
-            <Reveal key={value.title} delay={index * 0.08} className="site-panel-muted p-6">
-              <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-300/10 text-emerald-200">
-                  <value.icon className="h-6 w-6" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-white">{value.title}</h3>
-                  <p className="mt-3 text-sm leading-7 text-slate-300">{value.description}</p>
-                </div>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </div>
-    </PageSection>
+const StatCard = ({ label, value, sub }: { label: string; value: string; sub: string }) => (
+  <div className="p-8 rounded-[2.5rem] bg-white/[0.02] border border-white/5 backdrop-blur-md">
+    <p className="text-emerald-500 text-[10px] font-black uppercase tracking-[0.3em] mb-2">{label}</p>
+    <h3 className="text-4xl font-black text-white tracking-tighter mb-1">{value}</h3>
+    <p className="text-white/40 text-xs font-medium uppercase tracking-widest">{sub}</p>
   </div>
 );
+
+const FeatureSection = ({ icon: Icon, title, description }: { icon: any, title: string, description: string }) => (
+  <div className="group p-10 rounded-[3rem] bg-gradient-to-br from-white/[0.03] to-transparent border border-white/5 hover:border-emerald-500/20 transition-all duration-500">
+    <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 mb-8 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
+      <Icon size={28} />
+    </div>
+    <h3 className="text-2xl font-black text-white mb-4 tracking-tight uppercase">{title}</h3>
+    <p className="text-white/50 leading-relaxed font-medium">
+      {description}
+    </p>
+  </div>
+);
+
+export const About = () => {
+  return (
+    <div className="min-h-screen bg-[#010203] text-white selection:bg-emerald-500 selection:text-black">
+      <Navbar />
+      
+      {/* ── HERO SECTION ── */}
+      <section className="relative pt-44 pb-32 px-6 overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[120%] h-[800px] bg-[radial-gradient(ellipse_at_center,rgba(16,185,129,0.08)_0%,transparent_70%)] pointer-events-none" />
+        
+        <div className="max-w-7xl mx-auto relative z-10 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="inline-flex items-center gap-3 px-5 py-2 rounded-full border border-emerald-500/20 bg-emerald-500/5 backdrop-blur-md mb-10"
+          >
+            <Shield size={14} className="text-emerald-400" />
+            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-emerald-400">Institutional Heritage</span>
+          </motion.div>
+          
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-6xl md:text-9xl font-black tracking-[-0.04em] leading-[0.9] uppercase mb-12"
+          >
+            The New Standard in <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Quant Intelligence.</span>
+          </motion.h1>
+          
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="max-w-3xl mx-auto text-white/60 text-lg md:text-xl font-medium leading-relaxed mb-20"
+          >
+            IFX Trades was founded on a single premise: that institutional-grade execution intelligence should not be a walled garden. We provide the technical bridge between retail ambition and professional algorithmic reality.
+          </motion.p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}>
+              <StatCard label="Execution Velocity" value="< 5ms" sub="Latency Precision" />
+            </motion.div>
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
+              <StatCard label="Quant Volume" value="$2.4B+" sub="Processed Monthly" />
+            </motion.div>
+            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5 }}>
+              <StatCard label="Active Licenses" value="12,000+" sub="Global Enclave" />
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── MISSION SECTION ── */}
+      <section className="py-32 px-6 bg-white/[0.01] border-y border-white/5">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+            <div>
+              <h2 className="text-4xl md:text-6xl font-black tracking-tight uppercase mb-8 leading-[1.1]">
+                Why Institutions Choose <br />
+                <span className="text-emerald-500">IFX Intelligence.</span>
+              </h2>
+              <p className="text-white/50 text-lg leading-relaxed mb-10 font-medium">
+                Traditional retail trading is built on hype and lagged indicators. IFX Intelligence operates at the structural level of the market. We don't just teach trading; we deploy high-frequency quantitative frameworks that have been hardened in the most volatile environments.
+              </p>
+              
+              <div className="space-y-6">
+                {[
+                  "Direct-to-Bank Order Flow Analysis",
+                  "RSA-Secured Algorithmic Licenses",
+                  "Low-Latency Execution Infrastructure",
+                  "Zero Conflict-of-Interest Model"
+                ].map((item, idx) => (
+                  <div key={idx} className="flex items-center gap-4 group">
+                    <div className="w-6 h-6 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-black transition-colors">
+                      <Target size={12} />
+                    </div>
+                    <span className="text-sm font-bold uppercase tracking-widest text-white/80">{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <FeatureSection 
+                icon={Zap} 
+                title="Sovereign Tech" 
+                description="Our algorithms are built on private C++ and Python stacks, bypassing standard retail limitations for true institutional edge."
+              />
+              <FeatureSection 
+                icon={Globe} 
+                title="Global Reach" 
+                description="Operating from India to the UAE, we provide the infrastructure for a borderless quant economy."
+              />
+              <FeatureSection 
+                icon={BarChart3} 
+                title="Data Rigor" 
+                description="Every signal is backtested across 10 years of tick data and forward-tested in live shadow mode before deployment."
+              />
+              <FeatureSection 
+                icon={Users} 
+                title="The Enclave" 
+                description="Join a private ecosystem of the top 1% of traders who prioritize logic over luck and math over emotion."
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── THE FOUNDERS / VISION ── */}
+      <section className="py-32 px-6">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight mb-8">The IFX Manifesto</h2>
+          <div className="relative p-12 md:p-20 rounded-[4rem] bg-gradient-to-b from-white/[0.03] to-transparent border border-white/5">
+            <p className="text-xl md:text-3xl font-serif italic text-white/80 leading-relaxed mb-12">
+              "In an era of information noise, the only true signal is math. We built IFX Trades to be the signal for those who are tired of the noise. No fluff, no gurus—just cold, hard execution."
+            </p>
+            <div className="w-16 h-1 bg-emerald-500 mx-auto mb-6" />
+            <p className="text-[10px] font-black uppercase tracking-[0.5em] text-emerald-500">The IFX Quantitative Council</p>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
+    </div>
+  );
+};
+

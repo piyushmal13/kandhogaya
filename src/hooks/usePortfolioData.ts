@@ -21,7 +21,7 @@ export function usePortfolioData() {
       // Fetch performance summary from consolidated table
       const query = supabase
         .from('performance_results')
-        .select('*')
+        .select('id, total_balance, daily_change, is_featured')
         .eq('is_featured', true)
         .maybeSingle();
       
@@ -29,7 +29,7 @@ export function usePortfolioData() {
       const data = Array.isArray(result) ? result[0] : (result?.data || result);
 
       return {
-        total: data?.total_balance || 125480.20,
+        total: data?.total_balance || 125480.2,
         change: data?.daily_change || 12.45,
         currency: 'USD'
       } as PortfolioData;

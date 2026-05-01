@@ -18,7 +18,7 @@ export const LeadManager = () => {
     try {
       const { data, error } = await supabase
         .from('leads')
-        .select('*')
+        .select('id, email, source, created_at')
         .order('created_at', { ascending: false });
 
       if (error || !data || data.length === 0) {
@@ -27,6 +27,7 @@ export const LeadManager = () => {
 
       processAndSetLeads(data);
     } catch (err) {
+      console.warn("Failed to fetch leads data:", err);
       console.warn("Falling back to simulated High-Value Institutional CRM records.");
       const mockData = [
         { id: 1, email: "portfolio.manager@capital.com", source: "exit_intent", created_at: new Date(Date.now() - 1000 * 60 * 2).toISOString() },
