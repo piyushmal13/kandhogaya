@@ -85,13 +85,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
 
         const [userRes, entitlementRes, sessionData] = await Promise.all([
-          supabase.from("users").select("*").eq("id", userId).maybeSingle(),
-          supabase.from("user_entitlements").select("*").eq("user_id", userId),
+          supabase.from("users").select("id, email, full_name, role, referred_by, avatar_url").eq("id", userId).maybeSingle(),
+          supabase.from("user_entitlements").select("id, user_id, product_id, active, expires_at").eq("user_id", userId),
           supabase.auth.getSession()
         ]);
 
         const userData = userRes?.data || null;
-        const entitlementData = entitlementRes?.data || [];
+        const rawEntitlements = entitlementRes?.data || [];
+        // Map DB rows to the Entitlement shape the access engine expects
+        const entitlementData: Entitlement[] = rawEntitlements.map((e: any) => ({
+          feature:    e.product_id || e.feature || "unknown",
+          active:     e.active ?? false,
+          expires_at: e.expires_at ?? null,
+        }));
         
         // Institutional Validation: Extract custom claim or fallback to database role
         const tokenRole = sessionData.data.session?.user?.app_metadata?.role;

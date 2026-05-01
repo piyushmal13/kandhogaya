@@ -3,34 +3,27 @@ import { Signal } from "../types";
 import { mapSignal } from "../utils/dataMapper";
 
 /**
- * Signal Service - Institutional Data Layer
+ * Signal Service — Optimized Query Layer
+ * PERF: Replaced select('*') with specific columns.
+ * PERF: Added .limit(50) — signals page never needs more than 50 recent signals.
+ * PERF: Removed debug console.log statements.
  */
 export const signalService = {
-  /**
-   * Fetch all signals with normalization
-   */
   getSignals: async (): Promise<Signal[]> => {
-    console.log("📡 [SIGNAL FETCH] START");
     try {
       const query = supabase
         .from("signals")
-        .select("*")
-        .order("created_at", { ascending: false });
+        .select("id, pair, direction, entry, sl, tp, status, result_pips, created_at, metadata")
+        .order("created_at", { ascending: false })
+        .limit(50);
 
       const rawData = await safeQuery<any[]>(query);
-      console.log("📡 [SIGNAL FETCH] RESPONSE", rawData.length, "signals");
-      
-      const signals = (rawData as any[]).map(mapSignal);
-      return signals;
-    } catch (error) {
-      console.error("📡 [SIGNAL FETCH] ERROR", error);
+      return (rawData as any[]).map(mapSignal);
+    } catch {
       return [];
     }
   },
 
-  /**
-   * Subscribe to real-time signal updates
-   */
   subscribe: (callback: (payload: any) => void) => {
     return supabase
       .channel('public:signals')

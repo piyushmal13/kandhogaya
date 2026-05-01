@@ -322,8 +322,15 @@ export const FortressHero = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-[100svh] overflow-hidden bg-[#010203] flex flex-col"
+      className="relative min-h-[100svh] overflow-hidden flex flex-col"
       aria-label="IFX Trades — Institutional Trading Education"
+      style={{
+        /* LCP OPTIMIZATION: instant background color = no white flash
+           This CSS paint is synchronous — user sees dark instantly before JS loads */
+        backgroundColor: "#010203",
+        /* Subtle gradient blur-hash placeholder — paints before canvas loads */
+        backgroundImage: "radial-gradient(ellipse 80% 50% at 50% 60%, rgba(16,185,129,0.08) 0%, transparent 70%)",
+      }}
     >
       {/* ── CANVAS BACKGROUND (GPU layer) ── */}
       <motion.div
@@ -346,8 +353,13 @@ export const FortressHero = () => {
 
       {/* ── LIVE MARKET TICKER ── */}
       <div
-        className="relative z-20 border-b border-emerald-500/10 bg-black/30 backdrop-blur-sm overflow-hidden h-9 flex items-center"
+        className="relative z-20 border-b border-emerald-500/10 bg-black/30 backdrop-blur-sm overflow-hidden flex items-center"
         aria-label="Live market data ticker"
+        style={{
+          height: "2.25rem", // EXPLICIT height = zero CLS (no layout shift while JS loads)
+          minHeight: "2.25rem",
+          contain: "layout", // CSS containment — prevents ticker from affecting surrounding layout
+        }}
       >
         <div className="absolute left-0 z-10 w-16 h-full bg-gradient-to-r from-black/80 to-transparent" />
         <div className="absolute right-0 z-10 w-16 h-full bg-gradient-to-l from-black/80 to-transparent" />

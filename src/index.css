@@ -3,6 +3,21 @@
 
 @import "tailwindcss";
 
+/* ── IFX Trades: Input Snap (mechanical switch feel) ── */
+/* Targets all form controls for instant, snappy feedback */
+input, textarea, select, button {
+  transition: all 0.1s ease-out;
+}
+input:focus, textarea:focus, select:focus {
+  outline: 2px solid rgba(16,185,129,0.6);
+  outline-offset: 2px;
+}
+
+/* ── Data-saver mode: disable heavy canvas backgrounds ── */
+@media (prefers-reduced-data: reduce) {
+  canvas { display: none !important; }
+}
+
 
 /* ── Tailwind v4 theme tokens ── */
 @theme {

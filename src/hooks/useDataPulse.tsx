@@ -46,12 +46,16 @@ export const DataPulseProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
   const { data: registrations, refetch: refetchRegs } = useQuery({
     queryKey: ['pulse_registrations'],
-    queryFn: () => safeQuery<any[]>(supabase.from('webinar_registrations').select('webinar_id'))
+    queryFn: () => safeQuery<any[]>(supabase.from('webinar_registrations').select('webinar_id')),
+    staleTime: 5 * 60_000, // 5 min — registration counts don't change per second
+    gcTime: 10 * 60_000,
   });
 
   const { data: perfResult, refetch: refetchPerf } = useQuery({
     queryKey: ['pulse_performance'],
-    queryFn: () => safeQuery<any>(supabase.from('performance_results').select('*').eq('is_featured', true).maybeSingle())
+    queryFn: () => safeQuery<any>(supabase.from('performance_results').select('id, win_rate, total_pips, return_pct, is_featured').eq('is_featured', true).maybeSingle()),
+    staleTime: 30 * 60_000, // 30 min — performance history is static
+    gcTime: 60 * 60_000,
   });
 
   const loading = isSignalsLoading || isWebinarsLoading || isMarketLoading;

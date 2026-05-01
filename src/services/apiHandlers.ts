@@ -69,8 +69,9 @@ export const getSignals = async () => {
   return safeQuery<Signal[]>(
     supabase
       .from("signals")
-      .select("*")
+      .select("id, pair, direction, entry, sl, tp, status, result_pips, created_at, metadata")
       .order("created_at", { ascending: false })
+      .limit(50)
   );
 };
 
@@ -83,14 +84,14 @@ export const getProducts = async () => {
 export const getProductById = async (id: string) => {
   const { data, error } = await supabase
     .from("products")
-    .select("*")
+    .select("id, name, description, price, category, video_url, thumbnail_url, is_active, metadata, created_at")
     .eq("id", id)
     .single();
   
   if (error) {
     return null;
   }
-  return data as Product;
+  return data as unknown as Product;
 };
 
 export const subscribeToAlgo = async (userId: string, algoId: string, durationDays: number) => {
@@ -200,7 +201,7 @@ export const getCourseById = async (id: string) => {
 export const checkUserAccess = async (userId: string, itemId: string) => {
   const { data, error } = await supabase
     .from("user_access")
-    .select("*")
+    .select("id")
     .eq("user_id", userId)
     .eq("item_id", itemId)
     .maybeSingle();
@@ -230,7 +231,7 @@ export const subscribeToWebinars = (callback: (payload: unknown) => void) => {
 export const getAgentStats = async (agentId: string) => {
   const { data: sales, error: salesError } = await supabase
     .from("sales_tracking")
-    .select("*")
+    .select("id, sale_amount, created_at")
     .eq("agent_id", agentId);
 
   if (salesError) return { totalSales: 0, revenue: 0, referrals: 0 };
@@ -415,7 +416,7 @@ export const getPerformanceResults = async () => {
   return safeQuery<any[]>(
     supabase
       .from("performance_results")
-      .select("*")
+      .select("id, month, year, return_pct, win_rate, created_at")
       .order("created_at", { ascending: true })
   );
 };

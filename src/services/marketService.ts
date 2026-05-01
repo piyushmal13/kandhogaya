@@ -1,7 +1,8 @@
 import { supabase, safeQuery } from "../lib/supabase";
 import { mapMarketTicker } from "../utils/dataMapper";
 
-const TWELVE_DATA_API_KEY = "6ac663a609254023a49d4412d9ea419e";
+// API key should be set in .env as VITE_TWELVEDATA_API_KEY
+const TWELVE_DATA_API_KEY = import.meta.env.VITE_TWELVEDATA_API_KEY || "";
 const SYMBOLS = "EUR/USD,GBP/USD,USD/JPY,XAU/USD,XAG/USD,BTC/USD,ETH/USD";
 
 /**
@@ -12,7 +13,6 @@ export const marketService = {
    * Fetch all market data with direct exchange integration
    */
   getMarketPairs: async (): Promise<any[]> => {
-    console.log("📈 [MARKET FETCH] START (Twelve Data API)");
     try {
       // 1. Primary: Direct Exchange Fetch
       const response = await fetch(`https://api.twelvedata.com/price?symbol=${SYMBOLS}&apikey=${TWELVE_DATA_API_KEY}`);
@@ -40,10 +40,10 @@ export const marketService = {
         }
       }
 
-      // 2. Secondary: Supabase fallback if API limit reached or error
+      // 2. Secondary: Supabase fallback (specific columns only)
       const query = supabase
         .from("market_data")
-        .select("*")
+        .select("id, symbol, price, change, updated_at")
         .order("symbol", { ascending: true });
 
       const rawData = await safeQuery<any[]>(query);
@@ -69,8 +69,8 @@ export const marketService = {
             up: jC > 0
          };
       });
-    } catch (error) {
-      console.error("📈 [MARKET FETCH] CRITICAL ERROR/FALLBACK", error);
+    } catch {
+      // Last resort — deterministic static fallback, no external dependency
       const m = [
         { id: '1', symbol: 'EUR/USD', price: 1.0942, change: 0.12, up: true },
         { id: '2', symbol: 'GBP/USD', price: 1.2651, change: -0.08, up: false },
