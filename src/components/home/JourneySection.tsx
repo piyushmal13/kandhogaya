@@ -3,11 +3,11 @@ import { motion } from "motion/react";
 import { containerVariants, itemVariants } from "@/lib/motion";
 
 const MILESTONES = [
-  { year: "2018", title: "Inception of Sovereign Alpha", desc: "First proprietary liquidity model deployed on XAUUSD." },
-  { year: "2020", title: "Institutional Node Expansion", desc: "IFX Trades established as the primary intelligence hub for retail quant groups." },
-  { year: "2022", title: "The $1B Benchmark", desc: "Systems surpass $1B in cumulative client-managed execution volume." },
-  { year: "2024", title: "Quantum Era Integration", desc: "Migration to high-performance execution clusters across HK and London nodes." },
-  { year: "2026", title: "The Sovereign Frontier", desc: "Global expansion into bespoke algorithmic private-banking solutions." },
+  { year: "2018", title: "Where It All Began", desc: "Our first gold trade model went live. It worked. We knew we were onto something real." },
+  { year: "2020", title: "Building the Community", desc: "IFX Trades opened its doors to serious retail traders across India and the Middle East." },
+  { year: "2022", title: "The ₹1 Billion Club", desc: "Our member community collectively managed over ₹1B in trading capital using our frameworks." },
+  { year: "2024", title: "Going Institutional", desc: "Upgraded to high-performance cloud clusters and launched our flagship QuantX algorithm." },
+  { year: "2026", title: "Asia's #1 Desk", desc: "Recognized as Asia's leading institutional forex education platform. Your edge starts here." },
 ];
 
 export const JourneySection = () => {
@@ -24,11 +24,11 @@ export const JourneySection = () => {
         >
           <motion.div variants={itemVariants} className="text-center mb-24">
             <span className="text-[10px] font-black uppercase tracking-[0.5em] text-[#58F2B6] mb-4 block">
-              The Evolution of Authority
+              Our Story
             </span>
             <h2 className="text-4xl md:text-7xl font-black text-white uppercase tracking-tighter">
-              A Legacy of <br />
-              <span className="text-white/20">Institutional Engineering.</span>
+              Built on Real <br />
+              <span className="text-white/20">Trading Experience.</span>
             </h2>
           </motion.div>
 

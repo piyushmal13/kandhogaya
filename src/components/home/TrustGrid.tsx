@@ -161,7 +161,7 @@ export const TrustGrid = () => {
         </div>
 
         {/* Bottom CTA */}
-        <motion.div
+          <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -170,20 +170,20 @@ export const TrustGrid = () => {
         >
           <div>
             <div className="text-white font-black text-xl md:text-2xl tracking-tight mb-2">
-              Ready to trade with institutional precision?
+              Ready to start trading smarter?
             </div>
             <div
               className="text-white/30 text-[11px] uppercase tracking-[0.2em]"
               style={{ fontFamily: "IBM Plex Mono, monospace" }}
             >
-              Institutional Access · Secure Connection · Global Desk
+              Free to Start · No Credit Card · Instant Access
             </div>
           </div>
           <Link
-            to="/academy"
+            to="/webinars"
             className="shrink-0 inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl bg-emerald-500 text-black font-black text-[11px] uppercase tracking-[0.15em] hover:bg-emerald-400 transition-all duration-150 hover:scale-[1.02] active:scale-[0.98] shadow-[0_0_30px_rgba(16,185,129,0.25)] hover:shadow-[0_0_50px_rgba(16,185,129,0.35)] whitespace-nowrap"
           >
-            Join the Academy <ArrowRight className="w-4 h-4" aria-hidden="true" />
+            Join a Free Webinar <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </Link>
         </motion.div>
       </div>

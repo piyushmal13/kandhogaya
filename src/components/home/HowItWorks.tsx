@@ -7,29 +7,29 @@ import { cn } from "@/lib/utils";
 const STEPS = [
   {
     icon: <Lightbulb className="w-8 h-8" />,
-    title: "Intelligence Origin",
-    description: "Macroeconomic hypotheses are stress-tested against historical cross-asset correlations.",
+    title: "We Study the Markets",
+    description: "Our analysts read global macro data, central bank policy, and institutional order flow — the same signals Wall Street uses every day.",
     span: "col-span-12 md:col-span-7",
     color: "bg-blue-500/5 border-blue-500/20 text-blue-400"
   },
   {
     icon: <Code2 className="w-8 h-8" />,
-    title: "Quant Engineering",
-    description: "Hypotheses are translated into high-performance C++ / Python algorithmic structures.",
+    title: "We Build the Algorithm",
+    description: "Those insights become a coded, back-tested trading strategy — not a feeling or a hunch, but a rules-based engine.",
     span: "col-span-12 md:col-span-5",
     color: "bg-purple-500/5 border-purple-500/20 text-purple-400"
   },
   {
     icon: <Cpu className="w-8 h-8" />,
-    title: "Risk Hardening",
-    description: "Execution nodes are hardened with proprietary stop-management protocols.",
+    title: "We Protect Your Capital",
+    description: "Every strategy includes built-in stop-loss rules and position sizing. We focus on not losing before we focus on winning.",
     span: "col-span-12 md:col-span-4",
     color: "bg-rose-500/5 border-rose-500/20 text-rose-400"
   },
   {
     icon: <LineChart className="w-8 h-8" />,
-    title: "Alpha Deployment",
-    description: "Sovereign liquidity clusters are exploited across global FX and Commodity pools.",
+    title: "You Learn & Execute",
+    description: "We teach you how to run it. Live sessions, PDF guides, and direct Q&A with our analysts. You own the edge.",
     span: "col-span-12 md:col-span-8",
     color: "bg-[#58F2B6]/5 border-[#58F2B6]/20 text-[#58F2B6]"
   }
@@ -47,11 +47,11 @@ export const HowItWorks = () => {
         >
           <motion.div variants={itemVariants} className="mb-20 text-center md:text-left">
             <span className="text-[10px] font-black uppercase tracking-[0.5em] text-[#58F2B6] mb-4 block">
-              Execution Lifecycle
+              How It Works
             </span>
             <h2 className="text-4xl md:text-7xl font-black text-white uppercase tracking-tighter max-w-4xl">
-              From Sovereign Hypothesis <br />
-              <span className="text-white/20">To Systematic Profit.</span>
+              From Market Insight <br />
+              <span className="text-white/20">To Your Winning Trade.</span>
             </h2>
           </motion.div>
 

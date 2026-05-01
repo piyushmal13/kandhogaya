@@ -59,15 +59,14 @@ export const ConsultationSection = () => {
             {/* Context Intelligence */}
             <motion.div variants={itemVariants}>
               <span className="text-[10px] font-black uppercase tracking-[0.5em] text-[#58F2B6] mb-4 block text-center lg:text-left">
-                Sovereign Inquiry
+                Get In Touch
               </span>
               <h2 className="text-4xl md:text-7xl font-black text-white uppercase tracking-tighter mb-8 text-center lg:text-left">
-                Request Private <br />
-                <span className="text-white/20">Institutional Review.</span>
+                Speak With Our <br />
+                <span className="text-white/20">Trading Experts.</span>
               </h2>
-              <p className="text-[rgba(248,250,252,0.6)] text-xl leading-relaxed mb-12 text-center lg:text-left">
-                Direct access to our senior quant specialists and macroeconomic architects. 
-                Limited availability for high-tier capital deployments.
+              <p className="text-[rgba(248,250,252,0.8)] text-xl leading-relaxed mb-12 text-center lg:text-left">
+                Ready to take your trading to the next level? Our quants and macro specialists are here to help you build a winning strategy.
               </p>
 
               <div className="space-y-6 hidden lg:block">
@@ -165,7 +164,7 @@ export const ConsultationSection = () => {
                         className="flex items-center gap-2"
                       >
                         <CheckCircle2 className="w-5 h-5" />
-                        <span>Transmission Authorized</span>
+                        <span>Message Received</span>
                       </motion.div>
                     ) : (
                       <motion.div 
@@ -175,7 +174,7 @@ export const ConsultationSection = () => {
                         className="flex items-center gap-2"
                       >
                         <Send className="w-5 h-5" />
-                        <span>Launch Inquiry</span>
+                        <span>Send Message</span>
                       </motion.div>
                     )}
                   </AnimatePresence>
