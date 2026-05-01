@@ -54,8 +54,8 @@ class Tracker {
         priority,
         metadata: {
           ...metadata,
-          path: globalThis.window !== undefined ? globalThis.window.location.pathname : '',
-          referrer: globalThis.document !== undefined ? globalThis.document.referrer : '',
+          path: globalThis.window === undefined ? '' : globalThis.window.location.pathname,
+          referrer: globalThis.document === undefined ? '' : globalThis.document.referrer,
           timestamp
         },
         event_at: timestamp
