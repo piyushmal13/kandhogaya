@@ -94,7 +94,7 @@ export const PurchaseModal = ({ plan, amount, productId, onClose }: PurchaseModa
         .from("manual_payment_receipts")
         .insert({
           user_id: user.id,
-          product_id: productId || "00000000-0000-0000-0000-000000000000",
+          product_id: productId || null,
           amount: amount,
           storage_path: filePath,
           whatsapp_number: whatsappNumber,

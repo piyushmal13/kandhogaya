@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 import {
   BarChart3, Zap, ShieldCheck, Users, Video, Settings, Star,
   ShoppingCart, Activity, Trophy, DollarSign, FileText, CreditCard,
-  Flag
+  Flag, Image as ImageIcon
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { cn } from "../utils/cn";
@@ -25,6 +25,7 @@ import { SettingsManager } from "../modules/admin/SettingsManager";
 import { ErrorViewer } from "../modules/admin/ErrorViewer";
 import { PaymentManager } from "../modules/admin/PaymentManager";
 import { FeatureFlagManager } from "../modules/admin/FeatureFlagManager";
+import { BannerManager } from "../modules/admin/BannerManager";
 
 const tabs = [
   { id: "ceo",         name: "Executive Overview",  icon: BarChart3,    group: "COMMAND" },
@@ -34,6 +35,7 @@ const tabs = [
   { id: "agents",      name: "Elite Agents",        icon: Trophy,       group: "GROWTH" },
   { id: "retention",   name: "Retention Hub",       icon: Activity,     group: "GROWTH" },
   { id: "webinars",    name: "Webinar Manager",     icon: Video,        group: "CONTENT" },
+  { id: "banners",     name: "Banners",            icon: ImageIcon,    group: "CONTENT" },
   { id: "content",     name: "Content Publishing",  icon: FileText,     group: "CONTENT" },
   { id: "algos",       name: "Product Manager",     icon: Zap,          group: "CONTENT" },
   { id: "reviews",     name: "Review Manager",      icon: Star,         group: "CONTENT" },
@@ -111,6 +113,7 @@ export const Admin = () => {
             {activeTab === "leads"       && <LeadManager />}
             {activeTab === "payments"    && <FulfillmentManager />}
             {activeTab === "content"     && <ContentManager />}
+            {activeTab === "banners"     && <BannerManager />}
             {activeTab === "licenses"    && <LicenseManager />}
             {activeTab === "flags"       && <FeatureFlagManager />}
             {activeTab === "algos"       && <ProductManager />}

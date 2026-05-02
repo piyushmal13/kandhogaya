@@ -4,6 +4,7 @@ import { screen, fireEvent, waitFor } from '@testing-library/dom';
 import { describe, it, expect, vi } from 'vitest';
 import { Login } from './Login';
 import { AuthProvider } from '../contexts/AuthContext';
+import { ToastProvider } from '../contexts/ToastContext';
 import { BrowserRouter } from 'react-router-dom';
 
 // Mock Supabase
@@ -31,9 +32,11 @@ describe('Login Component', () => {
   it('renders login form', async () => {
     render(
       <BrowserRouter>
-        <AuthProvider>
-          <Login />
-        </AuthProvider>
+        <ToastProvider>
+          <AuthProvider>
+            <Login />
+          </AuthProvider>
+        </ToastProvider>
       </BrowserRouter>
     );
     
@@ -46,9 +49,11 @@ describe('Login Component', () => {
   it('switches to magic link mode', async () => {
     render(
       <BrowserRouter>
-        <AuthProvider>
-          <Login />
-        </AuthProvider>
+        <ToastProvider>
+          <AuthProvider>
+            <Login />
+          </AuthProvider>
+        </ToastProvider>
       </BrowserRouter>
     );
     
@@ -59,7 +64,7 @@ describe('Login Component', () => {
     const magicLinkBtn = screen.getByText('Login with Magic Link (OTP)');
     fireEvent.click(magicLinkBtn);
     
-    expect(screen.getByText('Send Magic Link')).toBeInTheDocument();
+    expect(screen.getByText('Send Magic Link / OTP')).toBeInTheDocument();
     expect(screen.queryByPlaceholderText('••••••••')).not.toBeInTheDocument();
   });
 });

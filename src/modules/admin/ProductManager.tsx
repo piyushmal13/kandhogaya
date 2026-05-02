@@ -16,6 +16,12 @@ export const ProductManager = () => {
   
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [productToDelete, setProductToDelete] = useState<string | null>(null);
+  // Variant management state
+  const [variantModalOpen, setVariantModalOpen] = useState(false);
+  const [variantProductId, setVariantProductId] = useState<string | null>(null);
+  const [variantsList, setVariantsList] = useState<any[]>([]);
+  const [variantLoading, setVariantLoading] = useState(false);
+  const [variantForm, setVariantForm] = useState<any>({ name: '', sku: '', price_cents: 0, attributes: {} });
 
   const fetchProducts = async () => {
     const cacheKey = "products_list";
@@ -216,6 +222,79 @@ export const ProductManager = () => {
     } catch (error: unknown) {
       const err = error as Error;
       alert("Error creating product: " + err.message);
+    }
+  };
+
+  // Variants
+  const openVariantModal = async (productId: string) => {
+    setVariantProductId(productId);
+    setVariantModalOpen(true);
+    fetchVariants(productId);
+  };
+
+  const fetchVariants = async (productId: string) => {
+    setVariantLoading(true);
+    try {
+      const res = await fetch(`/api/products/${productId}/variants`);
+      if (!res.ok) throw new Error('Failed to fetch variants');
+      const data = await res.json();
+      setVariantsList(data || []);
+    } catch (err: any) {
+      alert('Error fetching variants: ' + (err.message || err));
+    } finally {
+      setVariantLoading(false);
+    }
+  };
+
+  const addVariant = async () => {
+    if (!variantProductId) return;
+    try {
+      const res = await fetch(`/api/admin/products/${variantProductId}/variants`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session?.access_token}` },
+        body: JSON.stringify(variantForm)
+      });
+      if (!res.ok) {
+        const err = await res.json(); throw new Error(err.error || 'Failed to create variant');
+      }
+      setVariantForm({ name: '', sku: '', price_cents: 0, attributes: {} });
+      fetchVariants(variantProductId);
+    } catch (err: any) {
+      alert('Add variant error: ' + (err.message || err));
+    }
+  };
+
+  const updateVariant = async (variantId: string, payload: any) => {
+    if (!variantProductId) return;
+    try {
+      const res = await fetch(`/api/admin/products/${variantProductId}/variants/${variantId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session?.access_token}` },
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) {
+        const err = await res.json(); throw new Error(err.error || 'Failed to update variant');
+      }
+      fetchVariants(variantProductId);
+    } catch (err: any) {
+      alert('Update variant error: ' + (err.message || err));
+    }
+  };
+
+  const deleteVariant = async (variantId: string) => {
+    if (!variantProductId) return;
+    if (!confirm('Delete variant?')) return;
+    try {
+      const res = await fetch(`/api/admin/products/${variantProductId}/variants/${variantId}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${session?.access_token}` }
+      });
+      if (!res.ok) {
+        const err = await res.json(); throw new Error(err.error || 'Failed to delete variant');
+      }
+      fetchVariants(variantProductId);
+    } catch (err: any) {
+      alert('Delete variant error: ' + (err.message || err));
     }
   };
 
@@ -519,6 +598,12 @@ export const ProductManager = () => {
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
+                        <button
+                          onClick={() => openVariantModal(product.id)}
+                          className="p-2 bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-all"
+                        >
+                          <ImageIcon className="w-4 h-4" />
+                        </button>
                       </div>
                     </div>
                     <p className="text-gray-400 text-sm line-clamp-2 mb-4">{product.description}</p>
@@ -559,6 +644,45 @@ export const ProductManager = () => {
         description="Are you sure you want to delete this algorithm? This will remove it from the marketplace and all associated data will be lost. This action cannot be undone."
         confirmText="Delete Algorithm"
       />
+
+      {/* Variants Dialog */}
+      <Dialog isOpen={variantModalOpen} onClose={() => { setVariantModalOpen(false); setVariantProductId(null); }} title="Product Variants">
+        <div className="space-y-4">
+          {variantLoading ? (
+            <div>Loading variants...</div>
+          ) : (
+            <div className="space-y-3">
+              {variantsList.map(v => (
+                <div key={v.id} className="flex items-center justify-between gap-4">
+                  <div>
+                    <div className="font-bold">{v.name}</div>
+                    <div className="text-sm text-gray-400">SKU: {v.sku} — ${((v.price_cents||0)/100).toFixed(2)}</div>
+                  </div>
+                  <div className="flex gap-2">
+                    <button onClick={() => {
+                      const newName = prompt('Variant name', v.name);
+                      if (newName !== null) updateVariant(v.id, { name: newName });
+                    }} className="px-3 py-1 bg-emerald-600 rounded">Edit</button>
+                    <button onClick={() => deleteVariant(v.id)} className="px-3 py-1 bg-red-600 rounded">Delete</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="pt-4 border-t border-white/5">
+            <h4 className="font-bold">Add Variant</h4>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-2">
+              <input placeholder="Name" value={variantForm.name} onChange={e => setVariantForm({...variantForm, name: e.target.value})} className="bg-black border border-white/10 rounded px-3 py-2" />
+              <input placeholder="SKU" value={variantForm.sku} onChange={e => setVariantForm({...variantForm, sku: e.target.value})} className="bg-black border border-white/10 rounded px-3 py-2" />
+              <input placeholder="Price (cents)" type="number" value={variantForm.price_cents} onChange={e => setVariantForm({...variantForm, price_cents: Number(e.target.value)})} className="bg-black border border-white/10 rounded px-3 py-2" />
+            </div>
+            <div className="flex justify-end mt-3">
+              <button onClick={addVariant} className="px-4 py-2 bg-emerald-500 rounded">Add Variant</button>
+            </div>
+          </div>
+        </div>
+      </Dialog>
     </div>
   );
 };

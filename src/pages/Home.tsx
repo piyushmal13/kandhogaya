@@ -11,6 +11,7 @@ import { WebinarPromo } from "../components/home/WebinarPromo";
 import { HowItWorks } from "../components/home/HowItWorks";
 import { JourneySection } from "../components/home/JourneySection";
 import { ConsultationSection } from "../components/home/ConsultationSection";
+import AdBanner from "../components/ui/AdBanner";
 
 import { faqSchema, educationalOrganizationSchema, websiteSchema, breadcrumbSchema } from "../utils/structuredData";
 
@@ -67,6 +68,9 @@ const Home = () => {
       <main>
         {/* L1: Sovereign Execution Hero */}
         <FortressHero />
+
+        {/* Editable advertisement banner (Supabase-driven) */}
+        <AdBanner placement="home" />
 
         {/* L2: Partner Matrix & Authority */}
         <BrandAuthority />

@@ -3,10 +3,15 @@ import jwt from "jsonwebtoken";
 import { createClient } from "@supabase/supabase-js";
 
 // --- CONFIGURATION ---
-const JWT_SECRET = process.env.JWT_SECRET || "hub-secret-2024";
+const isProduction = process.env.NODE_ENV === "production";
+const JWT_SECRET = process.env.JWT_SECRET || (isProduction ? "" : "dev-only-jwt-secret");
 const supabaseUrl = process.env.VITE_SUPABASE_URL || "https://placeholder.supabase.co";
 const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY || "placeholder";
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+if (!JWT_SECRET) {
+  throw new Error("Missing JWT_SECRET. Set a strong secret before deploying API routes.");
+}
 
 // Initialize Supabase Client
 const supabase = createClient(
@@ -37,6 +42,33 @@ const supabase = createClient(
 const app = express();
 app.use(express.json());
 
+type AppUserRole = "user" | "admin" | "agent" | "sales_agent" | "support" | "analyst";
+const validRoles = new Set<AppUserRole>(["user", "admin", "agent", "sales_agent", "support", "analyst"]);
+
+const normalizeRole = (role: unknown): AppUserRole | null => {
+  return typeof role === "string" && validRoles.has(role as AppUserRole)
+    ? role as AppUserRole
+    : null;
+};
+
+const createAuthedSupabaseClient = (token: string) => createClient(supabaseUrl, supabaseAnonKey, {
+  global: { headers: { Authorization: `Bearer ${token}` } },
+  auth: { persistSession: false, autoRefreshToken: false }
+});
+
+const resolveUserRole = async (authUser: any, authedClient: ReturnType<typeof createClient>): Promise<AppUserRole> => {
+  const appMetadataRole = normalizeRole(authUser.app_metadata?.role);
+  const roleClient = supabaseServiceKey ? supabase : authedClient;
+
+  const { data } = await roleClient
+    .from("users")
+    .select("role")
+    .eq("id", authUser.id)
+    .maybeSingle();
+
+  return normalizeRole(data?.role) || appMetadataRole || "user";
+};
+
 app.get("/api/health", (req, res) => {
   res.json({
     status: "ok",
@@ -59,15 +91,12 @@ const authenticate = async (req: any, res: any, next: any) => {
   const token = req.headers.authorization?.split(" ")[1];
   if (!token) return res.status(401).json({ error: "Unauthorized" });
   try {
-    const { data: { user }, error } = await supabase.auth.getUser(token);
+    const authClient = createAuthedSupabaseClient(token);
+    const { data: { user }, error } = await authClient.auth.getUser(token);
     if (error || !user) throw error;
-    
-    // Enrich user with role from metadata
-    req.user = { 
-      ...user, 
-      role: user.user_metadata?.role || 'user',
-      agent_code: user.user_metadata?.agent_code || null
-    };
+
+    req.supabase = authClient;
+    req.user = { ...user, role: await resolveUserRole(user, authClient) };
     next();
   } catch (e) {
     res.status(401).json({ error: "Invalid token" });
@@ -107,7 +136,7 @@ app.get("/api/webinars", async (req, res) => {
   const { data: webinars, error } = await supabase
     .from('webinars')
     .select('*')
-    .order('start_time', { ascending: true });
+    .order('date_time', { ascending: true });
 
   if (error) return res.status(500).json({ error: error.message });
   res.json(webinars);

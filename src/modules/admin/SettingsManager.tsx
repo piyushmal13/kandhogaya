@@ -81,7 +81,7 @@ export const SettingsManager = () => {
                 {previewUrl ? (
                   <img src={previewUrl} alt="Preview" className="max-w-full max-h-full object-contain" />
                 ) : (
-                  <img src="/uploads/logo/logo.png" onError={(e) => e.currentTarget.src = "/logo.png"} alt="Current Logo" className="max-w-full max-h-full object-contain" />
+                  <img alt="Current IFX Trades logo" src="/uploads/logo/logo.png" onError={(e) => e.currentTarget.src = "/logo.png"} className="max-w-full max-h-full object-contain" />
                 )}
               </div>
               

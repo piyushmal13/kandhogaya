@@ -33,9 +33,7 @@ export const useAccess = (): AccessState => {
     
     if (isAdmin) return { plan: 'elite' as PlanTier, isLoading: false };
 
-    // Check for explicit 'elite' tags in user metadata (CRM forced flags)
-    if (user.user_metadata?.plan === 'elite') return { plan: 'elite' as PlanTier, isLoading: false };
-    if (user.user_metadata?.plan === 'pro') return { plan: 'pro' as PlanTier, isLoading: false };
+    if (userProfile?.isPro) return { plan: 'pro' as PlanTier, isLoading: false };
 
     // Default to free
     return { plan: 'free' as PlanTier, isLoading: false };

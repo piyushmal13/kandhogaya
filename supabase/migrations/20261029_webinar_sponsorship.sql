@@ -19,8 +19,12 @@ CREATE POLICY "Public Read Access" ON webinar_sponsors
 -- Admin-only write access for sponsors (assuming authenticated users for now)
 CREATE POLICY "Admin All Access" ON webinar_sponsors
   FOR ALL TO authenticated
-  USING (true)
-  WITH CHECK (true);
+  USING (
+    EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin')
+  )
+  WITH CHECK (
+    EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin')
+  );
 
 -- Create storage bucket for sponsor logos
 INSERT INTO storage.buckets (id, name, public) 
@@ -34,8 +38,14 @@ CREATE POLICY "Public Access" ON storage.objects
 -- Storage RLS: Admin-only write
 CREATE POLICY "Admin Full Access" ON storage.objects
   FOR ALL TO authenticated
-  USING (bucket_id = 'sponsor-logos')
-  WITH CHECK (bucket_id = 'sponsor-logos');
+  USING (
+    bucket_id = 'sponsor-logos'
+    AND EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin')
+  )
+  WITH CHECK (
+    bucket_id = 'sponsor-logos'
+    AND EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin')
+  );
 
 -- Insert dummy sponsor data for demonstration
 -- First, get a webinar_id from the table

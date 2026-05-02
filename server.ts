@@ -11,6 +11,7 @@ import multer from "multer";
 import fs from "node:fs";
 import helmet from "helmet";
 import compression from "compression";
+import Stripe from 'stripe';
 
 const logger = pino({
   level: process.env.LOG_LEVEL || "info",
@@ -26,7 +27,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // --- CONFIGURATION ---
-const JWT_SECRET = process.env.JWT_SECRET || "hub-secret-2024";
+const isProduction = process.env.NODE_ENV === "production";
+const PORT = parseInt(process.env.PORT || "3000", 10);
+const JWT_SECRET = process.env.JWT_SECRET || (isProduction ? "" : "dev-only-jwt-secret");
 const supabaseUrl = process.env.VITE_SUPABASE_URL || "https://placeholder.supabase.co";
 const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY || "placeholder";
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY && 
@@ -34,25 +37,18 @@ const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY &&
   ? process.env.SUPABASE_SERVICE_ROLE_KEY 
   : undefined;
 
-// Robust Verification Bridge
-const verifyConnection = async () => {
-  try {
-    const testClient = createClient(supabaseUrl, supabaseAnonKey);
-    const { error } = await testClient.from('products').select('id').limit(1);
-    if (error) {
-      logger.warn({ error: error.message }, "Supabase connectivity warning during startup");
-    } else {
-      logger.info("Supabase Research Connection: ESTABLISHED");
-    }
-  } catch (err) {
-    logger.error({ err }, "Supabase initialization crash");
-  }
-};
-verifyConnection();
-
 if (!process.env.VITE_SUPABASE_URL || !process.env.VITE_SUPABASE_ANON_KEY) {
   logger.error("Missing required environment variables (VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY). Exiting.");
   process.exit(1);
+}
+
+if (!JWT_SECRET) {
+  logger.error("Missing JWT_SECRET. Set a strong secret before running in production.");
+  process.exit(1);
+}
+
+if (isProduction && !supabaseServiceKey) {
+  logger.warn("SUPABASE_SERVICE_ROLE_KEY is not configured. Admin reconciliation, audit logs, and payment webhooks may be limited by RLS.");
 }
 
 // Ensure uploads directory exists
@@ -103,6 +99,34 @@ const supabase = createClient(
     }
   }
 );
+
+// Robust Verification Bridge
+const verifyConnection = async () => {
+  try {
+    const { error } = await supabase.from('products').select('id').limit(1);
+    if (error) {
+      logger.warn({ error: error.message, hint: error.hint }, "Supabase connectivity warning during startup");
+    } else {
+      logger.info("Supabase connection established");
+    }
+  } catch (err) {
+    logger.error({ err }, "Supabase initialization crash");
+  }
+};
+verifyConnection();
+
+if (!process.env.STRIPE_SECRET_KEY) {
+  logger.warn('STRIPE_SECRET_KEY not configured; payments disabled until configured');
+}
+
+let stripeClient: Stripe | null = null;
+const getStripe = () => {
+  if (!process.env.STRIPE_SECRET_KEY) return null;
+  if (!stripeClient) {
+    stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2023-08-16' });
+  }
+  return stripeClient;
+};
 
 // --- BACKEND SERVICES ---
 
@@ -156,6 +180,72 @@ const LicenseService = {
   }
 };
 
+type AppUserRole = "user" | "admin" | "agent" | "sales_agent" | "support" | "analyst";
+
+const validRoles = new Set<AppUserRole>(["user", "admin", "agent", "sales_agent", "support", "analyst"]);
+
+const normalizeRole = (role: unknown): AppUserRole | null => {
+  return typeof role === "string" && validRoles.has(role as AppUserRole)
+    ? role as AppUserRole
+    : null;
+};
+
+const createAuthedSupabaseClient = (token: string) => createClient(supabaseUrl, supabaseAnonKey, {
+  global: { headers: { Authorization: `Bearer ${token}` } },
+  auth: { persistSession: false, autoRefreshToken: false }
+});
+
+const resolveUserRole = async (authUser: any, authedClient: ReturnType<typeof createClient>): Promise<AppUserRole> => {
+  const appMetadataRole = normalizeRole(authUser.app_metadata?.role);
+  const roleClient = supabaseServiceKey ? supabase : authedClient;
+
+  try {
+    const { data, error } = await roleClient
+      .from("users")
+      .select("role")
+      .eq("id", authUser.id)
+      .maybeSingle();
+
+    if (error) {
+      logger.warn({ userId: authUser.id, code: error.code, message: error.message }, "Could not resolve database role");
+    }
+
+    return normalizeRole(data?.role) || appMetadataRole || "user";
+  } catch (err) {
+    logger.warn({ err, userId: authUser.id }, "Role resolution failed");
+    return appMetadataRole || "user";
+  }
+};
+
+const allowedPaymentCurrencies = new Set(["usd", "inr", "aed"]);
+
+const normalizeCurrency = (currency: unknown) => {
+  const normalized = typeof currency === "string" ? currency.toLowerCase() : "usd";
+  return allowedPaymentCurrencies.has(normalized) ? normalized : "usd";
+};
+
+const toAmountCents = (amount: unknown) => {
+  const numericAmount = Number(amount);
+  if (!Number.isFinite(numericAmount) || numericAmount <= 0) return 0;
+  return Math.round(numericAmount * 100);
+};
+
+const appBaseUrl = () => process.env.APP_URL || process.env.BASE_URL || "http://localhost:3000";
+
+const trustedRedirectUrl = (candidate: unknown, fallbackPath: string) => {
+  const base = new URL(appBaseUrl());
+  if (typeof candidate !== "string" || candidate.trim().length === 0) {
+    return new URL(fallbackPath, base).toString();
+  }
+
+  try {
+    const parsed = new URL(candidate, base);
+    return parsed.origin === base.origin ? parsed.toString() : new URL(fallbackPath, base).toString();
+  } catch {
+    return new URL(fallbackPath, base).toString();
+  }
+};
+
 // --- API CONTROLLERS ---
 
 async function startServer() {
@@ -178,7 +268,37 @@ async function startServer() {
   // Performance Optimization (Compression)
   app.use(compression());
 
-  app.use(express.json());
+  app.use(express.json({
+    verify: (req: any, res: any, buf: Buffer) => {
+      (req as any).rawBody = buf;
+    }
+  }));
+
+  // CORS: allow configured frontend origins via CORS_ALLOW env (comma-separated).
+  const allowedOrigins = (process.env.CORS_ALLOW || '').split(',').map(s => s.trim()).filter(Boolean);
+  app.use((req, res, next) => {
+    const origin = req.headers.origin;
+    const allowOrigin = !origin
+      ? ""
+      : allowedOrigins.length === 0 || allowedOrigins.includes(origin)
+        ? origin
+        : "";
+
+    if (allowOrigin) {
+      res.setHeader("Access-Control-Allow-Origin", allowOrigin);
+      res.setHeader("Vary", "Origin");
+      res.setHeader("Access-Control-Allow-Credentials", "true");
+    }
+
+    res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization,Stripe-Signature");
+
+    if (req.method === "OPTIONS") {
+      return res.sendStatus(204);
+    }
+
+    next();
+  });
 
   // Metrics
   const metrics = {
@@ -186,6 +306,10 @@ async function startServer() {
     errors: 0,
     startTime: Date.now()
   };
+
+  // Global rate limiter (mild) to protect APIs
+  const globalRateLimiter = rateLimit({ windowMs: 60 * 1000, max: 600, standardHeaders: true, legacyHeaders: false });
+  app.use('/api', globalRateLimiter);
 
   // Request Logging Middleware
   app.use((req, res, next) => {
@@ -245,20 +369,14 @@ async function startServer() {
       const { data: { user: authUser }, error: authError } = await authClient.auth.getUser(token);
       if (authError || !authUser) throw authError;
       
-      req.supabase = createClient(supabaseUrl, supabaseAnonKey, {
-        global: { headers: { Authorization: `Bearer ${token}` } },
-        auth: { persistSession: false, autoRefreshToken: false }
-      });
-      const isAdmin = authUser.email === 'admin@ifxtrades.com' || 
-                      authUser.email === 'admin@tradinghub.com' || 
-                      authUser.email === 'piyushmal1301@gmail.com' ||
-                      authUser.user_metadata?.role === 'admin';
-                      
-      req.user = { ...authUser, role: isAdmin ? 'admin' : 'user' };
+      req.supabase = createAuthedSupabaseClient(token);
+      const role = await resolveUserRole(authUser, req.supabase);
+
+      req.user = { ...authUser, role };
       next();
     } catch (e: any) {
       const errorMessage = e instanceof Error ? e.message : "Authentication failed";
-      logger.error({ err: e, token }, errorMessage);
+      logger.warn({ err: e }, errorMessage);
       res.status(401).json({ error: "Invalid token" });
     }
   };
@@ -409,6 +527,58 @@ async function startServer() {
     res.json({ success: true });
   });
 
+  // Product Variant Routes
+  app.get("/api/products/:id/variants", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { data, error } = await supabase.from('product_variants').select('*').eq('product_id', id).order('priority', { ascending: true });
+      if (error) return res.status(500).json({ error: error.message });
+      res.json(data);
+    } catch (err) {
+      res.status(500).json({ error: 'Failed to fetch product variants' });
+    }
+  });
+
+  app.post("/api/admin/products/:id/variants", authenticate, async (req: any, res) => {
+    if (req.user.role !== "admin") return res.status(403).json({ error: "Forbidden" });
+    try {
+      const { id } = req.params; // product id
+      const payload = { ...req.body, product_id: id };
+      const { data, error } = await req.supabase.from('product_variants').insert([payload]).select().single();
+      if (error) return res.status(500).json({ error: error.message });
+      await logAudit(req.supabase, req.user.id, 'CREATE', 'product_variant', data.id, payload);
+      res.json({ success: true, variant: data });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message || 'Failed to create variant' });
+    }
+  });
+
+  app.put("/api/admin/products/:productId/variants/:variantId", authenticate, async (req: any, res) => {
+    if (req.user.role !== "admin") return res.status(403).json({ error: "Forbidden" });
+    try {
+      const { productId, variantId } = req.params;
+      const { error } = await req.supabase.from('product_variants').update(req.body).eq('id', variantId).eq('product_id', productId);
+      if (error) return res.status(500).json({ error: error.message });
+      await logAudit(req.supabase, req.user.id, 'UPDATE', 'product_variant', variantId, req.body);
+      res.json({ success: true });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message || 'Failed to update variant' });
+    }
+  });
+
+  app.delete("/api/admin/products/:productId/variants/:variantId", authenticate, async (req: any, res) => {
+    if (req.user.role !== "admin") return res.status(403).json({ error: "Forbidden" });
+    try {
+      const { productId, variantId } = req.params;
+      const { error } = await req.supabase.from('product_variants').delete().eq('id', variantId).eq('product_id', productId);
+      if (error) return res.status(500).json({ error: error.message });
+      await logAudit(req.supabase, req.user.id, 'DELETE', 'product_variant', variantId);
+      res.json({ success: true });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message || 'Failed to delete variant' });
+    }
+  });
+
   app.get("/api/admin/licenses", authenticate, async (req: any, res) => {
     if (req.user.role !== "admin") return res.status(403).json({ error: "Forbidden" });
     const { data, error } = await req.supabase
@@ -488,6 +658,46 @@ async function startServer() {
     res.json({ success: true });
   });
 
+  // Banner Routes - public fetch + admin management
+  app.get("/api/banners", async (req, res) => {
+    try {
+      const placement = req.query.placement;
+      let query = supabase.from('banners').select('*').eq('is_active', true);
+      if (placement) query = query.eq('placement', placement as string);
+      const { data, error } = await query.order('priority', { ascending: false });
+      if (error) return res.status(500).json({ error: error.message });
+      res.json(data);
+    } catch (err) {
+      res.status(500).json({ error: "Failed to fetch banners" });
+    }
+  });
+
+  app.post("/api/admin/banners", authenticate, async (req: any, res) => {
+    if (req.user.role !== "admin") return res.status(403).json({ error: "Forbidden" });
+    const { data, error } = await req.supabase.from('banners').insert([req.body]).select().single();
+    if (error) return res.status(500).json({ error: error.message });
+    await logAudit(req.supabase, req.user.id, 'CREATE', 'banner', data.id, req.body);
+    res.json({ success: true, banner: data });
+  });
+
+  app.put("/api/admin/banners/:id", authenticate, async (req: any, res) => {
+    if (req.user.role !== "admin") return res.status(403).json({ error: "Forbidden" });
+    const { id } = req.params;
+    const { error } = await req.supabase.from('banners').update(req.body).eq('id', id);
+    if (error) return res.status(500).json({ error: error.message });
+    await logAudit(req.supabase, req.user.id, 'UPDATE', 'banner', id, req.body);
+    res.json({ success: true });
+  });
+
+  app.delete("/api/admin/banners/:id", authenticate, async (req: any, res) => {
+    if (req.user.role !== "admin") return res.status(403).json({ error: "Forbidden" });
+    const { id } = req.params;
+    const { error } = await req.supabase.from('banners').delete().eq('id', id);
+    if (error) return res.status(500).json({ error: error.message });
+    await logAudit(req.supabase, req.user.id, 'DELETE', 'banner', id);
+    res.json({ success: true });
+  });
+
   app.post("/api/admin/reviews", authenticate, async (req: any, res) => {
     if (req.user.role !== "admin") return res.status(403).json({ error: "Forbidden" });
     const { error } = await req.supabase.from('reviews').insert([req.body]).select().single();
@@ -520,6 +730,166 @@ async function startServer() {
     if (req.user.role !== "admin") return res.status(403).json({ error: "Forbidden" });
     const logoUrl = `/uploads/logo/logo.png?v=${Date.now()}`;
     res.json({ success: true, url: logoUrl });
+  });
+
+  // Payments: create payment intent (authenticated users)
+  app.post('/api/payments/create-intent', authenticate, async (req: any, res) => {
+    const stripe = getStripe();
+    if (!stripe) return res.status(503).json({ error: 'Stripe not configured' });
+    try {
+      const { product_id, variant_id, amount, currency = 'usd', affiliate_code } = req.body;
+      let amountCents = 0;
+      if (product_id) {
+        const { data: product, error } = await req.supabase.from('products').select('id, price').eq('id', product_id).single();
+        if (error || !product) return res.status(400).json({ error: 'Product not found' });
+        amountCents = toAmountCents(product.price);
+      } else if (amount) {
+        amountCents = toAmountCents(amount);
+      } else {
+        return res.status(400).json({ error: 'Missing amount or product_id' });
+      }
+
+      if (amountCents < 50) {
+        return res.status(400).json({ error: 'Payment amount is invalid' });
+      }
+
+      const paymentCurrency = normalizeCurrency(currency);
+
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: amountCents,
+        currency: paymentCurrency,
+        metadata: {
+          user_id: req.user?.id || null,
+          product_id: product_id || null,
+          variant_id: variant_id || null,
+          affiliate_code: affiliate_code || null
+        }
+      });
+
+      // record payment in DB (best-effort)
+      try {
+        const { data: paymentRecord, error } = await req.supabase.from('payments').insert({
+          stripe_payment_intent_id: paymentIntent.id,
+          user_id: req.user?.id || null,
+          amount: amountCents,
+          currency: paymentCurrency,
+          status: paymentIntent.status,
+          affiliate_code
+        }).select().single();
+        if (error) logger.error({ err: error }, 'Failed to insert payment record');
+      } catch (e: any) {
+        logger.error({ err: e }, 'Payments table insert failed');
+      }
+
+      await logAudit(req.supabase, req.user?.id || 'system', 'CREATE', 'payment', paymentIntent.id, { amount: amountCents });
+      res.json({ clientSecret: paymentIntent.client_secret });
+    } catch (err: any) {
+      logger.error({ err }, 'Create payment intent failed');
+      res.status(500).json({ error: err.message || 'Failed to create payment intent' });
+    }
+  });
+
+      // Create a Stripe Checkout Session and return a redirect URL
+      app.post('/api/payments/create-checkout-session', authenticate, async (req: any, res) => {
+        const stripe = getStripe();
+        if (!stripe) return res.status(503).json({ error: 'Stripe not configured' });
+        try {
+          const { product_id, amount, currency = 'usd', affiliate_code, success_url, cancel_url } = req.body;
+          let priceCents = 0;
+          let name = 'Purchase';
+          if (product_id) {
+            const { data: product, error } = await req.supabase.from('products').select('id, name, price').eq('id', product_id).single();
+            if (error || !product) return res.status(400).json({ error: 'Product not found' });
+            priceCents = toAmountCents(product.price);
+            name = product.name || name;
+          } else if (amount) {
+            priceCents = toAmountCents(amount);
+          } else {
+            return res.status(400).json({ error: 'Missing amount or product_id' });
+          }
+
+          if (priceCents < 50) {
+            return res.status(400).json({ error: 'Payment amount is invalid' });
+          }
+
+          const paymentCurrency = normalizeCurrency(currency);
+
+          const session = await stripe.checkout.sessions.create({
+            payment_method_types: ['card'],
+            line_items: [
+              {
+                price_data: {
+                  currency: paymentCurrency,
+                  product_data: { name },
+                  unit_amount: priceCents
+                },
+                quantity: 1
+              }
+            ],
+            mode: 'payment',
+            success_url: process.env.STRIPE_SUCCESS_URL || trustedRedirectUrl(success_url, '/payments/success'),
+            cancel_url: process.env.STRIPE_CANCEL_URL || trustedRedirectUrl(cancel_url, '/payments/cancel'),
+            metadata: { user_id: req.user?.id || null, product_id, affiliate_code }
+          });
+
+          try {
+            await req.supabase.from('payments').insert({
+              stripe_payment_intent_id: session.payment_intent || session.id,
+              user_id: req.user?.id || null,
+              amount: priceCents,
+              currency: paymentCurrency,
+              status: 'created',
+              affiliate_code,
+              metadata: { stripe_session: session }
+            });
+          } catch (e: any) {
+            logger.error({ err: e }, 'Failed to record checkout session');
+          }
+
+          res.json({ url: session.url });
+        } catch (err: any) {
+          logger.error({ err }, 'Create checkout session failed');
+          res.status(500).json({ error: err.message || 'Failed to create checkout session' });
+        }
+      });
+
+  // Stripe Webhook endpoint (verify signature)
+  app.post('/api/webhooks/stripe', express.raw({ type: 'application/json' }), async (req: any, res) => {
+    const stripe = getStripe();
+    if (!stripe) return res.status(503).send('Stripe not configured');
+    const sig = req.headers['stripe-signature'] as string | undefined;
+    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+    if (!webhookSecret) return res.status(400).send('Webhook secret not configured');
+    try {
+      const raw = (req as any).rawBody || req.body;
+      const event = stripe.webhooks.constructEvent(raw, sig || '', webhookSecret);
+
+      if (event.type === 'payment_intent.succeeded') {
+        const pi: any = event.data.object;
+        const intentId = pi.id;
+        await supabase.from('payments').update({ status: 'succeeded', raw: pi }).eq('stripe_payment_intent_id', intentId);
+        await logAudit(supabase, 'system', 'UPDATE', 'payment', intentId, { status: 'succeeded' });
+      } else if (event.type === 'payment_intent.payment_failed') {
+        const pi: any = event.data.object;
+        const intentId = pi.id;
+        await supabase.from('payments').update({ status: 'failed', raw: pi }).eq('stripe_payment_intent_id', intentId);
+        await logAudit(supabase, 'system', 'UPDATE', 'payment', intentId, { status: 'failed' });
+      } else if (event.type === 'checkout.session.completed') {
+        const session: any = event.data.object;
+        const recordIds = [session.id, session.payment_intent].filter(Boolean);
+        await supabase
+          .from('payments')
+          .update({ status: 'succeeded', raw: session })
+          .in('stripe_payment_intent_id', recordIds);
+        await logAudit(supabase, 'system', 'UPDATE', 'payment', session.id, { status: 'succeeded', source: 'checkout.session.completed' });
+      } else {
+        logger.info({ event: event.type }, 'Unhandled stripe event');
+      }
+      res.json({ received: true });
+    } catch (err: any) {
+      logger.error({ err }, 'Stripe webhook error');
+      res.status(400).send(`Webhook Error: ${err.message}`);
+    }
   });
 
   // Global Error Handler
@@ -578,7 +948,23 @@ async function startServer() {
     app.use(vite.middlewares);
   }
 
-  app.listen(3000, "0.0.0.0", () => console.log("IFXTrades Hub API running on port 3000"));
+  // Graceful shutdown and global error handlers
+  const shutdown = async (signal: string) => {
+    logger.info({ signal }, 'Shutting down server');
+    try {
+      // TODO: close DB connections, flush logs, finish background jobs
+      setTimeout(() => process.exit(0), 250);
+    } catch (e: any) {
+      logger.error({ err: e }, 'Error during shutdown');
+      process.exit(1);
+    }
+  };
+  process.on('SIGINT', () => shutdown('SIGINT'));
+  process.on('SIGTERM', () => shutdown('SIGTERM'));
+  process.on('uncaughtException', (err) => { logger.error({ err }, 'uncaughtException'); process.exit(1); });
+  process.on('unhandledRejection', (reason) => { logger.error({ reason }, 'unhandledRejection'); });
+
+  app.listen(PORT, "0.0.0.0", () => console.log(`IFXTrades Hub API running on port ${PORT}`));
 }
 
 await startServer();

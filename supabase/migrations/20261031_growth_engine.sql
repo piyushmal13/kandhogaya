@@ -58,9 +58,7 @@ CREATE POLICY "Affiliates can view their own commissions"
 ON commissions FOR SELECT
 TO authenticated
 USING (
-  agent_id IN (
-    SELECT id FROM agents WHERE user_id = auth.uid()
-  )
+  agent_id = auth.uid()
 );
 
 -- Admin Global Access (Assuming 'admin' role in users table)
@@ -92,7 +90,7 @@ BEGIN
   done := false;
   WHILE NOT done LOOP
     new_code := UPPER(SUBSTRING(MD5(RANDOM()::TEXT) FROM 1 FOR 8));
-    INSERT INTO affiliate_codes (user_id, code) VALUES (user_id, new_code)
+    INSERT INTO affiliate_codes (user_id, code) VALUES ($1, new_code)
     ON CONFLICT (code) DO NOTHING
     RETURNING code INTO new_code;
     IF new_code IS NOT NULL THEN
@@ -101,4 +99,4 @@ BEGIN
   END LOOP;
   RETURN new_code;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY INVOKER SET search_path = public, pg_temp;

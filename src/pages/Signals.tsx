@@ -236,12 +236,11 @@ const PaymentModal = ({ plan, onClose }: { plan: PricingPlan; onClose: () => voi
     try {
       let screenshotUrl = "";
       if (file) {
-        const fileExt = file.name.split(".").pop();
-        const fileName = `${Math.random()}.${fileExt}`;
+        const fileExt = file.name.split(".").pop()?.toLowerCase() || "png";
+        const fileName = `${user.id}/${crypto.randomUUID()}.${fileExt}`;
         const { error: uploadError } = await supabase.storage.from("payment-proofs").upload(fileName, file);
         if (uploadError) throw uploadError;
-        const { data: { publicUrl } } = supabase.storage.from("payment-proofs").getPublicUrl(fileName);
-        screenshotUrl = publicUrl;
+        screenshotUrl = fileName;
       }
       const { error: insertError } = await supabase
         .from("payment-proofs")

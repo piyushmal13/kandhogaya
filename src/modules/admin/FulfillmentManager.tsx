@@ -233,9 +233,13 @@ export const FulfillmentManager = () => {
 
                 <div className="flex items-center gap-4 w-full xl:w-auto">
                    <button 
-                    onClick={() => {
-                        const { data } = supabase.storage.from('receipts').getPublicUrl(receipt.storage_path);
-                        if (data?.publicUrl) globalThis.open(data.publicUrl, '_blank');
+                    onClick={async () => {
+                        const { data, error } = await supabase.storage.from('receipts').createSignedUrl(receipt.storage_path, 60);
+                        if (error) {
+                          console.error("Receipt signed URL failed:", error);
+                          return;
+                        }
+                        if (data?.signedUrl) globalThis.open(data.signedUrl, '_blank');
                     }}
                     className="flex-1 xl:flex-none p-5 bg-white/5 border border-white/10 text-white font-black text-[10px] uppercase tracking-widest rounded-2xl hover:bg-white/10 flex items-center justify-center gap-3 transition-all"
                    >

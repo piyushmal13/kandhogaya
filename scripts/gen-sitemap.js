@@ -27,6 +27,19 @@ const BASE_URL  = 'https://ifxtrades.com';
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL;
 const SERVICE_KEY  = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
+const looksConfigured = (value) => {
+  return Boolean(value) &&
+    !/^(your-|placeholder|sk_live_\.{3}|sk_test_\.{3}|whsec_\.{3})/i.test(value) &&
+    !value.includes('your-project');
+};
+
+const escapeXml = (value) => String(value)
+  .replaceAll('&', '&amp;')
+  .replaceAll('<', '&lt;')
+  .replaceAll('>', '&gt;')
+  .replaceAll('"', '&quot;')
+  .replaceAll("'", '&apos;');
+
 // ─── Static Routes ────────────────────────────────────────────────────────────
 const STATIC_URLS = [
   { loc: '/',            changefreq: 'daily',   priority: '1.0' },
@@ -48,7 +61,7 @@ const STATIC_URLS = [
 
 // ─── Dynamic Routes from Supabase ─────────────────────────────────────────────
 async function fetchDynamicRoutes() {
-  if (!SUPABASE_URL || !SERVICE_KEY) {
+  if (!looksConfigured(SUPABASE_URL) || !looksConfigured(SERVICE_KEY)) {
     console.warn('[sitemap] Supabase credentials missing — skipping dynamic routes.');
     return [];
   }
@@ -64,7 +77,7 @@ async function fetchDynamicRoutes() {
     .order('id', { ascending: false });
 
   if (wErr) {
-    console.error('[sitemap] Webinar fetch error:', wErr.message);
+    console.warn('[sitemap] Webinar fetch skipped:', wErr.message);
   } else {
     (webinars ?? []).forEach(w => {
       routes.push({
@@ -82,9 +95,9 @@ async function fetchDynamicRoutes() {
 function buildXml(urls) {
   const entries = urls.map(u => `
   <url>
-    <loc>${BASE_URL}${u.loc}</loc>
-    <changefreq>${u.changefreq}</changefreq>
-    <priority>${u.priority}</priority>${u.lastmod ? `\n    <lastmod>${u.lastmod}</lastmod>` : ''}
+    <loc>${escapeXml(BASE_URL + u.loc)}</loc>
+    <changefreq>${escapeXml(u.changefreq)}</changefreq>
+    <priority>${escapeXml(u.priority)}</priority>${u.lastmod ? `\n    <lastmod>${escapeXml(u.lastmod)}</lastmod>` : ''}
   </url>`).join('');
 
   return `<?xml version="1.0" encoding="UTF-8"?>
