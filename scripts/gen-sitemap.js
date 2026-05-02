@@ -88,6 +88,25 @@ async function fetchDynamicRoutes() {
     });
   }
 
+  // Blog Posts
+  const { data: posts, error: bErr } = await sb
+    .from('content_posts')
+    .select('slug')
+    .eq('status', 'published')
+    .order('created_at', { ascending: false });
+
+  if (bErr) {
+    console.warn('[sitemap] Blog fetch skipped:', bErr.message);
+  } else {
+    (posts ?? []).forEach(p => {
+      routes.push({
+        loc:        `/blog/${p.slug}`,
+        changefreq: 'weekly',
+        priority:   '0.75'
+      });
+    });
+  }
+
   return routes;
 }
 

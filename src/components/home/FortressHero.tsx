@@ -203,8 +203,8 @@ export const FortressHero = () => {
         >
           {[
             { value: "12,000+",     label: "Active Traders" },
-            { value: "₹0 Broker",   label: "No Hidden Fees" },
-            { value: "3-Year",      label: "Verified Track Record" },
+            { value: "Institutional",   label: "Grade Research" },
+            { value: "3-Year",      label: "Verified Alpha" },
             { value: "India · UAE", label: "Compliance Verified" },
           ].map((s) => (
             <div key={s.label} className="flex flex-col items-center gap-1">

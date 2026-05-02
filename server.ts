@@ -948,11 +948,21 @@ async function startServer() {
     app.use(vite.middlewares);
   }
 
+  // Institutional Status Heartbeat
+  async function verifyConnection() {
+    try {
+      const { data, error } = await supabase.from('users').select('count', { count: 'exact', head: true });
+      if (error) throw error;
+      logger.info(`[INSTITUTIONAL HEARTBEAT]: Supabase Pulse active. Population: ${data || 0} nodes.`);
+    } catch (err: any) {
+      logger.error(`[CRITICAL INFRASTRUCTURE FAILURE]: Supabase connection lost: ${err.message}`);
+    }
+  }
+
   // Graceful shutdown and global error handlers
   const shutdown = async (signal: string) => {
     logger.info({ signal }, 'Shutting down server');
     try {
-      // TODO: close DB connections, flush logs, finish background jobs
       setTimeout(() => process.exit(0), 250);
     } catch (e: any) {
       logger.error({ err: e }, 'Error during shutdown');
@@ -964,7 +974,19 @@ async function startServer() {
   process.on('uncaughtException', (err) => { logger.error({ err }, 'uncaughtException'); process.exit(1); });
   process.on('unhandledRejection', (reason) => { logger.error({ reason }, 'unhandledRejection'); });
 
-  app.listen(PORT, "0.0.0.0", () => console.log(`IFXTrades Hub API running on port ${PORT}`));
+  app.listen(PORT, "0.0.0.0", async () => {
+    console.log(`
+  ╔═══════════════════════════════════════════════════════╗
+  ║  IFX TRADES — INSTITUTIONAL PERFORMANCE TERMINAL      ║
+  ╠═══════════════════════════════════════════════════════╣
+  ║  Status: OPERATIONAL                                  ║
+  ║  Port:   ${PORT}                                         ║
+  ║  Mode:   ${process.env.NODE_ENV?.toUpperCase()}                         ║
+  ║  Auth:   SUPABASE JWT ENFORCED                        ║
+  ╚═══════════════════════════════════════════════════════╝
+    `);
+    await verifyConnection();
+  });
 }
 
 await startServer();

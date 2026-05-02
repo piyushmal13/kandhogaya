@@ -3,29 +3,6 @@ Allow: /
 Disallow: /admin
 Disallow: /dashboard
 Disallow: /agent
-Disallow: /affiliate
 Disallow: /api/
-Crawl-delay: 5
 
-# Search engine specific rules
-User-agent: Googlebot
-Allow: /
-Disallow: /admin
-Disallow: /dashboard
-Crawl-delay: 2
-
-User-agent: Bingbot
-Allow: /
-Disallow: /admin
-Disallow: /dashboard
-Crawl-delay: 5
-
-# Block resource-heavy scrapers
-User-agent: AhrefsBot
-Crawl-delay: 10
-
-User-agent: SemrushBot
-Crawl-delay: 10
-
-# Sitemap discovery
 Sitemap: https://ifxtrades.com/sitemap.xml

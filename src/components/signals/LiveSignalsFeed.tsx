@@ -25,11 +25,11 @@ export const LiveSignalsFeed = () => {
             <div className="flex items-center gap-3">
               <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_20px_rgba(16,185,129,0.8)]" />
               <h2 className="text-[11px] font-black text-white uppercase tracking-[0.4em] font-mono">
-                Neural Execution Stream
+                Institutional Intelligence Stream
               </h2>
             </div>
             <p className="text-gray-500 text-sm max-w-md font-light leading-relaxed">
-              Real-time synchronization with our proprietary quantitative models. All parameters are derived from institutional liquidity voids.
+              Real-time synchronization with our proprietary quantitative models. All parameters are derived from institutional liquidity analysis.
             </p>
           </div>
           <div className="flex items-center gap-6 px-6 py-3 rounded-2xl bg-white/[0.02] border border-white/[0.08] backdrop-blur-xl">
@@ -45,7 +45,7 @@ export const LiveSignalsFeed = () => {
         <BlurGate 
           requiredPlan="pro" 
           title="Institutional Parameters Encrypted"
-          description="Access to real-time execution nodes, deep-liquidity zones, and risk hardeners requires the Sovereign Pass. High-fidelity discovery remains active for preview."
+          description="Access to real-time intelligence nodes, deep-liquidity zones, and risk hardeners requires the Sovereign Pass. High-fidelity discovery remains active for preview."
         >
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
             {loading
@@ -81,7 +81,7 @@ export const LiveSignalsFeed = () => {
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className="text-[9px] font-black text-white/20 uppercase tracking-[0.3em] mb-1">Entry Price</div>
+                          <div className="text-[9px] font-black text-white/20 uppercase tracking-[0.3em] mb-1">Entry Discovery</div>
                           <div className="text-xl font-black text-white font-mono tracking-tighter">{signal.entry}</div>
                         </div>
                       </div>
@@ -89,7 +89,7 @@ export const LiveSignalsFeed = () => {
                       <div className="grid grid-cols-2 gap-10 mb-10 border-y border-white/[0.04] py-8">
                         <div className="space-y-2">
                           <div className="text-[9px] font-black text-emerald-500/40 uppercase tracking-[0.3em]">
-                            Target Alpha
+                            Target Projection
                           </div>
                           <div className="text-2xl font-black text-emerald-400 font-mono tracking-tighter leading-none">
                             {signal.take_profit}
@@ -97,7 +97,7 @@ export const LiveSignalsFeed = () => {
                         </div>
                         <div className="space-y-2">
                           <div className="text-[9px] font-black text-rose-500/40 uppercase tracking-[0.3em]">
-                            Hard Stop
+                            Risk Threshold
                           </div>
                           <div className="text-2xl font-black text-white/40 font-mono tracking-tighter leading-none">
                             {signal.stop_loss}
