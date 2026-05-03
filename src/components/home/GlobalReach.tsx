@@ -7,11 +7,11 @@ import { Link } from "react-router-dom";
 const REGIONS = [
   { name: "Dubai", flag: "🇦🇪", lat: 25.2048, lng: 55.2708, key: true },
   { name: "Mumbai", flag: "🇮🇳", lat: 19.076, lng: 72.8777, key: true },
-  { name: "London", flag: "🇬🇧", lat: 51.5074, lng: -0.1278, key: false },
+  { name: "London", flag: "🇬🇧", lat: 51.5074, lng: -0.1278, key: true },
   { name: "Singapore", flag: "🇸🇬", lat: 1.3521, lng: 103.8198, key: true },
-  { name: "New York", flag: "🇺🇸", lat: 40.7128, lng: -74.006, key: false },
-  { name: "Tokyo", flag: "🇯🇵", lat: 35.6762, lng: 139.6503, key: false },
-  { name: "Zurich", flag: "🇨🇭", lat: 47.3769, lng: 8.5417, key: false },
+  { name: "New York", flag: "🇺🇸", lat: 40.7128, lng: -74.006, key: true },
+  { name: "Tokyo", flag: "🇯🇵", lat: 35.6762, lng: 139.6503, key: true },
+  { name: "Zurich", flag: "🇨🇭", lat: 47.3769, lng: 8.5417, key: true },
 ];
 
 
@@ -94,7 +94,7 @@ export const GlobalReach = () => {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
               </span>
-              {" "}Global Sovereign Network
+              {" "}Global Alpha Network
             </motion.div>
 
             <motion.h2
@@ -105,7 +105,7 @@ export const GlobalReach = () => {
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               className="text-5xl sm:text-7xl font-black text-white tracking-tighter mb-8 leading-[0.87] uppercase"
             >
-              Where{" "}
+              Institutional{" "}
               <span
                 className="italic font-serif mx-3"
                 style={{
@@ -114,9 +114,9 @@ export const GlobalReach = () => {
                   WebkitTextFillColor: "transparent",
                 }}
               >
-                Asia
+                Intelligence
               </span>
-              {" "}trades.
+              {" "}Terminal.
             </motion.h2>
 
             <motion.p
@@ -126,7 +126,7 @@ export const GlobalReach = () => {
               transition={{ delay: 0.18 }}
               className="text-white/40 text-base md:text-lg mb-10 leading-relaxed"
             >
-              Our institutional intelligence desks bridge the gap between retail limitations and professional execution protocols. From Mumbai to Singapore, Dubai to London.
+              Direct access to professional execution protocols across every major financial hub. From Mumbai to Singapore, Dubai to London, New York to Tokyo.
             </motion.p>
 
             {/* Region tags */}
@@ -163,7 +163,7 @@ export const GlobalReach = () => {
                 to="/academy"
                 className="group inline-flex items-center gap-3 px-8 py-4 rounded-xl bg-white text-black font-black text-xs uppercase tracking-[0.25em] hover:bg-emerald-500 transition-all duration-300 hover:scale-[1.03] active:scale-[0.97]"
               >
-                Access the Academy Desk
+                Access Intelligence Terminal
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
               </Link>
             </motion.div>

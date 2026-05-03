@@ -12,14 +12,15 @@ export const webinarService = {
   getWebinars: async (): Promise<Webinar[]> => {
     try {
       // Fetch ALL webinars regardless of status — the UI tabs filter client-side.
-      // Production DB uses 'upcoming', 'live', 'past' — NOT 'scheduled'.
+      // Joined with webinar_sponsors for proper relational data.
       const query = supabase
         .from("webinars")
         .select(`
           id, title, description, date_time, speaker_name,
           speaker_images, type, max_attendees, registration_count,
           status, webinar_image_url, recording_url, sponsor_logos,
-          q_and_a, about_content, advanced_features, streaming_url
+          q_and_a, about_content, advanced_features, streaming_url,
+          sponsors:webinar_sponsors(*)
         `)
         .order("date_time", { ascending: true })
         .limit(50);
@@ -40,7 +41,8 @@ export const webinarService = {
           id, title, description, date_time, speaker_name,
           speaker_images, type, max_attendees, registration_count,
           status, webinar_image_url, recording_url, sponsor_logos,
-          q_and_a, about_content, advanced_features
+          q_and_a, about_content, advanced_features,
+          sponsors:webinar_sponsors(*)
         `)
         .eq("id", id)
         .single();

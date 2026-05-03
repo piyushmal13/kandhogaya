@@ -1,12 +1,12 @@
 import { Activity, ArrowUpRight, ArrowDownRight } from 'lucide-react';
-import { SovereignButton } from '@/components/ui/SovereignButton';
+import { EliteButton } from '@/components/ui/Button';
 import { motion, AnimatePresence } from "motion/react";
 import { useSignals } from '@/hooks/useSignals';
 
 /**
- * SignalFeed (v2.0)
+ * IntelligenceFeed (v2.0)
  * 
- * The Live Alpha Pulse of the Sovereign Terminal.
+ * The Live Alpha Pulse of the Elite Terminal.
  * Features: Absolute zero-CLS state management, institutional telemetry markers, and instant execution triggers.
  */
 export function SignalFeed() {
@@ -24,7 +24,7 @@ export function SignalFeed() {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
           </div>
-          <h3 className="text-xs font-black uppercase tracking-[0.4em] text-foreground">Strategic Signal Hub</h3>
+          <h3 className="text-xs font-black uppercase tracking-[0.4em] text-foreground">Strategic Intelligence Hub</h3>
         </div>
         <div className="text-[9px] font-mono text-white/20 uppercase tracking-widest">Educational Stream: SYNCED</div>
       </div>
@@ -73,7 +73,7 @@ export function SignalFeed() {
                     <div className="text-lg font-mono font-black text-foreground tracking-tighter tabular-nums mb-0.5">
                       {signal.entry?.toFixed(5) || '0.00000'}
                     </div>
-                    <div className="text-[8px] font-black uppercase tracking-[0.3em] text-primary-500/60">Sovereign Alpha Entry</div>
+                    <div className="text-[8px] font-black uppercase tracking-[0.3em] text-primary-500/60">Elite Alpha Entry</div>
                   </div>
                 </div>
                 
@@ -89,14 +89,14 @@ export function SignalFeed() {
                     </div>
                   </div>
 
-                  <SovereignButton 
-                    variant="outline" 
+                  <EliteButton 
+                    variant="institutional-outline" 
                     size="sm"
                     className="h-8 px-4"
-                    trackingEvent={`signal_view_${signal.id}`}
+                    trackingEvent={`intelligence_view_${signal.id}`}
                   >
                     View Research
-                  </SovereignButton>
+                  </EliteButton>
                 </div>
               </motion.div>
             ))}

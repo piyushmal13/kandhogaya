@@ -34,7 +34,7 @@ export const UrgencyBanner = ({ leadId }: { leadId?: string }) => {
             `Institutional alert: ${signal.pair} setup is active right now.`,
             `High Volatility: ${signal.pair} just moved +${Math.floor(Math.random() * 50) + 20} points.`,
             `Social Pulse: ${rando} accounts synchronized with the ${signal.pair} setup in the last 15 mins.`,
-            `Yield Logic: Your last audited pair is hitting TP1.`,
+            `Yield Logic: Your last verified pair is hitting TP1.`,
             `Priority Access: Expert Masterclass starting in 45 minutes.`
          ];
          setMessage(messages[Math.floor(Math.random() * messages.length)]);

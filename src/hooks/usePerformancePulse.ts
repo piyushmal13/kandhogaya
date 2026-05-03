@@ -20,7 +20,7 @@ export function usePerformancePulse() {
     queryKey: ['institutional_performance'],
     queryFn: async () => {
       const [performanceRes, usersCountRes] = await Promise.all([
-        safeQuery<any>(supabase.from('performance_results').select('id, win_rate, total_pips, profit_factor, is_featured').eq('is_featured', true).maybeSingle()),
+        safeQuery<any>(supabase.from('performance_results').select('id, win_rate, pips, profit_factor, is_featured').eq('is_featured', true).maybeSingle()),
         supabase.from('users').select('id', { count: 'exact', head: true })
       ]);
 
@@ -37,7 +37,7 @@ export function usePerformancePulse() {
 
   const stats: PerformanceStats = useMemo(() => ({
     fidelityRate: data?.win_rate ? `${data.win_rate}%` : '82.4%',
-    totalPoints: data?.total_pips || 4200,
+    totalPoints: data?.pips || 4200,
     yieldMultiplier: data?.profit_factor || 3.24,
     activeNodes: data?.userCount || 12400
   }), [data]);

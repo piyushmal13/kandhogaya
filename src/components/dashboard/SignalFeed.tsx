@@ -18,7 +18,7 @@ export const SignalFeed: React.FC<SignalFeedProps> = ({
     if (signals.length === 0) {
       return (
         <div className="text-center py-12">
-          <p className="text-gray-500 text-xs font-black uppercase tracking-[0.2em] italic">Awaiting new trade setups...</p>
+          <p className="text-gray-500 text-xs font-black uppercase tracking-[0.2em] italic">Awaiting new intelligence setups...</p>
         </div>
       );
     }
@@ -55,8 +55,8 @@ export const SignalFeed: React.FC<SignalFeedProps> = ({
             <Lock className="w-10 h-10" />
             <div className="absolute inset-0 bg-emerald-500/20 blur-xl rounded-full animate-pulse" />
           </div>
-          <h3 className="text-2xl font-black text-white uppercase tracking-tighter italic mb-2">Signals Locked</h3>
-          <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest text-center mb-8">Upgrade for real-time institutional signals.</p>
+          <h3 className="text-2xl font-black text-white uppercase tracking-tighter italic mb-2">Streams Locked</h3>
+          <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest text-center mb-8">Upgrade for real-time institutional intelligence.</p>
           <button 
             onClick={onUpgrade}
             className="px-10 py-4 bg-emerald-500 text-black font-black text-[10px] uppercase tracking-[0.2em] rounded-2xl hover:scale-110 transition-all shadow-xl shadow-emerald-500/20"

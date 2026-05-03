@@ -28,6 +28,7 @@ const CONTENT_TYPES = [
   { value: "signal",        label: "Technical Signal" },
   { value: "market_report", label: "Institutional Report" },
   { value: "course",        label: "Course Material" },
+  { value: "faq",           label: "Knowledge Base (FAQ)" },
 ];
 
 const STATUSES = ["published", "draft", "archived"];

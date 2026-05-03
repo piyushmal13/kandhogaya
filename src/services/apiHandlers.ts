@@ -420,3 +420,38 @@ export const getPerformanceResults = async () => {
       .order("created_at", { ascending: true })
   );
 };
+// --- REVIEWS / SOCIAL PROOF ---
+
+export const getReviews = async (limit = 10) => {
+  const { data, error } = await supabase
+    .from("reviews")
+    .select("id, name, role, text, rating, region, image_url, created_at")
+    .eq("status", "approved")
+    .order("priority", { ascending: false })
+    .limit(limit);
+
+  if (error) return [];
+  return data.map((r: any) => ({
+    id: r.id,
+    name: r.name || "Institutional Client",
+    role: r.role || "Elite Trader",
+    text: r.text,
+    location: r.region || "Confidential",
+    rating: r.rating || 5,
+    image_url: r.image_url
+  }));
+};
+
+// --- FAQ ---
+
+export const getFaqs = async (limit = 10) => {
+  return safeQuery<any[]>(
+    supabase
+      .from('content_posts')
+      .select('id, title, body, metadata')
+      .eq('content_type', 'faq')
+      .eq('status', 'published')
+      .order('created_at', { ascending: true })
+      .limit(limit)
+  );
+};

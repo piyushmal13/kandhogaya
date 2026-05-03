@@ -52,7 +52,7 @@ export const tokens = {
   shadows: {
     card: '0 30px 80px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.04)',
     panel: '0 18px 44px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.03)',
-    glow: '0 16px 40px rgba(88, 242, 182, 0.18)', // Sovereign tracking
+    glow: '0 16px 40px rgba(88, 242, 182, 0.18)', // Elite tracking
     float: '0 24px 60px rgba(0, 0, 0, 0.35)',
   },
   
@@ -62,7 +62,7 @@ export const tokens = {
   },
   
   gradients: {
-    sovereign: 'linear-gradient(135deg, var(--color34) 0%, var(--color35) 100%)',
+    elite: 'linear-gradient(135deg, var(--color34) 0%, var(--color35) 100%)',
     emerald: 'linear-gradient(135deg, var(--color8) 0%, var(--color42) 100%)',
     dark: 'linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 100%)',
   }

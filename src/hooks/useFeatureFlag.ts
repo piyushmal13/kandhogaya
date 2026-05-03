@@ -6,7 +6,7 @@ import { tracker } from '@/core/tracker';
 /**
  * Institutional Core: useFeatureFlag
  * Connects directly to Supabase platform_flags to dynamically enable/disable 
- * UI nodes (like the Sovereign glow) without redeployments.
+ * UI nodes (like the Elite glow) without redeployments.
  * 
  * @param flagName - The unique config string in platform_flags (e.g. 'enable_glow_effect')
  * @param defaultValue - Fallback value if the query fails or network is offline

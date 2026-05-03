@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Send, CheckCircle2, ShieldCheck, Mail, User, Briefcase } from "lucide-react";
-import { SovereignButton } from "../ui/SovereignButton";
+import { EliteButton } from "../ui/Button";
 import { containerVariants, itemVariants } from "@/lib/motion";
 import { supabase } from "@/lib/supabase";
 import { tracker } from "@/core/tracker";
@@ -133,7 +133,7 @@ export const ConsultationSection = () => {
                     <option value="" disabled>Select Tier</option>
                     <option value="1k-10k">$1,000 - $10,000 (Emergent)</option>
                     <option value="10k-100k">$10,000 - $100,000 (Institutional)</option>
-                    <option value="100k+">$100,000+ (Sovereign)</option>
+                    <option value="100k+">$100,000+ (Elite)</option>
                   </select>
                 </div>
 
@@ -148,9 +148,9 @@ export const ConsultationSection = () => {
                   />
                 </div>
 
-                <SovereignButton 
+                <EliteButton 
                   type="submit"
-                  variant="primary" 
+                  variant="elite" 
                   size="lg" 
                   className="w-full mt-4"
                   isLoading={status === 'loading'}
@@ -178,7 +178,7 @@ export const ConsultationSection = () => {
                       </motion.div>
                     )}
                   </AnimatePresence>
-                </SovereignButton>
+                </EliteButton>
               </form>
             </motion.div>
           </div>

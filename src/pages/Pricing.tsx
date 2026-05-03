@@ -92,7 +92,7 @@ export const Pricing = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-shimmer mb-10 text-center"
           >
-            Sovereign <br />
+            Elite <br />
             <span className="italic font-serif text-gradient-emerald">Access.</span>
           </motion.h1>
           <p className="text-[11px] font-black uppercase tracking-[0.4em] text-white/30 max-w-2xl mx-auto italic">

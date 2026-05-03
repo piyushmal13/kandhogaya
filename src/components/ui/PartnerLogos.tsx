@@ -112,7 +112,7 @@ const SUCCESS_STORIES = [
     company: "Hedge Fund Analyst",
     location: "Singapore",
     quote: "The macro research and XAUUSD signals from IFX are the most consistent I've seen from any education platform in Asia.",
-    result: "Sovereign Tier Access",
+    result: "Institutional Elite Access",
     avatar: "M",
     rating: 5,
   },

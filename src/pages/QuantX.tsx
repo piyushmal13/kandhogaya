@@ -47,7 +47,7 @@ const IntelligenceLayer = ({ number, title, description, inputs, outputs, icon: 
         <div className="grid grid-cols-2 gap-8">
           <div>
             <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#58F2B6]/80">
-              Sovereign Execution Environment <span className="text-white/20 ml-2">v2.0_ELITE</span>
+              Elite Execution Environment <span className="text-white/20 ml-2">v2.0_ELITE</span>
             </span>
             <ul className="space-y-2">
               {inputs.map((input: string) => (

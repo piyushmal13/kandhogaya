@@ -1,13 +1,17 @@
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { Calendar, Clock, Users } from 'lucide-react';
+import { Calendar, Clock, Users, ShieldCheck } from 'lucide-react';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag';
-import { SovereignButton } from '@/components/ui/Button';
+import { EliteButton } from '@/components/ui/Button';
 import { Webinar } from '@/types';
 
 export function WebinarCard({ webinar }: Readonly<{ webinar: Webinar }>) {
+  const navigate = useNavigate();
   const { isEnabled: isRegistrationOpen } = useFeatureFlag('webinar_registration_open', true);
   const isLive = webinar.status === 'live';
   const isRecorded = webinar.status === 'past'; // Global type uses 'past' instead of 'recorded'
+
+  const hasSponsor = Array.isArray(webinar.sponsors) && webinar.sponsors.length > 0;
 
   const renderStatusBadge = () => {
     if (isLive) {
@@ -88,7 +92,8 @@ export function WebinarCard({ webinar }: Readonly<{ webinar: Webinar }>) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.4 }}
-      className="group relative rounded-3xl bg-white/[0.03] border border-white/10 overflow-hidden hover:border-emerald-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-emerald-500/5"
+      onClick={() => navigate(`/webinars/${webinar.id}`)}
+      className="group relative rounded-3xl bg-white/[0.03] border border-white/10 overflow-hidden hover:border-emerald-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-emerald-500/5 cursor-pointer"
       itemScope
       itemType="https://schema.org/Event"
     >
@@ -111,8 +116,16 @@ export function WebinarCard({ webinar }: Readonly<{ webinar: Webinar }>) {
           {renderStatusBadge()}
         </div>
 
+        {/* Sponsored Badge */}
+        {hasSponsor && (
+          <div className="absolute top-4 right-4 px-2 py-1 rounded bg-white/5 border border-white/10 backdrop-blur-md text-white/40 text-[8px] font-black uppercase tracking-widest flex items-center gap-1.5">
+            <ShieldCheck className="w-2.5 h-2.5 text-emerald-500" />
+            Sponsored
+          </div>
+        )}
+
         {/* Premium Badge */}
-        {webinar.is_paid && (
+        {webinar.is_paid && !hasSponsor && (
           <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-amber-500 text-black text-[10px] font-black uppercase tracking-widest shadow-lg">
             PREMIUM
           </div>
@@ -172,26 +185,33 @@ export function WebinarCard({ webinar }: Readonly<{ webinar: Webinar }>) {
         {/* CTA */}
         <div className="pt-2">
           {isRecorded ? (
-            <SovereignButton 
+            <EliteButton 
               variant="secondary" 
               fluid
               className="rounded-2xl"
               trackingEvent="webinar_watch_recording"
-              onClick={() => webinar.recording_url && globalThis.open(webinar.recording_url, '_blank')}
+              onClick={(e) => {
+                e.stopPropagation();
+                webinar.recording_url && globalThis.open(webinar.recording_url, '_blank');
+              }}
             >
               Analyze Recording
-            </SovereignButton>
+            </EliteButton>
           ) : (
-            <SovereignButton 
-              variant="sovereign" 
+            <EliteButton 
+              variant="elite" 
               fluid
               className="rounded-2xl"
               glowEffect={isLive}
               disabled={!isRegistrationOpen || attendees >= maxSeats}
               trackingEvent={`webinar_register_${webinar.id}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate(`/webinars/${webinar.id}`);
+              }}
             >
               {getButtonContent()}
-            </SovereignButton>
+            </EliteButton>
           )}
         </div>
       </div>

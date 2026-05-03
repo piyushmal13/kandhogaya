@@ -5,7 +5,7 @@ import { Check, Code, Cpu, Gauge } from 'lucide-react';
 const TIERS = [
   {
     id: 'essential',
-    name: 'Sovereign Essential',
+    name: 'Elite Essential',
     price: '$2,500',
     timeline: '2-4 Weeks',
     description: 'Single-strategy automation for MT4/MT5.',

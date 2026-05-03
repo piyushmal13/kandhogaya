@@ -36,7 +36,7 @@ export function Footer() {
                 <span className="text-[9px] font-black uppercase tracking-[0.4em] text-emerald-500/50">Institutional Platform</span>
               </div>
               <p className="text-[11px] font-medium text-white/40 leading-relaxed uppercase tracking-widest max-w-[200px]">
-                Sovereign algorithmic trading education and quantitative execution architecture.
+                Elite algorithmic trading education and quantitative execution architecture.
               </p>
             </div>
             
@@ -72,7 +72,7 @@ export function Footer() {
                 </div>
                 <div className="h-[1px] bg-white/5 w-full" />
                 <div className="text-[9px] font-mono text-white/20 uppercase tracking-widest leading-none">
-                  Uptime: 99.98% (Sovereign Alpha Cluster)
+                  Uptime: 99.98% (Elite Alpha Cluster)
                 </div>
               </div>
             </div>
@@ -80,7 +80,7 @@ export function Footer() {
           
           <div className="border-t border-white/5 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-[9px] font-black uppercase tracking-[0.4em] text-white/10">
-              © {new Date().getFullYear()} IFX TRADES. SOVEREIGN EXECUTION NODE.
+              © {new Date().getFullYear()} IFX TRADES. ELITE EXECUTION NODE.
             </p>
             <p className="text-[8px] font-mono text-white/20 uppercase tracking-widest">
               Educational services only. Not a brokerage entity.

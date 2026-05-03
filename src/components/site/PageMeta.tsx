@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-
+import React from "react";
+import { Helmet } from "react-helmet-async";
 import { BRANDING, PAGE_META_KEYWORDS } from "../../constants/branding";
 
 export interface PageMetaProps {
@@ -20,47 +20,11 @@ const getAbsoluteUrl = (path: string) => {
     return path;
   }
 
-  if (globalThis.window === undefined) {
+  if (typeof window === "undefined") {
     return path;
   }
 
-  return new URL(path, globalThis.window.location.origin).toString();
-};
-
-const upsertMeta = (selector: string, attrs: Record<string, string>, content: string) => {
-  let element = document.head.querySelector(selector) as HTMLMetaElement | null;
-
-  if (!element) {
-    element = document.createElement("meta");
-    Object.entries(attrs).forEach(([key, value]) => element?.setAttribute(key, value));
-    document.head.appendChild(element);
-  }
-
-  element.setAttribute("content", content);
-};
-
-const upsertLink = (selector: string, attrs: Record<string, string>) => {
-  let element = document.head.querySelector(selector) as HTMLLinkElement | null;
-
-  if (!element) {
-    element = document.createElement("link");
-    document.head.appendChild(element);
-  }
-
-  Object.entries(attrs).forEach(([key, value]) => element?.setAttribute(key, value));
-};
-
-const upsertScript = (id: string, json: string) => {
-  let element = document.head.querySelector(`#${id}`) as HTMLScriptElement | null;
-
-  if (!element) {
-    element = document.createElement("script");
-    element.id = id;
-    element.type = "application/ld+json";
-    document.head.appendChild(element);
-  }
-
-  element.textContent = json;
+  return new URL(path, window.location.origin).toString();
 };
 
 export const PageMeta = ({
@@ -75,33 +39,41 @@ export const PageMeta = ({
 }: PageMetaProps) => {
   const keywordContent = Array.from(new Set([...DEFAULT_KEYWORDS, ...(keywords ?? [])])).join(", ");
   const fullTitle = title.includes(BRANDING.name) ? title : `${title} | ${BRANDING.name}`;
-  const currentPath = globalThis.window === undefined ? "/" : globalThis.window.location.pathname;
+  const currentPath = typeof window === "undefined" ? "/" : window.location.pathname;
   const url = getAbsoluteUrl(path || currentPath);
   const imageUrl = getAbsoluteUrl(image || BRANDING.logoUrl);
   const schema = structuredData ? JSON.stringify(structuredData) : "";
 
-  useEffect(() => {
-    document.title = fullTitle;
-
-    upsertMeta('meta[name="description"]', { name: "description" }, description);
-    upsertMeta('meta[name="keywords"]', { name: "keywords" }, keywordContent);
-    upsertMeta('meta[name="robots"]', { name: "robots" }, robots);
-    upsertMeta('meta[property="og:title"]', { property: "og:title" }, fullTitle);
-    upsertMeta('meta[property="og:description"]', { property: "og:description" }, description);
-    upsertMeta('meta[property="og:type"]', { property: "og:type" }, type);
-    upsertMeta('meta[property="og:url"]', { property: "og:url" }, url);
-    upsertMeta('meta[property="og:image"]', { property: "og:image" }, imageUrl);
-    upsertMeta('meta[property="og:site_name"]', { property: "og:site_name" }, BRANDING.name);
-    upsertMeta('meta[name="twitter:card"]', { name: "twitter:card" }, "summary_large_image");
-    upsertMeta('meta[name="twitter:title"]', { name: "twitter:title" }, fullTitle);
-    upsertMeta('meta[name="twitter:description"]', { name: "twitter:description" }, description);
-    upsertMeta('meta[name="twitter:image"]', { name: "twitter:image" }, imageUrl);
-    upsertLink('link[rel="canonical"]', { rel: "canonical", href: url });
-
-    if (schema) {
-      upsertScript("ifx-structured-data", schema);
-    }
-  }, [description, fullTitle, imageUrl, keywordContent, robots, schema, type, url]);
-
-  return null;
+  return (
+    <Helmet>
+      <title>{fullTitle}</title>
+      <meta name="description" content={description} />
+      <meta name="keywords" content={keywordContent} />
+      <meta name="robots" content={robots} />
+      
+      {/* Open Graph */}
+      <meta property="og:title" content={fullTitle} />
+      <meta property="og:description" content={description} />
+      <meta property="og:type" content={type} />
+      <meta property="og:url" content={url} />
+      <meta property="og:image" content={imageUrl} />
+      <meta property="og:site_name" content={BRANDING.name} />
+      
+      {/* Twitter */}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={fullTitle} />
+      <meta name="twitter:description" content={description} />
+      <meta name="twitter:image" content={imageUrl} />
+      
+      {/* Canonical */}
+      <link rel="canonical" href={url} />
+      
+      {/* Structured Data */}
+      {schema && (
+        <script type="application/ld+json">
+          {schema}
+        </script>
+      )}
+    </Helmet>
+  );
 };

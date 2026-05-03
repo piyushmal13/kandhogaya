@@ -26,8 +26,8 @@ export const Webinars = () => {
           <div className="dot-grid absolute inset-0 opacity-[0.03]" />
         </div>
         <PageMeta
-          title="Institutional Masterclasses | Sovereign Terminal"
-          description="Live algorithmic trading sessions and recorded deep-dives from sovereign desks. Access institutional intelligence sessions."
+          title="Institutional Masterclasses | IFX Terminal"
+          description="Live algorithmic trading sessions and recorded deep-dives from the IFX research desk. Access institutional intelligence sessions."
           path="/webinars"
         />
 
@@ -37,7 +37,7 @@ export const Webinars = () => {
               Institutional Masterclasses
             </h1>
             <p className="text-sm text-white/40 max-w-2xl font-medium uppercase tracking-widest leading-relaxed">
-              Participate in sovereign market breakdowns, systematic workflow walkthroughs, and quantitative execution masterclasses led by the IFX research desk.
+              Participate in systematic market breakdowns, systematic workflow walkthroughs, and quantitative execution masterclasses led by the IFX research desk.
             </p>
           </div>
 

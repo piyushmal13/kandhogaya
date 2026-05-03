@@ -27,7 +27,7 @@ export const InstitutionalBackground = () => {
       mouse.y = e.clientY;
     };
 
-    const particleCount = Math.min(Math.floor(width / 14), 70);
+    const particleCount = Math.min(Math.floor(width / 20), 45); // Reduced from 70
 
     interface Particle {
       x: number;
@@ -42,32 +42,31 @@ export const InstitutionalBackground = () => {
       return {
         x: Math.random() * width,
         y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.35,
-        vy: (Math.random() - 0.5) * 0.35,
-        size: Math.random() * 1.5 + 0.5,
-        isGold: Math.random() < 0.08,
+        vx: (Math.random() - 0.5) * 0.25, // Slower drift
+        vy: (Math.random() - 0.5) * 0.25,
+        size: Math.random() * 1.2 + 0.3, // Slightly smaller
+        isGold: Math.random() < 0.05, // Reduced gold frequency
       };
     };
 
     const updateParticle = (p: Particle) => {
-      // Subtle mouse repulsion — responds to cursor, max 80px radius
+      // Subtle mouse repulsion — responds to cursor, max 60px radius
       const dx = p.x - mouse.x;
       const dy = p.y - mouse.y;
       const dist = Math.hypot(dx, dy);
-      if (dist < 80 && dist > 0) {
-        const force = (80 - dist) / 80;
-        p.vx += (dx / dist) * force * 0.4;
-        p.vy += (dy / dist) * force * 0.4;
+      if (dist < 60 && dist > 0) {
+        const force = (60 - dist) / 60;
+        p.vx += (dx / dist) * force * 0.25;
+        p.vy += (dy / dist) * force * 0.25;
       }
 
-      // Velocity damping — precision drift, not bounce
-      p.vx *= 0.97;
-      p.vy *= 0.97;
+      // Velocity damping — precision drift
+      p.vx *= 0.98;
+      p.vy *= 0.98;
 
       p.x += p.vx;
       p.y += p.vy;
 
-      // Wrap instead of bounce — seamless
       if (p.x < 0) p.x = width;
       if (p.x > width) p.x = 0;
       if (p.y < 0) p.y = height;
@@ -79,8 +78,8 @@ export const InstitutionalBackground = () => {
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
       ctx.fillStyle = p.isGold
-        ? 'rgba(212, 175, 55, 0.6)' // --brand-secondary gold
-        : 'rgba(16, 185, 129, 0.25)'; // --brand-primary emerald
+        ? 'rgba(212, 175, 55, 0.4)' 
+        : 'rgba(16, 185, 129, 0.15)'; 
       ctx.fill();
     };
 
@@ -100,10 +99,10 @@ export const InstitutionalBackground = () => {
     const animate = () => {
       ctx.clearRect(0, 0, width, height);
 
-      // Institutional grid — 60px cell, ultra-low opacity
-      ctx.strokeStyle = 'rgba(16, 185, 129, 0.028)';
+      // Institutional grid — 80px cell, ultra-low opacity
+      ctx.strokeStyle = 'rgba(16, 185, 129, 0.015)';
       ctx.lineWidth = 1;
-      const gridSize = 60;
+      const gridSize = 80;
       for (let x = 0; x <= width; x += gridSize) {
         ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke();
       }
@@ -111,38 +110,22 @@ export const InstitutionalBackground = () => {
         ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke();
       }
 
-      // Mouse crosshair — Command Center reticle
-      const cx = mouse.x;
-      const cy = mouse.y;
-      ctx.strokeStyle = 'rgba(212, 175, 55, 0.12)'; // gold
-      ctx.lineWidth = 0.5;
-      ctx.setLineDash([4, 8]);
-      ctx.beginPath(); ctx.moveTo(cx - 40, cy); ctx.lineTo(cx + 40, cy); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(cx, cy - 40); ctx.lineTo(cx, cy + 40); ctx.stroke();
-      ctx.setLineDash([]);
-      // Crosshair dot
-      ctx.beginPath();
-      ctx.arc(cx, cy, 2, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(212, 175, 55, 0.25)';
-      ctx.fill();
-
       // Particles
       particles.forEach(p => { updateParticle(p); drawParticle(p); });
 
       // Connections — emerald network lines
-      ctx.lineWidth = 0.4;
+      ctx.lineWidth = 0.35;
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
           const dist = Math.hypot(dx, dy);
 
-          if (dist < 130) {
-            const alpha = 0.12 * (1 - dist / 130);
-            // Gold-to-gold connections glow gold
+          if (dist < 110) {
+            const alpha = 0.08 * (1 - dist / 110);
             const bothGold = particles[i].isGold && particles[j].isGold;
             ctx.strokeStyle = bothGold
-              ? `rgba(212, 175, 55, ${alpha * 1.5})`
+              ? `rgba(212, 175, 55, ${alpha * 1.2})`
               : `rgba(16, 185, 129, ${alpha})`;
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);

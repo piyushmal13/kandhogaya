@@ -42,9 +42,18 @@ export const mapWebinar = (raw: any): Webinar => ({
   ],
   webinar_image_url: raw.webinar_image_url || "https://images.unsplash.com/photo-1591696208162-a93795a74838?q=80&w=2070&auto=format&fit=crop",
   sponsor_logos: Array.isArray(raw.sponsor_logos) ? raw.sponsor_logos : [],
-  sponsors: Array.isArray(raw.sponsors) && raw.sponsors.length > 0 ? raw.sponsors : [
-    { id: "sp-1", name: "IFX Intelligence", logo_url: "https://cryptologos.cc/logos/binance-coin-bnb-logo.svg" },
-  ],
+  sponsors: Array.isArray(raw.sponsors) && raw.sponsors.length > 0 
+    ? raw.sponsors.map((s: any) => ({
+        id: s.id,
+        webinar_id: s.webinar_id,
+        name: s.name,
+        tier: s.tier,
+        logo_url: s.logo_url,
+        website_url: s.website_url
+      }))
+    : [
+        { id: "sp-1", name: "IFX Intelligence", tier: "Headline", logo_url: "https://cryptologos.cc/logos/binance-coin-bnb-logo.svg" },
+      ],
   q_and_a: Array.isArray(raw.q_and_a) && raw.q_and_a.length > 0 ? raw.q_and_a : [
     { question: "Will recordings be provided?", answer: "Yes, all registered attendees receive full institutional playback access for 30 days." },
     { question: "Is this suitable for retail traders?", answer: "This is advanced institutional methodology, but broken down so independent retail traders can execute it." },
@@ -73,6 +82,19 @@ export const mapLead = (raw: any): any => ({
   metadata: typeof raw.metadata === 'string' ? JSON.parse(raw.metadata) : (raw.metadata || {}),
   active_licenses: Array.isArray(raw.bot_licenses) ? raw.bot_licenses.length : 0,
   webinar_count: Array.isArray(raw.webinar_registrations) ? raw.webinar_registrations.length : 0,
+});
+
+export const mapReview = (raw: any): Review => ({
+  id: raw.id,
+  name: raw.name || 'Anonymous Node',
+  role: raw.role || 'Institutional Trader',
+  text: raw.text || '',
+  rating: Number(raw.rating) || 5,
+  created_at: raw.created_at,
+  image_url: raw.image_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(raw.name || 'A')}&background=10b981&color=fff`,
+  region: raw.region || 'Global',
+  status: raw.status || 'pending',
+  priority: Number(raw.priority) || 0,
 });
 
 export const mapMarketTicker = (raw: any): any => ({

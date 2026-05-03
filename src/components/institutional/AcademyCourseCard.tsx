@@ -82,7 +82,7 @@ export const AcademyCourseCard: React.FC<AcademyCourseCardProps> = ({ course, in
           <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
             <div className="flex flex-col items-center gap-2">
               <ShieldCheck className="w-8 h-8 text-amber-500" />
-              <span className="text-[10px] font-black text-amber-500 uppercase tracking-widest">Sovereign Access Required</span>
+              <span className="text-[10px] font-black text-amber-500 uppercase tracking-widest">Elite Access Required</span>
             </div>
           </div>
         )}
@@ -186,7 +186,7 @@ export const AcademyCourseCard: React.FC<AcademyCourseCardProps> = ({ course, in
         {/* Action Node */}
         <div className="mt-auto">
           <Button
-            variant="sovereign"
+            variant="elite"
             fluid
             size="md"
             className="rounded-2xl"

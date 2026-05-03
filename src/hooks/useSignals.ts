@@ -1,15 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
 import { signalService } from '../services/signalService';
-import { Signal } from '../types';
-export type { Signal };
+import { Intelligence } from '../types';
+export type { Intelligence };
 
 /**
- * Atomic Signal Stream Hook
- * Fetches the latest algorithmic signals with a 5-second polling interval.
+ * Atomic Intelligence Stream Hook
+ * Fetches the latest algorithmic intelligence with a 5-second polling interval.
  */
 export function useSignals() {
   return useQuery({
-    queryKey: ['pulse_signals'],
+    queryKey: ['pulse_intelligence'],
     queryFn: () => signalService.getSignals(),
     // Institutional Polling: 5s interval for "Live" status
     refetchInterval: 5000, 

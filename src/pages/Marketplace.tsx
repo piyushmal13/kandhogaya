@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "motion/react";
-import { Search, ShieldAlert, Activity, ShieldCheck, TrendingUp } from "lucide-react";
+import { Search, ShieldAlert } from "lucide-react";
 import { PageMeta } from "../components/site/PageMeta";
 import { MarketplaceGrid } from "../components/institutional/MarketplaceGrid";
 import { AlgoDetailModal } from "../components/algorithms/AlgoDetailModal";
@@ -12,6 +12,8 @@ import { DashboardLayout } from "../components/institutional/DashboardLayout";
 import { useToast } from "../contexts/ToastContext";
 import { useNavigate } from "react-router-dom";
 import { Product } from "../types";
+import { EliteSocialProof } from "../components/institutional/EliteSocialProof";
+import { CustomStrategyTerminal } from "../components/institutional/CustomStrategyTerminal";
 
 export const Marketplace = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -173,57 +175,51 @@ export const Marketplace = () => {
           {renderGrid()}
         </div>
 
-        {/* Custom Strategy Engineering Block */}
+        {/* Custom Strategy Engineering Terminal */}
+        <CustomStrategyTerminal />
+
+        {/* Elite Social Proof & Performance Validation */}
+        <EliteSocialProof />
+
+        {/* MT5 Institutional Showcase */}
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
-          className="relative group p-10 md:p-16 rounded-[3rem] bg-gradient-to-br from-emerald-500/[0.03] to-transparent border border-emerald-500/10 overflow-hidden"
+          className="py-24 border-t border-white/5"
         >
-           <div className="absolute top-0 right-0 p-8 opacity-10">
-              <ShieldCheck className="w-32 h-32 text-emerald-400" />
-           </div>
-           
-           <div className="relative z-10 max-w-3xl space-y-8">
-              <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[9px] font-black uppercase tracking-[0.2em]">
-                 Bespoke Development
-              </div>
-              <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight italic uppercase">
-                 Custom Strategy <br />
-                 <span className="text-emerald-400">Engineering Desk.</span>
-              </h2>
-              <p className="text-base text-white/50 leading-relaxed font-medium">
-                 Already have a winning strategy? Our quantitative engineering desk takes custom orders to transform your manual logic into high-frequency algorithmic infrastructure. From PineScript to enterprise MQL5 and Python deployment.
-              </p>
-              <div className="flex flex-wrap gap-4 pt-4">
-                 <button 
-                   onClick={() => navigate('/contact?ref=custom-algo')}
-                   className="px-8 py-4 bg-emerald-500 text-black text-[10px] font-black uppercase tracking-widest rounded-2xl hover:bg-emerald-400 transition-all shadow-[0_10px_30px_rgba(16,185,129,0.3)] active:scale-95"
-                 >
-                   Submit Strategy Logic
-                 </button>
-                 <div className="flex items-center gap-3 px-6 py-4 bg-white/5 border border-white/5 rounded-2xl text-[10px] font-black text-white/40 uppercase tracking-widest">
-                    <Activity className="w-4 h-4 text-emerald-500/50" /> Fully Encrypted Protocol
+           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+              <div className="order-2 lg:order-1 relative">
+                 <div className="absolute inset-0 bg-emerald-500/5 blur-[100px] rounded-full opacity-30" />
+                 <div className="relative rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl">
+                    <img 
+                      src="/brain/efc31965-26c1-4320-a414-7f19a27d9e96/mt5_elite_terminal_v2_1777798969670.png" 
+                      alt="MT5 Elite Terminal" 
+                      className="w-full h-auto"
+                    />
                  </div>
+              </div>
+              <div className="order-1 lg:order-2 space-y-8">
+                 <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[9px] font-black uppercase tracking-[0.2em]">
+                    Infrastructure Layer
+                 </div>
+                 <h2 className="text-4xl md:text-6xl font-black text-white tracking-tight leading-tight italic uppercase">
+                    Terminal <br />
+                    <span className="text-emerald-400">Execution.</span>
+                 </h2>
+                 <p className="text-lg text-white/40 leading-relaxed font-medium">
+                    Native MetaTrader 5 (MT5) integration with our proprietary bridge protocols. Experience zero-latency synchronization between our research models and your personal execution workstation.
+                 </p>
+                 <ul className="space-y-4">
+                    {['Automated Liquidity Discovery', 'Algorithmic Risk Enforcement', 'Institutional Order Slicing'].map(feature => (
+                       <li key={feature} className="flex items-center gap-4 text-[11px] font-black uppercase tracking-widest text-white/60">
+                          <div className="w-2 h-2 rounded-full bg-emerald-500" />
+                          {feature}
+                       </li>
+                    ))}
+                 </ul>
               </div>
            </div>
         </motion.div>
-
-        {/* Bottom Trust Row */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 py-16 border-t border-white/5">
-           {[
-             { icon: ShieldCheck, title: "Verified Integrity", desc: "Every model passes rigorous institutional backtesting for educational simulation." },
-             { icon: Activity, title: "Performance Tracking", desc: "Real-time performance metrics and simulated monthly projections synced seamlessly." },
-             { icon: TrendingUp, title: "Quantitative Strategy", desc: "Built by our specialized desk managing institutional research and macro strategy." }
-           ].map((item) => (
-             <div key={item.title} className="space-y-4 group">
-                <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-emerald-400 border border-white/5 group-hover:bg-emerald-500/10 transition-all">
-                   <item.icon className="w-6 h-6" />
-                </div>
-                <h3 className="text-sm text-white font-black uppercase italic tracking-tight transition-colors group-hover:text-emerald-400">{item.title}</h3>
-                <p className="text-white/40 text-[10px] font-medium uppercase tracking-[0.15em] leading-relaxed">{item.desc}</p>
-             </div>
-           ))}
-        </div>
       </div>
 
       {/* Detail Modal Overlay */}

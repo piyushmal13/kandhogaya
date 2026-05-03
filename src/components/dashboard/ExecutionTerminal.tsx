@@ -53,7 +53,7 @@ export const ExecutionTerminal: React.FC<ExecutionTerminalProps> = ({
                   </div>
                   <div>
                     <div className="text-2xl font-black text-white group-hover:text-emerald-400 transition-colors uppercase tracking-tight italic font-serif">
-                      {license.algo_bots?.name || "SOVEREIGN ENGINE v4"}
+                      {license.algo_bots?.name || "ELITE ENGINE v4"}
                     </div>
                     <div className="flex items-center gap-6 mt-3 text-[9px] font-mono text-gray-500 uppercase tracking-[0.3em] font-black">
                       <span className="bg-white/5 px-2.5 py-1 rounded-lg border border-white/5">CLEARANCE: {license.license_key.slice(0, 12)}...</span>
@@ -117,7 +117,7 @@ export const ExecutionTerminal: React.FC<ExecutionTerminalProps> = ({
         <div className="flex items-center justify-between mb-12">
           <h2 className="text-4xl font-black text-white flex items-center gap-5 uppercase tracking-tighter italic font-serif">
             <Activity className="w-10 h-10 text-emerald-500" />
-            Sovereign Ops Desk
+            Elite Ops Desk
           </h2>
           <Link to="/marketplace" className="text-[10px] font-black text-emerald-500/60 hover:text-emerald-500 transition-all uppercase tracking-[0.4em] hover:tracking-[0.5em] border-b border-emerald-500/20 pb-1">COMMAND NEW NODE</Link>
         </div>

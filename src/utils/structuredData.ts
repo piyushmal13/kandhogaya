@@ -36,12 +36,6 @@ export const educationalOrganizationSchema = () => ({
       "@type": "PostalAddress",
       addressLocality: "Dubai",
       addressCountry: "AE"
-    },
-    {
-      "@type": "PostalAddress",
-      addressLocality: "Greater Noida",
-      addressRegion: "Uttar Pradesh",
-      addressCountry: "IN"
     }
   ]
 });

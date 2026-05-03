@@ -95,5 +95,28 @@ export const productService = {
         filter: `user_id=eq.${userId}`
       }, callback)
       .subscribe();
+  },
+
+  getSignalPlans: async (): Promise<any[]> => {
+    try {
+      const { data, error } = await supabase
+        .from("product_variants")
+        .select(`
+          id,
+          price,
+          duration_days,
+          product:product_id (
+            name,
+            description,
+            category
+          )
+        `)
+        .eq("product.category", "signals"); // Filter by category if supported by join
+
+      if (error) throw error;
+      return data || [];
+    } catch {
+      return [];
+    }
   }
 };

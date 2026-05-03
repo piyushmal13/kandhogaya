@@ -109,7 +109,7 @@ export const About = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <FeatureSection 
                 icon={Zap} 
-                title="Sovereign Tech" 
+                title="Institutional Tech" 
                 description="Our algorithms are built on private C++ and Python stacks, bypassing standard retail limitations for true institutional edge."
               />
               <FeatureSection 

@@ -6,7 +6,6 @@ import {
   MessageSquare, Send, Share2, 
   Play, Star, Zap, ShieldCheck, BarChart3, Check
 } from "lucide-react";
-import { getWebinarById, checkWebinarRegistration } from "../services/apiHandlers";
 import { RegistrationModal } from "../components/webinars/RegistrationModal";
 import { CountdownTimer } from "../components/webinars/CountdownTimer";
 import { WebinarSponsors } from "../components/webinars/WebinarSponsors";
@@ -15,10 +14,12 @@ import { useAuth } from "../contexts/AuthContext";
 import { useToast } from "../contexts/ToastContext";
 import { ResizedImage } from "../components/ui/ResizedImage";
 
+import { useWebinar } from "../hooks/useWebinars";
+import { webinarService } from "../services/webinarService";
+
 export const WebinarDetail = () => {
   const { id } = useParams();
-  const [webinar, setWebinar] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const { data: webinar, isLoading: loading } = useWebinar(id);
   const [isRegistered, setIsRegistered] = useState(false);
   const [showRegModal, setShowRegModal] = useState(false);
   const [messages, setMessages] = useState<any[]>([]);
@@ -30,20 +31,13 @@ export const WebinarDetail = () => {
   const particles = React.useMemo(() => new Array(20).fill(null).map((_, i) => ({ id: `particle-${i}` })), []);
 
   useEffect(() => {
-    const fetchWebinar = async () => {
-      if (!id) return;
-      const data = await getWebinarById(id);
-      if (data) {
-        setWebinar(data);
-        if (user) {
-          const registered = await checkWebinarRegistration(id, user.id);
-          setIsRegistered(registered);
-        }
+    const checkReg = async () => {
+      if (id && user) {
+        const registered = await webinarService.checkRegistration(id, user.id);
+        setIsRegistered(registered);
       }
-      setLoading(false);
     };
-
-    fetchWebinar();
+    checkReg();
   }, [id, user]);
 
   useEffect(() => {
@@ -350,7 +344,7 @@ export const WebinarDetail = () => {
                         <h3 className="text-3xl md:text-4xl font-black text-white mb-2 tracking-tighter uppercase">{webinar.speaker || webinar.speaker_name || "IFX Lead Strategist"}</h3>
                         <p className="text-emerald-500 font-black uppercase tracking-[0.3em] text-[10px] mb-8">Director of Global Macro Strategy</p>
                         <p className="text-gray-400 text-lg leading-relaxed max-w-xl font-medium opacity-80">
-                          {webinar.metadata?.author_bio || "A defining voice in institutional market structure, specializing in high-velocity algorithmic modeling and sovereign capital flow analysis. Leading the IFX research desk since 2024."}
+                          {webinar.metadata?.author_bio || "A defining voice in institutional market structure, specializing in high-velocity algorithmic modeling and macro capital flow analysis. Leading the IFX research desk since 2024."}
                         </p>
                       </div>
                     </div>

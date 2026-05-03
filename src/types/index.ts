@@ -65,9 +65,9 @@ export interface Webinar {
 }
 
 // ---------------------------------------------------------------------------
-// signals  (flat table — NOT a content_post)
+// Intelligence  (flat table — NOT a content_post)
 // ---------------------------------------------------------------------------
-export interface Signal {
+export interface Intelligence {
   id: string;
   type?: 'TRADE' | 'ANALYSIS' | 'NEWS';
   symbol: string;

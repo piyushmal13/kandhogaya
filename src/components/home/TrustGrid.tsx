@@ -22,7 +22,7 @@ const PILLARS = [
   },
   {
     icon: TrendingUp,
-    title: "Performance Independently Audited",
+    title: "Performance Independently Verified",
     desc: "Every signal is archived with timestamped entries and exits. Our 36-month audit log is transparent and independently verified.",
     color: "#8B5CF6",
     num: "03",

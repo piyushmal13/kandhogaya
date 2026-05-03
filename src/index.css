@@ -31,12 +31,32 @@ input:focus, textarea:focus, select:focus {
 
   /* Brand palette */
   --color-primary-400: #34D399;
-  --color-primary-500: #10B981;
-  --color-primary-600: #059669;
+  --color-emerald-500: #10b981;
+  --color-cyan-500: #06b6d4;
+}
+
+/* ── INSTITUTIONAL BASELINE ── */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background-color: #000000;
+  margin: 0;
+  padding: 0;
+  font-family: "Outfit", "Inter", system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  color: white;
+}
+#root { min-height: 100vh; isolation: isolate; }
+
+:root {
+  --foreground-rgb: 255, 255, 255;
   --color-gold:        #D4AF37;
   --color-gold-light:  #F5E6A3;
   --color-cyan:        #06B6D4;
   --color-violet:      #8B5CF6;
+  --color-imperial:    linear-gradient(135deg, #10B981 0%, #06B6D4 50%, #D4AF37 100%);
 
   /* Surfaces */
   --color-background: #010203;
@@ -44,15 +64,9 @@ input:focus, textarea:focus, select:focus {
   --color-card:       #0A0D12;
   --color-obsidian:   #030406;
 
-  /* Text */
-  --color-foreground: #F8FAFC;
-  --color-muted:      #8A9AAB;
-  --color-subtle:     #4F5A69;
-
-  /* Borders */
-  --color-border:       rgba(255,255,255,0.05);
-  --color-border-em:    rgba(255,255,255,0.12);
-  --color-border-glow:  rgba(16,185,129,0.3);
+  /* Perspective */
+  --perspective-deep: 1000px;
+  --perspective-elite: 2000px;
 }
 
 /* ─────────────────────────────────────────────────────────────────────── */
@@ -239,17 +253,27 @@ input:focus, textarea:focus, select:focus {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.4rem 1.1rem;
+    padding: 0.5rem 1.25rem;
     border-radius: 9999px;
-    background: rgba(0,0,0,0.2);
-    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
     color: #ffffff;
-    backdrop-filter: blur(12px);
-    font-size: 0.625rem;
+    backdrop-filter: blur(16px);
+    font-size: 0.65rem;
     font-weight: 900;
     text-transform: uppercase;
-    letter-spacing: 0.25em;
+    letter-spacing: 0.35em;
+    transition: all 0.3s ease;
   }
+  .site-pill:hover {
+    border-color: rgba(16,185,129,0.3);
+    background: rgba(16,185,129,0.05);
+  }
+
+  /* ── 3D Tilt Support ── */
+  .preserve-3d { transform-style: preserve-3d; }
+  .backface-hidden { backface-visibility: hidden; }
 
   /* ── Magnetic / interactive button base ── */
   .magnetic-btn {

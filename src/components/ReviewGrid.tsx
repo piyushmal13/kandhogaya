@@ -5,7 +5,7 @@ import { cn } from "../utils/cn";
 
 /**
  * Public Sentiment Grid - Institutional Social Proof
- * Displays ONLY 'approved' sentiment signals.
+ * Displays ONLY 'approved' sentiment data.
  */
 export const PublicReviews = () => {
   const { reviews, loading } = useReviews('approved');
@@ -27,7 +27,7 @@ export const PublicReviews = () => {
 
           <div className="flex items-center gap-2 mb-6">
             {Array(r.rating).fill('★').join('')}
-            <span className="text-[10px] font-black text-amber-500 tracking-widest">{r.rating}/5 SIGNAL</span>
+            <span className="text-[10px] font-black text-amber-500 tracking-widest">{r.rating}/5 RATING</span>
           </div>
 
           <p className="text-gray-400 text-sm font-medium leading-relaxed italic mb-8">

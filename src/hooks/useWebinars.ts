@@ -25,3 +25,16 @@ export function useLiveWebinar() {
     refetchInterval: 5000, // Aggressive polling for live status
   });
 }
+
+export function useWebinar(id: string | undefined) {
+  return useQuery({
+    queryKey: ['webinar', id],
+    queryFn: async () => {
+      if (!id) return null;
+      return await webinarService.getWebinarById(id);
+    },
+    enabled: !!id,
+    staleTime: 60000,
+    refetchInterval: 30000, // Real-time sync for Q&A and status
+  });
+}

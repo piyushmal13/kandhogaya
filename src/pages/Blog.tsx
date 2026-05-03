@@ -60,10 +60,10 @@ export const Blog = () => {
   return (
     <div className="relative overflow-hidden pb-20">
       <PageMeta
-        title="Institutional Research & Sovereign Intelligence"
+        title="Institutional Research & Alpha Intelligence"
         description="Deep-dive analysis on liquid currency pairs, gold market structure, and systemic macro developments from the IFX research desk. Strategically engineered for institutional decision makers."
         path="/research"
-        keywords={["institutional forex research", "sovereign market analysis", "gold market structure", "macro research 2026", "quantitative trading insights"]}
+        keywords={["institutional forex research", "macro market analysis", "gold market structure", "macro research 2026", "quantitative trading insights"]}
         structuredData={breadcrumbSchema([
           { name: "Home", path: "/" },
           { name: "Market Insights", path: "/blog" },
@@ -71,13 +71,13 @@ export const Blog = () => {
       />
 
       <PageHero
-        eyebrow="Sovereign Intelligence"
+        eyebrow="Elite Intelligence"
         title={
           <>
             Strategic research for <span className="site-title-gradient">institutional players.</span>
           </>
         }
-        description="Advanced analysis derived from sovereign capital flow, systemic liquidity shifts, and macroeconomic structural integrity. We prioritize technical alpha over content volume."
+        description="Advanced analysis derived from macro capital flow, systemic liquidity shifts, and macroeconomic structural integrity. We prioritize technical alpha over content volume."
         metrics={[
           { label: "Alpha Depth", value: "High-Fidelity", helper: "Institutional-grade market framing" },
           { label: "Desk Cadence", value: "Systematic Pulse", helper: "Daily live market intelligence" },

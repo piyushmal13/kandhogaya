@@ -21,7 +21,7 @@ export const TradersTravel = () => {
   return (
     <div className="min-h-screen bg-[#020202] pt-32 pb-48 relative overflow-hidden">
       <PageMeta 
-        title="Sovereign Retreats | Elite Mastermind Mobility 2026"
+        title="Elite Retreats | Institutional Mastermind Mobility 2026"
         description="Join the top 1% community on exclusive trader retreats in Bali, Dubai, and Thailand. Elite networking & institutional mastermind sessions."
         path="/travel"
         keywords={[
@@ -55,7 +55,7 @@ export const TradersTravel = () => {
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
             className="text-shimmer mb-10 leading-[0.9]"
           >
-            Sovereign <br />
+            Elite <br />
             <span className="italic font-serif text-gradient-emerald">Retreats.</span>
           </motion.h1>
           <motion.p 

@@ -1,18 +1,18 @@
 import { motion } from 'motion/react';
-import { SovereignButton } from '@/components/ui/SovereignButton';
+import { EliteButton } from '@/components/ui/Button';
 import { Rocket, ShieldAlert, FileText, Download } from 'lucide-react';
 
 const ACTIONS = [
-  { label: 'Deploy Bot', icon: Rocket, event: 'action_deploy', variant: 'primary', glow: true },
-  { label: 'Risk Audit', icon: ShieldAlert, event: 'action_risk', variant: 'outline', glow: false },
-  { label: 'Export Reports', icon: FileText, event: 'action_export', variant: 'outline', glow: false },
-  { label: 'Download API', icon: Download, event: 'action_api', variant: 'outline', glow: false },
+  { label: 'Deploy Algorithm', icon: Rocket, event: 'action_deploy', variant: 'elite' as const, glow: true },
+  { label: 'Risk Audit', icon: ShieldAlert, event: 'action_risk', variant: 'institutional-outline' as const, glow: false },
+  { label: 'Export Reports', icon: FileText, event: 'action_export', variant: 'institutional-outline' as const, glow: false },
+  { label: 'Download API', icon: Download, event: 'action_api', variant: 'institutional-outline' as const, glow: false },
 ] as const;
 
 /**
  * QuickActions (v2.0)
  * 
- * The Command Bar of the Sovereign Terminal.
+ * The Command Bar of the Elite Terminal.
  * Features: Instant execution triggers, high-velocity interactions, and unified tracking.
  */
 export function QuickActions() {
@@ -27,7 +27,7 @@ export function QuickActions() {
       
       <div className="grid grid-cols-1 gap-4 relative z-10">
         {ACTIONS.map((action) => (
-          <SovereignButton 
+          <EliteButton 
             key={action.label}
             variant={action.variant}
             glowEffect={action.glow}
@@ -37,7 +37,7 @@ export function QuickActions() {
           >
             <action.icon className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
             <span className="flex-1 text-left">{action.label}</span>
-          </SovereignButton>
+          </EliteButton>
         ))}
       </div>
 
@@ -45,7 +45,7 @@ export function QuickActions() {
       <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between opacity-20">
          <span className="text-[8px] font-black uppercase tracking-widest text-[#58F2B6]">Executive Privileges</span>
          <div className="h-1 w-1 rounded-full bg-white/40" />
-         <span className="text-[8px] font-mono">v2.0_SOVEREIGN</span>
+         <span className="text-[8px] font-mono">v2.0_ELITE</span>
       </div>
     </div>
   );

@@ -47,7 +47,7 @@ export const ReviewSubmission = () => {
         <div className="w-16 h-16 bg-emerald-500 text-black rounded-[24px] flex items-center justify-center mx-auto mb-6">
            <ShieldCheck className="w-8 h-8 font-black" />
         </div>
-        <h3 className="text-xl font-black text-white text-center uppercase tracking-tighter italic">Sentiment Signal Broadcasted</h3>
+        <h3 className="text-xl font-black text-white text-center uppercase tracking-tighter italic">Feedback Acknowledged</h3>
         <p className="text-[10px] text-emerald-500 text-center font-black uppercase tracking-widest mt-4">Awaiting Institutional Moderation Audit</p>
      </div>
   );
@@ -59,7 +59,7 @@ export const ReviewSubmission = () => {
           <Send className="w-6 h-6 rotate-45" />
         </div>
         <div>
-          <h3 className="text-2xl font-black text-white italic tracking-tighter uppercase">Signal Submission</h3>
+          <h3 className="text-2xl font-black text-white italic tracking-tighter uppercase">Protocol Feedback</h3>
           <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mt-1">Institutional Feedback Channel</p>
         </div>
       </div>
@@ -98,11 +98,11 @@ export const ReviewSubmission = () => {
 
           <div className="space-y-6">
             <div className="space-y-2">
-              <label className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1 italic">Sentiment Signal Content</label>
+              <label className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1 italic">Detailed Sentiment Content</label>
               <textarea 
                 value={text} onChange={(e) => setText(e.target.value)} required rows={4}
                 className="w-full bg-black border border-white/5 focus:border-amber-500/50 rounded-2xl p-4 text-white text-sm outline-none transition-all resize-none h-[116px] placeholder:text-gray-800"
-                placeholder="Institutional discovery signals are stable..."
+                placeholder="Institutional discovery results are stable..."
               />
             </div>
           </div>
@@ -112,7 +112,7 @@ export const ReviewSubmission = () => {
           type="submit" disabled={loading || isLimited}
           className="w-full py-5 bg-amber-500 hover:bg-amber-400 text-black font-black text-[11px] uppercase tracking-[0.3em] rounded-24 shadow-2xl shadow-amber-500/10 transition-all disabled:opacity-50 group flex items-center justify-center gap-3 italic"
         >
-          {loading ? "Discovering..." : isLimited ? "Cooldown Active" : "Broadcast Signal"}
+          {loading ? "Discovering..." : isLimited ? "Cooldown Active" : "Submit Feedback"}
           <Send className="w-4 h-4 transition-transform group-hover:translate-x-1" />
         </button>
       </form>

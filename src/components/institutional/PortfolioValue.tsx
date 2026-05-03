@@ -1,12 +1,12 @@
 import { motion } from 'motion/react';
 import { TrendingUp, TrendingDown, ShieldCheck } from 'lucide-react';
 import { usePortfolioData } from '@/hooks/usePortfolioData';
-import { SovereignButton } from '@/components/ui/SovereignButton';
+import { EliteButton } from '@/components/ui/Button';
 
 /**
  * PortfolioValue (v2.0)
  * 
- * The High-Stakes Heartbeat of the Sovereign Terminal.
+ * The High-Stakes Heartbeat of the Elite Terminal.
  * Features: Institutional transparency, verified equity tracking, and instant capital triggers.
  */
 export function PortfolioValue() {
@@ -50,23 +50,23 @@ export function PortfolioValue() {
         </div>
 
         <div className="flex flex-col gap-3 w-full md:w-auto">
-          <SovereignButton 
-            variant="primary" 
+          <EliteButton 
+            variant="elite" 
             glowEffect={true} 
             size="lg"
             className="w-full md:w-auto"
             trackingEvent="portfolio_withdraw"
           >
             Withdraw Core
-          </SovereignButton>
-          <SovereignButton 
-            variant="outline" 
+          </EliteButton>
+          <EliteButton 
+            variant="institutional-outline" 
             size="lg"
             className="w-full md:w-auto"
             trackingEvent="portfolio_deposit"
           >
             Inject Capital
-          </SovereignButton>
+          </EliteButton>
         </div>
       </div>
 
@@ -78,8 +78,8 @@ export function PortfolioValue() {
         </div>
         <div className="w-px h-6 bg-white/10" />
         <div className="flex flex-col gap-1">
-          <span className="text-[8px] font-black uppercase tracking-widest">Audit Status</span>
-          <span className="text-[10px] font-mono">Sovereign_Verified_v4</span>
+          <span className="text-[8px] font-black uppercase tracking-widest">Verification Status</span>
+          <span className="text-[10px] font-mono">Elite_Verified_v4</span>
         </div>
       </div>
     </motion.div>

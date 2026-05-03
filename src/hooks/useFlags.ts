@@ -3,7 +3,7 @@ import { supabase } from '../lib/supabase';
 import { CACHE_TIERS } from '../lib/reactQuery';
 
 // ── Type ──────────────────────────────────────────────────────────────────────
-type FlagKey =
+export type FlagKey =
   // Core module toggles (present in DB)
   | 'signals'
   | 'algo'

@@ -18,11 +18,11 @@ export function MobileNavigation() {
 
   return (
     <>
-      {/* Sovereign Hamburger Node */}
+      {/* Elite Hamburger Node */}
       <button 
         onClick={() => setIsOpen(true)}
         className="lg:hidden fixed top-6 left-6 z-[60] p-3 bg-black/80 backdrop-blur-xl rounded-2xl border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.5)] active:scale-95 transition-all"
-        aria-label="Toggle Sovereign Navigation"
+        aria-label="Toggle Elite Navigation"
       >
         <Menu className="w-6 h-6 text-emerald-500" />
       </button>

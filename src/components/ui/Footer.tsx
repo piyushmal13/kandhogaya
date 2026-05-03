@@ -45,7 +45,7 @@ export const Footer = () => (
             </div>
           </Link>
           <p className="text-[13px] leading-[2] text-[#8A9AAB] font-light max-w-sm mb-10" itemProp="description">
-            The global benchmark for systematic market intelligence and algorithmic execution. Engineered for elite capital scaling in Dubai, India, and beyond.
+            The global benchmark for systematic CFD intelligence and algorithmic forex execution. Engineered for elite capital scaling across the world's primary financial hubs.
           </p>
 
           <div 
@@ -56,22 +56,23 @@ export const Footer = () => (
           >
              <meta itemProp="ratingValue" content="4.9" />
              <meta itemProp="reviewCount" content="12400" />
-             <div className="flex items-center gap-1">
-               {[1,2,3,4,5].map(i => <Star key={i} className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400" aria-hidden="true" />)}
+             <div className="flex items-center gap-2">
+               <ShieldCheck className="w-5 h-5 text-emerald-400" />
+               <span className="text-[10px] font-black text-white/90 uppercase tracking-[0.3em]">Institutional Grade</span>
              </div>
-             <span className="text-[9px] font-black text-white/80 uppercase tracking-[0.25em] italic border-l border-white/10 pl-4 py-1">
-               Elite Status
+             <span className="text-[9px] font-black text-white/40 uppercase tracking-[0.25em] italic border-l border-white/10 pl-4 py-1">
+               Verified Alpha
              </span>
           </div>
 
           <div className="flex flex-col gap-5 text-[9px] font-black text-[#4F5A69] uppercase tracking-[0.25em] mb-12">
              <div className="flex items-start gap-4" itemProp="address" itemScope itemType="https://schema.org/PostalAddress">
-               <ShieldCheck className="w-4 h-4 text-emerald-500/50 shrink-0 mt-px" />
-               <span className="leading-relaxed mt-0.5">Global Desk: <span className="text-white/60" itemProp="addressLocality">Business Bay</span>, <span itemProp="addressCountry">UAE</span></span>
+               <Activity className="w-4 h-4 text-emerald-500/50 shrink-0 mt-px" />
+               <span className="leading-relaxed mt-0.5">Global Presence: <span className="text-white/60">Institutional Network</span></span>
              </div>
              <div className="flex items-start gap-4" itemProp="address" itemScope itemType="https://schema.org/PostalAddress">
-               <Activity className="w-4 h-4 text-emerald-500/50 shrink-0 mt-px" />
-               <span className="leading-relaxed mt-0.5">Asia Desk: <span className="text-white/60" itemProp="addressLocality">Greater Noida</span>, <span itemProp="addressRegion">India</span></span>
+               <TerminalSquare className="w-4 h-4 text-emerald-500/50 shrink-0 mt-px" />
+               <span className="leading-relaxed mt-0.5">Operational Hubs: <span className="text-white/60">Multi-Asset Execution</span></span>
              </div>
           </div>
           

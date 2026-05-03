@@ -22,7 +22,7 @@ export const UpgradeModal = ({ isOpen, onClose, requiredPlan = 'pro', title, des
   if (!isOpen) return null;
 
   const features = [
-    { icon: Zap, text: "Institutional-Grade Signal Logic", sub: "Exact entry, SL, and TP for all setups." },
+    { icon: Zap, text: "Institutional-Grade Intelligence Logic", sub: "Exact entry, SL, and TP for all setups." },
     { icon: LayoutGrid, text: "Algo Terminal Discovery", sub: "Explore proprietary systematic trading bots." },
     { icon: ShieldCheck, text: "Validated Performance", sub: "Equity growth tranches updated in real-time." },
     { icon: Star, text: "Elite Execution Masterclasses", sub: "Live institutional analysis with the research desk." },

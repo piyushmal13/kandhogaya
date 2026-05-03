@@ -1,13 +1,12 @@
 import { DashboardLayout } from '../components/institutional/DashboardLayout';
-import { SovereignButton } from '../components/ui/Button';
+import { EliteButton } from '../components/ui/Button';
 import { motion } from 'motion/react';
 import { AlertTriangle, Home } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 /**
  * Institutional Error Surface (404 / 500).
- * Replaces generic browser errors with a sovereign, high-authority 
- * fallback that maintains platform immersion.
+ * High-authority fallback that maintains platform immersion.
  */
 export function InstitutionalError() {
   const navigate = useNavigate();
@@ -37,11 +36,11 @@ export function InstitutionalError() {
           </div>
 
           <p className="max-w-md mx-auto text-[11px] font-medium text-white/20 uppercase tracking-[0.2em] leading-relaxed">
-             The requested node is currently offline or does not exist within the Sovereign grid. Verify your uplink parameters or return to the base omni-view.
+             The requested node is currently offline or does not exist within the Elite grid. Verify your uplink parameters or return to the base omni-view.
           </p>
 
           <div className="pt-8">
-            <SovereignButton 
+            <EliteButton 
               onClick={() => navigate('/dashboard')}
               className="px-10 py-5 bg-white text-black hover:bg-emerald-500 transition-all rounded-2xl"
             >
@@ -49,7 +48,7 @@ export function InstitutionalError() {
                  <Home className="w-4 h-4" />
                  Return to Base
               </div>
-            </SovereignButton>
+            </EliteButton>
           </div>
         </motion.div>
       </div>

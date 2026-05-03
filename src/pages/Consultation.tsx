@@ -10,7 +10,7 @@ import {
   Mail,
   Phone,
 } from "lucide-react";
-import { SovereignButton } from "../components/ui/Button";
+import { EliteButton } from "../components/ui/Button";
 import { PageMeta } from "../components/site/PageMeta";
 import { supabase } from "../lib/supabase";
 import { tracker } from "@/core/tracker";
@@ -73,9 +73,9 @@ export const Consultation = () => {
         <p className="text-gray-400 max-w-md mx-auto mb-12">
           Your institutional consultation request has been logged. A senior desk analyst will reach out to verify your credentials within 24 business hours.
         </p>
-        <SovereignButton variant="secondary" onClick={() => globalThis.location.href = "/"}>
+        <EliteButton variant="secondary" onClick={() => globalThis.location.href = "/"}>
           Return to Terminal
-        </SovereignButton>
+        </EliteButton>
       </div>
     );
   }
@@ -89,7 +89,7 @@ export const Consultation = () => {
       </div>
 
       <PageMeta 
-        title="Institutional Consultation | Sovereign Boardroom"
+        title="Institutional Consultation | Elite Boardroom"
         description="Book a strategic session with the IFX Trades proprietary desk leads. Elite quantitative architecture and risk governance."
         path="/consultation"
       />

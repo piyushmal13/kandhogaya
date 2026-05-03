@@ -1,10 +1,10 @@
 export const homeContent = {
   hero: {
-    badge: "IFX Sovereign Terminal v6.0",
+    badge: "IFX Elite Terminal v6.0",
     titleLine1: "The Quantitative",
     titleLine2: "Architecture for",
     titleHighlight: "Elite Capital",
-    description: "Institutional-grade research, automated algorithmic models, and high-fidelity education. Developed for the meticulous operator who demands sovereign precision.",
+    description: "Institutional-grade research, automated algorithmic models, and high-fidelity education. Developed for the meticulous operator who demands institutional precision.",
     primaryCta: { text: "Audit Research Feed", link: "/signals" },
     secondaryCta: { text: "Discover Algos", link: "/marketplace" }
   },

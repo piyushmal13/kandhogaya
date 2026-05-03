@@ -36,8 +36,8 @@ export const Results = () => {
       </div>
 
       <PageMeta
-        title="Verified Strategy Performance | IFX TRADES"
-        description="Review IFX TRADES audited performance data: 82.4% win rate, 3.24 profit factor, consistent equity growth."
+        title="Institutional Performance Analytics | IFX TRADES"
+        description="Access verified performance data across the IFX multi-strategy ecosystem: 82.4% win rate, 3.24 profit factor, consistent equity growth."
         path="/results"
       />
 
@@ -45,14 +45,14 @@ export const Results = () => {
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-12 mb-32">
           <div className="space-y-10">
             <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-emerald-500/[0.04] border border-emerald-500/[0.15] text-emerald-500 text-[10px] font-black uppercase tracking-[0.4em]">
-              Audited Performance Data
+              Institutional Performance Data
             </div>
             <h1 className="text-shimmer leading-[0.9]">
-              Performance <br />
+              Strategy <br />
               <span className="italic font-serif text-gradient-emerald">Analytics.</span>
             </h1>
             <p className="text-lg text-gray-400 max-w-2xl font-light leading-relaxed">
-              Transparent reporting of systematic trading performance. Every data point represents a verified outcome within the IFX Execution Engine.
+              Transparent reporting across our elite algorithmic ecosystem. Every data point represents a verified outcome within the IFX multi-strategy execution framework.
             </p>
           </div>
           
@@ -165,9 +165,9 @@ export const Results = () => {
               className="p-12 rounded-[4rem] bg-[#080B12] border border-white/[0.06] space-y-8 group hover:border-emerald-500/30 transition-all duration-700"
             >
               <Award className="h-12 w-12 text-emerald-500" />
-              <h3 className="text-3xl font-black text-white uppercase italic tracking-tighter">Verified Reporting</h3>
+              <h3 className="text-3xl font-black text-white uppercase italic tracking-tighter">Institutional Reporting</h3>
               <p className="text-[11px] text-white/30 uppercase tracking-[0.2em] leading-relaxed font-light">
-                We align with institutional standards of transparency. No vanity metrics, just equity trends and risk posture audit.
+                We align with institutional standards of transparency. No vanity metrics, just verified equity trends and risk posture metrics.
               </p>
            </motion.div>
 
@@ -177,9 +177,9 @@ export const Results = () => {
               className="p-12 rounded-[4rem] bg-[#080B12] border border-white/[0.06] space-y-8 group hover:border-emerald-500/30 transition-all duration-700"
             >
               <CheckCircle2 className="h-12 w-12 text-emerald-500" />
-              <h3 className="text-3xl font-black text-white uppercase italic tracking-tighter">Professional Execution</h3>
+              <h3 className="text-3xl font-black text-white uppercase italic tracking-tighter">Elite Execution</h3>
               <p className="text-[11px] text-white/30 uppercase tracking-[0.2em] leading-relaxed font-light">
-                Transition from discretionary noise to systematic execution. Gain access to our full institutional track record.
+                Transition from discretionary noise to systematic excellence. Gain access to our full institutional multi-strategy alpha.
               </p>
            </motion.div>
         </section>

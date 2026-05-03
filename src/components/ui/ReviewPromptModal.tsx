@@ -24,7 +24,7 @@ export const ReviewPromptModal = ({ isOpen, onClose }: { isOpen: boolean, onClos
              Finding value in our macro research?
            </h3>
            <p className="text-sm text-gray-400 leading-relaxed font-sans mb-10">
-             Your feedback builds unparalleled trust. Drop a quick 5-star review on Google to help us onboard more elite traders globally.
+             Your intelligence feedback builds unparalleled trust. Submit an Institutional Performance Review to help us onboard more elite traders globally.
            </p>
 
            <div className="flex flex-col gap-4">

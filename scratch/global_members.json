@@ -1,0 +1,30 @@
+[
+  {
+    "id": "node_01",
+    "name": "Arjun S.",
+    "region": "Mumbai, India",
+    "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Arjun",
+    "feedback": "The MQL5 bridge for the Quant-V4 strategy is flawless. Execution latency is sub-5ms."
+  },
+  {
+    "id": "node_02",
+    "name": "Fatima A.",
+    "region": "Dubai, UAE",
+    "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Fatima",
+    "feedback": "Institutional research on gold liquidity shifts helped our desk navigate the NFP volatility."
+  },
+  {
+    "id": "node_03",
+    "name": "Marcus L.",
+    "region": "Singapore",
+    "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Marcus",
+    "feedback": "Custom Python development service was professional. Delivered a clean, optimized API for our custom dashboard."
+  },
+  {
+    "id": "node_04",
+    "name": "Elena V.",
+    "region": "London, UK",
+    "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Elena",
+    "feedback": "Elite webinars are the highlight. Real-time market structure analysis that actually makes sense."
+  }
+]

@@ -96,12 +96,12 @@ export const PerformanceHistory = () => {
             Verified Results
           </div>
           <h2 id="performance-heading" className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 tracking-tight leading-[1.1]">
-            Audited Trading <br className="hidden md:block" />
-            <span className="text-emerald-400">Track Record</span>
+            Multi-Strategy <br className="hidden md:block" />
+            <span className="text-emerald-400">Performance Metrics</span>
           </h2>
           <p className="text-white/50 max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
-            Transparent overview of our institutional algorithmic performance. 
-            Real-time fulfillment signals synced directly from the IFX Terminal.
+            A comprehensive overview of our proprietary algorithmic ecosystem. 
+            Execution results are driven by elite quantitative teams and systematic high-performance protocols.
           </p>
         </motion.div>
       </div>

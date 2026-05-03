@@ -35,9 +35,9 @@ export const routeMetaMap: Record<string, RouteMeta> = {
     keywords: `${BASE_KEYWORDS}, trading algorithms, algo marketplace, MT5 trading bots, automated forex trading, EA trading`,
   },
   "/results": {
-    title: "Performance Results | IFXTrades",
+    title: "Performance Independently Verified",
     description:
-      "Review IFXTrades performance metrics, equity growth, and audited-style transparency across signals and systematic trading workflows.",
+      "Review IFXTrades performance metrics, equity growth, and institutional-grade transparency across signals and systematic trading workflows.",
     keywords: `${BASE_KEYWORDS}, trading performance, forex results, trading win rate, equity curve`,
   },
   "/academy": {

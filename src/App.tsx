@@ -11,6 +11,9 @@ import { ProtectedRoute } from "./components/ui/ProtectedRoute";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./lib/reactQuery";
 import { loadSystem } from "./core/systemLoader";
+import { HelmetProvider } from "react-helmet-async";
+import { FeatureGuard } from "./components/ui/FeatureGuard";
+import { GlobalPromotionBanner } from "./components/institutional/GlobalPromotionBanner";
 
 const Home = lazy(() => import("./pages/Home"));
 const Marketplace = lazy(() => import("./pages/Marketplace").then(m => ({ default: m.Marketplace })));
@@ -25,7 +28,6 @@ const Admin = lazy(() => import("./pages/Admin").then(m => ({ default: m.Admin }
 const AgentDashboard = lazy(() => import("./pages/AgentDashboard").then(m => ({ default: m.AgentDashboard })));
 const Contact = lazy(() => import("./pages/Contact").then(m => ({ default: m.Contact })));
 const About = lazy(() => import("./pages/About").then(m => ({ default: m.About })));
-const Signals = lazy(() => import("./pages/Signals").then(m => ({ default: m.Signals })));
 const Results = lazy(() => import("./pages/Results").then(m => ({ default: m.Results })));
 const Academy = lazy(() => import("./pages/Academy").then(m => ({ default: m.Academy })));
 const Pricing = lazy(() => import("./pages/Pricing").then(m => ({ default: m.Pricing })));
@@ -60,9 +62,9 @@ const AnimatedRoutes = () => {
             <Route path="/" element={<Home />} />
             <Route path="/solutions" element={<Solutions />} />
             <Route path="/consultation" element={<Consultation />} />
-            <Route path="/marketplace" element={<Marketplace />} />
-            <Route path="/quantx" element={<QuantX />} />
-            <Route path="/webinars" element={<Webinars />} />
+            <Route path="/marketplace" element={<FeatureGuard flag="marketplace" redirect="/dashboard"><Marketplace /></FeatureGuard>} />
+            <Route path="/quantx" element={<ProtectedRoute><QuantX /></ProtectedRoute>} />
+            <Route path="/webinars" element={<FeatureGuard flag="webinars" redirect="/dashboard"><Webinars /></FeatureGuard>} />
             <Route path="/webinars/:id" element={<WebinarDetail />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogDetail />} />
@@ -71,9 +73,8 @@ const AnimatedRoutes = () => {
             <Route path="/admin" element={<ProtectedRoute adminOnly><Admin /></ProtectedRoute>} />
             <Route path="/agent" element={<ProtectedRoute><AgentDashboard /></ProtectedRoute>} />
             <Route path="/affiliate" element={<ProtectedRoute><AffiliateHub /></ProtectedRoute>} />
-            <Route path="/signals" element={<Signals />} />
             <Route path="/results" element={<Results />} />
-            <Route path="/academy" element={<Academy />} />
+            <Route path="/academy" element={<FeatureGuard flag="academy" redirect="/dashboard"><Academy /></FeatureGuard>} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/hiring" element={<Hiring />} />
             <Route path="/about" element={<About />} />
@@ -100,6 +101,7 @@ function AppContent() {
 
   return (
     <StandardLayout>
+      <GlobalPromotionBanner />
       <AnimatedRoutes />
     </StandardLayout>
   );
@@ -111,18 +113,20 @@ export default function App() {
   }, []);
 
   return (
-    <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <ToastProvider>
-          <AuthProvider>
-            <DataPulseProvider>
-              <Router>
-                <AppContent />
-              </Router>
-            </DataPulseProvider>
-          </AuthProvider>
-        </ToastProvider>
-      </QueryClientProvider>
-    </ErrorBoundary>
+    <HelmetProvider>
+      <ErrorBoundary>
+        <QueryClientProvider client={queryClient}>
+          <ToastProvider>
+            <AuthProvider>
+              <DataPulseProvider>
+                <Router>
+                  <AppContent />
+                </Router>
+              </DataPulseProvider>
+            </AuthProvider>
+          </ToastProvider>
+        </QueryClientProvider>
+      </ErrorBoundary>
+    </HelmetProvider>
   );
 }

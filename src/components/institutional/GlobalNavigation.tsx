@@ -8,49 +8,67 @@ import {
   LineChart, 
   Settings,
   LogOut,
-  Zap,
   Shield,
   Trophy
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
+import { useFlags, type FlagKey } from '@/hooks/useFlags';
+import { InfrastructurePulse } from '../ui/InfrastructurePulse';
+
+interface NavItem {
+  path: string;
+  label: string;
+  icon: any;
+  flag: FlagKey;
+}
 
 export function GlobalNavigation() {
   const location = useLocation();
   const { logout, userProfile } = useAuth();
+  const { flags } = useFlags();
 
-  const navItems = [
-    { path: '/dashboard', label: 'Omni-View', icon: LayoutDashboard },
-    { path: '/marketplace', label: 'Marketplace', icon: Store },
-    { path: '/academy', label: 'Academy', icon: GraduationCap },
-    { path: '/webinars', label: 'Webinars', icon: Video },
-    { path: '/results', label: 'Performance', icon: LineChart },
+  const navItems: NavItem[] = [
+    { path: '/dashboard', label: 'Omni-View', icon: LayoutDashboard, flag: 'admin_panel' },
+    { path: '/marketplace', label: 'Marketplace', icon: Store, flag: 'marketplace' },
+    { path: '/academy', label: 'Academy', icon: GraduationCap, flag: 'academy' },
+    { path: '/webinars', label: 'Webinars', icon: Video, flag: 'webinars' },
+    { path: '/results', label: 'Performance', icon: LineChart, flag: 'algo' },
   ];
+
+  // Filter items based on flags
+  const visibleItems = navItems.filter(item => flags[item.flag] !== false);
 
   // Conditional Intelligence Layers
   if (userProfile?.role === 'admin') {
-    navItems.push({ path: '/admin', label: 'Command', icon: Shield });
+    visibleItems.push({ path: '/admin', label: 'Command', icon: Shield, flag: 'admin_panel' });
   }
   if (userProfile?.role === 'agent' || userProfile?.role === 'admin') {
-    navItems.push({ path: '/agent', label: 'Growth', icon: Trophy });
+    visibleItems.push({ path: '/agent', label: 'Growth', icon: Trophy, flag: 'affiliate_system' });
   }
 
   return (
     <nav className="h-full flex flex-col bg-black/60 backdrop-blur-3xl border-r border-white/5 shadow-[20px_0_50px_rgba(0,0,0,0.5)]">
       {/* Branding Node */}
-      <div className="h-24 flex items-center px-10 border-b border-white/5 shrink-0">
-        <div className="w-11 h-11 rounded-2xl bg-white/[0.03] flex items-center justify-center shrink-0 shadow-[0_4px_30px_rgba(0,0,0,0.4)] border border-white/5 group-hover:border-cyan-500/30 transition-all">
-           <Zap className="w-6 h-6 text-cyan-400 fill-cyan-400/20" />
-        </div>
-        <div className="ml-5 flex flex-col">
-           <span className="font-black uppercase tracking-tighter italic text-xl text-white leading-none">IFX <span className="text-cyan-500">Trades</span></span>
-           <span className="text-[8px] font-black uppercase tracking-[0.6em] text-white/20 leading-tight mt-1">Sovereign Node</span>
+      <div className="h-28 flex items-center px-8 border-b border-white/5 shrink-0">
+        <div className="relative group flex items-center gap-4">
+           <div className="w-14 h-14 rounded-2xl overflow-hidden border border-white/10 shadow-2xl group-hover:border-cyan-500/50 transition-all duration-500">
+              <img 
+                src="/logo.png" 
+                alt="IFX Trades Logo" 
+                className="w-full h-full object-contain"
+              />
+           </div>
+           <div className="flex flex-col">
+              <span className="font-black uppercase tracking-tighter italic text-xl text-white leading-none">IFX <span className="text-cyan-500">Trades</span></span>
+              <span className="text-[7px] font-black uppercase tracking-[0.4em] text-white/20 leading-tight mt-1">Research Desk</span>
+           </div>
         </div>
       </div>
 
       {/* Primary Execution Rail */}
       <div className="flex-1 py-8 px-4 space-y-1 overflow-y-auto custom-scrollbar">
-        {navItems.map((item) => {
+        {visibleItems.map((item) => {
           const isActive = location.pathname === item.path || 
                           location.pathname.startsWith(`${item.path}/`);
           const Icon = item.icon;
@@ -60,12 +78,14 @@ export function GlobalNavigation() {
               key={item.path}
               to={item.path}
               className={({ isActive }) => cn(
-                "relative group flex items-center gap-4 px-4 py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all duration-300",
+                "relative group flex items-center gap-4 px-4 py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all duration-500 preserve-3d",
                 isActive 
-                  ? 'bg-white/10 text-white shadow-[0_0_20px_rgba(255,255,255,0.05)] border border-white/5' 
-                  : 'text-white/30 hover:bg-white/5 hover:text-white'
+                  ? 'bg-white/10 text-white shadow-[0_20px_40px_rgba(0,0,0,0.4)] border border-white/5' 
+                  : 'text-white/30 hover:bg-white/[0.03] hover:text-white hover:translate-x-1'
               )}
             >
+              {/* Subtle Glow Overlay */}
+              <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 bg-gradient-to-r from-cyan-500/[0.05] to-transparent transition-opacity duration-500 pointer-events-none" />
               {isActive && (
                 <motion.div
                   layoutId="activeNavIndicator"
@@ -98,7 +118,7 @@ export function GlobalNavigation() {
           )}
         >
           <Settings className="w-5 h-5" />
-          <span>Config</span>
+          <span>Protocol Settings</span>
         </NavLink>
         
         <button
@@ -109,13 +129,7 @@ export function GlobalNavigation() {
           <span>Terminate</span>
         </button>
 
-        <div className="mt-6 p-5 rounded-3xl bg-white/[0.01] border border-white/5">
-           <p className="text-[7px] font-black uppercase tracking-[0.5em] text-white/10 mb-1 leading-none text-center">Protocol Integrity</p>
-           <div className="flex items-center justify-center gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_8px_rgba(0,229,255,0.8)]" />
-              <span className="text-[9px] font-mono text-cyan-500 uppercase tracking-tighter">NODE_SYNC_OK</span>
-           </div>
-        </div>
+        <InfrastructurePulse />
       </div>
     </nav>
   );

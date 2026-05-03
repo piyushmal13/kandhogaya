@@ -158,26 +158,6 @@
         send_page_view: true
       });
     </script>
-
-    <!-- ═══════════════════════════════════════════════════════════
-         CRITICAL CSS — Zero Layout Shift (CLS = 0)
-    ═══════════════════════════════════════════════════════════ -->
-    <style>
-      *, *::before, *::after { box-sizing: border-box; }
-      html { scroll-behavior: smooth; }
-      body {
-        background-color: #000000;
-        margin: 0;
-        padding: 0;
-        font-family: "Outfit", "Inter", system-ui, -apple-system, sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        overflow-x: hidden;
-      }
-      #root { min-height: 100vh; isolation: isolate; }
-      /* Prevent invisible content shift before JS hydrates */
-      #root:empty { background-color: #000000; }
-    </style>
   </head>
   <body>
     <!-- ARIA landmark for screen readers / accessibility -->

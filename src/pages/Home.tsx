@@ -11,34 +11,41 @@ import { WebinarPromo } from "../components/home/WebinarPromo";
 import { HowItWorks } from "../components/home/HowItWorks";
 import { JourneySection } from "../components/home/JourneySection";
 import { ConsultationSection } from "../components/home/ConsultationSection";
+import { InstitutionalFAQ } from "../components/home/InstitutionalFAQ";
+import { BlogSection } from "../components/home/BlogSection";
 import AdBanner from "../components/ui/AdBanner";
 
 import { faqSchema, educationalOrganizationSchema, websiteSchema, breadcrumbSchema } from "../utils/structuredData";
 
-const homeFaqs = [
-  {
-    question: "What is IFX Trades?",
-    answer:
-      "IFX Trades is Asia's #1 institutional forex education and research platform, providing professional quantitative analysis and algorithmic infrastructure for modern market participants.",
-  },
-  {
-    question: "Do you provide financial advice or signals?",
-    answer:
-      "No. IFX Trades is strictly an educational and research desk. We do not provide financial advice, trading signals, or manage funds. All materials are for research and educational purposes only.",
-  },
-  {
-    question: "How can I access the institutional research?",
-    answer:
-      "Access is provided through our Master Terminal desk. Professional members gain access to our quantitative analysis, macro research, and execution infrastructure frameworks.",
-  },
-  {
-    question: "Is IFX Trades a broker?",
-    answer:
-      "No. IFX Trades is strictly an education and research organization. We do not accept deposits, execute trades, hold client funds, or provide brokerage services.",
-  },
-];
+import { useQuery } from "@tanstack/react-query";
+import { getFaqs } from "../services/apiHandlers";
 
 const Home = () => {
+  const { data: homeFaqs = [] } = useQuery({
+    queryKey: ['home_faqs'],
+    queryFn: async () => {
+      const data = await getFaqs(10);
+      if (!data || data.length === 0) {
+        return [
+          {
+            title: "What is IFX Trades?",
+            body: "IFX Trades is Asia's #1 institutional forex education and research platform, providing professional quantitative analysis and algorithmic infrastructure for modern market participants.",
+          },
+          {
+            title: "Do you provide financial advice or signals?",
+            body: "No. IFX Trades is strictly an educational and research desk. We do not provide financial advice, trading signals, or manage funds. All materials are for research and educational purposes only.",
+          }
+        ];
+      }
+      return data;
+    },
+    staleTime: 600000,
+  });
+
+  const formattedFaqs = homeFaqs.map((f: any) => ({
+    question: f.title || f.question,
+    answer: f.content || f.body || f.answer
+  }));
   return (
     <>
       <PageMeta
@@ -56,7 +63,7 @@ const Home = () => {
         structuredData={[
           educationalOrganizationSchema(),
           websiteSchema(),
-          faqSchema(homeFaqs),
+          faqSchema(formattedFaqs),
           breadcrumbSchema([
             { name: "Home", path: "/" },
             { name: "Marketplace", path: "/marketplace" },
@@ -66,7 +73,7 @@ const Home = () => {
       />
 
       <main>
-        {/* L1: Sovereign Execution Hero */}
+        {/* L1: Elite Execution Hero */}
         <FortressHero />
 
         {/* Editable advertisement banner (Supabase-driven) */}
@@ -90,10 +97,16 @@ const Home = () => {
         {/* L7: Global Network */}
         <GlobalReach />
 
-        {/* L8: Masterclass Engagement */}
+        {/* L8: Institutional Intelligence (Live from Supabase) */}
+        <BlogSection />
+
+        {/* L9: Masterclass Engagement */}
         <WebinarPromo />
 
-        {/* L9: Capital Inquiry / Consultation */}
+        {/* L10: Institutional FAQ (Sovereign Data) */}
+        <InstitutionalFAQ faqs={formattedFaqs} />
+
+        {/* L11: Capital Inquiry / Consultation */}
         <ConsultationSection />
       </main>
     </>

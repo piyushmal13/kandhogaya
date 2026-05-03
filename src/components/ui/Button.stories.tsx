@@ -4,16 +4,16 @@ import { Button } from './Button';
 import { Loader2 } from 'lucide-react';
 
 const meta: Meta<typeof Button> = {
-  title: 'UI/SovereignButton',
+  title: 'UI/EliteButton',
   component: Button,
   argTypes: {
     variant: {
       control: { type: 'select' },
-      options: ['sovereign', 'execution', 'secondary', 'ghost', 'danger', 'institutional-outline'],
+      options: ['elite', 'execution', 'secondary', 'ghost', 'danger', 'institutional-outline'],
     },
     size: {
       control: { type: 'select' },
-      options: ['sm', 'md', 'lg', 'xl', 'sovereign-hero'],
+      options: ['sm', 'md', 'lg', 'xl', 'elite-hero'],
     },
     glowEffect: {
       control: 'boolean',
@@ -37,9 +37,9 @@ export default meta;
 
 type Story = StoryObj<typeof Button>;
 
-export const Sovereign: Story = {
+export const Elite: Story = {
   args: {
-    variant: 'sovereign',
+    variant: 'elite',
     glowEffect: true,
   },
 };
@@ -59,7 +59,7 @@ export const InstitutionalOutline: Story = {
 
 export const LoadingState: Story = {
   args: {
-    variant: 'sovereign',
+    variant: 'elite',
     isLoading: true,
   },
 };

@@ -5,21 +5,21 @@ import { cn } from '@/lib/utils';
 import { tracker } from '@/core/tracker';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag';
 
-// ── INSTITUTIONAL BUTTON PRIMITIVE (v5.0 Sovereign) ──
+// ── INSTITUTIONAL BUTTON PRIMITIVE (v5.0 Elite) ──
 // This Replaces IFX-02 with a hyper-advanced, accessible, and trackable execution node.
 // Enforces zero-layout shift, dynamic GPU-accelerated glows, and strict WCAG AA.
 
 export type ButtonVariant = 
-  | 'sovereign' 
+  | 'elite' 
   | 'execution' 
   | 'secondary' 
   | 'ghost' 
   | 'danger' 
   | 'institutional-outline';
 
-export type ButtonSize = 'sm' | 'md' | 'lg' | 'xl' | 'sovereign-hero';
+export type ButtonSize = 'sm' | 'md' | 'lg' | 'xl' | 'elite-hero';
 
-export interface SovereignButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onAnimationStart'> {
+export interface EliteButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onAnimationStart'> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   isLoading?: boolean;
@@ -33,7 +33,7 @@ export interface SovereignButtonProps extends Omit<ButtonHTMLAttributes<HTMLButt
 }
 
 const variantStyles: Record<ButtonVariant, string> = {
-  sovereign: "bg-[var(--grad-royale)] text-black font-black hover:shadow-[0_0_50px_rgba(16,185,129,0.5)] border-none shadow-[inset_0_2px_4px_rgba(255,255,255,0.4),0_0_0_1px_rgba(0,0,0,0.1)]",
+  elite: "bg-[var(--grad-royale)] text-black font-black hover:shadow-[0_0_50px_rgba(16,185,129,0.5)] border-none shadow-[inset_0_2px_4px_rgba(255,255,255,0.4),0_0_0_1px_rgba(0,0,0,0.1)]",
   execution: "bg-emerald-500 hover:bg-emerald-400 text-black font-black hover:shadow-[0_0_30px_rgba(16,185,129,0.4)] border border-emerald-400/50 shadow-[inset_0_2px_4px_rgba(255,255,255,0.3),0_0_0_1px_rgba(0,0,0,0.1)]",
   secondary: "bg-white/[0.03] hover:bg-white/[0.07] text-white border border-white/10 hover:border-white/20 shadow-2xl backdrop-blur-md",
   ghost: "bg-transparent hover:bg-white/5 text-gray-400 hover:text-white",
@@ -46,10 +46,10 @@ const sizeStyles: Record<ButtonSize, string> = {
   md: "px-6 py-3 text-sm tracking-widest",
   lg: "px-8 py-4 text-base tracking-[0.15em]",
   xl: "px-10 py-5 text-lg tracking-[0.2em]",
-  'sovereign-hero': "px-12 py-6 text-xl tracking-[0.25em] min-w-[280px]",
+  'elite-hero': "px-12 py-6 text-xl tracking-[0.25em] min-w-[280px]",
 };
 
-export const Button = forwardRef<HTMLButtonElement, SovereignButtonProps>(
+export const Button = forwardRef<HTMLButtonElement, EliteButtonProps>(
   (
     { 
       className, 
@@ -84,7 +84,7 @@ export const Button = forwardRef<HTMLButtonElement, SovereignButtonProps>(
       
       // Auto-Telemtry
       if (trackingEvent) {
-        tracker.track(trackingEvent, { ...trackingData, component: 'SovereignButton' });
+        tracker.track(trackingEvent, { ...trackingData, component: 'EliteButton' });
       }
 
       setIsPressed(true);
@@ -102,7 +102,7 @@ export const Button = forwardRef<HTMLButtonElement, SovereignButtonProps>(
           <div className={cn(
             "absolute -inset-1 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 -z-10 mix-blend-screen",
             (() => {
-              if (variant === 'sovereign') return 'bg-[var(--color14)]/40';
+              if (variant === 'elite') return 'bg-[var(--color14)]/40';
               if (variant === 'execution') return 'bg-emerald-500/40';
               return 'bg-white/10';
             })()
@@ -133,7 +133,7 @@ export const Button = forwardRef<HTMLButtonElement, SovereignButtonProps>(
 
           <div className={cn("flex items-center gap-3 relative z-10 transition-transform duration-200", isPressed && "scale-95")}>
             {isLoading && (
-              <Loader2 className="w-5 h-5 animate-spin data-[variant=sovereign]:text-[var(--color29)] data-[variant=secondary]:text-white" />
+              <Loader2 className="w-5 h-5 animate-spin data-[variant=elite]:text-[var(--color29)] data-[variant=secondary]:text-white" />
             )}
             {!isLoading && leftIcon && <span className="group-hover:-translate-x-1 transition-transform">{leftIcon}</span>}
             
@@ -147,5 +147,5 @@ export const Button = forwardRef<HTMLButtonElement, SovereignButtonProps>(
   }
 );
 
-export { Button as SovereignButton };
-Button.displayName = "SovereignButton";
+export { Button as EliteButton };
+Button.displayName = "EliteButton";

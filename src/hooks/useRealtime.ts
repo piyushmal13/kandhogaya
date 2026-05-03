@@ -10,7 +10,8 @@ import { RealtimePostgresChangesPayload } from "@supabase/supabase-js";
 export function useRealtime<T extends { id: string | number }>(
   table: string,
   filter?: string,
-  onUpdate?: (payload: RealtimePostgresChangesPayload<T>) => void
+  onUpdate?: (payload: RealtimePostgresChangesPayload<T>) => void,
+  mapper?: (raw: any) => T
 ) {
   const [data, setData] = useState<T[]>([]);
   const [loading, setLoading] = useState(true);
@@ -27,7 +28,8 @@ export function useRealtime<T extends { id: string | number }>(
       
       const { data: initialData, error } = await query.order('created_at', { ascending: false }).limit(50);
       if (!error) {
-        setData((initialData as T[]) || []);
+        const processed = mapper ? (initialData as any[]).map(mapper) : (initialData as T[]);
+        setData(processed);
       }
       setLoading(false);
     };
@@ -40,11 +42,13 @@ export function useRealtime<T extends { id: string | number }>(
       const safeCurrent = Array.isArray(current) ? current : [];
       if (!payload || (!payload.new && !payload.old)) return safeCurrent;
 
+      const newItem = (payload.new && mapper) ? mapper(payload.new) : (payload.new as T);
+
       switch (payload.eventType) {
         case 'INSERT':
-          return payload.new ? [payload.new, ...safeCurrent].slice(0, 50) : safeCurrent;
+          return newItem ? [newItem, ...safeCurrent].slice(0, 50) : safeCurrent;
         case 'UPDATE':
-          return payload.new ? safeCurrent.map(item => item.id === payload.new.id ? payload.new : item) : safeCurrent;
+          return newItem ? safeCurrent.map(item => item.id === newItem.id ? newItem : item) : safeCurrent;
         case 'DELETE':
           return payload.old ? safeCurrent.filter(item => item.id !== payload.old.id) : safeCurrent;
         default:

@@ -13,7 +13,7 @@ export const BannerManager = () => {
   const [form, setForm] = useState<any>({
     title: "",
     description: "",
-    placement: "home",
+    placement: "global",
     link_url: "",
     is_active: true,
     priority: 0,
@@ -42,7 +42,7 @@ export const BannerManager = () => {
 
   const resetForm = () => {
     setEditing(null);
-    setForm({ title: "", description: "", placement: "home", link_url: "", is_active: true, priority: 0, image_url: "", imageFile: null });
+    setForm({ title: "", description: "", placement: "global", link_url: "", is_active: true, priority: 0, image_url: "", imageFile: null });
     setFormOpen(false);
   };
 
@@ -182,11 +182,12 @@ export const BannerManager = () => {
             <div>
               <label className="block text-xs text-gray-400 mb-1">Placement</label>
               <select className="w-full bg-black border border-white/10 rounded-xl px-3 py-2 text-white" value={form.placement} onChange={e => setForm({...form, placement: e.target.value})}>
-                <option value="home">Home</option>
-                <option value="webinar">Webinar</option>
-                <option value="header">Header</option>
-                <option value="footer">Footer</option>
-                <option value="sidebar">Sidebar</option>
+                <option value="global">Global Broadcast</option>
+                <option value="home">Home Page</option>
+                <option value="webinar">Webinar Hub</option>
+                <option value="marketplace">Marketplace</option>
+                <option value="header">Header Strip</option>
+                <option value="sidebar">Sidebar Slot</option>
               </select>
             </div>
             <div>

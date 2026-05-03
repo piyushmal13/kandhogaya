@@ -102,6 +102,18 @@ const FLAG_REGISTRY: { key: string; label: string; description: string; group: s
     group:       "Marketing",
   },
   {
+    key:         "institutional_reviews_live",
+    label:       "Institutional Social Proof",
+    description: "Enables the synchronized reviews/feedback section on the home page.",
+    group:       "Branding",
+  },
+  {
+    key:         "market_ticker_active",
+    label:       "Live Market Ticker",
+    description: "Enables the real-time ticker stream in the hero section.",
+    group:       "Branding",
+  },
+  {
     key:         "maintenance_mode",
     label:       "Maintenance Mode",
     description: "Redirects all public routes to a maintenance page.",

@@ -11,14 +11,14 @@ import { PageMeta } from '@/components/site/PageMeta';
 import { tracker } from '@/core/tracker';
 
 /**
- * Dashboard (v2.0) - The Sovereign Terminal
+ * Dashboard (v2.0) - The Elite Terminal
  * 
  * High-density command center for institutional capital management.
  * Features: Asymmetric data grid, real-time Alpha pulses, and integrated Risk Shield.
  */
 export const Dashboard = () => {
   React.useEffect(() => {
-    tracker.track("page_view", { surface: "sovereign_terminal_v2" });
+    tracker.track("page_view", { surface: "elite_terminal_v2" });
   }, []);
 
   return (

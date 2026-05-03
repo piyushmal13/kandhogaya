@@ -9,6 +9,7 @@ import { cn } from "../../utils/cn";
 
 import { useRealtime } from "../../hooks/useRealtime";
 import { Lead } from "../../types";
+import { mapLead } from "../../utils/dataMapper";
 
 const ScoreBadge = ({ score }: { score: number }) => {
   let scoreColor = "text-gray-500";
@@ -26,7 +27,7 @@ const ScoreBadge = ({ score }: { score: number }) => {
  * Transitioned to LIVE STREAM for zero-latency discovery.
  */
 export const LeadManager = () => {
-  const { data: leads, loading } = useRealtime<Lead>('leads');
+  const { data: leads, loading } = useRealtime<Lead>('leads', undefined, undefined, mapLead);
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(0);
 
