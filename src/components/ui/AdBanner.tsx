@@ -1,34 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { ArrowRight, ShieldCheck } from "lucide-react";
-import { supabase } from "../../lib/supabase";
+import { bannerService, Banner } from "../../services/bannerService";
+import { getSupabasePublicUrl } from "../../lib/supabase";
 import { cn } from "../../lib/utils";
-
-type Banner = {
-  id: string;
-  title: string;
-  description?: string | null;
-  image_url?: string | null;
-  link_url?: string | null;
-  metadata?: {
-    accent_color?: string;
-    layout?: 'wide' | 'blueprint';
-  };
-};
 
 export const AdBanner: React.FC<{ placement?: string }> = ({ placement = "webinar" }) => {
   const [banner, setBanner] = useState<Banner | null>(null);
 
   useEffect(() => {
     const fetchBanner = async () => {
-      const { data } = await supabase
-        .from("banners")
-        .select("*")
-        .eq("is_active", true)
-        .eq("placement", placement)
-        .order("priority", { ascending: false })
-        .limit(1);
-      if (data && data.length) setBanner(data[0] as any);
+      const data = await bannerService.getBanners(placement);
+      if (data && data.length) setBanner(data[0]);
     };
     fetchBanner();
   }, [placement]);
@@ -45,7 +28,7 @@ export const AdBanner: React.FC<{ placement?: string }> = ({ placement = "webina
     >
       <div className="absolute inset-0 z-0">
         <img 
-          src={banner.image_url || ""} 
+          src={banner.image_url?.startsWith('http') ? banner.image_url : getSupabasePublicUrl('banners', banner.image_url || '')} 
           alt={banner.title} 
           className="w-full h-full object-cover opacity-40 group-hover:scale-105 transition-transform duration-700"
         />
@@ -99,3 +82,5 @@ export const AdBanner: React.FC<{ placement?: string }> = ({ placement = "webina
     </motion.div>
   );
 };
+
+export default AdBanner;

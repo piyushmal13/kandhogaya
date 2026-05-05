@@ -13,6 +13,7 @@ import { JourneySection } from "../components/home/JourneySection";
 import { ConsultationSection } from "../components/home/ConsultationSection";
 import { InstitutionalFAQ } from "../components/home/InstitutionalFAQ";
 import { BlogSection } from "../components/home/BlogSection";
+import { SocialProof } from "../components/home/SocialProof";
 import AdBanner from "../components/ui/AdBanner";
 
 import { faqSchema, educationalOrganizationSchema, websiteSchema, breadcrumbSchema } from "../utils/structuredData";
@@ -84,6 +85,9 @@ const Home = () => {
 
         {/* L3: Why Institutional Standard */}
         <TrustGrid />
+
+        {/* L3.5: Social Proof & Market Authority */}
+        <SocialProof />
 
         {/* L4: Quantitative Lifecycle */}
         <HowItWorks />

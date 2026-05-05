@@ -1,155 +1,92 @@
 import React, { useEffect, useState } from "react";
 import { Plus, Edit2, Trash2, Save, X, Image as ImageIcon } from "lucide-react";
-import { supabase, getSupabasePublicUrl } from "../../lib/supabase";
+import { bannerService, Banner } from "../../services/bannerService";
 import { useAuth } from "../../contexts/AuthContext";
+import { getSupabasePublicUrl } from "../../lib/supabase";
+import { motion } from "motion/react";
 
 export const BannerManager = () => {
   const { session } = useAuth();
-  const [banners, setBanners] = useState<any[]>([]);
+  const [banners, setBanners] = useState<Banner[]>([]);
   const [loading, setLoading] = useState(true);
   const [formOpen, setFormOpen] = useState(false);
-  const [editing, setEditing] = useState<any | null>(null);
+  const [editing, setEditing] = useState<Banner | null>(null);
 
-  const [form, setForm] = useState<any>({
+  const [form, setForm] = useState<Partial<Banner>>({
     title: "",
     description: "",
-    placement: "global",
+    placement: "home",
     link_url: "",
     is_active: true,
     priority: 0,
     image_url: "",
-    imageFile: null
   });
 
   const fetchBanners = async () => {
     setLoading(true);
-    try {
-      const { data, error } = await supabase.from('banners').select('*').order('priority', { ascending: false });
-      if (error) {
-        console.warn("Banner fetch error:", error.message);
-        setBanners([]);
-      } else {
-        setBanners(data || []);
-      }
-    } catch (err) {
-      console.error(err);
-      setBanners([]);
-    }
+    const data = await bannerService.getAllBanners();
+    setBanners(data);
     setLoading(false);
   };
 
-  useEffect(() => { fetchBanners(); }, []);
+  useEffect(() => {
+    fetchBanners();
+  }, []);
 
   const resetForm = () => {
     setEditing(null);
-    setForm({ title: "", description: "", placement: "global", link_url: "", is_active: true, priority: 0, image_url: "", imageFile: null });
+    setForm({
+      title: "",
+      description: "",
+      placement: "home",
+      link_url: "",
+      is_active: true,
+      priority: 0,
+      image_url: "",
+    });
     setFormOpen(false);
   };
 
-  const uploadImage = async (file: File) => {
-    const path = `${Date.now()}-${file.name}`;
-    const { data, error } = await supabase.storage.from('banners').upload(path, file, { cacheControl: '3600', upsert: true });
-    if (error) throw error;
-    return data?.path || path;
-  };
-
-  const handleCreate = async () => {
-    try {
-      if (!session) throw new Error("No active session");
-      let image_path = form.image_url || null;
-      if (form.imageFile) {
-        image_path = await uploadImage(form.imageFile);
-      }
-      const body = {
-        title: form.title,
-        description: form.description || null,
-        placement: form.placement,
-        image_url: image_path,
-        link_url: form.link_url || null,
-        is_active: form.is_active,
-        priority: Number(form.priority) || 0
-      };
-
-      const res = await fetch('/api/admin/banners', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session?.access_token}` },
-        body: JSON.stringify(body)
-      });
-
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || 'Failed to create banner');
-      }
-
-      await fetchBanners();
-      resetForm();
-    } catch (err: any) {
-      alert('Error creating banner: ' + (err.message || err));
+  const handleSubmit = async () => {
+    if (!form.title) {
+      alert("Title is required.");
+      return;
     }
-  };
 
-  const handleUpdate = async () => {
-    try {
-      if (!session || !editing) throw new Error("No active session or editing target");
-      let image_path = form.image_url || editing.image_url || null;
-      if (form.imageFile) {
-        image_path = await uploadImage(form.imageFile);
+    if (editing) {
+      const result = await bannerService.updateBanner(editing.id, form);
+      if (result) {
+        await fetchBanners();
+        resetForm();
       }
-
-      const body = {
-        title: form.title,
-        description: form.description || null,
-        placement: form.placement,
-        image_url: image_path,
-        link_url: form.link_url || null,
-        is_active: form.is_active,
-        priority: Number(form.priority) || 0
-      };
-
-      const res = await fetch(`/api/admin/banners/${editing.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session?.access_token}` },
-        body: JSON.stringify(body)
-      });
-
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || 'Failed to update banner');
+    } else {
+      const result = await bannerService.createBanner(form);
+      if (result) {
+        await fetchBanners();
+        resetForm();
       }
-
-      await fetchBanners();
-      resetForm();
-    } catch (err: any) {
-      alert('Error updating banner: ' + (err.message || err));
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Delete this banner?')) return;
-    try {
-      if (!session) throw new Error("No active session");
-      const res = await fetch(`/api/admin/banners/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${session?.access_token}` } });
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || 'Failed to delete banner');
+    if (confirm("Delete this banner?")) {
+      const success = await bannerService.deleteBanner(id);
+      if (success) {
+        await fetchBanners();
       }
-      await fetchBanners();
-    } catch (err: any) {
-      alert('Error deleting banner: ' + (err.message || err));
     }
   };
 
-  const startEdit = (b: any) => {
+  const startEdit = (b: Banner) => {
     setEditing(b);
     setForm({
-      title: b.title || '',
-      description: b.description || '',
-      placement: b.placement || 'home',
-      link_url: b.link_url || '',
-      is_active: b.is_active ?? true,
-      priority: b.priority ?? 0,
-      image_url: b.image_url || '',
-      imageFile: null
+      title: b.title,
+      description: b.description,
+      placement: b.placement,
+      link_url: b.link_url,
+      is_active: b.is_active,
+      priority: b.priority,
+      image_url: b.image_url,
     });
     setFormOpen(true);
   };
@@ -159,111 +96,151 @@ export const BannerManager = () => {
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-bold text-white flex items-center gap-2">
           <ImageIcon className="w-5 h-5 text-emerald-500" />
-          Editable Banners
+          Institutional Ad Banners
         </h2>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => { resetForm(); setFormOpen(!formOpen); }}
-            className="flex items-center gap-2 px-4 py-2 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all"
-          >
-            <Plus className="w-4 h-4" />
-            {formOpen ? 'Close' : 'Create New'}
-          </button>
-        </div>
+        <button
+          onClick={() => { resetForm(); setFormOpen(!formOpen); }}
+          className="flex items-center gap-2 px-4 py-2 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all text-xs uppercase tracking-widest"
+        >
+          <Plus className="w-4 h-4" />
+          {formOpen ? 'Close' : 'Create Banner'}
+        </button>
       </div>
 
       {formOpen && (
-        <div className="bg-zinc-900 border border-white/5 rounded-2xl p-6">
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-zinc-900 border border-white/5 rounded-2xl p-6 space-y-4"
+        >
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-xs text-gray-400 mb-1">Title</label>
-              <input className="w-full bg-black border border-white/10 rounded-xl px-3 py-2 text-white" value={form.title} onChange={e => setForm({...form, title: e.target.value})} />
+            <div className="space-y-1">
+              <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Title</label>
+              <input 
+                className="w-full bg-black border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm outline-none focus:border-emerald-500/50 transition-all" 
+                value={form.title} 
+                onChange={e => setForm({...form, title: e.target.value})} 
+              />
             </div>
-            <div>
-              <label className="block text-xs text-gray-400 mb-1">Placement</label>
-              <select className="w-full bg-black border border-white/10 rounded-xl px-3 py-2 text-white" value={form.placement} onChange={e => setForm({...form, placement: e.target.value})}>
-                <option value="global">Global Broadcast</option>
+            <div className="space-y-1">
+              <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Placement</label>
+              <select 
+                className="w-full bg-black border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm outline-none focus:border-emerald-500/50 transition-all" 
+                value={form.placement} 
+                onChange={e => setForm({...form, placement: e.target.value})}
+              >
                 <option value="home">Home Page</option>
                 <option value="webinar">Webinar Hub</option>
                 <option value="marketplace">Marketplace</option>
-                <option value="header">Header Strip</option>
-                <option value="sidebar">Sidebar Slot</option>
+                <option value="global">Global Broadcast</option>
               </select>
             </div>
-            <div>
-              <label className="block text-xs text-gray-400 mb-1">Priority</label>
-              <input type="number" className="w-full bg-black border border-white/10 rounded-xl px-3 py-2 text-white" value={form.priority} onChange={e => setForm({...form, priority: Number(e.target.value)})} />
+            <div className="space-y-1">
+              <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Priority</label>
+              <input 
+                type="number" 
+                className="w-full bg-black border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm outline-none focus:border-emerald-500/50 transition-all" 
+                value={form.priority} 
+                onChange={e => setForm({...form, priority: parseInt(e.target.value)})} 
+              />
             </div>
           </div>
 
-          <div className="mt-4">
-            <label className="block text-xs text-gray-400 mb-1">Description</label>
-            <textarea className="w-full bg-black border border-white/10 rounded-xl px-3 py-2 text-white" rows={3} value={form.description} onChange={e => setForm({...form, description: e.target.value})} />
+          <div className="space-y-1">
+            <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Description</label>
+            <textarea 
+              className="w-full bg-black border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm outline-none focus:border-emerald-500/50 transition-all" 
+              rows={2} 
+              value={form.description || ''} 
+              onChange={e => setForm({...form, description: e.target.value})} 
+            />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-            <div>
-              <label className="block text-xs text-gray-400 mb-1">Link URL</label>
-              <input className="w-full bg-black border border-white/10 rounded-xl px-3 py-2 text-white" value={form.link_url} onChange={e => setForm({...form, link_url: e.target.value})} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-1">
+              <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Link URL</label>
+              <input 
+                className="w-full bg-black border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm outline-none focus:border-emerald-500/50 transition-all" 
+                value={form.link_url || ''} 
+                onChange={e => setForm({...form, link_url: e.target.value})} 
+              />
             </div>
-            <div>
-              <label className="block text-xs text-gray-400 mb-1">Image Upload (PNG/SVG)</label>
-              <input type="file" accept="image/png,image/svg+xml" onChange={e => setForm({...form, imageFile: e.target.files?.[0] || null})} />
-              {form.image_url && (
-                <div className="mt-2">
-                  <img src={getSupabasePublicUrl('banners', form.image_url)} alt={form.title || 'Banner image'} className="max-h-32 rounded-md" />
-                </div>
-              )}
+            <div className="space-y-1">
+              <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Image URL</label>
+              <input 
+                className="w-full bg-black border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm outline-none focus:border-emerald-500/50 transition-all" 
+                value={form.image_url || ''} 
+                onChange={e => setForm({...form, image_url: e.target.value})} 
+              />
             </div>
           </div>
 
-          <div className="flex items-center gap-4 mt-4">
-            {editing ? (
-              <>
-                <button onClick={handleUpdate} className="px-4 py-2 bg-emerald-500 text-black rounded-xl font-bold">Save</button>
-                <button onClick={resetForm} className="px-4 py-2 bg-white/5 rounded-xl">Cancel</button>
-              </>
-            ) : (
-              <button onClick={handleCreate} className="px-4 py-2 bg-emerald-500 text-black rounded-xl font-bold">Create Banner</button>
-            )}
+          <div className="flex items-center gap-6 py-2">
+            <label className="flex items-center gap-3 cursor-pointer">
+              <input 
+                type="checkbox" 
+                className="w-4 h-4 rounded border-white/10 bg-black text-emerald-500" 
+                checked={form.is_active} 
+                onChange={e => setForm({...form, is_active: e.target.checked})} 
+              />
+              <span className="text-[10px] font-black uppercase tracking-widest text-white/60">Active Production Status</span>
+            </label>
           </div>
-        </div>
+
+          <div className="flex items-center gap-3 pt-2">
+            <button 
+              onClick={handleSubmit} 
+              className="px-6 py-2.5 bg-emerald-500 text-black rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-emerald-400 transition-all flex items-center gap-2"
+            >
+              <Save className="w-4 h-4" />
+              {editing ? 'Update Banner' : 'Deploy Banner'}
+            </button>
+            <button 
+              onClick={resetForm} 
+              className="px-6 py-2.5 bg-white/5 text-white/60 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-white/10 transition-all"
+            >
+              Cancel
+            </button>
+          </div>
+        </motion.div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {loading ? (
-          <div className="col-span-2 py-10 flex justify-center"><div className="w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin" /></div>
+          <div className="col-span-2 py-20 flex justify-center">
+            <div className="w-8 h-8 border-2 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin" />
+          </div>
         ) : (
           banners.map(b => (
-            <div key={b.id} className="bg-zinc-900 border border-white/5 rounded-2xl p-4 flex gap-4 items-start">
-              <div className="w-40 h-24 bg-black rounded-md overflow-hidden flex items-center justify-center">
+            <div key={b.id} className="group bg-zinc-900/50 border border-white/5 rounded-3xl overflow-hidden hover:border-white/10 transition-all">
+              <div className="aspect-[21/9] w-full bg-black relative">
                 {b.image_url ? (
-                  <img src={getSupabasePublicUrl('banners', b.image_url)} alt={b.title} className="object-cover w-full h-full" />
+                  <img src={b.image_url.startsWith('http') ? b.image_url : getSupabasePublicUrl('banners', b.image_url)} alt={b.title} className="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" />
                 ) : (
-                  <div className="text-gray-500">No image</div>
+                  <div className="w-full h-full flex items-center justify-center text-white/10">
+                    <ImageIcon className="w-12 h-12" />
+                  </div>
                 )}
-              </div>
-              <div className="flex-1">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <div className="font-bold text-white">{b.title}</div>
-                    <div className="text-sm text-gray-400">{b.description}</div>
-                    <div className="text-xs text-gray-500 mt-1">{b.placement} • priority {b.priority}</div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <button onClick={() => startEdit(b)} className="px-3 py-2 bg-white/5 rounded-xl"><Edit2 className="w-4 h-4" /></button>
-                    <button onClick={() => handleDelete(b.id)} className="px-3 py-2 bg-red-600/80 rounded-xl"><Trash2 className="w-4 h-4" /></button>
-                  </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent to-transparent" />
+                <div className="absolute top-4 right-4 flex gap-2">
+                  <button onClick={() => startEdit(b)} className="p-2 bg-black/60 backdrop-blur-md rounded-xl text-white/60 hover:text-white transition-all"><Edit2 className="w-4 h-4" /></button>
+                  <button onClick={() => handleDelete(b.id)} className="p-2 bg-black/60 backdrop-blur-md rounded-xl text-red-500/60 hover:text-red-500 transition-all"><Trash2 className="w-4 h-4" /></button>
                 </div>
-                {b.description && (
-                  <div className="mt-2 text-sm text-gray-300">{b.description}</div>
-                )}
-                {b.html_content && (
-                  <div className="mt-2 text-sm text-gray-300" dangerouslySetInnerHTML={{ __html: b.html_content }} />
-                )}
-                {b.link_url && (
-                  <div className="mt-2 text-xs text-emerald-400"><a href={b.link_url} target="_blank" rel="noreferrer">{b.link_url}</a></div>
-                )}
+                <div className="absolute bottom-4 left-6">
+                   <span className="px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/20 rounded text-[8px] font-black text-emerald-500 uppercase tracking-widest">
+                      {b.placement}
+                    </span>
+                </div>
+              </div>
+              <div className="p-6">
+                <h4 className="text-white font-bold text-lg mb-1">{b.title}</h4>
+                <p className="text-xs text-white/40 line-clamp-2">{b.description}</p>
+                <div className="mt-4 flex items-center justify-between text-[10px] font-black uppercase tracking-widest">
+                   <div className="text-white/20">Priority: {b.priority}</div>
+                   <div className={b.is_active ? "text-emerald-500" : "text-red-500"}>
+                      {b.is_active ? "Live" : "Inactive"}
+                   </div>
+                </div>
               </div>
             </div>
           ))

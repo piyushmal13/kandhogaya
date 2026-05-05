@@ -43,20 +43,20 @@ export const BrokerAdBanner: React.FC<BrokerAdProps> = ({
           <div className="flex-1 text-center md:text-left">
             <div className="flex flex-col md:flex-row items-center gap-3 mb-2 justify-center md:justify-start">
               <span className="px-3 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-[10px] font-black uppercase tracking-[0.2em]">
-                {tagline}
+                {tagline === "Official Institutional Partner" ? "Verified Research Partner" : tagline}
               </span>
-              <div className="flex items-center gap-1 text-amber-500 text-[10px] font-black uppercase tracking-widest">
-                <Award className="w-3 h-3" />
-                Vetted Liquidity
+              <div className="flex items-center gap-1 text-emerald-500 text-[10px] font-black uppercase tracking-widest">
+                <Shield className="w-3 h-3" />
+                Audited Intelligence
               </div>
             </div>
             
             <h3 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tighter mb-3 leading-none">
-              Trade with <span className="text-emerald-400">{name}</span>
+              Research with <span className="text-emerald-400">{name}</span>
             </h3>
             
             <p className="text-gray-400 text-sm leading-relaxed max-w-xl group-hover:text-gray-300 transition-colors">
-              {description}
+              {description.includes("spreads") ? "Access high-fidelity market data and institutional-grade research nodes through our vetted partner." : description}
             </p>
           </div>
           
@@ -67,12 +67,12 @@ export const BrokerAdBanner: React.FC<BrokerAdProps> = ({
               rel="noopener noreferrer"
               className="px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-black font-black text-[11px] uppercase tracking-[0.15em] rounded-2xl flex items-center justify-center gap-2 transition-all active:scale-95 shadow-[0_0_30px_rgba(16,185,129,0.3)]"
             >
-              Open Live Account
+              Access Intelligence Node
               <ArrowUpRight className="w-4 h-4" />
             </a>
             <div className="flex items-center justify-center gap-2 text-[10px] text-gray-600 font-mono">
               <ExternalLink className="w-3 h-3 text-emerald-500/50" />
-              <span>Institutional Referral Program</span>
+              <span>Institutional Research Program</span>
             </div>
           </div>
         </div>

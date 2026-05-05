@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 import {
   BarChart3, Zap, ShieldCheck, Users, Video, Settings, Star,
   ShoppingCart, Activity, Trophy, DollarSign, FileText, CreditCard,
-  Flag, Image as ImageIcon
+  Flag, Image as ImageIcon, HelpCircle
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { cn } from "../utils/cn";
@@ -26,6 +26,7 @@ import { ErrorViewer } from "../modules/admin/ErrorViewer";
 import { PaymentManager } from "../modules/admin/PaymentManager";
 import { FeatureFlagManager } from "../modules/admin/FeatureFlagManager";
 import { BannerManager } from "../modules/admin/BannerManager";
+import { FAQManager } from "../modules/admin/FAQManager";
 
 const tabs = [
   { id: "ceo",         name: "Executive Overview",  icon: BarChart3,    group: "COMMAND" },
@@ -42,6 +43,7 @@ const tabs = [
   { id: "licenses",    name: "License Vault",       icon: ShieldCheck,  group: "SYSTEM" },
   { id: "flags",       name: "Feature Flags",       icon: Flag,         group: "SYSTEM" },
   { id: "health",      name: "System Health",       icon: Activity,     group: "SYSTEM" },
+  { id: "faqs",        name: "FAQ Manager",         icon: HelpCircle,   group: "CONTENT" },
   { id: "settings",    name: "Settings",            icon: Settings,     group: "SYSTEM" },
 ];
 
@@ -119,6 +121,7 @@ export const Admin = () => {
             {activeTab === "algos"       && <ProductManager />}
             {activeTab === "webinars"    && <WebinarManager />}
             {activeTab === "reviews"     && <ReviewManager />}
+            {activeTab === "faqs"        && <FAQManager />}
             {activeTab === "health"      && <ErrorViewer />}
             {activeTab === "settings"    && <SettingsManager />}
           </div>

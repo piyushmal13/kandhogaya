@@ -77,17 +77,17 @@
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://ifxtrades.com/blog/what-is-forex-trading-guide</loc>
+    <loc>https://ifxtrades.com/blog/compliance-financial-integrity</loc>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
-    <loc>https://ifxtrades.com/blog/best-forex-trading-strategies</loc>
+    <loc>https://ifxtrades.com/blog/quantflow-architecture-intelligence</loc>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
-    <loc>https://ifxtrades.com/blog/algorithmic-forex-trading-automation</loc>
+    <loc>https://ifxtrades.com/blog/institutional-execution-governance</loc>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
   </url>
@@ -122,22 +122,22 @@
     <priority>0.75</priority>
   </url>
   <url>
+    <loc>https://ifxtrades.com/blog/what-is-forex-trading-guide</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
     <loc>https://ifxtrades.com/blog/forex-technical-analysis-price-action</loc>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
-    <loc>https://ifxtrades.com/blog/100-oil-shock-2026-institutional-forex</loc>
+    <loc>https://ifxtrades.com/blog/best-forex-trading-strategies</loc>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
-    <loc>https://ifxtrades.com/blog/gold-5000-xauusd-hni-capital-allocation</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://ifxtrades.com/blog/boj-historic-rate-hike-jpy-volatility-2026</loc>
+    <loc>https://ifxtrades.com/blog/algorithmic-forex-trading-automation</loc>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
   </url>
@@ -148,6 +148,21 @@
   </url>
   <url>
     <loc>https://ifxtrades.com/blog/fed-higher-for-longer-2026-us-dollar-impact</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://ifxtrades.com/blog/boj-historic-rate-hike-jpy-volatility-2026</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://ifxtrades.com/blog/gold-5000-xauusd-hni-capital-allocation</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://ifxtrades.com/blog/100-oil-shock-2026-institutional-forex</loc>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
   </url>

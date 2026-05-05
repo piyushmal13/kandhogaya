@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "motion/react";
-import { ShieldCheck, Verified } from "lucide-react";
+import { ShieldCheck, Verified, Star } from "lucide-react";
 
 // Institutional Tone Fallback
 const FALLBACK_REVIEWS = [

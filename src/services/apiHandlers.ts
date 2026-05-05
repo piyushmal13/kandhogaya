@@ -6,6 +6,8 @@ import {
 import { webinarService } from "./webinarService";
 import { productService } from "./productService";
 import { marketService } from "./marketService";
+import { faqService } from "./faqService";
+import { bannerService } from "./bannerService";
 
 /**
  * Institutional Reliability Wrappers
@@ -445,13 +447,11 @@ export const getReviews = async (limit = 10) => {
 // --- FAQ ---
 
 export const getFaqs = async (limit = 10) => {
-  return safeQuery<any[]>(
-    supabase
-      .from('content_posts')
-      .select('id, title, body, metadata')
-      .eq('content_type', 'faq')
-      .eq('status', 'published')
-      .order('created_at', { ascending: true })
-      .limit(limit)
-  );
+  return faqService.getFaqs(limit);
+};
+
+// --- BANNERS ---
+
+export const getBanners = async (placement?: string) => {
+  return bannerService.getBanners(placement);
 };
