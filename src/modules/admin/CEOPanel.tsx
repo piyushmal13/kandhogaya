@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   TrendingUp, Users, Target, DollarSign, Activity,
   Globe, Clock, ShieldAlert, RefreshCw,
-  ArrowUpRight, CreditCard, Video, Star, Zap, Trophy
+  CreditCard, Video, Star, Zap, Trophy
 } from "lucide-react";
 import { cn } from "../../utils/cn";
 import { supabase } from "../../lib/supabase";

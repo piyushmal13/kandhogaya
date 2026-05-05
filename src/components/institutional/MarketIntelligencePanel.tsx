@@ -1,5 +1,5 @@
 import React from 'react';
-import { Activity, X, TrendingUp, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { Activity, X, ArrowUpRight, ArrowDownRight } from 'lucide-react';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { marketService } from '@/services/marketService';
 import { motion, AnimatePresence } from 'motion/react';
@@ -45,8 +45,8 @@ export function MarketIntelligencePanel() {
           <div className="space-y-3">
             <AnimatePresence mode="popLayout">
               {loading ? (
-                [...Array(5)].map((_, i) => (
-                  <div key={i} className="h-16 rounded-2xl bg-white/[0.02] border border-white/[0.05] animate-pulse" />
+                [...new Array(5)].map((_, i) => (
+                  <div key={`skeleton-${i}`} className="h-16 rounded-2xl bg-white/[0.02] border border-white/[0.05] animate-pulse" />
                 ))
               ) : (
                 pairs.map((pair) => (
