@@ -1,4 +1,4 @@
-import { Signal, Webinar } from '../types';
+import { Intelligence as Signal, Webinar, Review } from '../types';
 
 /**
  * Institutional Data Mapping Layer
@@ -30,15 +30,15 @@ export const mapWebinar = (raw: any): Webinar => ({
   speaker: raw.speaker_name || 'Institutional Lead',
   speaker_name: raw.speaker_name || '',
   date_time: raw.date_time,
-  is_paid: raw.type === 'paid',
-  price: 0, // No price column in webinars table, type='paid' indicates cost exists.
+  is_paid: raw.type === 'paid' || !!raw.is_paid,
+  price: Number(raw.price) || 0,
   registration_count: Number(raw.registration_count) || 0,
   max_attendees: Number(raw.max_attendees) || 500,
   status: raw.status || 'upcoming',
   metadata: typeof raw.metadata === 'string' ? JSON.parse(raw.metadata) : (raw.metadata || {}),
   created_at: raw.created_at,
   speaker_images: Array.isArray(raw.speaker_images) && raw.speaker_images.length > 0 ? raw.speaker_images : [
-    "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=2000&auto=format&fit=crop"
+    raw.speaker_profile_url || "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=2000&auto=format&fit=crop"
   ],
   webinar_image_url: raw.webinar_image_url || "https://images.unsplash.com/photo-1591696208162-a93795a74838?q=80&w=2070&auto=format&fit=crop",
   sponsor_logos: Array.isArray(raw.sponsor_logos) ? raw.sponsor_logos : [],
@@ -51,9 +51,10 @@ export const mapWebinar = (raw: any): Webinar => ({
         logo_url: s.logo_url,
         website_url: s.website_url
       }))
-    : [
-        { id: "sp-1", name: "IFX Intelligence", tier: "Headline", logo_url: "https://cryptologos.cc/logos/binance-coin-bnb-logo.svg" },
-      ],
+    : (raw.brand_logo_url 
+        ? [{ id: "sp-main", name: "Lead Partner", tier: "Headline", logo_url: raw.brand_logo_url }] 
+        : [{ id: "sp-1", name: "IFX Intelligence", tier: "Headline", logo_url: "https://cryptologos.cc/logos/binance-coin-bnb-logo.svg" }]
+      ),
   q_and_a: Array.isArray(raw.q_and_a) && raw.q_and_a.length > 0 ? raw.q_and_a : [
     { question: "Will recordings be provided?", answer: "Yes, all registered attendees receive full institutional playback access for 30 days." },
     { question: "Is this suitable for retail traders?", answer: "This is advanced institutional methodology, but broken down so independent retail traders can execute it." },
@@ -61,6 +62,8 @@ export const mapWebinar = (raw: any): Webinar => ({
   ],
   recording_url: raw.recording_url,
   streaming_url: raw.streaming_url,
+  about_content: raw.about_content,
+  advanced_features: typeof raw.advanced_features === 'string' ? JSON.parse(raw.advanced_features) : (raw.advanced_features || {}),
 });
 
 export const mapLead = (raw: any): any => ({

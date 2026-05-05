@@ -141,6 +141,18 @@ export const BlogDetail = () => {
                 {post.title}
               </motion.h1>
 
+              {post.metadata?.subtitle && (
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.12 }}
+                  className="text-xl md:text-2xl text-emerald-500 font-bold tracking-tight uppercase"
+                >
+                  {post.metadata.subtitle}
+                </motion.p>
+              )}
+
+
               {boldHeadline && (
                 <motion.p
                   initial={{ opacity: 0, y: 20 }}
@@ -241,9 +253,10 @@ export const BlogDetail = () => {
               className="prose-institutional selection:bg-emerald-500/30"
             >
               <div 
-                dangerouslySetInnerHTML={{ __html: post.content }} 
+                dangerouslySetInnerHTML={{ __html: post.body || post.content }} 
                 className="max-w-none"
               />
+
             </motion.div>
 
             {/* In-content Broker Ad */}

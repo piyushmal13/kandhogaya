@@ -61,7 +61,7 @@ const FAQItem: React.FC<FAQItemProps> = ({ question, answer, isOpen, onClick, in
             transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
             className="overflow-hidden"
           >
-            <div className="px-16 pb-10 text-white/50 text-sm md:text-base leading-relaxed max-w-3xl font-medium">
+            <div className="px-6 md:px-16 pb-10 text-white/50 text-sm md:text-base leading-relaxed max-w-3xl font-medium">
               {answer}
             </div>
           </motion.div>
@@ -91,7 +91,7 @@ export const InstitutionalFAQ: React.FC<{ faqs: Array<{ question: string; answer
               </span>
             </div>
             <h2 id="faq-heading" className="text-4xl md:text-6xl font-black text-white uppercase italic tracking-tighter">
-              Knowledge <br /> <span className="text-white/20">Protocol</span>
+              Research & <br /> <span className="text-white/20">Operations FAQ</span>
             </h2>
           </div>
           <p className="text-white/40 text-[11px] font-bold uppercase tracking-[0.2em] md:text-right max-w-[200px]">
@@ -102,7 +102,7 @@ export const InstitutionalFAQ: React.FC<{ faqs: Array<{ question: string; answer
         <div className="border-t border-white/5">
           {faqs.map((faq, i) => (
             <FAQItem
-              key={i}
+              key={`faq-${faq.question.slice(0, 20)}`}
               index={i}
               question={faq.question}
               answer={faq.answer}
@@ -118,15 +118,15 @@ export const InstitutionalFAQ: React.FC<{ faqs: Array<{ question: string; answer
                  <HelpCircle className="w-6 h-6" />
               </div>
               <div>
-                <div className="text-white font-black text-sm uppercase tracking-tight">Need specific intelligence?</div>
-                <div className="text-[10px] text-white/30 uppercase tracking-widest mt-1">Our quant desk is available 24/5.</div>
+                <div className="text-white font-black text-sm uppercase tracking-tight">Need deeper technical clarification?</div>
+                <div className="text-[10px] text-white/30 uppercase tracking-widest mt-1">Our research team is available to assist your onboarding.</div>
               </div>
            </div>
            <a 
             href="https://wa.me/your-number" 
             className="px-6 py-3 rounded-xl bg-white/5 border border-white/10 text-white font-black text-[10px] uppercase tracking-widest hover:bg-white/10 transition-all"
            >
-             Initialize Consultation
+             Contact Research Desk
            </a>
         </div>
       </div>

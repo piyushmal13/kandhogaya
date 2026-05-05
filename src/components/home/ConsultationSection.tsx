@@ -134,7 +134,9 @@ export const ConsultationSection = () => {
                     <option value="1k-10k">$1,000 - $10,000 (Emergent)</option>
                     <option value="10k-100k">$10,000 - $100,000 (Institutional)</option>
                     <option value="100k+">$100,000+ (Elite)</option>
+                    <option value="custom_algo">Custom Algorithmic Development Request</option>
                   </select>
+
                 </div>
 
                 <div className="space-y-2">

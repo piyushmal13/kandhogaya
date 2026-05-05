@@ -19,7 +19,8 @@ export const webinarService = {
           id, title, description, date_time, speaker_name,
           speaker_images, type, max_attendees, registration_count,
           status, webinar_image_url, recording_url, sponsor_logos,
-          q_and_a, about_content, advanced_features, streaming_url,
+          speaker_profile_url, brand_logo_url,
+          q_and_a, about_content, advanced_features,
           sponsors:webinar_sponsors(*)
         `)
         .order("date_time", { ascending: true })
@@ -41,6 +42,7 @@ export const webinarService = {
           id, title, description, date_time, speaker_name,
           speaker_images, type, max_attendees, registration_count,
           status, webinar_image_url, recording_url, sponsor_logos,
+          speaker_profile_url, brand_logo_url,
           q_and_a, about_content, advanced_features,
           sponsors:webinar_sponsors(*)
         `)

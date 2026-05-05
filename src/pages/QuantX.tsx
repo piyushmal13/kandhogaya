@@ -143,8 +143,8 @@ export const QuantX = () => {
       <section className="py-32 border-b border-white/[0.05]">
         <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto text-center mb-24">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">The Neural Mesh</h2>
-            <p className="text-white/40 text-lg">A seamless data-to-execution pipeline with built-in recursive feedback loops.</p>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight italic uppercase">Institutional Infrastructure</h2>
+            <p className="text-white/40 text-lg">A seamless data-to-execution pipeline engineered for precision and reliability.</p>
           </div>
 
           <div className="relative max-w-5xl mx-auto">
@@ -167,8 +167,8 @@ export const QuantX = () => {
         <div className="container mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-24">
             <div className="max-w-2xl">
-              <div className="text-emerald-500 text-[10px] font-black tracking-[0.4em] uppercase mb-4">Elite Intelligence</div>
-              <h2 className="text-5xl md:text-7xl font-bold tracking-tighter leading-none">The Cognitive <br />Layers</h2>
+              <div className="text-emerald-500 text-[10px] font-black tracking-[0.4em] uppercase mb-4">Institutional Framework</div>
+              <h2 className="text-5xl md:text-7xl font-bold tracking-tighter leading-none italic uppercase">Core Analysis <br />Layers</h2>
             </div>
             <p className="text-white/30 text-lg max-w-sm leading-relaxed pb-2">
               Processing thousands of data points across five specialized intelligence vectors.
@@ -178,8 +178,8 @@ export const QuantX = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <IntelligenceLayer 
               number="1"
-              title="Market Understanding"
-              description="Real-time regime classification. Identifies if the market is trending, ranging, or under institutional manipulation."
+              title="Regime Classification"
+              description="Real-time market environment analysis. Identifies if the current structure is trending, ranging, or exhibiting institutional manipulation."
               inputs={["Volatility (ATR)", "Price Action", "Liquidity Zones"]}
               outputs="MARKET REGIME"
               icon={Activity}
@@ -187,8 +187,8 @@ export const QuantX = () => {
             />
             <IntelligenceLayer 
               number="2"
-              title="Strategy Selection"
-              description="Dynamically activates the most profitable engine based on the current market regime output."
+              title="Framework Selection"
+              description="Dynamically activates the most robust execution engine based on the current market environment output."
               inputs={["Trend Engine", "Mean Reversion", "SMC Engine"]}
               outputs="ACTIVE STRATEGY"
               icon={Layers}
@@ -262,8 +262,8 @@ export const QuantX = () => {
                     <LineChart size={20} />
                   </div>
                   <div>
-                    <h4 className="text-xl font-bold mb-3">Self-Learning Loop</h4>
-                    <p className="text-white/40 leading-relaxed">Every trade is recorded and analyzed. The system automatically reduces weak strategy usage and recalibrates thresholds weekly.</p>
+                    <h4 className="text-xl font-bold mb-3">Continuous Performance Review</h4>
+                    <p className="text-white/40 leading-relaxed">Every execution is recorded and audited. The desk automatically recalibrates strategy thresholds based on 30-day rolling performance data.</p>
                   </div>
                 </div>
               </div>
@@ -284,8 +284,8 @@ export const QuantX = () => {
                     <div className="w-24 h-24 rounded-3xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mx-auto mb-6 shadow-[0_0_50px_-12px_rgba(16,185,129,0.5)]">
                       <Cpu size={40} />
                     </div>
-                    <div className="text-[10px] font-black tracking-[0.5em] text-emerald-500 uppercase mb-2">Recursive Engine</div>
-                    <div className="text-2xl font-bold">CORE ACTIVE</div>
+                    <div className="text-[10px] font-black tracking-[0.5em] text-emerald-500 uppercase mb-2">Execution Processor</div>
+                    <div className="text-2xl font-bold">DESK ACTIVE</div>
                   </div>
                 </div>
               </div>

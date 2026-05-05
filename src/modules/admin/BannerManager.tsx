@@ -20,7 +20,9 @@ export const BannerManager = () => {
     is_active: true,
     priority: 0,
     image_url: "",
+    metadata: { type: "standard", accent_color: "#10B981" },
   });
+
 
   const fetchBanners = async () => {
     setLoading(true);
@@ -43,7 +45,9 @@ export const BannerManager = () => {
       is_active: true,
       priority: 0,
       image_url: "",
+      metadata: { type: "standard", accent_color: "#10B981" },
     });
+
     setFormOpen(false);
   };
 
@@ -87,7 +91,9 @@ export const BannerManager = () => {
       is_active: b.is_active,
       priority: b.priority,
       image_url: b.image_url,
+      metadata: b.metadata || { type: "standard", accent_color: "#10B981" },
     });
+
     setFormOpen(true);
   };
 
@@ -145,6 +151,31 @@ export const BannerManager = () => {
               />
             </div>
           </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-1">
+              <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Banner Type</label>
+              <select 
+                className="w-full bg-black border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm outline-none focus:border-emerald-500/50 transition-all" 
+                value={form.metadata?.type || "standard"} 
+                onChange={e => setForm({...form, metadata: { ...form.metadata, type: e.target.value }})}
+              >
+                <option value="standard">Standard Partner Ad</option>
+                <option value="institutional_broadcast">Institutional Broadcast</option>
+                <option value="system_alert">System Alert</option>
+              </select>
+            </div>
+            <div className="space-y-1">
+              <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Accent Color</label>
+              <input 
+                className="w-full bg-black border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm outline-none focus:border-emerald-500/50 transition-all" 
+                value={form.metadata?.accent_color || "#10B981"} 
+                onChange={e => setForm({...form, metadata: { ...form.metadata, accent_color: e.target.value }})}
+                placeholder="#10B981"
+              />
+            </div>
+          </div>
+
 
           <div className="space-y-1">
             <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Description</label>

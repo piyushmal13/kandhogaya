@@ -29,7 +29,7 @@ const PILLARS = [
   },
   {
     icon: Zap,
-    title: "XAUUSD Macro Intelligence",
+    title: "XAUUSD Institutional Research",
     desc: "Proprietary gold macro research built on institutional order flow, COT data, and macro catalysts — not retail chart patterns.",
     color: "#D4AF37",
     num: "04",
@@ -43,7 +43,7 @@ const PILLARS = [
   },
   {
     icon: Award,
-    title: "Asia's Top Intelligence Award 2025",
+    title: "Asia's Premier Research Award 2025",
     desc: "Recognised as Asia's leading institutional forex education platform for quantitative curriculum and outcomes excellence.",
     color: "#F43F5E",
     num: "06",

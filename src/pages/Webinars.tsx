@@ -4,7 +4,9 @@ import { useWebinars } from '@/hooks/useWebinars';
 import { WebinarCard } from '@/components/institutional/WebinarCard';
 import { VideoPlayer } from '@/components/institutional/VideoPlayer';
 import { WebinarCardSkeleton } from '@/components/ui/Skeleton';
+import { WebinarOperationsMonitor } from '@/components/institutional/WebinarOperationsMonitor';
 import { PageMeta } from '@/components/site/PageMeta';
+
 import { StandardLayout } from '@/components/site/StandardLayout';
 
 export const Webinars = () => {
@@ -40,6 +42,10 @@ export const Webinars = () => {
               Participate in systematic market breakdowns, systematic workflow walkthroughs, and quantitative execution masterclasses led by the IFX research desk.
             </p>
           </div>
+
+          <AdBanner placement="webinar" />
+
+          <WebinarOperationsMonitor />
 
           <AnimatePresence mode="wait">
             {liveWebinar && (

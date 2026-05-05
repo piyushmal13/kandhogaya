@@ -5,7 +5,7 @@ import { ShieldCheck, ExternalLink } from 'lucide-react';
 interface Sponsor {
   id: string;
   name: string;
-  tier: 'Headline' | 'Partner' | 'Co-Sponsor';
+  tier: 'Headline' | 'Partner' | 'Co-Sponsor' | 'Supporter';
   logo_url: string;
   website_url?: string;
 }

@@ -77,6 +77,21 @@
     <priority>0.3</priority>
   </url>
   <url>
+    <loc>https://ifxtrades.com/blog/master-terminal-protocol</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://ifxtrades.com/blog/algorithmic-convergence-mt5-alpha</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://ifxtrades.com/blog/strategic-liquidity-engineering-2026</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
     <loc>https://ifxtrades.com/blog/compliance-financial-integrity</loc>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
@@ -88,21 +103,6 @@
   </url>
   <url>
     <loc>https://ifxtrades.com/blog/institutional-execution-governance</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://ifxtrades.com/blog/institutional-forex-trading-smart-money</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://ifxtrades.com/blog/forex-market-hours-best-times</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://ifxtrades.com/blog/top-forex-currency-pairs-liquidity</loc>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
   </url>
@@ -122,12 +122,12 @@
     <priority>0.75</priority>
   </url>
   <url>
-    <loc>https://ifxtrades.com/blog/what-is-forex-trading-guide</loc>
+    <loc>https://ifxtrades.com/blog/forex-technical-analysis-price-action</loc>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
-    <loc>https://ifxtrades.com/blog/forex-technical-analysis-price-action</loc>
+    <loc>https://ifxtrades.com/blog/what-is-forex-trading-guide</loc>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
   </url>
@@ -142,12 +142,27 @@
     <priority>0.75</priority>
   </url>
   <url>
-    <loc>https://ifxtrades.com/blog/2026-ai-trading-revolution-machine-learning-forex</loc>
+    <loc>https://ifxtrades.com/blog/institutional-forex-trading-smart-money</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://ifxtrades.com/blog/forex-market-hours-best-times</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://ifxtrades.com/blog/top-forex-currency-pairs-liquidity</loc>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://ifxtrades.com/blog/fed-higher-for-longer-2026-us-dollar-impact</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://ifxtrades.com/blog/2026-ai-trading-revolution-machine-learning-forex</loc>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
   </url>

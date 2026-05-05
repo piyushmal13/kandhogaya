@@ -80,7 +80,7 @@ export const WebinarDetail = () => {
   </div>;
 
   const isLive = webinar.status === "live";
-  const isRecorded = webinar.status === "recorded" || webinar.status === "completed" || webinar.status === "past";
+  const isRecorded = webinar.status === "past";
   const isUpcoming = webinar.status === "upcoming";
 
   return (
@@ -226,15 +226,15 @@ export const WebinarDetail = () => {
                           Institutional Alpha <br/>
                           <span className="text-emerald-500">Successfully Unlocked</span>
                         </h2>
-                        <div className="grid grid-cols-3 gap-8 max-w-2xl mx-auto mb-12">
+                        <div className="grid grid-cols-1 xs:grid-cols-3 gap-4 md:gap-8 max-w-2xl mx-auto mb-12">
                            {[
                             { label: "Analysis Depth", value: "Q2/26" },
                             { label: "Data Points", value: "1.4M+" },
                             { label: "Logic Framework", value: "Institutional" }
                           ].map((stat) => (
-                            <div key={stat.label} className="text-center p-6 rounded-[2rem] bg-white/[0.03] border border-white/5 backdrop-blur-md">
-                              <div className="text-2xl md:text-3xl font-black text-emerald-500 tracking-tighter leading-none">{stat.value}</div>
-                              <div className="text-[9px] text-gray-500 uppercase tracking-[0.2em] font-black mt-3">{stat.label}</div>
+                            <div key={stat.label} className="text-center p-4 md:p-6 rounded-[1.5rem] md:rounded-[2rem] bg-white/[0.03] border border-white/5 backdrop-blur-md">
+                              <div className="text-xl md:text-3xl font-black text-emerald-500 tracking-tighter leading-none">{stat.value}</div>
+                              <div className="text-[8px] md:text-[9px] text-gray-500 uppercase tracking-[0.2em] font-black mt-2 md:mt-3">{stat.label}</div>
                             </div>
                           ))}
                         </div>
@@ -310,7 +310,7 @@ export const WebinarDetail = () => {
                           What You'll Learn
                         </h4>
                         <ul className="space-y-3 text-sm">
-                          {webinar.advanced_features?.learning_points?.map((point: string) => (
+                          {(webinar.advanced_features as any)?.learning_points?.map((point: string) => (
                             <li key={point} className="flex items-start gap-2">
                               <Check className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" />
                               <span>{point}</span>

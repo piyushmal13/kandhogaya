@@ -131,7 +131,7 @@ export const Marketplace = () => {
             >
               Asset Catalog
             </motion.div>
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 text-white tracking-tight leading-[0.9]">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 text-white tracking-tight leading-[0.9]">
               Institutional <br />
               <span className="text-emerald-400">Allocations.</span>
             </h1>

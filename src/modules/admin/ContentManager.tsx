@@ -41,13 +41,19 @@ export const ContentManager = () => {
 
   // Form State
   const [title, setTitle] = useState("");
+  const [subtitle, setSubtitle] = useState("");
   const [body, setBody] = useState("");
   const [type, setType] = useState("blog");
   const [status, setStatus] = useState("published");
   const [coverImage, setCoverImage] = useState("");
   const [category, setCategory] = useState("Research");
-  const [authorBio, setAuthorBio] = useState("");
-  const [metadata, setMetadata] = useState<any>({});
+  const [authorBio, setAuthorBio] = useState("Senior Market Analyst at IFX Trades Institutional Desk.");
+  const [metadata, setMetadata] = useState<any>({
+    key_insights: ["Institutional liquidity zones.", "Order block identification.", "Macro-structure alignment."],
+    video_url: "",
+    author_name: "IFX Lead Analyst",
+    author_profile_url: ""
+  });
   const [loading, setLoading] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
 
@@ -89,10 +95,12 @@ export const ContentManager = () => {
   const handleEdit = (item: ContentPost) => {
     setEditingId(item.id);
     setTitle(item.title || "");
-    setBody(item.content || "");
+    setSubtitle(item.metadata?.subtitle || "");
+    setBody(item.content || item.body || "");
+
     setType(item.content_type || "blog");
     setStatus(item.status || "published");
-    setCoverImage(item.image_url || "");
+    setCoverImage(item.image_url || item.featured_image || "");
     setCategory(item.category || "Research");
     setAuthorBio(item.author_bio || "");
     setMetadata(item.metadata || {});
@@ -102,13 +110,19 @@ export const ContentManager = () => {
   const handleCancelEdit = () => {
     setEditingId(null);
     setTitle("");
+    setSubtitle("");
     setBody("");
     setType("blog");
     setStatus("published");
     setCoverImage("");
     setCategory("Research");
     setAuthorBio("");
-    setMetadata({});
+    setMetadata({
+      key_insights: ["Institutional liquidity zones.", "Order block identification.", "Macro-structure alignment."],
+      video_url: "",
+      author_name: "IFX Lead Analyst",
+      author_profile_url: ""
+    });
   };
 
   const handleSubmit = async (e: SyntheticEvent) => {
@@ -122,14 +136,17 @@ export const ContentManager = () => {
         title,
         slug,
         content_type: type,
-        content: body,
+        content: body, // Legacy compatibility
+        body: body,    // Modern column
         status,
-        image_url: coverImage,
+        image_url: coverImage,       // Legacy compatibility
+        featured_image: coverImage,  // Modern column
         category,
         author_bio: authorBio,
-        metadata,
+        metadata: { ...metadata, subtitle },
         author_id: userProfile.id,
       };
+
 
       if (editingId) {
         const { error } = await supabase.from("content_posts").update(payload).eq("id", editingId);
@@ -379,6 +396,17 @@ export const ContentManager = () => {
               </div>
 
               <div className="space-y-2">
+                <label htmlFor="post-subtitle" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Subtitle / Headline</label>
+                <input
+                  id="post-subtitle"
+                  value={subtitle} onChange={e => setSubtitle(e.target.value)}
+                  placeholder="The core thesis of this insight..."
+                  className="w-full bg-black border border-white/5 rounded-2xl p-4 text-white text-sm outline-none focus:border-emerald-500/50 transition-all placeholder:text-zinc-700"
+                />
+              </div>
+
+
+              <div className="space-y-2">
                 <label htmlFor="post-body" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Body (Markdown) *</label>
                 <textarea
                   id="post-body"
@@ -435,24 +463,45 @@ export const ContentManager = () => {
                 </div>
               </div>
 
-              <div className="space-y-2 bg-black/40 p-6 rounded-3xl border border-white/5">
-                <label htmlFor="post-metadata" className="text-[9px] font-black uppercase tracking-widest text-cyan-400 px-1 flex items-center gap-2">
-                  <Shield className="w-3 h-3" /> Institutional Metadata
-                </label>
-                <textarea
-                  id="post-metadata"
-                  rows={4}
-                  value={JSON.stringify(metadata, null, 2)}
-                  onChange={e => {
-                    try { 
-                      const parsed = JSON.parse(e.target.value);
-                      setMetadata(parsed); 
-                    } catch (err) {
-                      console.warn("[ContentManager] Metadata JSON parse error:", err);
-                    }
-                  }}
-                  className="w-full bg-black border border-white/10 rounded-2xl p-4 text-white text-xs outline-none focus:border-cyan-500/50 transition-all font-mono"
-                />
+              <div className="space-y-6 bg-black/40 p-8 rounded-[32px] border border-white/5 relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-6 opacity-[0.05] pointer-events-none">
+                  <Shield className="w-20 h-20 text-cyan-500" />
+                </div>
+                
+                <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-cyan-400 mb-2 flex items-center gap-2">
+                   Institutional Metadata
+                </h3>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Author Display Name</label>
+                    <input 
+                      value={metadata.author_name || ""} 
+                      onChange={e => setMetadata({...metadata, author_name: e.target.value})}
+                      placeholder="e.g. IFX Lead Analyst"
+                      className="w-full bg-black border border-white/5 rounded-2xl p-4 text-white text-sm outline-none focus:border-cyan-500/50 transition-all"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Video Insight URL</label>
+                    <input 
+                      value={metadata.video_url || ""} 
+                      onChange={e => setMetadata({...metadata, video_url: e.target.value})}
+                      placeholder="YouTube/Vimeo link..."
+                      className="w-full bg-black border border-white/5 rounded-2xl p-4 text-white text-sm outline-none focus:border-cyan-500/50 transition-all"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Key Insights (Comma Separated)</label>
+                  <input 
+                    value={metadata.key_insights?.join(", ") || ""} 
+                    onChange={e => setMetadata({...metadata, key_insights: e.target.value.split(",").map(i => i.trim())})}
+                    placeholder="Insight 1, Insight 2, Insight 3"
+                    className="w-full bg-black border border-white/5 rounded-2xl p-4 text-white text-sm outline-none focus:border-cyan-500/50 transition-all"
+                  />
+                </div>
               </div>
 
               <button

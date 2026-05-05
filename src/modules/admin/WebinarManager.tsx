@@ -23,6 +23,11 @@ interface Webinar {
   max_attendees: number;
   registration_count: number;
   sponsor_logos: string[];
+  metadata?: {
+    partner_name?: string;
+    learning_points?: string[];
+    [key: string]: any;
+  };
 }
 
 interface RegistrationRow {
@@ -47,7 +52,9 @@ const EMPTY_FORM = {
   status: "upcoming" as Webinar["status"],
   maxAttendees: 500,
   sponsorLogos: "",
+  metadata: {} as NonNullable<Webinar["metadata"]>,
 };
+
 
 export const WebinarManager = () => {
   const [form, setForm] = useState(EMPTY_FORM);
@@ -115,7 +122,9 @@ export const WebinarManager = () => {
       status: w.status || "upcoming",
       maxAttendees: w.max_attendees || 500,
       sponsorLogos: Array.isArray(w.sponsor_logos) ? w.sponsor_logos.join(", ") : "",
+      metadata: w.metadata || {},
     });
+
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -144,6 +153,7 @@ export const WebinarManager = () => {
       sponsor_logos: form.sponsorLogos
         ? form.sponsorLogos.split(",").map(s => s.trim()).filter(Boolean)
         : [],
+      metadata: form.metadata,
     };
 
     try {
@@ -327,41 +337,129 @@ export const WebinarManager = () => {
             </div>
           </div>
 
-          {/* Row 4: Media URLs */}
-          <div className="p-6 bg-black/40 border border-white/5 rounded-3xl space-y-6">
-            <div className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.3em]">Media & Branding</div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {[
-                { label: "Speaker Profile Image URL", key: "speakerProfileUrl", placeholder: "https://..." },
-                { label: "Brand / Company Logo URL", key: "brandLogoUrl", placeholder: "https://..." },
-                { label: "Webinar Cover Image URL", key: "webinarImageUrl", placeholder: "https://..." },
-                { label: "Sponsor Logos (comma-separated URLs)", key: "sponsorLogos", placeholder: "https://logo1.png, https://logo2.png" },
-              ].map(field => (
-                <div key={field.key} className="space-y-1.5">
-                  <label className="text-[9px] font-black uppercase tracking-widest text-gray-600">{field.label}</label>
+          {/* Row 4: Media & Collaboration */}
+          <div className="p-8 bg-black/60 border border-white/10 rounded-[32px] space-y-8 relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-8 opacity-[0.03] pointer-events-none">
+              <Globe className="w-32 h-32 text-emerald-500" />
+            </div>
+            
+            <div className="flex items-center justify-between">
+              <h3 className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.4em]">Institutional Collaboration</h3>
+              <div className="px-3 py-1 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[8px] font-black uppercase tracking-widest">
+                Partner Desk v2.0
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-4">
+                <div className="space-y-1.5">
+                  <label htmlFor="partner-name" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Primary Partner Name</label>
                   <input
-                    type="url"
-                    value={(form as any)[field.key]}
-                    onChange={e => setForm(f => ({ ...f, [field.key]: e.target.value }))}
-                    placeholder={field.placeholder}
-                    className="w-full bg-black/40 border border-white/5 rounded-xl p-3 text-xs text-white outline-none focus:border-cyan-500/50 transition-all placeholder:text-zinc-800"
+                    id="partner-name"
+                    type="text"
+                    value={form.metadata?.partner_name || ""}
+                    onChange={e => setForm(f => ({ ...f, metadata: { ...f.metadata, partner_name: e.target.value } }))}
+                    placeholder="e.g. IC Markets / Pepperstone"
+                    className="w-full bg-black/60 border border-white/5 rounded-xl p-3.5 text-xs text-white outline-none focus:border-emerald-500/50 transition-all"
                   />
                 </div>
-              ))}
+                <div className="space-y-1.5">
+                  <label htmlFor="partner-logo" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Primary Partner Logo URL</label>
+                  <input
+                    id="partner-logo"
+                    type="url"
+                    value={form.brandLogoUrl}
+                    onChange={e => setForm(f => ({ ...f, brandLogoUrl: e.target.value }))}
+                    placeholder="https://partner-logo.png"
+                    className="w-full bg-black/60 border border-white/5 rounded-xl p-3.5 text-xs text-white outline-none focus:border-emerald-500/50 transition-all"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div className="space-y-1.5">
+                  <label htmlFor="speaker-profile" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Speaker Profile Image</label>
+                  <input
+                    id="speaker-profile"
+                    type="url"
+                    value={form.speakerProfileUrl}
+                    onChange={e => setForm(f => ({ ...f, speakerProfileUrl: e.target.value }))}
+                    placeholder="https://speaker-avatar.jpg"
+                    className="w-full bg-black/60 border border-white/5 rounded-xl p-3.5 text-xs text-white outline-none focus:border-cyan-500/50 transition-all"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label htmlFor="webinar-header" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Webinar Header Image</label>
+                  <input
+                    id="webinar-header"
+                    type="url"
+                    value={form.webinarImageUrl}
+                    onChange={e => setForm(f => ({ ...f, webinarImageUrl: e.target.value }))}
+                    placeholder="https://hero-banner.jpg"
+                    className="w-full bg-black/60 border border-white/5 rounded-xl p-3.5 text-xs text-white outline-none focus:border-cyan-500/50 transition-all"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="sponsor-logos" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Co-Sponsor Logos (Comma Separated)</label>
+              <textarea
+                id="sponsor-logos"
+                rows={2}
+                value={form.sponsorLogos}
+                onChange={e => setForm(f => ({ ...f, sponsorLogos: e.target.value }))}
+                placeholder="https://broker1.png, https://broker2.png"
+                className="w-full bg-black/60 border border-white/5 rounded-xl p-3.5 text-xs text-white outline-none focus:border-emerald-500/50 transition-all resize-none"
+              />
             </div>
           </div>
 
-          {/* Row 5: About Content */}
-          <div className="space-y-2">
-            <label htmlFor="session-about" className="text-[9px] font-black uppercase tracking-[0.25em] text-gray-500">About This Session (Extended Description)</label>
+          {/* Row 5: Content Details */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+            <div className="md:col-span-8 space-y-2">
+              <label htmlFor="session-about" className="text-[9px] font-black uppercase tracking-[0.25em] text-gray-500">About This Session (Extended Bio)</label>
+              <textarea
+                id="session-about"
+                rows={8} value={form.aboutContent}
+                onChange={e => setForm(f => ({ ...f, aboutContent: e.target.value }))}
+                placeholder="Detailed session breakdown and expert bio..."
+                className="w-full bg-black border border-white/10 focus:border-emerald-500/50 rounded-[32px] p-6 text-white text-sm outline-none transition-all resize-none font-mono"
+              />
+            </div>
+            <div className="md:col-span-4 space-y-6">
+                <div className="p-6 bg-cyan-500/[0.03] border border-cyan-500/10 rounded-[32px] space-y-4">
+                   <label htmlFor="learning-points" className="text-[9px] font-black uppercase tracking-widest text-cyan-400">Learning Points (Comma Sep)</label>
+                   <textarea
+                     id="learning-points"
+                     rows={6}
+                     value={form.metadata?.learning_points?.join(", ") || ""}
+                     onChange={e => setForm(f => ({ ...f, metadata: { ...f.metadata, learning_points: e.target.value.split(",").map(p => p.trim()) } }))}
+                     placeholder="Point 1, Point 2, Point 3..."
+                     className="w-full bg-black border border-white/5 rounded-2xl p-4 text-xs text-white outline-none focus:border-cyan-500/50 transition-all resize-none"
+                   />
+                </div>
+            </div>
+          </div>
+
+          <div className="space-y-2 bg-black/40 p-6 rounded-3xl border border-white/5">
+            <label htmlFor="json-metadata" className="text-[9px] font-black uppercase tracking-widest text-cyan-400 px-1 flex items-center gap-2">
+              Institutional Metadata (JSON)
+            </label>
             <textarea
-              id="session-about"
-              rows={4} value={form.aboutContent}
-              onChange={e => setForm(f => ({ ...f, aboutContent: e.target.value }))}
-              placeholder="Detailed content that appears on the webinar detail page..."
-              className="w-full bg-black border border-white/5 focus:border-emerald-500/50 rounded-2xl p-4 text-white text-sm outline-none transition-all resize-none font-mono"
+              id="json-metadata"
+              rows={4}
+              value={JSON.stringify(form.metadata, null, 2)}
+              onChange={e => {
+                try { 
+                  const parsed = JSON.parse(e.target.value);
+                  setForm(f => ({ ...f, metadata: parsed }));
+                } catch (err) {}
+              }}
+              className="w-full bg-black border border-white/10 rounded-2xl p-4 text-white text-xs outline-none focus:border-cyan-500/50 transition-all font-mono"
             />
           </div>
+
 
           {/* Actions */}
           <div className="flex gap-4">

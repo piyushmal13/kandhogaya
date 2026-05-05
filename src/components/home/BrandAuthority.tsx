@@ -11,7 +11,7 @@ const PARTNERS = [
 ];
 
 const PRESS = [
-  "Bloomberg Intelligence", "Reuters Global", "Financial Times", "Forbes Institutional", "Nasdaq Quant", "TechCrunch Alpha"
+  "Bloomberg Terminal", "Reuters Finance", "Financial Times", "Forbes", "Nasdaq Institutional", "Business Insider"
 ];
 
 export const BrandAuthority = () => {
