@@ -58,6 +58,7 @@ export const mapWebinar = (raw: any): Webinar => {
     
     // Legacy / Relational fallbacks
     recording_url: raw.recording_url,
+    streaming_url: raw.streaming_url,
     sponsors: Array.isArray(raw.sponsors) ? raw.sponsors.map((s: any) => ({
       id: s.id,
       name: s.name,

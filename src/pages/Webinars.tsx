@@ -62,7 +62,7 @@ export const Webinars = () => {
                     </span> Direct Link Active 
                   </h2>
                   <div className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[9px] font-mono text-white/40 uppercase">
-                    Session ID: {liveWebinar.id.slice(0, 8)}
+                    Session ID: {liveWebinar?.id?.slice(0, 8) || 'AUTHENTICATING'}
                   </div>
                 </div>
                 <VideoPlayer 

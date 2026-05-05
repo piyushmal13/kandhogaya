@@ -130,15 +130,19 @@ export const FortressHero = () => {
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="site-pill mb-10 group"
+          className="relative mb-12 group cursor-default"
         >
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500" />
-          </span>
-          <span className="text-emerald-400 font-bold uppercase tracking-[0.3em]">
-            Institutional Trading Operations
-          </span>
+          <div className="absolute -inset-4 bg-emerald-500/10 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+          <div className="relative flex items-center gap-4 px-6 py-2 rounded-full bg-white/[0.03] border border-white/10 backdrop-blur-md shadow-2xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 via-transparent to-transparent" />
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
+            </span>
+            <span className="text-[10px] text-emerald-400 font-black uppercase tracking-[0.4em] leading-none">
+              Institutional <span className="text-white/60">Trading</span> Operations
+            </span>
+          </div>
         </motion.div>
 
         {/* Headline (Imperial Typography) */}

@@ -437,7 +437,7 @@ export const getReviews = async (limit = 10) => {
     id: r.id,
     name: r.name || "Institutional Client",
     role: r.role || "Elite Trader",
-    text: r.text,
+    feedback: r.text,
     location: r.region || "Confidential",
     rating: r.rating || 5,
     image_url: r.image_url

@@ -19,7 +19,7 @@ export const webinarService = {
           brand_logo_url, webinar_image_url, sponsor_logos,
           speaker_images, about_content, q_and_a,
           advanced_features, max_attendees, registration_count,
-          type, recording_url
+          type, recording_url, streaming_url
         `)
         .order("date_time", { ascending: true })
         .limit(50);
