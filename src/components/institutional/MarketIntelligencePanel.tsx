@@ -45,8 +45,8 @@ export function MarketIntelligencePanel() {
           <div className="space-y-3">
             <AnimatePresence mode="popLayout">
               {loading ? (
-                [...new Array(5)].map((_, i) => (
-                  <div key={`skeleton-${i}`} className="h-16 rounded-2xl bg-white/[0.02] border border-white/[0.05] animate-pulse" />
+                [1, 2, 3, 4, 5].map((id) => (
+                  <div key={`skeleton-id-${id}`} className="h-16 rounded-2xl bg-white/[0.02] border border-white/[0.05] animate-pulse" />
                 ))
               ) : (
                 pairs.map((pair) => (
