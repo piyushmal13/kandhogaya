@@ -153,7 +153,9 @@ export const WebinarManager = () => {
       sponsor_logos: form.sponsorLogos
         ? form.sponsorLogos.split(",").map(s => s.trim()).filter(Boolean)
         : [],
-      metadata: form.metadata,
+      q_and_a: form.metadata?.learning_points?.map(p => ({ question: p, answer: "Session Highlight" })) || [],
+      advanced_features: form.metadata,
+      type: form.isPaid ? 'premium' : 'free'
     };
 
     try {

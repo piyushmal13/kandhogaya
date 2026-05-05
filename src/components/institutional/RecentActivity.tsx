@@ -79,6 +79,7 @@ export function RecentActivity() {
             <p className="text-[10px] text-gray-600 font-black uppercase tracking-widest">No Recent Telemetry</p>
           </div>
         ) : (
+          activities.map((a) => (
             <div 
               key={`${a.title}-${a.date}`} 
               className="group/row relative p-4 rounded-2xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.05] hover:border-white/20 transition-all duration-300 cursor-pointer"

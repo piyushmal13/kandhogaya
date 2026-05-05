@@ -90,7 +90,7 @@ export const WebinarDetail = () => {
         description={webinar.description || "IFXTrades webinar details and registration."}
         path={id ? `/webinars/${id}` : "/webinars"}
         type="article"
-        keywords={["trading webinar", webinar.speaker || "IFXTrades", webinar.status || "webinar"]}
+        keywords={["trading webinar", webinar.speaker_name || "IFXTrades", webinar.status || "webinar"]}
       />
       
       <div className="bg-[var(--color6)] border-b border-white/5 py-6">
@@ -112,7 +112,7 @@ export const WebinarDetail = () => {
                     SESSION RECORDING
                   </span>
                 )}
-                <span className="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em]">{webinar.speaker_name || webinar.speaker || 'Institutional Lead Analyst'}</span>
+                <span className="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em]">{webinar.speaker_name || 'Institutional Lead Analyst'}</span>
               </div>
               <h1 className="text-xl md:text-2xl font-bold text-white tracking-tight">{webinar.title}</h1>
             </div>
@@ -310,7 +310,7 @@ export const WebinarDetail = () => {
                           What You'll Learn
                         </h4>
                         <ul className="space-y-3 text-sm">
-                          {(webinar.advanced_features as any)?.learning_points?.map((point: string) => (
+                          {webinar.metadata?.learning_points?.map((point: string) => (
                             <li key={point} className="flex items-start gap-2">
                               <Check className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" />
                               <span>{point}</span>
@@ -335,13 +335,13 @@ export const WebinarDetail = () => {
                       <div className="w-40 h-40 md:w-56 md:h-56 rounded-[32px] overflow-hidden shrink-0 border border-emerald-500/20 shadow-2xl relative group">
                         <div className="absolute inset-0 bg-emerald-500/20 group-hover:opacity-0 transition-opacity" />
                         <img 
-                          src={webinar.speaker_profile_url || webinar.speaker_images?.[0] || "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=2000&auto=format&fit=crop"} 
-                          alt={webinar.speaker || "Institutional Speaker"}
+                          src={webinar.webinar_image_url || webinar.speaker_profile_url || "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=2000&auto=format&fit=crop"} 
+                          alt={webinar.speaker_name || "Institutional Speaker"}
                           className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
                         />
                       </div>
                       <div className="text-center md:text-left">
-                        <h3 className="text-3xl md:text-4xl font-black text-white mb-2 tracking-tighter uppercase">{webinar.speaker || webinar.speaker_name || "IFX Lead Strategist"}</h3>
+                        <h3 className="text-3xl md:text-4xl font-black text-white mb-2 tracking-tighter uppercase">{webinar.speaker_name || "IFX Lead Strategist"}</h3>
                         <p className="text-emerald-500 font-black uppercase tracking-[0.3em] text-[10px] mb-8">Director of Global Macro Strategy</p>
                         <p className="text-gray-400 text-lg leading-relaxed max-w-xl font-medium opacity-80">
                           {webinar.metadata?.author_bio || "A defining voice in institutional market structure, specializing in high-velocity algorithmic modeling and macro capital flow analysis. Leading the IFX research desk since 2024."}
@@ -355,7 +355,7 @@ export const WebinarDetail = () => {
                   <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 space-y-4">
                     <h3 className="text-xl font-bold text-white mb-6">Frequently Asked Questions</h3>
                     {webinar.q_and_a?.map((qa: any) => (
-                      <div key={qa.id || qa.question?.slice(0, 32)} className="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-emerald-500/30 transition-colors">
+                      <div key={qa.question?.slice(0, 32)} className="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-emerald-500/30 transition-colors">
                         <h4 className="text-white font-bold text-lg mb-3 flex items-start gap-3">
                           <span className="text-emerald-500 mt-1">Q.</span>
                           {qa.question}

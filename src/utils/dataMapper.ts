@@ -23,48 +23,60 @@ export const mapSignal = (raw: any): Signal => ({
   pips: Number(raw.pips) || 0,
 });
 
-export const mapWebinar = (raw: any): Webinar => ({
-  id: raw.id,
-  title: raw.title || 'Untitled Session',
-  description: raw.description || '',
-  speaker: raw.speaker_name || 'Institutional Lead',
-  speaker_name: raw.speaker_name || '',
-  date_time: raw.date_time,
-  is_paid: raw.type === 'paid' || !!raw.is_paid,
-  price: Number(raw.price) || 0,
-  registration_count: Number(raw.registration_count) || 0,
-  max_attendees: Number(raw.max_attendees) || 500,
-  status: raw.status || 'upcoming',
-  metadata: typeof raw.metadata === 'string' ? JSON.parse(raw.metadata) : (raw.metadata || {}),
-  created_at: raw.created_at,
-  speaker_images: Array.isArray(raw.speaker_images) && raw.speaker_images.length > 0 ? raw.speaker_images : [
-    raw.speaker_profile_url || "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=2000&auto=format&fit=crop"
-  ],
-  webinar_image_url: raw.webinar_image_url || "https://images.unsplash.com/photo-1591696208162-a93795a74838?q=80&w=2070&auto=format&fit=crop",
-  sponsor_logos: Array.isArray(raw.sponsor_logos) ? raw.sponsor_logos : [],
-  sponsors: Array.isArray(raw.sponsors) && raw.sponsors.length > 0 
-    ? raw.sponsors.map((s: any) => ({
-        id: s.id,
-        webinar_id: s.webinar_id,
-        name: s.name,
-        tier: s.tier,
-        logo_url: s.logo_url,
-        website_url: s.website_url
-      }))
-    : (raw.brand_logo_url 
-        ? [{ id: "sp-main", name: "Lead Partner", tier: "Headline", logo_url: raw.brand_logo_url }] 
-        : [{ id: "sp-1", name: "IFX Intelligence", tier: "Headline", logo_url: "https://cryptologos.cc/logos/binance-coin-bnb-logo.svg" }]
-      ),
-  q_and_a: Array.isArray(raw.q_and_a) && raw.q_and_a.length > 0 ? raw.q_and_a : [
-    { question: "Will recordings be provided?", answer: "Yes, all registered attendees receive full institutional playback access for 30 days." },
-    { question: "Is this suitable for retail traders?", answer: "This is advanced institutional methodology, but broken down so independent retail traders can execute it." },
-    { question: "Do I need MT4 or MT5 to apply this?", answer: "The frameworks are platform agnostic, though examples will predominantly feature MT5 and Binance execution." }
-  ],
-  recording_url: raw.recording_url,
-  streaming_url: raw.streaming_url,
-  about_content: raw.about_content,
-  advanced_features: typeof raw.advanced_features === 'string' ? JSON.parse(raw.advanced_features) : (raw.advanced_features || {}),
-});
+export const mapWebinar = (raw: any): Webinar => {
+  // Determine status based on date and backend status field
+  const now = new Date();
+  const sessionDate = new Date(raw.date_time);
+  let status: 'upcoming' | 'live' | 'past' = raw.status || 'upcoming';
+  
+  if (status === 'upcoming' && sessionDate < now) {
+    const twoHoursAgo = new Date(now.getTime() - (2 * 60 * 60 * 1000));
+    status = sessionDate < twoHoursAgo ? 'past' : 'live';
+  }
+
+  return {
+    id: raw.id,
+    title: raw.title || 'Untitled Session',
+    description: raw.description || '',
+    speaker_name: raw.speaker_name || 'Institutional Lead Analyst',
+    date_time: raw.date_time,
+    speaker_profile_url: raw.speaker_profile_url || "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=200&auto=format&fit=crop",
+    brand_logo_url: raw.brand_logo_url || "https://upload.wikimedia.org/wikipedia/commons/4/4c/Binance_Logo.png",
+    webinar_image_url: raw.webinar_image_url || "https://images.unsplash.com/photo-1611974717483-360099105c4a?q=80&w=2000&auto=format&fit=crop",
+    about_content: raw.about_content || raw.description || "Join our institutional desk for a deep dive into algorithmic market structure and capital flow analysis.",
+    is_paid: !!raw.is_paid,
+    price: Number(raw.price) || 0,
+    status: status,
+    max_attendees: Number(raw.max_attendees) || 500,
+    registration_count: Number(raw.registration_count) || 0,
+    sponsor_logos: Array.isArray(raw.sponsor_logos) ? raw.sponsor_logos : [],
+    speaker_images: Array.isArray(raw.speaker_images) ? raw.speaker_images : [],
+    q_and_a: Array.isArray(raw.q_and_a) ? raw.q_and_a : [],
+    advanced_features: raw.advanced_features || {},
+    created_at: raw.created_at || new Date().toISOString(),
+    type: raw.type || (!!raw.is_paid ? 'premium' : 'free'),
+    
+    // Legacy / Relational fallbacks
+    recording_url: raw.recording_url,
+    sponsors: Array.isArray(raw.sponsors) ? raw.sponsors.map((s: any) => ({
+      id: s.id,
+      name: s.name,
+      tier: s.tier,
+      logo_url: s.logo_url,
+      website_url: s.website_url
+    })) : [],
+    
+    // Metadata for Detail Page
+    metadata: {
+      partner_name: raw.brand_logo_url ? "Institutional Partner" : "IFX Trades",
+      learning_points: raw.advanced_features?.learning_points || [
+        "Institutional Liquidity Zones",
+        "Algorithmic Order Flow Decoding",
+        "Macro Structure Alignment"
+      ]
+    }
+  };
+};
 
 export const mapLead = (raw: any): any => ({
   id: raw.id,

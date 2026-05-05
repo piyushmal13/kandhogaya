@@ -131,7 +131,7 @@ export const BlogDetail = () => {
                 <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                 {post.category || "Research Note"}
               </motion.div>
-
+ 
               <motion.h1 
                 initial={{ opacity: 0, y: 20 }} 
                 animate={{ opacity: 1, y: 0 }} 
@@ -140,29 +140,24 @@ export const BlogDetail = () => {
               >
                 {post.title}
               </motion.h1>
-
-              {post.metadata?.subtitle && (
-                <motion.p
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.12 }}
-                  className="text-xl md:text-2xl text-emerald-500 font-bold tracking-tight uppercase"
-                >
-                  {post.metadata.subtitle}
-                </motion.p>
-              )}
-
-
-              {boldHeadline && (
-                <motion.p
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.15 }}
-                  className="text-2xl md:text-3xl text-gray-400 font-medium leading-tight tracking-tight max-w-3xl border-l-4 border-emerald-500/50 pl-8 py-2"
-                >
-                  {boldHeadline}
-                </motion.p>
-              )}
+ 
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.12 }}
+                className="text-xl md:text-2xl text-emerald-500 font-bold tracking-tight uppercase"
+              >
+                {post.metadata?.subtitle || `Institutional Analysis: ${post.category || "Market Insight"}`}
+              </motion.p>
+ 
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 }}
+                className="text-2xl md:text-3xl text-gray-400 font-medium leading-tight tracking-tight max-w-3xl border-l-4 border-emerald-500/50 pl-8 py-2"
+              >
+                {boldHeadline || `Decrypting institutional order flow and macro capital adjustments for ${post.title}.`}
+              </motion.p>
             </div>
 
             <motion.div

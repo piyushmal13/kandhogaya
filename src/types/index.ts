@@ -41,27 +41,32 @@ export interface Webinar {
   id: string;
   title: string;
   description?: string;
-  date_time: string;          // timestamptz
-  speaker: string;            // normalized field
-  speaker_name?: string;      // legacy DB field
+  date_time: string;
+  speaker_name?: string;
   status: 'upcoming' | 'live' | 'past';
-  is_paid?: boolean;
-  price?: number;
+  is_paid: boolean;
+  price: number;
   created_at: string;
   speaker_profile_url?: string;
   brand_logo_url?: string;
   webinar_image_url?: string;
-  sponsor_logos?: string[];   // jsonb array
-  speaker_images?: string[];  // jsonb array
+  sponsor_logos: string[]; // jsonb
+  speaker_images: string[]; // jsonb
   about_content?: string;
-  q_and_a?: QA[];             // jsonb array
-  advanced_features?: Record<string, unknown>; // jsonb object
+  q_and_a: QA[];           // jsonb
+  advanced_features: Record<string, any>; // jsonb
   max_attendees: number;
   registration_count: number;
-  metadata?: Record<string, any>;
-  sponsors?: WebinarSponsor[];
+  type: string;
   recording_url?: string;
-  streaming_url?: string;
+  
+  // UI Virtual / Joined
+  sponsors?: WebinarSponsor[];
+  metadata?: {
+    partner_name?: string;
+    learning_points?: string[];
+    author_bio?: string;
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -192,6 +197,7 @@ export interface Blog {
     author_bio?: string;
     author_name?: string;
     author_profile_url?: string;
+    subtitle?: string;
     broker_ad?: {
       name: string;
       logo_url: string;
@@ -327,11 +333,11 @@ export interface WebinarRegistration {
   id: string;
   webinar_id: string;
   user_id: string;
-  email?: string;
-  attended: boolean;
-  payment_status: string;
-  payment_id?: string;
   created_at: string;
+  // UI Virtual Fields
+  email?: string;
+  attended?: boolean;
+  payment_status?: string;
 }
 
 export interface MarketPair {

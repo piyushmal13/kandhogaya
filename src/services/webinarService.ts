@@ -11,17 +11,15 @@ import { mapWebinar } from "../utils/dataMapper";
 export const webinarService = {
   getWebinars: async (): Promise<Webinar[]> => {
     try {
-      // Fetch ALL webinars regardless of status — the UI tabs filter client-side.
-      // Joined with webinar_sponsors for proper relational data.
       const query = supabase
         .from("webinars")
         .select(`
           id, title, description, date_time, speaker_name,
-          speaker_images, type, max_attendees, registration_count,
-          status, webinar_image_url, recording_url, sponsor_logos,
-          speaker_profile_url, brand_logo_url,
-          q_and_a, about_content, advanced_features,
-          sponsors:webinar_sponsors(*)
+          status, is_paid, price, speaker_profile_url,
+          brand_logo_url, webinar_image_url, sponsor_logos,
+          speaker_images, about_content, q_and_a,
+          advanced_features, max_attendees, registration_count,
+          type, recording_url
         `)
         .order("date_time", { ascending: true })
         .limit(50);
@@ -40,11 +38,11 @@ export const webinarService = {
         .from("webinars")
         .select(`
           id, title, description, date_time, speaker_name,
-          speaker_images, type, max_attendees, registration_count,
-          status, webinar_image_url, recording_url, sponsor_logos,
-          speaker_profile_url, brand_logo_url,
-          q_and_a, about_content, advanced_features,
-          sponsors:webinar_sponsors(*)
+          status, is_paid, price, speaker_profile_url,
+          brand_logo_url, webinar_image_url, sponsor_logos,
+          speaker_images, about_content, q_and_a,
+          advanced_features, max_attendees, registration_count,
+          type, recording_url
         `)
         .eq("id", id)
         .single();
