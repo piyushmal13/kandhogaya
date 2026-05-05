@@ -344,7 +344,7 @@ export const ContentManager = () => {
                     {editingId ? "Edit Content" : "Publish Content"}
                   </h2>
                   <p className="text-[10px] text-gray-500 font-bold uppercase tracking-[0.3em] mt-1">
-                    Orchestration Console
+                    Orchestration Dashboard
                   </p>
                 </div>
               </div>

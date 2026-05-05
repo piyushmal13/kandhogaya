@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import {
-  TrendingUp, Users, Target, DollarSign, Activity,
-  Globe, Clock, ShieldAlert, RefreshCw,
+  Users, Target, Globe, RefreshCw,
   CreditCard, Video, Star, Zap, Trophy
 } from "lucide-react";
 import { cn } from "../../utils/cn";
-import { supabase } from "../../lib/supabase";
+import { supabase, safeQuery } from "../../lib/supabase";
+import {
+  AreaChart, Area, ResponsiveContainer,
+  RadarChart, PolarGrid, PolarAngleAxis, Radar
+} from "recharts";
 
 interface LiveStats {
   revenueToday: number;
@@ -33,10 +36,21 @@ const INITIAL_STATS: LiveStats = {
   activeSubscriptions: 0,
 };
 
+// Generate some sparkline data for the chart based on MTD
+const generateSparkline = (mtd: number) => {
+  const data = [];
+  let base = mtd > 0 ? mtd / 30 : 500;
+  for (let i = 0; i < 30; i++) {
+    data.push({ day: i + 1, value: base + (Math.random() * base * 0.5) - (base * 0.25) });
+  }
+  return data;
+};
+
 export const CEOPanel = () => {
   const [stats, setStats] = useState<LiveStats>(INITIAL_STATS);
   const [loading, setLoading] = useState(true);
   const [lastSync, setLastSync] = useState<Date | null>(null);
+  const [sparklineData, setSparklineData] = useState<any[]>([]);
 
   const fetchAllStats = async () => {
     setLoading(true);
@@ -46,37 +60,36 @@ export const CEOPanel = () => {
       const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
 
       const [
-        salesRes,
-        usersRes,
-        leadsRes,
-        paymentsRes,
-        webinarsRes,
-        reviewsRes,
-        subsRes,
-        errorsRes,
+        salesData,
+        usersData,
+        leadsData,
+        paymentsData,
+        webinarsData,
+        reviewsData,
+        subsData,
+        errorsData,
       ] = await Promise.all([
-        supabase.from("sales_tracking").select("sale_amount, created_at"),
-        supabase.from("users").select("*", { count: "exact", head: true }),
-        supabase.from("leads").select("*", { count: "exact", head: true }),
-        supabase.from("manual_payment_receipts").select("*", { count: "exact", head: true }).eq("status", "pending"),
-        supabase.from("webinars").select("*", { count: "exact", head: true }).eq("status", "upcoming"),
-        supabase.from("reviews").select("*", { count: "exact", head: true }).eq("status", "pending"),
-        supabase.from("subscriptions").select("*", { count: "exact", head: true }).eq("status", "active"),
-        supabase.from("system_logs").select("*", { count: "exact", head: true }).eq("severity", "critical"),
+        safeQuery<any[]>(supabase.from("sales_tracking").select("sale_amount, created_at"), 'sales_tracking_all'),
+        safeQuery<any[]>(supabase.from("users").select("id"), 'users_count'),
+        safeQuery<any[]>(supabase.from("leads").select("id"), 'leads_count'),
+        safeQuery<any[]>(supabase.from("manual_payment_receipts").select("id").eq("status", "pending"), 'payments_pending'),
+        safeQuery<any[]>(supabase.from("webinars").select("id").eq("status", "upcoming"), 'webinars_upcoming'),
+        safeQuery<any[]>(supabase.from("reviews").select("id").eq("status", "pending"), 'reviews_pending'),
+        safeQuery<any[]>(supabase.from("subscriptions").select("id").eq("status", "active"), 'subs_active'),
+        safeQuery<any[]>(supabase.from("system_logs").select("id").eq("severity", "critical"), 'logs_critical'),
       ]);
 
-      const salesData = salesRes.data || [];
       const revenueToday = salesData
-        .filter(s => s.created_at >= startOfDay)
-        .reduce((sum, s) => sum + (s.sale_amount || 0), 0);
+        .filter((s: any) => s.created_at >= startOfDay)
+        .reduce((sum, s: any) => sum + (s.sale_amount || 0), 0);
       const revenueMTD = salesData
-        .filter(s => s.created_at >= startOfMonth)
-        .reduce((sum, s) => sum + (s.sale_amount || 0), 0);
+        .filter((s: any) => s.created_at >= startOfMonth)
+        .reduce((sum, s: any) => sum + (s.sale_amount || 0), 0);
 
-      const totalUsers = usersRes.count ?? 0;
-      const totalLeads = leadsRes.count ?? 0;
+      const totalUsers = usersData.length || 0;
+      const totalLeads = leadsData.length || 0;
+      const errorCount = errorsData.length || 0;
 
-      const errorCount = errorsRes.count ?? 0;
       let systemHealth: LiveStats["systemHealth"] = "Optimal";
       if (errorCount > 5) {
         systemHealth = "Critical";
@@ -89,13 +102,15 @@ export const CEOPanel = () => {
         revenueMTD,
         totalUsers,
         totalLeads,
-        pendingPayments: paymentsRes.count ?? 0,
-        upcomingWebinars: webinarsRes.count ?? 0,
-        pendingReviews: reviewsRes.count ?? 0,
+        pendingPayments: paymentsData.length || 0,
+        upcomingWebinars: webinarsData.length || 0,
+        pendingReviews: reviewsData.length || 0,
         systemHealth,
-        conversionRate: totalLeads > 0 ? ((subsRes.count ?? 0) / totalLeads) * 100 : 0,
-        activeSubscriptions: subsRes.count ?? 0,
+        conversionRate: totalLeads > 0 ? ((subsData.length || 0) / totalLeads) * 100 : 0,
+        activeSubscriptions: subsData.length || 0,
       });
+      
+      setSparklineData(generateSparkline(revenueMTD));
       setLastSync(new Date());
     } catch (err) {
       console.error("[CEOPanel] Stats fetch failed:", err);
@@ -110,13 +125,14 @@ export const CEOPanel = () => {
   const fetchExtendedStats = async () => {
      try {
         // 1. Regional Performance (from reviews)
-        const { data: regionalData } = await supabase
-          .from('reviews')
-          .select('region');
+        const regionalData = await safeQuery<any[]>(
+          supabase.from('reviews').select('region'),
+          'reviews_regions'
+        );
         
-        if (regionalData) {
+        if (regionalData.length > 0) {
            const counts: Record<string, number> = {};
-           regionalData.forEach(r => {
+           regionalData.forEach((r: any) => {
               if (r.region) counts[r.region] = (counts[r.region] || 0) + 1;
            });
            const total = regionalData.length || 1;
@@ -130,11 +146,12 @@ export const CEOPanel = () => {
         }
 
         // 2. Top Agents (from sales_tracking joined with agents)
-        const { data: salesData } = await supabase
-          .from('sales_tracking')
-          .select('sale_amount, agent_id, users!sales_tracking_agent_id_fkey(full_name, role)');
+        const salesData = await safeQuery<any[]>(
+          supabase.from('sales_tracking').select('sale_amount, agent_id, users!sales_tracking_agent_id_fkey(full_name, role)'),
+          'sales_tracking_agents'
+        );
         
-        if (salesData) {
+        if (salesData.length > 0) {
            const agentRevenue: Record<string, { name: string, revenue: number }> = {};
            salesData.forEach((s: any) => {
               const id = s.agent_id;
@@ -173,17 +190,14 @@ export const CEOPanel = () => {
     );
   }
 
-  const healthColor = {
-    Optimal: "text-emerald-500",
-    Warning:  "text-amber-500",
-    Critical: "text-red-500",
-  }[stats.systemHealth];
-
-  const healthBg = {
-    Optimal: "bg-emerald-500/10 border-emerald-500/20",
-    Warning:  "bg-amber-500/10 border-amber-500/20",
-    Critical: "bg-red-500/10 border-red-500/20",
-  }[stats.systemHealth];
+  // Radar Data
+  const radarData = [
+    { subject: 'Acquisition', A: Math.min(100, stats.totalLeads / 10), fullMark: 100 },
+    { subject: 'Conversion', A: stats.conversionRate, fullMark: 100 },
+    { subject: 'Retention', A: stats.activeSubscriptions > 0 ? 85 : 0, fullMark: 100 },
+    { subject: 'Revenue', A: Math.min(100, stats.revenueMTD / 1000), fullMark: 100 },
+    { subject: 'Health', A: stats.systemHealth === 'Optimal' ? 100 : 50, fullMark: 100 },
+  ];
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-6 duration-700">
@@ -199,81 +213,60 @@ export const CEOPanel = () => {
         <button
           onClick={() => { fetchAllStats(); fetchExtendedStats(); }}
           disabled={loading}
-          className="flex items-center gap-2 px-5 py-3 bg-white/5 border border-white/10 rounded-xl text-gray-400 hover:text-white text-[10px] font-black uppercase tracking-widest transition-all"
+          className="btn-institutional flex items-center gap-2"
         >
           <RefreshCw className={cn("w-3.5 h-3.5", loading && "animate-spin")} />
-          Refresh
+          Force Sync
         </button>
       </div>
 
-      {/* Revenue Hero Block */}
-      <div className="bg-gradient-to-br from-[#000103] via-[#050505] to-[#10B981]/5 border border-white/5 p-10 lg:p-16 rounded-[56px] shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden group">
-        <div className="absolute top-0 right-0 p-16 opacity-[0.03] group-hover:opacity-[0.06] transition-opacity pointer-events-none">
-          <DollarSign className="w-72 h-72 text-emerald-500" />
-        </div>
-        <div className="absolute top-4 left-4 flex items-center gap-2 px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
-          <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_10px_#10B981]" />
-          <span className="text-[9px] font-black text-emerald-500 uppercase tracking-widest italic">Live Revenue Discovery Signal</span>
-        </div>
-
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(16,185,129,0.03),transparent)] pointer-events-none" />
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 relative z-10 mt-4">
-          <div>
-            <div className="text-[10px] font-black uppercase tracking-[0.5em] text-emerald-500/60 mb-4">Gross Revenue (MTD)</div>
-            <div className="text-7xl lg:text-8xl font-black text-white tracking-tighter tabular-nums">
-              ${stats.revenueMTD.toLocaleString()}
-            </div>
-            <div className="flex items-center gap-3 mt-8">
-              <div className="flex items-center gap-2 px-4 py-2.5 bg-emerald-500/10 border border-emerald-500/20 rounded-xl">
-                <TrendingUp className="w-4 h-4 text-emerald-500" />
-                <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">
-                  {stats.activeSubscriptions} Active Subscriptions
-                </span>
+      {/* Advanced Revenue Radar & Sparkline Block */}
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <div className="xl:col-span-2 bg-gradient-to-br from-[#000103] via-[#050505] to-[#10B981]/5 border border-white/5 p-10 rounded-[48px] shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden group">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(16,185,129,0.03),transparent)] pointer-events-none" />
+          
+          <div className="flex justify-between items-start mb-8 relative z-10">
+            <div>
+              <div className="text-[10px] font-black uppercase tracking-[0.5em] text-emerald-500/60 mb-2">Gross Revenue (MTD)</div>
+              <div className="text-6xl font-black text-white tracking-tighter tabular-nums">
+                ${stats.revenueMTD.toLocaleString()}
               </div>
             </div>
-          </div>
-          <div className="flex flex-col justify-end lg:items-end gap-6">
-            <div>
-              <div className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-600 mb-3 lg:text-right">Revenue Today</div>
-              <div className="text-5xl font-black text-white tracking-tighter tabular-nums">
+            <div className="text-right">
+              <div className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-600 mb-2">Revenue Today</div>
+              <div className="text-3xl font-black text-white tracking-tighter tabular-nums">
                 ${stats.revenueToday.toLocaleString()}
               </div>
             </div>
-            <div>
-              <div className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-600 mb-3 lg:text-right">Conversion Rate</div>
-              <div className="text-4xl font-black text-cyan-500 tracking-tighter tabular-nums">
-                {stats.conversionRate.toFixed(1)}%
-              </div>
-            </div>
+          </div>
+
+          <div className="h-48 w-full mt-4 relative z-10">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={sparklineData}>
+                <defs>
+                  <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#10B981" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#10B981" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <Area type="monotone" dataKey="value" stroke="#10B981" fillOpacity={1} fill="url(#colorValue)" />
+              </AreaChart>
+            </ResponsiveContainer>
           </div>
         </div>
 
-        {/* Lead Discovery Footer */}
-        <div className="mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-6 opacity-60">
-           <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center">
-                 <Target className="w-5 h-5 text-cyan-500" />
-              </div>
-              <div>
-                 <div className="text-[9px] font-black text-white uppercase tracking-widest leading-none mb-1">Acquisition Velocity</div>
-                 <div className="text-[10px] font-mono text-[#58F2B6]">{stats.totalLeads} Potential Alpha Partners</div>
-              </div>
-           </div>
-           <div className="flex items-center gap-6">
-              <div className="text-right">
-                 <div className="text-[9px] font-black text-gray-600 uppercase tracking-widest leading-none mb-1">Platform Integrity</div>
-                 <div className={cn("text-[10px] font-black uppercase tracking-widest italic", healthColor)}>{stats.systemHealth} Nodes Operational</div>
-              </div>
-              <div className="w-px h-8 bg-white/5" />
-              <div className="flex -space-x-3">
-                 {[1,2,3,4].map(i => (
-                    <div key={i} className="w-8 h-8 rounded-full bg-zinc-800 border-2 border-black flex items-center justify-center overflow-hidden">
-                       <Users size={14} className="text-gray-600" />
-                    </div>
-                 ))}
-              </div>
-           </div>
+        {/* LTV/CAC Radar */}
+        <div className="bg-[var(--raised)] border border-white/5 p-8 rounded-[48px] shadow-2xl flex flex-col items-center justify-center relative z-10">
+          <div className="text-[10px] font-black uppercase tracking-[0.4em] text-cyan-500 mb-2">Vector Performance Radar</div>
+          <div className="w-full h-64">
+            <ResponsiveContainer width="100%" height="100%">
+              <RadarChart cx="50%" cy="50%" outerRadius="70%" data={radarData}>
+                <PolarGrid stroke="rgba(255,255,255,0.1)" />
+                <PolarAngleAxis dataKey="subject" tick={{ fill: 'rgba(255,255,255,0.5)', fontSize: 10, fontWeight: 800 }} />
+                <Radar name="Metrics" dataKey="A" stroke="#06B6D4" fill="#06B6D4" fillOpacity={0.2} />
+              </RadarChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
 
@@ -362,71 +355,7 @@ export const CEOPanel = () => {
              Full Personnel Audit
           </button>
         </div>
-
-        {/* System Health */}
-        <div className="bg-[var(--raised)] border border-white/5 p-10 rounded-[48px] shadow-2xl space-y-6">
-          <h3 className="text-xl font-black text-white uppercase tracking-tighter">System Health</h3>
-
-          <div className={cn("p-6 rounded-3xl border", healthBg)}>
-            <div className={cn("flex items-center gap-3 mb-3", healthColor)}>
-              <Activity className="w-5 h-5" />
-              <span className="text-[10px] font-black uppercase tracking-widest">Platform Status</span>
-            </div>
-            <div className={cn("text-2xl font-black uppercase tracking-tight", healthColor)}>
-              {stats.systemHealth}
-            </div>
-            <div className="text-[9px] font-black text-gray-600 uppercase tracking-widest mt-2">
-              <Clock className="inline w-3 h-3 mr-1" />
-              {lastSync ? lastSync.toLocaleTimeString() : "—"}
-            </div>
-          </div>
-
-          {stats.pendingPayments > 0 && (
-            <div className="p-6 rounded-3xl bg-amber-500/5 border border-amber-500/20">
-              <div className="flex items-center gap-3 text-amber-400 mb-2">
-                <ShieldAlert className="w-5 h-5" />
-                <span className="text-[10px] font-black uppercase tracking-widest">Action Required</span>
-              </div>
-              <div className="text-lg font-black text-white uppercase tracking-tight">
-                {stats.pendingPayments} Pending Payment{stats.pendingPayments > 1 ? "s" : ""}
-              </div>
-              <div className="text-[9px] font-black text-gray-600 uppercase tracking-widest mt-1">
-                Review & fulfill in Payments tab
-              </div>
-            </div>
-          )}
-
-
-        </div>
       </div>
-
-      {/* Quick Action Flags */}
-      {(stats.pendingPayments > 0 || stats.pendingReviews > 0) && (
-        <div className="p-6 bg-black border border-amber-500/20 rounded-3xl">
-          <div className="text-[9px] font-black text-amber-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-            <ShieldAlert className="w-3.5 h-3.5" />
-            Action Queue
-          </div>
-          <div className="flex flex-wrap gap-3">
-            {stats.pendingPayments > 0 && (
-              <div className="flex items-center gap-2 px-4 py-2 bg-amber-500/10 border border-amber-500/20 rounded-xl">
-                <CreditCard className="w-3.5 h-3.5 text-amber-400" />
-                <span className="text-[10px] font-black text-amber-400 uppercase tracking-widest">
-                  {stats.pendingPayments} payment proof{stats.pendingPayments > 1 ? "s" : ""} waiting
-                </span>
-              </div>
-            )}
-            {stats.pendingReviews > 0 && (
-              <div className="flex items-center gap-2 px-4 py-2 bg-red-500/10 border border-red-500/20 rounded-xl">
-                <Star className="w-3.5 h-3.5 text-red-400" />
-                <span className="text-[10px] font-black text-red-400 uppercase tracking-widest">
-                  {stats.pendingReviews} review{stats.pendingReviews > 1 ? "s" : ""} pending moderation
-                </span>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   );
 };

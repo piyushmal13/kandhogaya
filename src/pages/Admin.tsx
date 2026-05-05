@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 import {
   BarChart3, Zap, ShieldCheck, Users, Video, Settings, Star,
   ShoppingCart, Activity, Trophy, DollarSign, FileText, CreditCard,
-  Flag, Image as ImageIcon, HelpCircle
+  Flag, Image as ImageIcon, HelpCircle, Server
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { cn } from "../utils/cn";
@@ -27,6 +27,7 @@ import { PaymentManager } from "../modules/admin/PaymentManager";
 import { FeatureFlagManager } from "../modules/admin/FeatureFlagManager";
 import { BannerManager } from "../modules/admin/BannerManager";
 import { FAQManager } from "../modules/admin/FAQManager";
+import { SupabaseOpsHub } from "../modules/admin/SupabaseOpsHub";
 
 const tabs = [
   { id: "ceo",         name: "Executive Overview",  icon: BarChart3,    group: "COMMAND" },
@@ -41,6 +42,7 @@ const tabs = [
   { id: "algos",       name: "Product Manager",     icon: Zap,          group: "CONTENT" },
   { id: "reviews",     name: "Review Manager",      icon: Star,         group: "CONTENT" },
   { id: "licenses",    name: "License Vault",       icon: ShieldCheck,  group: "SYSTEM" },
+  { id: "ops",         name: "Ops Hub Telemetry",   icon: Server,       group: "SYSTEM" },
   { id: "flags",       name: "Feature Flags",       icon: Flag,         group: "SYSTEM" },
   { id: "health",      name: "System Health",       icon: Activity,     group: "SYSTEM" },
   { id: "faqs",        name: "FAQ Manager",         icon: HelpCircle,   group: "CONTENT" },
@@ -117,6 +119,7 @@ export const Admin = () => {
             {activeTab === "content"     && <ContentManager />}
             {activeTab === "banners"     && <BannerManager />}
             {activeTab === "licenses"    && <LicenseManager />}
+            {activeTab === "ops"         && <SupabaseOpsHub />}
             {activeTab === "flags"       && <FeatureFlagManager />}
             {activeTab === "algos"       && <ProductManager />}
             {activeTab === "webinars"    && <WebinarManager />}

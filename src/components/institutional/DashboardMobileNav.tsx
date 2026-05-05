@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils';
 export function DashboardMobileNav() {
   const location = useLocation();
   const navItems = [
-    { icon: LayoutDashboard, label: 'Home', path: '/dashboard' },
+    { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
     { icon: Terminal, label: 'Market', path: '/marketplace' },
     { icon: Shield, label: 'Signals', path: '/risk' },
     { icon: BookOpen, label: 'Academy', path: '/academy' },

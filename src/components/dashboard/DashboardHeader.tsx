@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import { motion } from "motion/react";
 import { Settings, ShieldCheck } from "lucide-react";
 import { cn } from "@/utils/cn";
-import { getSupabaseHealth } from "@/lib/supabase";
+import { getCircuitStatus } from "@/lib/supabase";
 
-interface ConsoleHeaderProps {
+interface DashboardHeaderProps {
   sessionReady: boolean;
   userProfile?: any;
   user: any;
@@ -13,18 +13,18 @@ interface ConsoleHeaderProps {
   isPro: boolean;
 }
 
-export const ConsoleHeader: React.FC<ConsoleHeaderProps> = ({ 
+export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ 
   sessionReady, 
   userProfile, 
   user, 
   isAdmin, 
   isPro 
 }) => {
-  const isHealthy = getSupabaseHealth();
+  const isHealthy = getCircuitStatus() === 'CLOSED';
   
   // Refactored logic to satisfy SonarQube complexity audits
   let statusColor = "bg-red-500 animate-pulse";
-  let statusText = "INITIALIZING QUANTUM PULSE • HANDSHAKING...";
+  let statusText = "INITIALIZING ALPHA PULSE • HANDSHAKING...";
 
   if (sessionReady) {
     if (isHealthy) {
@@ -47,7 +47,7 @@ export const ConsoleHeader: React.FC<ConsoleHeaderProps> = ({
         </div>
         <div className="relative">
           <h1 className="text-6xl md:text-8xl font-black text-white tracking-tighter leading-none italic font-serif">
-            Workstation <span className="text-emerald-500">01</span>
+            Master <span className="text-emerald-500">Terminal</span>
           </h1>
           <div className="mt-6 flex items-center gap-4 overflow-hidden">
              <div className="h-px bg-white/5 flex-1" />
@@ -58,12 +58,11 @@ export const ConsoleHeader: React.FC<ConsoleHeaderProps> = ({
           </div>
         </div>
       </motion.div>
-
       <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="flex items-center gap-4">
         {isAdmin && (
           <Link to="/admin" className="h-14 px-8 rounded-2xl bg-white text-black text-[11px] font-black flex items-center gap-3 hover:translate-y-[-2px] hover:shadow-[0_20px_40px_rgba(255,255,255,0.1)] transition-all uppercase tracking-[0.3em]">
             <Settings className="w-4 h-4" />
-            ADMIN_TERMINAL
+            ADMIN_DASHBOARD
           </Link>
         )}
         <div className={cn(

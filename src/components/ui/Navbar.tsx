@@ -268,7 +268,7 @@ export const Navbar = () => {
                       className="flex items-center gap-5 rounded-[1.5rem] border border-white/[0.05] bg-white/[0.02] px-6 py-5 text-white/60 hover:text-white"
                     >
                       <LayoutDashboard className="h-6 w-6" />
-                      <span className="text-xl font-bold">Console</span>
+                      <span className="text-xl font-bold">Dashboard</span>
                     </Link>
                     {isAdmin && (
                       <Link

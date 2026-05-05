@@ -84,7 +84,7 @@ export const PaymentManager = () => {
         <div>
           <h1 className="text-3xl font-bold text-white tracking-tight flex items-center gap-3">
             <ShieldAlert className="w-8 h-8 text-emerald-500" />
-            Payment Fulfillment Console
+            Payment Fulfillment Dashboard
           </h1>
           <p className="text-sm text-gray-500 mt-2">Verify high-fidelity payment proofs and fulfill subscription entitlements.</p>
         </div>

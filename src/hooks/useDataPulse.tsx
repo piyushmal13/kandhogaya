@@ -54,8 +54,8 @@ export const DataPulseProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const performanceStats: DashboardStats = useMemo(() => {
     const perfData = perfResult?.data || perfResult;
     return {
-      fidelityScale: perfData?.win_rate ? `${perfData.win_rate}%` : "74%",
-      totalPoints: perfData?.pips || 12000
+      fidelityScale: perfData?.win_rate ? `${perfData.win_rate}%` : "...",
+      totalPoints: perfData?.pips || 0
     };
   }, [perfResult]);
 

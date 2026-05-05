@@ -26,7 +26,7 @@ export function SignalFeed() {
           </div>
           <h3 className="text-xs font-black uppercase tracking-[0.4em] text-foreground">Strategic Intelligence Hub</h3>
         </div>
-        <div className="text-[9px] font-mono text-white/20 uppercase tracking-widest">Educational Stream: SYNCED</div>
+        <div className="text-[9px] font-mono text-emerald-500/60 uppercase tracking-widest">Live Alpha Stream: SECURED</div>
       </div>
 
       {/* Feed Area - Fixed Height for Zero-CLS */}

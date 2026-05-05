@@ -230,7 +230,7 @@ export const WebinarManager = () => {
                 {editingId ? "Edit Session" : "Schedule New Session"}
               </h2>
               <p className="text-[10px] text-gray-500 font-bold uppercase tracking-[0.3em] mt-1">
-                Institutional Webinar Orchestration Console
+                Institutional Webinar Orchestration Dashboard
               </p>
             </div>
           </div>
