@@ -5,20 +5,20 @@ import { Navbar } from '@/components/ui/Navbar';
 import { Footer } from '@/components/ui/Footer';
 
 const StatCard = ({ label, value, sub }: { label: string; value: string; sub: string }) => (
-  <div className="p-8 rounded-[2.5rem] bg-white/[0.02] border border-white/5 backdrop-blur-md">
-    <p className="text-emerald-500 text-[10px] font-black uppercase tracking-[0.3em] mb-2">{label}</p>
-    <h3 className="text-4xl font-black text-white tracking-tighter mb-1">{value}</h3>
-    <p className="text-white/40 text-xs font-medium uppercase tracking-widest">{sub}</p>
+  <div className="p-6 md:p-8 rounded-2xl md:rounded-[2.5rem] bg-white/[0.02] border border-white/5 backdrop-blur-md">
+    <p className="text-emerald-500 text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] mb-2">{label}</p>
+    <h3 className="text-2xl md:text-4xl font-black text-white tracking-tighter mb-1">{value}</h3>
+    <p className="text-white/40 text-[9px] md:text-xs font-medium uppercase tracking-widest">{sub}</p>
   </div>
 );
 
 const FeatureSection = ({ icon: Icon, title, description }: { icon: any, title: string, description: string }) => (
-  <div className="group p-10 rounded-[3rem] bg-gradient-to-br from-white/[0.03] to-transparent border border-white/5 hover:border-emerald-500/20 transition-all duration-500">
-    <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 mb-8 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
-      <Icon size={28} />
+  <div className="group p-8 md:p-10 rounded-2xl md:rounded-[3rem] bg-gradient-to-br from-white/[0.03] to-transparent border border-white/5 hover:border-emerald-500/20 transition-all duration-500">
+    <div className="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 mb-6 md:mb-8 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
+      <Icon size={24} className="md:w-7 md:h-7" />
     </div>
-    <h3 className="text-2xl font-black text-white mb-4 tracking-tight uppercase">{title}</h3>
-    <p className="text-white/50 leading-relaxed font-medium">
+    <h3 className="text-lg md:text-2xl font-black text-white mb-3 md:mb-4 tracking-tight uppercase">{title}</h3>
+    <p className="text-white/50 text-sm md:text-base leading-relaxed font-medium">
       {description}
     </p>
   </div>
@@ -37,10 +37,12 @@ export const About = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-3 px-5 py-2 rounded-full border border-emerald-500/20 bg-emerald-500/5 backdrop-blur-md mb-10"
+            className="mb-10"
           >
-            <Shield size={14} className="text-emerald-400" />
-            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-emerald-400">Institutional Heritage</span>
+            <div className="site-pill">
+              <Shield size={14} />
+              <span>Institutional Heritage</span>
+            </div>
           </motion.div>
           
           <motion.h1

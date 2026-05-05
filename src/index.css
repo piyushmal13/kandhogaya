@@ -250,27 +250,41 @@ body {
                 inset 0 1px 0 rgba(255,255,255,0.2);
   }
 
-  /* ── Site pill / badge ── */
+  /* ── Site pill / badge (Institutional Vault Style) ── */
   .site-pill {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1.25rem;
-    border-radius: 9999px;
-    background: rgba(0,0,0,0.3);
-    border: 1px solid rgba(255,255,255,0.08);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
-    color: #ffffff;
-    backdrop-filter: blur(16px);
-    font-size: 0.65rem;
-    font-weight: 900;
+    gap: 0.75rem;
+    padding: 0.625rem 1.5rem;
+    border-radius: 4px; /* More structural, less pill */
+    background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 10px 30px -5px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05);
+    color: var(--brand-primary);
+    backdrop-filter: blur(24px);
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.35em;
-    transition: all 0.3s ease;
+    letter-spacing: 0.4em;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
   }
+  .site-pill::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+    transition: left 0.8s ease;
+  }
+  .site-pill:hover::before { left: 100%; }
   .site-pill:hover {
-    border-color: rgba(16,185,129,0.3);
-    background: rgba(16,185,129,0.05);
+    border-color: var(--brand-primary);
+    background: rgba(16,185,129,0.08);
+    transform: translateY(-1px);
+    box-shadow: 0 15px 35px -5px rgba(16,185,129,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
   }
 
   /* ── 3D Tilt Support ── */
@@ -364,16 +378,25 @@ body {
   .section-py { padding-block: clamp(4rem, 8vw, 10rem); }
   /* ── Institutional Button System ── */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-emerald-500 text-black font-black text-[10px] uppercase tracking-widest hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/20 active:scale-95 disabled:opacity-50;
+    @apply inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-lg bg-emerald-500 text-black font-black text-[10px] uppercase tracking-[0.2em] hover:bg-emerald-400 transition-all shadow-xl shadow-emerald-500/10 active:scale-[0.98] disabled:opacity-50 border-b-2 border-emerald-600;
   }
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-cyan-500 text-black font-black text-[10px] uppercase tracking-widest hover:bg-cyan-400 transition-all shadow-lg shadow-cyan-500/20 active:scale-95 disabled:opacity-50;
+    @apply inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-lg bg-cyan-500 text-black font-black text-[10px] uppercase tracking-[0.2em] hover:bg-cyan-400 transition-all shadow-xl shadow-cyan-500/10 active:scale-[0.98] disabled:opacity-50 border-b-2 border-cyan-600;
   }
   .btn-premium {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#F5E6A3] text-black font-black text-[10px] uppercase tracking-widest hover:opacity-90 transition-all shadow-lg shadow-gold/20 active:scale-95;
+    @apply inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-lg bg-gradient-to-r from-[#D4AF37] to-[#F5E6A3] text-black font-black text-[10px] uppercase tracking-[0.2em] hover:opacity-95 transition-all shadow-xl shadow-gold/10 active:scale-[0.98] border-b-2 border-amber-600;
   }
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white/5 border border-white/5 text-white font-black text-[10px] uppercase tracking-widest hover:bg-white/10 transition-all active:scale-95;
+    @apply inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-lg bg-white/[0.03] border border-white/10 text-white font-black text-[10px] uppercase tracking-[0.2em] hover:bg-white/[0.08] hover:border-white/20 transition-all active:scale-[0.98];
+  }
+  .btn-obsidian {
+    @apply inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-lg bg-[#0A0D12] border border-white/5 text-white/70 font-black text-[10px] uppercase tracking-[0.2em] hover:text-white hover:border-emerald-500/30 transition-all active:scale-[0.98] shadow-2xl;
+  }
+  .btn-vault {
+    @apply relative inline-flex items-center justify-center gap-3 px-8 py-4 rounded-md bg-black text-emerald-400 border border-emerald-500/30 font-black text-[11px] uppercase tracking-[0.3em] overflow-hidden group hover:text-black transition-all duration-500;
+  }
+  .btn-vault::before {
+    @apply content-[''] absolute inset-0 bg-emerald-500 translate-y-full transition-transform duration-500 ease-out group-hover:translate-y-0 -z-10;
   }
 
   /* ── Mobile Optimization Utils ── */

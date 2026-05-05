@@ -32,14 +32,14 @@ export const Webinars = () => {
           path="/webinars"
         />
 
-        <div className="max-w-7xl mx-auto px-4 space-y-12">
-          <div className="relative z-10 space-y-6">
-            <h1 className="text-4xl md:text-6xl font-black text-white tracking-tight uppercase italic leading-tight">
+        <div className="max-w-7xl mx-auto px-4 md:px-8 space-y-16">
+          <div className="relative z-10 space-y-8 pt-8 md:pt-12">
+            <h1 className="text-4xl md:text-7xl font-black text-white tracking-tight uppercase italic leading-none">
               Institutional <br />
               <span className="text-emerald-500">Research Terminal.</span>
             </h1>
-            <p className="text-sm md:text-lg text-white/40 max-w-2xl font-medium leading-relaxed">
-              Real-time synchronization with the IFX Global Research Desk. Participate in systematic market breakdowns and quantitative execution masterclasses.
+            <p className="text-base md:text-xl text-white/40 max-w-3xl font-medium leading-relaxed">
+              Real-time synchronization with the IFX Global Research Desk. Professional market analysis and algorithmic execution breakdowns.
             </p>
           </div>
 

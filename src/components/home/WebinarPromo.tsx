@@ -15,8 +15,15 @@ export const WebinarPromo = () => {
       const webinars = await getWebinars();
       if (Array.isArray(webinars) && webinars.length > 0) {
         const now = Date.now();
-        const upcoming = webinars.filter((item: any) => new Date(item.date_time).getTime() > now);
-        setWebinar(upcoming.length > 0 ? upcoming[0] : webinars.at(-1));
+        // Priority: Search for the Elite Macro Strategy first
+        const eliteWebinar = webinars.find((w: any) => w.title.includes("Elite Macro Strategy") && new Date(w.date_time).getTime() > now);
+        
+        if (eliteWebinar) {
+          setWebinar(eliteWebinar);
+        } else {
+          const upcoming = webinars.filter((item: any) => new Date(item.date_time).getTime() > now);
+          setWebinar(upcoming.length > 0 ? upcoming[0] : webinars.at(-1));
+        }
       }
     };
 

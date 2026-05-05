@@ -130,17 +130,12 @@ export const FortressHero = () => {
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative mb-12 group cursor-default"
+          className="mb-12 group cursor-default"
         >
-          <div className="absolute -inset-4 bg-emerald-500/10 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-          <div className="relative flex items-center gap-4 px-6 py-2 rounded-full bg-white/[0.03] border border-white/10 backdrop-blur-md shadow-2xl overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 via-transparent to-transparent" />
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
-            </span>
-            <span className="text-[10px] text-emerald-400 font-black uppercase tracking-[0.4em] leading-none">
-              Institutional <span className="text-white/60">Trading</span> Operations
+          <div className="site-pill">
+            <span className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 bg-emerald-500 rounded-sm animate-pulse" />
+              Institutional Research Operations
             </span>
           </div>
         </motion.div>
@@ -193,24 +188,15 @@ export const FortressHero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.32, duration: 0.6, ease: EASING }}
-          className="flex flex-col sm:flex-row items-center gap-4 justify-center w-full"
+          className="flex flex-col sm:flex-row items-center gap-6 justify-center w-full"
         >
-          <Link
-            to="/webinars"
-            className="group flex items-center gap-3 px-8 py-4 rounded-2xl bg-emerald-500 text-black font-black text-sm uppercase tracking-[0.2em] hover:bg-emerald-400 transition-all duration-300 hover:scale-[1.03] active:scale-[0.97] shadow-[0_0_40px_rgba(16,185,129,0.35)] hover:shadow-[0_0_60px_rgba(16,185,129,0.5)]"
-            style={{ willChange: "transform" }}
-          >
+          <Link to="/webinars" className="btn-vault">
             Request Session Access
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-300" />
           </Link>
 
-
-          <Link
-            to="/quantx"
-            className="group flex items-center gap-3 px-8 py-4 rounded-2xl bg-white/[0.05] border border-white/10 text-white font-black text-sm uppercase tracking-[0.2em] hover:bg-white/10 hover:border-white/20 transition-all duration-300 hover:scale-[1.02] active:scale-[0.97] backdrop-blur-md"
-            style={{ willChange: "transform" }}
-          >
-            <Play className="w-4 h-4 text-emerald-400" />
+          <Link to="/quantx" className="btn-ghost">
+            <Play className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400/20" />
             See QuantX Results
           </Link>
         </motion.div>

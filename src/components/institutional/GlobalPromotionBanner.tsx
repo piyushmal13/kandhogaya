@@ -37,8 +37,9 @@ export const GlobalPromotionBanner = () => {
   const [hasClosed, setHasClosed] = useState(false);
 
   useEffect(() => {
-    // Check if user already dismissed a banner in this session
-    const dismissedBannerId = sessionStorage.getItem('dismissed_banner_id');
+    // Check if user already dismissed a banner
+    const dismissedAt = localStorage.getItem('dismissed_banner_timestamp');
+    const isDismissedRecently = dismissedAt && (Date.now() - parseInt(dismissedAt)) < 1000 * 60 * 60 * 24; // 24 hour silence
     
     const fetchBanner = async () => {
       try {
@@ -61,7 +62,7 @@ export const GlobalPromotionBanner = () => {
                            (b.placement === 'marketplace' && currentPath.startsWith('/marketplace')) ||
                            (b.placement === 'home' && currentPath === '/');
             
-            return isMatch && dismissedBannerId !== b.id;
+            return isMatch && !isDismissedRecently;
           });
 
           if (relevantBanner) {
@@ -84,7 +85,7 @@ export const GlobalPromotionBanner = () => {
 
   const handleDismiss = () => {
     if (activeBanner) {
-      sessionStorage.setItem('dismissed_banner_id', activeBanner.id);
+      localStorage.setItem('dismissed_banner_timestamp', Date.now().toString());
     }
     setIsVisible(false);
     setTimeout(() => setHasClosed(true), 500);

@@ -101,11 +101,15 @@ const Home = () => {
         <JourneySection />
 
         {/* L6.5: Custom Engineering Authority */}
-        <CustomAlgoTeam />
+        <section className="hidden sm:block">
+          <CustomAlgoTeam />
+        </section>
 
 
         {/* L7: Global Network */}
-        <GlobalReach />
+        <section className="hidden md:block">
+          <GlobalReach />
+        </section>
 
         {/* L8: Institutional Intelligence (Live from Supabase) */}
         <BlogSection />

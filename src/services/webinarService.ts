@@ -21,7 +21,7 @@ export const webinarService = {
           advanced_features, max_attendees, registration_count,
           type, recording_url, streaming_url
         `)
-        .order("date_time", { ascending: true })
+        .order("date_time", { ascending: false })
         .limit(50);
 
       const rawData = await safeQuery<any[]>(query);

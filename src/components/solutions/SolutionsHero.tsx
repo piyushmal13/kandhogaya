@@ -27,10 +27,12 @@ export function SolutionsHero() {
       >
         <motion.div 
           variants={institutionalVariants}
-          className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-emerald-500/[0.04] border border-emerald-500/[0.15] text-emerald-500 text-[10px] font-black uppercase tracking-[0.4em] mb-12"
+          className="mb-12"
         >
-          <Cpu className="w-4 h-4" />
-          <span>Bespoke Algorithmic Engineering</span>
+          <div className="site-pill">
+            <Cpu className="w-4 h-4" />
+            <span>Bespoke Algorithmic Engineering</span>
+          </div>
         </motion.div>
 
         <motion.h1 
@@ -51,19 +53,19 @@ export function SolutionsHero() {
 
         <motion.div 
           variants={institutionalVariants}
-          className="flex flex-col sm:flex-row gap-8 justify-center items-center"
+          className="flex flex-col sm:flex-row gap-6 justify-center items-center"
         >
           <button 
             onClick={() => document.getElementById('configurator')?.scrollIntoView({ behavior: 'smooth' })}
-            className="group relative px-12 py-6 bg-white text-black font-black text-[11px] uppercase tracking-[0.3em] rounded-2xl overflow-hidden transition-all duration-500 hover:scale-[1.05] hover:shadow-[0_20px_40px_rgba(255,255,255,0.1)] active:scale-95 flex items-center gap-4"
+            className="btn-vault px-14 py-5"
           >
             Build Your System
-            <Zap className="w-5 h-5 group-hover:scale-125 transition-transform text-emerald-600" />
+            <Zap className="w-4 h-4" />
           </button>
           
           <button 
             onClick={() => document.getElementById('case-studies')?.scrollIntoView({ behavior: 'smooth' })}
-            className="group px-12 py-6 border border-white/[0.08] text-white font-black text-[11px] uppercase tracking-[0.3em] rounded-2xl transition-all duration-500 hover:bg-white/[0.04] hover:border-white/[0.2] active:scale-95"
+            className="btn-obsidian px-14 py-5"
           >
             View Case Studies
           </button>
