@@ -20,9 +20,9 @@ export const RetentionHub = () => {
           .from('sales_pipeline')
           .select(`
             *,
-            users(id, email, full_name, user_metadata)
+            users(id, email, full_name)
           `)
-          .order('last_active_at', { ascending: false })
+          .order('updated_at', { ascending: false })
           .then() as any,
         (raw) => raw,
         "Retention Discovery"
@@ -53,10 +53,10 @@ export const RetentionHub = () => {
   };
 
   const categories = {
-    active: data.filter(d => getRetentionStatus(d.last_active_at).label === "Pulse Active").length,
-    inactive: data.filter(d => getRetentionStatus(d.last_active_at).label === "Inactive").length,
-    atRisk: data.filter(d => getRetentionStatus(d.last_active_at).label === "At Risk").length,
-    churned: data.filter(d => getRetentionStatus(d.last_active_at).label === "Churned").length
+    active: data.filter(d => getRetentionStatus(d.updated_at).label === "Pulse Active").length,
+    inactive: data.filter(d => getRetentionStatus(d.updated_at).label === "Inactive").length,
+    atRisk: data.filter(d => getRetentionStatus(d.updated_at).label === "At Risk").length,
+    churned: data.filter(d => getRetentionStatus(d.updated_at).label === "Churned").length
   };
 
   return (
@@ -111,9 +111,9 @@ export const RetentionHub = () => {
 
         <div className="grid grid-cols-1 gap-4">
           {data
-            .filter(d => filter === "all" || getRetentionStatus(d.last_active_at).label === filter)
+            .filter(d => filter === "all" || getRetentionStatus(d.updated_at).label === filter)
             .map((user) => {
-              const status = getRetentionStatus(user.last_active_at);
+              const status = getRetentionStatus(user.updated_at);
               return (
                 <div key={user.user_id} className="group flex flex-col md:flex-row md:items-center justify-between gap-6 p-8 bg-black/40 border border-white/5 rounded-3xl hover:border-white/10 transition-all">
                   <div className="flex items-center gap-6">
@@ -133,7 +133,7 @@ export const RetentionHub = () => {
                      </div>
                      <div className="flex flex-col text-center">
                         <span className="text-[9px] font-black text-gray-600 uppercase tracking-widest mb-2">Last Heartbeat</span>
-                        <span className="text-xs font-black text-white italic">{user.last_active_at ? new Date(user.last_active_at).toLocaleString() : "Never"}</span>
+                        <span className="text-xs font-black text-white italic">{user.updated_at ? new Date(user.updated_at).toLocaleString() : "Never"}</span>
                      </div>
                      <div className={cn("px-5 py-2.5 rounded-2xl text-[9px] font-black uppercase tracking-[0.2em] italic border border-white/5", status.bg, status.color)}>
                         {status.label}

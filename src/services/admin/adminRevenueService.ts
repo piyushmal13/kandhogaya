@@ -50,9 +50,9 @@ export const adminRevenueService = {
       }
 
       const { count: converted, error: pipelineError } = await supabase
-        .from('sales_pipeline')
+        .from('leads')
         .select('*', { count: 'exact', head: true })
-        .eq('stage', 'converted');
+        .eq('stage', 'CONVERTED');
 
       if (pipelineError) {
         console.error("[Institutional CRM Recovery]: Pipeline signal lost.", pipelineError);

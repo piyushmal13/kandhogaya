@@ -160,15 +160,12 @@ export const ProductManager = () => {
     setDeleteLoading(true);
     try {
       if (!session) throw new Error("No active session");
-      const res = await fetch(`/api/admin/products/${productToDelete}`, {
-        method: "DELETE",
-        headers: { "Authorization": `Bearer ${session?.access_token}` }
-      });
+      const { error } = await supabase
+        .from('products')
+        .delete()
+        .eq('id', productToDelete);
       
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || "Failed to delete product");
-      }
+      if (error) throw new Error(error.message || "Failed to delete product");
       
       fetchProducts();
       setIsDeleteDialogOpen(false);
@@ -204,19 +201,11 @@ export const ProductManager = () => {
 
     try {
       if (!session) throw new Error("No active session");
-      const res = await fetch(`/api/admin/products`, {
-        method: "POST",
-        headers: { 
-          "Authorization": `Bearer ${session?.access_token}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(newProduct)
-      });
+      const { error } = await supabase
+        .from('products')
+        .insert([newProduct]);
       
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || "Failed to create product");
-      }
+      if (error) throw new Error(error.message || "Failed to create product");
       
       fetchProducts();
     } catch (error: unknown) {
@@ -235,9 +224,8 @@ export const ProductManager = () => {
   const fetchVariants = async (productId: string) => {
     setVariantLoading(true);
     try {
-      const res = await fetch(`/api/products/${productId}/variants`);
-      if (!res.ok) throw new Error('Failed to fetch variants');
-      const data = await res.json();
+      const { data, error } = await supabase.from('product_variants').select('*').eq('product_id', productId);
+      if (error) throw error;
       setVariantsList(data || []);
     } catch (err: any) {
       alert('Error fetching variants: ' + (err.message || err));
@@ -249,14 +237,12 @@ export const ProductManager = () => {
   const addVariant = async () => {
     if (!variantProductId) return;
     try {
-      const res = await fetch(`/api/admin/products/${variantProductId}/variants`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session?.access_token}` },
-        body: JSON.stringify(variantForm)
-      });
-      if (!res.ok) {
-        const err = await res.json(); throw new Error(err.error || 'Failed to create variant');
-      }
+      const { error } = await supabase.from('product_variants').insert([{
+        product_id: variantProductId,
+        name: variantForm.name,
+        price: variantForm.price_cents / 100, // storing as price based on schema
+      }]);
+      if (error) throw error;
       setVariantForm({ name: '', sku: '', price_cents: 0, attributes: {} });
       fetchVariants(variantProductId);
     } catch (err: any) {
@@ -267,14 +253,8 @@ export const ProductManager = () => {
   const updateVariant = async (variantId: string, payload: any) => {
     if (!variantProductId) return;
     try {
-      const res = await fetch(`/api/admin/products/${variantProductId}/variants/${variantId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session?.access_token}` },
-        body: JSON.stringify(payload)
-      });
-      if (!res.ok) {
-        const err = await res.json(); throw new Error(err.error || 'Failed to update variant');
-      }
+      const { error } = await supabase.from('product_variants').update(payload).eq('id', variantId);
+      if (error) throw error;
       fetchVariants(variantProductId);
     } catch (err: any) {
       alert('Update variant error: ' + (err.message || err));
@@ -285,13 +265,8 @@ export const ProductManager = () => {
     if (!variantProductId) return;
     if (!confirm('Delete variant?')) return;
     try {
-      const res = await fetch(`/api/admin/products/${variantProductId}/variants/${variantId}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${session?.access_token}` }
-      });
-      if (!res.ok) {
-        const err = await res.json(); throw new Error(err.error || 'Failed to delete variant');
-      }
+      const { error } = await supabase.from('product_variants').delete().eq('id', variantId);
+      if (error) throw error;
       fetchVariants(variantProductId);
     } catch (err: any) {
       alert('Delete variant error: ' + (err.message || err));
@@ -656,7 +631,7 @@ export const ProductManager = () => {
                 <div key={v.id} className="flex items-center justify-between gap-4">
                   <div>
                     <div className="font-bold">{v.name}</div>
-                    <div className="text-sm text-gray-400">SKU: {v.sku} — ${((v.price_cents||0)/100).toFixed(2)}</div>
+                    <div className="text-sm text-gray-400">${Number(v.price).toFixed(2)}</div>
                   </div>
                   <div className="flex gap-2">
                     <button onClick={() => {

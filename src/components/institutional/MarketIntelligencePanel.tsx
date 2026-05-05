@@ -1,7 +1,9 @@
+import React from 'react';
 import { Activity, X, TrendingUp, ArrowUpRight, ArrowDownRight } from 'lucide-react';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { marketService } from '@/services/marketService';
 import { motion, AnimatePresence } from 'motion/react';
+import { cn } from '@/utils/cn';
 
 export function MarketIntelligencePanel() {
   const { isEnabled: alphaMode } = useFeatureFlag('dashboard_enable_alpha_mode', false);

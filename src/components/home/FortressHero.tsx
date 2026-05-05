@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import { motion, useScroll, useTransform, useSpring } from "motion/react";
 import { ArrowRight, ChevronDown, Play, ShieldCheck, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
+import { EliteButton } from "../ui/Button";
 
 // ─── PERFORMANCE CONSTANTS ────────────────────────────────────────────────────
 const EASING = [0.4, 0, 0.2, 1] as const;

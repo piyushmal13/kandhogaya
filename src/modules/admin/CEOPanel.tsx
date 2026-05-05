@@ -58,7 +58,7 @@ export const CEOPanel = () => {
         supabase.from("sales_tracking").select("sale_amount, created_at"),
         supabase.from("users").select("*", { count: "exact", head: true }),
         supabase.from("leads").select("*", { count: "exact", head: true }),
-        supabase.from("payment_proofs").select("*", { count: "exact", head: true }).eq("status", "pending"),
+        supabase.from("manual_payment_receipts").select("*", { count: "exact", head: true }).eq("status", "pending"),
         supabase.from("webinars").select("*", { count: "exact", head: true }).eq("status", "upcoming"),
         supabase.from("reviews").select("*", { count: "exact", head: true }).eq("status", "pending"),
         supabase.from("subscriptions").select("*", { count: "exact", head: true }).eq("status", "active"),
@@ -132,13 +132,13 @@ export const CEOPanel = () => {
         // 2. Top Agents (from sales_tracking joined with agents)
         const { data: salesData } = await supabase
           .from('sales_tracking')
-          .select('sale_amount, agent_id, agents(name, role)');
+          .select('sale_amount, agent_id, users!sales_tracking_agent_id_fkey(full_name, role)');
         
         if (salesData) {
            const agentRevenue: Record<string, { name: string, revenue: number }> = {};
            salesData.forEach((s: any) => {
               const id = s.agent_id;
-              const name = s.agents?.name || 'Unknown Agent';
+              const name = s.users?.full_name || 'Unknown Agent';
               if (!agentRevenue[id]) agentRevenue[id] = { name, revenue: 0 };
               agentRevenue[id].revenue += (s.sale_amount || 0);
            });

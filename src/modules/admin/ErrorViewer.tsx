@@ -16,6 +16,10 @@ export const ErrorViewer = () => {
   const [severityFilter, setSeverityFilter] = useState<string | undefined>();
   const [page, setPage] = useState(0);
 
+  React.useEffect(() => {
+    fetchLogs(0);
+  }, [fetchLogs]);
+
   const getSeverityColor = (sev: string) => {
     if (sev === 'critical') return 'text-red-500 bg-red-500/10 border-red-500/20';
     if (sev === 'warning') return 'text-amber-500 bg-amber-500/10 border-amber-500/20';
