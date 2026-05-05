@@ -8,6 +8,7 @@ import { productService } from "./productService";
 import { marketService } from "./marketService";
 import { faqService } from "./faqService";
 import { bannerService } from "./bannerService";
+import { CRMService } from "../core/crmService";
 
 /**
  * Institutional Reliability Wrappers
@@ -285,15 +286,14 @@ export const sendContactMessage = async (name: string, email: string, subject: s
   try {
     await safeExecute(() =>
       withTimeout(
-        supabase.from("contact_messages").insert([
-          { name: name, email, subject, message }
-        ])
+        CRMService.captureInquiry({ name, email, subject, message })
       )
     );
     return {
       success: true
     };
-  } catch {
+  } catch (err) {
+    console.error("Institutional Contact Signal Error:", err);
     return {
       success: false,
       error: "Something went wrong. Please try again."
@@ -305,7 +305,7 @@ export const subscribeToNewsletter = async (email: string) => {
   try {
     await safeExecute(() =>
       withTimeout(
-        supabase.from("leads").insert([{ email }])
+        CRMService.captureLead(email, "Newsletter_Subscription")
       )
     );
     return {
@@ -369,17 +369,12 @@ export const registerForWebinar = async (webinarId: string, userId: string, emai
 
     if (existing) return { success: true, alreadyRegistered: true };
 
+    // Get webinar title for better CRM context
+    const { data: webinar } = await supabase.from("webinars").select("title").eq("id", webinarId).maybeSingle();
+
     await safeExecute(() =>
       withTimeout(
-        supabase
-          .from('webinar_registrations')
-          .insert([{
-            webinar_id: webinarId,
-            user_id: userId,
-            email,
-            attended: false,
-            payment_status: 'completed'
-          }])
+        CRMService.registerForWebinar(userId, webinarId, email, webinar?.title)
       )
     );
 
@@ -390,7 +385,8 @@ export const registerForWebinar = async (webinarId: string, userId: string, emai
     return {
       success: true
     };
-  } catch {
+  } catch (err) {
+    console.error("Institutional Webinar Registration Error:", err);
     return {
       success: false,
       error: "Something went wrong. Please try again."

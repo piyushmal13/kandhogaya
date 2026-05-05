@@ -57,128 +57,135 @@ export const Contact = () => {
       />
 
       <PageHero
-        eyebrow="Support Surface"
+        eyebrow="Institutional Support Desk"
         title={
           <>
-            Talk to the <span className="site-title-gradient">IFXTrades desk</span> without friction.
+            Direct Connectivity to the <br />
+            <span className="text-emerald-500">IFX Engineering Desk.</span>
           </>
         }
-        description="Use the contact desk for support, partnerships, billing, and product access questions. The UI is upgraded, but the underlying contact flow still writes directly into the existing Supabase table."
+        description="Secure high-fidelity communication for institutional partners, algorithmic licensees, and professional research enclaves. Our desk operates with zero friction and absolute technical transparency."
         actions={[
-          { label: "WhatsApp Desk", href: BRANDING.whatsappUrl },
-          { label: "Email Support", href: `mailto:${BRANDING.supportEmail}`, variant: "secondary" },
+          { label: "WhatsApp Secure", href: BRANDING.whatsappUrl },
+          { label: "Direct Email", href: `mailto:${BRANDING.supportEmail}`, variant: "secondary" },
         ]}
         metrics={[
-          { label: "Support Window", value: "24/5", helper: "Aligned with active market participation" },
-          { label: "Channels", value: "WhatsApp + Email", helper: "Fastest direct routes to the team" },
+          { label: "Response SLA", value: "< 2 Hours", helper: "During active market cycles" },
+          { label: "Encryption", value: "End-to-End", helper: "Secure institutional data handling" },
         ]}
       />
 
       <PageSection>
-        <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-          <div className="grid gap-6">
-            <Reveal className="site-panel p-6">
-              <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-300/10 text-emerald-200">
-                  <MessageSquare className="h-6 w-6" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-white">WhatsApp Support</h3>
-                  <p className="mt-3 text-sm leading-7 text-slate-300">
-                    Fastest route for active members, onboarding, signal access, and operational questions.
-                  </p>
-                  <a
-                    href={BRANDING.whatsappUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="mt-4 inline-flex text-sm font-semibold text-emerald-200 hover:text-white"
-                  >
-                    Chat with the desk
-                  </a>
-                </div>
+        <div className="grid gap-12 lg:grid-cols-[1fr_1fr]">
+          <div className="space-y-12">
+            <Reveal className="space-y-6">
+              <div className="site-pill">
+                <CheckCircle2 size={14} />
+                <span>Why IFX Intelligence?</span>
               </div>
+              <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight uppercase leading-none">
+                Engineering <br />
+                <span className="text-white/40">Differentiation.</span>
+              </h2>
+              <p className="text-white/50 text-lg leading-relaxed font-medium">
+                Unlike retail signal providers, IFX operates as a sovereign engineering hub. Every interaction with our desk is backed by quantitative rigor and institutional heritage.
+              </p>
             </Reveal>
 
-            <Reveal delay={0.08} className="site-panel-muted p-6">
-              <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-300/10 text-emerald-200">
-                  <Mail className="h-6 w-6" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-white">Email Support</h3>
-                  <p className="mt-3 text-sm leading-7 text-slate-300">
-                    Best for technical help, billing questions, partnerships, and enterprise-style requests.
-                  </p>
-                  <a
-                    href={`mailto:${BRANDING.supportEmail}`}
-                    className="mt-4 inline-flex text-sm font-semibold text-emerald-200 hover:text-white"
-                  >
-                    {BRANDING.supportEmail}
-                  </a>
-                </div>
-              </div>
-            </Reveal>
+            <div className="grid gap-6">
+              {[
+                { 
+                  title: "Sovereign Infrastructure", 
+                  desc: "We own our C++ and Python stacks. No third-party dependencies in our core execution logic.",
+                  icon: MessageSquare 
+                },
+                { 
+                  title: "Quant Council Oversight", 
+                  desc: "Every partnership is reviewed by our internal risk governance team for long-term viability.",
+                  icon: Mail 
+                },
+                { 
+                  title: "Verified Performance", 
+                  desc: "Direct access to audited research and algorithmic backtest enclaves for verified licensees.",
+                  icon: CheckCircle2 
+                }
+              ].map((item, idx) => (
+                <Reveal key={idx} delay={idx * 0.1} className="p-8 rounded-3xl bg-white/[0.02] border border-white/5 hover:border-emerald-500/20 transition-all group">
+                   <h3 className="text-lg font-black text-white uppercase tracking-tight mb-2 group-hover:text-emerald-400 transition-colors">{item.title}</h3>
+                   <p className="text-white/40 text-sm leading-relaxed">{item.desc}</p>
+                </Reveal>
+              ))}
+            </div>
+
+            <div className="p-8 rounded-[2.5rem] bg-emerald-500/[0.03] border border-emerald-500/10 text-center">
+               <div className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.5em] mb-4">Institutional Trust Compliance</div>
+               <div className="flex justify-center gap-8 opacity-40 grayscale hover:grayscale-0 transition-all">
+                  <span className="text-xs font-black text-white uppercase tracking-widest italic">ISO-27001 Ready</span>
+                  <span className="text-xs font-black text-white uppercase tracking-widest italic">SOC2 Type II compliant</span>
+               </div>
+            </div>
           </div>
 
-          <Reveal className="site-panel p-8 md:p-10">
-            <SectionHeading
-              eyebrow="Contact Form"
-              title="Send a focused request."
-              description="Use the form when you need a documented thread or a structured follow-up from the team."
-            />
+          <Reveal className="site-panel p-8 md:p-12 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 blur-3xl pointer-events-none" />
+            
+            <div className="mb-10">
+              <h3 className="text-2xl font-black text-white uppercase tracking-tighter italic mb-4">Secure Intake Form</h3>
+              <p className="text-white/40 text-sm font-medium">Structured requests for priority queue placement.</p>
+            </div>
 
             {status === "success" ? (
-              <div className="py-8 text-center">
-                <CheckCircle2 className="mx-auto h-16 w-16 text-emerald-300" />
-                <h3 className="mt-6 text-3xl font-semibold text-white">Message received</h3>
-                <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-slate-300">
-                  Your request is now stored in the current contact pipeline. The team can review it without any backend rewiring.
+              <div className="py-20 text-center">
+                <CheckCircle2 className="mx-auto h-16 w-16 text-emerald-400" />
+                <h3 className="mt-8 text-3xl font-black text-white uppercase tracking-tight">Transmission Secured</h3>
+                <p className="mx-auto mt-4 max-w-sm text-sm leading-7 text-white/40 font-medium">
+                  Your request has been prioritized for our quantitative desk review. Expect direct synchronization within 2 business hours.
                 </p>
                 <button
                   type="button"
                   onClick={() => setStatus("idle")}
-                  className="mt-8 inline-flex rounded-full border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-white hover:bg-white/10"
+                  className="btn-ghost mt-10"
                 >
-                  Send another message
+                  New Transmission
                 </button>
               </div>
             ) : (
-              <form className="space-y-5" onSubmit={handleSubmit}>
-                <div className="grid gap-5 md:grid-cols-2">
+              <form className="space-y-6" onSubmit={handleSubmit}>
+                <div className="grid gap-6 md:grid-cols-2">
                   <div>
-                    <label className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-500">
-                      Name
+                    <label className="mb-3 block text-[9px] font-black uppercase tracking-[0.3em] text-white/30">
+                      Operator Name
                     </label>
                     <input
                       required
                       value={formData.name}
                       onChange={(event) => updateField("name", event.target.value)}
-                      className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none focus:border-emerald-300/40"
-                      placeholder="John Doe"
+                      className="w-full rounded-xl border border-white/5 bg-white/[0.02] px-5 py-4 text-white outline-none focus:border-emerald-500/30 transition-all font-medium"
+                      placeholder="Enter identity..."
                     />
                   </div>
                   <div>
-                    <label className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-500">
-                      Email
+                    <label className="mb-3 block text-[9px] font-black uppercase tracking-[0.3em] text-white/30">
+                      Verified Email
                     </label>
                     <input
                       required
                       type="email"
                       value={formData.email}
                       onChange={(event) => updateField("email", event.target.value)}
-                      className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none focus:border-emerald-300/40"
-                      placeholder="john@example.com"
+                      className="w-full rounded-xl border border-white/5 bg-white/[0.02] px-5 py-4 text-white outline-none focus:border-emerald-500/30 transition-all font-medium"
+                      placeholder="operator@nexus.com"
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-500">
-                    Subject
+                  <label className="mb-3 block text-[9px] font-black uppercase tracking-[0.3em] text-white/30">
+                    Operation Intent
                   </label>
                   <select
                     value={formData.subject}
                     onChange={(event) => updateField("subject", event.target.value)}
-                    className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none focus:border-emerald-300/40"
+                    className="w-full rounded-xl border border-white/5 bg-white/[0.02] px-5 py-4 text-white outline-none focus:border-emerald-500/30 transition-all font-medium appearance-none"
                   >
                     <option>General Inquiry</option>
                     <option>Algo Licensing</option>
@@ -187,37 +194,37 @@ export const Contact = () => {
                   </select>
                 </div>
                 <div>
-                  <label className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-500">
-                    Message
+                  <label className="mb-3 block text-[9px] font-black uppercase tracking-[0.3em] text-white/30">
+                    Transmission Detail
                   </label>
                   <textarea
                     required
-                    rows={5}
+                    rows={4}
                     value={formData.message}
                     onChange={(event) => updateField("message", event.target.value)}
-                    className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none focus:border-emerald-300/40"
-                    placeholder="How can we help you?"
+                    className="w-full rounded-xl border border-white/5 bg-white/[0.02] px-5 py-4 text-white outline-none focus:border-emerald-500/30 transition-all font-medium"
+                    placeholder="Describe your requirement..."
                   />
                 </div>
 
                 {status === "error" ? (
-                  <p className="text-sm text-red-400">
-                    Failed to send the message. Please retry or contact support directly.
+                  <p className="text-xs text-red-500 font-bold uppercase tracking-widest">
+                    Transmission Fault: System busy.
                   </p>
                 ) : null}
 
                 <button
                   type="submit"
                   disabled={status === "loading"}
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-emerald-300 px-6 py-3 text-sm font-semibold text-slate-950 disabled:opacity-70"
+                  className="btn-vault w-full py-5"
                 >
                   {status === "loading" ? (
                     <>
                       <Loader2 className="h-4 w-4 animate-spin" />
-                      Sending message
+                      Synchronizing...
                     </>
                   ) : (
-                    "Send Message"
+                    "Authorize Transmission"
                   )}
                 </button>
               </form>

@@ -6,6 +6,7 @@ import { SignalFeed } from '@/components/institutional/SignalFeed';
 import { QuickActions } from '@/components/institutional/QuickActions';
 import { RiskMetrics } from '@/components/institutional/RiskMetrics';
 import { RecentActivity } from '@/components/institutional/RecentActivity';
+import { WebinarAccessPanel } from '@/components/institutional/WebinarAccessPanel';
 import { LicenseVault } from '@/components/institutional/LicenseVault';
 import { PageMeta } from '@/components/site/PageMeta';
 import { tracker } from '@/core/tracker';
@@ -43,6 +44,7 @@ export const Dashboard = () => {
           {/* INTELLIGENCE RAIL (1/3) */}
           <div className="space-y-8">
             <QuickActions />
+            <WebinarAccessPanel />
             <LicenseVault />
             <RiskMetrics />
             <RecentActivity />

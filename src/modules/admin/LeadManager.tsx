@@ -3,9 +3,10 @@ import {
   Search, Filter, 
   Target, Zap,
   ChevronLeft, ChevronRight,
-  TrendingUp
+  TrendingUp, Clock
 } from "lucide-react";
 import { cn } from "../../utils/cn";
+import { formatDistanceToNow } from "date-fns";
 
 import { useRealtime } from "../../hooks/useRealtime";
 import { Lead } from "../../types";
@@ -110,6 +111,16 @@ export const LeadManager = () => {
           <ScoreBadge score={lead.score || 0} />
         </td>
         <td className="px-8 py-6">
+          <div className="flex flex-col">
+             <span className="text-[10px] font-black text-white uppercase tracking-widest italic truncate max-w-[150px]">
+               {lead.crm_metadata?.last_action || lead.source || 'Direct Discovery'}
+             </span>
+             <span className="text-[8px] font-bold text-gray-600 uppercase tracking-widest mt-1">
+               {lead.last_action_at ? formatDistanceToNow(new Date(lead.last_action_at), { addSuffix: true }) : 'N/A'}
+             </span>
+          </div>
+        </td>
+        <td className="px-8 py-6">
           {lead.assigned_agent_code || lead.referred_by_code ? (
             <div className="flex flex-col">
                <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest italic">{lead.assigned_agent_code || lead.referred_by_code}</span>
@@ -118,7 +129,7 @@ export const LeadManager = () => {
                </span>
             </div>
           ) : (
-            <span className="text-[10px] font-black text-gray-700 uppercase tracking-widest italic">Direct Discovery</span>
+            <span className="text-[10px] font-black text-gray-700 uppercase tracking-widest italic">Organic Alpha</span>
           )}
         </td>
         <td className="px-8 py-6 text-right">
@@ -214,6 +225,7 @@ export const LeadManager = () => {
                 <th className="px-8 py-6 text-[9px] font-black text-gray-400 uppercase tracking-[0.3em]">Lifecycle Stage</th>
                  <th className="px-8 py-6 text-[9px] font-black text-gray-400 uppercase tracking-[0.3em]">Conversion Prob.</th>
                  <th className="px-8 py-6 text-[9px] font-black text-gray-400 uppercase tracking-[0.3em] text-center">Score</th>
+                 <th className="px-8 py-6 text-[9px] font-black text-gray-400 uppercase tracking-[0.3em]">Last Engagement</th>
                  <th className="px-8 py-6 text-[9px] font-black text-gray-400 uppercase tracking-[0.3em]">Attribution code</th>
                  <th className="px-8 py-6 text-[9px] font-black text-gray-400 uppercase tracking-[0.3em] text-right">Discovery Date</th>
               </tr>

@@ -196,6 +196,33 @@ export const CEOPanel = () => {
             </div>
           </div>
         </div>
+
+        {/* Lead Discovery Footer */}
+        <div className="mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-6 opacity-60">
+           <div className="flex items-center gap-4">
+              <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center">
+                 <Target className="w-5 h-5 text-cyan-500" />
+              </div>
+              <div>
+                 <div className="text-[9px] font-black text-white uppercase tracking-widest leading-none mb-1">Acquisition Velocity</div>
+                 <div className="text-[10px] font-mono text-[#58F2B6]">{stats.totalLeads} Potential Alpha Partners</div>
+              </div>
+           </div>
+           <div className="flex items-center gap-6">
+              <div className="text-right">
+                 <div className="text-[9px] font-black text-gray-600 uppercase tracking-widest leading-none mb-1">Platform Integrity</div>
+                 <div className={cn("text-[10px] font-black uppercase tracking-widest italic", healthColor)}>{stats.systemHealth} Nodes Operational</div>
+              </div>
+              <div className="w-px h-8 bg-white/5" />
+              <div className="flex -space-x-3">
+                 {[1,2,3,4].map(i => (
+                    <div key={i} className="w-8 h-8 rounded-full bg-zinc-800 border-2 border-black flex items-center justify-center overflow-hidden">
+                       <Users size={14} className="text-gray-600" />
+                    </div>
+                 ))}
+              </div>
+           </div>
+        </div>
       </div>
 
       {/* KPI Grid — Live Supabase Counts */}
