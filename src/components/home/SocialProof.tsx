@@ -71,7 +71,7 @@ export const SocialProof = () => {
                   </div>
                   
                   <p className="text-sm md:text-base text-gray-400 font-sans font-medium leading-relaxed mb-8">
-                     "{review.text}"
+                     "{review.feedback || review.text}"
                   </p>
                   
                   <div className="flex items-center gap-4 border-t border-white/5 pt-6">

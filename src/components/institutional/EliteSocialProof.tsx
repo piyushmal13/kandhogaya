@@ -49,17 +49,17 @@ export const EliteSocialProof = () => {
               </p>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-               {members.map(member => (
-                  <div key={member.id} className="p-6 rounded-3xl bg-white/[0.02] border border-white/5 space-y-4 hover:border-emerald-500/20 transition-all group">
-                     <div className="flex items-center justify-between">
-                        <div className="text-[9px] font-black uppercase tracking-widest text-white/60">{member.name}</div>
-                        <div className="text-[8px] font-black uppercase tracking-widest text-emerald-500/40">{member.region}</div>
-                     </div>
-                     <p className="text-[10px] text-white/30 leading-relaxed italic">"{member.feedback}"</p>
-                  </div>
-               ))}
-            </div>
+             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {members.map(member => (
+                   <div key={member.id} className="p-6 rounded-3xl bg-white/[0.02] border border-white/5 space-y-4 hover:border-emerald-500/20 transition-all group">
+                      <div className="flex items-center justify-between">
+                         <div className="text-[9px] font-black uppercase tracking-widest text-white/60">{member.name}</div>
+                         <div className="text-[8px] font-black uppercase tracking-widest text-emerald-500/40">{member.region || member.location}</div>
+                      </div>
+                      <p className="text-[10px] text-white/30 leading-relaxed italic">"{member.feedback || member.text}"</p>
+                   </div>
+                ))}
+             </div>
           </div>
 
           <motion.div 

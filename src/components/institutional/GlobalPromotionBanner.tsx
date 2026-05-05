@@ -108,7 +108,7 @@ export const GlobalPromotionBanner = () => {
             
             <div className="flex flex-col md:flex-row items-stretch">
               {/* Image Segment */}
-              <div className="relative w-full md:w-48 h-32 md:h-auto overflow-hidden shrink-0">
+              <div className="relative w-full md:w-48 h-24 md:h-auto overflow-hidden shrink-0">
                 <img 
                   src={activeBanner.image_url || "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop"} 
                   alt={activeBanner.title}
@@ -124,14 +124,14 @@ export const GlobalPromotionBanner = () => {
               </div>
 
               {/* Content Segment */}
-              <div className="flex-1 p-4 md:p-6 flex flex-col justify-center">
+              <div className="flex-1 p-3 md:p-6 flex flex-col justify-center">
                 <div className="flex items-start justify-between gap-4 mb-1">
                   <div>
                     <div className="flex items-center gap-2 mb-1">
-                      <Clock className="w-3 h-3 text-emerald-500" />
-                      <span className="text-[8px] font-black text-emerald-500 uppercase tracking-[0.3em]">Institutional Broadcast</span>
+                      <Clock className="w-2.5 h-2.5 text-emerald-500" />
+                      <span className="text-[7px] font-black text-emerald-500 uppercase tracking-[0.3em]">Institutional Broadcast</span>
                     </div>
-                    <h3 className="text-lg md:text-xl font-black text-white tracking-tighter uppercase italic leading-none">
+                    <h3 className="text-sm md:text-xl font-black text-white tracking-tighter uppercase italic leading-none">
                       {activeBanner.title}
                     </h3>
                   </div>

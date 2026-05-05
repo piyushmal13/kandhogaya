@@ -33,12 +33,13 @@ export const Webinars = () => {
         />
 
         <div className="max-w-7xl mx-auto px-4 space-y-12">
-          <div className="relative z-10 space-y-4">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tighter mb-4 text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
-              Institutional Masterclasses
+          <div className="relative z-10 space-y-6">
+            <h1 className="text-4xl md:text-6xl font-black text-white tracking-tight uppercase italic leading-tight">
+              Institutional <br />
+              <span className="text-emerald-500">Research Terminal.</span>
             </h1>
-            <p className="text-sm text-white/40 max-w-2xl font-medium uppercase tracking-widest leading-relaxed">
-              Participate in systematic market breakdowns, systematic workflow walkthroughs, and quantitative execution masterclasses led by the IFX research desk.
+            <p className="text-sm md:text-lg text-white/40 max-w-2xl font-medium leading-relaxed">
+              Real-time synchronization with the IFX Global Research Desk. Participate in systematic market breakdowns and quantitative execution masterclasses.
             </p>
           </div>
 
