@@ -104,9 +104,61 @@ export const CEOPanel = () => {
     }
   };
 
+  const [regionalStats, setRegionalStats] = useState<any[]>([]);
+  const [topAgents, setTopAgents] = useState<any[]>([]);
+
+  const fetchExtendedStats = async () => {
+     try {
+        // 1. Regional Performance (from reviews)
+        const { data: regionalData } = await supabase
+          .from('reviews')
+          .select('region');
+        
+        if (regionalData) {
+           const counts: Record<string, number> = {};
+           regionalData.forEach(r => {
+              if (r.region) counts[r.region] = (counts[r.region] || 0) + 1;
+           });
+           const total = regionalData.length || 1;
+           const mapped = Object.entries(counts).map(([region, count]) => ({
+              id: region,
+              region: region,
+              perf: Math.round((count / total) * 100),
+              color: region.includes('Asia') ? 'var(--color8)' : 'var(--color39)'
+           })).sort((a, b) => b.perf - a.perf);
+           setRegionalStats(mapped);
+        }
+
+        // 2. Top Agents (from sales_tracking joined with agents)
+        const { data: salesData } = await supabase
+          .from('sales_tracking')
+          .select('sale_amount, agent_id, agents(name, role)');
+        
+        if (salesData) {
+           const agentRevenue: Record<string, { name: string, revenue: number }> = {};
+           salesData.forEach((s: any) => {
+              const id = s.agent_id;
+              const name = s.agents?.name || 'Unknown Agent';
+              if (!agentRevenue[id]) agentRevenue[id] = { name, revenue: 0 };
+              agentRevenue[id].revenue += (s.sale_amount || 0);
+           });
+           const top = Object.values(agentRevenue)
+             .sort((a, b) => b.revenue - a.revenue)
+             .slice(0, 3);
+           setTopAgents(top);
+        }
+     } catch (err) {
+        console.error("Extended stats fetch failed:", err);
+     }
+  };
+
   useEffect(() => {
     fetchAllStats();
-    const interval = setInterval(fetchAllStats, 120000); // refresh every 2 min
+    fetchExtendedStats();
+    const interval = setInterval(() => {
+       fetchAllStats();
+       fetchExtendedStats();
+    }, 120000); 
     return () => clearInterval(interval);
   }, []);
 
@@ -145,7 +197,7 @@ export const CEOPanel = () => {
           </p>
         </div>
         <button
-          onClick={fetchAllStats}
+          onClick={() => { fetchAllStats(); fetchExtendedStats(); }}
           disabled={loading}
           className="flex items-center gap-2 px-5 py-3 bg-white/5 border border-white/10 rounded-xl text-gray-400 hover:text-white text-[10px] font-black uppercase tracking-widest transition-all"
         >
@@ -255,12 +307,7 @@ export const CEOPanel = () => {
             <Globe className="w-5 h-5 text-gray-600" />
           </div>
           <div className="space-y-6">
-            {[
-              { id: "sea",  region: "South & East Asia",     color: "var(--color8)", perf: 78 },
-              { id: "me",   region: "Middle East & Gulf",    color: "var(--color39)", perf: 65 },
-              { id: "eea",  region: "European Economic Area",color: "var(--color41)", perf: 52 },
-              { id: "us",   region: "North America",         color: "var(--color38)", perf: 40 },
-            ].map(r => (
+            {regionalStats.length > 0 ? regionalStats.map(r => (
               <div key={r.id}>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-[11px] font-black text-gray-300 uppercase tracking-wider">{r.region}</span>
@@ -273,7 +320,9 @@ export const CEOPanel = () => {
                   />
                 </div>
               </div>
-            ))}
+            )) : (
+               <div className="py-10 text-center text-[10px] uppercase font-black tracking-widest text-white/10 italic">Awaiting Regional Data Synchronization...</div>
+            )}
           </div>
         </div>
 
@@ -288,28 +337,24 @@ export const CEOPanel = () => {
           </div>
           
           <div className="space-y-6">
-             {loading ? (
-               <div className="py-20 text-center animate-pulse text-[10px] uppercase font-black tracking-widest text-white/20">Scanning Personnel...</div>
+             {topAgents.length > 0 ? (
+               topAgents.map((agent, i) => (
+                  <div key={agent.name} className="flex items-center justify-between p-4 bg-white/5 border border-white/5 rounded-2xl hover:bg-white/10 transition-all">
+                     <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-500 border border-amber-500/20 font-black text-[10px] italic">0{i+1}</div>
+                        <div>
+                           <div className="text-[10px] font-black text-white uppercase tracking-wider">{agent.name}</div>
+                           <div className="text-[8px] font-bold text-gray-500 uppercase tracking-widest leading-none">Senior Growth Agent</div>
+                        </div>
+                     </div>
+                     <div className="text-right">
+                        <div className="text-[11px] font-black text-emerald-500 italic tabular-nums">${agent.revenue.toLocaleString()}</div>
+                        <div className="text-[8px] font-bold text-[#58F2B6] uppercase tracking-widest">Performance Sync</div>
+                     </div>
+                  </div>
+                ))
              ) : (
-               [
-                 { name: "Global Signal 01", revenue: 12450, growth: "+12%" },
-                 { name: "Institutional Desk", revenue: 8900,  growth: "+8%" },
-                 { name: "Corporate Alpha",   revenue: 5200,  growth: "+5%" }
-               ].map((agent, i) => (
-                 <div key={agent.name} className="flex items-center justify-between p-4 bg-white/5 border border-white/5 rounded-2xl hover:bg-white/10 transition-all">
-                    <div className="flex items-center gap-3">
-                       <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-500 border border-amber-500/20 font-black text-[10px] italic">0{i+1}</div>
-                       <div>
-                          <div className="text-[10px] font-black text-white uppercase tracking-wider">{agent.name}</div>
-                          <div className="text-[8px] font-bold text-gray-500 uppercase tracking-widest leading-none">Senior Growth Agent</div>
-                       </div>
-                    </div>
-                    <div className="text-right">
-                       <div className="text-[11px] font-black text-emerald-500 italic tabular-nums">${agent.revenue.toLocaleString()}</div>
-                       <div className="text-[8px] font-bold text-[#58F2B6] uppercase tracking-widest">{agent.growth}</div>
-                    </div>
-                 </div>
-               ))
+                <div className="py-20 text-center text-[10px] uppercase font-black tracking-widest text-white/10 italic">Personnel Audit in Progress...</div>
              )}
           </div>
           

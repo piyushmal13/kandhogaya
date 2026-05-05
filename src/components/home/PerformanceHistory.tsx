@@ -80,7 +80,7 @@ export const PerformanceHistory = () => {
   }, [displayResults, results]);
 
   return (
-    <section className="py-24 md:py-40 bg-[#020202] border-t border-white/[0.04] relative overflow-hidden" aria-labelledby="performance-heading">
+    <section className="py-12 md:py-40 bg-[#020202] border-t border-white/[0.04] relative overflow-hidden" aria-labelledby="performance-heading">
       <div className="absolute inset-0 pointer-events-none" aria-hidden>
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[60%] bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(16,185,129,0.06),transparent)]" />
       </div>
@@ -112,7 +112,7 @@ export const PerformanceHistory = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="bg-[#080B12] p-8 md:p-14 rounded-[2.5rem] border border-white/[0.06] relative overflow-hidden group shadow-[0_40px_80px_rgba(0,0,0,0.5)] card-shine"
+          className="bg-[#080B12] p-6 md:p-14 rounded-[2.5rem] border border-white/[0.06] relative overflow-hidden group shadow-[0_40px_80px_rgba(0,0,0,0.5)] card-shine"
         >
           {/* Header Row */}
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-12 gap-10">
@@ -129,13 +129,13 @@ export const PerformanceHistory = () => {
             <div className="flex gap-12 items-center">
               <div className="flex flex-col">
                 <span className="text-[11px] font-semibold text-emerald-500/80 uppercase tracking-wider mb-2">Total Return</span>
-                <span className="text-3xl md:text-4xl font-mono font-bold text-emerald-400 flex items-center gap-2 tracking-tight">
+                <span className="text-2xl md:text-4xl font-mono font-bold text-emerald-400 flex items-center gap-2 tracking-tight">
                   +{stats.totalReturn}% <TrendingUp className="w-5 h-5 opacity-60" />
                 </span>
               </div>
               <div className="flex flex-col">
                 <span className="text-[11px] font-semibold text-white/40 uppercase tracking-wider mb-2">Max Drawdown</span>
-                <span className="text-3xl md:text-4xl font-mono font-bold text-red-400 flex items-center gap-2 tracking-tight">
+                <span className="text-2xl md:text-4xl font-mono font-bold text-red-400 flex items-center gap-2 tracking-tight">
                   -8.2% <TrendingDown className="w-5 h-5 opacity-60" />
                 </span>
               </div>
@@ -143,7 +143,7 @@ export const PerformanceHistory = () => {
           </div>
 
           {/* Grid */}
-          <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-9 lg:grid-cols-12 gap-3 md:gap-4">
+          <div className="grid grid-cols-3 sm:grid-cols-6 md:grid-cols-9 lg:grid-cols-12 gap-2 md:gap-4">
             {displayResults.map((month, i) => (
               <motion.div
                 key={`${month.label}-${i}`}

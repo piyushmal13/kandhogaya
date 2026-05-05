@@ -25,17 +25,17 @@ const FAQItem: React.FC<FAQItemProps> = ({ question, answer, isOpen, onClick, in
     >
       <button
         onClick={onClick}
-        className="w-full py-8 px-6 flex items-center justify-between text-left gap-6 outline-none"
+        className="w-full py-5 md:py-8 px-4 md:px-6 flex items-center justify-between text-left gap-4 md:gap-6 outline-none"
       >
-        <div className="flex items-start gap-4">
+        <div className="flex items-start gap-3 md:gap-4">
           <span className={cn(
-            "text-[10px] font-black uppercase tracking-widest mt-1 transition-colors",
+            "text-[9px] md:text-[10px] font-black uppercase tracking-widest mt-1 transition-colors",
             isOpen ? "text-emerald-500" : "text-white/20"
           )}>
             {String(index + 1).padStart(2, '0')}
           </span>
           <h3 className={cn(
-            "text-lg md:text-xl font-black uppercase italic tracking-tighter transition-all",
+            "text-base md:text-xl font-black uppercase italic tracking-tighter transition-all",
             isOpen ? "text-white" : "text-white/60 group-hover:text-white"
           )}>
             {question}
@@ -77,12 +77,12 @@ export const InstitutionalFAQ: React.FC<{ faqs: Array<{ question: string; answer
   if (!faqs || faqs.length === 0) return null;
 
   return (
-    <section className="py-24 md:py-36 bg-[#010203] relative overflow-hidden" aria-labelledby="faq-heading">
+    <section className="py-12 md:py-36 bg-[#010203] relative overflow-hidden" aria-labelledby="faq-heading">
       {/* Background Ambient */}
       <div className="absolute top-0 right-0 w-[50%] h-[50%] bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.03),transparent_70%)] pointer-events-none" />
       
       <div className="max-w-5xl mx-auto px-6">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-20">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-10 md:mb-20">
           <div>
             <div className="flex items-center gap-3 mb-6">
               <ShieldCheck className="w-5 h-5 text-emerald-500" />
@@ -90,7 +90,7 @@ export const InstitutionalFAQ: React.FC<{ faqs: Array<{ question: string; answer
                 Institutional Support
               </span>
             </div>
-            <h2 id="faq-heading" className="text-4xl md:text-6xl font-black text-white uppercase italic tracking-tighter">
+            <h2 id="faq-heading" className="text-3xl md:text-6xl font-black text-white uppercase italic tracking-tighter">
               Research & <br /> <span className="text-white/20">Operations FAQ</span>
             </h2>
           </div>
@@ -112,7 +112,7 @@ export const InstitutionalFAQ: React.FC<{ faqs: Array<{ question: string; answer
           ))}
         </div>
 
-        <div className="mt-20 p-8 rounded-[2rem] bg-white/[0.02] border border-white/5 flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div className="mt-10 md:mt-20 p-6 md:p-8 rounded-[1.5rem] md:rounded-[2rem] bg-white/[0.02] border border-white/5 flex flex-col sm:flex-row items-center justify-between gap-6">
            <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500">
                  <HelpCircle className="w-6 h-6" />

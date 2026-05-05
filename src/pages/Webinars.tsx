@@ -7,7 +7,7 @@ import { WebinarCardSkeleton } from '@/components/ui/Skeleton';
 import { WebinarOperationsMonitor } from '@/components/institutional/WebinarOperationsMonitor';
 import { PageMeta } from '@/components/site/PageMeta';
 
-import AdBanner from '@/components/ui/AdBanner';
+import { AdBanner } from '@/components/ui/AdBanner';
 
 export const Webinars = () => {
   const { data: webinars, isLoading } = useWebinars();

@@ -5,6 +5,8 @@ import { useFocusRoute } from '@/hooks/useFocusRoute';
 import { cn } from '@/lib/utils';
 import { motion } from "motion/react";
 
+import { DashboardMobileNav } from './DashboardMobileNav';
+
 // ── TYPES ──
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -31,6 +33,9 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
       <aside className="hidden lg:flex flex-col w-72 h-screen sticky top-0 border-r border-white/5 bg-[#050709] z-50">
         <DashboardNavigation />
       </aside>
+
+      {/* === MOBILE NAVIGATION === */}
+      <DashboardMobileNav />
 
       <motion.div 
         initial={{ opacity: 0 }}

@@ -125,12 +125,12 @@ export const FortressHero = () => {
       )}
 
       {/* ── MAIN CONTENT (Triple Parallax Stack) ── */}
-      <div className="relative z-20 flex-1 flex flex-col items-center justify-center px-6 pt-12 pb-24 text-center">
+      <div className="relative z-20 flex-1 flex flex-col items-center justify-center px-6 pt-12 pb-12 md:pb-24 text-center">
         {/* Status badge */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-12 group cursor-default"
+          className="mb-8 md:mb-12 group cursor-default"
         >
           <div className="site-pill">
             <span className="flex items-center gap-2">
@@ -164,7 +164,7 @@ export const FortressHero = () => {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.25 }}
-          className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4 sm:gap-8 mb-12 py-6 sm:py-4 px-6 sm:px-8 rounded-3xl sm:rounded-full bg-white/[0.02] border border-white/5 backdrop-blur-md"
+          className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4 sm:gap-8 mb-8 md:mb-12 py-6 sm:py-4 px-6 sm:px-8 rounded-3xl sm:rounded-full bg-white/[0.02] border border-white/5 backdrop-blur-md"
         >
           <div className="flex items-center gap-3">
              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10B981]" />
@@ -188,16 +188,20 @@ export const FortressHero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.32, duration: 0.6, ease: EASING }}
-          className="flex flex-col sm:flex-row items-center gap-6 justify-center w-full"
+          className="flex flex-col sm:flex-row items-center gap-6 justify-center w-full px-4"
         >
-          <Link to="/webinars" className="btn-vault">
-            Request Session Access
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-300" />
+          <Link to="/webinars" className="w-full sm:w-auto">
+            <EliteButton variant="premium-gold" size="lg" fluid>
+              Request Session Access
+              <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1.5 transition-transform duration-300" />
+            </EliteButton>
           </Link>
 
-          <Link to="/quantx" className="btn-ghost">
-            <Play className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400/20" />
-            See QuantX Results
+          <Link to="/quantx" className="w-full sm:w-auto">
+            <EliteButton variant="secondary" size="lg" fluid>
+              <Play className="w-3.5 h-3.5 mr-2 text-emerald-400 fill-emerald-400/20" />
+              See QuantX Results
+            </EliteButton>
           </Link>
         </motion.div>
 
@@ -206,7 +210,7 @@ export const FortressHero = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.55, duration: 0.8 }}
-          className="grid grid-cols-2 md:flex md:flex-wrap justify-center items-center gap-x-10 gap-y-6 mt-14 pt-10 border-t border-white/[0.06] w-full max-w-3xl mx-auto"
+          className="grid grid-cols-2 md:flex md:flex-wrap justify-center items-center gap-x-10 gap-y-6 mt-8 md:mt-14 pt-10 border-t border-white/[0.06] w-full max-w-3xl mx-auto"
         >
           {[
             { value: "Institutional", label: "Quantitative Desk" },

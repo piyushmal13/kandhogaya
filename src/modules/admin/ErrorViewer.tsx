@@ -66,7 +66,7 @@ export const ErrorViewer = () => {
         {[
           { label: "Active Error Rate", value: "0.2%", status: "OPTIMAL", color: "text-emerald-500" },
           { label: "API Latency (p95)", value: "142ms", status: "STABLE", color: "text-cyan-500" },
-          { label: "Database Health", value: "99.9%", status: "HEALTHY", color: "text-emerald-500" },
+          { label: "Database Health", value: "Optimal", status: "HEALTHY", color: "text-emerald-500" },
           { label: "Critical Discovery", value: "0 Today", status: "CLEAR", color: "text-white" }
         ].map((metric) => (
           <div key={metric.label} className="bg-zinc-900 border border-white/10 p-8 rounded-[40px] group overflow-hidden relative">

@@ -27,7 +27,7 @@ export const AdBanner: React.FC<{ placement?: string }> = ({ placement = "webina
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       className={cn(
-        "group relative w-full rounded-[2.5rem] overflow-hidden border shadow-2xl transition-all duration-500",
+        "group relative w-full rounded-3xl md:rounded-[2.5rem] overflow-hidden border shadow-2xl transition-all duration-500 my-4",
         isInstitutional ? "border-emerald-500/20 bg-[#020202]" : "border-white/5 bg-[#080B12]"
       )}
     >
@@ -36,78 +36,66 @@ export const AdBanner: React.FC<{ placement?: string }> = ({ placement = "webina
         <img 
           src={banner.image_url?.startsWith('http') ? banner.image_url : getSupabasePublicUrl('banners', banner.image_url || '')} 
           alt={banner.title} 
-          className="w-full h-full object-cover opacity-30 group-hover:scale-105 transition-transform duration-1000"
+          className="w-full h-full object-cover opacity-20 group-hover:scale-105 transition-transform duration-1000"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#020202] via-[#020202]/90 to-transparent" />
-        
-        {isInstitutional && (
-          <div className="absolute top-0 right-0 p-20 opacity-[0.03] pointer-events-none">
-            <Zap className="w-64 h-64 text-emerald-500" />
-          </div>
-        )}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#020202] via-[#020202]/95 to-transparent" />
       </div>
 
-      <div className="relative z-10 p-8 md:p-14 flex flex-col lg:flex-row lg:items-center justify-between gap-12">
+      <div className="relative z-10 p-5 md:p-8 lg:p-10 flex flex-col lg:flex-row lg:items-center justify-between gap-4 md:gap-8">
         <div className="max-w-2xl">
-          <div className="flex items-center gap-4 mb-8">
-            <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-black uppercase tracking-[0.3em]">
-              <Shield className="w-3 h-3" />
-              {isInstitutional ? "Institutional Masterclass" : "Sovereign Node"}
+          <div className="flex items-center gap-4 mb-3 lg:mb-4">
+            <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[7px] md:text-[8px] font-black uppercase tracking-[0.2em]">
+              <Shield className="w-2.5 h-2.5" />
+              {isInstitutional ? "Institutional Broadcast" : "Sovereign Node"}
             </div>
-            {isInstitutional && (
-              <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-black uppercase tracking-[0.3em] animate-pulse">
-                <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
-                Live Broadcast
-              </div>
-            )}
           </div>
           
-          <h3 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mb-6 leading-[0.9]">
+          <h3 className="text-xl md:text-3xl lg:text-4xl font-black text-white uppercase tracking-tighter mb-2 leading-[0.95]">
             {banner.title}
           </h3>
           
-          <p className="text-lg text-white/50 leading-relaxed font-medium mb-10 max-w-xl">
+          <p className="text-xs md:text-sm lg:text-base text-white/50 leading-relaxed font-medium mb-4 lg:mb-6 max-w-xl">
             {banner.description}
           </p>
 
-          <div className="flex flex-wrap items-center gap-6">
+          <div className="flex flex-wrap items-center gap-4 lg:gap-6">
             {banner.link_url && (
               <a 
                 href={banner.link_url}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-4 px-8 py-4 rounded-2xl bg-emerald-500 text-black font-black text-[11px] uppercase tracking-widest hover:bg-emerald-400 transition-all shadow-[0_10px_30px_rgba(16,185,129,0.2)]"
+                className="inline-flex items-center gap-3 px-6 py-3 rounded-xl bg-emerald-500 text-black font-black text-[10px] uppercase tracking-widest hover:bg-emerald-400 transition-all shadow-[0_10px_20px_rgba(16,185,129,0.1)] active:scale-95"
               >
-                Secure Entry Node <ArrowRight className="w-5 h-5" />
+                Secure Entry <ArrowRight className="w-4 h-4" />
               </a>
             )}
             
             {isInstitutional && (
-              <div className="flex items-center gap-6 py-4 px-6 rounded-2xl bg-white/5 border border-white/10">
+              <div className="flex items-center gap-4 py-2.5 px-4 rounded-xl bg-white/5 border border-white/10">
                  <div className="flex flex-col">
-                    <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest mb-1">1.2K+ Synchronized</span>
-                    <span className="text-[8px] text-white/30 uppercase tracking-widest">Active Intelligence Nodes</span>
+                    <span className="text-[9px] font-black text-emerald-500 uppercase tracking-widest leading-none mb-1">1.2K+ Connected</span>
+                    <span className="text-[7px] text-white/30 uppercase tracking-widest">Active Nodes</span>
                  </div>
-                 <div className="w-px h-6 bg-white/10" />
-                 <div className="flex items-center gap-2">
-                    <ShieldCheck className="w-4 h-4 text-emerald-500" />
-                    <span className="text-[10px] font-black text-white uppercase tracking-widest">Verified Intel</span>
+                 <div className="w-px h-4 bg-white/10" />
+                 <div className="flex items-center gap-1.5">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+                    <span className="text-[9px] font-black text-white uppercase tracking-widest">Audited</span>
                  </div>
               </div>
             )}
           </div>
         </div>
 
-        <div className="hidden xl:flex items-center gap-8">
+        <div className="hidden lg:flex items-center gap-8 shrink-0">
            <div className="relative">
-              <div className="absolute inset-0 bg-emerald-500/20 blur-[60px] rounded-full animate-pulse" />
-              <div className="relative p-10 rounded-[3rem] bg-black/40 backdrop-blur-2xl border border-white/10 flex flex-col items-center gap-6 shadow-3xl">
-                <div className="w-20 h-20 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
-                  <Users className="w-10 h-10 text-emerald-500" />
+              <div className="absolute inset-0 bg-emerald-500/10 blur-[40px] rounded-full animate-pulse" />
+              <div className="relative p-6 lg:p-8 rounded-[2.5rem] bg-black/40 backdrop-blur-2xl border border-white/10 flex flex-col items-center gap-4 shadow-2xl">
+                <div className="w-12 h-12 lg:w-16 lg:h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+                  <Users className="w-6 h-6 lg:w-8 lg:h-8 text-emerald-500" />
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-black text-white tracking-tighter mb-1 uppercase">Institutional</div>
-                  <div className="text-[9px] font-black text-white/30 uppercase tracking-[0.3em]">Execution Access</div>
+                  <div className="text-lg lg:text-xl font-black text-white tracking-tighter uppercase">Vault Access</div>
+                  <div className="text-[8px] font-black text-white/30 uppercase tracking-[0.3em]">Verified Tier</div>
                 </div>
               </div>
            </div>
@@ -116,12 +104,11 @@ export const AdBanner: React.FC<{ placement?: string }> = ({ placement = "webina
 
       {/* Decorative accent pulse */}
       <div 
-        className="absolute bottom-0 left-0 h-1.5 transition-all duration-700 group-hover:w-full w-32"
-        style={{ backgroundColor: accentColor, boxShadow: `0 0 30px ${accentColor}` }}
+        className="absolute bottom-0 left-0 h-1 transition-all duration-700 group-hover:w-full w-20"
+        style={{ backgroundColor: accentColor, boxShadow: `0 0 20px ${accentColor}` }}
       />
     </motion.div>
   );
 };
 
-export default AdBanner;
 

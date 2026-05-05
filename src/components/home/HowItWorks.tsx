@@ -37,7 +37,7 @@ const STEPS = [
 
 export const HowItWorks = () => {
   return (
-    <section className="py-32 bg-[#020202] relative">
+    <section className="py-12 md:py-32 bg-[#020202] relative">
       <div className="container mx-auto px-6">
         <motion.div
           variants={containerVariants}
@@ -45,11 +45,11 @@ export const HowItWorks = () => {
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
         >
-          <motion.div variants={itemVariants} className="mb-20 text-center md:text-left">
+          <motion.div variants={itemVariants} className="mb-10 md:mb-20 text-center md:text-left">
             <span className="text-[10px] font-black uppercase tracking-[0.5em] text-[#58F2B6] mb-4 block">
               How It Works
             </span>
-            <h2 className="text-4xl md:text-7xl font-black text-white uppercase tracking-tighter max-w-4xl">
+            <h2 className="text-3xl md:text-7xl font-black text-white uppercase tracking-tighter max-w-4xl">
               From Market Insight <br />
               <span className="text-white/20">To Your Winning Trade.</span>
             </h2>
@@ -62,7 +62,7 @@ export const HowItWorks = () => {
                 variants={itemVariants}
                 whileHover={{ y: -5 }}
                 className={cn(
-                  "p-8 md:p-12 rounded-[2.5rem] border border-white/5 bg-[#0A0A0A] relative overflow-hidden group transition-all duration-500 hover:border-white/20",
+                  "p-6 md:p-12 rounded-[2rem] md:rounded-[2.5rem] border border-white/5 bg-[#0A0A0A] relative overflow-hidden group transition-all duration-500 hover:border-white/20",
                   step.span
                 )}
               >

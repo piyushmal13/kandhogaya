@@ -15,7 +15,8 @@ export type ButtonVariant =
   | 'secondary' 
   | 'ghost' 
   | 'danger' 
-  | 'institutional-outline';
+  | 'institutional-outline'
+  | 'premium-gold';
 
 export type ButtonSize = 'sm' | 'md' | 'lg' | 'xl' | 'elite-hero';
 
@@ -39,6 +40,7 @@ const variantStyles: Record<ButtonVariant, string> = {
   ghost: "bg-transparent hover:bg-white/5 text-gray-400 hover:text-white",
   danger: "bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 hover:border-red-500/40",
   'institutional-outline': "bg-transparent border-2 border-white/10 text-white hover:bg-white/[0.02] hover:border-emerald-500/40 hover:text-emerald-400",
+  'premium-gold': "bg-gradient-to-r from-[#D4AF37] to-[#F5E6A3] text-black font-black hover:shadow-[0_0_50px_rgba(212,175,55,0.4)] border-none shadow-[inset_0_2px_4px_rgba(255,255,255,0.4),0_0_0_1px_rgba(0,0,0,0.1)]",
 };
 
 const sizeStyles: Record<ButtonSize, string> = {

@@ -16,14 +16,14 @@ const PRESS = [
 
 export const BrandAuthority = () => {
   return (
-    <section className="py-24 bg-[#0A0A0A] border-y border-white/5 overflow-hidden">
+    <section className="py-12 md:py-24 bg-[#0A0A0A] border-y border-white/5 overflow-hidden">
       <div className="container mx-auto px-6">
         <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="flex flex-col gap-16"
+          className="flex flex-col gap-8 md:gap-16"
         >
           {/* Logo Matrix */}
           <motion.div variants={itemVariants} className="text-center mb-4">
@@ -34,7 +34,7 @@ export const BrandAuthority = () => {
 
           <motion.div 
             variants={itemVariants} 
-            className="flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-40 grayscale hover:grayscale-0 transition-all duration-700"
+            className="flex flex-wrap justify-center items-center gap-8 md:gap-24 opacity-40 grayscale hover:grayscale-0 transition-all duration-700"
           >
             {PARTNERS.map((partner) => (
               <img 

@@ -393,10 +393,13 @@ body {
     @apply inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-lg bg-[#0A0D12] border border-white/5 text-white/70 font-black text-[10px] uppercase tracking-[0.2em] hover:text-white hover:border-emerald-500/30 transition-all active:scale-[0.98] shadow-2xl;
   }
   .btn-vault {
-    @apply relative inline-flex items-center justify-center gap-3 px-8 py-4 rounded-md bg-black text-emerald-400 border border-emerald-500/30 font-black text-[11px] uppercase tracking-[0.3em] overflow-hidden group hover:text-black transition-all duration-500;
+    @apply relative inline-flex items-center justify-center gap-3 px-8 py-4 rounded-md bg-black text-emerald-400 border border-emerald-500/30 font-black text-[11px] uppercase tracking-[0.3em] overflow-hidden hover:text-black transition-all duration-500;
   }
   .btn-vault::before {
-    @apply content-[''] absolute inset-0 bg-emerald-500 translate-y-full transition-transform duration-500 ease-out group-hover:translate-y-0 -z-10;
+    @apply content-[''] absolute inset-0 bg-emerald-500 translate-y-full transition-transform duration-500 ease-out -z-10;
+  }
+  .btn-vault:hover::before {
+    transform: translateY(0);
   }
 
   /* ── Mobile Optimization Utils ── */

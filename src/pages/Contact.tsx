@@ -120,8 +120,8 @@ export const Contact = () => {
             <div className="p-8 rounded-[2.5rem] bg-emerald-500/[0.03] border border-emerald-500/10 text-center">
                <div className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.5em] mb-4">Institutional Trust Compliance</div>
                <div className="flex justify-center gap-8 opacity-40 grayscale hover:grayscale-0 transition-all">
-                  <span className="text-xs font-black text-white uppercase tracking-widest italic">ISO-27001 Ready</span>
-                  <span className="text-xs font-black text-white uppercase tracking-widest italic">SOC2 Type II compliant</span>
+                  <span className="text-xs font-black text-white uppercase tracking-widest italic">Bank-Grade Security</span>
+                  <span className="text-xs font-black text-white uppercase tracking-widest italic">End-to-End Encryption</span>
                </div>
             </div>
           </div>

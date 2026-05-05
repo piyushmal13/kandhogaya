@@ -14,7 +14,7 @@ import { ConsultationSection } from "../components/home/ConsultationSection";
 import { InstitutionalFAQ } from "../components/home/InstitutionalFAQ";
 import { BlogSection } from "../components/home/BlogSection";
 import { SocialProof } from "../components/home/SocialProof";
-import AdBanner from "../components/ui/AdBanner";
+import { AdBanner } from "../components/ui/AdBanner";
 import { CustomAlgoTeam } from "../components/home/CustomAlgoTeam";
 
 

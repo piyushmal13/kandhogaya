@@ -101,7 +101,7 @@ function AppContent() {
 
   return (
     <StandardLayout>
-      <GlobalPromotionBanner />
+      {/* <GlobalPromotionBanner /> - Deactivated per CEO's 'zero pop-up' directive */}
       <AnimatedRoutes />
     </StandardLayout>
   );

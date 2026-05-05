@@ -43,7 +43,7 @@ export const ConsultationSection = () => {
   };
 
   return (
-    <section className="py-32 bg-[#020202] relative overflow-hidden">
+    <section className="py-12 md:py-32 bg-[#020202] relative overflow-hidden">
       {/* Background Gradient */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#58F2B6]/5 blur-[120px] rounded-full pointer-events-none" />
 
@@ -55,17 +55,17 @@ export const ConsultationSection = () => {
           viewport={{ once: true }}
           className="max-w-6xl mx-auto"
         >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center">
             {/* Context Intelligence */}
             <motion.div variants={itemVariants}>
               <span className="text-[10px] font-black uppercase tracking-[0.5em] text-[#58F2B6] mb-4 block text-center lg:text-left">
                 Get In Touch
               </span>
-              <h2 className="text-4xl md:text-7xl font-black text-white uppercase tracking-tighter mb-8 text-center lg:text-left">
+              <h2 className="text-3xl md:text-7xl font-black text-white uppercase tracking-tighter mb-6 md:mb-8 text-center lg:text-left">
                 Speak With Our <br />
                 <span className="text-white/20">Trading Experts.</span>
               </h2>
-              <p className="text-[rgba(248,250,252,0.8)] text-xl leading-relaxed mb-12 text-center lg:text-left">
+              <p className="text-[rgba(248,250,252,0.8)] text-lg md:text-xl leading-relaxed mb-10 md:mb-12 text-center lg:text-left">
                 Ready to take your trading to the next level? Our quants and macro specialists are here to help you build a winning strategy.
               </p>
 
@@ -88,7 +88,7 @@ export const ConsultationSection = () => {
             {/* Execution Form */}
             <motion.div 
               variants={itemVariants}
-              className="p-8 md:p-12 rounded-[3.5rem] bg-[#0A0A0A] border border-white/5 shadow-2xl relative"
+              className="p-6 md:p-12 rounded-[2.5rem] md:rounded-[3.5rem] bg-[#0A0A0A] border border-white/5 shadow-2xl relative"
             >
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
