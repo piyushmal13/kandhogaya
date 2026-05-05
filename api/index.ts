@@ -1,6 +1,6 @@
 import express from "express";
 import jwt from "jsonwebtoken";
-import { createClient, SupabaseClient } from "@supabase/supabase-js";
+import { createClient } from "@supabase/supabase-js";
 
 // --- CONFIGURATION ---
 const isProduction = process.env.NODE_ENV === "production";
@@ -26,18 +26,16 @@ const supabase = createClient(
 );
 
 // Verify connection at startup
-(async () => {
-  try {
-    const { data, error } = await supabase.from('products').select('id').limit(1);
-    if (error) {
-      console.error("[Vercel API]: Supabase connection failed:", error.message);
-    } else {
-      console.log("[Vercel API]: Supabase connection successful.");
-    }
-  } catch (e) {
-    console.error("[Vercel API]: Supabase connection exception:", e);
+try {
+  const { error } = await supabase.from('products').select('id').limit(1);
+  if (error) {
+    console.error("[Vercel API]: Supabase connection failed:", error.message);
+  } else {
+    console.log("[Vercel API]: Supabase connection successful.");
   }
-})();
+} catch (e) {
+  console.error("[Vercel API]: Supabase connection exception:", e);
+}
 
 const app = express();
 app.use(express.json());
@@ -98,7 +96,8 @@ const authenticate = async (req: any, res: any, next: any) => {
     req.supabase = authClient;
     req.user = { ...user, role: await resolveUserRole(user, authClient) };
     next();
-  } catch (e) {
+  } catch (err) {
+    console.error("[Vercel API]: Authentication failure:", err);
     res.status(401).json({ error: "Invalid token" });
   }
 };
@@ -143,7 +142,7 @@ app.get("/api/webinars", async (req, res) => {
 });
 
 app.post("/api/webinars/register", authenticate, async (req: any, res) => {
-  const { webinar_id, name, email } = req.body;
+  const { webinar_id, email } = req.body;
   
   // 1. Trigger Automated Email Reminders (Mocked)
   console.log(`[EMAIL SERVICE] Sending confirmation to ${email} for webinar ${webinar_id}`);
@@ -203,6 +202,7 @@ app.get("/api/admin/stats", authenticate, async (req: any, res) => {
       ]
     });
   } catch (error) {
+    console.error("[Vercel API]: Admin stats retrieval failure:", error);
     res.status(500).json({ error: "Failed to fetch admin stats" });
   }
 });
@@ -221,7 +221,7 @@ app.get("/api/admin/agents", authenticate, async (req: any, res) => {
 app.post("/api/admin/licenses", authenticate, async (req: any, res) => {
   if (req.user.role !== "admin") return res.status(403).json({ error: "Forbidden" });
   const { user_id, algo_id, duration_days } = req.body;
-  const key = `IFX-${Math.random().toString(36).toUpperCase().substr(2, 4)}-${Math.random().toString(36).toUpperCase().substr(2, 4)}`;
+  const key = `IFX-${Math.random().toString(36).toUpperCase().substring(2, 6)}-${Math.random().toString(36).toUpperCase().substring(2, 6)}`;
   const expires_at = new Date();
   expires_at.setDate(expires_at.getDate() + (duration_days || 30));
 
@@ -244,7 +244,7 @@ app.post("/api/admin/licenses", authenticate, async (req: any, res) => {
 app.post("/api/admin/content", authenticate, async (req: any, res) => {
   if (req.user.role !== "admin") return res.status(403).json({ error: "Forbidden" });
   const { title, content_type, body, data } = req.body;
-  const slug = title.toLowerCase().replace(/ /g, "-") + "-" + Math.random().toString(36).substr(2, 5);
+  const slug = title.toLowerCase().replaceAll(" ", "-") + "-" + Math.random().toString(36).substring(2, 7);
   
   const { error } = await supabase
     .from('content_posts')

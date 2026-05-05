@@ -463,8 +463,9 @@ export const ContentManager = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Author Display Name</label>
+                    <label htmlFor="author_name" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Author Display Name</label>
                     <input 
+                      id="author_name"
                       value={metadata.author_name || ""} 
                       onChange={e => setMetadata({...metadata, author_name: e.target.value})}
                       placeholder="e.g. IFX Lead Analyst"
@@ -472,8 +473,9 @@ export const ContentManager = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Video Insight URL</label>
+                    <label htmlFor="video_url" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Video Insight URL</label>
                     <input 
+                      id="video_url"
                       value={metadata.video_url || ""} 
                       onChange={e => setMetadata({...metadata, video_url: e.target.value})}
                       placeholder="YouTube/Vimeo link..."
@@ -483,8 +485,9 @@ export const ContentManager = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Key Insights (Comma Separated)</label>
+                  <label htmlFor="key_insights" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Key Insights (Comma Separated)</label>
                   <input 
+                    id="key_insights"
                     value={metadata.key_insights?.join(", ") || ""} 
                     onChange={e => setMetadata({...metadata, key_insights: e.target.value.split(",").map(i => i.trim())})}
                     placeholder="Insight 1, Insight 2, Insight 3"

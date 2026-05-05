@@ -67,94 +67,7 @@ export const CustomRequestTerminal: React.FC = () => {
             <p className="text-sm text-[#849396] uppercase tracking-widest">Institutional Engineering Fulfillment Protocol</p>
           </div>
 
-          {!isSuccess ? (
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-xs font-semibold text-[#00E5FF] mb-1 uppercase">Full Name</label>
-                  <input 
-                    required
-                    type="text"
-                    value={formData.name}
-                    onChange={(e) => setFormData({...formData, name: e.target.value})}
-                    className="w-full bg-[#121214] border border-[#BAC9CC]/10 p-3 rounded text-white focus:outline-none focus:border-[#00E5FF]/50 transition-colors"
-                    placeholder="IDENTIFY SENDER"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-[#00E5FF] mb-1 uppercase">Email Address</label>
-                  <input 
-                    required
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({...formData, email: e.target.value})}
-                    className="w-full bg-[#121214] border border-[#BAC9CC]/10 p-3 rounded text-white focus:outline-none focus:border-[#00E5FF]/50 transition-colors"
-                    placeholder="PROTOCOL CONTACT"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-[#00E5FF] mb-1 uppercase">Project Domain</label>
-                <select 
-                  value={formData.project_type}
-                  onChange={(e) => setFormData({...formData, project_type: e.target.value})}
-                  className="w-full bg-[#121214] border border-[#BAC9CC]/10 p-3 rounded text-white focus:outline-none focus:border-[#00E5FF]/50 transition-colors appearance-none"
-                >
-                  <option value="MT5_ALGO">MetaTrader 5 Algorithmic Development</option>
-                  <option value="PYTHON_QUANT">Python Quantitative Infrastructure</option>
-                  <option value="WEB_DASHBOARD">Custom Institutional Dashboard</option>
-                  <option value="AI_INTEGRATION">AI/ML Signal Optimization</option>
-                  <option value="OTHER">Other Custom Engineering</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-[#00E5FF] mb-1 uppercase">Project Specification</label>
-                <textarea 
-                  required
-                  rows={5}
-                  value={formData.description}
-                  onChange={(e) => setFormData({...formData, description: e.target.value})}
-                  className="w-full bg-[#121214] border border-[#BAC9CC]/10 p-3 rounded text-white focus:outline-none focus:border-[#00E5FF]/50 transition-colors resize-none"
-                  placeholder="Describe your architectural requirements..."
-                />
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-xs font-semibold text-[#00E5FF] mb-1 uppercase">Budget Allocation (USD)</label>
-                  <input 
-                    type="text"
-                    value={formData.budget}
-                    onChange={(e) => setFormData({...formData, budget: e.target.value})}
-                    className="w-full bg-[#121214] border border-[#BAC9CC]/10 p-3 rounded text-white focus:outline-none focus:border-[#00E5FF]/50 transition-colors"
-                    placeholder="ESTIMATED RESOURCE COMMITMENT"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-[#00E5FF] mb-1 uppercase">Timeline Requirement</label>
-                  <input 
-                    type="text"
-                    value={formData.timeline}
-                    onChange={(e) => setFormData({...formData, timeline: e.target.value})}
-                    className="w-full bg-[#121214] border border-[#BAC9CC]/10 p-3 rounded text-white focus:outline-none focus:border-[#00E5FF]/50 transition-colors"
-                    placeholder="FULFILLMENT WINDOW"
-                  />
-                </div>
-              </div>
-
-              <div className="pt-6">
-                <EliteButton 
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full py-4 text-lg"
-                >
-                  {isSubmitting ? 'TRANSMITTING...' : 'INITIATE PROTOCOL'}
-                </EliteButton>
-              </div>
-            </form>
-          ) : (
+          {isSuccess ? (
             <div className="text-center py-20">
               <motion.div 
                 initial={{ scale: 0.9 }}
@@ -176,6 +89,99 @@ export const CustomRequestTerminal: React.FC = () => {
                 Submit another request
               </button>
             </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label htmlFor="full_name" className="block text-xs font-semibold text-[#00E5FF] mb-1 uppercase">Full Name</label>
+                  <input 
+                    id="full_name"
+                    required
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                    className="w-full bg-[#121214] border border-[#BAC9CC]/10 p-3 rounded text-white focus:outline-none focus:border-[#00E5FF]/50 transition-colors"
+                    placeholder="IDENTIFY SENDER"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="email_address" className="block text-xs font-semibold text-[#00E5FF] mb-1 uppercase">Email Address</label>
+                  <input 
+                    id="email_address"
+                    required
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    className="w-full bg-[#121214] border border-[#BAC9CC]/10 p-3 rounded text-white focus:outline-none focus:border-[#00E5FF]/50 transition-colors"
+                    placeholder="PROTOCOL CONTACT"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="project_domain" className="block text-xs font-semibold text-[#00E5FF] mb-1 uppercase">Project Domain</label>
+                <select 
+                  id="project_domain"
+                  value={formData.project_type}
+                  onChange={(e) => setFormData({...formData, project_type: e.target.value})}
+                  className="w-full bg-[#121214] border border-[#BAC9CC]/10 p-3 rounded text-white focus:outline-none focus:border-[#00E5FF]/50 transition-colors appearance-none"
+                >
+                  <option value="MT5_ALGO">MetaTrader 5 Algorithmic Development</option>
+                  <option value="PYTHON_QUANT">Python Quantitative Infrastructure</option>
+                  <option value="WEB_DASHBOARD">Custom Institutional Dashboard</option>
+                  <option value="AI_INTEGRATION">AI/ML Signal Optimization</option>
+                  <option value="OTHER">Other Custom Engineering</option>
+                </select>
+              </div>
+
+              <div>
+                <label htmlFor="project_spec" className="block text-xs font-semibold text-[#00E5FF] mb-1 uppercase">Project Specification</label>
+                <textarea 
+                  id="project_spec"
+                  required
+                  rows={5}
+                  value={formData.description}
+                  onChange={(e) => setFormData({...formData, description: e.target.value})}
+                  className="w-full bg-[#121214] border border-[#BAC9CC]/10 p-3 rounded text-white focus:outline-none focus:border-[#00E5FF]/50 transition-colors resize-none"
+                  placeholder="Describe your architectural requirements..."
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label htmlFor="budget_alloc" className="block text-xs font-semibold text-[#00E5FF] mb-1 uppercase">Budget Allocation (USD)</label>
+                  <input 
+                    id="budget_alloc"
+                    type="text"
+                    value={formData.budget}
+                    onChange={(e) => setFormData({...formData, budget: e.target.value})}
+                    className="w-full bg-[#121214] border border-[#BAC9CC]/10 p-3 rounded text-white focus:outline-none focus:border-[#00E5FF]/50 transition-colors"
+                    placeholder="ESTIMATED RESOURCE COMMITMENT"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="timeline_req" className="block text-xs font-semibold text-[#00E5FF] mb-1 uppercase">Timeline Requirement</label>
+                  <input 
+                    id="timeline_req"
+                    type="text"
+                    value={formData.timeline}
+                    onChange={(e) => setFormData({...formData, timeline: e.target.value})}
+                    className="w-full bg-[#121214] border border-[#BAC9CC]/10 p-3 rounded text-white focus:outline-none focus:border-[#00E5FF]/50 transition-colors"
+                    placeholder="FULFILLMENT WINDOW"
+                  />
+                </div>
+              </div>
+
+              <div className="pt-6">
+                <EliteButton 
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full py-4 text-lg"
+                >
+                  {isSubmitting ? 'TRANSMITTING...' : 'INITIATE PROTOCOL'}
+                </EliteButton>
+              </div>
+            </form>
           )}
         </motion.div>
       </main>
