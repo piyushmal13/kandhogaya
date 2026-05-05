@@ -453,10 +453,12 @@ export const WebinarManager = () => {
               rows={4}
               value={JSON.stringify(form.metadata, null, 2)}
               onChange={e => {
-                try { 
-                  const parsed = JSON.parse(e.target.value);
-                  setForm(f => ({ ...f, metadata: parsed }));
-                } catch (err) {}
+                 try { 
+                   const parsed = JSON.parse(e.target.value);
+                   setForm(f => ({ ...f, metadata: parsed }));
+                 } catch (err) {
+                   // Silent fail for malformed JSON during live typing
+                 }
               }}
               className="w-full bg-black border border-white/10 rounded-2xl p-4 text-white text-xs outline-none focus:border-cyan-500/50 transition-all font-mono"
             />
