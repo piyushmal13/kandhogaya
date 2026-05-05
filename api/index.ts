@@ -1,6 +1,6 @@
 import express from "express";
 import jwt from "jsonwebtoken";
-import { createClient } from "@supabase/supabase-js";
+import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
 // --- CONFIGURATION ---
 const isProduction = process.env.NODE_ENV === "production";
@@ -56,7 +56,7 @@ const createAuthedSupabaseClient = (token: string) => createClient(supabaseUrl, 
   auth: { persistSession: false, autoRefreshToken: false }
 });
 
-const resolveUserRole = async (authUser: any, authedClient: ReturnType<typeof createClient>): Promise<AppUserRole> => {
+const resolveUserRole = async (authUser: any, authedClient: any): Promise<AppUserRole> => {
   const appMetadataRole = normalizeRole(authUser.app_metadata?.role);
   const roleClient = supabaseServiceKey ? supabase : authedClient;
 

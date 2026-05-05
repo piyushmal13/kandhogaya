@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { SovereignCard } from './SovereignCard';
+import { EliteCard } from './EliteCard';
 
-const meta: Meta<typeof SovereignCard> = {
-  title: 'UI/SovereignCard',
-  component: SovereignCard,
+const meta: Meta<typeof EliteCard> = {
+  title: 'UI/EliteCard',
+  component: EliteCard,
   tags: ['autodocs'],
 };
 
 export default meta;
-type Story = StoryObj<typeof SovereignCard>;
+type Story = StoryObj<typeof EliteCard>;
 
 export const Default: Story = {
   args: {

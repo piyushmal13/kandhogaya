@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import { SovereignCard } from './SovereignCard';
+import { EliteCard } from './EliteCard';
 
-describe('SovereignCard Component', () => {
+describe('EliteCard Component', () => {
   it('renders natively without crashing', () => {
-    render(<SovereignCard />);
-    expect(screen.getByText('SovereignCard')).toBeInTheDocument();
+    render(<EliteCard />);
+    expect(screen.getByText('EliteCard')).toBeInTheDocument();
   });
 });

@@ -8,6 +8,7 @@ import { WebinarOperationsMonitor } from '@/components/institutional/WebinarOper
 import { PageMeta } from '@/components/site/PageMeta';
 
 import { StandardLayout } from '@/components/site/StandardLayout';
+import AdBanner from '@/components/ui/AdBanner';
 
 export const Webinars = () => {
   const { data: webinars, isLoading } = useWebinars();

@@ -59,6 +59,7 @@ export interface Webinar {
   registration_count: number;
   type: string;
   recording_url?: string;
+  streaming_url?: string;
   
   // UI Virtual / Joined
   sponsors?: WebinarSponsor[];
@@ -225,6 +226,9 @@ export interface Blog {
   author_bio?: string;
   video_url?: string;
 }
+
+export type ContentPost = Blog;
+export type Signal = Intelligence;
 
 // ---------------------------------------------------------------------------
 // courses / lessons

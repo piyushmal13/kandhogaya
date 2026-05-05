@@ -4,7 +4,7 @@ import { Navbar } from '../components/ui/Navbar';
 import { Footer } from '../components/ui/Footer';
 import { EliteButton } from '../components/ui/Button';
 import { logger } from '../core/logger';
-import { toast } from 'react-hot-toast';
+import { useToast } from '../contexts/ToastContext';
 
 /**
  * CustomRequestTerminal
@@ -24,6 +24,8 @@ export const CustomRequestTerminal: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
+  const { success, error: toastError } = useToast();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -38,10 +40,10 @@ export const CustomRequestTerminal: React.FC = () => {
       if (!response.ok) throw new Error('System failure during transmission');
       
       setIsSuccess(true);
-      toast.success('Protocol Initiated: Request Transmitted');
+      success('Protocol Initiated: Request Transmitted');
     } catch (err: any) {
-      logger.error({ err: err.message }, 'CustomRequestTerminal.handleSubmit Failure');
-      toast.error('Transmission Failure: Please check network status');
+      logger.error('system', 'CustomRequestTerminal.handleSubmit Failure', { err: err.message });
+      toastError('Transmission Failure: Please check network status');
     } finally {
       setIsSubmitting(false);
     }

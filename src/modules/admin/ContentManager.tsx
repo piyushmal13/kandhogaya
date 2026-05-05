@@ -8,20 +8,9 @@ import { useAuth } from "../../contexts/AuthContext";
 import { Dialog } from "../../components/ui/Dialog";
 import { cn } from "../../utils/cn";
 
-interface ContentPost {
-  id: string;
-  title: string;
-  slug: string;
-  content: string;
-  image_url: string;
-  content_type: string;
-  status: string;
-  category?: string;
-  author_bio?: string;
-  metadata?: any;
-  created_at: string;
-  author?: { full_name: string };
-}
+import { Blog } from "../../types";
+
+type ContentPost = Blog;
 
 const CONTENT_TYPES = [
   { value: "blog",          label: "Article / Analysis" },
