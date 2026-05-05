@@ -286,14 +286,13 @@ export const WebinarDetail = () => {
                     <button
                       role="tab"
                       aria-selected={isActive}
-                      tabIndex={isActive ? 0 : -1}
                       onClick={() => setActiveTab(tab.toLowerCase())}
-                      className={`px-6 py-4 text-sm font-bold transition-all relative whitespace-nowrap ${
+                      className={`px-6 py-4 text-sm font-black uppercase tracking-widest transition-all relative whitespace-nowrap ${
                         isActive ? "text-emerald-500" : "text-gray-500 hover:text-gray-300"
                       }`}
                     >
                       {tab}
-                      {isActive && <motion.div layoutId="activeTab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-500" />}
+                      {isActive && <motion.div layoutId="activeTab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]" />}
                     </button>
                   </li>
                 )})}
@@ -302,28 +301,30 @@ export const WebinarDetail = () => {
               <div className="prose prose-invert max-w-none">
                 {activeTab === "overview" && (
                   <div className="text-gray-400 leading-relaxed animate-in fade-in slide-in-from-bottom-2 duration-500">
-                    <p className="mb-6 text-lg text-white/80">{webinar.description}</p>
+                    <p className="mb-6 text-lg text-white/80 font-medium">{webinar.description}</p>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-                      <div className="p-6 rounded-2xl bg-white/5 border border-white/5">
-                        <h4 className="text-white font-bold mb-4 flex items-center gap-2">
+                      <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5">
+                        <h4 className="text-white font-black text-xs uppercase tracking-widest mb-6 flex items-center gap-2">
                           <Star className="w-4 h-4 text-emerald-500" />
-                          What You'll Learn
+                          Key Outcomes
                         </h4>
-                        <ul className="space-y-3 text-sm">
-                          {webinar.metadata?.learning_points?.map((point: string) => (
-                            <li key={point} className="flex items-start gap-2">
+                        <ul className="space-y-4">
+                          {Array.isArray(webinar.metadata?.learning_points) ? webinar.metadata.learning_points.map((point: string) => (
+                            <li key={point} className="flex items-start gap-3 text-xs">
                               <Check className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" />
-                              <span>{point}</span>
+                              <span className="leading-relaxed">{point}</span>
                             </li>
-                          )) || <li className="text-gray-500">Comprehensive market structure analysis, institutional algorithmic frameworks, and quantitative execution models.</li>}
+                          )) : (
+                            <li className="text-gray-600 text-xs italic">Institutional curriculum processing...</li>
+                          )}
                         </ul>
                       </div>
-                      <div className="p-6 rounded-2xl bg-white/5 border border-white/5">
-                        <h4 className="text-white font-bold mb-4 flex items-center gap-2">
+                      <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5">
+                        <h4 className="text-white font-black text-xs uppercase tracking-widest mb-6 flex items-center gap-2">
                           <ShieldCheck className="w-4 h-4 text-emerald-500" />
-                          Institutional Security
+                          Risk Protocol
                         </h4>
-                        <p className="text-sm">All methods shared are compliant with strictly monitored institutional risk management standards, including execution speed optimization and drawdown protection.</p>
+                        <p className="text-xs leading-relaxed text-white/40">All methods shared are compliant with strictly monitored institutional risk management standards, including execution speed optimization and drawdown protection.</p>
                       </div>
                     </div>
                   </div>
@@ -331,8 +332,8 @@ export const WebinarDetail = () => {
                 
                 {activeTab === "speaker" && (
                   <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
-                    <div className="flex flex-col md:flex-row gap-12 items-center bg-white/[0.02] border border-white/5 rounded-[40px] p-10 md:p-14">
-                      <div className="w-40 h-40 md:w-56 md:h-56 rounded-[32px] overflow-hidden shrink-0 border border-emerald-500/20 shadow-2xl relative group">
+                    <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-center bg-white/[0.02] border border-white/5 rounded-3xl md:rounded-[40px] p-8 md:p-14">
+                      <div className="w-32 h-32 md:w-56 md:h-56 rounded-3xl md:rounded-[32px] overflow-hidden shrink-0 border border-emerald-500/20 shadow-2xl relative group">
                         <div className="absolute inset-0 bg-emerald-500/20 group-hover:opacity-0 transition-opacity" />
                         <img 
                           src={webinar.webinar_image_url || webinar.speaker_profile_url || "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=2000&auto=format&fit=crop"} 
@@ -341,9 +342,9 @@ export const WebinarDetail = () => {
                         />
                       </div>
                       <div className="text-center md:text-left">
-                        <h3 className="text-3xl md:text-4xl font-black text-white mb-2 tracking-tighter uppercase">{webinar.speaker_name || "IFX Lead Strategist"}</h3>
-                        <p className="text-emerald-500 font-black uppercase tracking-[0.3em] text-[10px] mb-8">Director of Global Macro Strategy</p>
-                        <p className="text-gray-400 text-lg leading-relaxed max-w-xl font-medium opacity-80">
+                        <h3 className="text-2xl md:text-4xl font-black text-white mb-2 tracking-tighter uppercase">{webinar.speaker_name || "IFX Lead Strategist"}</h3>
+                        <p className="text-emerald-500 font-black uppercase tracking-[0.3em] text-[8px] md:text-[10px] mb-6">Director of Global Macro Strategy</p>
+                        <p className="text-gray-400 text-sm md:text-lg leading-relaxed max-w-xl font-medium opacity-80">
                           {webinar.metadata?.author_bio || "A defining voice in institutional market structure, specializing in high-velocity algorithmic modeling and macro capital flow analysis. Leading the IFX research desk since 2024."}
                         </p>
                       </div>
@@ -351,23 +352,21 @@ export const WebinarDetail = () => {
                   </div>
                 )}
 
-                {activeTab === "q&a" && (
+                {activeTab === "qa" && (
                   <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 space-y-4">
-                    <h3 className="text-xl font-bold text-white mb-6">Frequently Asked Questions</h3>
-                    {webinar.q_and_a?.map((qa: any) => (
-                      <div key={qa.question?.slice(0, 32)} className="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-emerald-500/30 transition-colors">
-                        <h4 className="text-white font-bold text-lg mb-3 flex items-start gap-3">
-                          <span className="text-emerald-500 mt-1">Q.</span>
+                    <h3 className="text-xs font-black text-white uppercase tracking-widest mb-8">Intelligence Retrieval</h3>
+                    {Array.isArray(webinar.q_and_a) ? webinar.q_and_a.map((qa: any) => (
+                      <div key={qa.question} className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-emerald-500/20 transition-colors">
+                        <h4 className="text-white font-bold text-sm mb-3 flex items-start gap-3">
+                          <span className="text-emerald-500 font-black">Q.</span>
                           {qa.question}
                         </h4>
-                        <p className="text-gray-400 leading-relaxed text-sm flex items-start gap-3">
-                          <span className="text-gray-600 font-bold mt-0.5">A.</span>
+                        <p className="text-white/40 leading-relaxed text-xs flex items-start gap-3 ml-4">
                           {qa.answer}
                         </p>
                       </div>
-                    ))}
-                    {(!webinar.q_and_a || webinar.q_and_a.length === 0) && (
-                      <p className="text-gray-500 text-sm">No Q&A provided for this session yet.</p>
+                    )) : (
+                      <p className="text-gray-600 text-xs italic">No Q&A provided for this session yet.</p>
                     )}
                   </div>
                 )}
@@ -375,27 +374,50 @@ export const WebinarDetail = () => {
             </div>
           </div>
 
-          <div className="lg:col-span-4">
-            <div className="bg-[var(--color7)] border border-white/10 rounded-2xl flex flex-col h-[600px] shadow-xl">
-              <div className="p-4 border-b border-white/5 flex items-center justify-between">
-                <div className="flex items-center gap-2">
+          <div className="lg:col-span-4 mt-12 lg:mt-0">
+            <div className="bg-black/40 backdrop-blur-3xl border border-white/10 rounded-3xl flex flex-col h-[500px] md:h-[600px] shadow-2xl relative overflow-hidden">
+              <div className="p-5 border-b border-white/5 flex items-center justify-between">
+                <div className="flex items-center gap-3">
                   <MessageSquare className="w-4 h-4 text-emerald-500" />
-                  <span className="text-white font-bold text-sm">Live Chat</span>
+                  <span className="text-white font-black text-[10px] uppercase tracking-widest">Secure Terminal Feed</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                   <span className="text-[8px] font-black text-emerald-500 uppercase tracking-widest">Active</span>
                 </div>
               </div>
-              <div className="flex-1 overflow-y-auto p-4 space-y-4">
+              <div className="flex-1 overflow-y-auto p-6 space-y-6 hide-scrollbar">
+                {messages.length === 0 && (
+                  <div className="h-full flex flex-col items-center justify-center opacity-20 text-center px-8">
+                     <Send className="w-8 h-8 mb-4" />
+                     <p className="text-[10px] font-black uppercase tracking-widest leading-relaxed">
+                        Establishing encrypted <br/> connection to session...
+                     </p>
+                  </div>
+                )}
                 {messages.map((msg) => (
-                  <div key={`msg-${msg.id}`} className="bg-white/5 rounded-lg p-2.5 text-gray-300 text-sm">
-                    <span className="text-emerald-500 font-bold mr-2 uppercase text-[10px]">{msg.user}</span>
+                  <div key={`msg-${msg.id}`} className="bg-white/[0.03] border border-white/5 rounded-xl p-4 text-white/80 text-xs">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-emerald-500 font-black uppercase text-[9px] tracking-widest">{msg.user}</span>
+                      <span className="text-[8px] text-white/20">{msg.time}</span>
+                    </div>
                     {msg.text}
                   </div>
                 ))}
                 <div ref={chatEndRef} />
               </div>
-              <form onSubmit={handleSendMessage} className="p-4 border-t border-white/5">
-                <div className="relative">
-                  <input type="text" placeholder="Type a message..." value={newMessage} onChange={(e) => setNewMessage(e.target.value)} className="w-full bg-black border border-white/10 rounded-xl pl-4 pr-12 py-3 text-sm text-white focus:border-emerald-500 outline-none" />
-                  <button type="submit" className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-emerald-500"><Send className="w-4 h-4" /></button>
+              <form onSubmit={handleSendMessage} className="p-4 border-t border-white/5 bg-black/40">
+                <div className="relative group">
+                  <input 
+                    type="text" 
+                    placeholder="Type intelligence brief..." 
+                    value={newMessage} 
+                    onChange={(e) => setNewMessage(e.target.value)} 
+                    className="w-full bg-white/[0.02] border border-white/10 rounded-xl pl-4 pr-12 py-4 text-xs text-white focus:border-emerald-500/30 outline-none transition-all" 
+                  />
+                  <button type="submit" className="absolute right-2 top-1/2 -translate-y-1/2 p-2.5 text-emerald-500 hover:text-emerald-400 transition-colors">
+                    <Send className="w-4 h-4" />
+                  </button>
                 </div>
               </form>
             </div>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ArrowUpRight, Zap, Share2, Calendar, Clock, User, Shield, ExternalLink, Globe } from "lucide-react";
+import { ArrowUpRight, Share2, Calendar, Clock, User, Shield, ExternalLink, Globe } from "lucide-react";
 import { motion, useScroll, useSpring } from "motion/react";
 
 import { PageMeta } from "../components/site/PageMeta";
@@ -136,7 +136,7 @@ export const BlogDetail = () => {
                 initial={{ opacity: 0, y: 20 }} 
                 animate={{ opacity: 1, y: 0 }} 
                 transition={{ delay: 0.1 }} 
-                className="text-5xl md:text-7xl font-black text-white tracking-tighter leading-[0.9] lg:max-w-4xl"
+                className="text-4xl sm:text-5xl md:text-7xl font-black text-white tracking-tighter leading-[1] md:leading-[0.9] lg:max-w-4xl uppercase"
               >
                 {post.title}
               </motion.h1>
@@ -145,7 +145,7 @@ export const BlogDetail = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.12 }}
-                className="text-xl md:text-2xl text-emerald-500 font-bold tracking-tight uppercase"
+                className="text-lg md:text-2xl text-emerald-500 font-bold tracking-tight uppercase"
               >
                 {post.metadata?.subtitle || `Institutional Analysis: ${post.category || "Market Insight"}`}
               </motion.p>
@@ -154,7 +154,7 @@ export const BlogDetail = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.15 }}
-                className="text-2xl md:text-3xl text-gray-400 font-medium leading-tight tracking-tight max-w-3xl border-l-4 border-emerald-500/50 pl-8 py-2"
+                className="text-xl md:text-3xl text-gray-400 font-medium leading-tight tracking-tight max-w-3xl border-l-4 border-emerald-500/50 pl-4 md:pl-8 py-2"
               >
                 {boldHeadline || `Decrypting institutional order flow and macro capital adjustments for ${post.title}.`}
               </motion.p>
@@ -321,27 +321,29 @@ export const BlogDetail = () => {
             </div>
 
             <div className="sticky top-24 space-y-12">
-              {/* Telegram Promo */}
-              <div className="p-[1px] bg-gradient-to-br from-emerald-500/20 via-white/5 to-transparent rounded-[40px] border border-white/5">
-                <div className="bg-[var(--color6)] p-10 rounded-[39px] relative overflow-hidden">
-                   <div className="absolute top-0 right-0 p-8 opacity-[0.05]">
-                      <Zap className="w-20 h-20 text-emerald-500" />
-                   </div>
-                   <h3 className="text-2xl font-black text-white uppercase tracking-tighter mb-4 leading-none">
-                      Live Pulse <br/><span className="text-emerald-500 text-lg">Signal Channel</span>
-                   </h3>
-                   <p className="text-gray-500 text-xs leading-relaxed mb-8">
-                      Institutional trade flow and macro adjustments delivered instantly to your device.
-                   </p>
-                   <a 
-                     href="https://t.me/ifxtrades" 
-                     target="_blank" 
-                     className="block w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-black text-center font-black text-[10px] uppercase tracking-widest rounded-2xl shadow-2xl transition-all"
-                   >
-                      Enter Signal Intelligence
-                   </a>
+              {/* Telegram Promo - REMOVED AS PER INSTITUTIONAL DIRECTIVE */}
+              
+              {/* Dynamic Ad Slot */}
+              {meta.sidebar_ad && (
+                <div className="p-[1px] bg-gradient-to-br from-emerald-500/20 via-white/5 to-transparent rounded-[40px] border border-white/5">
+                  <div className="bg-[var(--color6)] p-10 rounded-[39px] relative overflow-hidden text-center">
+                    <img src={meta.sidebar_ad.logo_url} className="h-8 mx-auto mb-6 grayscale opacity-60" alt="Partner" />
+                    <h3 className="text-xl font-black text-white uppercase tracking-tighter mb-4 leading-none">
+                      {meta.sidebar_ad.title}
+                    </h3>
+                    <p className="text-gray-500 text-[10px] leading-relaxed mb-8 uppercase tracking-widest">
+                      {meta.sidebar_ad.description}
+                    </p>
+                    <a 
+                      href={meta.sidebar_ad.link_url} 
+                      target="_blank" 
+                      className="block w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-black text-center font-black text-[10px] uppercase tracking-widest rounded-2xl shadow-2xl transition-all"
+                    >
+                      {meta.sidebar_ad.button_text || "Enter Node"}
+                    </a>
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Related Ads or Content */}
               <div className="bg-zinc-900/30 p-10 rounded-[40px] border border-white/5">

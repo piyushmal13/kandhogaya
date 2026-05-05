@@ -1,5 +1,5 @@
-import React, { useRef, useMemo } from 'react';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { PageMeta } from "@/components/site/PageMeta";
 import { 
   Brain, 
@@ -295,17 +295,14 @@ export const QuantX = () => {
       </section>
 
       {/* Final CTA */}
-      <section className="py-40 bg-emerald-600/[0.02] border-t border-white/[0.05]">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-5xl md:text-7xl font-bold mb-12 tracking-tight italic">
+      <section className="py-24 md:py-40 bg-emerald-600/[0.02] border-t border-white/[0.05]">
+        <div className="container mx-auto px-4 md:px-6 text-center">
+          <h2 className="text-4xl md:text-7xl font-bold mb-12 tracking-tight italic uppercase">
             Elite Alpha. <br />
             <span className="text-emerald-400">Zero Guesswork.</span>
           </h2>
-          <button className="group relative px-12 py-5 bg-emerald-500 text-black font-black rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95">
-            <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-            <span className="relative z-10 flex items-center gap-3">
-              ACCESS QUANTX SYSTEM <ChevronRight size={20} />
-            </span>
+          <button className="btn-primary px-10 py-5 text-sm">
+            ACCESS QUANTX SYSTEM <ChevronRight size={18} />
           </button>
         </div>
       </section>

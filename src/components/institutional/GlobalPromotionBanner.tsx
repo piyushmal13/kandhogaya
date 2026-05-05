@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   X, 
-  Calendar, 
   Users, 
   ArrowRight, 
   Zap, 
   ShieldCheck,
-  TrendingUp,
-  Clock,
-  Info
+  Clock
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 
 interface Banner {
@@ -106,69 +102,69 @@ export const GlobalPromotionBanner = () => {
           transition={{ type: "spring", stiffness: 260, damping: 20 }}
           className="fixed bottom-6 left-6 right-6 z-[100] max-w-4xl mx-auto"
         >
-          <div className="relative group overflow-hidden rounded-[2rem] bg-black/60 backdrop-blur-3xl border border-emerald-500/20 shadow-[0_40px_100px_rgba(0,0,0,0.8),0_0_40px_rgba(16,185,129,0.1)]">
+          <div className="relative group overflow-hidden rounded-2xl md:rounded-[2rem] bg-black/80 backdrop-blur-3xl border border-emerald-500/20 shadow-[0_40px_100px_rgba(0,0,0,0.8)]">
             {/* Animated Glow Overlay */}
             <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 via-transparent to-transparent pointer-events-none" />
             
             <div className="flex flex-col md:flex-row items-stretch">
               {/* Image Segment */}
-              <div className="relative w-full md:w-56 h-40 md:h-auto overflow-hidden shrink-0">
+              <div className="relative w-full md:w-48 h-32 md:h-auto overflow-hidden shrink-0">
                 <img 
                   src={activeBanner.image_url || "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop"} 
                   alt={activeBanner.title}
                   className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-black/60 to-transparent" />
-                <div className="absolute top-4 left-4">
-                  <div className="px-2 py-1 rounded bg-emerald-500 text-black text-[8px] font-black uppercase tracking-widest flex items-center gap-1.5 shadow-xl">
-                    <Zap className="w-2.5 h-2.5" />
-                    {activeBanner.placement === 'webinar' ? 'Live Transmission' : 'Institutional Protocol'}
+                <div className="absolute top-3 left-3">
+                  <div className="px-1.5 py-0.5 rounded bg-emerald-500 text-black text-[7px] font-black uppercase tracking-widest flex items-center gap-1 shadow-xl">
+                    <Zap className="w-2 h-2" />
+                    {activeBanner.placement === 'webinar' ? 'Live' : 'Intel'}
                   </div>
                 </div>
               </div>
 
               {/* Content Segment */}
-              <div className="flex-1 p-6 md:p-8 flex flex-col justify-center">
-                <div className="flex items-start justify-between gap-4 mb-2">
+              <div className="flex-1 p-4 md:p-6 flex flex-col justify-center">
+                <div className="flex items-start justify-between gap-4 mb-1">
                   <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <Clock className="w-3.5 h-3.5 text-emerald-500" />
-                      <span className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.3em]">Institutional Broadcast</span>
+                    <div className="flex items-center gap-2 mb-1">
+                      <Clock className="w-3 h-3 text-emerald-500" />
+                      <span className="text-[8px] font-black text-emerald-500 uppercase tracking-[0.3em]">Institutional Broadcast</span>
                     </div>
-                    <h3 className="text-xl md:text-2xl font-black text-white tracking-tighter uppercase italic leading-none">
+                    <h3 className="text-lg md:text-xl font-black text-white tracking-tighter uppercase italic leading-none">
                       {activeBanner.title}
                     </h3>
                   </div>
                   <button 
                     onClick={handleDismiss}
-                    className="p-2 rounded-full hover:bg-white/10 text-white/30 hover:text-white transition-all"
+                    className="p-1.5 rounded-full hover:bg-white/10 text-white/30 hover:text-white transition-all"
                   >
-                    <X className="w-4 h-4" />
+                    <X className="w-3.5 h-3.5" />
                   </button>
                 </div>
                 
-                <p className="text-sm text-white/40 font-medium leading-relaxed mb-6 max-w-xl line-clamp-2">
+                <p className="text-xs text-white/40 font-medium leading-relaxed mb-4 max-w-xl line-clamp-2">
                   {activeBanner.description}
                 </p>
 
-                <div className="flex flex-wrap items-center gap-6">
+                <div className="flex flex-wrap items-center gap-4">
                   <Link
                     to={activeBanner.link_url}
-                    className="inline-flex items-center gap-3 px-6 py-3 rounded-xl bg-emerald-500 text-black font-black text-[10px] uppercase tracking-widest hover:bg-emerald-400 transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-emerald-500/20"
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-emerald-500 text-black font-black text-[9px] uppercase tracking-widest hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/20"
                   >
                     Secure Entry Node
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <ArrowRight className="w-3 h-3" />
                   </Link>
 
-                  <div className="flex items-center gap-4 text-[9px] font-black text-white/30 uppercase tracking-widest">
-                    <div className="flex items-center gap-1.5">
-                      <Users className="w-3.5 h-3.5" />
-                      <span>{activeBanner.metadata?.registration_count || '1.2K'} Synchronized</span>
+                  <div className="hidden sm:flex items-center gap-3 text-[8px] font-black text-white/20 uppercase tracking-widest">
+                    <div className="flex items-center gap-1">
+                      <Users className="w-3 h-3" />
+                      <span>{activeBanner.metadata?.registration_count || '1.2K'}</span>
                     </div>
-                    <div className="w-1 h-1 rounded-full bg-white/10" />
-                    <div className="flex items-center gap-1.5">
-                      <ShieldCheck className="w-3.5 h-3.5" />
-                      <span>Verified Intel</span>
+                    <div className="w-0.5 h-0.5 rounded-full bg-white/10" />
+                    <div className="flex items-center gap-1">
+                      <ShieldCheck className="w-3 h-3" />
+                      <span>Verified</span>
                     </div>
                   </div>
                 </div>

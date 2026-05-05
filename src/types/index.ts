@@ -198,6 +198,13 @@ export interface Blog {
     author_name?: string;
     author_profile_url?: string;
     subtitle?: string;
+    sidebar_ad?: {
+      title: string;
+      description: string;
+      logo_url: string;
+      link_url: string;
+      button_text?: string;
+    };
     broker_ad?: {
       name: string;
       logo_url: string;

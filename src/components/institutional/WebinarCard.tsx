@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { Calendar, Clock, Users, ShieldCheck } from 'lucide-react';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag';
-import { EliteButton } from '@/components/ui/Button';
 import { Webinar } from '@/types';
 
 export function WebinarCard({ webinar }: Readonly<{ webinar: Webinar }>) {
@@ -73,7 +72,7 @@ export function WebinarCard({ webinar }: Readonly<{ webinar: Webinar }>) {
     },
     performer: {
       '@type': 'Person',
-      name: webinar.speaker || webinar.speaker_name || "Institutional Lead"
+      name: webinar.speaker_name || "Institutional Lead"
     },
     image: webinar.webinar_image_url || "",
     description: webinar.description,
@@ -167,14 +166,14 @@ export function WebinarCard({ webinar }: Readonly<{ webinar: Webinar }>) {
           <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full ring-2 ring-emerald-500/20">
             <img 
               src={webinar.speaker_images?.[0] || webinar.speaker_profile_url || "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=2000&auto=format&fit=crop"} 
-              alt={webinar.speaker || webinar.speaker_name || "Institutional Lead"}
+              alt={webinar.speaker_name || "Institutional Lead"}
               className="w-full h-full object-cover"
               itemProp="performer"
             />
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-[11px] font-black text-white uppercase tracking-wider truncate" itemProp="organizer">
-              {webinar.speaker || webinar.speaker_name || "Institutional Lead"}
+              {webinar.speaker_name || "Institutional Lead"}
             </p>
             <p className="text-[9px] font-medium text-white/20 uppercase tracking-widest truncate">
               Lead Strategist
@@ -185,33 +184,26 @@ export function WebinarCard({ webinar }: Readonly<{ webinar: Webinar }>) {
         {/* CTA */}
         <div className="pt-2">
           {isRecorded ? (
-            <EliteButton 
-              variant="secondary" 
-              fluid
-              className="rounded-2xl"
-              trackingEvent="webinar_watch_recording"
+            <button 
+              className="btn-secondary w-full py-3.5 text-[10px]"
               onClick={(e) => {
                 e.stopPropagation();
                 webinar.recording_url && globalThis.open(webinar.recording_url, '_blank');
               }}
             >
               Analyze Recording
-            </EliteButton>
+            </button>
           ) : (
-            <EliteButton 
-              variant="elite" 
-              fluid
-              className="rounded-2xl"
-              glowEffect={isLive}
+            <button 
+              className={`w-full py-3.5 text-[10px] ${isLive ? 'btn-primary shadow-[0_0_20px_rgba(16,185,129,0.3)]' : 'btn-primary opacity-90'}`}
               disabled={!isRegistrationOpen || attendees >= maxSeats}
-              trackingEvent={`webinar_register_${webinar.id}`}
               onClick={(e) => {
                 e.stopPropagation();
                 navigate(`/webinars/${webinar.id}`);
               }}
             >
               {getButtonContent()}
-            </EliteButton>
+            </button>
           )}
         </div>
       </div>
