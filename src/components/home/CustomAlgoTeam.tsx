@@ -55,30 +55,28 @@ export const CustomAlgoTeam = () => {
                   <Users className="w-6 h-6" />
                 </div>
                 <div>
-                  <div className="text-2xl font-black text-white">40+</div>
-                  <div className="text-[10px] text-white/30 uppercase font-black tracking-widest">Senior Quants</div>
+                  <div className="text-2xl font-black text-white">Elite</div>
+                  <div className="text-[10px] text-white/30 uppercase font-black tracking-widest">Quantitative Engineers</div>
                 </div>
               </div>
               <div className="flex items-center gap-4 p-6 rounded-3xl bg-white/[0.02] border border-white/5">
                 <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 flex items-center justify-center text-cyan-400">
-                  <Zap className="w-6 h-6" />
+                  <ShieldCheck className="w-6 h-6" />
                 </div>
                 <div>
-                  <div className="text-2xl font-black text-white">&lt;1ms</div>
-                  <div className="text-[10px] text-white/30 uppercase font-black tracking-widest">Execution Latency</div>
+                  <div className="text-2xl font-black text-white">Verified</div>
+                  <div className="text-[10px] text-white/30 uppercase font-black tracking-widest">Infrastructure</div>
                 </div>
               </div>
             </div>
 
-            <EliteButton 
-              variant="elite" 
-              size="lg" 
-              className="group"
+            <button 
               onClick={() => document.getElementById('consultation')?.scrollIntoView({ behavior: 'smooth' })}
+              className="group w-full sm:w-auto px-10 py-5 bg-[#58F2B6] hover:bg-[#58F2B6]/90 text-black font-black text-sm uppercase tracking-widest rounded-full transition-all duration-300 flex items-center justify-center gap-3 shadow-[0_0_30px_rgba(88,242,182,0.3)] hover:shadow-[0_0_50px_rgba(88,242,182,0.5)]"
             >
               Request Custom Build
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </EliteButton>
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform" />
+            </button>
           </motion.div>
 
           <div className="space-y-6">

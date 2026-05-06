@@ -84,6 +84,7 @@ export const Marketplace = () => {
             price: p.price,
             category: p.category,
             description: p.description,
+            imageUrl: p.images?.[0] || p.image_url || p.metadata?.image_url,
             isPremium: p.price > 1000,
             performance: p.performance ? {
               winRate: p.performance.win_rate || 72,

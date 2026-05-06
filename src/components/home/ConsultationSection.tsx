@@ -140,7 +140,7 @@ export const ConsultationSection = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-white/30 ml-2">Objective Protocol</label>
+                  <label className="text-xs font-black uppercase tracking-widest text-[#58F2B6] ml-2 block mb-2">Objective Protocol</label>
                   <textarea 
                     rows={4}
                     placeholder="Briefly describe your algorithmic or liquidity engineering requirements..."
@@ -150,12 +150,10 @@ export const ConsultationSection = () => {
                   />
                 </div>
 
-                <EliteButton 
+                <button 
                   type="submit"
-                  variant="elite" 
-                  size="lg" 
-                  className="w-full mt-4"
-                  isLoading={status === 'loading'}
+                  disabled={status === 'loading'}
+                  className="w-full mt-8 py-5 bg-[#58F2B6] hover:bg-[#58F2B6]/90 text-black font-black text-sm uppercase tracking-widest rounded-2xl transition-all duration-300 flex items-center justify-center gap-3 shadow-[0_0_30px_rgba(88,242,182,0.2)] hover:shadow-[0_0_50px_rgba(88,242,182,0.4)] disabled:opacity-50"
                 >
                   <AnimatePresence mode="wait">
                     {status === 'success' ? (
@@ -176,11 +174,11 @@ export const ConsultationSection = () => {
                         className="flex items-center gap-2"
                       >
                         <Send className="w-5 h-5" />
-                        <span>Send Message</span>
+                        <span>Send Protocol Request</span>
                       </motion.div>
                     )}
                   </AnimatePresence>
-                </EliteButton>
+                </button>
               </form>
             </motion.div>
           </div>

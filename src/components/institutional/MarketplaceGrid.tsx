@@ -87,12 +87,20 @@ export const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({ products, isLo
             )}
           >
             {/* Asset Shimmer Overlay */}
-            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-700">
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-700 z-10">
                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.03] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
             </div>
 
+            {/* Proof Image Background */}
+            {product.imageUrl && (
+              <div className="absolute inset-0 z-0 opacity-[0.05] group-hover:opacity-20 transition-opacity duration-700">
+                <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover mix-blend-overlay" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent" />
+              </div>
+            )}
+
             {/* Header: Meta & Status */}
-            <div className="flex justify-between items-start mb-12">
+            <div className="flex justify-between items-start mb-12 relative z-20">
               <div className="space-y-4">
                 <div className="inline-flex items-center gap-3 px-3 py-1 rounded-full bg-white/5 border border-white/10">
                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
@@ -117,7 +125,7 @@ export const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({ products, isLo
             </div>
 
             {/* Asset Content */}
-            <div className="flex-1 space-y-8">
+            <div className="flex-1 space-y-8 relative z-20">
               <h3 className="text-4xl font-black text-white leading-none uppercase tracking-tighter group-hover:text-emerald-400 transition-colors">
                 {product.name}
               </h3>
@@ -146,7 +154,7 @@ export const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({ products, isLo
             </div>
 
             {/* Deployment Action */}
-            <div className="mt-12 flex items-center justify-between">
+            <div className="mt-12 flex items-center justify-between relative z-20">
               <div className="flex flex-col">
                 <span className="text-[9px] font-black text-white/20 uppercase tracking-widest mb-2">Base Allocation</span>
                 <div className="flex items-baseline gap-1.5">
@@ -157,13 +165,12 @@ export const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({ products, isLo
                 </div>
               </div>
 
-              <Button
-                variant="elite"
-                className="rounded-2xl px-10 py-6 h-auto text-[11px] font-black uppercase tracking-[0.2em] shadow-glow-emerald"
+              <button
+                className="rounded-2xl px-8 py-5 h-auto text-[11px] font-black uppercase tracking-[0.2em] bg-[#58F2B6] hover:bg-[#58F2B6]/90 text-black shadow-[0_0_20px_rgba(88,242,182,0.3)] transition-all"
                 onClick={() => onSelect?.(product)}
               >
                 Deploy System
-              </Button>
+              </button>
             </div>
           </motion.div>
 

@@ -138,6 +138,33 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
                   </div>
                 )}
 
+                {/* Proof Images Gallery */}
+                {(algo.images && algo.images.length > 0) ? (
+                  <div className="space-y-4">
+                    <h4 className="text-white font-bold mb-4 flex items-center gap-2">
+                      <ShieldCheck className="w-5 h-5 text-emerald-500" />
+                      Verified Proof of Performance
+                    </h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {algo.images.map((img: string, idx: number) => (
+                        <div key={idx} className="rounded-2xl overflow-hidden border border-white/10 relative group bg-black">
+                          <img src={img} alt={`Proof ${idx + 1}`} className="w-full h-auto object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : algo.image_url ? (
+                  <div className="space-y-4">
+                    <h4 className="text-white font-bold mb-4 flex items-center gap-2">
+                      <ShieldCheck className="w-5 h-5 text-emerald-500" />
+                      Verified Proof of Performance
+                    </h4>
+                    <div className="rounded-2xl overflow-hidden border border-white/10 relative group bg-black max-w-2xl">
+                      <img src={algo.image_url} alt="Proof" className="w-full h-auto object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
+                    </div>
+                  </div>
+                ) : null}
+
                 <div className="p-6 rounded-2xl bg-white/5 border border-white/5">
                   <h4 className="text-white font-bold mb-6 flex items-center gap-2">
                     <BarChart3 className="w-5 h-5 text-emerald-500" />

@@ -49,7 +49,7 @@ export const Footer = () => (
           </p>
 
           <div 
-            className="inline-flex items-center gap-4 px-5 py-3 bg-white/[0.02] border border-white/[0.04] rounded-2xl mb-10 hover:bg-white/[0.04] hover:border-white/[0.08] transition-all cursor-default shadow-lg"
+            className="inline-flex items-center gap-3 px-4 py-2 bg-[#050505] border border-white/10 rounded-xl mb-10 hover:bg-white/[0.04] hover:border-emerald-500/30 transition-all cursor-default shadow-[0_0_20px_rgba(16,185,129,0.05)]"
             itemProp="aggregateRating"
             itemScope
             itemType="https://schema.org/AggregateRating"
@@ -57,22 +57,22 @@ export const Footer = () => (
              <meta itemProp="ratingValue" content="4.9" />
              <meta itemProp="reviewCount" content="12400" />
              <div className="flex items-center gap-2">
-               <ShieldCheck className="w-5 h-5 text-emerald-400" />
-               <span className="text-[10px] font-black text-white/90 uppercase tracking-[0.3em]">Institutional Grade</span>
+               <ShieldCheck className="w-4 h-4 text-[#58F2B6]" />
+               <span className="text-[9px] font-black text-white uppercase tracking-widest">Institutional Grade</span>
              </div>
-             <span className="text-[9px] font-black text-white/40 uppercase tracking-[0.25em] italic border-l border-white/10 pl-4 py-1">
+             <span className="text-[8px] font-black text-[#58F2B6] uppercase tracking-[0.2em] border-l border-white/20 pl-3 py-0.5">
                Verified Alpha
              </span>
           </div>
 
-          <div className="flex flex-col gap-5 text-[9px] font-black text-[#4F5A69] uppercase tracking-[0.25em] mb-12">
-             <div className="flex items-start gap-4" itemProp="address" itemScope itemType="https://schema.org/PostalAddress">
-               <Activity className="w-4 h-4 text-emerald-500/50 shrink-0 mt-px" />
-               <span className="leading-relaxed mt-0.5">Global Presence: <span className="text-white/60">Institutional Network</span></span>
+          <div className="flex flex-col gap-4 text-[9px] font-bold text-gray-500 uppercase tracking-widest mb-12">
+             <div className="flex items-center gap-3" itemProp="address" itemScope itemType="https://schema.org/PostalAddress">
+               <Activity className="w-3.5 h-3.5 text-emerald-500/80" />
+               <span>Global Presence: <span className="text-white/80 font-black">Institutional Network</span></span>
              </div>
-             <div className="flex items-start gap-4" itemProp="address" itemScope itemType="https://schema.org/PostalAddress">
-               <TerminalSquare className="w-4 h-4 text-emerald-500/50 shrink-0 mt-px" />
-               <span className="leading-relaxed mt-0.5">Operational Hubs: <span className="text-white/60">Multi-Asset Execution</span></span>
+             <div className="flex items-center gap-3" itemProp="address" itemScope itemType="https://schema.org/PostalAddress">
+               <TerminalSquare className="w-3.5 h-3.5 text-emerald-500/80" />
+               <span>Operational Hubs: <span className="text-white/80 font-black">Multi-Asset Execution</span></span>
              </div>
           </div>
           
@@ -86,11 +86,11 @@ export const Footer = () => (
                 href={social.url} 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="p-3 border border-white/[0.05] rounded-xl bg-[#030406] text-[#4F5A69] hover:text-emerald-400 hover:border-emerald-500/30 hover:bg-emerald-500/10 hover:scale-105 transition-all duration-300 shadow-md"
+                className="p-2 border border-white/10 rounded-lg bg-white/5 text-gray-400 hover:text-[#58F2B6] hover:border-[#58F2B6]/30 hover:bg-[#58F2B6]/10 transition-all duration-300"
                 itemProp="sameAs"
                 aria-label="Social Link"
               >
-                <social.Icon className="w-5 h-5" />
+                <social.Icon className="w-3.5 h-3.5" />
               </a>
             ))}
           </div>
