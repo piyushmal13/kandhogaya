@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "motion/react";
-import { Search, ShieldAlert } from "lucide-react";
+import { Search, ShieldAlert, Zap } from "lucide-react";
 import { PageMeta } from "../components/site/PageMeta";
 import { MarketplaceGrid } from "../components/institutional/MarketplaceGrid";
 import { AlgoDetailModal } from "../components/algorithms/AlgoDetailModal";

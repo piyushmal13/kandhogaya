@@ -9,6 +9,8 @@ import {
   AreaChart, Area, ResponsiveContainer,
   RadarChart, PolarGrid, PolarAngleAxis, Radar
 } from "recharts";
+import { useToast } from "../../contexts/ToastContext";
+
 
 interface LiveStats {
   revenueToday: number;
@@ -51,6 +53,7 @@ export const CEOPanel = () => {
   const [loading, setLoading] = useState(true);
   const [lastSync, setLastSync] = useState<Date | null>(null);
   const [sparklineData, setSparklineData] = useState<any[]>([]);
+  const { info } = useToast();
 
   const fetchAllStats = async () => {
     setLoading(true);

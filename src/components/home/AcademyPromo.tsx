@@ -8,7 +8,7 @@ import { getCourses } from "../../services/apiHandlers";
 export const AcademyPromo = () => {
   const { data: courses = [], isLoading } = useQuery({
     queryKey: ['home_academy_promo'],
-    queryFn: () => getCourses(3), // Get top 3 courses
+    queryFn: () => getCourses(), // Get top 3 courses
     staleTime: 600000,
   });
 
