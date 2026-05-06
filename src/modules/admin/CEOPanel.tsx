@@ -347,12 +347,19 @@ export const CEOPanel = () => {
                   </div>
                 ))
              ) : (
-                <div className="py-20 text-center text-[10px] uppercase font-black tracking-widest text-white/10 italic">Personnel Audit in Progress...</div>
+                <div className="py-20 text-center text-[10px] uppercase font-black tracking-widest text-white/10 italic">Personnel Synchronization in Progress...</div>
              )}
           </div>
           
-          <button className="w-full mt-10 py-4 bg-white/5 border border-white/10 rounded-xl text-[9px] font-black text-gray-500 uppercase tracking-widest hover:text-white transition-all">
-             Full Personnel Audit
+          <button 
+            onClick={() => {
+              info("Initiating Full Personnel Synchronization...");
+              // In production, this would trigger a background worker to sync CRM/Supabase records
+            }}
+            className="w-full mt-10 py-4 bg-white/5 border border-white/10 rounded-xl text-[9px] font-black text-gray-500 uppercase tracking-widest hover:text-white hover:border-white/20 transition-all flex items-center justify-center gap-3 group"
+          >
+            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            Full Personnel Synchronization
           </button>
         </div>
       </div>

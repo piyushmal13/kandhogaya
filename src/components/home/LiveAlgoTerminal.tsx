@@ -76,7 +76,7 @@ export const LiveAlgoTerminal = () => {
                 </div>
                 <div>
                   <div className="text-[10px] text-[var(--color5)] font-mono font-bold uppercase tracking-[0.3em]">Institutional Protocol</div>
-                  <div className="text-white font-bold font-mono text-xl">Systematic Flow <span className="text-[10px] text-emerald-400 ml-2 tracking-widest uppercase opacity-80 animate-pulse">Live</span></div>
+                  <div className="text-white font-bold font-mono text-xl uppercase tracking-tighter">Educational Strategy <span className="text-[10px] text-emerald-400 ml-2 tracking-widest uppercase opacity-80 animate-pulse italic">Research</span></div>
                 </div>
               </div>
             </div>
@@ -200,7 +200,7 @@ export const LiveAlgoTerminal = () => {
                 <div className="text-emerald-400 font-bold text-3xl md:text-4xl tracking-tighter">+1,240%</div>
               </div>
               <div className="group">
-                <div className="text-[10px] font-mono font-bold text-[var(--color5)] uppercase tracking-[0.3em] mb-2">Portfolio MDD</div>
+                <div className="text-[10px] font-mono font-bold text-[var(--color5)] uppercase tracking-[0.3em] mb-2">Risk Governance Threshold</div>
                 <div className="text-rose-500/80 font-bold text-3xl md:text-4xl tracking-tighter">-8.2%</div>
               </div>
               <div className="group">

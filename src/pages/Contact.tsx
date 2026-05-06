@@ -48,7 +48,7 @@ export const Contact = () => {
   };
 
   return (
-    <div className="relative overflow-hidden pb-16">
+    <div className="relative overflow-hidden pt-32 pb-32">
       <PageMeta
         title="Contact"
         description="Contact IFXTrades for support, partnership inquiries, algorithm licensing, or signal access questions."

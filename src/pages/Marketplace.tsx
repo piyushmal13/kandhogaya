@@ -131,7 +131,7 @@ export const Marketplace = () => {
             >
               Asset Catalog
             </motion.div>
-            <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 text-white tracking-tight leading-[0.9]">
+            <h1 className="text-[clamp(3rem,8vw,6rem)] lg:text-[8rem] font-black mb-6 text-white tracking-tighter leading-[0.85] uppercase italic">
               Institutional <br />
               <span className="text-emerald-400">Allocations.</span>
             </h1>
@@ -142,7 +142,7 @@ export const Marketplace = () => {
 
           {/* Catalog Controls */}
           <div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
-            <div className="relative flex-1 lg:w-80 group">
+            <div className="relative w-full sm:w-80 group">
               <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20 group-focus-within:text-emerald-500 transition-colors" />
               <input
                 type="text"
@@ -152,12 +152,12 @@ export const Marketplace = () => {
                 className="w-full bg-white/[0.02] border border-white/5 rounded-2xl py-4 pl-12 pr-6 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-emerald-500/30 focus:bg-white/[0.04] transition-all"
               />
             </div>
-            <div className="flex p-1.5 bg-white/[0.02] border border-white/5 rounded-2xl">
+            <div className="flex p-1.5 bg-white/[0.02] border border-white/5 rounded-2xl w-full sm:w-auto overflow-x-auto scrollbar-hide">
               {categories.map((cat) => (
                 <button
                   key={cat.id}
                   onClick={() => setActiveCategory(cat.id)}
-                  className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
+                  className={`flex-1 sm:flex-none px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${
                     activeCategory === cat.id
                        ? "bg-emerald-500 text-black"
                        : "text-white/40 hover:text-white hover:bg-white/5"
@@ -202,14 +202,26 @@ export const Marketplace = () => {
                  <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[9px] font-black uppercase tracking-[0.2em]">
                     Infrastructure Layer
                  </div>
-                 <h2 className="text-4xl md:text-6xl font-black text-white tracking-tight leading-tight italic uppercase">
+                 <h2 className="text-[clamp(2.5rem,6vw,5rem)] md:text-7xl font-black text-white tracking-tighter leading-[0.9] italic uppercase">
                     Terminal <br />
                     <span className="text-emerald-400">Execution.</span>
                  </h2>
                  <p className="text-lg text-white/40 leading-relaxed font-medium">
                     Native MetaTrader 5 (MT5) integration with our proprietary bridge protocols. Experience zero-latency synchronization between our research models and your personal execution workstation.
                  </p>
-                 <ul className="space-y-4">
+                 
+                 <div className="flex flex-wrap gap-4">
+                    {['MT5 Bridge EA', 'Risk Governance DLL', 'Institutional Indicators'].map(asset => (
+                       <div key={asset} className="flex items-center gap-4 p-5 rounded-2xl bg-white/[0.02] border border-white/5 group/asset hover:border-emerald-500/20 transition-all cursor-pointer">
+                          <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500 group-hover/asset:bg-emerald-500 group-hover/asset:text-black transition-all">
+                             <Zap className="w-4 h-4" />
+                          </div>
+                          <span className="text-[10px] font-black uppercase tracking-widest text-white/50 group-hover/asset:text-white transition-colors">{asset}</span>
+                       </div>
+                    ))}
+                 </div>
+
+                 <ul className="space-y-4 pt-6">
                     {['Automated Liquidity Discovery', 'Algorithmic Risk Enforcement', 'Institutional Order Slicing'].map(feature => (
                        <li key={feature} className="flex items-center gap-4 text-[11px] font-black uppercase tracking-widest text-white/60">
                           <div className="w-2 h-2 rounded-full bg-emerald-500" />

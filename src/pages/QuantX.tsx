@@ -44,7 +44,7 @@ const IntelligenceLayer = ({ number, title, description, inputs, outputs, icon: 
           {description}
         </p>
         
-        <div className="grid grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
           <div>
             <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#58F2B6]/80">
               Elite Execution Environment <span className="text-white/20 ml-2">v2.0_ELITE</span>
@@ -102,7 +102,7 @@ export const QuantX = () => {
       />
 
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden border-b border-white/[0.05]">
+      <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden border-b border-white/[0.05] pt-32 pb-24">
         <motion.div 
           style={{ y: backgroundY }}
           className="absolute inset-0 z-0"
@@ -121,8 +121,8 @@ export const QuantX = () => {
               <Brain className="w-3.5 h-3.5" />
               Intelligence Protocol
             </div>
-            <h1 className="text-7xl md:text-9xl font-bold tracking-tighter mb-8 leading-[0.9]">
-              QUANT<span className="text-emerald-400 font-black italic">X</span>
+            <h1 className="text-[clamp(3.5rem,10vw,8rem)] md:text-[9rem] lg:text-[12rem] font-black tracking-tighter mb-8 leading-[0.85] uppercase">
+              QUANT<span className="text-emerald-400 italic">X</span>
             </h1>
             <p className="text-white/40 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
               Not a bot. A multi-layer cognitive ecosystem designed for institutional-grade gold execution.
@@ -151,7 +151,7 @@ export const QuantX = () => {
             {/* Visual Flow Lines */}
             <div className="absolute inset-x-0 top-1/2 h-px bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent -translate-y-1/2 hidden lg:block" />
             
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 relative z-10">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 relative z-10">
               <ArchitectureNode title="Market Data" icon={Database} subtext="L-Feed" active />
               <ArchitectureNode title="Core Analyzer" icon={Brain} subtext="Engine-v8" active />
               <ArchitectureNode title="Risk Engine" icon={ShieldAlert} subtext="Strict-Mode" active />
@@ -168,7 +168,7 @@ export const QuantX = () => {
           <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-24">
             <div className="max-w-2xl">
               <div className="text-emerald-500 text-[10px] font-black tracking-[0.4em] uppercase mb-4">Institutional Framework</div>
-              <h2 className="text-5xl md:text-7xl font-bold tracking-tighter leading-none italic uppercase">Core Analysis <br />Layers</h2>
+              <h2 className="text-[clamp(2.5rem,6vw,5rem)] md:text-7xl font-bold tracking-tighter leading-[0.9] italic uppercase">Core Analysis <br className="hidden md:block" />Layers</h2>
             </div>
             <p className="text-white/30 text-lg max-w-sm leading-relaxed pb-2">
               Processing thousands of data points across five specialized intelligence vectors.
@@ -297,7 +297,7 @@ export const QuantX = () => {
       {/* Final CTA */}
       <section className="py-24 md:py-40 bg-emerald-600/[0.02] border-t border-white/[0.05]">
         <div className="container mx-auto px-4 md:px-6 text-center">
-          <h2 className="text-4xl md:text-7xl font-bold mb-12 tracking-tight italic uppercase">
+          <h2 className="text-[clamp(2.5rem,6vw,5rem)] md:text-7xl font-black mb-12 tracking-tight italic uppercase leading-[0.9]">
             Elite Alpha. <br />
             <span className="text-emerald-400">Zero Guesswork.</span>
           </h2>

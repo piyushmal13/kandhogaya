@@ -46,7 +46,7 @@ export const InfrastructurePulse = () => {
         <div className="p-3 rounded-2xl bg-black/40 border border-white/5">
           <div className="flex items-center gap-2 mb-1">
             <Activity className="w-3 h-3 text-cyan-500/40" />
-            <span className="text-[7px] font-black uppercase tracking-tighter text-white/20">Latency</span>
+            <span className="text-[7px] font-black uppercase tracking-tighter text-white/20">Sync Delay</span>
           </div>
           <div className="text-xs font-mono font-black text-white/80">
             {latency ? `${latency}ms` : '---'}
@@ -68,7 +68,7 @@ export const InfrastructurePulse = () => {
            <Zap className="w-3 h-3 text-emerald-500" />
            <span className="text-[8px] font-black uppercase tracking-widest text-emerald-500/60">System Operational</span>
         </div>
-        <span className="text-[8px] font-mono text-white/10 italic">v4.1.14-L</span>
+        <span className="text-[8px] font-mono text-white/10 italic">IFX_INSTITUTIONAL_CORE</span>
       </div>
     </div>
   );

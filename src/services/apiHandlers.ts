@@ -89,7 +89,7 @@ export const getProductById = async (id: string) => {
     .from("products")
     .select("id, name, description, price, category, video_explanation_url, image_url, created_at, performance_data, long_plan_offers")
     .eq("id", id)
-    .single();
+    .maybeSingle();
   
   if (error) {
     return null;
@@ -193,7 +193,7 @@ export const getCourseById = async (id: string) => {
     .from("courses")
     .select("*, chapters:lessons(*)")
     .eq("id", id)
-    .single();
+    .maybeSingle();
   
   if (error) {
     return null;

@@ -143,8 +143,8 @@ export const FortressHero = () => {
 
         {/* Headline (Imperial Typography) */}
         <motion.h1
-          style={{ opacity, y: textY, fontSize: "clamp(2.4rem, 10vw, 8rem)" }}
-          className="font-black text-white tracking-[-0.05em] leading-[0.85] uppercase max-w-6xl mx-auto mb-8 preserve-3d"
+          style={{ opacity, y: textY, fontSize: "clamp(2rem, 8vw, 8rem)" }}
+          className="font-black text-white tracking-[-0.05em] leading-[0.9] uppercase max-w-6xl mx-auto mb-8 preserve-3d px-4"
         >
           World-Class <br />
           <span className="italic font-serif text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">CFD & Forex</span>
@@ -179,7 +179,7 @@ export const FortressHero = () => {
           <div className="hidden sm:block w-px h-3 bg-white/10" />
           <div className="flex items-center gap-3">
              <Zap className="w-3.5 h-3.5 text-cyan-500/50" />
-             <span className="text-[10px] font-black text-white/60 uppercase tracking-[0.2em]">Execution Latency: 0.12ms</span>
+             <span className="text-[10px] font-black text-white/60 uppercase tracking-[0.2em]">Sync Delay: 0.12ms</span>
           </div>
         </motion.div>
 
@@ -189,17 +189,17 @@ export const FortressHero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.32, duration: 0.6, ease: EASING }}
-          className="flex flex-col sm:flex-row items-center gap-6 justify-center w-full px-4"
+          className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 justify-center w-full max-w-lg sm:max-w-none px-4"
         >
           <Link to="/webinars" className="w-full sm:w-auto">
-            <EliteButton variant="premium-gold" size="lg" fluid>
+            <EliteButton variant="premium-gold" size="md" fluid>
               Request Session Access
               <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1.5 transition-transform duration-300" />
             </EliteButton>
           </Link>
 
           <Link to="/quantx" className="w-full sm:w-auto">
-            <EliteButton variant="secondary" size="lg" fluid>
+            <EliteButton variant="secondary" size="md" fluid>
               <Play className="w-3.5 h-3.5 mr-2 text-emerald-400 fill-emerald-400/20" />
               See QuantX Results
             </EliteButton>

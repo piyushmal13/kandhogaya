@@ -2,13 +2,15 @@ import CryptoJS from 'crypto-js';
 import { set, get, del } from 'idb-keyval';
 
 // 256-bit base64 secret from environment. In dev, uses a safe fallback.
-const SECRET = import.meta.env.VITE_CLIENT_STORAGE_SECRET || btoa("ifxtrades_dev_fallback_secret_256");
+// 256-bit secret from environment. Robust fallback for development.
+const SECRET_RAW = import.meta.env.VITE_CLIENT_STORAGE_SECRET || "ifxtrades_institutional_sovereign_secret_256";
+const SECRET = CryptoJS.enc.Utf8.parse(SECRET_RAW);
 
 export async function setSecureItem(key: string, value: any) {
   try {
     const ciphertext = CryptoJS.AES.encrypt(
       JSON.stringify(value),
-      CryptoJS.enc.Base64.parse(SECRET)
+      SECRET
     ).toString();
     await set(key, ciphertext);
   } catch (error) {
@@ -21,7 +23,7 @@ export async function getSecureItem<T>(key: string): Promise<T | null> {
     const ciphertext = await get<string>(key);
     if (!ciphertext) return null;
     
-    const bytes = CryptoJS.AES.decrypt(ciphertext, CryptoJS.enc.Base64.parse(SECRET));
+    const bytes = CryptoJS.AES.decrypt(ciphertext, SECRET);
     const json = bytes.toString(CryptoJS.enc.Utf8);
     return JSON.parse(json) as T;
   } catch (error) {

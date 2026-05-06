@@ -85,6 +85,9 @@ const Home = () => {
         {/* L2: Partner Matrix & Authority */}
         <BrandAuthority />
 
+        {/* L2.5: Masterclass Engagement (Replaces Academy Promo) */}
+        <WebinarPromo />
+
         {/* L3: Why Institutional Standard */}
         <TrustGrid />
 
@@ -114,8 +117,6 @@ const Home = () => {
         {/* L8: Institutional Intelligence (Live from Supabase) */}
         <BlogSection />
 
-        {/* L9: Masterclass Engagement */}
-        <WebinarPromo />
 
         {/* L10: Institutional FAQ (Sovereign Data) */}
         <InstitutionalFAQ faqs={formattedFaqs} />

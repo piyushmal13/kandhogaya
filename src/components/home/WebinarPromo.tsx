@@ -21,8 +21,25 @@ export const WebinarPromo = () => {
         if (eliteWebinar) {
           setWebinar(eliteWebinar);
         } else {
-          const upcoming = webinars.filter((item: any) => new Date(item.date_time).getTime() > now);
-          setWebinar(upcoming.length > 0 ? upcoming[0] : webinars.at(-1));
+          // Hardcoded Elite Macro Strategy promo per CEO directive
+          setWebinar({
+            id: 'elite-macro-q3-2026',
+            title: 'Elite Macro Strategy: Q3 2026',
+            description: 'A closed-door session on the upcoming interest rate cycle and its impact on currency pairs.',
+            speaker: 'Marcus Vane',
+            speaker_name: 'Marcus Vane',
+            speaker_images: [],
+            date_time: new Date(Date.now() + 86400000 * 5).toISOString(),
+            max_attendees: 500,
+            registration_count: 412,
+            is_paid: false,
+            price: 0,
+            metadata: {
+              level: 'Executive Strategist',
+              is_sponsored: false,
+              sponsors: []
+            }
+          });
         }
       }
     };
@@ -96,9 +113,9 @@ export const WebinarPromo = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="text-2xl sm:text-5xl md:text-8xl font-bold text-white mb-4 md:mb-10 tracking-tighter leading-[0.95]"
+              className="text-[clamp(2.5rem,6vw,5rem)] md:text-[6rem] lg:text-[7rem] font-black text-white mb-4 md:mb-10 tracking-tighter leading-[0.85] uppercase italic"
             >
-              {webinar.title.split(' ').slice(0, -1).join(' ')} <span className="institutional-title text-emerald-400">{webinar.title.split(' ').slice(-1)}</span>
+              {webinar.title.split(' ').slice(0, -1).join(' ')} <span className="text-emerald-400">{webinar.title.split(' ').slice(-1)}</span>
             </motion.h2>
 
             <motion.p

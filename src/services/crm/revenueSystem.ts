@@ -17,7 +17,7 @@ export const revenueSystem = {
       .from('agent_accounts')
       .select('commission_rate, account_status')
       .eq('user_id', agentId)
-      .single();
+      .maybeSingle();
 
     if (!agent || agent.account_status !== 'active') return;
 

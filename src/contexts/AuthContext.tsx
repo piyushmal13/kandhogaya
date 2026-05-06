@@ -189,7 +189,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 .from('affiliate_codes')
                 .select('user_id')
                 .eq('code', refCode)
-                .single();
+                .maybeSingle();
 
               if (codeData) {
                 // 2. Attribution: Link user to agent

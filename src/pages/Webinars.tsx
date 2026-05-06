@@ -34,7 +34,7 @@ export const Webinars = () => {
 
         <div className="max-w-7xl mx-auto px-4 md:px-8 space-y-16">
           <div className="relative z-10 space-y-8 pt-8 md:pt-12">
-            <h1 className="text-4xl md:text-7xl font-black text-white tracking-tight uppercase italic leading-none">
+            <h1 className="text-[clamp(3rem,8vw,6rem)] lg:text-[8rem] font-black text-white tracking-tighter uppercase italic leading-[0.85]">
               Institutional <br />
               <span className="text-emerald-500">Research Terminal.</span>
             </h1>

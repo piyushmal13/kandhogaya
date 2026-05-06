@@ -20,7 +20,7 @@ const stats = [
     color: "#10B981",
   },
   {
-    label: "Success Probability",
+    label: "Verification Index",
     value: "94",
     suffix: "%",
     sub: "Institutional modeling",

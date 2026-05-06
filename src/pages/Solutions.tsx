@@ -11,9 +11,7 @@ import { ConsultationSection } from "@/components/home/ConsultationSection";
  * Transitioned from "Course Grid" to "Bespoke Engineering Surface".
  * High-intent sales funnel focusing on custom algorithmic development and institutional setups.
  */
-export const Solutions = () => {
-  return (
-    <main className="min-h-screen bg-[#020202] text-[#F8FAFC] selection:bg-[#58F2B6]/30">
+    <div className="bg-transparent text-[#F8FAFC] selection:bg-[#58F2B6]/30 pb-32">
       <PageMeta 
         title="Institutional Solutions | Bespoke Algorithmic Engineering"
         description="Asia's #1 institutional engineering hub. Custom algorithmic development, Educational Data Licenses, and private strategic consulting for elite capital deployments."
@@ -28,7 +26,7 @@ export const Solutions = () => {
         ]}
       />
 
-      <Suspense fallback={<div className="h-screen bg-[#020202]" />}>
+      <div className="relative">
         {/* 1. High-Impact Entrance */}
         <SolutionsHero />
         
@@ -40,7 +38,7 @@ export const Solutions = () => {
         
         {/* 4. Final Conversion Step */}
         <ConsultationSection />
-      </Suspense>
-    </main>
+      </div>
+    </div>
   );
 };

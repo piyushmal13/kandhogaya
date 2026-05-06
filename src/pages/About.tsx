@@ -1,8 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Shield, Zap, Globe, Target, BarChart3, Users } from 'lucide-react';
-import { Navbar } from '@/components/ui/Navbar';
-import { Footer } from '@/components/ui/Footer';
 
 const StatCard = ({ label, value, sub }: { label: string; value: string; sub: string }) => (
   <div className="p-6 md:p-8 rounded-2xl md:rounded-[2.5rem] bg-white/[0.02] border border-white/5 backdrop-blur-md">
@@ -26,8 +24,7 @@ const FeatureSection = ({ icon: Icon, title, description }: { icon: any, title: 
 
 export const About = () => {
   return (
-    <div className="min-h-screen bg-[#010203] text-white selection:bg-emerald-500 selection:text-black">
-      <Navbar />
+    <div className="bg-transparent text-white selection:bg-emerald-500 selection:text-black">
       
       {/* ── HERO SECTION ── */}
       <section className="relative pt-44 pb-32 px-6 overflow-hidden">
@@ -49,7 +46,7 @@ export const About = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-6xl md:text-9xl font-black tracking-[-0.04em] leading-[0.9] uppercase mb-12"
+            className="text-[clamp(2.5rem,8vw,6rem)] md:text-9xl font-black tracking-[-0.04em] leading-[0.9] uppercase mb-12"
           >
             The New Standard in <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Quant Intelligence.</span>
@@ -148,7 +145,6 @@ export const About = () => {
         </div>
       </section>
 
-      <Footer />
     </div>
   );
 };
