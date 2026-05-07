@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { supabase } from '@/lib/supabase';
 
 export type RealtimeEvent<T> = {
@@ -9,11 +9,7 @@ export type RealtimeEvent<T> = {
 };
 
 /**
- * Generic hook for subscribing to Supabase Realtime changes on any table
- * 
- * Usage:
- *   const { rows, loading, error } = useRealtimeTable<Signal>('signals', 'status=eq.active');
- *   const { rows } = useRealtimeTable<Webinar>('webinars', 'status=eq.upcoming');
+ * Core realtime table hook with generic typing.
  */
 export function useRealtimeTable<T>(
   table: string,
@@ -29,27 +25,26 @@ export function useRealtimeTable<T>(
   const [error, setError] = useState<Error | null>(null);
   const { initialPageSize = 100, enabled = true, onChange } = options || {};
 
-  // Initial fetch
   const fetchInitial = useCallback(async () => {
     if (!enabled) return;
-    
+
     try {
       setLoading(true);
       setError(null);
-      
+
       let query = supabase
         .from(table)
         .select('*')
         .limit(initialPageSize);
-      
+
       if (filter) {
         query = query.or(filter);
       }
-      
+
       const { data, error: fetchError } = await query;
-      
+
       if (fetchError) throw fetchError;
-      
+
       setRows((data || []) as T[]);
     } catch (err: any) {
       setError(err);
@@ -59,7 +54,6 @@ export function useRealtimeTable<T>(
     }
   }, [table, filter, initialPageSize, enabled]);
 
-  // Subscribe to real-time changes
   useEffect(() => {
     if (!enabled) return;
 
@@ -83,16 +77,13 @@ export function useRealtimeTable<T>(
             timestamp: Date.now()
           };
 
-          // Invoke custom callback if provided
           if (onChange) {
             onChange(event);
           }
 
-          // Update local state
           setRows(prev => {
             switch (payload.eventType) {
               case 'INSERT':
-                // Avoid duplicates
                 if (prev.some(row => (row as any).id === payload.new.id)) {
                   return prev;
                 }
@@ -150,42 +141,72 @@ export function useSignals() {
 }
 
 /**
- * Specialized hook for webinars with registration count tracking
+ * Hook for fetching a list of webinars with real-time updates
+ * @param status Optional filter by status ('upcoming', 'live', 'past', 'all')
  */
 export function useWebinars(status?: 'upcoming' | 'live' | 'past' | 'all') {
   const filter = status && status !== 'all' ? `status=eq.${status}` : undefined;
-  
-  const { rows: webinars, loading, error, refresh } = useRealtimeTable<any>(
+
+  const { rows, loading, error, refresh } = useRealtimeTable<any>(
     'webinars',
     filter,
     { initialPageSize: 20 }
   );
 
   return {
-    webinars: webinars || [],
+    webinars: rows || [],
+    data: rows || [], // compatibility
     loading,
+    isLoading: loading,
     error,
     refreshWebinars: refresh
   };
 }
 
 /**
- * Specialized hook for marketplace products
+ * Hook for fetching a single webinar by ID with real-time updates
+ * @param id Webinar ID
+ */
+export function useWebinar(id: string | undefined) {
+  const { rows, loading, error, refresh } = useRealtimeTable<any>(
+    'webinars',
+    id ? `id=eq.${id}` : undefined,
+    { initialPageSize: 1 }
+  );
+
+  return {
+    webinar: rows?.[0] || null,
+    data: rows?.[0] || null, // alias
+    loading,
+    isLoading: loading,
+    error,
+    refreshWebinar: refresh
+  };
+}
+
+/**
+ * Hook for fetching products with real-time updates
  */
 export function useProducts(category?: string, includeInactive = false) {
-  const filter = includeInactive 
-    ? undefined 
-    : `is_active=eq.true${category ? `,category=eq.${category}` : ''}`;
-  
-  const { rows: products, loading, error, refresh } = useRealtimeTable<any>(
+  let filter = '';
+  if (!includeInactive) {
+    filter = 'is_active=eq.true';
+  }
+  if (category) {
+    filter = filter ? `${filter},category=eq.${category}` : `category=eq.${category}`;
+  }
+
+  const { rows, loading, error, refresh } = useRealtimeTable<any>(
     'products',
-    filter,
+    filter || undefined,
     { initialPageSize: 100 }
   );
 
   return {
-    products: products || [],
+    products: rows || [],
+    data: rows || [],
     loading,
+    isLoading: loading,
     error,
     refreshProducts: refresh
   };
@@ -196,13 +217,13 @@ export function useProducts(category?: string, includeInactive = false) {
  */
 export function useUserLicenses(userId: string) {
   const { rows: licenses, loading, error, refresh } = useRealtimeTable<any>(
-    'algo_licenses',
+    'bot_licenses',
     `user_id=eq.${userId}`,
     { initialPageSize: 50 }
   );
 
-  const activeLicenses = licenses?.filter(l => 
-    l.status === 'active' && 
+  const activeLicenses = licenses?.filter(l =>
+    l.status === 'active' &&
     (!l.expires_at || new Date(l.expires_at) > new Date())
   ) || [];
 
@@ -229,7 +250,7 @@ export function useProductWatch(productId: string) {
         .select('*')
         .eq('id', productId)
         .single();
-      
+
       if (!error && data) {
         setProduct(data);
       }
@@ -254,7 +275,9 @@ export function useProductWatch(productId: string) {
       )
       .subscribe();
 
-    return () => supabase.removeChannel(channel);
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [productId]);
 
   return { product, loading };
@@ -279,6 +302,21 @@ export function useMarketData(symbols?: string[]) {
 }
 
 /**
+ * Legacy wrapper for backward compatibility.
+ * Accepts optional mapper to transform rows.
+ */
+export function useRealtime<T>(
+  table: string,
+  filter?: string,
+  _options?: any,
+  mapper?: (row: any) => T
+) {
+  const { rows, loading, error, refresh } = useRealtimeTable<any>(table, filter);
+  const data = useMemo(() => mapper ? rows.map(mapper) : (rows as T), [rows, mapper]);
+  return { data, loading, error, refresh };
+}
+
+/**
  * Hook for aggregated dashboard metrics (real-time)
  */
 export function useDashboardMetrics() {
@@ -290,7 +328,6 @@ export function useDashboardMetrics() {
   });
   const [loading, setLoading] = useState(true);
 
-  // Initial fetch
   useEffect(() => {
     const fetchMetrics = async () => {
       try {
@@ -312,7 +349,6 @@ export function useDashboardMetrics() {
 
     fetchMetrics();
 
-    // Subscribe to metric update events (via a dedicated channel)
     const channel = supabase
       .channel('dashboard-metrics')
       .on(
@@ -323,13 +359,14 @@ export function useDashboardMetrics() {
           table: 'dashboard_daily_metrics'
         },
         () => {
-          // Refresh metrics on any dashboard table change
           fetchMetrics();
         }
       )
       .subscribe();
 
-    return () => supabase.removeChannel(channel);
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   return { metrics, loading };

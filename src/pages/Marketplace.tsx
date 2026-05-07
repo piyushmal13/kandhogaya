@@ -6,7 +6,7 @@ import { PageMeta } from "../components/site/PageMeta";
 import { MarketplaceGrid } from "../components/institutional/MarketplaceGrid";
 import { AlgoDetailModal } from "../components/algorithms/AlgoDetailModal";
 import { PurchaseModal } from "../components/payments/PurchaseModal";
-import { productService } from "../services/productService";
+import { useProducts } from "../hooks/useProducts";
 import { useAuth } from "../contexts/AuthContext";
 import { DashboardLayout } from "../components/institutional/DashboardLayout";
 import { useToast } from "../contexts/ToastContext";
@@ -26,33 +26,7 @@ export const Marketplace = () => {
   const { info } = useToast();
   const navigate = useNavigate();
 
-  const { data: products = [], isLoading } = useQuery({
-    queryKey: ["marketplace_products"],
-    queryFn: async () => {
-      const [algoData, courseData] = await Promise.all([
-        productService.getProducts(),
-        supabase.from('university_courses').select('*')
-      ]);
-      
-      const mappedAlgos = (algoData || []).map(a => ({ 
-        ...a, 
-        category: 'algorithm' 
-      }));
-      
-      const mappedCourses = (courseData.data || []).map(c => ({ 
-        id: c.id, 
-        name: c.title, 
-        description: c.description, 
-        price: c.price, 
-        image_url: c.thumbnail_url,
-        category: 'course',
-        created_at: c.created_at
-      }));
-
-      return [...mappedAlgos, ...mappedCourses];
-    },
-    staleTime: 300000,
-  });
+      const { data: products = [], isLoading } = useProducts(activeCategory !== 'all' ? activeCategory : undefined, false);
 
   const categories = [
     { id: "all", label: "All Assets" },

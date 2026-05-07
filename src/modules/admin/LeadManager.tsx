@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { 
   Search, Filter, 
   Target, Zap,
@@ -8,7 +8,7 @@ import {
 import { cn } from "../../utils/cn";
 import { formatDistanceToNow } from "date-fns";
 
-import { useRealtime } from "../../hooks/useRealtime";
+import { useRealtimeTable } from "../../hooks/useRealtime";
 import { Lead } from "../../types";
 import { mapLead } from "../../utils/dataMapper";
 
