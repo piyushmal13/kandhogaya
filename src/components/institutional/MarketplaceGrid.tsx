@@ -117,7 +117,7 @@ export const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({ products, isLo
                 {product.type === 'algorithm' && (
                   <div className="flex items-center gap-2 md:gap-3 text-[9px] md:text-[10px] font-black text-emerald-400 uppercase tracking-widest font-mono">
                     <Activity className="w-3 h-3" />
-                    Sync: {85 + (product.id.codePointAt(0) || 0) % 15}%
+                    Alpha Sync: {85 + (product.id.codePointAt(0) || 0) % 15}%
                   </div>
                 )}
               </div>

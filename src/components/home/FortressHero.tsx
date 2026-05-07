@@ -179,7 +179,7 @@ export const FortressHero = () => {
           <div className="hidden sm:block w-px h-3 bg-white/10" />
           <div className="flex items-center gap-3">
              <Zap className="w-3.5 h-3.5 text-cyan-500/50" />
-             <span className="text-[10px] font-black text-white/60 uppercase tracking-[0.2em]">Sync Delay: 0.12ms</span>
+             <span className="text-[10px] font-black text-white/60 uppercase tracking-[0.2em]">Research Sync: Active</span>
           </div>
         </motion.div>
 

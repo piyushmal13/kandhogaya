@@ -9,9 +9,12 @@ export type { Json } from './database.types';
 
 export type User = Database['public']['Tables']['users']['Row'];
 
-export type Product = Database['public']['Tables']['products']['Row'] & {
+export type Product = (Database['public']['Tables']['algorithms']['Row'] | any) & {
   slug?: string;
-  performance?: Database['public']['Tables']['performance_results']['Row'] | null;
+  monthly_roi_pct?: number;
+  risk_classification?: string;
+  min_capital?: number;
+  performance?: any;
 };
 
 export type Webinar = Database['public']['Tables']['webinars']['Row'] & {
@@ -25,45 +28,35 @@ export type Webinar = Database['public']['Tables']['webinars']['Row'] & {
 
 export type WebinarSponsor = Database['public']['Tables']['webinar_sponsors']['Row'];
 
-export type Intelligence = Database['public']['Tables']['signals']['Row'];
-export type Signal = Intelligence; // alias
+export type Intelligence = any; // fallback for signals if table missing
+export type Signal = Intelligence;
 
-export type Blog = Database['public']['Tables']['content_posts']['Row'] & {
-  // UI convenience aliases
-  content?: string; // body column holds the main text
-  author?: {
-    full_name?: string;
-    avatar_url?: string;
-    role?: string;
-  };
+export type Blog = (Database['public']['Tables']['blog_posts']['Row'] | any) & {
+  body?: string;
+  author_name?: string;
+  content?: string; // legacy alias
+  metadata?: any;
 };
 
-export type Course = Database['public']['Tables']['courses']['Row'] & {
-  chapters?: Database['public']['Tables']['lessons']['Row'][];
-  lessons?: Database['public']['Tables']['lessons']['Row'][];
+export type Course = (Database['public']['Tables']['university_courses']['Row'] | any) & {
+  chapters?: any[];
+  lessons?: any[];
 };
 
-export type Lesson = Database['public']['Tables']['lessons']['Row'];
+export type Lesson = (Database['public']['Tables']['course_lessons']['Row'] | any);
 
 export type Review = Database['public']['Tables']['reviews']['Row'];
 
-export type Lead = Database['public']['Tables']['leads']['Row'] & {
-  name?: string;
-  status?: string;
-  active_licenses?: number;
-  webinar_count?: number;
-  assigned_agent_code?: string;
-  assigned_agent_name?: string;
-};
+export type Lead = any;
 
-export type AgentAccount = Database['public']['Tables']['agent_accounts']['Row'];
+export type AgentAccount = any;
 
-export type SaleTracking = Database['public']['Tables']['sales_tracking']['Row'];
+export type SaleTracking = any;
 
-export type AlgoBot = Database['public']['Tables']['algo_bots']['Row'];
+export type AlgoBot = any;
 
-export type BotLicense = Database['public']['Tables']['bot_licenses']['Row'] & {
-  algo?: AlgoBot;
+export type BotLicense = (Database['public']['Tables']['algo_licenses']['Row'] | any) & {
+  algo?: any;
   user?: User;
 };
 

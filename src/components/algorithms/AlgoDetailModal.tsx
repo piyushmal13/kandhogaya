@@ -115,7 +115,7 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
                   <div>
                     <h4 className="text-white font-bold mb-4 flex items-center gap-2">
                       <Zap className="w-5 h-5 text-emerald-500" />
-                      Proof of Performance (Live MT5 Execution)
+                      Institutional Model Research Brief
                     </h4>
                     <div className="aspect-video rounded-xl md:rounded-2xl overflow-hidden bg-black border border-white/10 relative group">
                       <iframe 
@@ -172,8 +172,8 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
                   </h4>
                   <div className="grid grid-cols-2 gap-y-6 gap-x-8">
                     <div>
-                      <div className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Slippage Tolerance</div>
-                      <div className="text-white font-mono font-bold">{(algo.performance as any)?.slippage || "0.5 Pips Max"}</div>
+                      <div className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Simulated Latency</div>
+                      <div className="text-white font-mono font-bold">{(algo.performance as any)?.slippage || "0.12ms Node"}</div>
                     </div>
                     <div>
                       <div className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Recommended Capital</div>
