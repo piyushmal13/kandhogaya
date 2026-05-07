@@ -115,7 +115,7 @@ export const Marketplace = () => {
   };
 
   const content = (
-    <div className={user ? "pb-24" : "pt-32 pb-24 md:pt-48 md:pb-48"}>
+    <div className={user ? "pb-24" : "pt-24 pb-12 md:pt-48 md:pb-48"}>
       <PageMeta
         title="Execution Desk | Institutional Algorithmic Assets"
         description="Access the IFX TRADES Execution Desk. Sovereign algorithmic models, quantitative education, and institutional macro intelligence."
@@ -123,22 +123,22 @@ export const Marketplace = () => {
         keywords={["algorithmic models", "quantitative education", "institutional trading assets", "market intelligence", "forex algorithms"]}
       />
 
-      <div className="max-w-[1440px] mx-auto px-6 sm:px-12 space-y-16">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-12 space-y-10 md:space-y-16">
         {/* Header Block */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-12">
-          <div className="space-y-10 flex-1">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 md:gap-12">
+          <div className="space-y-6 md:space-y-10 flex-1">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-emerald-500/[0.04] border border-emerald-500/[0.15] text-emerald-400 text-[10px] font-bold uppercase tracking-[0.2em]"
+              className="inline-flex items-center gap-3 px-4 py-2 md:px-5 md:py-2.5 rounded-full bg-emerald-500/[0.04] border border-emerald-500/[0.15] text-emerald-400 text-[9px] md:text-[10px] font-bold uppercase tracking-[0.2em]"
             >
               Institutional Asset Catalog
             </motion.div>
-            <h1 className="text-[clamp(2.5rem,10vw,5rem)] lg:text-[8rem] font-black mb-4 md:mb-6 text-white tracking-tighter leading-[0.9] md:leading-[0.85] uppercase italic">
+            <h1 className="text-[clamp(2.5rem,10vw,5rem)] lg:text-[8rem] font-black mb-2 md:mb-6 text-white tracking-tighter leading-[0.9] md:leading-[0.85] uppercase italic">
               Quantitative <br />
               <span className="text-emerald-400">Allocations.</span>
             </h1>
-            <p className="text-sm md:text-xl text-white/40 max-w-2xl font-medium leading-relaxed">
+            <p className="text-base md:text-xl text-white/40 max-w-2xl font-medium leading-relaxed">
               Professional execution models and systematic protocols designed for high-performance capital management and institutional risk governance. Secure your allocation to our proprietary alpha strategies today.
             </p>
             
@@ -203,35 +203,35 @@ export const Marketplace = () => {
         <motion.div 
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
-          className="py-24 border-t border-white/5"
+          className="py-12 md:py-24 border-t border-white/5"
         >
-           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-20 items-center">
               <div className="order-2 lg:order-1 relative">
                  <div className="absolute inset-0 bg-emerald-500/5 blur-[100px] rounded-full opacity-30" />
-                 <div className="relative rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl aspect-video bg-white/5">
+                 <div className="relative rounded-3xl md:rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl aspect-video bg-white/5">
                     <ResizedImage 
                       src="mt5_elite_terminal_v2.png" 
-                      bucket="products"
+                      bucket="images"
                       alt="MT5 Elite Terminal" 
                       className="w-full h-full object-cover"
                     />
                  </div>
               </div>
-              <div className="order-1 lg:order-2 space-y-8">
+              <div className="order-1 lg:order-2 space-y-6 md:space-y-8">
                  <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[9px] font-black uppercase tracking-[0.2em]">
                     Infrastructure Layer
                  </div>
-                 <h2 className="text-[clamp(2.5rem,6vw,5rem)] md:text-7xl font-black text-white tracking-tighter leading-[0.9] italic uppercase">
+                 <h2 className="text-[clamp(2rem,6vw,5rem)] md:text-7xl font-black text-white tracking-tighter leading-[0.9] italic uppercase">
                     Terminal <br />
                     <span className="text-emerald-400">Execution.</span>
                  </h2>
-                 <p className="text-lg text-white/40 leading-relaxed font-medium">
+                 <p className="text-base md:text-lg text-white/40 leading-relaxed font-medium">
                     Native MetaTrader 5 (MT5) integration with our proprietary bridge protocols. Experience zero-latency synchronization between our research models and your institutional execution node.
                  </p>
                  
-                 <div className="flex flex-wrap gap-4">
+                 <div className="flex flex-wrap gap-3 md:gap-4">
                     {['MT5 Bridge EA', 'Risk Governance DLL', 'Institutional Indicators'].map(asset => (
-                       <div key={asset} className="flex items-center gap-4 p-5 rounded-2xl bg-white/[0.02] border border-white/5 group/asset hover:border-emerald-500/20 transition-all cursor-pointer">
+                       <div key={asset} className="flex items-center gap-3 md:gap-4 p-4 md:p-5 rounded-2xl bg-white/[0.02] border border-white/5 group/asset hover:border-emerald-500/20 transition-all cursor-pointer">
                           <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500 group-hover/asset:bg-emerald-500 group-hover/asset:text-black transition-all">
                              <Zap className="w-4 h-4" />
                           </div>
@@ -240,10 +240,10 @@ export const Marketplace = () => {
                     ))}
                  </div>
 
-                 <ul className="space-y-4 pt-6">
+                 <ul className="space-y-3 md:space-y-4 pt-4 md:pt-6">
                     {['Automated Liquidity Discovery', 'Algorithmic Risk Enforcement', 'Institutional Order Slicing'].map(feature => (
-                       <li key={feature} className="flex items-center gap-4 text-[11px] font-black uppercase tracking-widest text-white/60">
-                          <div className="w-2 h-2 rounded-full bg-emerald-500" />
+                       <li key={feature} className="flex items-center gap-3 md:gap-4 text-[10px] md:text-[11px] font-black uppercase tracking-widest text-white/60">
+                          <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-emerald-500" />
                           {feature}
                        </li>
                     ))}

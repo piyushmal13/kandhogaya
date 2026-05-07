@@ -255,6 +255,21 @@ export const Navbar = () => {
                       </Link>
                     </motion.div>
                   ))}
+                  <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: navLinks.length * 0.05, duration: 0.4 }}
+                  >
+                    <a
+                      href="https://wa.me/917709583224"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-4 rounded-[1.25rem] border border-emerald-500/20 bg-emerald-500/10 px-5 py-4 text-emerald-400"
+                    >
+                      <MessageSquare className="h-5 w-5 shrink-0" aria-hidden />
+                      <span className="text-lg font-bold tracking-tight">Elite Desk Support</span>
+                    </a>
+                  </motion.div>
                 </div>
               </div>
 
