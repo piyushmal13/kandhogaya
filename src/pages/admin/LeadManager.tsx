@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Users, Target, Download, Clock, ArrowRight, Activity, Filter, RefreshCw, Mail } from "lucide-react";
+import { Users, Target, Download, Clock, ArrowRight, Activity, Filter, RefreshCw, Mail, Flame, TrendingUp, ShieldAlert } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { cn } from "../../utils/cn";
 
@@ -18,7 +18,7 @@ export const LeadManager = () => {
     try {
       const { data, error } = await supabase
         .from('leads')
-        .select('id, email, source, created_at')
+        .select('id, email, source, created_at, score, conversion_probability, is_hot, priority_tag, stage')
         .order('created_at', { ascending: false });
 
       if (error || !data || data.length === 0) {
@@ -30,10 +30,10 @@ export const LeadManager = () => {
       console.warn("Failed to fetch leads data:", err);
       console.warn("Falling back to simulated High-Value Institutional CRM records.");
       const mockData = [
-        { id: 1, email: "portfolio.manager@capital.com", source: "exit_intent", created_at: new Date(Date.now() - 1000 * 60 * 2).toISOString() },
-        { id: 2, email: "quant.desk@nomura-asset.jp", source: "hero_terminal", created_at: new Date(Date.now() - 1000 * 60 * 60).toISOString() },
-        { id: 3, email: "macro.lead@bridgewater.com", source: "webinar_waitlist", created_at: new Date(Date.now() - 1000 * 60 * 60 * 3).toISOString() },
-        { id: 4, email: "director.fx@jpmorgan.com", source: "hero_terminal", created_at: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString() },
+        { id: 1, email: "portfolio.manager@capital.com", source: "exit_intent", created_at: new Date(Date.now() - 1000 * 60 * 2).toISOString(), score: 45, conversion_probability: 32, is_hot: false, priority_tag: 'TIER_3_STANDARD', stage: 'discovered' },
+        { id: 2, email: "quant.desk@nomura-asset.jp", source: "hero_terminal", created_at: new Date(Date.now() - 1000 * 60 * 60).toISOString(), score: 65, conversion_probability: 55, is_hot: false, priority_tag: 'TIER_2_CORPORATE', stage: 'discovered' },
+        { id: 3, email: "macro.lead@bridgewater.com", source: "webinar_waitlist", created_at: new Date(Date.now() - 1000 * 60 * 60 * 3).toISOString(), score: 85, conversion_probability: 78, is_hot: true, priority_tag: 'TIER_1_INSTITUTIONAL', stage: 'discovered' },
+        { id: 4, email: "director.fx@jpmorgan.com", source: "hero_terminal", created_at: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(), score: 92, conversion_probability: 88, is_hot: true, priority_tag: 'TIER_1_INSTITUTIONAL', stage: 'discovered' },
       ];
       processAndSetLeads(mockData);
     } finally {
@@ -62,6 +62,12 @@ export const LeadManager = () => {
     if (source?.includes('exit')) return { label: 'Exit Intent', style: 'text-amber-500 bg-amber-500/10 border-amber-500/20' };
     if (source?.includes('webinar')) return { label: 'Webinar Waitlist', style: 'text-purple-500 bg-purple-500/10 border-purple-500/20' };
     return { label: 'Hero Form', style: 'text-emerald-500 bg-emerald-500/10 border-emerald-500/20' };
+  };
+
+  const getTierStyle = (tier: string) => {
+    if (tier?.includes('TIER_1')) return 'text-purple-400 bg-purple-500/10 border-purple-500/30';
+    if (tier?.includes('TIER_2')) return 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30';
+    return 'text-gray-400 bg-white/5 border-white/10';
   };
 
   const exportToCSV = () => {
@@ -123,23 +129,56 @@ export const LeadManager = () => {
             <thead>
               <tr className="text-[10px] text-gray-500 uppercase font-black tracking-[0.3em]">
                 <th className="px-8 py-6">Institutional Client</th>
+                <th className="px-8 py-6">Tier Class</th>
+                <th className="px-8 py-6">Signal Score</th>
+                <th className="px-8 py-6">Conversion Vector</th>
                 <th className="px-8 py-6">Capture Source</th>
-                <th className="px-8 py-6">Intelligence Date</th>
                 <th className="px-8 py-6 text-right">Action</th>
               </tr>
             </thead>
             <tbody className="text-sm">
               {leads.map((lead) => {
                 const sourceBadge = getSourceBadge(lead.source);
+                const tierStyle = getTierStyle(lead.priority_tag);
                 return (
                  <tr key={lead.id} className="bg-white/5 group hover:bg-emerald-500/5 transition-all">
                    <td className="px-8 py-6 first:rounded-l-[32px] border-y border-l border-white/5 group-hover:border-emerald-500/20">
                      <div className="flex items-center gap-4">
                        <div className="w-10 h-10 bg-black rounded-xl border border-white/10 flex items-center justify-center text-gray-500 group-hover:text-emerald-500 transition-colors shadow-inner">
-                         <Mail className="w-4 h-4" />
+                         {lead.is_hot ? <Flame className="w-4 h-4 text-orange-500" /> : <Mail className="w-4 h-4" />}
                        </div>
                        <div>
                          <div className="text-white font-bold tracking-tight">{lead.email}</div>
+                         <div className="text-[10px] text-gray-500 font-mono tracking-widest mt-1">{new Date(lead.created_at).toLocaleString()}</div>
+                       </div>
+                     </div>
+                   </td>
+                   <td className="px-8 py-6 border-y border-white/5 group-hover:border-emerald-500/20">
+                     <span className={cn(
+                       "px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-[0.2em] border",
+                       tierStyle
+                     )}>
+                       {lead.priority_tag ? lead.priority_tag.replace(/_/g, ' ') : 'UNRATED'}
+                     </span>
+                   </td>
+                   <td className="px-8 py-6 border-y border-white/5 group-hover:border-emerald-500/20">
+                     <div className="flex items-center gap-2">
+                       <ShieldAlert className={cn("w-4 h-4", lead.score >= 70 ? "text-purple-400" : lead.score >= 50 ? "text-emerald-400" : "text-gray-500")} />
+                       <span className="text-white font-black font-mono">{lead.score || 0}</span>
+                       <span className="text-gray-600 text-xs font-mono">/100</span>
+                     </div>
+                   </td>
+                   <td className="px-8 py-6 border-y border-white/5 group-hover:border-emerald-500/20">
+                     <div className="w-32">
+                       <div className="flex justify-between text-[10px] font-black mb-2">
+                         <span className="text-gray-400 uppercase tracking-widest">Prob</span>
+                         <span className={cn(lead.conversion_probability >= 70 ? "text-emerald-400" : "text-gray-400")}>{lead.conversion_probability || 0}%</span>
+                       </div>
+                       <div className="h-1.5 w-full bg-black rounded-full overflow-hidden border border-white/5">
+                         <div 
+                           className={cn("h-full rounded-full transition-all duration-1000", lead.conversion_probability >= 70 ? "bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]" : "bg-white/20")}
+                           style={{ width: `${lead.conversion_probability || 0}%` }}
+                         />
                        </div>
                      </div>
                    </td>
@@ -150,11 +189,6 @@ export const LeadManager = () => {
                      )}>
                        {sourceBadge.label}
                      </span>
-                   </td>
-                   <td className="px-8 py-6 border-y border-white/5 group-hover:border-emerald-500/20">
-                     <div className="text-xs text-gray-400 font-mono">
-                       {new Date(lead.created_at).toLocaleString()}
-                     </div>
                    </td>
                    <td className="px-8 py-6 last:rounded-r-[32px] border-y border-r border-white/5 group-hover:border-emerald-500/20 text-right">
                      <button className="w-10 h-10 rounded-xl bg-white/5 text-gray-500 hover:bg-emerald-500 hover:text-black transition-all flex items-center justify-center ml-auto">
