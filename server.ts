@@ -96,8 +96,9 @@ async function startServer() {
   let retryCount = 0;
 
   const startListening = () => {
-    const server = app.listen(config.port, "0.0.0.0", () => {
-      logger.info(`[IFX SOVEREIGN NODE]: OPERATIONAL ON PORT ${config.port}`);
+    const port = Number(config.port);
+    const server = app.listen(port, "0.0.0.0", () => {
+      logger.info(`[IFX SOVEREIGN NODE]: OPERATIONAL ON PORT ${port}`);
     });
 
     server.on('error', (e: NodeJS.ErrnoException) => {
@@ -140,7 +141,9 @@ async function startServer() {
   startListening();
 }
 
-startServer().catch(err => {
+try {
+  await startServer();
+} catch (err) {
   console.error("[CRITICAL SHUTDOWN]:", err);
   process.exit(1);
-});
+}

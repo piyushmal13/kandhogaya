@@ -33,7 +33,7 @@ export function useRealtimeTable<T>(
       setError(null);
 
       let query = supabase
-        .from(table)
+        .from(table as any)
         .select('*')
         .limit(initialPageSize);
 
@@ -42,7 +42,7 @@ export function useRealtimeTable<T>(
           query = query.or(filter);
         } else {
           const [col, rest] = filter.split('=');
-          if (rest && rest.includes('.')) {
+          if (rest?.includes('.')) {
             const [op, val] = rest.split('.');
             query = query.filter(col, op as any, val);
           } else {
