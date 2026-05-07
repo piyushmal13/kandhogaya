@@ -92,9 +92,52 @@ async function startServer() {
     });
   }
 
-  app.listen(config.port, "0.0.0.0", () => {
-    logger.info(`[IFX SOVEREIGN NODE]: OPERATIONAL ON PORT ${config.port}`);
-  });
+  const MAX_RETRIES = 5;
+  let retryCount = 0;
+
+  const startListening = () => {
+    const server = app.listen(config.port, "0.0.0.0", () => {
+      logger.info(`[IFX SOVEREIGN NODE]: OPERATIONAL ON PORT ${config.port}`);
+    });
+
+    server.on('error', (e: NodeJS.ErrnoException) => {
+      if (e.code === 'EADDRINUSE') {
+        logger.warn(`[TELEMETRY] PORT ${config.port} IN USE. RETRYING (ATTEMPT ${retryCount + 1}/${MAX_RETRIES})...`);
+        if (retryCount < MAX_RETRIES) {
+          retryCount++;
+          const backoff = Math.pow(2, retryCount) * 1000;
+          setTimeout(() => {
+            server.close();
+            startListening();
+          }, backoff);
+        } else {
+          logger.error(`[CRITICAL] FAILED TO BIND TO PORT ${config.port} AFTER ${MAX_RETRIES} ATTEMPTS.`);
+          process.exit(1);
+        }
+      } else {
+        logger.error(`[CRITICAL SHUTDOWN]: ${e}`);
+        process.exit(1);
+      }
+    });
+
+    // Graceful Shutdown
+    const gracefulShutdown = () => {
+      logger.info("[IFX SOVEREIGN NODE]: INITIATING GRACEFUL SHUTDOWN...");
+      server.close(() => {
+        logger.info("[IFX SOVEREIGN NODE]: CONNECTIONS CLOSED. TERMINATING PROCESS.");
+        process.exit(0);
+      });
+      setTimeout(() => {
+        logger.error("[CRITICAL] FORCE TERMINATING DUE TO HANGING CONNECTIONS.");
+        process.exit(1);
+      }, 10000);
+    };
+
+    process.on('SIGTERM', gracefulShutdown);
+    process.on('SIGINT', gracefulShutdown);
+  };
+
+  startListening();
 }
 
 startServer().catch(err => {

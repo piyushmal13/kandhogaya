@@ -3,6 +3,7 @@
   "type": "module",
   "private": true,
   "scripts": {
+    "predev": "node scripts/recover-ports.js",
     "dev": "cross-env NODE_ENV=development tsx server.ts",
     "prebuild": "node scripts/gen-sitemap.js",
     "build": "vite build",
@@ -78,6 +79,7 @@
     "cross-env": "^10.1.0",
     "jscodeshift": "^17.3.0",
     "jsdom": "^28.1.0",
+    "kill-port": "^2.0.1",
     "tailwindcss": "^4.1.14",
     "tsx": "^4.21.0",
     "typescript": "~5.8.2",

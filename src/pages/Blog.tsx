@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { Calendar, Clock, ArrowRight, Search, Filter } from "lucide-react";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
 import { getBlogPosts } from "../services/apiHandlers";
 import { PageHero } from "../components/site/PageHero";
@@ -14,48 +15,47 @@ import { resolveBlogImage, stripHtml } from "../utils/blogUtils";
 import { DashboardLayout } from "../components/institutional/DashboardLayout";
 
 export const Blog = () => {
-  const [posts, setPosts] = useState<BlogPost[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const observer = useRef<IntersectionObserver | null>(null);
   const PAGE_SIZE = 9;
 
+  const fetchPosts = async ({ pageParam = 0 }) => {
+    const data = await getBlogPosts(pageParam, PAGE_SIZE, searchQuery);
+    return {
+      data: Array.isArray(data) ? data : [],
+      nextPage: Array.isArray(data) && data.length === PAGE_SIZE ? pageParam + 1 : undefined,
+    };
+  };
+
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ['blogPosts', searchQuery],
+    queryFn: fetchPosts,
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => lastPage.nextPage,
+  });
+
+  const posts = data ? data.pages.flatMap(page => page.data) : [];
+  const loading = isFetching && !isFetchingNextPage;
+
   const lastPostElementRef = useCallback((node: HTMLDivElement | null) => {
-    if (loading) return;
+    if (isFetchingNextPage) return;
     if (observer.current) observer.current.disconnect();
     observer.current = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting && hasMore) {
-        setPage(prevPage => prevPage + 1);
+      if (entries[0].isIntersecting && hasNextPage) {
+        fetchNextPage();
       }
     });
     if (node) observer.current.observe(node);
-  }, [loading, hasMore]);
-
-  useEffect(() => {
-    const fetchPosts = async () => {
-      setLoading(true);
-      const data = await getBlogPosts(page, PAGE_SIZE, searchQuery);
-      
-      if (Array.isArray(data)) {
-        if (page === 0) {
-          setPosts(data);
-        } else {
-          setPosts(prev => [...prev, ...data]);
-        }
-        setHasMore(data.length === PAGE_SIZE);
-      }
-      setLoading(false);
-    };
-
-    fetchPosts();
-  }, [page, searchQuery]);
+  }, [isFetchingNextPage, hasNextPage, fetchNextPage]);
 
   const handleSearch = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    setPage(0);
-    // Search is handled by the useEffect dependency on searchQuery
   };
 
   return (

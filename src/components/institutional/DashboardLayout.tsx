@@ -5,6 +5,8 @@ import { useFocusRoute } from '@/hooks/useFocusRoute';
 import { cn } from '@/lib/utils';
 import { motion } from "motion/react";
 
+import { BottomNavBar } from '../ui/BottomNavBar';
+
 // ── TYPES ──
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -33,13 +35,14 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
       </aside>
 
       {/* === MOBILE NAVIGATION === */}
-      {/* Note: Mobile navigation is handled by global Navbar component's hamburger menu */}
+      {/* Note: Mobile navigation is handled by global Navbar component's hamburger menu and BottomNavBar */}
+      <BottomNavBar />
 
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="relative z-10 flex-1 flex flex-col min-w-0"
+        className="relative z-10 flex-1 flex flex-col min-w-0 mb-24 lg:mb-0"
       >
         <div className={cn(
           "w-full transition-all duration-700 ease-in-out px-4 sm:px-6 md:px-8 lg:px-12 pt-24",
