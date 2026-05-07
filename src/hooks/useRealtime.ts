@@ -75,7 +75,7 @@ export function useRealtimeTable<T = any>(
 
       if (fetchError) throw fetchError;
 
-      setRows((data || []) as T[]);
+      setRows(data || []);
     } catch (err: any) {
       setError(err);
       console.error(`[Realtime] Failed to fetch ${table}:`, err);

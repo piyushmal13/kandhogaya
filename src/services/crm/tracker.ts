@@ -46,8 +46,8 @@ class Tracker {
       priority,
       metadata: {
         ...event.metadata,
-        url: globalThis.window !== undefined ? globalThis.window.location.href : '',
-        referrer: globalThis.document !== undefined ? globalThis.document.referrer : '',
+        url: globalThis.window === undefined ? '' : globalThis.window.location.href,
+        referrer: globalThis.document === undefined ? '' : globalThis.document.referrer,
         timestamp: new Date().toISOString()
       }
     };
