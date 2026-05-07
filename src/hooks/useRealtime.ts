@@ -9,6 +9,27 @@ export type RealtimeEvent<T> = {
 };
 
 /**
+ * Helper to process realtime events and update row state.
+ */
+function handleRealtimePayload<T>(prev: T[], payload: any): T[] {
+  switch (payload.eventType) {
+    case 'INSERT':
+      if (prev.some(row => (row as any).id === payload.new.id)) {
+        return prev;
+      }
+      return [payload.new as T, ...prev];
+    case 'UPDATE':
+      return prev.map(row => 
+        (row as any).id === payload.new.id ? payload.new as T : row
+      );
+    case 'DELETE':
+      return prev.filter(row => (row as any).id !== payload.old.id);
+    default:
+      return prev;
+  }
+}
+
+/**
  * Core realtime table hook with generic typing.
  */
 export function useRealtimeTable<T = any>(
@@ -32,9 +53,9 @@ export function useRealtimeTable<T = any>(
       setLoading(true);
       setError(null);
 
-      let query = (supabase.from(table as any) as any)
+      let query = supabase.from(table as any)
         .select('*')
-        .limit(initialPageSize);
+        .limit(initialPageSize) as any;
 
       if (filter) {
         if (filter.includes(',') || filter.includes('(')) {
@@ -90,26 +111,7 @@ export function useRealtimeTable<T = any>(
             onChange(event);
           }
 
-          setRows(prev => {
-            switch (payload.eventType) {
-              case 'INSERT':
-                if (prev.some(row => (row as any).id === payload.new.id)) {
-                  return prev;
-                }
-                return [payload.new as T, ...prev];
-              
-              case 'UPDATE':
-                return prev.map(row => 
-                  (row as any).id === payload.new.id ? payload.new as T : row
-                );
-              
-              case 'DELETE':
-                return prev.filter(row => (row as any).id !== payload.old.id);
-              
-              default:
-                return prev;
-            }
-          });
+          setRows(prev => handleRealtimePayload<T>(prev, payload));
         }
       )
       .subscribe((status) => {
