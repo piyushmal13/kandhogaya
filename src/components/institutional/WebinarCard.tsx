@@ -3,6 +3,8 @@ import { motion } from 'motion/react';
 import { Calendar, Clock, Users, ShieldCheck } from 'lucide-react';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Webinar } from '@/types';
+import { getWebinarUrl, getAvatarUrl } from '@/lib/supabase';
+import { ResizedImage } from '../ui/ResizedImage';
 
 export function WebinarCard({ webinar }: Readonly<{ webinar: Webinar }>) {
   const navigate = useNavigate();
@@ -96,17 +98,14 @@ export function WebinarCard({ webinar }: Readonly<{ webinar: Webinar }>) {
       itemScope
       itemType="https://schema.org/Event"
     >
-      {/* Schema.org JSON-LD */}
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }} />
-      
       {/* Event Image */}
       <div className="relative h-48 overflow-hidden">
-        <img 
+        <ResizedImage 
           src={webinar.webinar_image_url || "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop"} 
           alt={webinar.title}
+          bucket="webinar-assets"
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
           itemProp="image"
-          loading="lazy"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent" />
         
@@ -165,7 +164,7 @@ export function WebinarCard({ webinar }: Readonly<{ webinar: Webinar }>) {
         <div className="flex items-center gap-4 pt-2">
           <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full ring-2 ring-emerald-500/20">
             <img 
-              src={webinar.speaker_images?.[0] || webinar.speaker_profile_url || "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=2000&auto=format&fit=crop"} 
+              src={getAvatarUrl(webinar.speaker_images?.[0] || webinar.speaker_profile_url) || "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=2000&auto=format&fit=crop"} 
               alt={webinar.speaker_name || "Institutional Lead"}
               className="w-full h-full object-cover"
               itemProp="performer"

@@ -140,13 +140,23 @@ export const safeQuery = async <T>(query: any, cacheKey?: string): Promise<T | [
 
 // --- UTILS ---
 
-export const getSupabasePublicUrl = (bucket: string, path: string): string => {
+/**
+ * Institutional Image Resolver
+ * Handles absolute URLs, relative Supabase storage paths, and fallbacks.
+ */
+export const getSupabasePublicUrl = (bucket: string, path: string | null | undefined): string => {
   if (!path) return "";
   if (path.startsWith("http")) return path;
+  
+  // Clean path (remove leading slash if present)
+  const cleanPath = path.startsWith("/") ? path.slice(1) : path;
+  
   const bakedUrl = import.meta.env.VITE_SUPABASE_URL || getSupabaseConfig().url;
-  return `${bakedUrl}/storage/v1/object/public/${bucket}/${path}`;
+  return `${bakedUrl}/storage/v1/object/public/${bucket}/${cleanPath}`;
 };
 
-export const getAvatarUrl = (path: string) => getSupabasePublicUrl("avatars", path);
-export const getProductUrl = (path: string) => getSupabasePublicUrl("products", path);
-export const getWebinarUrl = (path: string) => getSupabasePublicUrl("webinars", path);
+export const getAvatarUrl = (path: string | null | undefined) => getSupabasePublicUrl("avatars", path);
+export const getProductUrl = (path: string | null | undefined) => getSupabasePublicUrl("products", path);
+export const getWebinarUrl = (path: string | null | undefined) => getSupabasePublicUrl("webinar-assets", path);
+export const getBannerUrl = (path: string | null | undefined) => getSupabasePublicUrl("banners", path);
+export const getContentUrl = (path: string | null | undefined) => getSupabasePublicUrl("content", path);

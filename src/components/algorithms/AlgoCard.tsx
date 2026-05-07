@@ -36,6 +36,7 @@ export const AlgoCard = ({ algo, onSelect }: AlgoCardProps) => {
         <ResizedImage 
           src={algo.image_url || `https://picsum.photos/seed/${algo.id}/800/450`} 
           alt={algo.name} 
+          bucket="products"
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 opacity-40 group-hover:opacity-60"
         />
         

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { ArrowRight, ShieldCheck, Zap, Users, Shield } from "lucide-react";
 import { bannerService, Banner } from "../../services/bannerService";
-import { getSupabasePublicUrl } from "../../lib/supabase";
+import { getBannerUrl } from "../../lib/supabase";
 import { cn } from "../../lib/utils";
 
 export const AdBanner: React.FC<{ placement?: string }> = ({ placement = "webinar" }) => {
@@ -34,7 +34,7 @@ export const AdBanner: React.FC<{ placement?: string }> = ({ placement = "webina
       {/* Background Ambience */}
       <div className="absolute inset-0 z-0">
         <img 
-          src={banner.image_url?.startsWith('http') ? banner.image_url : getSupabasePublicUrl('banners', banner.image_url || '')} 
+          src={getBannerUrl(banner.image_url)} 
           alt={banner.title} 
           className="w-full h-full object-cover opacity-20 group-hover:scale-105 transition-transform duration-1000"
         />

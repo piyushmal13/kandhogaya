@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 
 import { getWebinars, subscribeToWebinars } from "../../services/apiHandlers";
 import { mapWebinar } from "../../utils/dataMapper";
+import { ResizedImage } from "../ui/ResizedImage";
 
 export const WebinarPromo = () => {
   const [webinar, setWebinar] = useState<any>(null);
@@ -139,10 +140,15 @@ export const WebinarPromo = () => {
                 <div className="relative group">
                   <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-full opacity-30 blur group-hover:opacity-50 transition duration-500" />
                   <div className="w-14 h-14 md:w-16 md:h-16 rounded-full border border-white/10 p-0.5 flex items-center justify-center bg-zinc-900 overflow-hidden relative z-10">
-                    {webinar.speaker_images?.[0] ? (
-                      <img src={webinar.speaker_images[0]} alt={webinar.speaker} className="w-full h-full object-cover" />
+                    {webinar.speaker_images?.[0] || webinar.speaker_profile_url ? (
+                      <ResizedImage 
+                        src={webinar.speaker_images?.[0] || webinar.speaker_profile_url} 
+                        alt={webinar.speaker || webinar.speaker_name} 
+                        bucket="avatars"
+                        className="w-full h-full object-cover" 
+                      />
                     ) : (
-                      <span className="text-white font-bold text-xl">{webinar.speaker?.charAt(0) || "S"}</span>
+                      <span className="text-white font-bold text-xl">{webinar.speaker?.charAt(0) || webinar.speaker_name?.charAt(0) || "S"}</span>
                     )}
                   </div>
                 </div>
