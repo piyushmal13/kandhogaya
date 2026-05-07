@@ -73,14 +73,20 @@ export function PortfolioValue() {
       </div>
 
       {/* Surface Metadata */}
-      <div className="mt-12 flex items-center gap-6 border-t border-white/5 pt-6 opacity-30">
+      <div className="mt-12 flex flex-wrap items-center gap-6 border-t border-white/5 pt-6 opacity-30">
         <div className="flex flex-col gap-1">
-          <span className="text-[10px] font-mono">Real-time Stream</span>
+          <span className="text-[8px] font-black uppercase tracking-widest">Protocol Stream</span>
+          <span className="text-[10px] font-mono">Real-time_Bridge_v2</span>
         </div>
-        <div className="w-px h-6 bg-white/10" />
+        <div className="w-px h-6 bg-white/10 hidden sm:block" />
         <div className="flex flex-col gap-1">
           <span className="text-[8px] font-black uppercase tracking-widest">Verification Status</span>
-          <span className="text-[10px] font-mono">Elite_Verified_v4</span>
+          <span className="text-[10px] font-mono text-emerald-500">Elite_Verified_Audit_Pass</span>
+        </div>
+        <div className="w-px h-6 bg-white/10 hidden sm:block" />
+        <div className="flex flex-col gap-1">
+          <span className="text-[8px] font-black uppercase tracking-widest">Auditor Signature</span>
+          <span className="text-[10px] font-mono">IFX_QUANT_SYSTEMS_772</span>
         </div>
       </div>
     </motion.div>

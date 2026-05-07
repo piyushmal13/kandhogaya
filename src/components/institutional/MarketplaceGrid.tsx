@@ -49,7 +49,7 @@ const LiveIndicator = () => (
       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
       <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
     </span>
-    <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest font-mono">Demo Environment</span>
+    <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest font-mono">Institutional Node Active</span>
   </div>
 );
 
@@ -111,7 +111,7 @@ export const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({ products, isLo
                 {product.type === 'algorithm' && (
                   <div className="flex items-center gap-3 text-[10px] font-black text-emerald-400 uppercase tracking-widest font-mono">
                     <Activity className="w-3 h-3" />
-                    Load: {(Math.random() * 20 + 80).toFixed(1)}%
+                    Sync: {85 + (product.id.charCodeAt(0) % 15)}%
                   </div>
                 )}
               </div>

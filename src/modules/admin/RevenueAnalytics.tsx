@@ -26,7 +26,7 @@ export const RevenueAnalytics = () => {
   const fetchRevenueMetrics = async () => {
     setLoading(true);
     try {
-      const [sales, events] = await Promise.all([
+      const [salesRes, eventsRes] = await Promise.all([
         supabase
           .from('sales_tracking')
           .select(`
@@ -34,32 +34,30 @@ export const RevenueAnalytics = () => {
             agent:agent_id(full_name, id),
             product:product_id(name)
           `),
-        supabase.from('analytics_events').select('event_type')
+        supabase.from('user_events').select('event_type')
       ]);
 
-      const salesData = sales.data || [];
-      const eventsData = events.data || [];
+      const salesData = salesRes.data || [];
+      const eventsData = eventsRes.data || [];
 
-      // 3. Analytics: Calculate Metrics
-      const totalMTD = salesData.reduce((sum, s) => sum + (s.sale_amount || 0), 0) || 0;
-      
-      const sourceMap: any = { 'Direct': 0, 'Affiliate': 0, 'Internal': 0 };
+      // 1. Revenue Metrics
+      const totalMTD = salesData.reduce((sum, s) => sum + (parseFloat(s.sale_amount) || 0), 0) || 0;
+      const sourceMap: any = { 'Direct': 0, 'Affiliate': 0 };
       const agentMap: any = {};
       
       salesData.forEach((s: any) => {
         const src = s.agent_id ? 'Affiliate' : 'Direct';
         const agent = s.agent?.full_name || 'Direct Sale';
-        
-        sourceMap[src] = (sourceMap[src] || 0) + (s.sale_amount || 0);
+        sourceMap[src] = (sourceMap[src] || 0) + (parseFloat(s.sale_amount) || 0);
         if (s.agent_id) {
-          agentMap[agent] = (agentMap[agent] || 0) + (s.sale_amount || 0);
+          agentMap[agent] = (agentMap[agent] || 0) + (parseFloat(s.sale_amount) || 0);
         }
       });
 
       const revenueBySource = Object.entries(sourceMap).map(([name, value]) => ({ name, value }));
       const revenueByAgent = Object.entries(agentMap).map(([name, value]) => ({ name, value }));
-      
-      // 4. Funnel Logic
+
+      // 2. Funnel Intelligence
       const counts = eventsData.reduce((acc: any, curr: any) => {
         acc[curr.event_type] = (acc[curr.event_type] || 0) + 1;
         return acc;
@@ -67,9 +65,9 @@ export const RevenueAnalytics = () => {
 
       const funnelConversion = [
         { name: "Discovery", value: counts.page_view || 0 },
-        { name: "High Intent", value: counts.pricing_click || 0 },
-        { name: "Checkout", value: counts.purchase_attempt || 0 },
-        { name: "Fulfilled", value: counts.payment_uploaded || 0 }
+        { name: "Asset Analysis", value: counts.view_product || 0 },
+        { name: "Allocation Intent", value: counts.purchase_attempt || 0 },
+        { name: "Protocol Fulfilled", value: counts.payment_uploaded || 0 }
       ];
 
       setData({
