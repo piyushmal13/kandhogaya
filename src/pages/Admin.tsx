@@ -58,6 +58,7 @@ const GROUP_LABELS: Record<string, string> = {
 };
 
 import { DashboardLayout } from "@/components/institutional/DashboardLayout";
+import { InstitutionalSkeleton } from "@/components/institutional/InstitutionalSkeleton";
 
 export const Admin = () => {
   const { user, userProfile, loading } = useAuth();
@@ -66,7 +67,7 @@ export const Admin = () => {
   if (loading) return <InstitutionalSkeleton />;
 
   // All hooks must be called before any conditional return (Rules of Hooks)
-  const isAdmin = userProfile?.role === "admin";
+  const isAdmin = userProfile?.role === "admin" || userProfile?.role === "superadmin";
 
   // Guard — must be AFTER all hooks
   if (!user || !isAdmin) return <Navigate to="/dashboard" />;

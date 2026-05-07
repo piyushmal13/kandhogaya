@@ -71,8 +71,8 @@ export const checkWebinarRegistration = async (webinarId: string, userId: string
 export const getSignals = async () => {
   return safeQuery<Signal[]>(
     supabase
-      .from("signals")
-      .select("id, asset, direction, entry_price, stop_loss, take_profit, status, created_at")
+      .from("algorithms")
+      .select("id, name, description, risk_classification, created_at")
       .order("created_at", { ascending: false })
       .limit(50)
   );
@@ -86,8 +86,8 @@ export const getProducts = async () => {
 
 export const getProductById = async (id: string) => {
   const { data, error } = await supabase
-    .from("products")
-    .select("id, name, description, price, category, video_explanation_url, image_url, created_at, performance_data, long_plan_offers")
+    .from("algorithms")
+    .select("id, name, description, price, image_url, created_at, risk_classification, monthly_roi_pct, min_capital, slug")
     .eq("id", id)
     .maybeSingle();
   
@@ -105,11 +105,11 @@ export const subscribeToAlgo = async (userId: string, algoId: string, durationDa
 
     const res = await safeExecute(() =>
       withTimeout(
-        supabase.from('bot_licenses').insert({
+        supabase.from('algo_licenses').insert({
           user_id: userId,
           algo_id: algoId,
-          license_key: key,
-          is_active: true,
+          status: 'active',
+          starts_at: new Date().toISOString(),
           expires_at: expiresAt.toISOString()
         }).select().maybeSingle()
       )
@@ -134,9 +134,8 @@ export const subscribeToAlgo = async (userId: string, algoId: string, durationDa
 export const getBlogPosts = async (page = 0, pageSize = 9, searchQuery = "") => {
   try {
     let query = supabase
-      .from('content_posts')
-      .select('id, author_id, category, title, slug, content_type, status, featured_image, image_url, created_at, metadata, author_bio')
-      .eq('status', 'published')
+      .from('blog_posts')
+      .select('id, author_name, category, title, slug, featured_image_url, created_at, excerpt')
       .order('created_at', { ascending: false })
       .range(page * pageSize, (page + 1) * pageSize - 1);
 
@@ -158,8 +157,8 @@ export const getBlogPosts = async (page = 0, pageSize = 9, searchQuery = "") => 
 
 export const getBlogPostBySlug = async (slug: string) => {
   const { data, error } = await supabase
-    .from('content_posts')
-    .select('id, author_id, category, title, slug, content_type, status, body, content, featured_image, image_url, created_at, metadata, author_bio')
+    .from('blog_posts')
+    .select('id, author_name, category, title, slug, body, featured_image_url, created_at, excerpt')
     .eq('slug', slug)
     .single();
   
@@ -175,8 +174,8 @@ export const getCourses = async () => {
   try {
     const res = await safeQuery<Course[]>(
       supabase
-        .from("courses")
-        .select("*, chapters:lessons(*)")
+        .from("university_courses")
+        .select("*, chapters:course_lessons(*)")
         .order("created_at", { ascending: false })
     );
 
@@ -190,8 +189,8 @@ export const getCourses = async () => {
 
 export const getCourseById = async (id: string) => {
   const { data, error } = await supabase
-    .from("courses")
-    .select("*, chapters:lessons(*)")
+    .from("university_courses")
+    .select("*, chapters:course_lessons(*)")
     .eq("id", id)
     .maybeSingle();
   
@@ -203,10 +202,10 @@ export const getCourseById = async (id: string) => {
 
 export const checkUserAccess = async (userId: string, itemId: string) => {
   const { data, error } = await supabase
-    .from("user_access")
+    .from("course_enrollments")
     .select("id")
     .eq("user_id", userId)
-    .eq("item_id", itemId)
+    .eq("course_id", itemId)
     .maybeSingle();
   
   if (error) return false;
@@ -217,8 +216,8 @@ export const checkUserAccess = async (userId: string, itemId: string) => {
 
 export const subscribeToSignals = (callback: (payload: unknown) => void) => {
   return supabase
-    .channel('public:signals')
-    .on('postgres_changes', { event: '*', schema: 'public', table: 'signals' }, callback)
+    .channel('public:algorithms')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'algorithms' }, callback)
     .subscribe();
 };
 
@@ -413,8 +412,8 @@ export const subscribeToMarketData = (callback: (payload: any) => void) => {
 export const getPerformanceResults = async () => {
   return safeQuery<any[]>(
     supabase
-      .from("performance_results")
-      .select("id, month, year, return_pct, win_rate, pips, created_at")
+      .from("algo_performance_snapshots")
+      .select("id, roi_pct, period_start, created_at")
       .order("created_at", { ascending: true })
   );
 };

@@ -24,6 +24,7 @@ export const getAccess = (userProfile: any, entitlements: Entitlement[] = []) =>
   // Role Intelligence Matrix: Baseline Capability Discovery
   switch (role) {
     case "admin":
+    case "superadmin":
       return { 
         signals: true, algo: true, academy: true, webinars: true, 
         admin: true, revenue: true, crm: true, fulfillment: true, logs: true 

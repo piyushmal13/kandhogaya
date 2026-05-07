@@ -11,10 +11,11 @@ export const productService = {
   getProducts: async (): Promise<Product[]> => {
     try {
       const { data: products, error } = await supabase
-        .from("products")
+        .from("algorithms")
         .select(`
-          id, name, description, price, category, video_explanation_url, image_url, created_at, performance_data, long_plan_offers,
-          performance:performance_results(*)
+          id, name, description, price, image_url, created_at, 
+          risk_classification, monthly_roi_pct, min_capital, slug,
+          performance:algo_performance_snapshots(*)
         `)
         .order("created_at", { ascending: false });
 
@@ -28,10 +29,10 @@ export const productService = {
   getUserLicenses: async (userId: string): Promise<BotLicense[]> => {
     try {
       const query = supabase
-        .from("bot_licenses")
-        .select("id, user_id, algo_id, license_key, is_active, expires_at, created_at")
+        .from("algo_licenses")
+        .select("id, user_id, algo_id, status, expires_at, created_at")
         .eq("user_id", userId)
-        .eq("is_active", true);
+        .eq("status", "active");
 
       return await safeQuery<BotLicense[]>(query);
     } catch {
@@ -70,15 +71,15 @@ export const productService = {
       expiresAt.setDate(expiresAt.getDate() + durationDays);
 
       const { data, error } = await supabase
-        .from('bot_licenses')
+        .from('algo_licenses')
         .insert({
           user_id: userId,
           algo_id: algoId,
-          license_key: key,
-          is_active: true,
+          status: 'active',
+          starts_at: new Date().toISOString(),
           expires_at: expiresAt.toISOString()
         })
-        .select("id, license_key, expires_at")
+        .select("id, expires_at")
         .maybeSingle();
 
       if (error) throw error;
@@ -90,11 +91,11 @@ export const productService = {
 
   subscribeToUserLicenses: (userId: string, callback: (payload: any) => void) => {
     return supabase
-      .channel(`public:bot_licenses:${userId}`)
+      .channel(`public:algo_licenses:${userId}`)
       .on('postgres_changes', {
         event: '*',
         schema: 'public',
-        table: 'bot_licenses',
+        table: 'algo_licenses',
         filter: `user_id=eq.${userId}`
       }, callback)
       .subscribe();

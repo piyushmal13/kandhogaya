@@ -101,38 +101,36 @@ export interface LongPlanOffer {
 
 export interface PerformanceResult {
   id: string;
-  product_id: string;
-  win_rate: number;
-  monthly_return: number;
-  drawdown: number;
-  total_trades: number;
-  is_live: boolean;
-  equity_curve: number[];
-  last_updated: string;
+  algo_id: string;
+  roi_pct: number;
+  drawdown_pct: number;
+  period_start: string;
+  period_end: string;
+  created_at: string;
+  // UI Legacy compatibility
+  win_rate?: number;
+  monthly_return?: number;
 }
 
 export interface Product {
   id: string;
   name: string;
+  slug?: string;
   description?: string;
   price: number;
   image_url?: string;
   created_at: string;
-  strategy_details?: string;
-  risk_profile?: string;
-  performance_data: { type: 'text' | 'image'; content: string }[]; // jsonb
-  q_and_a: QA[];              // jsonb
-  terms_and_conditions?: string;
-  strategy_graph_url?: string;
-  backtesting_result_url?: string;
-  video_explanation_url?: string;
-  long_plan_offers: LongPlanOffer[]; // jsonb
+  risk_classification?: string;
+  monthly_roi_pct?: number;
+  min_capital?: number;
+  is_active?: boolean;
+  compliance_disclaimer?: string;
+  
+  // Legacy / UI Helpers
   category?: string;
-  supported_assets?: string[];
-  // joined via query
-  product_variants?: ProductVariant[];
-  reviews?: Review[];
   performance?: PerformanceResult;
+  long_plan_offers?: LongPlanOffer[];
+  performance_data?: { type: 'text' | 'image'; content: string }[];
 }
 
 // ---------------------------------------------------------------------------

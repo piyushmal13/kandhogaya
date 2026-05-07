@@ -6,19 +6,25 @@ import {
   BookOpen, 
   BarChart3, 
   Settings, 
-  Zap
+  Zap,
+  Lock
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 
 export function DashboardNavigation() {
   const location = useLocation();
+  const { userProfile } = useAuth();
+  const isAdmin = userProfile?.role === "admin" || userProfile?.role === "superadmin";
+
   const navItems = [
     { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
     { icon: Terminal, label: 'Marketplace', path: '/marketplace' },
     { icon: Shield, label: 'Signals', path: '/quantx' },
     { icon: BookOpen, label: 'Academy', path: '/academy' },
     { icon: BarChart3, label: 'Performance', path: '/results' },
+    ...(isAdmin ? [{ icon: Lock, label: 'Admin Hub', path: '/admin' }] : []),
     { icon: Settings, label: 'Terminal', path: '/dashboard' },
   ];
 

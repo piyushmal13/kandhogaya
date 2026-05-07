@@ -23,7 +23,7 @@ export const FulfillmentManager = () => {
         .select(`
           *,
           users(id, email, full_name),
-          products(id, name)
+          algorithms(id, name)
         `)
         .eq('status', 'pending')
         .order('created_at', { ascending: false });
@@ -87,59 +87,20 @@ export const FulfillmentManager = () => {
       }
 
       // 4. ENTITLEMENT ORCHESTRATION: Release Assets
-      const isTier = ['a1a1a1a1-a1a1-a1a1-a1a1-a1a1a1a1a1a1', 'b2b2b2b2-b2b2-b2b2-b2b2-b2b2b2b2b2b2'].includes(receipt.product_id);
+      const expiresAt = new Date();
+      expiresAt.setDate(expiresAt.getDate() + 30);
+      const key = `IFX-${Math.random().toString(36).toUpperCase().substring(2, 6)}-${Math.random().toString(36).toUpperCase().substring(2, 6)}`;
 
-      if (isTier) {
-        const features = receipt.product_id === 'b2b2b2b2-b2b2-b2b2-b2b2-b2b2b2b2b2b2' 
-          ? ['signals', 'algo', 'webinars'] 
-          : ['signals'];
+      // Use unified algo_licenses table
+      const { error: licenseError } = await supabase.from('algo_licenses').insert({
+        user_id: receipt.user_id,
+        algo_id: receipt.product_id, // Assuming product_id matches algorithm_id
+        license_key: key,
+        is_active: true,
+        expires_at: expiresAt.toISOString()
+      });
 
-        const expiresAt = new Date();
-        expiresAt.setDate(expiresAt.getDate() + 30);
-
-        const entitlementInserts = features.map(f => ({
-          user_id: receipt.user_id,
-          feature: f,
-          active: true,
-          expires_at: expiresAt.toISOString()
-        }));
-
-        await supabase.from('user_entitlements').insert(entitlementInserts);
-      } else {
-        // Product Fulfillment
-        let { data: bot } = await supabase
-          .from('algo_bots')
-          .select('id')
-          .eq('product_id', receipt.product_id)
-          .maybeSingle();
-
-        if (!bot) {
-          const { data: newBot } = await supabase
-            .from('algo_bots')
-            .insert({
-              product_id: receipt.product_id,
-              name: receipt.products?.name || 'Institutional Bot',
-              version: 'v1.0'
-            })
-            .select()
-            .single();
-          bot = newBot;
-        }
-
-        if (bot) {
-          const key = `IFX-${Math.random().toString(36).toUpperCase().substring(2, 6)}-${Math.random().toString(36).toUpperCase().substring(2, 6)}`;
-          const expiresAt = new Date();
-          expiresAt.setDate(expiresAt.getDate() + 30);
-
-          await supabase.from('bot_licenses').insert({
-            user_id: receipt.user_id,
-            algo_id: bot.id,
-            license_key: key,
-            is_active: true,
-            expires_at: expiresAt.toISOString()
-          });
-        }
-      }
+      if (licenseError) console.error("Institutional License Issuance Error:", licenseError);
 
       // 5. STATUS FINALIZATION
       const { error: updError } = await supabase
@@ -226,7 +187,7 @@ export const FulfillmentManager = () => {
                   <div className="flex flex-wrap items-center gap-6 mt-4">
                      <span className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest transition-colors group-hover:text-white"><User className="w-3.5 h-3.5 text-emerald-500" /> {receipt.users?.email}</span>
                      <span className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest transition-colors group-hover:text-white"><Phone className="w-3.5 h-3.5 text-emerald-500" /> {receipt.whatsapp_number}</span>
-                     <span className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest transition-colors group-hover:text-white"><Package className="w-3.5 h-3.5 text-emerald-500" /> {receipt.products?.name}</span>
+                     <span className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest transition-colors group-hover:text-white"><Package className="w-3.5 h-3.5 text-emerald-500" /> {receipt.algorithms?.name}</span>
                      <span className="flex items-center gap-2 text-[10px] font-black text-emerald-500 uppercase tracking-widest"><DollarSign className="w-3.5 h-3.5" /> ${receipt.amount}</span>
                   </div>
                 </div>

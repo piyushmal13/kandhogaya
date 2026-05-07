@@ -12,7 +12,7 @@ interface UserProfile {
   id: string;
   email?: string;
   full_name?: string;
-  role: "user" | "admin" | "agent" | "sales_agent" | "support" | "analyst";
+  role: "member" | "admin" | "superadmin" | "agent" | "sales_agent" | "support" | "analyst";
   isPro: boolean;
   referred_by?: string;
   avatar_url?: string;
@@ -85,8 +85,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
 
         const [userRes, entitlementRes, sessionData] = await Promise.all([
-          supabase.from("users").select("id, email, full_name, role, referred_by, avatar_url").eq("id", userId).maybeSingle(),
-          supabase.from("user_entitlements").select("id, user_id, feature, active, expires_at").eq("user_id", userId),
+          supabase.from("users").select("id, email, full_name, role, avatar_url").eq("id", userId).maybeSingle(),
+          supabase.from("algo_licenses").select("id, user_id, algo_id, status, expires_at").eq("user_id", userId),
           supabase.auth.getSession()
         ]);
 
@@ -94,8 +94,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const rawEntitlements = entitlementRes?.data || [];
         // Map DB rows to the Entitlement shape the access engine expects
         const entitlementData: Entitlement[] = rawEntitlements.map((e: any) => ({
-          feature:    e.product_id || e.feature || "unknown",
-          active:     e.active ?? false,
+          feature:    "algo",
+          active:     e.status === 'active',
           expires_at: e.expires_at ?? null,
         }));
         
@@ -110,7 +110,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           const profileData = {
             ...base,
             role: serverRole,
-            isPro: entitlementData.some(e => e.active) || serverRole === "admin",
+            isPro: entitlementData.some(e => e.active) || serverRole === "admin" || serverRole === "superadmin",
           };
           
           setUserProfile(profileData);

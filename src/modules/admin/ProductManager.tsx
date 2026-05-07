@@ -27,8 +27,8 @@ export const ProductManager = () => {
     const cacheKey = "products_list";
     setLoading(true);
     const res = await supabase
-      .from('products')
-      .select('id, name, description, price, category, image_url, strategy_graph_url, backtesting_result_url, video_explanation_url, long_plan_offers, q_and_a, terms_and_conditions, performance_data, created_at, strategy_details, risk_profile')
+      .from('algorithms')
+      .select('*')
       .order('created_at', { ascending: false });
     
     if (res?.data) {
@@ -53,8 +53,8 @@ export const ProductManager = () => {
 
       setLoading(true);
       const res = await supabase
-        .from('products')
-        .select('id, name, description, price, category, image_url, strategy_graph_url, backtesting_result_url, video_explanation_url, long_plan_offers, q_and_a, terms_and_conditions, performance_data, created_at, strategy_details, risk_profile')
+        .from('algorithms')
+        .select('*')
         .order('created_at', { ascending: false });
       
       if (!isMounted) return;
@@ -127,21 +127,23 @@ export const ProductManager = () => {
     try {
       if (!session) throw new Error("No active session");
       
-      // Update Product
+      // Update Algorithm
       const { error: updateError } = await supabase
-        .from('products')
+        .from('algorithms')
         .update(dataToSave)
         .eq('id', editingId);
       
       if (updateError) throw updateError;
 
-      // Update/Insert Performance Result
+      // Update/Insert Performance Snapshot
       const { error: perfError } = await supabase
-        .from('performance_results')
+        .from('algo_performance_snapshots')
         .upsert({
-          product_id: editingId,
-          ...performanceUpdate
-        }, { onConflict: 'product_id' });
+          algo_id: editingId,
+          roi_pct: performanceUpdate.monthly_return,
+          drawdown_pct: performanceUpdate.drawdown,
+          period_start: new Date().toISOString()
+        });
 
       if (perfError) console.error("Performance Update Error:", perfError);
       
@@ -161,7 +163,7 @@ export const ProductManager = () => {
     try {
       if (!session) throw new Error("No active session");
       const { error } = await supabase
-        .from('products')
+        .from('algorithms')
         .delete()
         .eq('id', productToDelete);
       
@@ -202,7 +204,7 @@ export const ProductManager = () => {
     try {
       if (!session) throw new Error("No active session");
       const { error } = await supabase
-        .from('products')
+        .from('algorithms')
         .insert([newProduct]);
       
       if (error) throw new Error(error.message || "Failed to create product");

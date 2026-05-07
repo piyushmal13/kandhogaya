@@ -45,7 +45,7 @@ export const ProtectedRoute = ({
 
   // Admin guard
   if (adminOnly) {
-    const isAdmin = userProfile?.role === "admin";
+    const isAdmin = userProfile?.role === "admin" || userProfile?.role === "superadmin";
 
     if (!isAdmin) {
       return <Navigate to="/dashboard" replace />;

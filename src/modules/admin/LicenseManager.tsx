@@ -17,14 +17,13 @@ export const LicenseManager = () => {
 
   const fetchLicenses = async () => {
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      const res = await fetch("/api/admin/licenses", {
-        headers: { "Authorization": `Bearer ${session?.access_token}` }
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setLicenses(data);
-      }
+      const { data, error } = await supabase
+        .from('algo_licenses')
+        .select('*, users(email)')
+        .order('created_at', { ascending: false });
+      
+      if (error) throw error;
+      setLicenses(data || []);
     } catch (err) {
       console.error("Institutional License Discovery Error:", err);
     }
@@ -38,15 +37,14 @@ export const LicenseManager = () => {
     if (!licenseToDelete) return;
     setDeleteLoading(true);
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      const res = await fetch(`/api/admin/licenses/${licenseToDelete}`, {
-        method: "DELETE",
-        headers: { "Authorization": `Bearer ${session?.access_token}` }
-      });
-      if (res.ok) {
-        fetchLicenses();
-        setIsDeleteDialogOpen(false);
-      }
+      const { error } = await supabase
+        .from('algo_licenses')
+        .delete()
+        .eq('id', licenseToDelete);
+      
+      if (error) throw error;
+      fetchLicenses();
+      setIsDeleteDialogOpen(false);
     } catch (err) {
       console.error("Institutional License Erasure Error:", err);
     } finally {
@@ -64,17 +62,24 @@ export const LicenseManager = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      const res = await fetch("/api/admin/licenses", {
-        method: "POST",
-        headers: { 
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${session?.access_token}`
-        },
-        body: JSON.stringify({ user_id: licenseUserId, algo_id: licenseAlgoId, duration_days: 30 })
-      });
-      if (res.ok) {
-        const data = await res.json();
+      const key = `IFX-${Math.random().toString(36).toUpperCase().substring(2, 6)}-${Math.random().toString(36).toUpperCase().substring(2, 6)}`;
+      const expiresAt = new Date();
+      expiresAt.setDate(expiresAt.getDate() + 30);
+
+      const { data, error } = await supabase
+        .from('algo_licenses')
+        .insert({
+          user_id: licenseUserId,
+          algo_id: licenseAlgoId,
+          license_key: key,
+          is_active: true,
+          expires_at: expiresAt.toISOString()
+        })
+        .select()
+        .single();
+      
+      if (error) throw error;
+      if (data) {
         setLicenseKey(data.license_key);
         fetchLicenses();
       }
