@@ -191,7 +191,12 @@ export const LicenseManager = () => {
                       </div>
                     </div>
                   </div>
-                  <button onClick={() => openDeleteDialog(license.id)} className="p-3 rounded-xl bg-white/5 text-gray-500 hover:bg-red-500 hover:text-white transition-all opacity-0 group-hover:opacity-100"><Trash2 className="w-4 h-4" /></button>
+                   <button 
+                     onClick={() => openDeleteDialog(license.id)} 
+                     className="p-4 rounded-xl bg-white/5 text-gray-500 hover:bg-red-500 hover:text-white transition-all opacity-0 group-hover:opacity-100 min-w-[44px] min-h-[44px] flex items-center justify-center"
+                   >
+                     <Trash2 className="w-5 h-5" />
+                   </button>
                 </div>
               );
             })}

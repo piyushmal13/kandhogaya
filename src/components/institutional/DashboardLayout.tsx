@@ -5,8 +5,6 @@ import { useFocusRoute } from '@/hooks/useFocusRoute';
 import { cn } from '@/lib/utils';
 import { motion } from "motion/react";
 
-import { DashboardMobileNav } from './DashboardMobileNav';
-
 // ── TYPES ──
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -35,7 +33,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
       </aside>
 
       {/* === MOBILE NAVIGATION === */}
-      <DashboardMobileNav />
+      {/* Note: Mobile navigation is handled by global Navbar component's hamburger menu */}
 
       <motion.div 
         initial={{ opacity: 0 }}
@@ -44,8 +42,8 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         className="relative z-10 flex-1 flex flex-col min-w-0"
       >
         <div className={cn(
-          "w-full transition-all duration-700 ease-in-out px-4 sm:px-8 md:px-12 pt-24",
-          contextPanel ? "max-w-[1800px]" : "max-w-[1400px]"
+          "w-full transition-all duration-700 ease-in-out px-4 sm:px-6 md:px-8 lg:px-12 pt-24",
+          "max-w-[95vw] mx-auto"
         )}>
           
           <div className="flex flex-col lg:flex-row gap-10 py-10">

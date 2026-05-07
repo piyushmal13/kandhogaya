@@ -10,14 +10,27 @@ import {
   Menu,
   MessageSquare,
   Settings,
+  Shield,
+  Terminal,
+  Trophy,
   X,
   Zap,
+  GraduationCap,
+  LineChart
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { BRANDING } from "../../constants/branding";
 import { useAuth } from "../../contexts/AuthContext";
 import { cn } from "../../utils/cn";
 
+/**
+ * Unified Responsive Navigation System
+ * 
+ * Desktop (>1024px): Horizontal navbar with site links + auth actions
+ * Mobile (<1024px): Hamburger button → fullscreen menu with ALL navigation grouped
+ * 
+ * Breakpoints aligned with DashboardLayout at lg (1024px)
+ */
 export const Navbar = () => {
   const { user, userProfile, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
@@ -26,10 +39,15 @@ export const Navbar = () => {
   const [hidden, setHidden] = useState(false);
   const location = useLocation();
 
+  const isAdmin = userProfile?.role === "admin" || userProfile?.role === "superadmin";
+  const isAgent = userProfile?.role === "agent" || isAdmin;
+
+  // Close menu on route change
   useEffect(() => {
     setIsOpen(false);
   }, [location.pathname]);
 
+  // Prevent body scroll when menu open
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "unset";
     return () => { document.body.style.overflow = "unset"; };
@@ -51,16 +69,32 @@ export const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
 
-  const navLinks = [
+  /**
+   * Public navigation - visible to all visitors
+   */
+  const publicNavLinks = [
     { name: "Terminal", path: "/", icon: Home },
     { name: "Ecosystem", path: "/quantx", icon: Zap },
     { name: "Webinars", path: "/webinars", icon: BookOpen },
     { name: "Marketplace", path: "/marketplace", icon: BarChart3 },
-    { name: "About", path: "/about", icon: Zap },
+    { name: "Academy", path: "/academy", icon: GraduationCap },
+    { name: "Results", path: "/results", icon: LineChart },
+    { name: "About", path: "/about", icon: Settings },
     { name: "Blog", path: "/blog", icon: MessageSquare },
   ];
 
-  const isAdmin = userProfile?.role === "admin";
+  /**
+   * Authenticated app navigation - visible after login
+   */
+  const appNavLinks = user ? [
+    { name: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
+    { name: "Marketplace", path: "/marketplace", icon: BarChart3 },
+    { name: "Academy", path: "/academy", icon: GraduationCap },
+    { name: "Webinars", path: "/webinars", icon: BookOpen },
+    { name: "Results", path: "/results", icon: LineChart },
+    ...(isAdmin ? [{ name: "Admin Hub", path: "/admin", icon: Shield }] : []),
+    ...(isAgent ? [{ name: "Growth Hub", path: "/agent", icon: Trophy }] : []),
+  ] : [];
 
   return (
     <>
@@ -97,15 +131,16 @@ export const Navbar = () => {
             </div>
           </Link>
 
-          {/* Desktop Nav */}
-          <nav 
-            className="hidden md:flex items-center gap-1.5"
+          {/* Desktop Navigation - Shows at lg (1024px) and up */}
+          <nav
+            className="hidden lg:flex items-center gap-1.5"
             aria-label="Main Navigation"
             itemScope
             itemType="https://schema.org/SiteNavigationElement"
           >
-            {navLinks.map((link) => {
-              const isActive = location.pathname === link.path || (link.path === '/' && location.pathname === '');
+            {publicNavLinks.map((link) => {
+              const isActive = location.pathname === link.path || 
+                (link.path === '/' && location.pathname === '/');
               return (
                 <Link
                   key={link.path}
@@ -131,7 +166,7 @@ export const Navbar = () => {
             })}
           </nav>
 
-          {/* Desktop Auth */}
+          {/* Desktop Auth/Quick Access - Shows at md (768px) and up */}
           <div className="hidden md:flex items-center gap-3">
             {user ? (
               <div className="flex items-center gap-2 bg-white/[0.02] p-1.5 rounded-[1.25rem] border border-white/[0.05]">
@@ -168,49 +203,26 @@ export const Navbar = () => {
               >
                 <div className="absolute inset-0 bg-emerald-400 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" />
                 <span className="relative z-10 flex items-center gap-2">
-                  Portal
-                  <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
+                  Access Terminal <ArrowRight className="h-4 w-4" />
                 </span>
               </Link>
             )}
           </div>
 
-          {/* Mobile controls */}
-          <div className="md:hidden flex items-center gap-2">
-            {!user && (
-              <Link
-                to="/login"
-                className="rounded-xl bg-white/10 border border-white/10 px-5 py-2.5 text-[9px] font-black text-white uppercase tracking-widest hover:bg-white/20 transition-all active:scale-95"
-              >
-                Sign In
-              </Link>
-            )}
-            {user && (
-              <div className="flex items-center gap-2">
-                {isAdmin && (
-                  <Link to="/admin" className="p-2.5 bg-emerald-500/10 border border-emerald-500/20 rounded-[14px] text-emerald-400 active:scale-90 transition-transform">
-                    <Settings className="h-4 w-4" />
-                  </Link>
-                )}
-                <Link to="/dashboard" className="p-2.5 bg-white/5 border border-white/10 rounded-[14px] text-white active:scale-90 transition-transform">
-                  <LayoutDashboard className="h-4 w-4" />
-                </Link>
-              </div>
-            )}
-            <button
-              type="button"
-              onClick={() => setIsOpen((o) => !o)}
-              className="rounded-[14px] border border-white/10 bg-white/[0.04] p-2.5 text-white/50 hover:text-white hover:bg-white/[0.08] transition-all active:scale-90"
-              aria-label="Toggle menu"
-              aria-expanded={isOpen}
-            >
-              {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </button>
-          </div>
+          {/* Mobile Hamburger - Shows on lg:hidden (<1024px) */}
+          <button
+            type="button"
+            onClick={() => setIsOpen((o) => !o)}
+            className="lg:hidden rounded-[14px] border border-white/10 bg-white/[0.04] p-2.5 text-white/50 hover:text-white hover:bg-white/[0.08] transition-all active:scale-90"
+            aria-label="Toggle menu"
+            aria-expanded={isOpen}
+          >
+            {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
         </div>
       </motion.nav>
 
-      {/* Mobile fullscreen menu */}
+      {/* Mobile Fullscreen Menu - lg:hidden only */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -218,7 +230,7 @@ export const Navbar = () => {
             animate={{ opacity: 1, clipPath: "inset(0 0 0% 0)" }}
             exit={{ opacity: 0, clipPath: "inset(0 0 100% 0)" }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-[60] flex flex-col bg-[#010203]/98 backdrop-blur-3xl md:hidden overflow-y-auto pt-28 px-6 pb-12"
+            className="fixed inset-0 z-[60] flex flex-col bg-[#010203]/98 backdrop-blur-3xl lg:hidden overflow-y-auto pt-28 px-6 pb-12"
           >
             <button
               type="button"
@@ -230,35 +242,44 @@ export const Navbar = () => {
             </button>
 
             <div className="flex flex-col gap-10 flex-1 mt-6">
+              {/* Site Navigation */}
               <div>
-                <div className="text-[10px] font-black uppercase tracking-[0.4em] text-emerald-400/50 mb-5">Navigation</div>
+                <div className="text-[10px] font-black uppercase tracking-[0.4em] text-emerald-400/50 mb-5">
+                  Navigation
+                </div>
                 <div className="flex flex-col gap-3">
-                  {navLinks.map((link, index) => (
-                    <motion.div
-                      key={link.path}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.05, duration: 0.4 }}
-                    >
-                      <Link
-                        to={link.path}
-                        onClick={() => setIsOpen(false)}
-                        className={cn(
-                          "flex items-center gap-4 rounded-[1.25rem] border px-5 py-4 transition-all duration-300",
-                          location.pathname === link.path
-                            ? "border-emerald-500/30 bg-emerald-500/[0.08] text-emerald-400 shadow-[0_10px_30px_rgba(16,185,129,0.1)]"
-                            : "border-white/[0.05] bg-white/[0.02] text-white/60 hover:border-white/15 hover:text-white hover:bg-white/[0.05]"
-                        )}
+                  {publicNavLinks.map((link, index) => {
+                    const isActive = location.pathname === link.path || 
+                      (link.path === '/' && location.pathname === '/');
+                    return (
+                      <motion.div
+                        key={link.path}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.05, duration: 0.4 }}
                       >
-                        <link.icon className="h-5 w-5 shrink-0" aria-hidden />
-                        <span className="text-lg font-bold tracking-tight">{link.name}</span>
-                      </Link>
-                    </motion.div>
-                  ))}
+                        <Link
+                          to={link.path}
+                          onClick={() => setIsOpen(false)}
+                          className={cn(
+                            "flex items-center gap-4 rounded-[1.25rem] border px-5 py-4 transition-all duration-300",
+                            isActive
+                              ? "border-emerald-500/30 bg-emerald-500/[0.08] text-emerald-400 shadow-[0_10px_30px_rgba(16,185,129,0.1)]"
+                              : "border-white/[0.05] bg-white/[0.02] text-white/60 hover:border-white/15 hover:text-white hover:bg-white/[0.05]"
+                          )}
+                        >
+                          <link.icon className="h-5 w-5 shrink-0" aria-hidden />
+                          <span className="text-lg font-bold tracking-tight">{link.name}</span>
+                        </Link>
+                      </motion.div>
+                    );
+                  })}
+
+                  {/* Support Link */}
                   <motion.div
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: navLinks.length * 0.05, duration: 0.4 }}
+                    transition={{ delay: publicNavLinks.length * 0.05, duration: 0.4 }}
                   >
                     <a
                       href="https://wa.me/917709583224"
@@ -273,28 +294,50 @@ export const Navbar = () => {
                 </div>
               </div>
 
+              {/* App Navigation (for logged-in users) */}
+              {user && (
+                <div>
+                  <div className="text-[10px] font-black uppercase tracking-[0.4em] text-white/30 mb-5">
+                    Terminal Hub
+                  </div>
+                  <div className="flex flex-col gap-3">
+                    {appNavLinks.map((link, index) => {
+                      const isActive = location.pathname === link.path ||
+                        (link.path !== '/' && location.pathname.startsWith(link.path));
+                      return (
+                        <motion.div
+                          key={link.path}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: index * 0.03, duration: 0.4 }}
+                        >
+                          <Link
+                            to={link.path}
+                            onClick={() => setIsOpen(false)}
+                            className={cn(
+                              "flex items-center gap-4 rounded-[1.25rem] border px-5 py-4 transition-all duration-300",
+                              isActive
+                                ? "border-emerald-500/30 bg-emerald-500/[0.08] text-emerald-400 shadow-[0_10px_30px_rgba(16,185,129,0.1)]"
+                                : "border-white/[0.05] bg-white/[0.02] text-white/60 hover:border-white/15 hover:text-white hover:bg-white/[0.05]"
+                            )}
+                          >
+                            <link.icon className="h-5 w-5 shrink-0" aria-hidden />
+                            <span className="text-lg font-bold tracking-tight">{link.name}</span>
+                          </Link>
+                        </motion.div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Account Actions */}
               <div>
-                <div className="text-[10px] font-black uppercase tracking-[0.4em] text-white/30 mb-5">Account</div>
+                <div className="text-[10px] font-black uppercase tracking-[0.4em] text-white/30 mb-5">
+                  Account
+                </div>
                 {user ? (
                   <div className="flex flex-col gap-3">
-                    <Link
-                      to="/dashboard"
-                      onClick={() => setIsOpen(false)}
-                      className="flex items-center gap-4 rounded-[1.25rem] border border-white/[0.05] bg-white/[0.02] px-5 py-4 text-white/60 hover:text-white"
-                    >
-                      <LayoutDashboard className="h-5 w-5" />
-                      <span className="text-lg font-bold">Dashboard</span>
-                    </Link>
-                    {isAdmin && (
-                      <Link
-                        to="/admin"
-                        onClick={() => setIsOpen(false)}
-                        className="flex items-center gap-4 rounded-[1.25rem] border border-emerald-500/20 bg-emerald-500/10 px-5 py-4 text-emerald-400"
-                      >
-                        <Settings className="h-5 w-5" />
-                        <span className="text-lg font-bold">Admin Terminal</span>
-                      </Link>
-                    )}
                     <button
                       onClick={() => { logout(); setIsOpen(false); }}
                       className="flex items-center gap-4 rounded-[1.25rem] border border-red-500/10 bg-red-500/5 px-5 py-4 text-red-400 hover:bg-red-500/10 transition-colors"
@@ -319,9 +362,13 @@ export const Navbar = () => {
             <div className="mt-10 p-6 rounded-[1.5rem] bg-emerald-500/[0.05] border border-emerald-500/[0.1] text-center">
               <div className="flex items-center justify-center gap-2 mb-2">
                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <div className="text-[10px] font-black text-emerald-400 uppercase tracking-[0.4em]">IFX Desk Acknowledged</div>
+                <div className="text-[10px] font-black text-emerald-400 uppercase tracking-[0.4em]">
+                  IFX Desk Acknowledged
+                </div>
               </div>
-              <div className="text-[11px] text-white/30 font-mono tracking-widest">SESSION SECURED</div>
+              <div className="text-[11px] text-white/30 font-mono tracking-widest">
+                SESSION SECURED
+              </div>
             </div>
           </motion.div>
         )}

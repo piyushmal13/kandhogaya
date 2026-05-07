@@ -562,26 +562,26 @@ export const ProductManager = () => {
                         <h3 className="text-xl font-bold text-white">{product.name}</h3>
                         <div className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest mt-1">{product.category}</div>
                       </div>
-                      <div className="flex gap-2">
-                        <button 
-                          onClick={() => handleEdit(product)}
-                          className="p-2 bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-all"
-                        >
-                          <Edit2 className="w-4 h-4" />
-                        </button>
-                        <button 
-                          onClick={() => openDeleteDialog(product.id)}
-                          className="p-2 bg-white/5 text-gray-400 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => openVariantModal(product.id)}
-                          className="p-2 bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-all"
-                        >
-                          <ImageIcon className="w-4 h-4" />
-                        </button>
-                      </div>
+                       <div className="flex gap-2">
+                         <button 
+                           onClick={() => handleEdit(product)}
+                           className="p-4 bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-all min-w-[44px] min-h-[44px] flex items-center justify-center"
+                         >
+                           <Edit2 className="w-5 h-5" />
+                         </button>
+                         <button 
+                           onClick={() => openDeleteDialog(product.id)}
+                           className="p-4 bg-white/5 text-gray-400 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all min-w-[44px] min-h-[44px] flex items-center justify-center"
+                         >
+                           <Trash2 className="w-5 h-5" />
+                         </button>
+                         <button
+                           onClick={() => openVariantModal(product.id)}
+                           className="p-4 bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-all min-w-[44px] min-h-[44px] flex items-center justify-center"
+                         >
+                           <ImageIcon className="w-5 h-5" />
+                         </button>
+                       </div>
                     </div>
                     <p className="text-gray-400 text-sm line-clamp-2 mb-4">{product.description}</p>
                     <div className="flex items-center gap-6">

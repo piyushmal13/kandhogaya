@@ -8,15 +8,15 @@ import compression from "compression";
 import fs from "node:fs";
 
 // Modular Imports
-import { config, logger } from "./api/config";
-import { authenticate } from "./api/middleware/auth";
-import { errorHandler, globalLimiter, sensitiveLimiter } from "./api/middleware";
-import { maintenanceGuard } from "./api/middleware/maintenance";
-import { ContentController } from "./api/controllers/ContentController";
-import { LicenseController } from "./api/controllers/LicenseController";
-import { AdminController } from "./api/controllers/AdminController";
-import { SystemController } from "./api/controllers/SystemController";
-import { RequestController } from "./api/controllers/RequestController";
+import { config, logger } from "./src/api/config";
+import { authenticate } from "./src/api/middleware/auth";
+import { errorHandler, globalLimiter, sensitiveLimiter } from "./src/api/middleware";
+import { maintenanceGuard } from "./src/api/middleware/maintenance";
+import { ContentController } from "./src/api/controllers/ContentController";
+import { LicenseController } from "./src/api/controllers/LicenseController";
+import { AdminController } from "./src/api/controllers/AdminController";
+import { SystemController } from "./src/api/controllers/SystemController";
+import { RequestController } from "./src/api/controllers/RequestController";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
