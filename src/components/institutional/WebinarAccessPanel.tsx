@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { motion } from 'motion/react';
-import { Video, Calendar, ArrowRight, Play, Clock } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Calendar, Clock, Play, ArrowRight, Video } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { EliteButton } from '@/components/ui/Button';
@@ -10,7 +9,7 @@ interface WebinarSession {
   id: string;
   title: string;
   date_time: string;
-  status: string;
+  status: 'upcoming' | 'live' | 'past';
   speaker_name: string;
   registration_id?: string;
 }
@@ -31,7 +30,6 @@ export function WebinarAccessPanel() {
       if (!user) return;
       
       try {
-        // 1. Fetch upcoming/live webinars
         const { data: webinars, error: wError } = await supabase
           .from('webinars')
           .select('id, title, date_time, status, speaker_name')
@@ -41,7 +39,6 @@ export function WebinarAccessPanel() {
 
         if (wError) throw wError;
 
-        // 2. Fetch user registrations
         const { data: regs, error: rError } = await supabase
           .from('webinar_registrations')
           .select('webinar_id, id')
@@ -138,7 +135,7 @@ export function WebinarAccessPanel() {
                         variant="elite" 
                         size="sm" 
                         className="gap-2 px-4 shadow-[0_0_20px_rgba(16,185,129,0.1)]"
-                        onClick={() => window.location.href = `/webinars/${session.id}`}
+                        onClick={() => globalThis.location.href = `/webinars/${session.id}`}
                       >
                          <Play size={12} fill="currentColor" />
                          Enter Room
@@ -148,7 +145,7 @@ export function WebinarAccessPanel() {
                         variant="institutional-outline" 
                         size="sm" 
                         className="gap-2 px-4"
-                        onClick={() => window.location.href = `/webinars/${session.id}`}
+                        onClick={() => globalThis.location.href = `/webinars/${session.id}`}
                       >
                          Secure Spot
                          <ArrowRight size={12} />
@@ -163,7 +160,7 @@ export function WebinarAccessPanel() {
       </div>
 
       <button 
-        onClick={() => window.location.href = '/webinars'}
+        onClick={() => globalThis.location.href = '/webinars'}
         className="w-full mt-6 pt-6 border-t border-white/5 text-[9px] font-black text-white/30 hover:text-emerald-500 uppercase tracking-[0.4em] transition-all"
       >
         View Full Schedule

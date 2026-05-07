@@ -3,7 +3,6 @@ import { motion } from 'motion/react';
 import { Activity, Lock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag';
-import { Button } from '../ui/Button';
 
 // ── TYPES ──
 export interface MarketplaceProduct {
@@ -111,7 +110,7 @@ export const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({ products, isLo
                 {product.type === 'algorithm' && (
                   <div className="flex items-center gap-3 text-[10px] font-black text-emerald-400 uppercase tracking-widest font-mono">
                     <Activity className="w-3 h-3" />
-                    Sync: {85 + (product.id.charCodeAt(0) % 15)}%
+                    Sync: {85 + (product.id.codePointAt(0) || 0) % 15}%
                   </div>
                 )}
               </div>

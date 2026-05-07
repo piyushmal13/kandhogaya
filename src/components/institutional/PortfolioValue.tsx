@@ -56,19 +56,27 @@ export function PortfolioValue() {
             size="lg"
             className="w-full md:w-auto"
             trackingEvent="access_academy"
-            onClick={() => window.location.href = '/academy'}
+            onClick={() => globalThis.location.href = '/intelligence'}
           >
-            Access Academy
+            View Signal History
           </EliteButton>
-          <EliteButton 
-            variant="institutional-outline" 
-            size="lg"
-            className="w-full md:w-auto"
-            trackingEvent="request_consultation"
-            onClick={() => window.location.href = '/consultation'}
-          >
-            Request Consultation
-          </EliteButton>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-8 mt-8">
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+            <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Monthly Yield</span>
+          </div>
+          <div className="text-3xl font-black text-white font-mono italic">+{portfolio?.monthlyReturn || 0}%</div>
+        </div>
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <div className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
+            <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Win Rate</span>
+          </div>
+          <div className="text-3xl font-black text-white font-mono italic">{portfolio?.winRate || 0}%</div>
         </div>
       </div>
 

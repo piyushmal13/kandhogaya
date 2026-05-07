@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {
   Users, Target, Globe, RefreshCw,
-  CreditCard, Video, Star, Zap, Trophy
+  CreditCard, Video, Star, Zap, Trophy, Activity, ShieldCheck
 } from "lucide-react";
 import { cn } from "../../utils/cn";
 import { supabase, safeQuery } from "../../lib/supabase";
@@ -87,7 +87,7 @@ export const CEOPanel = () => {
       const getRevenue = (data: any[], dateField: string, amountField: string, startDate: string) => {
         return data
           .filter((s: any) => s[dateField] >= startDate)
-          .reduce((sum, s: any) => sum + (parseFloat(s[amountField]) || 0), 0);
+          .reduce((sum, s: any) => sum + (Number.parseFloat(s[amountField]) || 0), 0);
       };
 
       const revenueToday = 
@@ -352,24 +352,30 @@ export const CEOPanel = () => {
 
           <div className="space-y-4">
              {[
-               { time: '02:14', msg: 'ECB Monetary Policy Shift Detected', impact: 'High' },
-               { time: '04:45', msg: 'Asian Liquidity Pocket Identified (JPY)', impact: 'Medium' },
-               { time: '07:12', msg: 'Fed Chair Statement: Quantitative Hardening', impact: 'Critical' },
-               { time: '10:05', msg: 'Proprietary Bridge Sync: MT5 Node 04', impact: 'Stable' }
-             ].map((signal, i) => (
-               <div key={i} className="flex items-center justify-between p-4 bg-white/5 border border-white/5 rounded-2xl hover:bg-white/10 transition-all cursor-default">
-                 <div className="flex items-center gap-4">
-                    <span className="text-[9px] font-mono text-gray-600">{signal.time}</span>
-                    <span className="text-[10px] font-black text-white uppercase tracking-tight">{signal.msg}</span>
+               { id: 'ecb-policy', time: '02:14', msg: 'ECB Monetary Policy Shift Detected', impact: 'High' },
+               { id: 'jpy-liq', time: '04:45', msg: 'Asian Liquidity Pocket Identified (JPY)', impact: 'Medium' },
+               { id: 'fed-chair', time: '07:12', msg: 'Fed Chair Statement: Quantitative Hardening', impact: 'Critical' },
+               { id: 'bridge-sync', time: '10:05', msg: 'Proprietary Bridge Sync: MT5 Node 04', impact: 'Stable' }
+             ].map((signal) => {
+               const impactStyles = signal.impact === 'High' 
+                 ? "text-amber-400 border-amber-500/20 bg-amber-500/5" 
+                 : signal.impact === 'Critical' 
+                   ? "text-red-400 border-red-500/20 bg-red-500/5" 
+                   : "text-emerald-400 border-emerald-500/20 bg-emerald-500/5";
+
+               return (
+                 <div key={signal.id} className="flex items-center justify-between p-4 bg-white/5 border border-white/5 rounded-2xl hover:bg-white/10 transition-all cursor-default">
+                   <div className="flex items-center gap-4">
+                      <span className="text-[9px] font-mono text-gray-600">{signal.time}</span>
+                      <span className="text-[10px] font-black text-white uppercase tracking-tight">{signal.msg}</span>
+                   </div>
+                   <span className={cn(
+                     "text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full border",
+                     impactStyles
+                   )}>{signal.impact}</span>
                  </div>
-                 <span className={cn(
-                   "text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full border",
-                   signal.impact === 'High' ? "text-amber-400 border-amber-500/20 bg-amber-500/5" :
-                   signal.impact === 'Critical' ? "text-red-400 border-red-500/20 bg-red-500/5" :
-                   "text-emerald-400 border-emerald-500/20 bg-emerald-500/5"
-                 )}>{signal.impact}</span>
-               </div>
-             ))}
+               );
+             })}
           </div>
 
           <div className="mt-8 pt-8 border-t border-white/5">

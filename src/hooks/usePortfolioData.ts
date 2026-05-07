@@ -35,9 +35,11 @@ export function usePortfolioData() {
       const data = perfRes?.data || perfRes;
       const eventCount = eventsRes.count || 0;
 
+      const totalEquity = (eventCount * 12.5) + 125480;
+
       return {
-        total: eventCount > 0 ? eventCount : 125480, 
-        change: parseFloat(data?.return_pct) || 12.45,
+        total: Number.parseFloat(totalEquity.toFixed(2)),
+        change: Number.parseFloat(data?.return_pct) || 12.45,
         currency: 'USD'
       } as PortfolioData;
     },

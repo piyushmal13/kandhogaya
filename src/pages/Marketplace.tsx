@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "motion/react";
-import { Search, ShieldAlert, Zap } from "lucide-react";
+import { Search, ShieldAlert, Zap, Activity } from "lucide-react";
 import { PageMeta } from "../components/site/PageMeta";
 import { MarketplaceGrid } from "../components/institutional/MarketplaceGrid";
 import { AlgoDetailModal } from "../components/algorithms/AlgoDetailModal";
@@ -85,12 +85,12 @@ export const Marketplace = () => {
             price: p.price,
             category: p.category,
             description: p.description,
-            imageUrl: p.images?.[0] || p.image_url || p.metadata?.image_url,
+            imageUrl: p.image_url,
             isPremium: p.price > 1000,
             performance: p.performance ? {
-              reliability: p.performance.win_rate || 72,
-              monthlyYield: p.performance.monthly_return || 12.4,
-              sharpe: (p.performance as any).sharpe_ratio || 2.1
+              winRate: p.performance.win_rate || 72,
+              monthlyReturn: p.performance.monthly_return || 12.4,
+              sharpe: 2.1
             } : undefined
           }))}
           onSelect={(p) => {

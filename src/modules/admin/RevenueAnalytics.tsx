@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { 
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
-  PieChart, Pie, LineChart, Line, AreaChart, Area, BarChart, Bar
+  PieChart, Pie, AreaChart, Area, BarChart, Bar, LineChart, Line, Cell
 } from "recharts";
-// @ts-ignore - Cell is deprecated but required for Pie chart coloring
-import { Cell } from "recharts";
 import { 
   TrendingUp, DollarSign, ShoppingCart, 
   Target, Activity, Filter, RefreshCw, ArrowUpRight
@@ -41,16 +39,16 @@ export const RevenueAnalytics = () => {
       const eventsData = eventsRes.data || [];
 
       // 1. Revenue Metrics
-      const totalMTD = salesData.reduce((sum, s) => sum + (parseFloat(s.sale_amount) || 0), 0) || 0;
+      const totalMTD = salesData.reduce((sum, s) => sum + (Number.parseFloat(s.sale_amount) || 0), 0) || 0;
       const sourceMap: any = { 'Direct': 0, 'Affiliate': 0 };
       const agentMap: any = {};
       
       salesData.forEach((s: any) => {
         const src = s.agent_id ? 'Affiliate' : 'Direct';
         const agent = s.agent?.full_name || 'Direct Sale';
-        sourceMap[src] = (sourceMap[src] || 0) + (parseFloat(s.sale_amount) || 0);
+        sourceMap[src] = (sourceMap[src] || 0) + (Number.parseFloat(s.sale_amount) || 0);
         if (s.agent_id) {
-          agentMap[agent] = (agentMap[agent] || 0) + (parseFloat(s.sale_amount) || 0);
+          agentMap[agent] = (agentMap[agent] || 0) + (Number.parseFloat(s.sale_amount) || 0);
         }
       });
 
