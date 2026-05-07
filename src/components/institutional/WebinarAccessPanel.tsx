@@ -4,6 +4,7 @@ import { Video, Calendar, ArrowRight, Play, Clock } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { EliteButton } from '@/components/ui/Button';
+import { cn } from '@/utils/cn';
 
 interface WebinarSession {
   id: string;
@@ -90,61 +91,74 @@ export function WebinarAccessPanel() {
              <p className="text-[10px] text-gray-600 font-black uppercase tracking-widest">No Active Sessions Found</p>
           </div>
         ) : (
-          sessions.map((session) => (
-            <div 
-              key={session.id}
-              className="group/session p-5 rounded-3xl bg-white/[0.03] border border-white/5 hover:border-emerald-500/20 transition-all duration-500"
-            >
-              <div className="flex items-center justify-between gap-4">
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-3 mb-2">
-                    <h4 className="text-sm font-black text-white uppercase tracking-tight truncate">{session.title}</h4>
-                    {session.status === 'live' && (
-                      <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-[8px] font-black uppercase animate-pulse">
-                        <div className="w-1 h-1 rounded-full bg-red-500" />
-                        Live
-                      </span>
+          <>
+            {sessions.some(s => s.registration_id) && (
+              <div className="text-[8px] font-black uppercase tracking-[0.2em] text-emerald-500/60 mb-2 px-2">Your Registered Sessions</div>
+            )}
+            {sessions.map((session) => (
+              <div 
+                key={session.id}
+                className={cn(
+                  "group/session p-5 rounded-3xl transition-all duration-500 border",
+                  session.registration_id 
+                    ? "bg-emerald-500/[0.03] border-emerald-500/20" 
+                    : "bg-white/[0.03] border-white/5 hover:border-white/20"
+                )}
+              >
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-3 mb-2">
+                      <h4 className={cn(
+                        "text-sm font-black uppercase tracking-tight truncate",
+                        session.registration_id ? "text-emerald-400" : "text-white"
+                      )}>{session.title}</h4>
+                      {session.status === 'live' && (
+                        <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-[8px] font-black uppercase animate-pulse">
+                          <div className="w-1 h-1 rounded-full bg-red-500" />
+                          Live
+                        </span>
+                      )}
+                    </div>
+                    
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-1.5 text-[9px] font-mono text-white/30 uppercase tracking-widest">
+                         <Clock size={12} className={session.registration_id ? "text-emerald-500" : "text-gray-600"} />
+                         {new Date(session.date_time).toLocaleDateString()}
+                      </div>
+                      <div className="flex items-center gap-1.5 text-[9px] font-mono text-white/30 uppercase tracking-widest">
+                         <Calendar size={12} className={session.registration_id ? "text-emerald-400" : "text-cyan-500"} />
+                         {session.speaker_name}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="shrink-0">
+                    {session.registration_id ? (
+                      <EliteButton 
+                        variant="elite" 
+                        size="sm" 
+                        className="gap-2 px-4 shadow-[0_0_20px_rgba(16,185,129,0.1)]"
+                        onClick={() => window.location.href = `/webinars/${session.id}`}
+                      >
+                         <Play size={12} fill="currentColor" />
+                         Enter Room
+                      </EliteButton>
+                    ) : (
+                      <EliteButton 
+                        variant="institutional-outline" 
+                        size="sm" 
+                        className="gap-2 px-4"
+                        onClick={() => window.location.href = `/webinars/${session.id}`}
+                      >
+                         Secure Spot
+                         <ArrowRight size={12} />
+                      </EliteButton>
                     )}
                   </div>
-                  
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-1.5 text-[9px] font-mono text-white/30 uppercase tracking-widest">
-                       <Clock size={12} className="text-emerald-500" />
-                       {new Date(session.date_time).toLocaleDateString()}
-                    </div>
-                    <div className="flex items-center gap-1.5 text-[9px] font-mono text-white/30 uppercase tracking-widest">
-                       <Calendar size={12} className="text-cyan-500" />
-                       {session.speaker_name}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="shrink-0">
-                  {session.registration_id ? (
-                    <EliteButton 
-                      variant="institutional-outline" 
-                      size="sm" 
-                      className="gap-2 px-4 border-emerald-500/20 text-emerald-400"
-                      onClick={() => window.location.href = `/webinars/${session.id}`}
-                    >
-                       <Play size={12} fill="currentColor" />
-                       Access
-                    </EliteButton>
-                  ) : (
-                    <EliteButton 
-                      variant="institutional-outline" 
-                      size="sm" 
-                      className="gap-2 px-4"
-                      onClick={() => window.location.href = `/webinars/${session.id}`}
-                    >
-                       Join
-                       <ArrowRight size={12} />
-                    </EliteButton>
-                  )}
                 </div>
               </div>
-            </div>
-          ))
+            ))}
+          </>
         )}
       </div>
 

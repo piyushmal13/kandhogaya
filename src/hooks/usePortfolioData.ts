@@ -27,11 +27,16 @@ export function usePortfolioData() {
         .limit(1)
         .maybeSingle();
       
-      const result = await safeQuery<any>(query);
-      const data = result?.data || result;
+      const [perfRes, eventsRes] = await Promise.all([
+        safeQuery<any>(query),
+        supabase.from('user_events').select('id', { count: 'exact', head: true })
+      ]);
+      
+      const data = perfRes?.data || perfRes;
+      const eventCount = eventsRes.count || 0;
 
       return {
-        total: 125480, // Base Institutional Data Points
+        total: eventCount > 0 ? eventCount : 125480, 
         change: parseFloat(data?.return_pct) || 12.45,
         currency: 'USD'
       } as PortfolioData;

@@ -64,15 +64,17 @@ export const CEOPanel = () => {
 
       const [
         salesData,
+        manualPaymentsData,
         usersData,
         leadsData,
-        paymentsData,
+        pendingPaymentsData,
         webinarsData,
         reviewsData,
         subsData,
         errorsData,
       ] = await Promise.all([
         safeQuery<any[]>(supabase.from("sales_tracking").select("sale_amount, created_at"), 'sales_tracking_all'),
+        safeQuery<any[]>(supabase.from("manual_payment_receipts").select("amount, created_at").eq("status", "approved"), 'manual_payments_approved'),
         safeQuery<any[]>(supabase.from("users").select("id"), 'users_count'),
         safeQuery<any[]>(supabase.from("leads").select("id"), 'leads_count'),
         safeQuery<any[]>(supabase.from("manual_payment_receipts").select("id").eq("status", "pending"), 'payments_pending'),
@@ -82,12 +84,19 @@ export const CEOPanel = () => {
         safeQuery<any[]>(supabase.from("system_logs").select("id").eq("severity", "critical"), 'logs_critical'),
       ]);
 
-      const revenueToday = salesData
-        .filter((s: any) => s.created_at >= startOfDay)
-        .reduce((sum, s: any) => sum + (s.sale_amount || 0), 0);
-      const revenueMTD = salesData
-        .filter((s: any) => s.created_at >= startOfMonth)
-        .reduce((sum, s: any) => sum + (s.sale_amount || 0), 0);
+      const getRevenue = (data: any[], dateField: string, amountField: string, startDate: string) => {
+        return data
+          .filter((s: any) => s[dateField] >= startDate)
+          .reduce((sum, s: any) => sum + (parseFloat(s[amountField]) || 0), 0);
+      };
+
+      const revenueToday = 
+        getRevenue(salesData, 'created_at', 'sale_amount', startOfDay) +
+        getRevenue(manualPaymentsData, 'created_at', 'amount', startOfDay);
+
+      const revenueMTD = 
+        getRevenue(salesData, 'created_at', 'sale_amount', startOfMonth) +
+        getRevenue(manualPaymentsData, 'created_at', 'amount', startOfMonth);
 
       const totalUsers = usersData.length || 0;
       const totalLeads = leadsData.length || 0;
@@ -105,7 +114,7 @@ export const CEOPanel = () => {
         revenueMTD,
         totalUsers,
         totalLeads,
-        pendingPayments: paymentsData.length || 0,
+        pendingPayments: pendingPaymentsData.length || 0,
         upcomingWebinars: webinarsData.length || 0,
         pendingReviews: reviewsData.length || 0,
         systemHealth,

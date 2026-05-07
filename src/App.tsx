@@ -94,8 +94,9 @@ const AnimatedRoutes = () => {
 function AppContent() {
   const location = useLocation();
   const isPlainLayout = ['/login'].some(path => location.pathname.startsWith(path));
+  const isTerminalLayout = ['/dashboard', '/admin', '/agent', '/affiliate', '/quantx'].some(path => location.pathname.startsWith(path));
 
-  if (isPlainLayout) {
+  if (isPlainLayout || isTerminalLayout) {
     return <AnimatedRoutes />;
   }
 

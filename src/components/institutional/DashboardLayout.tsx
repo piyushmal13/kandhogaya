@@ -78,7 +78,18 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             )}
           </div>
 
-          {/* Footer removed to prevent duplication with StandardLayout */}
+          <div className="mt-auto pt-20">
+             <footer className="py-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4 opacity-30">
+                <div className="text-[9px] font-black uppercase tracking-widest text-gray-500">
+                   &copy; {new Date().getFullYear()} IFX TRADES. Institutional Environment v4.0
+                </div>
+                <div className="flex gap-6 text-[9px] font-black uppercase tracking-widest text-gray-500">
+                   <a href="/privacy" className="hover:text-white transition-colors">Privacy</a>
+                   <a href="/terms" className="hover:text-white transition-colors">Terms</a>
+                   <a href="/risk" className="hover:text-red-500 transition-colors">Risk Protocol</a>
+                </div>
+             </footer>
+          </div>
         </div>
       </motion.div>
     </div>

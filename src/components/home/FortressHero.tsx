@@ -191,7 +191,7 @@ export const FortressHero = () => {
           transition={{ delay: 0.32, duration: 0.6, ease: EASING }}
           className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 justify-center w-full max-w-lg sm:max-w-none px-4"
         >
-          <Link to="/webinars" className="w-full sm:w-auto">
+          <Link to="/marketplace" className="w-full sm:w-auto">
             <EliteButton variant="premium-gold" size="md" fluid>
               Request Session Access
               <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1.5 transition-transform duration-300" />

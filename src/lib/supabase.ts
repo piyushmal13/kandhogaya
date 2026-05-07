@@ -148,6 +148,11 @@ export const getSupabasePublicUrl = (bucket: string, path: string | null | undef
   if (!path) return "";
   if (path.startsWith("http")) return path;
   
+  // Institutional Failsafe: Filter out legacy/artifact paths that shouldn't be in the public layer.
+  if (path.includes("/brain/") || path.includes("/tmp/")) {
+    return "";
+  }
+  
   // Clean path (remove leading slash if present)
   const cleanPath = path.startsWith("/") ? path.slice(1) : path;
   

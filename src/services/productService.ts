@@ -12,7 +12,10 @@ export const productService = {
     try {
       const { data: products, error } = await supabase
         .from("products")
-        .select("id, name, description, price, category, video_explanation_url, image_url, created_at, performance_data, long_plan_offers")
+        .select(`
+          id, name, description, price, category, video_explanation_url, image_url, created_at, performance_data, long_plan_offers,
+          performance:performance_results(*)
+        `)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
@@ -105,13 +108,9 @@ export const productService = {
           id,
           price,
           duration_days,
-          product:product_id (
-            name,
-            description,
-            category
-          )
+          products!inner(name, description, category)
         `)
-        .eq("product.category", "signals"); // Filter by category if supported by join
+        .eq("products.category", "signals");
 
       if (error) throw error;
       return data || [];

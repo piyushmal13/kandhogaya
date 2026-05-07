@@ -1,4 +1,6 @@
 import React from 'react';
+import { useAuth } from '@/contexts/AuthContext';
+import { InstitutionalSkeleton } from '@/components/institutional/InstitutionalSkeleton';
 import { DashboardLayout } from '@/components/institutional/DashboardLayout';
 import { MarketIntelligencePanel } from '@/components/institutional/MarketIntelligencePanel';
 import { PortfolioValue } from '@/components/institutional/PortfolioValue';
@@ -18,9 +20,13 @@ import { tracker } from '@/core/tracker';
  * Features: Asymmetric data grid, real-time Alpha pulses, and integrated Risk Shield.
  */
 export const Dashboard = () => {
+  const { loading } = useAuth();
+
   React.useEffect(() => {
     tracker.track("page_view", { surface: "elite_terminal_v2" });
   }, []);
+
+  if (loading) return <InstitutionalSkeleton />;
 
   return (
     <>

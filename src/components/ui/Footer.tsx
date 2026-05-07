@@ -104,7 +104,9 @@ export const Footer = () => (
               <TerminalSquare className="w-3.5 h-3.5 text-emerald-500/50" /> Protocol
             </h4>
             <ul className="space-y-5 text-[13px] text-[#8A9AAB] font-light">
+              <li><Link to="/solutions" className="hover:text-emerald-400 transition-colors">Risk Solutions</Link></li>
               <li><Link to="/marketplace" className="hover:text-emerald-400 transition-colors flex items-center gap-2 group">Execution Desk <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
+              <li><Link to="/pricing" className="hover:text-emerald-400 transition-colors">Pricing Hub</Link></li>
               <li><Link to="/results" className="hover:text-emerald-400 transition-colors flex items-center gap-2 group">Audit Logs <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
             </ul>
           </div>
@@ -140,7 +142,7 @@ export const Footer = () => (
         <div className="flex flex-wrap items-center justify-center gap-8 text-[9px] font-black text-[#4F5A69] uppercase tracking-[0.25em]">
            <Link to="/privacy" className="hover:text-white transition-colors">Privacy</Link>
            <Link to="/terms" className="hover:text-white transition-colors">Terms</Link>
-           <Link to="/risk" className="hover:text-red-400/80 text-red-500/50 transition-colors">Risk Protocol</Link>
+           <Link to="/risk" className="hover:text-red-400/80 text-red-500/50 transition-colors italic">High-Risk Protocol Disclosure</Link>
         </div>
       </div>
     </div>

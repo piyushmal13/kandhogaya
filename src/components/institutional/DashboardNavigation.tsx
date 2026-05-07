@@ -16,10 +16,10 @@ export function DashboardNavigation() {
   const navItems = [
     { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
     { icon: Terminal, label: 'Marketplace', path: '/marketplace' },
-    { icon: Shield, label: 'Signals', path: '/risk' },
+    { icon: Shield, label: 'Signals', path: '/quantx' },
     { icon: BookOpen, label: 'Academy', path: '/academy' },
     { icon: BarChart3, label: 'Performance', path: '/results' },
-    { icon: Settings, label: 'Settings', path: '/settings' },
+    { icon: Settings, label: 'Terminal', path: '/dashboard' },
   ];
 
   return (

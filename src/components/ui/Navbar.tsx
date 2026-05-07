@@ -73,8 +73,8 @@ export const Navbar = () => {
           className={cn(
             "mt-4 mx-4 sm:mx-12 flex-1 max-w-7xl flex items-center justify-between rounded-[1.5rem] px-4 sm:px-7 transition-all duration-500 will-change-transform",
             scrolled
-              ? "h-14 sm:h-16 bg-[#040608]/80 border border-white/5 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)] backdrop-blur-[48px] saturate-[180%]"
-              : "h-16 sm:h-20 bg-transparent border border-transparent"
+              ? "h-12 sm:h-16 bg-[#040608]/80 border border-white/5 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)] backdrop-blur-[48px] saturate-[180%]"
+              : "h-14 sm:h-20 bg-transparent border border-transparent"
           )}
         >
           {/* Logo */}
@@ -244,14 +244,14 @@ export const Navbar = () => {
                         to={link.path}
                         onClick={() => setIsOpen(false)}
                         className={cn(
-                          "flex items-center gap-5 rounded-[1.5rem] border px-6 py-5 transition-all duration-300",
+                          "flex items-center gap-4 rounded-[1.25rem] border px-5 py-4 transition-all duration-300",
                           location.pathname === link.path
                             ? "border-emerald-500/30 bg-emerald-500/[0.08] text-emerald-400 shadow-[0_10px_30px_rgba(16,185,129,0.1)]"
                             : "border-white/[0.05] bg-white/[0.02] text-white/60 hover:border-white/15 hover:text-white hover:bg-white/[0.05]"
                         )}
                       >
-                        <link.icon className="h-6 w-6 shrink-0" aria-hidden />
-                        <span className="text-xl font-bold tracking-tight">{link.name}</span>
+                        <link.icon className="h-5 w-5 shrink-0" aria-hidden />
+                        <span className="text-lg font-bold tracking-tight">{link.name}</span>
                       </Link>
                     </motion.div>
                   ))}
@@ -265,27 +265,27 @@ export const Navbar = () => {
                     <Link
                       to="/dashboard"
                       onClick={() => setIsOpen(false)}
-                      className="flex items-center gap-5 rounded-[1.5rem] border border-white/[0.05] bg-white/[0.02] px-6 py-5 text-white/60 hover:text-white"
+                      className="flex items-center gap-4 rounded-[1.25rem] border border-white/[0.05] bg-white/[0.02] px-5 py-4 text-white/60 hover:text-white"
                     >
-                      <LayoutDashboard className="h-6 w-6" />
-                      <span className="text-xl font-bold">Dashboard</span>
+                      <LayoutDashboard className="h-5 w-5" />
+                      <span className="text-lg font-bold">Dashboard</span>
                     </Link>
                     {isAdmin && (
                       <Link
                         to="/admin"
                         onClick={() => setIsOpen(false)}
-                        className="flex items-center gap-5 rounded-[1.5rem] border border-emerald-500/20 bg-emerald-500/10 px-6 py-5 text-emerald-400"
+                        className="flex items-center gap-4 rounded-[1.25rem] border border-emerald-500/20 bg-emerald-500/10 px-5 py-4 text-emerald-400"
                       >
-                        <Settings className="h-6 w-6" />
-                        <span className="text-xl font-bold">Admin Terminal</span>
+                        <Settings className="h-5 w-5" />
+                        <span className="text-lg font-bold">Admin Terminal</span>
                       </Link>
                     )}
                     <button
                       onClick={() => { logout(); setIsOpen(false); }}
-                      className="flex items-center gap-5 rounded-[1.5rem] border border-red-500/10 bg-red-500/5 px-6 py-5 text-red-400 hover:bg-red-500/10 transition-colors"
+                      className="flex items-center gap-4 rounded-[1.25rem] border border-red-500/10 bg-red-500/5 px-5 py-4 text-red-400 hover:bg-red-500/10 transition-colors"
                     >
-                      <LogOut className="h-6 w-6" />
-                      <span className="text-xl font-bold">Sign Out</span>
+                      <LogOut className="h-5 w-5" />
+                      <span className="text-lg font-bold">Sign Out</span>
                     </button>
                   </div>
                 ) : (

@@ -60,8 +60,10 @@ const GROUP_LABELS: Record<string, string> = {
 import { DashboardLayout } from "@/components/institutional/DashboardLayout";
 
 export const Admin = () => {
-  const { user, userProfile } = useAuth();
+  const { user, userProfile, loading } = useAuth();
   const [activeTab, setActiveTab] = useState("ceo");
+
+  if (loading) return <InstitutionalSkeleton />;
 
   // All hooks must be called before any conditional return (Rules of Hooks)
   const isAdmin = userProfile?.role === "admin";

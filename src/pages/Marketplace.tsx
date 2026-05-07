@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { Product } from "../types";
 import { EliteSocialProof } from "../components/institutional/EliteSocialProof";
 import { CustomStrategyTerminal } from "../components/institutional/CustomStrategyTerminal";
+import { ResizedImage } from "../components/ui/ResizedImage";
 
 export const Marketplace = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -133,19 +134,25 @@ export const Marketplace = () => {
             >
               Institutional Asset Catalog
             </motion.div>
-            <h1 className="text-[clamp(3rem,8vw,6rem)] lg:text-[8rem] font-black mb-6 text-white tracking-tighter leading-[0.85] uppercase italic">
+            <h1 className="text-[clamp(2.5rem,10vw,5rem)] lg:text-[8rem] font-black mb-4 md:mb-6 text-white tracking-tighter leading-[0.9] md:leading-[0.85] uppercase italic">
               Quantitative <br />
               <span className="text-emerald-400">Allocations.</span>
             </h1>
-            <p className="text-base md:text-xl text-white/40 max-w-2xl font-medium leading-relaxed">
+            <p className="text-sm md:text-xl text-white/40 max-w-2xl font-medium leading-relaxed">
               Professional execution models and systematic protocols designed for high-performance capital management and institutional risk governance. Secure your allocation to our proprietary alpha strategies today.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <button className="px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-black text-[11px] font-black uppercase tracking-widest rounded-xl transition-all shadow-[0_0_20px_rgba(16,185,129,0.2)] hover:shadow-[0_0_30px_rgba(16,185,129,0.4)]">
+            <div className="flex flex-col sm:flex-row gap-3 md:gap-4 pt-2 md:pt-4">
+              <button 
+                onClick={() => document.getElementById('asset-catalog')?.scrollIntoView({ behavior: 'smooth' })}
+                className="px-6 md:px-8 py-3.5 md:py-4 bg-emerald-500 hover:bg-emerald-400 text-black text-[10px] md:text-[11px] font-black uppercase tracking-widest rounded-xl transition-all shadow-[0_0_20px_rgba(16,185,129,0.2)] hover:shadow-[0_0_30px_rgba(16,185,129,0.4)]"
+              >
                  Secure Allocation
               </button>
-              <button className="px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-white text-[11px] font-black uppercase tracking-widest rounded-xl transition-all">
+              <button 
+                onClick={() => navigate('/consultation')}
+                className="px-6 md:px-8 py-3.5 md:py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-white text-[10px] md:text-[11px] font-black uppercase tracking-widest rounded-xl transition-all"
+              >
                  Request Engineering Review
               </button>
             </div>
@@ -182,7 +189,7 @@ export const Marketplace = () => {
         </div>
 
         {/* Assets Grid */}
-        <div className="relative min-h-[400px]">
+        <div id="asset-catalog" className="relative min-h-[400px]">
           {renderGrid()}
         </div>
 
@@ -201,11 +208,12 @@ export const Marketplace = () => {
            <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
               <div className="order-2 lg:order-1 relative">
                  <div className="absolute inset-0 bg-emerald-500/5 blur-[100px] rounded-full opacity-30" />
-                 <div className="relative rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl">
-                    <img 
-                      src="/brain/efc31965-26c1-4320-a414-7f19a27d9e96/mt5_elite_terminal_v2_1777798969670.png" 
+                 <div className="relative rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl aspect-video bg-white/5">
+                    <ResizedImage 
+                      src="mt5_elite_terminal_v2.png" 
+                      bucket="products"
                       alt="MT5 Elite Terminal" 
-                      className="w-full h-auto"
+                      className="w-full h-full object-cover"
                     />
                  </div>
               </div>
