@@ -105,7 +105,7 @@ export const subscribeToAlgo = async (userId: string, algoId: string, durationDa
 
     const res = await safeExecute(() =>
       withTimeout(
-        supabase.from('algo_licenses').insert({
+        supabase.from('bot_licenses').insert({
           user_id: userId,
           algo_id: algoId,
           status: 'active',
@@ -178,8 +178,8 @@ export const getCourses = async () => {
   try {
     const res = await safeQuery<Course[]>(
       supabase
-        .from("university_courses")
-        .select("*, chapters:course_lessons(*)")
+        .from("courses")
+        .select("*, chapters:lessons(*)")
         .order("created_at", { ascending: false })
     );
 

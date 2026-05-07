@@ -35,16 +35,11 @@ export const ContentController = {
 
       let query = supabase
         .from('content_posts')
-        .select(`
-          *,
-          author:users!author_id(full_name, avatar_url, role),
-          category:content_categories!category_id(name, slug)
-        `, { count: 'exact' })
-        .eq('status', 'published')
+        .select(`*`, { count: 'exact' })
         .order('published_at', { ascending: false });
 
       if (category) {
-        query = query.eq('category.slug', category);
+        query = query.eq('category', category);
       }
 
       const { data, error, count } = await query
@@ -77,22 +72,13 @@ export const ContentController = {
     try {
       const { data, error } = await supabase
         .from('content_posts')
-        .select(`
-          *,
-          author:users!author_id(full_name, avatar_url, role),
-          category:content_categories!category_id(name, slug),
-          seo:content_seo!posts_seo_id(meta_title, meta_description, og_image)
-        `)
+        .select(`*`)
         .eq('slug', slug)
-        .eq('status', 'published')
         .single();
 
       if (error || !data) {
         return res.status(404).json({ error: 'Post not found' });
       }
-
-      // Increment view count asynchronously
-      supabase.rpc('increment_post_views', { post_id: data.id }).catch(() => {});
 
       res.json(data);
     } catch (err: any) {
@@ -230,21 +216,15 @@ export const ContentController = {
       const includeInactive = url.searchParams.get('all') === 'true';
 
       let query = supabase
-        .from('products')
+        .from('algorithms')
         .select(`
           *,
-          performance:algo_performance_snapshots(*),
-          images:product_images(is_primary, storage_path, alt_text),
-          variants:product_variants(*)
+          performance:algo_performance_snapshots(*)
         `)
         .order('created_at', { ascending: false });
 
       if (!includeInactive) {
         query = query.eq('is_active', true);
-      }
-
-      if (category && category !== 'all') {
-        query = query.eq('category', category);
       }
 
       const { data, error, count } = await query
@@ -255,10 +235,9 @@ export const ContentController = {
       }
 
       // Transform data for frontend consumption
-      const transformed = (data || []).map((product: any) => ({
-        ...product,
-        image_url: product.images?.find((img: any) => img.is_primary)?.storage_path || product.image_url,
-        performance: product.performance?.[0] || null
+      const transformed = (data || []).map((algo: any) => ({
+        ...algo,
+        performance: algo.performance?.[0] || null
       }));
 
       res.json({
@@ -279,14 +258,11 @@ export const ContentController = {
     
     try {
       const { data, error } = await supabase
-        .from('products')
+        .from('algorithms')
         .select(`
           *,
           performance:algo_performance_snapshots(*),
-          images:product_images(*),
-          variants:product_variants(*),
-          reviews:reviews(*),
-          bots:algo_bots(*)
+          reviews:reviews(*)
         `)
         .eq('id', id)
         .single();

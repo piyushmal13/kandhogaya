@@ -11,8 +11,12 @@ import type { Database } from '@/types/database.types';
  */
 
 const getSupabaseConfig = () => {
-  const injectedUrl = (globalThis as any)._SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL;
-  const injectedKey = (globalThis as any)._SUPABASE_ANON_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY;
+  const isServer = typeof window === 'undefined';
+  
+  const env = isServer ? process.env : (import.meta as any).env || {};
+  
+  const injectedUrl = (globalThis as any)._SUPABASE_URL || env.VITE_SUPABASE_URL;
+  const injectedKey = (globalThis as any)._SUPABASE_ANON_KEY || env.VITE_SUPABASE_ANON_KEY;
 
   if (!injectedUrl || injectedUrl.includes('placeholder')) {
     console.warn("⚠️ [INSTITUTIONAL DIAGNOSTIC]: Supabase credentials missing. Running in RESILIENCE MODE.");
@@ -164,7 +168,7 @@ export const getSupabasePublicUrl = (bucket: string, path: string | null | undef
   // Clean path (remove leading slash if present)
   const cleanPath = path.startsWith("/") ? path.slice(1) : path;
 
-  const bakedUrl = import.meta.env.VITE_SUPABASE_URL || getSupabaseConfig().url;
+  const bakedUrl = getSupabaseConfig().url;
   return `${bakedUrl}/storage/v1/object/public/${bucket}/${cleanPath}`;
 };
 

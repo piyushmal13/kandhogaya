@@ -11,14 +11,13 @@ export const productService = {
   getProducts: async (): Promise<Product[]> => {
     try {
       const { data: products, error } = await supabase
-        .from("products")
+        .from("algorithms")
         .select(`
-          id, name, description, price, image_url, created_at, 
-          risk_profile, category, strategy_details, q_and_a, 
-          terms_and_conditions, strategy_graph_url, backtesting_result_url, 
-          video_explanation_url, long_plan_offers, performance_data,
+          id, slug, name, description, price, image_url, created_at, 
+          risk_classification, monthly_roi_pct, min_capital, is_active,
           performance:performance_results(*)
         `)
+        .eq('is_active', true)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
@@ -44,7 +43,6 @@ export const productService = {
   // ... getAlgoBots unchanged (algo_bots correct)
   subscribeToAlgo: async (userId: string, algoId: string, durationDays: number) => {
     try {
-      const key = `IFX-${Math.random().toString(36).toUpperCase().substring(2, 6)}-${Math.random().toString(36).toUpperCase().substring(2, 6)}`;
       const expiresAt = new Date();
       expiresAt.setDate(expiresAt.getDate() + durationDays);
 

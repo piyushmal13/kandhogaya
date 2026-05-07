@@ -15,6 +15,7 @@ export const resolveBlogImage = (blog: Blog, size: "thumb" | "full" = "full") =>
   
   // 3. Main table image columns
   if (blog.image_url) return blog.image_url;
+  if ((blog as any).featured_image_url) return (blog as any).featured_image_url;
   if (blog.featured_image) return blog.featured_image;
   
   // 4. Fallback to high-quality institutional placeholder

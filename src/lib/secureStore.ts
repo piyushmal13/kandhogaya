@@ -21,13 +21,21 @@ export async function setSecureItem(key: string, value: any) {
 export async function getSecureItem<T>(key: string): Promise<T | null> {
   try {
     const ciphertext = await get<string>(key);
-    if (!ciphertext) return null;
+    if (!ciphertext || typeof ciphertext !== 'string') return null;
     
     const bytes = CryptoJS.AES.decrypt(ciphertext, SECRET);
     const json = bytes.toString(CryptoJS.enc.Utf8);
+    
+    if (!json) {
+      console.warn(`[SecureStore] Decryption returned empty string for ${key}. Possible secret mismatch.`);
+      return null;
+    }
+    
     return JSON.parse(json) as T;
   } catch (error) {
     console.error(`Secure storage decoding failed for ${key}`, error);
+    // Cleanup corrupted item
+    await del(key);
     return null;
   }
 }

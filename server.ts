@@ -10,8 +10,7 @@ import fs from "node:fs";
 // Modular Imports
 import { config, logger } from "./src/api/config";
 import { authenticate } from "./src/api/middleware/auth";
-import { errorHandler, globalLimiter, sensitiveLimiter } from "./src/api/middleware";
-import { maintenanceGuard } from "./src/api/middleware/maintenance";
+import { errorHandler, globalLimiter, sensitiveLimiter, maintenanceGuard } from "./src/api/middleware";
 import { ContentController } from "./src/api/controllers/ContentController";
 import { LicenseController } from "./src/api/controllers/LicenseController";
 import { AdminController } from "./src/api/controllers/AdminController";
@@ -29,9 +28,9 @@ async function startServer() {
     contentSecurityPolicy: {
       directives: {
         ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-        "img-src": ["'self'", "data:", "https://*.supabase.co", "file:", "*"],
+        "img-src": ["'self'", "data:", "https://*.supabase.co", "file:", "*", "https://*.twelvedata.com"],
         "script-src": ["'self'", "'unsafe-inline'", "https://*.supabase.co"],
-        "connect-src": ["'self'", "https://*.supabase.co", "wss://*.supabase.co"],
+        "connect-src": ["'self'", "https://*.supabase.co", "wss://*.supabase.co", "https://api.twelvedata.com", "ws://localhost:*", "http://localhost:*"],
       },
     },
     crossOriginEmbedderPolicy: false,

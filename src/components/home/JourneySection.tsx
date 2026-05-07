@@ -13,7 +13,7 @@ const MILESTONES = [
 export const JourneySection = () => {
   return (
     <section className="py-32 bg-[#0A0A0A] relative overflow-hidden">
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] z-0" />
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('/noise.png')] z-0" />
       
       <div className="container mx-auto px-6 relative z-10">
         <motion.div

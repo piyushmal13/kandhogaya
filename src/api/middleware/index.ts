@@ -1,33 +1,30 @@
 import type { Request, Response, NextFunction } from 'express';
-
-/**
- * Rate limiting middleware using express-rate-limit
- * Different limits for different endpoint types
- */
+import rateLimit from 'express-rate-limit';
 
 // General API rate limiting - generous for authenticated users
-export const globalLimiter = {
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per window
+export const globalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
   message: { error: 'Too many requests from this IP, please try again later.' },
   standardHeaders: true,
   legacyHeaders: false,
-};
+  validate: false
+});
 
-// Sensitive endpoints - stricter limits
-export const sensitiveLimiter = {
+export const sensitiveLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 10, // 10 requests per 15min for sensitive ops
+  max: 10,
   message: { error: 'Rate limit exceeded for this operation.' },
-  keyGenerator: (req: Request) => req.headers.get('x-user-id') || req.ip, // Track by user when available
-};
+  keyGenerator: (req: Request) => (req.headers as any)['x-user-id'] || req.ip || 'anonymous',
+  validate: false
+});
 
-// Login endpoint - prevent brute force
-export const authLimiter = {
+export const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 5, // 5 attempts per 15min
+  max: 5,
   message: { error: 'Too many login attempts. Please try again later.' },
-};
+  validate: false
+});
 
 /**
  * Maintenance mode guard
@@ -134,4 +131,4 @@ export const validateRequest = (schema: any) => {
 };
 
 // Re-export supabase for middleware use
-import { supabase } from '../../src/lib/supabase';
+import { supabase } from '../../lib/supabase';

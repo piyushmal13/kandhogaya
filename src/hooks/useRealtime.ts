@@ -38,7 +38,17 @@ export function useRealtimeTable<T>(
         .limit(initialPageSize);
 
       if (filter) {
-        query = query.or(filter);
+        if (filter.includes(',') || filter.includes('(')) {
+          query = query.or(filter);
+        } else {
+          const [col, rest] = filter.split('=');
+          if (rest && rest.includes('.')) {
+            const [op, val] = rest.split('.');
+            query = query.filter(col, op as any, val);
+          } else {
+            query = query.or(filter);
+          }
+        }
       }
 
       const { data, error: fetchError } = await query;
@@ -197,7 +207,7 @@ export function useProducts(category?: string, includeInactive = false) {
   }
 
   const { rows, loading, error, refresh } = useRealtimeTable<any>(
-    'products',
+    'algorithms',
     filter || undefined,
     { initialPageSize: 100 }
   );
@@ -246,7 +256,7 @@ export function useProductWatch(productId: string) {
   useEffect(() => {
     const fetchProduct = async () => {
       const { data, error } = await supabase
-        .from('products')
+        .from('algorithms')
         .select('*')
         .eq('id', productId)
         .single();
@@ -266,7 +276,7 @@ export function useProductWatch(productId: string) {
         {
           event: 'UPDATE',
           schema: 'public',
-          table: 'products',
+          table: 'algorithms',
           filter: `id=eq.${productId}`
         },
         (payload) => {

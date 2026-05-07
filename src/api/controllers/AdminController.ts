@@ -441,6 +441,70 @@ export const AdminController = {
   },
 
   /**
+   * POST /api/admin/licenses
+   * Bulk generate licenses
+   */
+  createLicense: async (req: Request, res: Response) => {
+    const auth = validateAuth(req);
+    if (!auth || !['admin', 'superadmin'].includes(auth.role)) {
+      return res.status(403).json({ error: 'Admin access required' });
+    }
+
+    const { algo_id, count, duration_days } = req.body;
+    
+    try {
+      const { data, error } = await supabase
+        .from('algo_licenses')
+        .insert(Array.from({ length: count || 1 }).map(() => ({
+          algo_id,
+          license_key: `IFX-${Math.random().toString(36).substring(2, 10).toUpperCase()}`,
+          is_active: true,
+          expires_at: new Date(Date.now() + (duration_days || 30) * 24 * 60 * 60 * 1000).toISOString(),
+          created_at: new Date().toISOString()
+        })))
+        .select();
+
+      if (error) throw error;
+      res.json({ success: true, data });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  },
+
+  /**
+   * POST /api/admin/content
+   * Create blog or course content
+   */
+  createContent: async (req: Request, res: Response) => {
+    const auth = validateAuth(req);
+    if (!auth || !['admin', 'superadmin'].includes(auth.role)) {
+      return res.status(403).json({ error: 'Admin access required' });
+    }
+
+    try {
+      const { title, content, type, metadata } = req.body;
+      const { data, error } = await supabase
+        .from('content_posts')
+        .insert({
+          title,
+          body: content,
+          author_name: 'IFX Research Desk',
+          category: type || 'Macro',
+          metadata: metadata || {},
+          published_at: new Date().toISOString(),
+          created_at: new Date().toISOString()
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+      res.json({ success: true, data });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  },
+
+  /**
    * PUT /api/admin/feature-flags/:key
    * Update feature flag value
    */

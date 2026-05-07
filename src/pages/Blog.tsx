@@ -160,19 +160,19 @@ export const Blog = () => {
                           {post.title}
                         </h3>
 
-                        {/* Content Snippet */}
+                         {/* Content Snippet */}
                         <p className="mb-10 flex-1 text-[15px] leading-8 text-gray-400 line-clamp-3 font-medium opacity-80 group-hover:opacity-100 transition-opacity">
-                          {post.metadata?.bold_headline || stripHtml(post.content)}
+                          {post.metadata?.bold_headline || stripHtml((post as any).body || post.content)}
                         </p>
 
                         {/* Footer */}
                         <div className="flex items-center justify-between border-t border-white/5 pt-6">
                           <div className="flex items-center gap-3">
                              <div className="w-8 h-8 rounded-full bg-zinc-800 border border-white/10 flex items-center justify-center text-emerald-500 font-black text-[10px]">
-                                {(post.metadata?.author_name || (post as any).author?.full_name || "A").charAt(0)}
+                                {(post.author_name || post.metadata?.author_name || (post as any).author?.full_name || "A").charAt(0)}
                              </div>
                              <span className="text-[10px] font-black uppercase tracking-widest text-gray-500">
-                               {post.metadata?.author_name || (post as any).author?.full_name || "IFX PRINCIPAL RESEARCHER"}
+                               {post.author_name || post.metadata?.author_name || (post as any).author?.full_name || "IFX PRINCIPAL RESEARCHER"}
                              </span>
                           </div>
                           <div className="w-10 h-10 rounded-full border border-white/5 flex items-center justify-center group-hover:bg-emerald-500 group-hover:border-emerald-500 text-gray-600 group-hover:text-black transition-all duration-300 transform group-hover:rotate-45">
