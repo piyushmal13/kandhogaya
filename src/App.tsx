@@ -45,6 +45,7 @@ const RiskDisclosure = lazy(() => import("./pages/legal/RiskDisclosure").then(m 
 const CookiePolicy = lazy(() => import("./pages/legal/CookiePolicy").then(m => ({ default: m.CookiePolicy })));
 const AffiliateHub = lazy(() => import("./pages/AffiliateHub").then(m => ({ default: m.AffiliateHub })));
 const QuantX = lazy(() => import("./pages/QuantX").then(m => ({ default: m.QuantX })));
+const OnboardingFlow = lazy(() => import("./pages/OnboardingFlow").then(m => ({ default: m.OnboardingFlow })));
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -69,6 +70,7 @@ const AnimatedRoutes = () => {
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogDetail />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/onboarding" element={<ProtectedRoute><OnboardingFlow /></ProtectedRoute>} />
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/admin" element={<ProtectedRoute adminOnly><Admin /></ProtectedRoute>} />
             <Route path="/agent" element={<ProtectedRoute><AgentDashboard /></ProtectedRoute>} />
