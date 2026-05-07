@@ -5,29 +5,21 @@ import { supabase } from '@/lib/supabase';
 
 export const InfrastructurePulse = () => {
   const [status, setStatus] = useState<'connected' | 'reconnecting' | 'failed'>('connected');
-  const [latency, setLatency] = useState<number | null>(null);
 
   useEffect(() => {
     const checkPulse = async () => {
-      const start = performance.now();
       try {
         const { error } = await supabase.from('users').select('count', { count: 'exact', head: true });
-        const end = performance.now();
         
         if (error) throw error;
         
-        setLatency(Math.round(end - start));
         setStatus('connected');
       } catch (err) {
         setStatus('reconnecting');
-        setLatency(null);
       }
     };
 
-    const interval = setInterval(checkPulse, 30000); // Check every 30s
     checkPulse();
-
-    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -46,10 +38,10 @@ export const InfrastructurePulse = () => {
         <div className="p-3 rounded-2xl bg-black/40 border border-white/5">
           <div className="flex items-center gap-2 mb-1">
             <Activity className="w-3 h-3 text-cyan-500/40" />
-            <span className="text-[7px] font-black uppercase tracking-tighter text-white/20">Sync Delay</span>
+            <span className="text-[7px] font-black uppercase tracking-tighter text-white/20">Data Integrity</span>
           </div>
           <div className="text-xs font-mono font-black text-white/80">
-            {latency ? `${latency}ms` : '---'}
+            {status === 'connected' ? 'VERIFIED' : 'SYNCING'}
           </div>
         </div>
         <div className="p-3 rounded-2xl bg-black/40 border border-white/5">

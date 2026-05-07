@@ -69,7 +69,7 @@ export const ErrorViewer = () => {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         {[
           { label: "Active Error Rate", value: "0.2%", status: "OPTIMAL", color: "text-emerald-500" },
-          { label: "API Latency (p95)", value: "142ms", status: "STABLE", color: "text-cyan-500" },
+          { label: "Protocol Sync", value: "Verified", status: "STABLE", color: "text-cyan-500" },
           { label: "Database Health", value: "Optimal", status: "HEALTHY", color: "text-emerald-500" },
           { label: "Critical Discovery", value: "0 Today", status: "CLEAR", color: "text-white" }
         ].map((metric) => (

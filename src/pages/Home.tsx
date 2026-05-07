@@ -45,23 +45,26 @@ const Home = () => {
     staleTime: 600000,
   });
 
-  const formattedFaqs = homeFaqs.map((f: any) => ({
-    question: f.title || f.question,
-    answer: f.content || f.body || f.answer
+  const formattedFaqs = homeFaqs.map((f: { title?: string; question?: string; content?: string; body?: string; answer?: string }) => ({
+    question: f.title || f.question || "",
+    answer: f.content || f.body || f.answer || ""
   }));
+
   return (
     <>
       <PageMeta
-        title="Institutional Algorithmic Research & Education"
-        description="Asia's #1 Institutional Research Desk. Professional quantitative analysis, macro intelligence, and algorithmic education for modern market participants."
+        title="Institutional Algorithmic Research & Quantitative Education"
+        description="Asia's #1 Sovereign Research Desk. Professional quantitative execution analysis, macro intelligence, and algorithmic architectural education for modern institutional participants."
         path="/"
         keywords={[
           "IFX Trades",
           "institutional forex research",
           "quantitative analysis Dubai",
           "macro research India",
-          "professional trader infrastructure",
-          "master terminal training",
+          "institutional operator infrastructure",
+          "institutional terminal training",
+          "algorithmic trading education",
+          "forex market architecture",
         ]}
         structuredData={[
           educationalOrganizationSchema(),
@@ -75,55 +78,51 @@ const Home = () => {
         ]}
       />
 
-      <main>
-        {/* L1: Elite Execution Hero */}
-        <FortressHero />
+      {/* L1: Elite Execution Hero */}
+      <FortressHero />
 
-        {/* Editable advertisement banner (Supabase-driven) */}
-        <AdBanner placement="home" />
+      {/* Editable advertisement banner (Supabase-driven) */}
+      <AdBanner placement="home" />
 
-        {/* L2: Partner Matrix & Authority */}
-        <BrandAuthority />
+      {/* L2: Partner Matrix & Authority */}
+      <BrandAuthority />
 
-        {/* L2.5: Masterclass Engagement (Replaces Academy Promo) */}
-        <WebinarPromo />
+      {/* L2.5: Masterclass Engagement (Replaces Academy Promo) */}
+      <WebinarPromo />
 
-        {/* L3: Why Institutional Standard */}
-        <TrustGrid />
+      {/* L3: Why Institutional Standard */}
+      <TrustGrid />
 
-        {/* L3.5: Social Proof & Market Authority */}
-        <SocialProof />
+      {/* L3.5: Social Proof & Market Authority */}
+      <SocialProof />
 
-        {/* L4: Quantitative Lifecycle */}
-        <HowItWorks />
+      {/* L4: Quantitative Lifecycle */}
+      <HowItWorks />
 
-        {/* L5: Institutional Performance Registry */}
-        <PerformanceHistory />
+      {/* L5: Institutional Performance Registry */}
+      <PerformanceHistory />
 
-        {/* L6: Engineering Journey */}
-        <JourneySection />
+      {/* L6: Engineering Journey */}
+      <JourneySection />
 
-        {/* L6.5: Custom Engineering Authority */}
-        <section className="hidden sm:block">
-          <CustomAlgoTeam />
-        </section>
+      {/* L6.5: Custom Engineering Authority */}
+      <section className="hidden sm:block">
+        <CustomAlgoTeam />
+      </section>
 
+      {/* L7: Global Network */}
+      <section className="hidden md:block">
+        <GlobalReach />
+      </section>
 
-        {/* L7: Global Network */}
-        <section className="hidden md:block">
-          <GlobalReach />
-        </section>
+      {/* L8: Institutional Intelligence (Live from Supabase) */}
+      <BlogSection />
 
-        {/* L8: Institutional Intelligence (Live from Supabase) */}
-        <BlogSection />
+      {/* L10: Institutional FAQ (Sovereign Data) */}
+      <InstitutionalFAQ faqs={formattedFaqs} />
 
-
-        {/* L10: Institutional FAQ (Sovereign Data) */}
-        <InstitutionalFAQ faqs={formattedFaqs} />
-
-        {/* L11: Capital Inquiry / Consultation */}
-        <ConsultationSection />
-      </main>
+      {/* L11: Capital Inquiry / Consultation */}
+      <ConsultationSection />
     </>
   );
 };

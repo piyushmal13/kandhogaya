@@ -21,16 +21,16 @@ export const TradersTravel = () => {
   return (
     <div className="min-h-screen bg-[#020202] pt-32 pb-48 relative overflow-hidden">
       <PageMeta 
-        title="Elite Retreats | Institutional Mastermind Mobility 2026"
-        description="Join the top 1% community on exclusive trader retreats in Bali, Dubai, and Thailand. Elite networking & institutional mastermind sessions."
+        title="Sovereign Summits | Elite Institutional Mobility 2026"
+        description="Join the top 1% syndicate on exclusive institutional retreats in Bali, Dubai, and Thailand. Elite networking & sovereign mastermind sessions for capital operators."
         path="/travel"
         keywords={[
-          "traders travel",
-          "forex trader retreat India",
-          "institutional trading mastermind Dubai",
-          "best trading community retreats 2026",
-          "luxury trading vacation Bali",
-          "elite trader networking event",
+          "elite mobility",
+          "institutional retreats Dubai",
+          "sovereign mastermind summits",
+          "quantitative syndicate retreats 2026",
+          "luxury institutional summits Bali",
+          "analyst networking events",
         ]}
       />
       {/* Dynamic Background */}
@@ -55,8 +55,8 @@ export const TradersTravel = () => {
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
             className="text-shimmer mb-10 leading-[0.9]"
           >
-            Elite <br />
-            <span className="italic font-serif text-gradient-emerald">Retreats.</span>
+            Sovereign <br />
+            <span className="italic font-serif text-gradient-emerald">Summits.</span>
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
@@ -64,7 +64,7 @@ export const TradersTravel = () => {
             transition={{ duration: 1, delay: 0.2 }}
             className="text-lg md:text-xl text-gray-400 font-light leading-relaxed max-w-2xl mx-auto"
           >
-            Join the top 1% community on exclusive retreats around the globe. Combine high-level networking, luxury experiences, and elite trading mastermind sessions.
+            Join the top 1% syndicate on exclusive retreats around the globe. Combine high-level networking, luxury experiences, and sovereign quantitative mastermind sessions.
           </motion.p>
         </div>
 

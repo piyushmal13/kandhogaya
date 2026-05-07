@@ -50,14 +50,14 @@ export const Contact = () => {
   return (
     <div className="relative overflow-hidden pt-32 pb-32">
       <PageMeta
-        title="Contact"
-        description="Contact IFXTrades for support, partnership inquiries, algorithm licensing, or signal access questions."
+        title="Institutional Intelligence Desk | Contact IFX TRADES"
+        description="Secure high-fidelity communication with the IFX TRADES Intelligence Desk. Direct connectivity for institutional partnerships, algorithmic licensing, and bespoke engineering requests."
         path="/contact"
-        keywords={["contact IFXTrades", "trading support", "algo licensing"]}
+        keywords={["contact IFX TRADES", "institutional intelligence", "algo licensing desk", "quantitative partnership", "market engineering support"]}
       />
 
       <PageHero
-        eyebrow="Institutional Support Desk"
+        eyebrow="Institutional Intelligence Desk"
         title={
           <>
             Direct Connectivity to the <br />
@@ -88,7 +88,7 @@ export const Contact = () => {
                 <span className="text-white/40">Differentiation.</span>
               </h2>
               <p className="text-white/50 text-lg leading-relaxed font-medium">
-                Unlike retail signal providers, IFX operates as a sovereign engineering hub. Every interaction with our desk is backed by quantitative rigor and institutional heritage.
+                Unlike non-institutional providers, IFX operates as a sovereign engineering hub. Every interaction with our desk is backed by quantitative rigor and institutional heritage.
               </p>
             </Reveal>
 
@@ -180,22 +180,22 @@ export const Contact = () => {
                 </div>
                 <div>
                   <label className="mb-3 block text-[9px] font-black uppercase tracking-[0.3em] text-white/30">
-                    Operation Intent
+                    Inquiry Protocol
                   </label>
                   <select
                     value={formData.subject}
                     onChange={(event) => updateField("subject", event.target.value)}
                     className="w-full rounded-xl border border-white/5 bg-white/[0.02] px-5 py-4 text-white outline-none focus:border-emerald-500/30 transition-all font-medium appearance-none"
                   >
-                    <option>General Inquiry</option>
+                    <option>Core Intelligence</option>
                     <option>Algo Licensing</option>
                     <option>Bespoke Engineering</option>
-                    <option>Partnership</option>
+                    <option>Partnership Protocol</option>
                   </select>
                 </div>
                 <div>
                   <label className="mb-3 block text-[9px] font-black uppercase tracking-[0.3em] text-white/30">
-                    Transmission Detail
+                    Strategic Context
                   </label>
                   <textarea
                     required

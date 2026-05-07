@@ -100,7 +100,7 @@ export const GlobalPromotionBanner = () => {
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
-          transition={{ type: "spring", stiffness: 260, damping: 20 }}
+          transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
           className="fixed bottom-6 left-6 right-6 z-[100] max-w-4xl mx-auto"
         >
           <div className="relative group overflow-hidden rounded-2xl md:rounded-[2rem] bg-black/80 backdrop-blur-3xl border border-emerald-500/20 shadow-[0_40px_100px_rgba(0,0,0,0.8)]">

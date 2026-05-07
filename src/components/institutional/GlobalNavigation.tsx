@@ -90,7 +90,7 @@ export function GlobalNavigation() {
                 <motion.div
                   layoutId="activeNavIndicator"
                   className="absolute left-[-10px] w-1 h-10 bg-cyan-500 rounded-r-full shadow-[0_0_25px_rgba(0,229,255,0.6)]"
-                  transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                  transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
                 />
               )}
               <Icon className={cn("w-5 h-5 transition-transform group-hover:scale-110", isActive ? 'text-cyan-400' : 'text-current')} />

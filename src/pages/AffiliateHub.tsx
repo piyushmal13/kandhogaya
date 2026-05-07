@@ -27,10 +27,10 @@ export const AffiliateHub = () => {
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const [stats, setStats] = useState({
-    clicks: 124, // Mock if newly created
-    registrations: 12,
-    commissions: 450,
-    pendingPayouts: 150
+    clicks: 0,
+    registrations: 0,
+    commissions: 0,
+    pendingPayouts: 0
   });
 
   useEffect(() => {
@@ -55,11 +55,10 @@ export const AffiliateHub = () => {
         setStats({
           clicks: data.total_clicks || 0,
           registrations: data.total_registrations || 0,
-          commissions: 0, // Calculated from commissions table
+          commissions: 0,
           pendingPayouts: 0
         });
         
-        // Fetch commissions (Mocking for now as we transition to SQL commissions)
         const { data: comms } = await supabase
           .from("commissions")
           .select("amount, status")
@@ -72,7 +71,7 @@ export const AffiliateHub = () => {
         }
       }
     } catch (err) {
-      console.error("Affiliate Discovery Error:", err);
+      console.error("Partner Protocol Discovery Error:", err);
     } finally {
       setLoading(false);
     }
@@ -85,7 +84,7 @@ export const AffiliateHub = () => {
       const { data, error } = await supabase.rpc("generate_affiliate_code", { user_id: userProfile.id });
       if (error) throw error;
       setAffiliateCode(data);
-      success("Institutional Referral Code Generated.");
+      success("Institutional Partner Protocol Initialized.");
     } catch (err: any) {
       toastError(err.message);
     } finally {
@@ -99,17 +98,17 @@ export const AffiliateHub = () => {
     navigator.clipboard.writeText(link);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
-    success("Referral Link Safely Duplicated.");
+    success("Partner Access Link Safely Duplicated.");
   };
 
-  const referralLink = affiliateCode ? `${globalThis.location.origin}?ref=${affiliateCode}` : "Login to generate...";
+  const referralLink = affiliateCode ? `${globalThis.location.origin}?ref=${affiliateCode}` : "Login to initialize...";
 
   return (
     <DashboardLayout>
       <div className="pb-24">
       <PageMeta 
-        title="Affiliate Hub" 
-        description="Monitor your institutional referral performance and management your commissions."
+        title="Institutional Partner Terminal | IFX TRADES" 
+        description="Monitor your institutional partner performance and manage your revenue share with sub-second transparency."
         path="/affiliate"
       />
 
@@ -127,10 +126,10 @@ export const AffiliateHub = () => {
                 Growth Protocol Active
               </div>
               <h1 className="text-4xl md:text-6xl font-black text-white uppercase italic tracking-tighter leading-none">
-                Affiliate <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">Terminal</span>
+                Partner <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">Terminal</span>
               </h1>
               <p className="text-gray-500 mt-4 max-w-xl text-sm font-bold uppercase tracking-widest leading-relaxed">
-                Scaled revenue through institutional partnership. Manage your referral network and withdraw commissions with sub-second transparency.
+                Scaled revenue through institutional partnership. Manage your referral network and settle balances with absolute technical transparency.
               </p>
             </div>
 
@@ -141,7 +140,7 @@ export const AffiliateHub = () => {
                </button>
                <button className="px-8 py-4 bg-emerald-500 text-black rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-emerald-400 transition-all flex items-center gap-2 shadow-xl shadow-emerald-500/20">
                   <Wallet className="w-4 h-4" />
-                  Withdraw Funds
+                  Settle Balance
                   <ArrowUpRight className="w-4 h-4" />
                </button>
             </div>
@@ -151,10 +150,10 @@ export const AffiliateHub = () => {
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
            {[
-             { label: "Total Clicks", value: stats.clicks, icon: MousePointer2, color: "text-cyan-400", bg: "bg-cyan-500/10" },
-             { label: "Registrations", value: stats.registrations, icon: Users, color: "text-emerald-400", bg: "bg-emerald-500/10" },
-             { label: "Total Earnings", value: `$${stats.commissions}`, icon: DollarSign, color: "text-emerald-400", bg: "bg-emerald-500/10" },
-             { label: "Pending Payout", value: `$${stats.pendingPayouts}`, icon: TrendingUp, color: "text-amber-400", bg: "bg-amber-500/10" }
+             { label: "Discovery Events", value: stats.clicks, icon: MousePointer2, color: "text-cyan-400", bg: "bg-cyan-500/10" },
+             { label: "Acquisitions", value: stats.registrations, icon: Users, color: "text-emerald-400", bg: "bg-emerald-500/10" },
+             { label: "Revenue Share", value: `$${stats.commissions}`, icon: DollarSign, color: "text-emerald-400", bg: "bg-emerald-500/10" },
+             { label: "Pending Settlement", value: `$${stats.pendingPayouts}`, icon: TrendingUp, color: "text-amber-400", bg: "bg-amber-500/10" }
            ].map((stat, i) => (
              <motion.div 
                key={stat.label}
@@ -185,12 +184,12 @@ export const AffiliateHub = () => {
            >
               <div className="flex items-center gap-4 mb-2">
                  <Zap className="w-6 h-6 text-emerald-500 animate-pulse" />
-                 <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter">Attribution Signal Link</h2>
+                 <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter">Institutional Signal Link</h2>
               </div>
               
               <div className="space-y-4">
                  <p className="text-xs text-gray-500 font-bold uppercase tracking-widest leading-relaxed">
-                   Share your unique institutional signal link. Every asset discovery and purchase triggered through this link is cryptographically tied to your dashboard.
+                   Share your unique partner protocol link. Every asset discovery and acquisition triggered through this link is cryptographically tied to your terminal dashboard.
                  </p>
                  
                  <div className="flex flex-col md:flex-row gap-4">
@@ -203,7 +202,7 @@ export const AffiliateHub = () => {
                         className="px-8 py-5 bg-white text-black rounded-2xl text-[10px] font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-3 shadow-xl"
                       >
                          {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                         {copied ? "Signals Duplicated" : "Duplicate Signal"}
+                         {copied ? "Link Duplicated" : "Duplicate Protocol"}
                       </button>
                     ) : (
                       <button 
@@ -212,7 +211,7 @@ export const AffiliateHub = () => {
                         className="px-8 py-5 bg-emerald-500 text-black rounded-2xl text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all flex items-center justify-center gap-3 shadow-xl disabled:opacity-50"
                       >
                          {loading ? <Activity className="w-4 h-4 animate-spin" /> : <ShieldCheck className="w-4 h-4" />}
-                         Establish ID Profile
+                         Initialize Partner ID
                       </button>
                     )}
                  </div>
@@ -220,28 +219,28 @@ export const AffiliateHub = () => {
 
               <div className="pt-8 border-t border-white/5 grid grid-cols-1 md:grid-cols-2 gap-8">
                  <div className="space-y-4">
-                    <h3 className="text-sm font-black text-white uppercase tracking-widest italic">Commission Hierarchy</h3>
+                    <h3 className="text-sm font-black text-white uppercase tracking-widest italic">Revenue Hierarchy</h3>
                     <div className="space-y-3">
                        <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-gray-500">
-                          <span>Standard Algorithms</span>
+                          <span>Algorithmic Models</span>
                           <span className="text-emerald-500">20% Share</span>
                        </div>
                        <div className="w-full bg-white/5 h-1 rounded-full overflow-hidden">
-                          <div className="w-[20%] h-full bg-emerald-500 shadow-[0_0_10px_var(--color8)]" />
+                          <div className="w-[20%] h-full bg-emerald-500 shadow-[0_0_10px_#10b981]" />
                        </div>
                        <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-gray-500">
-                          <span>Enterprise Signals</span>
+                          <span>Execution Protocols</span>
                           <span className="text-cyan-400">15% Share</span>
                        </div>
                        <div className="w-full bg-white/5 h-1 rounded-full overflow-hidden">
-                          <div className="w-[15%] h-full bg-cyan-400 shadow-[0_0_10px_var(--color51)]" />
+                          <div className="w-[15%] h-full bg-cyan-400 shadow-[0_0_10px_#22d3ee]" />
                        </div>
                     </div>
                  </div>
                  <div className="bg-emerald-500/5 border border-emerald-500/10 p-6 rounded-3xl">
-                    <h3 className="text-sm font-black text-emerald-500 uppercase tracking-widest italic mb-2">Automated Payouts</h3>
+                    <h3 className="text-sm font-black text-emerald-500 uppercase tracking-widest italic mb-2">Automated Settlements</h3>
                     <p className="text-[10px] text-gray-500 font-bold leading-relaxed uppercase tracking-widest transition-all">
-                       Commissions are audited every 48 hours. Withdrawal requests are processed instantly through your established settlement signal.
+                       Balances are audited every 48 hours. Settlement requests are processed instantly through your established settlement signal.
                     </p>
                  </div>
               </div>
@@ -260,13 +259,13 @@ export const AffiliateHub = () => {
               
               <div className="space-y-6 flex-1">
                  {[
-                   { event: "New Lead Capture", time: "2m ago", meta: "Forex Scalper X", status: "PENDING" },
-                   { event: "Conversion Event", time: "1h ago", meta: "Gold Hunter Pro", status: "VERIFIED" },
-                   { event: "Signal Click", time: "3h ago", meta: "Source: Twitter", status: "ACTIVE" },
-                   { event: "New Lead Capture", time: "5h ago", meta: "MT5 Trend Master", status: "PENDING" },
+                   { event: "Discovery Logged", time: "2m ago", meta: "Node ID: 8821", status: "PENDING" },
+                   { event: "Acquisition Event", time: "1h ago", meta: "Protocol: Scalper X", status: "VERIFIED" },
+                   { event: "Signal Click", time: "3h ago", meta: "Source: Terminal Alpha", status: "ACTIVE" },
+                   { event: "Discovery Logged", time: "5h ago", meta: "Node ID: 9942", status: "PENDING" },
                  ].map((act, i) => (
                    <div key={`${act.event}-${i}`} className="flex items-start gap-4 pb-6 border-b border-white/5 last:border-0">
-                      <div className={`w-2 h-2 rounded-full mt-2 ${act.status === 'VERIFIED' ? 'bg-emerald-500 shadow-[0_0_8px_var(--color8)]' : 'bg-gray-700'}`} />
+                      <div className={`w-2 h-2 rounded-full mt-2 ${act.status === 'VERIFIED' ? 'bg-emerald-500 shadow-[0_0_8px_#10b981]' : 'bg-gray-700'}`} />
                       <div className="flex-1">
                          <div className="flex justify-between items-center mb-1">
                             <span className="text-[11px] font-bold text-white uppercase tracking-widest">{act.event}</span>

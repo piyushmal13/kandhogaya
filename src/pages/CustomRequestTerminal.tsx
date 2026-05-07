@@ -129,7 +129,7 @@ export const CustomRequestTerminal: React.FC = () => {
                   <option value="MT5_ALGO">MetaTrader 5 Algorithmic Development</option>
                   <option value="PYTHON_QUANT">Python Quantitative Infrastructure</option>
                   <option value="WEB_DASHBOARD">Custom Institutional Dashboard</option>
-                  <option value="AI_INTEGRATION">AI/ML Signal Optimization</option>
+                  <option value="AI_INTEGRATION">AI/ML Execution Optimization</option>
                   <option value="OTHER">Other Custom Engineering</option>
                 </select>
               </div>

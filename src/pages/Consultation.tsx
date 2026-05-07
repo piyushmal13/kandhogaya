@@ -28,7 +28,7 @@ export const Consultation = () => {
     email: "",
     phone: "",
     company: "",
-    strategy: "Algo Trading",
+    strategy: "Algorithmic Engineering",
     notes: ""
   });
 
@@ -50,7 +50,6 @@ export const Consultation = () => {
       tracker.track("consultation_requested", { strategy: formData.strategy });
       setFormState('success');
       
-      // Auto-redirect or reset after success is handled in UI
     } catch (err) {
       console.error(err);
       setFormState('idle');
@@ -89,9 +88,10 @@ export const Consultation = () => {
       </div>
 
       <PageMeta 
-        title="Institutional Consultation | Elite Boardroom"
-        description="Book a strategic session with the IFX Trades proprietary desk leads. Elite quantitative architecture and risk governance."
+        title="Institutional Consultation | IFX TRADES Elite Boardroom"
+        description="Book a strategic session with the IFX TRADES proprietary desk leads. Elite quantitative architecture and risk governance for institutional capital."
         path="/consultation"
+        keywords={["institutional consultation", "quantitative architecture", "risk governance consulting", "capital deployment strategy", "IFX TRADES boardroom"]}
       />
 
       <div className="max-w-7xl mx-auto px-6 sm:px-12 relative z-10">
@@ -112,19 +112,19 @@ export const Consultation = () => {
                 <span className="italic font-serif text-gradient-emerald">Boardroom.</span>
               </h1>
               <p className="text-lg md:text-xl text-gray-400 leading-relaxed max-w-xl font-light">
-                Elevate beyond retail methodologies. Engage in a deep-dive analysis 
-                of your execution engine with IFX Trades' senior quantitative architects.
+                Elevate beyond non-institutional methodologies. Engage in a deep-dive analysis 
+                of your execution engine with IFX TRADES' senior quantitative architects.
               </p>
             </motion.div>
 
             <div className="space-y-6">
               {BENEFITS.map((benefit, i) => (
                 <motion.div 
-                  key={benefit.title} 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                  className="flex items-start gap-8 p-8 rounded-[2.5rem] border border-white/[0.05] bg-white/[0.02] hover:bg-white/[0.04] transition-all duration-500 group"
+                   key={benefit.title} 
+                   initial={{ opacity: 0, y: 20 }}
+                   animate={{ opacity: 1, y: 0 }}
+                   transition={{ delay: i * 0.1 }}
+                   className="flex items-start gap-8 p-8 rounded-[2.5rem] border border-white/[0.05] bg-white/[0.02] hover:bg-white/[0.04] transition-all duration-500 group"
                 >
                   <div className="w-14 h-14 rounded-2xl bg-emerald-500/[0.05] border border-emerald-500/[0.1] flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-black transition-all shrink-0">
                     <benefit.icon className="w-6 h-6" />
@@ -155,7 +155,7 @@ export const Consultation = () => {
                 <div className="space-y-8">
                   <div className="grid md:grid-cols-2 gap-8">
                     <div className="space-y-3">
-                      <label htmlFor="full-name" className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-2">Full Name</label>
+                      <label htmlFor="full-name" className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-2">Full Identity</label>
                       <div className="relative">
                         <User className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
                         <input 
@@ -203,7 +203,7 @@ export const Consultation = () => {
                       </div>
                     </div>
                     <div className="space-y-3">
-                      <label htmlFor="strategy-focus" className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-2">Strategy Focus</label>
+                      <label htmlFor="strategy-focus" className="text-[10px] font-black uppercase tracking-widest text-white/20 ml-2">Strategic Focus</label>
                       <div className="relative">
                         <select 
                           id="strategy-focus"
@@ -211,9 +211,9 @@ export const Consultation = () => {
                           onChange={(e) => setFormData({...formData, strategy: e.target.value})}
                           className="w-full bg-black/40 border border-white/[0.08] px-6 py-5 rounded-2xl text-white outline-none focus:border-emerald-500/50 transition-all font-black uppercase tracking-[0.2em] text-[10px] appearance-none"
                         >
-                          <option value="Algo Trading">Algo Trading Masterclass</option>
+                          <option value="Algorithmic Engineering">Algorithmic Engineering</option>
                           <option value="Macro Research">Macro Intelligence Hub</option>
-                          <option value="Hybrid">Hybrid (Retail to Institutional)</option>
+                          <option value="Institutional Transition">Institutional Transition</option>
                         </select>
                         <ArrowRight className="absolute right-5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20 rotate-90" />
                       </div>
@@ -227,7 +227,7 @@ export const Consultation = () => {
                       rows={4}
                       value={formData.notes}
                       onChange={(e) => setFormData({...formData, notes: e.target.value})}
-                      placeholder="Tell us about your current desk setup or trading history..."
+                      placeholder="Tell us about your current desk setup or execution history..."
                       className="w-full bg-black/40 border border-white/[0.08] px-6 py-5 rounded-2xl text-white outline-none focus:border-emerald-500/50 transition-all font-medium text-sm resize-none"
                     />
                   </div>

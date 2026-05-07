@@ -33,8 +33,8 @@ export const Marketplace = () => {
 
   const categories = [
     { id: "all", label: "All Assets" },
-    { id: "algorithm", label: "Trading Systems" },
-    { id: "course", label: "Education" },
+    { id: "algorithm", label: "Algorithmic Models" },
+    { id: "course", label: "Quantitative Education" },
   ];
 
   const filteredProducts = products.filter((p: Product) => {
@@ -46,7 +46,7 @@ export const Marketplace = () => {
 
   const handleSubscribe = async (algo: Product, plan: string) => {
     if (!user) {
-      info("Authentication required for execution deployment.");
+      info("Authentication required for protocol deployment.");
       navigate("/login");
       return;
     }
@@ -87,8 +87,8 @@ export const Marketplace = () => {
             imageUrl: p.images?.[0] || p.image_url || p.metadata?.image_url,
             isPremium: p.price > 1000,
             performance: p.performance ? {
-              winRate: p.performance.win_rate || 72,
-              monthlyReturn: p.performance.monthly_return || 12.4,
+              reliability: p.performance.win_rate || 72,
+              monthlyYield: p.performance.monthly_return || 12.4,
               sharpe: (p.performance as any).sharpe_ratio || 2.1
             } : undefined
           }))}
@@ -116,9 +116,10 @@ export const Marketplace = () => {
   const content = (
     <div className={user ? "pb-24" : "pt-32 pb-24 md:pt-48 md:pb-48"}>
       <PageMeta
-        title="Execution Desk | Institutional Assets"
-        description="Access the IFX TRADES Execution Desk. High-frequency algorithmic models and institutional macro intelligence."
+        title="Execution Desk | Institutional Algorithmic Assets"
+        description="Access the IFX TRADES Execution Desk. Sovereign algorithmic models, quantitative education, and institutional macro intelligence."
         path="/marketplace"
+        keywords={["algorithmic models", "quantitative education", "institutional trading assets", "market intelligence", "forex algorithms"]}
       />
 
       <div className="max-w-[1440px] mx-auto px-6 sm:px-12 space-y-16">
@@ -130,15 +131,24 @@ export const Marketplace = () => {
               animate={{ opacity: 1, x: 0 }}
               className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-emerald-500/[0.04] border border-emerald-500/[0.15] text-emerald-400 text-[10px] font-bold uppercase tracking-[0.2em]"
             >
-              Asset Catalog
+              Institutional Asset Catalog
             </motion.div>
             <h1 className="text-[clamp(3rem,8vw,6rem)] lg:text-[8rem] font-black mb-6 text-white tracking-tighter leading-[0.85] uppercase italic">
-              Institutional <br />
+              Quantitative <br />
               <span className="text-emerald-400">Allocations.</span>
             </h1>
             <p className="text-base md:text-xl text-white/40 max-w-2xl font-medium leading-relaxed">
-              Professional execution models and systematic trading protocols designed for high-performance capital management and institutional risk governance.
+              Professional execution models and systematic protocols designed for high-performance capital management and institutional risk governance. Secure your allocation to our proprietary alpha strategies today.
             </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 pt-4">
+              <button className="px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-black text-[11px] font-black uppercase tracking-widest rounded-xl transition-all shadow-[0_0_20px_rgba(16,185,129,0.2)] hover:shadow-[0_0_30px_rgba(16,185,129,0.4)]">
+                 Secure Allocation
+              </button>
+              <button className="px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-white text-[11px] font-black uppercase tracking-widest rounded-xl transition-all">
+                 Request Engineering Review
+              </button>
+            </div>
           </div>
 
           {/* Catalog Controls */}
@@ -208,7 +218,7 @@ export const Marketplace = () => {
                     <span className="text-emerald-400">Execution.</span>
                  </h2>
                  <p className="text-lg text-white/40 leading-relaxed font-medium">
-                    Native MetaTrader 5 (MT5) integration with our proprietary bridge protocols. Experience zero-latency synchronization between our research models and your personal execution workstation.
+                    Native MetaTrader 5 (MT5) integration with our proprietary bridge protocols. Experience zero-latency synchronization between our research models and your institutional execution node.
                  </p>
                  
                  <div className="flex flex-wrap gap-4">

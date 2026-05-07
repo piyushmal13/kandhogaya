@@ -6,8 +6,18 @@ import { getPerformanceResults } from "../services/apiHandlers";
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
 
+interface PerformanceResult {
+  id: string;
+  month: string;
+  pips: number; // Mapping legacy field for data consistency
+  win_rate?: number;
+  profit_factor?: number;
+  risk_reward?: string;
+  is_featured?: boolean;
+}
+
 export const Results = () => {
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<PerformanceResult[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -19,12 +29,12 @@ export const Results = () => {
     fetchResults();
   }, []);
 
-  const featured = results.find(r => r.is_featured) || results.at(-1) || {};
+  const featured = results.find(r => r.is_featured) || results.at(-1) || {} as PerformanceResult;
 
   const stats = [
-    { label: "Win Rate", value: featured.win_rate ? `${featured.win_rate}%` : "82.4%", icon: Target, color: "text-emerald-500" },
-    { label: "Profit Factor", value: featured.profit_factor || "3.24", icon: TrendingUp, color: "text-white" },
-    { label: "Risk Management", value: featured.risk_reward || "1:3.5", icon: ShieldCheck, color: "text-emerald-500" },
+    { label: "Execution Reliability", value: featured.win_rate ? `${featured.win_rate}%` : "82.4%", icon: Target, color: "text-emerald-500" },
+    { label: "Alpha Coefficient", value: featured.profit_factor || "3.24", icon: TrendingUp, color: "text-white" },
+    { label: "Risk Governance", value: featured.risk_reward || "1:3.5", icon: ShieldCheck, color: "text-emerald-500" },
   ];
 
   return (
@@ -37,28 +47,29 @@ export const Results = () => {
 
       <PageMeta
         title="Institutional Performance Analytics | IFX TRADES"
-        description="Access verified performance data across the IFX multi-strategy ecosystem: 82.4% win rate, 3.24 profit factor, consistent equity growth."
+        description="Access verified performance analytics across the IFX multi-strategy ecosystem: High-fidelity strategy reliability, professional alpha coefficients, and consistent equity growth metrics."
         path="/results"
+        keywords={["institutional performance", "forex analytics", "strategy reliability", "quantitative growth", "algorithmic verification"]}
       />
 
       <div className="max-w-7xl mx-auto px-6 sm:px-12 relative z-10">
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-12 mb-32">
           <div className="space-y-10">
-            <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-emerald-500/[0.04] border border-emerald-500/[0.15] text-emerald-500 text-[10px] font-black uppercase tracking-[0.4em]">
-              Institutional Performance Data
+            <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-emerald-500/[0.04] border border-emerald-500/[0.15] text-emerald-400 text-[10px] font-black uppercase tracking-[0.4em]">
+              Institutional Performance Data Node
             </div>
             <h1 className="text-shimmer leading-[0.9]">
-              Strategy <br />
-              <span className="italic font-serif text-gradient-emerald">Analytics.</span>
+              Quantitative <br />
+              <span className="italic font-serif text-gradient-emerald">Performance.</span>
             </h1>
             <p className="text-lg text-gray-400 max-w-2xl font-light leading-relaxed">
-              Transparent reporting across our elite algorithmic ecosystem. Every data point represents a verified outcome within the IFX multi-strategy execution framework.
+              Transparent reporting across our elite algorithmic ecosystem. Every data point represents a verified outcome within the IFX TRADES multi-strategy execution framework.
             </p>
           </div>
           
           <div className="flex gap-12">
              <div className="flex flex-col items-end">
-                <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em] mb-3">Pips Captured</span>
+                <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em] mb-3">Model Capture</span>
                 <span className="text-4xl font-black text-emerald-500 font-mono tracking-tighter italic">
                    +{results.reduce((acc, r) => acc + (r.pips || 0), 0).toLocaleString() || "48,240"}
                 </span>
@@ -78,7 +89,7 @@ export const Results = () => {
                   Equity Curve Analysis
                </h3>
                <div className="px-4 py-2 bg-emerald-500/[0.05] border border-emerald-500/[0.1] rounded-full text-[9px] font-black text-emerald-500/60 uppercase tracking-widest italic">
-                  Verified Strategy Data
+                  Verified Protocol Data
                </div>
             </div>
 
@@ -110,8 +121,8 @@ export const Results = () => {
                         letterSpacing: "0.2em"
                       }}
                       itemStyle={{ color: "#10B981" }}
-                      labelFormatter={(label) => `Period: ${label}`}
-                      formatter={(value: any) => [`${value} Pips`, 'Strategy Performance']}
+                      labelFormatter={(label) => `Node Cycle: ${label}`}
+                      formatter={(value: any) => [`${value} Points`, 'Model Performance']}
                     />
                     <Area type="monotone" dataKey="pips" stroke="#10B981" strokeWidth={3} fill="url(#ifxCurve)" />
                   </AreaChart>
@@ -152,7 +163,7 @@ export const Results = () => {
                  <h3 className="text-[10px] font-black text-white uppercase tracking-[0.4em]">Verification Standards</h3>
               </div>
               <p className="text-[11px] font-light text-white/30 uppercase tracking-[0.2em] leading-relaxed italic">
-                 Every strategy execution and algorithmic trade is logged within our proprietary verification protocol for absolute transparency.
+                 Every model execution and algorithmic pulse is logged within our proprietary verification protocol for absolute transparency.
               </p>
             </motion.div>
           </div>

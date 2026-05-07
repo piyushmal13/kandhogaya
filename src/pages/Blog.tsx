@@ -60,27 +60,31 @@ export const Blog = () => {
   return (
     <div className="relative overflow-hidden pb-20">
       <PageMeta
-        title="Institutional Research & Alpha Intelligence"
-        description="Deep-dive analysis on liquid currency pairs, gold market structure, and systemic macro developments from the IFX research desk. Strategically engineered for institutional decision makers."
+        title="Institutional Research & Alpha Intelligence | IFX TRADES"
+        description="Deep-dive research briefings on liquid currency pairs, gold market structure, and systemic macro developments from the IFX principal research desk."
         path="/research"
-        keywords={["institutional forex research", "macro market analysis", "gold market structure", "macro research 2026", "quantitative trading insights"]}
+        keywords={["institutional forex research", "macro market analysis", "gold market structure", "quantitative research 2026", "algorithmic intelligence briefings"]}
         structuredData={breadcrumbSchema([
           { name: "Home", path: "/" },
-          { name: "Market Insights", path: "/blog" },
+          { name: "Intelligence Desk", path: "/blog" },
         ])}
       />
 
       <PageHero
-        eyebrow="Elite Intelligence"
+        eyebrow="Intelligence Briefings"
         title={
           <>
-            Strategic research for <span className="site-title-gradient">institutional players.</span>
+            Strategic research for <span className="site-title-gradient">institutional operators.</span>
           </>
         }
-        description="Advanced analysis derived from macro capital flow, systemic liquidity shifts, and macroeconomic structural integrity. We prioritize technical alpha over content volume."
+        description="Advanced research derived from macro capital flow, systemic liquidity shifts, and macroeconomic structural integrity. Secure your competitive edge with our proprietary alpha generation."
+        actions={[
+          { label: "Secure Data Access", to: "/login", variant: "primary" },
+          { label: "Review Methodology", to: "/about", variant: "secondary" }
+        ]}
         metrics={[
           { label: "Alpha Depth", value: "High-Fidelity", helper: "Institutional-grade market framing" },
-          { label: "Desk Cadence", value: "Systematic Pulse", helper: "Daily live market intelligence" },
+          { label: "Desk Cadence", value: "Systematic Pulse", helper: "Daily live research briefings" },
         ]}
         aside={
           <div className="space-y-4">
@@ -88,7 +92,7 @@ export const Blog = () => {
               <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500 group-focus-within:text-emerald-200" />
               <input
                 type="text"
-                placeholder="Search analysis..."
+                placeholder="Search briefings..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full rounded-2xl border border-white/10 bg-black/30 py-3 pr-4 pl-12 text-sm text-white outline-none focus:border-emerald-300/40"
@@ -96,7 +100,7 @@ export const Blog = () => {
             </form>
             <button className="inline-flex items-center gap-3 rounded-2xl border border-white/5 bg-white/5 px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-emerald-400 transition-all">
               <Filter className="h-3.5 w-3.5 text-emerald-500" />
-              INTELLIGENCE TYPE
+              PROTOCOL TYPE
             </button>
           </div>
         }
@@ -130,7 +134,7 @@ export const Blog = () => {
                       {/* Floating Category Tag */}
                       <div className="absolute top-6 left-6">
                         <div className="px-3 py-1 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-emerald-400 text-[9px] font-black uppercase tracking-widest">
-                          {post.category || "Research"}
+                          {post.category || "Research Node"}
                         </div>
                       </div>
                     </div>
@@ -145,7 +149,7 @@ export const Blog = () => {
                          </div>
                          <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.15em] text-gray-500/50 bg-white/5 px-2 py-0.5 rounded-md">
                            <Clock className="h-2.5 w-2.5" />
-                           5 MIN
+                           5 MIN NODE
                          </div>
                       </div>
 
@@ -166,7 +170,7 @@ export const Blog = () => {
                               {(post.metadata?.author_name || (post as any).author?.full_name || "A").charAt(0)}
                            </div>
                            <span className="text-[10px] font-black uppercase tracking-widest text-gray-500">
-                             {post.metadata?.author_name || (post as any).author?.full_name || "IFX ANALYST"}
+                             {post.metadata?.author_name || (post as any).author?.full_name || "IFX PRINCIPAL RESEARCHER"}
                            </span>
                         </div>
                         <div className="w-10 h-10 rounded-full border border-white/5 flex items-center justify-center group-hover:bg-emerald-500 group-hover:border-emerald-500 text-gray-600 group-hover:text-black transition-all duration-300 transform group-hover:rotate-45">
@@ -191,13 +195,13 @@ export const Blog = () => {
 
         {loading && posts.length > 0 && (
           <div className="mt-12 flex justify-center">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-[var(--accent)] border-t-transparent" />
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent" />
           </div>
         )}
 
         {!loading && posts.length === 0 && (
           <div className="py-20 text-center">
-            <p className="text-slate-500">No analysis found matching your search.</p>
+            <p className="text-slate-500 uppercase font-black text-[10px] tracking-widest">No intelligence briefings found matching your protocol.</p>
           </div>
         )}
       </PageSection>

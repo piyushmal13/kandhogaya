@@ -123,7 +123,7 @@ export const Navbar = () => {
                     <motion.div
                       layoutId="navbar-indicator"
                       className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 w-6 bg-emerald-400 rounded-t-full shadow-[0_-2px_10px_rgba(16,185,129,0.5)]"
-                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                      transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
                     />
                   )}
                 </Link>

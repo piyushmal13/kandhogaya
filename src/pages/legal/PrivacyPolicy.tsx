@@ -3,11 +3,11 @@ import { LegalDocument } from "../../components/site/LegalDocument";
 export const PrivacyPolicy = () => (
   <LegalDocument
     title="Privacy Policy"
-    description="This Privacy Policy explains how IFXTrades collects, uses, and protects information across the platform."
+    description="This Privacy Policy explains how IFX TRADES collects, uses, and protects information across the platform."
     path="/privacy"
     updated="March 2026"
   >
-    <p>Welcome to IFXTrades ("we," "our," or "us"). We are committed to protecting your personal information and your right to privacy.</p>
+    <p>Welcome to IFX TRADES ("we," "our," or "us"). We are committed to protecting your personal information and your right to privacy.</p>
 
     <section>
       <h2>1. Information We Collect</h2>
@@ -21,8 +21,8 @@ export const PrivacyPolicy = () => (
     <section>
       <h2>2. How We Use Information</h2>
       <ul>
-        <li>Deliver and maintain the IFXTrades platform and support workflows.</li>
-        <li>Improve trader experience, product quality, and operational stability.</li>
+        <li>Deliver and maintain the IFX TRADES platform and support workflows.</li>
+        <li>Improve participant experience, product quality, and operational stability.</li>
         <li>Communicate product updates, security notices, and service-related messages.</li>
         <li>Monitor misuse, fraud, or behavior that could affect platform integrity.</li>
       </ul>

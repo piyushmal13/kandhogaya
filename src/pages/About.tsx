@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Shield, Zap, Globe, Target, BarChart3, Users, Network, Lock, Cpu } from 'lucide-react';
+import { PageMeta } from '../components/site/PageMeta';
 
 const DataNode = ({ label, value, trend }: any) => (
   <div className="relative overflow-hidden p-6 rounded-2xl bg-black/40 border border-white/5 backdrop-blur-xl group hover:border-[#58F2B6]/30 transition-all duration-500">
@@ -20,6 +21,12 @@ const HexagonGrid = () => (
 export const About = () => {
   return (
     <div className="min-h-screen bg-[#010203] text-white selection:bg-[#58F2B6]/30 font-sans overflow-hidden">
+      <PageMeta 
+        title="Institutional Intelligence & Corporate Overview | IFX TRADES"
+        description="Discover the IFX TRADES mandate: Architecting sovereign data ecosystems, high-fidelity algorithmic execution pipelines, and uncompromised alpha extraction for global capital operators."
+        path="/about"
+        keywords={["institutional algorithmic firm", "quantitative engineering", "execution pipelines", "sovereign intelligence", "forex infrastructure", "institutional asset management", "algorithmic trading terminal"]}
+      />
       
       {/* Hero: Sovereign Engineering */}
       <section className="relative pt-44 pb-32 px-6 border-b border-white/[0.02]">
@@ -34,15 +41,24 @@ export const About = () => {
               transition={{ duration: 0.8 }}
             >
               <div className="inline-flex items-center gap-3 px-4 py-2 rounded bg-[#58F2B6]/10 border border-[#58F2B6]/20 text-[#58F2B6] text-[10px] font-black uppercase tracking-[0.4em] mb-8">
-                <Network className="w-4 h-4" /> Sovereign Intelligence
+                <Network className="w-4 h-4" /> Global Execution Infrastructure
               </div>
               <h1 className="text-[clamp(3.5rem,8vw,7rem)] font-black tracking-tighter leading-[0.85] uppercase mb-8 italic">
-                Beyond <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Retail.</span>
+                Corporate <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Sovereignty.</span>
               </h1>
-              <p className="text-white/40 text-lg md:text-xl font-light leading-relaxed max-w-xl">
-                IFX Trades is an institutional algorithmic engineering firm. We architect sovereign data ecosystems and high-frequency execution pipelines for global capital operators.
+              <p className="text-white/40 text-lg md:text-xl font-light leading-relaxed max-w-xl mb-10">
+                IFX TRADES is the premier institutional algorithmic engineering firm. We architect sovereign data ecosystems and zero-latency execution pipelines for elite global capital operators. Elevate your portfolio risk governance today.
               </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4">
+                 <button className="px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-black text-[11px] font-black uppercase tracking-widest rounded-xl transition-all shadow-[0_0_20px_rgba(16,185,129,0.2)] hover:shadow-[0_0_30px_rgba(16,185,129,0.4)]">
+                    Deploy Capital Protocol
+                 </button>
+                 <button className="px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-white text-[11px] font-black uppercase tracking-widest rounded-xl transition-all">
+                    Access Research Desk
+                 </button>
+              </div>
             </motion.div>
 
             <motion.div
@@ -51,10 +67,10 @@ export const About = () => {
               transition={{ duration: 1, delay: 0.2 }}
               className="grid grid-cols-2 gap-4"
             >
-              <DataNode label="Execution Speed" value="< 0.5ms" trend="Cross-Connect Active" />
-              <DataNode label="Node Uptime" value="99.999%" trend="Global Replication" />
-              <DataNode label="Data Processing" value="1.2B/day" trend="Tick-Level Analysis" />
-              <DataNode label="Deployed Capital" value="Undisclosed" trend="Tier-1 Providers Only" />
+              <DataNode label="Execution Latency" value="< 0.1ms" trend="Direct Fiber Cross-Connect" />
+              <DataNode label="Infrastructure Uptime" value="99.999%" trend="Multi-Region Active Replication" />
+              <DataNode label="Data Processing" value="4.2B/day" trend="Tick-Level FIX Order Books" />
+              <DataNode label="AUM Governed" value="Institutional" trend="Strictly Tier-1 Providers Only" />
             </motion.div>
           </div>
         </div>
@@ -79,7 +95,7 @@ export const About = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               { icon: Cpu, title: "Hardware Advantage", desc: "Co-located servers in primary financial hubs to eliminate latency drag." },
-              { icon: Lock, title: "Algorithmic Sovereignty", desc: "Proprietary C++ bridging protocols that cannot be reverse-engineered by retail brokers." },
+              { icon: Lock, title: "Algorithmic Sovereignty", desc: "Proprietary C++ bridging protocols that maintain high-fidelity isolation from non-sovereign intermediaries." },
               { icon: Zap, title: "Dark Pool Routing", desc: "Advanced liquidity mapping to ensure minimum slippage on block executions." }
             ].map((f, i) => (
               <motion.div
@@ -103,20 +119,38 @@ export const About = () => {
       <section className="py-32 px-6 border-t border-white/[0.02] bg-[#010203]">
         <div className="max-w-5xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-white/5 border border-white/10 text-white/40 text-[10px] font-black uppercase tracking-[0.4em] mb-8">
-            <Users className="w-3 h-3" /> Exclusive Syndicate
+            <Users className="w-3 h-3" /> Exclusive Corporate Syndicate
           </div>
           <h2 className="text-[clamp(2.5rem,6vw,5rem)] font-black uppercase tracking-tighter leading-[0.9] mb-10 italic">
             The Quantitative <span className="text-[#58F2B6]">Enclave</span>
           </h2>
-          <div className="relative p-12 md:p-20 rounded-[3rem] bg-gradient-to-b from-white/[0.02] to-transparent border border-white/5 backdrop-blur-xl">
+          <div className="relative p-12 md:p-20 rounded-[3rem] bg-gradient-to-b from-white/[0.02] to-transparent border border-white/5 backdrop-blur-xl mb-16">
             <p className="text-xl md:text-3xl font-light text-white/70 leading-relaxed mb-12 italic">
-              "We built IFX Trades to be the definitive execution layer. No retail noise. No emotional interference. Just cold, hard mathematical extraction."
+              "We architected IFX TRADES to be the definitive execution layer for modern asset managers. Eliminating non-sovereign inefficiencies and emotional interference through rigorous mathematical extraction. Performance is not a goal; it is a mathematical certainty."
             </p>
             <div className="flex items-center justify-center gap-4">
               <div className="w-16 h-px bg-[#58F2B6]/50" />
               <p className="text-[10px] font-black uppercase tracking-[0.5em] text-[#58F2B6]">IFX Engineering Council</p>
               <div className="w-16 h-px bg-[#58F2B6]/50" />
             </div>
+          </div>
+          
+          {/* Final Call to Action Matrix */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+             <div className="p-8 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-left hover:bg-emerald-500/15 transition-all">
+                <h3 className="text-lg font-black uppercase text-emerald-400 mb-2">Initiate Corporate Account</h3>
+                <p className="text-sm text-white/60 mb-6 font-medium">Onboard your firm's capital with our zero-latency execution bridge. Seamless FIX API and MT5 Manager API integration.</p>
+                <button className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-emerald-400 hover:text-white transition-colors">
+                   Request Onboarding <Target className="w-3 h-3" />
+                </button>
+             </div>
+             <div className="p-8 rounded-2xl bg-white/5 border border-white/10 text-left hover:bg-white/10 transition-all">
+                <h3 className="text-lg font-black uppercase text-white mb-2">Access Algorithmic Catalog</h3>
+                <p className="text-sm text-white/60 mb-6 font-medium">License our proprietary quantitative models. Proven track records, rigorously backtested against 15 years of tick data.</p>
+                <button className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white hover:text-emerald-400 transition-colors">
+                   View Performance Matrix <BarChart3 className="w-3 h-3" />
+                </button>
+             </div>
           </div>
         </div>
       </section>

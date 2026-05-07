@@ -43,10 +43,10 @@ export const Academy = () => {
   const content = (
     <div className={user ? "pb-24" : "pt-32 pb-24 md:pt-48 md:pb-48"}>
       <PageMeta
-        title="IFX Academy | Institutional Certification"
-        description="Explore the IFX TRADES Academy for structured trader education across forex, gold, and algorithmic execution workflows."
+        title="IFX Academy | Institutional Quantitative Certification"
+        description="Explore the IFX TRADES Academy for sovereign institutional education across quantitative analysis, gold execution, and algorithmic architecture."
         path="/academy"
-        keywords={["trading academy", "forex education", "algo trading course"]}
+        keywords={["quantitative education", "institutional forex course", "algorithmic execution training", "market architecture mastery"]}
       />
 
       <div className="max-w-[1440px] mx-auto px-6 sm:px-12 space-y-16 md:space-y-32">
@@ -57,25 +57,25 @@ export const Academy = () => {
               animate={{ opacity: 1, x: 0 }}
               className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-emerald-500/[0.04] border border-emerald-500/[0.15] text-emerald-400 text-[10px] font-bold uppercase tracking-[0.2em]"
             >
-              Professional Education
+              Institutional Education Node
             </motion.div>
             <h1 className="text-5xl md:text-7xl font-bold mb-6 text-white tracking-tight leading-[0.9]">
-              Elite <br />
+              Sovereign <br />
               <span className="text-emerald-400">Curriculum.</span>
             </h1>
             <p className="text-base md:text-xl text-white/40 max-w-2xl font-medium leading-relaxed mx-auto lg:mx-0">
-              Curriculum engineered for traders moving from intuition-led entries toward systematic execution, risk discipline, and algorithmic repeatability.
+              Curriculum engineered for participants moving from intuition-led entries toward systematic execution, risk discipline, and algorithmic repeatability.
             </p>
           </div>
           
           <div className="flex justify-center lg:justify-end gap-12 md:gap-16 border-t lg:border-t-0 lg:border-l border-white/5 pt-12 lg:pt-0 lg:pl-16">
              <div className="flex flex-col items-center lg:items-end">
-                <span className="text-[10px] font-bold text-white/20 uppercase tracking-[0.2em] mb-3 leading-none">Programmes</span>
+                <span className="text-[10px] font-bold text-white/20 uppercase tracking-[0.2em] mb-3 leading-none">Research Modules</span>
                 <span className="text-4xl md:text-6xl font-bold text-white tabular-nums">{loading ? "--" : courses.length}</span>
              </div>
              <div className="flex flex-col items-center lg:items-end">
-                <span className="text-[10px] font-bold text-white/20 uppercase tracking-[0.2em] mb-3 leading-none">Catalogue</span>
-                <span className="text-4xl md:text-6xl font-bold text-emerald-500">2024</span>
+                <span className="text-[10px] font-bold text-white/20 uppercase tracking-[0.2em] mb-3 leading-none">Node Cycle</span>
+                <span className="text-4xl md:text-6xl font-bold text-emerald-500">2026</span>
              </div>
           </div>
         </div>
@@ -84,7 +84,6 @@ export const Academy = () => {
           {loading ? (
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {Array.from({ length: 3 }).map((_, i) => (
-                // eslint-disable-next-line react/no-array-index-key
                 <CourseCardSkeleton key={`academy-skeleton-${i}`} />
               ))}
             </div>
@@ -92,7 +91,7 @@ export const Academy = () => {
             <>
               {courses.length === 0 ? (
                 <div className="bg-white/[0.02] border border-white/5 rounded-[3rem] p-20 text-center">
-                   <div className="text-xl font-bold text-white/30 uppercase tracking-widest">No Programmes Available</div>
+                   <div className="text-xl font-bold text-white/30 uppercase tracking-widest">No Modules Online</div>
                    <p className="text-[10px] font-bold text-white/10 uppercase tracking-[0.2em] mt-3">Please check back later or contact institutional support.</p>
                 </div>
               ) : (
@@ -110,7 +109,7 @@ export const Academy = () => {
                           thumbnailUrl: getCourseImage(course),
                           duration: typeof course.duration === 'string' ? Number.parseInt(course.duration, 10) || 60 : 60,
                           moduleCount: course.chapters?.length || course.lessons?.length || 0,
-                          level: (course.level?.toLowerCase() === 'advanced' ? 'institutional' : course.level?.toLowerCase() || 'beginner') as any,
+                          level: (course.level?.toLowerCase() === 'advanced' ? 'institutional' : course.level?.toLowerCase() || 'beginner') as 'beginner' | 'intermediate' | 'advanced' | 'institutional',
                           isPremium: course.price > 0,
                           enrolledCount: 1420 + index * 85,
                           description: course.description,
@@ -137,7 +136,7 @@ export const Academy = () => {
               <div className="space-y-2">
                  <h4 className="text-sm font-black text-white uppercase tracking-widest">Execution Methodology</h4>
                  <p className="text-sm font-light text-white/40 leading-relaxed">
-                    Focused on market structure, directional bias, and the mechanical execution of high-probability trading models within a systematic framework.
+                    Focused on market structure, directional bias, and the mechanical execution of high-probability quantitative models within a systematic framework.
                  </p>
               </div>
            </div>
@@ -151,7 +150,7 @@ export const Academy = () => {
               <div className="space-y-2">
                  <h4 className="text-sm font-black text-white uppercase tracking-widest">Risk Governance</h4>
                  <p className="text-sm font-light text-white/40 leading-relaxed">
-                    Advanced study into trade management, portfolio survival metrics, and the psychological governance required for institutional capital scaling.
+                    Advanced study into capital management, portfolio survival metrics, and the psychological governance required for institutional scaling.
                  </p>
               </div>
            </div>

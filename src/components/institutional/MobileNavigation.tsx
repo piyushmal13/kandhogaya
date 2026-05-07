@@ -42,7 +42,7 @@ export function MobileNavigation() {
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
-              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+              transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
               className="fixed left-0 top-0 h-full w-[80vw] max-w-[320px] bg-black z-[80] lg:hidden border-r border-white/5 shadow-[20px_0_50px_rgba(0,0,0,1)]"
             >
               <div className="p-8 border-b border-white/5 flex justify-between items-center bg-white/[0.02]">

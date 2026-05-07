@@ -38,9 +38,17 @@ export const Webinars = () => {
               Institutional <br />
               <span className="text-emerald-500">Research Terminal.</span>
             </h1>
-            <p className="text-base md:text-xl text-white/40 max-w-3xl font-medium leading-relaxed">
-              Real-time synchronization with the IFX Global Research Desk. Professional market analysis and algorithmic execution breakdowns.
+            <p className="text-base md:text-xl text-white/40 max-w-3xl font-medium leading-relaxed mb-6">
+              Real-time synchronization with the IFX Global Research Desk. Professional market analysis, algorithmic execution breakdowns, and proprietary risk governance models. Register your node to join the live broadcast.
             </p>
+            <div className="flex flex-col sm:flex-row gap-4 pt-2">
+              <button className="px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-black text-[11px] font-black uppercase tracking-widest rounded-xl transition-all shadow-[0_0_20px_rgba(16,185,129,0.2)] hover:shadow-[0_0_30px_rgba(16,185,129,0.4)]">
+                 Access Live Terminal
+              </button>
+              <button className="px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-white text-[11px] font-black uppercase tracking-widest rounded-xl transition-all">
+                 Request Session Archive
+              </button>
+            </div>
           </div>
 
           <AdBanner placement="webinar" />

@@ -7,7 +7,14 @@ import {
   Target, RefreshCcw, Workflow, Lock, Terminal
 } from 'lucide-react';
 
-const NeuralNode = ({ x, y, delay, color }: any) => (
+interface NeuralNodeProps {
+  x: number;
+  y: number;
+  delay: number;
+  color: string;
+}
+
+const NeuralNode = ({ x, y, delay, color }: NeuralNodeProps) => (
   <motion.div
     initial={{ opacity: 0, scale: 0 }}
     animate={{ opacity: [0, 1, 0.5, 1], scale: 1 }}
@@ -19,7 +26,13 @@ const NeuralNode = ({ x, y, delay, color }: any) => (
   </motion.div>
 );
 
-const QuantumState = ({ title, value, status }: any) => (
+interface QuantumStateProps {
+  title: string;
+  value: string;
+  status: 'optimal' | 'active' | 'standby';
+}
+
+const QuantumState = ({ title, value, status }: QuantumStateProps) => (
   <div className="p-4 bg-black/40 border border-emerald-500/10 rounded-2xl backdrop-blur-xl">
     <div className="text-[9px] font-black tracking-widest text-emerald-500/50 uppercase mb-2">{title}</div>
     <div className="text-xl font-black text-white font-mono tracking-tighter">{value}</div>
@@ -37,8 +50,9 @@ export const QuantX = () => {
   return (
     <div ref={containerRef} className="min-h-screen bg-[#000] text-white selection:bg-emerald-500/30 font-sans overflow-hidden">
       <PageMeta 
-        title="QuantX Ecosystem | Autonomous Neural Execution"
-        description="Experience the QuantX AI. A multi-layer cognitive ecosystem designed for institutional-grade gold execution."
+        title="QuantX Ecosystem | Institutional Neural Market Architecture"
+        description="Asia's premier QuantX cognitive engine. A multi-layer neural ecosystem engineered for sovereign institutional-grade market intelligence."
+        keywords={["QuantX", "neural market architecture", "institutional trading AI", "quantitative execution", "forex intelligence engine"]}
       />
 
       {/* Hero Section - The AI Core */}
@@ -82,17 +96,17 @@ export const QuantX = () => {
               >
                 <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-emerald-500/5 border border-emerald-500/10 text-emerald-400 text-[10px] font-black uppercase tracking-[0.4em] mb-8 shadow-[0_0_30px_rgba(16,185,129,0.1)]">
                   <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  Neural Protocol Active
+                  Neural Intelligence Active
                 </div>
                 <h1 className="text-[clamp(4rem,10vw,10rem)] font-black tracking-tighter leading-[0.85] uppercase mb-8">
                   QUANT<span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500 italic">X</span>
                 </h1>
                 <p className="text-white/40 text-lg md:text-2xl max-w-2xl leading-relaxed mb-10 font-light">
-                  A sovereign artificial intelligence engine engineered for zero-latency institutional market extraction.
+                  A sovereign intelligence engine engineered for low-latency institutional market analysis and quantitative execution.
                 </p>
                 <div className="flex flex-wrap gap-6">
                   <button className="px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-black uppercase tracking-widest rounded-xl transition-all shadow-[0_0_30px_rgba(16,185,129,0.3)] flex items-center gap-2">
-                    Initialize Terminal <ChevronRight className="w-4 h-4" />
+                    Initialize Node <ChevronRight className="w-4 h-4" />
                   </button>
                   <button className="px-8 py-4 bg-white/5 hover:bg-white/10 text-white text-xs font-black uppercase tracking-widest rounded-xl border border-white/10 transition-all flex items-center gap-2">
                     <Terminal className="w-4 h-4" /> View Architecture
@@ -110,7 +124,7 @@ export const QuantX = () => {
               >
                 <QuantumState title="Machine Learning" value="Deep-Q Net" status="optimal" />
                 <QuantumState title="Tick Processing" value="1.2M/sec" status="active" />
-                <QuantumState title="Win Probability" value="84.2%" status="optimal" />
+                <QuantumState title="Model Confidence" value="High-Sigma" status="optimal" />
                 <QuantumState title="Risk Protocol" value="Hardened" status="active" />
               </motion.div>
             </div>
@@ -126,15 +140,15 @@ export const QuantX = () => {
               Autonomous <br /><span className="text-emerald-500">Cognition</span>
             </h2>
             <p className="text-white/40 text-lg md:text-xl max-w-2xl mx-auto">
-              QuantX does not guess. It computes. Operating on massive datasets, identifying anomalies that human analysts cannot perceive.
+              QuantX computes sovereign market opportunities by identifying anomalies that human analysts cannot perceive, operating on massive institutional datasets.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { icon: Brain, title: "Pattern Recognition", desc: "Real-time analysis of Level II liquidity and dark pool order flow." },
-              { icon: Zap, title: "HFT Execution Bridge", desc: "Orders dispatched directly to Tier-1 liquidity providers via custom FIX API." },
-              { icon: ShieldAlert, title: "Dynamic Risk Shield", desc: "Recursive logic adjusts exposure dynamically based on live market volatility." }
+              { icon: Brain, title: "Pattern Logic", desc: "Real-time analysis of Level II liquidity and institutional order flow anomalies." },
+              { icon: Zap, title: "Connectivity Bridge", desc: "Data streams dispatched directly to sovereign nodes via low-latency custom FIX API." },
+              { icon: ShieldAlert, title: "Dynamic Risk Shield", desc: "Recursive logic adjusts exposure dynamically based on institutional risk governance." }
             ].map((f, i) => (
               <motion.div
                 key={f.title}
@@ -163,13 +177,13 @@ export const QuantX = () => {
            <div className="p-12 md:p-24 rounded-[3rem] bg-white/[0.01] border border-white/[0.05] backdrop-blur-3xl text-center">
              <Cpu className="w-20 h-20 text-emerald-500 mx-auto mb-8 opacity-50" />
              <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter mb-6">
-               Ready for Deployment
+               Node Access Requested
              </h2>
              <p className="text-white/40 text-lg max-w-xl mx-auto mb-10">
-               Integrate the QuantX cognitive engine directly into your institutional execution environment today.
+               Integrate the QuantX cognitive engine directly into your institutional research environment today.
              </p>
              <button className="px-10 py-5 bg-emerald-500 hover:bg-emerald-400 text-black font-black uppercase tracking-widest text-sm rounded-2xl shadow-[0_0_40px_rgba(16,185,129,0.3)] transition-all">
-               Deploy Framework
+               License Framework
              </button>
            </div>
         </div>
