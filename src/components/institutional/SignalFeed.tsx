@@ -4,10 +4,10 @@ import { motion, AnimatePresence } from "motion/react";
 import { useSignals } from '@/hooks/useSignals';
 
 /**
- * IntelligenceFeed (v2.0)
+ * EducationalMarketStudies (v2.0)
  * 
  * The Live Alpha Pulse of the Elite Terminal.
- * Features: Absolute zero-CLS state management, institutional telemetry markers, and instant execution triggers.
+ * Features: Absolute zero-CLS state management, educational telemetry markers, and instant case study triggers.
  */
 export function SignalFeed() {
   const { data: signals, isLoading } = useSignals();
@@ -24,9 +24,9 @@ export function SignalFeed() {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
           </div>
-          <h3 className="text-xs font-black uppercase tracking-[0.4em] text-foreground">Strategic Intelligence Hub</h3>
+          <h3 className="text-xs font-black uppercase tracking-[0.4em] text-foreground">Market Analysis Case Studies</h3>
         </div>
-        <div className="text-[9px] font-mono text-emerald-500/60 uppercase tracking-widest">Live Alpha Stream: SECURED</div>
+        <div className="text-[9px] font-mono text-emerald-500/60 uppercase tracking-widest">Educational Analysis: ACTIVE</div>
       </div>
 
       {/* Feed Area - Fixed Height for Zero-CLS */}
@@ -60,7 +60,7 @@ export function SignalFeed() {
                       <div className="text-lg font-black text-foreground tracking-tighter uppercase leading-none mb-1">
                         {signal.symbol} 
                         <span className={`ml-2 text-[10px] ${signal.direction === 'BUY' ? 'text-primary-400' : 'text-red-500'}`}>
-                          {signal.direction}
+                          {signal.direction === 'BUY' ? 'BULLISH BIAS' : 'BEARISH BIAS'}
                         </span>
                       </div>
                       <div className="text-[10px] font-mono text-white/20 uppercase tracking-widest">
@@ -73,18 +73,18 @@ export function SignalFeed() {
                     <div className="text-lg font-mono font-black text-foreground tracking-tighter tabular-nums mb-0.5">
                       {signal.entry?.toFixed(5) || '0.00000'}
                     </div>
-                    <div className="text-[8px] font-black uppercase tracking-[0.3em] text-primary-500/60">Elite Alpha Entry</div>
+                    <div className="text-[8px] font-black uppercase tracking-[0.3em] text-primary-500/60">Key Level</div>
                   </div>
                 </div>
                 
                 <div className="mt-5 flex items-center justify-between">
                   <div className="flex gap-4">
                     <div className="flex flex-col">
-                      <span className="text-[8px] font-black uppercase tracking-widest text-white/20">TP_Target</span>
+                      <span className="text-[8px] font-black uppercase tracking-widest text-white/20">Target Resistance</span>
                       <span className="text-xs font-mono font-black text-primary-400">{signal.take_profit?.toFixed(5) || '—'}</span>
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-[8px] font-black uppercase tracking-widest text-white/20">SL_Guard</span>
+                      <span className="text-[8px] font-black uppercase tracking-widest text-white/20">Key Support</span>
                       <span className="text-xs font-mono font-black text-red-400">{signal.stop_loss?.toFixed(5) || '—'}</span>
                     </div>
                   </div>
@@ -93,9 +93,9 @@ export function SignalFeed() {
                     variant="institutional-outline" 
                     size="sm"
                     className="h-8 px-4"
-                    trackingEvent={`intelligence_view_${signal.id}`}
+                    trackingEvent={`case_study_view_${signal.id}`}
                   >
-                    View Research
+                    View Case Study
                   </EliteButton>
                 </div>
               </motion.div>

@@ -1,12 +1,13 @@
 import { motion } from 'motion/react';
 import { EliteButton } from '@/components/ui/Button';
-import { Rocket, ShieldAlert, FileText, Download } from 'lucide-react';
+import { ShieldAlert, FileText, Download, ShieldCheck, GraduationCap } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 
 const ACTIONS = [
-  { label: 'Deploy Algorithm', icon: Rocket, event: 'action_deploy', variant: 'elite' as const, glow: true },
-  { label: 'Risk Audit', icon: ShieldAlert, event: 'action_risk', variant: 'institutional-outline' as const, glow: false },
-  { label: 'Export Reports', icon: FileText, event: 'action_export', variant: 'institutional-outline' as const, glow: false },
-  { label: 'Download API', icon: Download, event: 'action_api', variant: 'institutional-outline' as const, glow: false },
+  { label: 'Access Masterclass', icon: GraduationCap, event: 'action_masterclass', variant: 'elite' as const, glow: true, path: '/academy' },
+  { label: 'Risk Audit', icon: ShieldAlert, event: 'action_risk', variant: 'institutional-outline' as const, glow: false, path: '/consultation' },
+  { label: 'Export Reports', icon: FileText, event: 'action_export', variant: 'institutional-outline' as const, glow: false, path: '#' },
+  { label: 'Download Curriculum', icon: Download, event: 'action_curriculum', variant: 'institutional-outline' as const, glow: false, path: '/academy' },
 ] as const;
 
 /**
@@ -16,6 +17,9 @@ const ACTIONS = [
  * Features: Instant execution triggers, high-velocity interactions, and unified tracking.
  */
 export function QuickActions() {
+  const { user } = useAuth();
+  const isAdmin = user?.email === 'piyushmalmantra01@gmail.com' || user?.email === 'piyushmal13@gmail.com';
+
   return (
     <div className="p-8 rounded-[2.5rem] bg-white/[0.02] border border-white/10 backdrop-blur-xl relative overflow-hidden group">
       <div className="absolute inset-0 bg-gradient-to-br from-white/[0.01] to-transparent pointer-events-none" />
@@ -26,6 +30,19 @@ export function QuickActions() {
       </h3>
       
       <div className="grid grid-cols-1 gap-4 relative z-10">
+        {isAdmin && (
+          <EliteButton 
+            variant="premium-gold"
+            glowEffect={true}
+            size="md"
+            className="w-full justify-start gap-4 px-6 border-white/5 hover:border-white/20 mb-2"
+            trackingEvent="admin_portal_access"
+            onClick={() => window.location.href = '/admin'}
+          >
+            <ShieldCheck className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity text-black" />
+            <span className="flex-1 text-left text-black">Admin Command Portal</span>
+          </EliteButton>
+        )}
         {ACTIONS.map((action) => (
           <EliteButton 
             key={action.label}
@@ -34,6 +51,7 @@ export function QuickActions() {
             size="md"
             className="w-full justify-start gap-4 px-6 border-white/5 hover:border-white/20"
             trackingEvent={action.event}
+            onClick={() => window.location.href = action.path}
           >
             <action.icon className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
             <span className="flex-1 text-left">{action.label}</span>

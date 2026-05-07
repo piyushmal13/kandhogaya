@@ -44,11 +44,11 @@ const variantStyles: Record<ButtonVariant, string> = {
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
-  sm: "px-4 py-2 text-xs tracking-wider",
-  md: "px-6 py-3 text-sm tracking-widest",
-  lg: "px-8 py-4 text-base tracking-[0.15em]",
-  xl: "px-10 py-5 text-lg tracking-[0.2em]",
-  'elite-hero': "px-12 py-6 text-xl tracking-[0.25em] min-w-[280px]",
+  sm: "px-3 md:px-4 py-1.5 md:py-2 text-[10px] md:text-xs tracking-wider",
+  md: "px-4 md:px-6 py-2 md:py-3 text-xs md:text-sm tracking-widest",
+  lg: "px-5 md:px-8 py-3 md:py-4 text-sm md:text-base tracking-[0.15em]",
+  xl: "px-6 md:px-10 py-4 md:py-5 text-base md:text-lg tracking-[0.2em]",
+  'elite-hero': "px-6 md:px-12 py-4 md:py-6 text-sm md:text-xl tracking-[0.15em] md:tracking-[0.25em] w-full md:w-auto md:min-w-[280px]",
 };
 
 export const Button = forwardRef<HTMLButtonElement, EliteButtonProps>(
@@ -139,7 +139,7 @@ export const Button = forwardRef<HTMLButtonElement, EliteButtonProps>(
             )}
             {!isLoading && leftIcon && <span className="group-hover:-translate-x-1 transition-transform">{leftIcon}</span>}
             
-            <span className="flex-1 whitespace-nowrap">{children}</span>
+            <span className="flex-1 whitespace-normal break-words text-center leading-snug">{children}</span>
             
             {!isLoading && rightIcon && <span className="group-hover:translate-x-1 transition-transform">{rightIcon}</span>}
           </div>

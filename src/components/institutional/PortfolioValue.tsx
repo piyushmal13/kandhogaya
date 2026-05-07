@@ -4,10 +4,10 @@ import { usePortfolioData } from '@/hooks/usePortfolioData';
 import { EliteButton } from '@/components/ui/Button';
 
 /**
- * PortfolioValue (v2.0)
+ * PlatformOverview (v2.0)
  * 
  * The High-Stakes Heartbeat of the Elite Terminal.
- * Features: Institutional transparency, verified equity tracking, and instant capital triggers.
+ * Features: Institutional transparency, verified platform analytics, and educational access.
  */
 export function PortfolioValue() {
   const { data: portfolio, isLoading } = usePortfolioData();
@@ -34,18 +34,18 @@ export function PortfolioValue() {
         <div className="flex-1">
           <div className="flex items-center gap-2 text-foreground/40 text-[10px] font-black uppercase tracking-[0.4em] mb-4">
             <ShieldCheck className="w-3.5 h-3.5 text-primary-400" />
-            Verified Institutional Equity
+            Verified Platform Analytics (Data Points)
           </div>
           
-          <div className="text-6xl lg:text-7xl font-black font-sans text-foreground tracking-tighter tabular-nums mb-3">
-            ${portfolio?.total?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) || '0.00'}
+          <div className="text-5xl lg:text-7xl font-black font-sans text-foreground tracking-tighter tabular-nums mb-3">
+            {portfolio?.total?.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 }) || '0'}
           </div>
           
           <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-black uppercase tracking-widest ${
             isPositive ? 'bg-primary-500/10 text-primary-400 border border-primary-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'
           }`}>
             {isPositive ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
-            <span>{isPositive ? '+' : ''}{portfolio?.change || 0}% Monthly Yield</span>
+            <span>{isPositive ? '+' : ''}{portfolio?.change || 0}% Platform Growth</span>
           </div>
         </div>
 
@@ -55,17 +55,19 @@ export function PortfolioValue() {
             glowEffect={true} 
             size="lg"
             className="w-full md:w-auto"
-            trackingEvent="portfolio_withdraw"
+            trackingEvent="access_academy"
+            onClick={() => window.location.href = '/academy'}
           >
-            Withdraw Core
+            Access Academy
           </EliteButton>
           <EliteButton 
             variant="institutional-outline" 
             size="lg"
             className="w-full md:w-auto"
-            trackingEvent="portfolio_deposit"
+            trackingEvent="request_consultation"
+            onClick={() => window.location.href = '/consultation'}
           >
-            Inject Capital
+            Request Consultation
           </EliteButton>
         </div>
       </div>

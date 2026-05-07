@@ -31,7 +31,7 @@ export function usePortfolioData() {
       const data = result?.data || result;
 
       return {
-        total: 125480.20, // Base Institutional Liquidity
+        total: 125480, // Base Institutional Data Points
         change: parseFloat(data?.return_pct) || 12.45,
         currency: 'USD'
       } as PortfolioData;
