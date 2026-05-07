@@ -23,7 +23,7 @@ class Tracker {
   }
 
   private initializeAnonId(): string {
-    if (typeof globalThis.window === 'undefined') return 'server';
+    if (globalThis.window === undefined) return 'server';
     let id = localStorage.getItem(STORAGE_KEY);
     if (!id) {
       id = `anon_${Math.random().toString(36).substring(2, 11)}_${Date.now()}`;
@@ -46,15 +46,15 @@ class Tracker {
       priority,
       metadata: {
         ...event.metadata,
-        url: typeof globalThis.window !== 'undefined' ? globalThis.window.location.href : '',
-        referrer: typeof globalThis.document !== 'undefined' ? globalThis.document.referrer : '',
+        url: globalThis.window !== undefined ? globalThis.window.location.href : '',
+        referrer: globalThis.document !== undefined ? globalThis.document.referrer : '',
         timestamp: new Date().toISOString()
       }
     };
 
     // Silent background execution
     publicSupabase
-      .from('analytics_events')
+      .from('user_events')
       .insert([payload])
       .then(({ error }) => {
          if (error) console.warn('[CRM] Event drop:', error.message);
@@ -80,7 +80,7 @@ class Tracker {
     
     // Update existing anon events to this user (retroactive intelligence)
     publicSupabase
-      .from('analytics_events')
+      .from('user_events')
       .update({ user_id: userId })
       .eq('anon_id', this.anonId)
       .is('user_id', null)

@@ -27,7 +27,7 @@ export const ProductManager = () => {
     const cacheKey = "products_list";
     setLoading(true);
     const res = await supabase
-      .from('algorithms')
+      .from('products')
       .select('*')
       .order('created_at', { ascending: false });
     
@@ -53,7 +53,7 @@ export const ProductManager = () => {
 
       setLoading(true);
       const res = await supabase
-        .from('algorithms')
+        .from('products')
         .select('*')
         .order('created_at', { ascending: false });
       
@@ -129,21 +129,21 @@ export const ProductManager = () => {
       
       // Update Algorithm
       const { error: updateError } = await supabase
-        .from('algorithms')
-        .update(dataToSave)
+        .from('products')
+        .update(dataToSave as any)
         .eq('id', editingId);
       
       if (updateError) throw updateError;
 
       // Update/Insert Performance Snapshot
       const { error: perfError } = await supabase
-        .from('algo_performance_snapshots')
+        .from('algo_performance_snapshots' as any)
         .upsert({
           algo_id: editingId,
           roi_pct: performanceUpdate.monthly_return,
           drawdown_pct: performanceUpdate.drawdown,
           period_start: new Date().toISOString()
-        });
+        } as any);
 
       if (perfError) console.error("Performance Update Error:", perfError);
       
@@ -163,7 +163,7 @@ export const ProductManager = () => {
     try {
       if (!session) throw new Error("No active session");
       const { error } = await supabase
-        .from('algorithms')
+        .from('products')
         .delete()
         .eq('id', productToDelete);
       
@@ -204,7 +204,7 @@ export const ProductManager = () => {
     try {
       if (!session) throw new Error("No active session");
       const { error } = await supabase
-        .from('algorithms')
+        .from('products')
         .insert([newProduct]);
       
       if (error) throw new Error(error.message || "Failed to create product");
@@ -243,7 +243,8 @@ export const ProductManager = () => {
         product_id: variantProductId,
         name: variantForm.name,
         price: variantForm.price_cents / 100, // storing as price based on schema
-      }]);
+        duration_days: 30 // institutional default
+      } as any]);
       if (error) throw error;
       setVariantForm({ name: '', sku: '', price_cents: 0, attributes: {} });
       fetchVariants(variantProductId);

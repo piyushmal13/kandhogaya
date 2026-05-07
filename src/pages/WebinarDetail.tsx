@@ -146,7 +146,7 @@ export const WebinarDetail = () => {
         {/* Presented By Section */}
         {webinar.sponsors && webinar.sponsors.length > 0 && (
           <div className="mb-12">
-            <WebinarSponsors sponsors={webinar.sponsors} />
+            <WebinarSponsors sponsors={webinar.sponsors as any} />
           </div>
         )}
 

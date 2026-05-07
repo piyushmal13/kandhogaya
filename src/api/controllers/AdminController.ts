@@ -39,26 +39,26 @@ export const AdminController = {
         licensesResult,
         ordersResult
       ] = await Promise.all([
-        supabase.from('users').select('count', { count: 'exact' }),
-        supabase.from('sales_tracking').select('sum(sale_amount)'),
-        supabase.from('webinars').select('count', { count: 'exact' }),
-        supabase.from('leads').select('count', { count: 'exact' }),
-        supabase.from('bot_licenses').select('count', { count: 'exact' }),
-        supabase.from('payments').select('sum(amount)')
+        supabase.from('users' as any).select('count', { count: 'exact' }),
+        supabase.from('sales_tracking' as any).select('sum(sale_amount)'),
+        supabase.from('webinars' as any).select('count', { count: 'exact' }),
+        supabase.from('leads' as any).select('count', { count: 'exact' }),
+        supabase.from('bot_licenses' as any).select('count', { count: 'exact' }),
+        supabase.from('payments' as any).select('sum(amount)')
       ]);
 
       // Get last 7 days trend data
-      const { data: trendData } = await supabase.rpc('get_revenue_trend', {
+      const { data: trendData } = await (supabase.rpc('get_revenue_trend' as any, {
         days: 7
-      }).catch(() => ({ data: [] }));
+      }) as any).catch(() => ({ data: [] }));
 
       res.json({
-        total_users: usersResult.count || 0,
-        total_revenue: revenueResult.data?.sum || 0,
-        total_webinars: webinarsResult.count || 0,
-        total_leads: leadsResult.count || 0,
-        total_licenses: licensesResult.count || 0,
-        total_orders: ordersResult.data?.sum || 0,
+        total_users: (usersResult as any).count || 0,
+        total_revenue: (revenueResult as any).data?.sum || 0,
+        total_webinars: (webinarsResult as any).count || 0,
+        total_leads: (leadsResult as any).count || 0,
+        total_licenses: (licensesResult as any).count || 0,
+        total_orders: (ordersResult as any).data?.sum || 0,
         revenue_trend: trendData,
         timestamp: new Date().toISOString()
       });
@@ -97,12 +97,12 @@ export const AdminController = {
       }
 
       // Enrich with commission totals
-      const agents = await Promise.all((data || []).map(async (agent) => {
-        const { count } = await supabase
-          .from('commissions')
+      const agents = await Promise.all((data || []).map(async (agent: any) => {
+        const { count } = await (supabase
+          .from('commissions' as any)
           .select('*', { count: 'exact' })
           .eq('agent_id', agent.id)
-          .eq('status', 'PENDING');
+          .eq('status', 'PENDING' as any) as any);
         
         return {
           ...agent,
@@ -133,13 +133,13 @@ export const AdminController = {
     const search = url.searchParams.get('search');
 
     try {
-      let query = supabase
-        .from('users')
+      let query = (supabase
+        .from('users' as any)
         .select(`
           *,
           entitlements:user_entitlements(*),
           _count:algo_licenses(count)
-        `, { count: 'exact' });
+        `, { count: 'exact' }) as any);
 
       if (role) query = query.eq('role', role);
       if (search) {
@@ -188,10 +188,10 @@ export const AdminController = {
       if (typeof is_active === 'boolean') updates.is_active = is_active;
       if (crm_metadata) updates.crm_metadata = crm_metadata;
 
-      const { error } = await supabase
-        .from('users')
+      const { error } = await (supabase
+        .from('users' as any)
         .update(updates)
-        .eq('id', id);
+        .eq('id', id) as any);
 
       if (error) {
         return res.status(500).json({ error: error.message });
@@ -219,8 +219,8 @@ export const AdminController = {
     const offset = parseInt(url.searchParams.get('offset') || '0');
 
     try {
-      let query = supabase
-        .from('leads')
+      let query = (supabase
+        .from('leads' as any)
         .select(`
           *,
           assigned_to_user:assigned_to (
@@ -228,7 +228,7 @@ export const AdminController = {
           )
         `, { count: 'exact' })
         .order('score', { ascending: false })
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false }) as any);
 
       if (stage) query = query.eq('stage', stage);
       if (auth.role === 'agent') {
@@ -273,10 +273,10 @@ export const AdminController = {
       if (metadata) updates.metadata = { ...metadata };
       updates.last_action_at = new Date().toISOString();
 
-      const { error } = await supabase
-        .from('leads')
-        .update(updates)
-        .eq('id', id);
+      const { error } = await (supabase
+        .from('leads' as any)
+        .update(updates as any)
+        .eq('id', id) as any);
 
       if (error) {
         return res.status(500).json({ error: error.message });
@@ -305,8 +305,8 @@ export const AdminController = {
     const offset = parseInt(url.searchParams.get('offset') || '0');
 
     try {
-      let query = supabase
-        .from('commissions')
+      let query = (supabase
+        .from('commissions' as any)
         .select(`
           *,
           agent:agent_id (
@@ -314,7 +314,7 @@ export const AdminController = {
           ),
           product:product_id (name, category)
         `, { count: 'exact' })
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false }) as any);
 
       if (agentId) query = query.eq('agent_id', agentId);
       if (status) query = query.eq('status', status);
@@ -327,14 +327,14 @@ export const AdminController = {
       }
 
       // Calculate summary
-      const { data: totalAmount } = await supabase
-        .from('commissions')
+      const { data: totalAmount } = await (supabase
+        .from('commissions' as any)
         .select('sum(amount)')
-        .eq('status', 'PENDING');
+        .eq('status', 'PENDING' as any) as any);
 
       res.json({
         commissions: data || [],
-        total_pending: totalAmount?.sum || 0,
+        total_pending: (totalAmount as any)?.sum || 0,
         total: count || 0,
         pagination: { limit, offset, total: count || 0 }
       });
@@ -356,13 +356,13 @@ export const AdminController = {
     const { id } = req.params;
 
     try {
-      const { error } = await supabase
-        .from('commissions')
+      const { error } = await (supabase
+        .from('commissions' as any)
         .update({ 
-          status: 'PAID',
+          status: 'PAID' as any,
           paid_at: new Date().toISOString()
-        })
-        .eq('id', id);
+        } as any)
+        .eq('id', id) as any);
 
       if (error) {
         return res.status(500).json({ error: error.message });
@@ -390,12 +390,12 @@ export const AdminController = {
     const offset = parseInt(url.searchParams.get('offset') || '0');
 
     try {
-      let query = supabase
-        .from('system_logs')
+      let query = (supabase
+        .from('system_logs' as any)
         .select('*')
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false }) as any);
 
-      if (level) query = query.eq('level', level);
+      if (level) query = query.eq('severity' as any, level);
 
       const { data, error, count } = await query
         .range(offset, offset + limit - 1);
@@ -425,10 +425,10 @@ export const AdminController = {
     }
 
     try {
-      const { data, error } = await supabase
-        .from('feature_flags')
+      const { data, error } = await (supabase
+        .from('feature_flags' as any)
         .select('*')
-        .order('key', { ascending: true });
+        .order('key', { ascending: true }) as any);
 
       if (error) {
         return res.status(500).json({ error: error.message });
@@ -453,16 +453,16 @@ export const AdminController = {
     const { algo_id, count, duration_days } = req.body;
     
     try {
-      const { data, error } = await supabase
-        .from('algo_licenses')
+      const { data, error } = await (supabase
+        .from('algo_licenses' as any)
         .insert(Array.from({ length: count || 1 }).map(() => ({
           algo_id,
           license_key: `IFX-${Math.random().toString(36).substring(2, 10).toUpperCase()}`,
           is_active: true,
           expires_at: new Date(Date.now() + (duration_days || 30) * 24 * 60 * 60 * 1000).toISOString(),
           created_at: new Date().toISOString()
-        })))
-        .select();
+        } as any)) as any)
+        .select() as any);
 
       if (error) throw error;
       res.json({ success: true, data });
@@ -483,8 +483,8 @@ export const AdminController = {
 
     try {
       const { title, content, type, metadata } = req.body;
-      const { data, error } = await supabase
-        .from('content_posts')
+      const { data, error } = await (supabase
+        .from('content_posts' as any)
         .insert({
           title,
           body: content,
@@ -493,9 +493,9 @@ export const AdminController = {
           metadata: metadata || {},
           published_at: new Date().toISOString(),
           created_at: new Date().toISOString()
-        })
+        } as any)
         .select()
-        .single();
+        .single() as any);
 
       if (error) throw error;
       res.json({ success: true, data });
@@ -518,14 +518,14 @@ export const AdminController = {
     const { enabled, value } = req.body;
 
     try {
-      const { error } = await supabase
-        .from('feature_flags')
+      const { error } = await (supabase
+        .from('feature_flags' as any)
         .update({ 
           enabled: typeof enabled === 'boolean' ? enabled : true,
           value: value || null,
           updated_at: new Date().toISOString()
-        })
-        .eq('key', key);
+        } as any)
+        .eq('key', key) as any);
 
       if (error) {
         return res.status(500).json({ error: error.message });
@@ -540,8 +540,8 @@ export const AdminController = {
 
 // Helper function duplicated here since this file stands alone
 const validateAuth = (req: Request) => {
-  const role = req.headers.get('x-verified-role');
-  const userId = req.headers.get('x-user-id');
+  const role = (req.headers as any)['x-verified-role'];
+  const userId = (req.headers as any)['x-user-id'];
   if (!role || !userId) return null;
   return { userId, role };
 };

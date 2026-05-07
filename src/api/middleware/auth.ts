@@ -65,7 +65,7 @@ export const authorize = (allowedRoles: string[]) => {
       return res.status(401).json({ error: 'Authentication required' });
     }
 
-    const userRole = req.headers['x-verified-role'];
+    const userRole: any = req.headers['x-verified-role'];
 
     if (!allowedRoles.includes(userRole)) {
       return res.status(403).json({
@@ -91,7 +91,7 @@ export const optionalAuth = async (
       const authClient = createAuthedClient(token);
       const { data: { user: authUser } } = await authClient.auth.getUser(token);
 
-      if (authUser && !authUser.banned_at) {
+      if (authUser && !(authUser as any).banned_at) {
         const role = await resolveUserRole(authUser);
         (req as any).user = {
           id: authUser.id,

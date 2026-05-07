@@ -12,7 +12,7 @@ export const logger = {
   async log(type: LogType, message: string, metadata: any = {}, level: LogLevel = "info") {
     const payload = {
       type,
-      level,
+      severity: level,
       message,
       metadata: {
         ...metadata,

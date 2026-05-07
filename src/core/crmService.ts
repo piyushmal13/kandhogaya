@@ -20,7 +20,7 @@ export const CRMService = {
       .maybeSingle();
 
     const newMetadata = {
-      ...(existing?.crm_metadata || {}),
+      ...(existing?.crm_metadata as any || {}),
       last_action: actionDetail || source,
       last_action_at: new Date().toISOString(),
       [new Date().getTime()]: actionDetail || source // Simple activity log

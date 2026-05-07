@@ -47,7 +47,7 @@ export const bannerService = {
     return data as Banner[];
   },
 
-  async createBanner(banner: Partial<Banner>): Promise<Banner | null> {
+  async createBanner(banner: any): Promise<Banner | null> {
     const { data, error } = await supabase
       .from('banners')
       .insert([banner])

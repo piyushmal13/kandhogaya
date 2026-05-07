@@ -94,8 +94,8 @@ export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationM
         // 2. Insert registration
         const refCode = localStorage.getItem("ifx_referral_code");
         
-        const { error: insertError } = await supabase
-          .from('webinar_registrations')
+        const { error: insertError } = await (supabase
+          .from('webinar_registrations' as any)
           .insert([
             {
               webinar_id: webinar.id,
@@ -105,23 +105,23 @@ export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationM
               payment_status: 'completed',
               referred_by_code: refCode
             }
-          ]);
+          ] as any) as any);
 
         if (insertError) throw insertError;
 
         // 3. Update webinar registration count
-        const { error: updateError } = await supabase
-          .from('webinars')
+        const { error: updateError } = await (supabase
+          .from('webinars' as any)
           .update({ 
             registration_count: (webinar.registration_count || 0) + 1 
-          })
-          .eq('id', webinar.id);
+          } as any)
+          .eq('id', webinar.id) as any);
 
         if (updateError) console.error("Could not update count:", updateError);
 
         // 4. Upsert Lead in CRM
-        const { error: leadError } = await supabase
-          .from('leads')
+        const { error: leadError } = await (supabase
+          .from('leads' as any)
           .upsert({
             id: user.id || undefined,
             name: formData.name || userProfile?.full_name || "Webinar Registrant",
@@ -135,7 +135,7 @@ export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationM
               webinar_id: webinar.id,
               webinar_title: webinar.title
             }
-          }, { onConflict: "email" });
+          } as any, { onConflict: "email" } as any) as any);
           
         if (leadError) console.error("Could not add to leads CRM:", leadError);
 

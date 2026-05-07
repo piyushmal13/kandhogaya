@@ -39,7 +39,7 @@ export const RevenueAnalytics = () => {
       const eventsData = eventsRes.data || [];
 
       // 1. Revenue Metrics
-      const totalMTD = salesData.reduce((sum, s) => sum + (Number.parseFloat(s.sale_amount) || 0), 0) || 0;
+      const totalMTD = (salesData as any[]).reduce((sum, s) => sum + (Number.parseFloat(s.sale_amount) || 0), 0) || 0;
       const sourceMap: any = { 'Direct': 0, 'Affiliate': 0 };
       const agentMap: any = {};
       

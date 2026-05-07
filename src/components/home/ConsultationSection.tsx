@@ -22,12 +22,12 @@ export const ConsultationSection = () => {
     setStatus('loading');
     try {
       const { error } = await supabase
-        .from("consultations")
+        .from("consultations" as any)
         .insert([{
           ...formData,
           status: 'pending',
           metadata: { surface: "premium_home_consultation" }
-        }]);
+        } as any]);
 
       if (error) throw error;
 

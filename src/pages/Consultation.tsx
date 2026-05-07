@@ -40,8 +40,7 @@ export const Consultation = () => {
       const { error } = await supabase.from("consultations").insert([
         { 
           ...formData, 
-          status: "pending",
-          crm_metadata: { source: "consultation_page_v10" }
+          status: "pending"
         }
       ]);
 

@@ -54,13 +54,13 @@ export const fetchTravelTrips = async (): Promise<TravelTrip[]> => {
     // Attempting to fetch from a hypothetic Supabase table "traders_travel"
     // Since we are strictly forbidden from altering Supabase schemas, we gracefully
     // fall back to dummy data if the table doesn't exist or errors out.
-    const { data, error } = await supabase.from('traders_travel').select('id, destination, country, date_range, description, image_url, spots_total, spots_available, exclusivity');
+    const { data, error } = await supabase.from('traders_travel' as any).select('id, destination, country, date_range, description, image_url, spots_total, spots_available, exclusivity');
     
     if (error || !data || data.length === 0) {
       return DUMMY_TRIPS;
     }
     
-    return data as TravelTrip[];
+    return data as any;
   } catch (err) {
     console.warn("Error fetching travel trips:", err);
     return DUMMY_TRIPS;

@@ -9,43 +9,25 @@ export type { Json } from './database.types';
 
 export type User = Database['public']['Tables']['users']['Row'];
 
-export type Product = (Database['public']['Tables']['algorithms']['Row'] | any) & {
-  slug?: string;
-  monthly_roi_pct?: number;
-  risk_classification?: string;
-  min_capital?: number;
-  performance?: any;
-};
+export type Product = any;
 
-export type Webinar = Database['public']['Tables']['webinars']['Row'] & {
-  sponsors?: Array<Database['public']['Tables']['webinar_sponsors']['Row']>;
-  metadata?: {
-    partner_name?: string;
-    learning_points?: string[];
-    author_bio?: string;
-  };
-};
+export type Webinar = any;
 
 export type WebinarSponsor = Database['public']['Tables']['webinar_sponsors']['Row'];
 
 export type Intelligence = any; // fallback for signals if table missing
 export type Signal = Intelligence;
 
-export type Blog = (Database['public']['Tables']['blog_posts']['Row'] | any) & {
-  body?: string;
-  author_name?: string;
-  content?: string; // legacy alias
-  metadata?: any;
-};
+export type Blog = any;
 
-export type Course = (Database['public']['Tables']['university_courses']['Row'] | any) & {
+export type Course = any & {
   chapters?: any[];
   lessons?: any[];
 };
 
-export type Lesson = (Database['public']['Tables']['course_lessons']['Row'] | any);
+export type Lesson = any;
 
-export type Review = Database['public']['Tables']['reviews']['Row'];
+export type Review = any;
 
 export type Lead = any;
 
@@ -55,7 +37,7 @@ export type SaleTracking = any;
 
 export type AlgoBot = any;
 
-export type BotLicense = (Database['public']['Tables']['algo_licenses']['Row'] | any) & {
+export type BotLicense = (Database['public']['Tables']['bot_licenses']['Row'] | any) & {
   algo?: any;
   user?: User;
 };
@@ -95,7 +77,7 @@ export interface LongPlanOffer {
 
 // System and other types
 export type SystemLog = Database['public']['Tables']['system_logs']['Row'];
-export type AuditLog = Database['public']['Tables']['audit_logs']['Row'];
+export type AuditLog = any;
 export type Commission = Database['public']['Tables']['commissions']['Row'];
 export type NotificationQueue = Database['public']['Tables']['notification_queue']['Row'];
 export type AffiliateCode = Database['public']['Tables']['affiliate_codes']['Row'];

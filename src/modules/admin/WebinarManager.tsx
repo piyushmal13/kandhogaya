@@ -86,7 +86,7 @@ export const WebinarManager = () => {
       console.error("[WebinarManager] Fetch error:", error);
       showToast("error", "Failed to load webinars.");
     } else {
-      setWebinars(data || []);
+      setWebinars((data || []) as any);
     }
     setFetching(false);
   };
@@ -137,7 +137,7 @@ export const WebinarManager = () => {
     e.preventDefault();
     setLoading(true);
 
-    const payload = {
+    const payload: any = {
       title: form.title,
       description: form.description,
       date_time: new Date(form.dateTime).toISOString(),
@@ -148,7 +148,7 @@ export const WebinarManager = () => {
       about_content: form.aboutContent,
       is_paid: form.isPaid,
       price: form.isPaid ? form.price : 0,
-      status: form.status,
+      status: form.status as any,
       max_attendees: form.maxAttendees,
       sponsor_logos: form.sponsorLogos
         ? form.sponsorLogos.split(",").map(s => s.trim()).filter(Boolean)

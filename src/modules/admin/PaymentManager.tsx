@@ -41,7 +41,7 @@ export const PaymentManager = () => {
 
       const { data, error } = await query;
       if (error) throw error;
-      setProofs(data || []);
+      setProofs((data || []) as any);
     } catch (err) {
       console.error("Institutional Payment Discovery Signal: Failed to retrieve proofs.", err);
     } finally {

@@ -52,10 +52,10 @@ export const SystemController = {
       const auth = validateAuth(req);
       
       // Fetch active feature flags
-      const { data: flags, error } = await supabase
-        .from('feature_flags')
+      const { data: flags, error } = await (supabase
+        .from('feature_flags' as any)
         .select('*')
-        .eq('enabled', true);
+        .eq('enabled', true) as any);
 
       const featureFlags: Record<string, any> = {};
       (flags || []).forEach(flag => {
@@ -63,7 +63,7 @@ export const SystemController = {
       });
 
       // Get site-wide config
-      const config = {
+      const config: any = {
         features: featureFlags,
         maintenance_mode: false,
         max_upload_size: 10 * 1024 * 1024, // 10MB
@@ -78,16 +78,16 @@ export const SystemController = {
 
       // If authenticated, add user-specific config
       if (auth) {
-        const { data: userProfile } = await supabase
-          .from('users')
+        const { data: userProfile } = await (supabase
+          .from('users' as any)
           .select('role, is_pro')
           .eq('id', auth.userId)
-          .single();
+          .single() as any);
 
-        const { data: entitlements } = await supabase
-          .from('user_entitlements')
+        const { data: entitlements } = await (supabase
+          .from('user_entitlements' as any)
           .select('feature, active, expires_at')
-          .eq('user_id', auth.userId);
+          .eq('user_id', auth.userId) as any);
 
         config.user = {
           role: userProfile?.role || 'user',
@@ -136,13 +136,13 @@ export const SystemController = {
           .gte('created_at', new Date(Date.now() - 24*60*60*1000).toISOString()),
         
         // Payments in last 24h
-        supabase
-          .from('payments')
+        (supabase
+          .from('payments' as any)
           .select('sum(amount)')
-          .gte('created_at', new Date(Date.now() - 24*60*60*1000).toISOString()),
+          .gte('created_at', new Date(Date.now() - 24*60*60*1000).toISOString()) as any),
         
         // Average session duration from analytics_events
-        supabase.rpc('avg_session_duration', { hours: 24 }).catch(() => ({ data: 0 })),
+        (supabase.rpc('avg_session_duration' as any, { hours: 24 }) as any).catch(() => ({ data: 0 })),
         
         // Webinar registrations today
         supabase
@@ -168,8 +168,8 @@ export const SystemController = {
 
 // Helper for auth validation
 const validateAuth = (req: Request) => {
-  const role = req.headers.get('x-verified-role');
-  const userId = req.headers.get('x-user-id');
+  const role = (req.headers as any)['x-verified-role'];
+  const userId = (req.headers as any)['x-user-id'];
   if (!role || !userId) return null;
   return { userId, role };
 };

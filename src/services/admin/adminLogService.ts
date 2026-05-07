@@ -34,7 +34,7 @@ export const adminLogService = {
       const { data, error } = await query;
       if (error) throw error;
 
-      return data || [];
+      return (data || []) as any;
     } catch (err) {
       console.error("[adminLogService] Discovery Failed:", err);
       return [];

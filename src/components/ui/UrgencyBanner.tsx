@@ -20,12 +20,12 @@ export const UrgencyBanner = ({ leadId }: { leadId?: string }) => {
 
     const generateContextualUrgency = async () => {
       // 1. Audit active signal volatility
-      const { data: signal } = await publicSupabase
-        .from('signals')
+      const { data: signal } = await (publicSupabase
+        .from('signals' as any)
         .select('id, pair, created_at')
         .order('created_at', { ascending: false })
         .limit(1)
-        .single();
+        .single() as any);
 
       if (signal) {
          // Fake dynamic social proof or movement logic

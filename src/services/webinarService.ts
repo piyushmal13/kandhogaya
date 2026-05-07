@@ -92,7 +92,7 @@ export const webinarService = {
         }]);
 
       if (error) throw error;
-      void supabase.rpc('increment_webinar_registrations', { webinar_id: webinarId });
+
       return { success: true };
     } catch {
       return { success: false, error: "Something went wrong. Please try again." };

@@ -34,7 +34,7 @@ export const revenueSystem = {
       percentage,
       source: product.type.toUpperCase(),
       product_id: product.id,
-      status: 'PENDING'
+      status: 'PENDING' as any
     };
 
     await publicSupabase

@@ -33,13 +33,12 @@ export const authLimiter = rateLimit({
 export const maintenanceGuard = async (req: Request, res: Response, next: NextFunction) => {
   try {
     // Check feature flag for maintenance mode
-    const { data } = await supabase
-      .from('feature_flags')
+    const { data } = await (supabase.from('feature_flags' as any)
       .select('value')
       .eq('key', 'maintenance_mode')
-      .single();
+      .single() as any);
 
-    const isMaintenance = data?.value?.enabled === true;
+    const isMaintenance = (data as any)?.value?.enabled === true;
 
     if (isMaintenance && req.method !== 'GET' && req.path !== '/api/health') {
       return res.status(503).json({

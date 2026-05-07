@@ -18,7 +18,7 @@ export const LicenseManager = () => {
   const fetchLicenses = async () => {
     try {
       const { data, error } = await supabase
-        .from('algo_licenses')
+        .from('algo_licenses' as any)
         .select('*, users(email)')
         .order('created_at', { ascending: false });
       
@@ -38,7 +38,7 @@ export const LicenseManager = () => {
     setDeleteLoading(true);
     try {
       const { error } = await supabase
-        .from('algo_licenses')
+        .from('algo_licenses' as any)
         .delete()
         .eq('id', licenseToDelete);
       
@@ -67,20 +67,20 @@ export const LicenseManager = () => {
       expiresAt.setDate(expiresAt.getDate() + 30);
 
       const { data, error } = await supabase
-        .from('algo_licenses')
+        .from('algo_licenses' as any)
         .insert({
           user_id: licenseUserId,
           algo_id: licenseAlgoId,
           license_key: key,
           is_active: true,
           expires_at: expiresAt.toISOString()
-        })
+        } as any)
         .select()
         .single();
       
       if (error) throw error;
       if (data) {
-        setLicenseKey(data.license_key);
+        setLicenseKey((data as any).license_key);
         fetchLicenses();
       }
     } catch (err) {

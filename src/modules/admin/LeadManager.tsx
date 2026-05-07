@@ -8,7 +8,8 @@ import {
 import { cn } from "../../utils/cn";
 import { formatDistanceToNow } from "date-fns";
 
-import { useRealtimeTable } from "../../hooks/useRealtime";
+import { useToast } from "../../contexts/ToastContext";
+import { useRealtime } from "../../hooks/useRealtime";
 import { Lead } from "../../types";
 import { mapLead } from "../../utils/dataMapper";
 

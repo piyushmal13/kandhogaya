@@ -8,6 +8,8 @@ import { cn } from "@/utils/cn";
 import { PurchaseModal } from "@/components/payments/PurchaseModal";
 import { tracker } from "@/core/tracker";
 import { motion } from "motion/react";
+import { PageMeta } from "../components/site/PageMeta";
+import * as apiHandlers from "../services/apiHandlers";
 
 const TIER_PLANS = [
   {
@@ -43,7 +45,7 @@ export const Pricing = () => {
   // 🚀 [CTO] Intelligence Data Rails
   const { data: algos = [], isLoading: algosLoading } = useQuery({
     queryKey: ['pricing_algos'],
-    queryFn: () => productService.getAlgoBots(3),
+    queryFn: () => apiHandlers.getProducts(),
     staleTime: 600000,
   });
 
@@ -68,7 +70,7 @@ export const Pricing = () => {
       localStorage.setItem("ifx_pricing_views", views.toString());
       setPricingViews(views);
     } catch (e) {
-      console.warn("Storage protocol offline:", e);
+      console.error("Storage protocol offline:", e);
     }
   }, []);
 

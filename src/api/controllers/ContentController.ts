@@ -5,8 +5,8 @@ import type { Request, Response } from 'express';
  * Base controller utility for authentication validation
  */
 const validateAuth = (req: Request) => {
-  const role = req.headers.get('x-verified-role');
-  const userId = req.headers.get('x-user-id');
+  const role = (req.headers as any)['x-verified-role'];
+  const userId = (req.headers as any)['x-user-id'];
   if (!role || !userId) return null;
   return { userId, role };
 };
@@ -33,10 +33,10 @@ export const ContentController = {
       const category = url.searchParams.get('category');
       const offset = (page - 1) * limit;
 
-      let query = supabase
-        .from('content_posts')
+      let query = (supabase
+        .from('content_posts' as any)
         .select(`*`, { count: 'exact' })
-        .order('published_at', { ascending: false });
+        .order('published_at', { ascending: false }) as any);
 
       if (category) {
         query = query.eq('category', category);
@@ -96,8 +96,8 @@ export const ContentController = {
       const status = url.searchParams.get('status') || 'upcoming';
       const limit = Math.min(parseInt(url.searchParams.get('limit') || '20'), 50);
 
-      const { data, error } = await supabase
-        .from('webinars')
+      const { data, error } = await (supabase
+        .from('webinars' as any)
         .select(`
           *,
           sponsors:webinar_sponsors(*),
@@ -105,7 +105,7 @@ export const ContentController = {
         `)
         .eq('status', status)
         .order('date_time', { ascending: status === 'upcoming' })
-        .limit(limit);
+        .limit(limit) as any);
 
       if (error) {
         return res.status(500).json({ error: error.message });
@@ -175,17 +175,16 @@ export const ContentController = {
         paymentStatus = 'completed';
       }
 
-      // Create registration
-      const { error: insertError } = await supabase
-        .from('webinar_registrations')
+      const { error: insertError } = await (supabase
+        .from('webinar_registrations' as any)
         .insert({
           webinar_id: webinarId,
           user_id: auth.userId,
-          email: req.user?.email,
+          email: (req as any).user?.email,
           payment_status: paymentStatus,
           registration_date: new Date().toISOString(),
           payment_intent_id: paymentIntentId
-        });
+        } as any) as any);
 
       if (insertError) {
         return res.status(500).json({ error: insertError.message });
@@ -215,13 +214,13 @@ export const ContentController = {
       const offset = parseInt(url.searchParams.get('offset') || '0');
       const includeInactive = url.searchParams.get('all') === 'true';
 
-      let query = supabase
-        .from('algorithms')
+      let query = (supabase
+        .from('algorithms' as any)
         .select(`
           *,
           performance:algo_performance_snapshots(*)
         `)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false }) as any);
 
       if (!includeInactive) {
         query = query.eq('is_active', true);
@@ -257,15 +256,15 @@ export const ContentController = {
     const { id } = req.params;
     
     try {
-      const { data, error } = await supabase
-        .from('algorithms')
+      const { data, error } = await (supabase
+        .from('algorithms' as any)
         .select(`
           *,
           performance:algo_performance_snapshots(*),
           reviews:reviews(*)
         `)
         .eq('id', id)
-        .single();
+        .single() as any);
 
       if (error || !data) {
         return res.status(404).json({ error: 'Product not found' });

@@ -81,7 +81,7 @@ export const AffiliateHub = () => {
     if (!userProfile?.id) return;
     try {
       setLoading(true);
-      const { data, error } = await supabase.rpc("generate_affiliate_code", { user_id: userProfile.id });
+      const { data, error } = await supabase.rpc('generate_affiliate_code' as any, { user_id: userProfile.id });
       if (error) throw error;
       setAffiliateCode(data);
       success("Institutional Partner Protocol Initialized.");

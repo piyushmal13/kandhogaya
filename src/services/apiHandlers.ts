@@ -108,8 +108,8 @@ export const subscribeToAlgo = async (userId: string, algoId: string, durationDa
         supabase.from('bot_licenses').insert({
           user_id: userId,
           algo_id: algoId,
-          status: 'active',
-          starts_at: new Date().toISOString(),
+          license_key: `IFX-${Math.random().toString(36).toUpperCase().substring(2, 8)}`,
+          is_active: true,
           expires_at: expiresAt.toISOString()
         }).select().maybeSingle()
       )
@@ -206,10 +206,10 @@ export const getCourseById = async (id: string) => {
 
 export const checkUserAccess = async (userId: string, itemId: string) => {
   const { data, error } = await supabase
-    .from("course_enrollments")
+    .from("user_access")
     .select("id")
     .eq("user_id", userId)
-    .eq("course_id", itemId)
+    .eq("item_id", itemId)
     .maybeSingle();
   
   if (error) return false;
@@ -381,9 +381,7 @@ export const registerForWebinar = async (webinarId: string, userId: string, emai
       )
     );
 
-    safeExecute(() =>
-      supabase.rpc('increment_webinar_registrations', { webinar_id: webinarId })
-    ).catch(() => {});
+
 
     return {
       success: true
@@ -417,7 +415,7 @@ export const getPerformanceResults = async () => {
   return safeQuery<any[]>(
     supabase
       .from("performance_results")
-      .select("id, win_rate, monthly_return, drawdown, total_trades, created_at")
+      .select("id, win_rate, return_pct, drawdown, total_trades, created_at")
       .order("created_at", { ascending: true })
   );
 };

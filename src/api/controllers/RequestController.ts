@@ -47,11 +47,11 @@ export const RequestController = {
       const clientIp = req.ip || req.connection?.remoteAddress || 'unknown';
       const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
       
-      const { count: recentCount } = await supabase
-        .from('custom_requests')
+      const { count: recentCount } = await (supabase
+        .from('custom_requests' as any)
         .select('*', { count: 'exact' })
         .eq('ip_address', clientIp)
-        .gte('created_at', oneHourAgo);
+        .gte('created_at', oneHourAgo) as any);
 
       if (recentCount && recentCount > 5) {
         return res.status(429).json({ 
@@ -70,8 +70,8 @@ export const RequestController = {
       }
 
       // Create request record
-      const { data, error } = await supabase
-        .from('custom_requests')
+      const { data, error } = await (supabase
+        .from('custom_requests' as any)
         .insert({
           full_name,
           email,
@@ -87,9 +87,9 @@ export const RequestController = {
           status: 'new',
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
-        })
+        } as any)
         .select()
-        .single();
+        .single() as any);
 
       if (error) {
         console.error('[Custom Request Error]:', error);
@@ -125,11 +125,11 @@ export const RequestController = {
     const { id } = req.params;
 
     try {
-      const { data, error } = await supabase
-        .from('custom_requests')
+      const { data, error } = await (supabase
+        .from('custom_requests' as any)
         .select('*')
         .eq('id', id)
-        .single();
+        .single() as any);
 
       if (error || !data) {
         return res.status(404).json({ error: 'Request not found' });
@@ -187,10 +187,10 @@ export const RequestController = {
     const offset = parseInt(url.searchParams.get('offset') || '0');
 
     try {
-      let query = supabase
-        .from('custom_requests')
+      let query = (supabase
+        .from('custom_requests' as any)
         .select('*', { count: 'exact' })
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false }) as any);
 
       if (status) query = query.eq('status', status);
       if (priority) query = query.eq('priority', priority);
@@ -251,10 +251,10 @@ export const RequestController = {
       if (assigned_to) updates.assigned_to = assigned_to;
       if (notes) updates.notes = notes;
 
-      const { error } = await supabase
-        .from('custom_requests')
+      const { error } = await (supabase
+        .from('custom_requests' as any)
         .update(updates)
-        .eq('id', id);
+        .eq('id', id) as any);
 
       if (error) {
         return res.status(500).json({ error: error.message });
@@ -262,11 +262,11 @@ export const RequestController = {
 
       // Send notification to user if status changed to 'quoted' or 'in_progress'
       if (status === 'quoted' || status === 'in_progress') {
-        const { data: request } = await supabase
-          .from('custom_requests')
+        const { data: request } = await (supabase
+          .from('custom_requests' as any)
           .select('email')
           .eq('id', id)
-          .single();
+          .single() as any);
         
         if (request) {
           await sendStatusUpdateEmail(request.email, id, status);
@@ -282,32 +282,32 @@ export const RequestController = {
 
 // Helper functions
 const validateAuth = (req: Request) => {
-  const role = req.headers.get('x-verified-role');
-  const userId = req.headers.get('x-user-id');
+  const role = (req.headers as any)['x-verified-role'];
+  const userId = (req.headers as any)['x-user-id'];
   if (!role || !userId) return null;
   return { userId, role };
 };
 
 const getEmailById = async (userId: string): Promise<string> => {
-  const { data } = await supabase
-    .from('users')
+  const { data } = await (supabase
+    .from('users' as any)
     .select('email')
     .eq('id', userId)
-    .single();
-  return data?.email || '';
+    .single() as any);
+  return (data as any)?.email || '';
 };
 
 const triggerCRMPipeline = async (request: any) => {
   // Create lead in CRM pipeline
   try {
-    await supabase.from('leads').insert({
+    await (supabase.from('leads' as any).insert({
       email: request.email,
       full_name: request.full_name,
       subject: `Custom Request: ${request.service_type}`,
       message: request.description,
       source: 'custom_request',
       status: 'new',
-      stage: 'QUALIFIED',
+      stage: 'QUALIFIED' as any,
       score: 80,
       metadata: {
         request_id: request.id,
@@ -315,7 +315,7 @@ const triggerCRMPipeline = async (request: any) => {
         timeline: request.timeline,
         priority: request.priority
       }
-    });
+    } as any) as any);
   } catch (err) {
     console.error('[CRM Pipeline Error]:', err);
   }

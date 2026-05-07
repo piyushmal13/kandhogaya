@@ -109,7 +109,7 @@ export const Academy = () => {
                           thumbnailUrl: getCourseImage(course),
                           duration: typeof course.duration === 'string' ? Number.parseInt(course.duration, 10) || 60 : 60,
                           moduleCount: course.chapters?.length || course.lessons?.length || 0,
-                          level: (course.level?.toLowerCase() === 'advanced' ? 'institutional' : course.level?.toLowerCase() || 'beginner') as 'beginner' | 'intermediate' | 'advanced' | 'institutional',
+                          level: (['institutional', 'beginner', 'intermediate', 'advanced'].includes(course.level as any) ? (course.level === 'advanced' ? 'institutional' : course.level as any) : 'intermediate') as any,
                           isPremium: course.price > 0,
                           enrolledCount: 1420 + index * 85,
                           description: course.description,

@@ -11,13 +11,11 @@ export const productService = {
   getProducts: async (): Promise<Product[]> => {
     try {
       const { data: products, error } = await supabase
-        .from("algorithms")
+        .from("products")
         .select(`
           id, slug, name, description, price, image_url, created_at, 
-          risk_classification, monthly_roi_pct, min_capital, is_active,
           performance:performance_results(*)
         `)
-        .eq('is_active', true)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
@@ -33,7 +31,7 @@ export const productService = {
         .from("bot_licenses")
         .select("id, user_id, algo_id, status, expires_at, created_at")
         .eq("user_id", userId)
-        .eq("status", "active");
+        .eq("is_active", true);
 
       return await safeQuery<BotLicense[]>(query);
     } catch {
@@ -51,8 +49,8 @@ export const productService = {
         .insert({
           user_id: userId,
           algo_id: algoId,
-          status: 'active',
-          starts_at: new Date().toISOString(),
+          license_key: `IFX-${Math.random().toString(36).toUpperCase().substring(2, 8)}`,
+          is_active: true,
           expires_at: expiresAt.toISOString()
         })
         .select("id, expires_at")

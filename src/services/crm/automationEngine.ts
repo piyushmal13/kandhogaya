@@ -53,12 +53,12 @@ export const automationEngine = {
         await publicSupabase.rpc('increment_agent_load', { agent_id: agentId });
 
         // [PHASE 6] Enqueue External Notification
-        const { data: agentProfile } = await publicSupabase.from('agents').select('phone').eq('id', agentId).maybeSingle();
+        const { data: agentProfile } = await publicSupabase.from('agents').select('*').eq('id', agentId).maybeSingle();
         
-        if (agentProfile?.phone) {
+        if ((agentProfile as any)?.phone) {
           const leadName = lead.email || 'Anonymous Lead';
           notificationEngine.enqueue({
-            recipient: agentProfile.phone,
+            recipient: (agentProfile as any).phone,
             channel: 'WHATSAPP',
             priority: 'HIGH',
             content: {

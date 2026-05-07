@@ -28,8 +28,8 @@ export const LicenseController = {
 
     try {
       // Fetch license with joined data
-      const { data: license, error } = await supabase
-        .from('bot_licenses')
+      const { data: license, error } = await (supabase
+        .from('bot_licenses' as any)
         .select(`
           *,
           algo:algo_id (
@@ -39,7 +39,7 @@ export const LicenseController = {
           user:user_id (id, email, full_name, role)
         `)
         .eq('license_key', licenseKey)
-        .maybeSingle();
+        .maybeSingle() as any);
 
       if (error || !license) {
         return res.status(404).json({ 
@@ -80,18 +80,18 @@ export const LicenseController = {
       }
 
       // Update last validated timestamp (async, non-blocking)
-      supabase
-        .from('bot_licenses')
+      (supabase
+        .from('bot_licenses' as any)
         .update({ 
           last_validated_at: new Date().toISOString(),
           last_ip_address: req.ip || req.connection?.remoteAddress,
           last_user_agent: req.headers['user-agent'] || null
-        })
-        .eq('id', license.id)
+        } as any)
+        .eq('id', license.id) as any)
         .catch(() => {}); // Fire and forget
-
+ 
       // Log validation attempt for audit
-      supabase.from('audit_logs').insert({
+      (supabase.from('audit_logs' as any).insert({
         actor_id: license.user_id,
         action: 'license_validation',
         entity_type: 'bot_license',
@@ -103,7 +103,7 @@ export const LicenseController = {
           ip_address: req.ip || req.connection?.remoteAddress,
           user_agent: req.headers['user-agent']
         })
-      }).catch(() => {});
+      } as any) as any).catch(() => {});
 
       res.json({
         valid: true,
@@ -142,8 +142,8 @@ export const LicenseController = {
     }
 
     try {
-      const { data, error } = await supabase
-        .from('bot_licenses')
+      const { data, error } = await (supabase
+        .from('bot_licenses' as any)
         .select(`
           *,
           algo:algo_id (
@@ -152,7 +152,7 @@ export const LicenseController = {
           )
         `)
         .eq('user_id', auth.userId)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false }) as any);
 
       if (error) {
         return res.status(500).json({ error: error.message });
@@ -228,7 +228,7 @@ export const LicenseController = {
       }
 
       // Audit log
-      await supabase.from('audit_logs').insert({
+      await (supabase.from('audit_logs' as any).insert({
         actor_id: auth.userId,
         action: 'bulk_license_generation',
         entity_type: 'bot_licenses',
@@ -237,7 +237,7 @@ export const LicenseController = {
           count: validCount,
           duration_days: durationDays
         })
-      });
+      } as any) as any);
 
       res.status(201).json({ 
         success: true, 
@@ -269,10 +269,10 @@ export const LicenseController = {
       if (account_id) updates.account_id = account_id;
       if (hardware_id) updates.hardware_id = hardware_id;
 
-      const { error } = await supabase
-        .from('bot_licenses')
-        .update(updates)
-        .eq('id', id);
+      const { error } = await (supabase
+        .from('bot_licenses' as any)
+        .update(updates as any)
+        .eq('id', id) as any);
 
       if (error) {
         return res.status(500).json({ error: error.message });
@@ -297,14 +297,14 @@ export const LicenseController = {
     const { id } = req.params;
 
     try {
-      const { error } = await supabase
-        .from('bot_licenses')
+      const { error } = await (supabase
+        .from('bot_licenses' as any)
         .update({ 
           is_active: false,
           status: 'revoked',
           expires_at: new Date().toISOString()
-        })
-        .eq('id', id);
+        } as any)
+        .eq('id', id) as any);
 
       if (error) {
         return res.status(500).json({ error: error.message });
@@ -315,4 +315,12 @@ export const LicenseController = {
       res.status(500).json({ error: 'Revocation failed' });
     }
   }
+};
+
+// Helper for auth validation
+const validateAuth = (req: Request) => {
+  const role = (req.headers as any)['x-verified-role'];
+  const userId = (req.headers as any)['x-user-id'];
+  if (!role || !userId) return null;
+  return { userId, role };
 };

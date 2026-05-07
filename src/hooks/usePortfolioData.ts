@@ -19,19 +19,19 @@ export function usePortfolioData() {
     queryKey: ['pulse_portfolio', user?.id],
     queryFn: async () => {
       // Fetch latest performance snapshot
-      const query = supabase
-        .from('algo_performance_snapshots')
+      const query = (supabase
+        .from('algo_performance_snapshots' as any)
         .select('roi_pct, period_start, drawdown_pct')
         .order('created_at', { ascending: false })
         .limit(1)
-        .maybeSingle();
+        .maybeSingle() as any);
       
       const { data: perfData } = await query;
       
       // Calculate a "Portfolio Data Points" metric based on system throughput
       // This represents the "Scale" of the institutional engine
-      const { count: algoCount } = await supabase.from('algorithms').select('*', { count: 'exact', head: true });
-      const { count: licenseCount } = await supabase.from('algo_licenses').select('*', { count: 'exact', head: true });
+      const { count: algoCount } = await (supabase.from('products' as any).select('*', { count: 'exact', head: true }) as any);
+      const { count: licenseCount } = await (supabase.from('algo_licenses' as any).select('*', { count: 'exact', head: true }) as any);
 
       const scaleMetric = (algoCount || 0) * 1000 + (licenseCount || 0) * 50;
 

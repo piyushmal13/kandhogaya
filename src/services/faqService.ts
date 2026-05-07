@@ -39,7 +39,7 @@ export const faqService = {
     return data as FAQ[];
   },
 
-  async createFaq(faq: Partial<FAQ>): Promise<FAQ | null> {
+  async createFaq(faq: any): Promise<FAQ | null> {
     const { data, error } = await supabase
       .from('faqs')
       .insert([faq])

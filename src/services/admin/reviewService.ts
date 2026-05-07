@@ -66,7 +66,7 @@ export const reviewService = {
 
     // CRM Pulse: Improve Lead Score for Positive Sentiment
     if (review.rating >= 4 && review.user_id) {
-       await supabase.rpc('update_lead_score', { 
+       await supabase.rpc('update_lead_score' as any, { 
          p_user_id: review.user_id, 
          p_increment: 15 
        });
@@ -172,7 +172,7 @@ export const reviewService = {
       flagged: isSpam,
       priority,
       created_at: new Date().toISOString()
-    }]);
+    } as any]);
 
     return !error;
   },

@@ -145,38 +145,25 @@ export const OnboardingFlow = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [completed, setCompleted] = useState(false);
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, userProfile } = useAuth();
 
   useEffect(() => {
     if (!user) {
       navigate('/login');
       return;
     }
-
-    // Check if onboarding is completed
-    const checkOnboarding = async () => {
-      const { data } = await supabase
-        .from('users')
-        .select('onboarding_completed')
-        .eq('id', user.id)
-        .single();
-
-      if (data?.onboarding_completed) {
-        navigate('/dashboard');
-      }
-    };
-    checkOnboarding();
   }, [user, navigate]);
 
   const nextStep = async () => {
     if (currentStep < onboardingSteps.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
-      // Mark onboarding as completed
       await supabase
         .from('users')
-        .update({ onboarding_completed: true })
-        .eq('id', user?.id);
+        .update({ 
+          onboarding_completed: true,
+          full_name: userProfile?.full_name
+        } as any).eq('id', user?.id);
 
       setCompleted(true);
       setTimeout(() => navigate('/marketplace'), 2000);
@@ -193,7 +180,6 @@ export const OnboardingFlow = () => {
 
   return (
     <div className="min-h-screen bg-[var(--color10)] flex flex-col">
-      {/* Progress Bar */}
       <div className="w-full bg-black/40 border-b border-white/5">
         <div className="max-w-4xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between mb-4">
@@ -219,7 +205,6 @@ export const OnboardingFlow = () => {
         </div>
       </div>
 
-      {/* Content */}
       <div className="flex-1 flex items-center justify-center p-6">
         <div className="max-w-4xl w-full">
           <motion.div
@@ -235,7 +220,6 @@ export const OnboardingFlow = () => {
         </div>
       </div>
 
-      {/* Navigation */}
       <div className="border-t border-white/5 bg-black/40">
         <div className="max-w-4xl mx-auto px-6 py-6 flex items-center justify-between">
           <button
@@ -256,7 +240,6 @@ export const OnboardingFlow = () => {
         </div>
       </div>
 
-      {/* Completion Overlay */}
       {completed && (
         <motion.div
           initial={{ opacity: 0 }}

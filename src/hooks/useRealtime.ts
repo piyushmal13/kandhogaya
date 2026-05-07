@@ -11,8 +11,8 @@ export type RealtimeEvent<T> = {
 /**
  * Core realtime table hook with generic typing.
  */
-export function useRealtimeTable<T>(
-  table: string,
+export function useRealtimeTable<T = any>(
+  table: any,
   filter?: string,
   options?: {
     initialPageSize?: number;
@@ -32,8 +32,7 @@ export function useRealtimeTable<T>(
       setLoading(true);
       setError(null);
 
-      let query = supabase
-        .from(table as any)
+      let query = (supabase.from(table as any) as any)
         .select('*')
         .limit(initialPageSize);
 
@@ -207,7 +206,7 @@ export function useProducts(category?: string, includeInactive = false) {
   }
 
   const { rows, loading, error, refresh } = useRealtimeTable<any>(
-    'algorithms',
+    'products',
     filter || undefined,
     { initialPageSize: 100 }
   );
@@ -256,7 +255,7 @@ export function useProductWatch(productId: string) {
   useEffect(() => {
     const fetchProduct = async () => {
       const { data, error } = await supabase
-        .from('algorithms')
+        .from('products')
         .select('*')
         .eq('id', productId)
         .single();
@@ -276,7 +275,7 @@ export function useProductWatch(productId: string) {
         {
           event: 'UPDATE',
           schema: 'public',
-          table: 'algorithms',
+          table: 'products',
           filter: `id=eq.${productId}`
         },
         (payload) => {
@@ -315,8 +314,8 @@ export function useMarketData(symbols?: string[]) {
  * Legacy wrapper for backward compatibility.
  * Accepts optional mapper to transform rows.
  */
-export function useRealtime<T>(
-  table: string,
+export function useRealtime<T = any>(
+  table: any,
   filter?: string,
   _options?: any,
   mapper?: (row: any) => T

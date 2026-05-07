@@ -86,7 +86,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
         const [userRes, entitlementRes, sessionData] = await Promise.all([
           supabase.from("users").select("id, email, full_name, role, avatar_url").eq("id", userId).maybeSingle(),
-          supabase.from("algo_licenses").select("id, user_id, algo_id, status, expires_at").eq("user_id", userId),
+          supabase.from("algo_licenses" as any).select("id, user_id, algo_id, status, expires_at").eq("user_id", userId),
           supabase.auth.getSession()
         ]);
 

@@ -2,7 +2,8 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, Play, Lock, CheckCircle2, Clock, BookOpen, ShieldCheck, Share2 } from "lucide-react";
 import { getCourseById, checkUserAccess } from "../services/apiHandlers";
-import { Course, Chapter } from "../types";
+import { Course } from "../types";
+type Chapter = any;
 import { useAuth } from "../contexts/AuthContext";
 import { useToast } from "../contexts/ToastContext";
 

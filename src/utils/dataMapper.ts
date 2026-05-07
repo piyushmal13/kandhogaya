@@ -100,7 +100,7 @@ export const mapLead = (raw: any): any => ({
   webinar_count: Array.isArray(raw.webinar_registrations) ? raw.webinar_registrations.length : 0,
 });
 
-export const mapReview = (raw: any): Review => ({
+export const mapReview = (raw: any) => ({
   id: raw.id,
   name: raw.name || 'Anonymous Node',
   role: raw.role || 'Institutional Trader',
@@ -111,7 +111,15 @@ export const mapReview = (raw: any): Review => ({
   region: raw.region || 'Global',
   status: raw.status || 'pending',
   priority: Number(raw.priority) || 0,
-});
+  flagged: !!raw.flagged,
+  ip_address: raw.ip_address || null,
+  metadata: raw.metadata || null,
+  rejection_reason: raw.rejection_reason || null,
+  source: raw.source || null,
+  user_agent: raw.user_agent || null,
+  user_id: raw.user_id || null,
+  user_name: raw.user_name || null,
+}) as any;
 
 export const mapMarketTicker = (raw: any): any => ({
   id: raw.id,

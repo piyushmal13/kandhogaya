@@ -53,7 +53,7 @@ export function WebinarAccessPanel() {
           registration_id: regMap.get(w.id)
         }));
 
-        setSessions(mapped);
+        setSessions(mapped as any);
       } catch (err) {
         console.error("Dashboard Webinar Fetch Error:", err);
       } finally {

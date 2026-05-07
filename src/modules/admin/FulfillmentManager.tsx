@@ -4,6 +4,8 @@ import {
   ShieldCheck, User, RefreshCw, Eye,
   ExternalLink, Phone, DollarSign, Package
 } from "lucide-react";
+import { useToast } from "../../contexts/ToastContext";
+import { useRealtime } from "../../hooks/useRealtime";
 import { supabase } from "../../lib/supabase";
 import { cn } from "../../utils/cn";
 import { tracker } from "@/core/tracker";
@@ -69,7 +71,7 @@ export const FulfillmentManager = () => {
           product_id: receipt.product_id,
           sale_amount: receipt.amount,
           source: 'manual_verification'
-        });
+        } as any);
 
       if (salesError) console.warn("Institutional Ledger Signal Delay:", salesError);
 
@@ -92,13 +94,15 @@ export const FulfillmentManager = () => {
       const key = `IFX-${Math.random().toString(36).toUpperCase().substring(2, 6)}-${Math.random().toString(36).toUpperCase().substring(2, 6)}`;
 
       // Use unified algo_licenses table
-      const { error: licenseError } = await supabase.from('algo_licenses').insert({
-        user_id: receipt.user_id,
-        algo_id: receipt.product_id, // Assuming product_id matches algorithm_id
-        license_key: key,
-        is_active: true,
-        expires_at: expiresAt.toISOString()
-      });
+      const { error: licenseError } = await supabase
+        .from('algo_licenses' as any)
+        .insert({
+          user_id: receipt.user_id,
+          algo_id: receipt.product_id,
+          license_key: key,
+          is_active: true,
+          expires_at: expiresAt.toISOString()
+        } as any);
 
       if (licenseError) console.error("Institutional License Issuance Error:", licenseError);
 

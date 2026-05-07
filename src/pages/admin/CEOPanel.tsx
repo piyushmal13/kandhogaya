@@ -34,7 +34,8 @@ export const CEOPanel = () => {
       const { count: converted } = await supabase.from('sales_pipeline').select('*', { count: 'exact', head: true }).eq('stage', 'converted');
 
       // 3. Health Discovery
-      const { count: errors } = await supabase.from('system_logs').select('*', { count: 'exact', head: true }).eq('level', 'error');
+      const healthQuery: any = supabase.from('system_logs');
+      const { count: errors } = await healthQuery.select('*', { count: 'exact', head: true }).eq('severity', 'error');
 
       setStats({
         revenueToday: today,
