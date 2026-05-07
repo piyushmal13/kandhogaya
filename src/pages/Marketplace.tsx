@@ -28,7 +28,29 @@ export const Marketplace = () => {
 
   const { data: products = [], isLoading } = useQuery({
     queryKey: ["marketplace_products"],
-    queryFn: () => productService.getProducts(),
+    queryFn: async () => {
+      const [algoData, courseData] = await Promise.all([
+        productService.getProducts(),
+        supabase.from('university_courses').select('*')
+      ]);
+      
+      const mappedAlgos = (algoData || []).map(a => ({ 
+        ...a, 
+        category: 'algorithm' 
+      }));
+      
+      const mappedCourses = (courseData.data || []).map(c => ({ 
+        id: c.id, 
+        name: c.title, 
+        description: c.description, 
+        price: c.price, 
+        image_url: c.thumbnail_url,
+        category: 'course',
+        created_at: c.created_at
+      }));
+
+      return [...mappedAlgos, ...mappedCourses];
+    },
     staleTime: 300000,
   });
 
@@ -38,7 +60,7 @@ export const Marketplace = () => {
     { id: "course", label: "Quantitative Education" },
   ];
 
-  const filteredProducts = products.filter((p: Product) => {
+  const filteredProducts = products.filter((p: any) => {
     const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
                          p.description?.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = activeCategory === "all" || p.category === activeCategory;
@@ -78,20 +100,20 @@ export const Marketplace = () => {
     if (filteredProducts.length > 0) {
       return (
         <MarketplaceGrid
-          products={filteredProducts.map((p: Product) => ({
+          products={filteredProducts.map((p: any) => ({
             id: p.id,
             name: p.name,
-            type: 'algorithm',
+            type: p.category === 'course' ? 'course' : 'algorithm',
             price: p.price,
-            category: p.risk_classification || 'Institutional',
+            category: p.category === 'algorithm' ? (p.risk_classification || 'Institutional') : 'Academy',
             description: p.description,
             imageUrl: p.image_url,
             isPremium: p.price > 1000,
-            performance: {
-              winRate: 82, // Hardened baseline
+            performance: p.category === 'algorithm' ? {
+              winRate: 82,
               monthlyReturn: p.monthly_roi_pct || (p.performance?.roi_pct) || 12.4,
               sharpe: 2.1
-            }
+            } : undefined
           }))}
           onSelect={(p) => {
             const original = products.find(o => o.id === p.id);
