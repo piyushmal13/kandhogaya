@@ -71,8 +71,8 @@ export const checkWebinarRegistration = async (webinarId: string, userId: string
 export const getSignals = async () => {
   return safeQuery<Signal[]>(
     supabase
-      .from("algorithms")
-      .select("id, name, description, risk_classification, created_at")
+      .from("signals")
+      .select("id, asset, direction, entry_price, stop_loss, take_profit, status, created_at")
       .order("created_at", { ascending: false })
       .limit(50)
   );
@@ -134,8 +134,8 @@ export const subscribeToAlgo = async (userId: string, algoId: string, durationDa
 export const getBlogPosts = async (page = 0, pageSize = 9, searchQuery = "") => {
   try {
     let query = supabase
-      .from('blog_posts')
-      .select('id, author_name, category, title, slug, featured_image_url, created_at, excerpt')
+      .from('content_posts')
+      .select('id, author_name, category, title, slug, featured_image_url, created_at, excerpt, body')
       .order('created_at', { ascending: false })
       .range(page * pageSize, (page + 1) * pageSize - 1);
 
@@ -143,11 +143,15 @@ export const getBlogPosts = async (page = 0, pageSize = 9, searchQuery = "") => 
       query = query.ilike('title', `%${searchQuery}%`);
     }
 
-    const posts = await safeQuery<Blog[]>(query);
+    const posts = await safeQuery<any[]>(query);
     if (!posts || posts.length === 0) {
       return [];
     }
-    return posts;
+    // Map body to content for UI
+    return posts.map(p => ({
+      ...p,
+      content: p.body
+    }));
   } catch (err) {
     console.error("Institutional Blog Fetch Error:", err);
     return [];
@@ -157,11 +161,11 @@ export const getBlogPosts = async (page = 0, pageSize = 9, searchQuery = "") => 
 
 export const getBlogPostBySlug = async (slug: string) => {
   const { data, error } = await supabase
-    .from('blog_posts')
-    .select('id, author_name, category, title, slug, body, featured_image_url, created_at, excerpt')
+    .from('content_posts')
+    .select('id, author_name, category, title, slug, body as content, featured_image_url, created_at, excerpt')
     .eq('slug', slug)
     .single();
-  
+
   if (error) {
     return null;
   }
@@ -189,11 +193,11 @@ export const getCourses = async () => {
 
 export const getCourseById = async (id: string) => {
   const { data, error } = await supabase
-    .from("university_courses")
-    .select("*, chapters:course_lessons(*)")
+    .from("courses")
+    .select("*, chapters:lessons(*)")
     .eq("id", id)
     .maybeSingle();
-  
+
   if (error) {
     return null;
   }
@@ -216,8 +220,8 @@ export const checkUserAccess = async (userId: string, itemId: string) => {
 
 export const subscribeToSignals = (callback: (payload: unknown) => void) => {
   return supabase
-    .channel('public:algorithms')
-    .on('postgres_changes', { event: '*', schema: 'public', table: 'algorithms' }, callback)
+    .channel('public:signals')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'signals' }, callback)
     .subscribe();
 };
 
@@ -412,8 +416,8 @@ export const subscribeToMarketData = (callback: (payload: any) => void) => {
 export const getPerformanceResults = async () => {
   return safeQuery<any[]>(
     supabase
-      .from("algo_performance_snapshots")
-      .select("id, roi_pct, period_start, created_at")
+      .from("performance_results")
+      .select("id, win_rate, monthly_return, drawdown, total_trades, created_at")
       .order("created_at", { ascending: true })
   );
 };

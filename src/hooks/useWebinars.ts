@@ -1,40 +1,46 @@
-import { useQuery } from '@tanstack/react-query';
-import { useFeatureFlag } from './useFeatureFlag';
-import { webinarService } from '@/services/webinarService';
+import { useRealtimeTable } from './useRealtime';
+import { Webinar } from '../types';
 
-export function useWebinars() {
-  const { isEnabled: enableRealtime } = useFeatureFlag('webinar_realtime_updates', true);
+/**
+ * Hook for fetching a list of webinars with real-time updates
+ * @param status Optional filter by status ('upcoming', 'live', 'past', 'all')
+ */
+export function useWebinars(status?: 'upcoming' | 'live' | 'past' | 'all') {
+  const filter = status && status !== 'all' ? `status=eq.${status}` : undefined;
+  
+  const { rows, loading, error, refresh } = useRealtimeTable<Webinar>(
+    'webinars',
+    filter,
+    { initialPageSize: 20 }
+  );
 
-  return useQuery({
-    queryKey: ['webinars'],
-    queryFn: async () => {
-      return await webinarService.getWebinars();
-    },
-    refetchInterval: enableRealtime ? 30000 : false, // Poll every 30s if enabled
-    staleTime: 60000, // 1 minute
-  });
+  return {
+    webinars: rows || [],
+    data: rows || [], // compatibility
+    loading,
+    isLoading: loading,
+    error,
+    refreshWebinars: refresh
+  };
 }
 
-export function useLiveWebinar() {
-  return useQuery({
-    queryKey: ['webinars', 'live'],
-    queryFn: async () => {
-      const webinars = await webinarService.getWebinars();
-      return webinars.find(w => w.status === 'live') || null;
-    },
-    refetchInterval: 5000, // Aggressive polling for live status
-  });
-}
-
+/**
+ * Hook for fetching a single webinar by ID with real-time updates
+ * @param id Webinar ID
+ */
 export function useWebinar(id: string | undefined) {
-  return useQuery({
-    queryKey: ['webinar', id],
-    queryFn: async () => {
-      if (!id) return null;
-      return await webinarService.getWebinarById(id);
-    },
-    enabled: !!id,
-    staleTime: 60000,
-    refetchInterval: 30000, // Real-time sync for Q&A and status
-  });
+  const { rows, loading, error, refresh } = useRealtimeTable<Webinar>(
+    'webinars',
+    id ? `id=eq.${id}` : undefined,
+    { initialPageSize: 1 }
+  );
+
+  return {
+    webinar: rows?.[0] || null,
+    data: rows?.[0] || null, // alias
+    loading,
+    isLoading: loading,
+    error,
+    refreshWebinar: refresh
+  };
 }

@@ -1,0 +1,61 @@
+{
+  "generated_at": "2026-05-07T18:47:14.385Z",
+  "schemas": [],
+  "tables": [],
+  "columns": [],
+  "constraints": [],
+  "key_column_usage": [],
+  "referential_constraints": [],
+  "indexes": [],
+  "policies": [],
+  "errors": {
+    "tables": {
+      "code": "PGRST205",
+      "details": null,
+      "hint": "Perhaps you meant the table 'public.performance_results'",
+      "message": "Could not find the table 'public.information_schema.tables' in the schema cache"
+    },
+    "columns": {
+      "code": "PGRST205",
+      "details": null,
+      "hint": "Perhaps you meant the table 'public.performance_results'",
+      "message": "Could not find the table 'public.information_schema.columns' in the schema cache"
+    },
+    "constraints": {
+      "code": "PGRST205",
+      "details": null,
+      "hint": null,
+      "message": "Could not find the table 'public.information_schema.table_constraints' in the schema cache"
+    },
+    "keyCols": {
+      "code": "PGRST205",
+      "details": null,
+      "hint": null,
+      "message": "Could not find the table 'public.information_schema.key_column_usage' in the schema cache"
+    },
+    "refConstraints": {
+      "code": "PGRST205",
+      "details": null,
+      "hint": null,
+      "message": "Could not find the table 'public.information_schema.referential_constraints' in the schema cache"
+    },
+    "indexes": {
+      "code": "PGRST205",
+      "details": null,
+      "hint": "Perhaps you meant the table 'public.bot_licenses'",
+      "message": "Could not find the table 'public.pg_indexes' in the schema cache"
+    },
+    "policies": {
+      "code": "PGRST205",
+      "details": null,
+      "hint": "Perhaps you meant the table 'public.bot_licenses'",
+      "message": "Could not find the table 'public.pg_policies' in the schema cache"
+    },
+    "schemas": {
+      "code": "PGRST205",
+      "details": null,
+      "hint": "Perhaps you meant the table 'public.performance_results'",
+      "message": "Could not find the table 'public.information_schema.schemata' in the schema cache"
+    }
+  }
+}

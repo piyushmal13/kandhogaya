@@ -11,11 +11,13 @@ export const productService = {
   getProducts: async (): Promise<Product[]> => {
     try {
       const { data: products, error } = await supabase
-        .from("algorithms")
+        .from("products")
         .select(`
           id, name, description, price, image_url, created_at, 
-          risk_classification, monthly_roi_pct, min_capital, slug,
-          performance:algo_performance_snapshots(*)
+          risk_profile, category, strategy_details, q_and_a, 
+          terms_and_conditions, strategy_graph_url, backtesting_result_url, 
+          video_explanation_url, long_plan_offers, performance_data,
+          performance:performance_results(*)
         `)
         .order("created_at", { ascending: false });
 
@@ -29,7 +31,7 @@ export const productService = {
   getUserLicenses: async (userId: string): Promise<BotLicense[]> => {
     try {
       const query = supabase
-        .from("algo_licenses")
+        .from("bot_licenses")
         .select("id, user_id, algo_id, status, expires_at, created_at")
         .eq("user_id", userId)
         .eq("status", "active");
@@ -39,31 +41,7 @@ export const productService = {
       return [];
     }
   },
-  getAlgoBots: async (limit: number = 10): Promise<any[]> => {
-    try {
-      const query = supabase
-        .from("algo_bots")
-        .select(`
-          id, 
-          name, 
-          version, 
-          download_url,
-          product:product_id (
-            description,
-            price,
-            category,
-            image_url,
-            metadata
-          )
-        `)
-        .limit(limit);
-
-      return await safeQuery<any[]>(query) || [];
-    } catch {
-      return [];
-    }
-  },
-
+  // ... getAlgoBots unchanged (algo_bots correct)
   subscribeToAlgo: async (userId: string, algoId: string, durationDays: number) => {
     try {
       const key = `IFX-${Math.random().toString(36).toUpperCase().substring(2, 6)}-${Math.random().toString(36).toUpperCase().substring(2, 6)}`;
@@ -71,7 +49,7 @@ export const productService = {
       expiresAt.setDate(expiresAt.getDate() + durationDays);
 
       const { data, error } = await supabase
-        .from('algo_licenses')
+        .from('bot_licenses')
         .insert({
           user_id: userId,
           algo_id: algoId,
@@ -91,11 +69,11 @@ export const productService = {
 
   subscribeToUserLicenses: (userId: string, callback: (payload: any) => void) => {
     return supabase
-      .channel(`public:algo_licenses:${userId}`)
+      .channel(`public:bot_licenses:${userId}`)
       .on('postgres_changes', {
         event: '*',
         schema: 'public',
-        table: 'algo_licenses',
+        table: 'bot_licenses',
         filter: `user_id=eq.${userId}`
       }, callback)
       .subscribe();

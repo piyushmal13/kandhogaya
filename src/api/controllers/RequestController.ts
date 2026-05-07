@@ -1,10 +1,5 @@
-import { createClient } from '@supabase/supabase-js';
+import { supabaseAdmin as supabase } from '@/lib/supabase';
 import type { Request, Response } from 'express';
-
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 /**
  * RequestController — Custom Services Request Management
