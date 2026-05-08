@@ -3,11 +3,11 @@ import { Signal } from "../types";
 
 export const signalService = {
   async getSignals(): Promise<Signal[]> {
-    const { data } = await supabase
-      .from("signals")
+    const { data } = await (supabase
+      .from("signals" as any)
       .select("id, asset, direction, entry_price, stop_loss, take_profit, status, created_at")
       .order("created_at", { ascending: false })
-      .limit(10);
+      .limit(10) as any);
     
     if (!data) return [];
 

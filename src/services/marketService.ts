@@ -42,7 +42,7 @@ export const marketService = {
 
       // 2. Secondary: Supabase fallback (specific columns only)
       const query = supabase
-        .from("market_data")
+        .from("market_data" as any)
         .select("id, symbol, price, change, created_at")
         .order("symbol", { ascending: true });
 

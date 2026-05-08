@@ -9,14 +9,42 @@ export type { Json } from './database.types';
 
 export type User = Database['public']['Tables']['users']['Row'];
 
-export type Product = any;
+export type Product = {
+  id: string;
+  name: string;
+  category: string;
+  description: string | null;
+  price: number;
+  image_url: string | null;
+  risk_classification?: string;
+  monthly_roi_pct?: number;
+  min_capital?: number;
+  is_active?: boolean;
+  slug?: string;
+  type?: 'algorithm' | 'course';
+  performance?: {
+    winRate: number;
+    monthlyReturn: number;
+  };
+  video_explanation_url?: string;
+  strategy_details?: string;
+  images?: string[];
+  terms_and_conditions?: string;
+  risk_profile?: string;
+  backtesting_result_url?: string;
+  strategy_graph_url?: string;
+  performance_data?: any;
+  reviews?: any;
+  q_and_a?: any;
+  long_plan_offers?: any;
+};
 
 export type Webinar = any;
 
 export type WebinarSponsor = Database['public']['Tables']['webinar_sponsors']['Row'];
 
 export type Intelligence = any; // fallback for signals if table missing
-export type Signal = Intelligence;
+export type Signal = any;
 
 export type Blog = any;
 
@@ -37,7 +65,7 @@ export type SaleTracking = any;
 
 export type AlgoBot = any;
 
-export type BotLicense = (Database['public']['Tables']['bot_licenses']['Row'] | any) & {
+export type BotLicense = any & {
   algo?: any;
   user?: User;
 };
@@ -48,13 +76,13 @@ export type WebinarRegistration = Database['public']['Tables']['webinar_registra
   payment_status?: string;
 };
 
-export type MarketPair = Database['public']['Tables']['market_data']['Row'];
+export type MarketPair = any;
 
-export type ProductVariant = Database['public']['Tables']['product_variants']['Row'];
+export type ProductVariant = any;
 
-export type FeatureFlag = Database['public']['Tables']['feature_flags']['Row'];
+export type FeatureFlag = any;
 
-export type PerformanceResult = Database['public']['Tables']['performance_results']['Row'] & {
+export type PerformanceResult = any & {
   // UI aliases / computed
   roi_pct?: number; // map to return_pct
   drawdown_pct?: number; // map to drawdown
@@ -76,15 +104,15 @@ export interface LongPlanOffer {
 }
 
 // System and other types
-export type SystemLog = Database['public']['Tables']['system_logs']['Row'];
+export type SystemLog = any;
 export type AuditLog = any;
-export type Commission = Database['public']['Tables']['commissions']['Row'];
-export type NotificationQueue = Database['public']['Tables']['notification_queue']['Row'];
-export type AffiliateCode = Database['public']['Tables']['affiliate_codes']['Row'];
-export type Consultation = Database['public']['Tables']['consultations']['Row'];
-export type Subscription = Database['public']['Tables']['subscriptions']['Row'];
-export type UserAccess = Database['public']['Tables']['user_access']['Row'];
-export type AnalyticsEvent = Database['public']['Tables']['analytics_events']['Row'];
+export type Commission = any;
+export type NotificationQueue = any;
+export type AffiliateCode = any;
+export type Consultation = any;
+export type Subscription = any;
+export type UserAccess = any;
+export type AnalyticsEvent = any;
 
 // Alias for backward compatibility
 export type ContentPost = Blog;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   ArrowRight,
@@ -69,9 +69,6 @@ export const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
 
-  /**
-   * Public navigation - visible to all visitors
-   */
   const publicNavLinks = [
     { name: "Terminal", path: "/", icon: Home },
     { name: "Ecosystem", path: "/quantx", icon: Zap },
@@ -84,17 +81,36 @@ export const Navbar = () => {
   ];
 
   /**
-   * Authenticated app navigation - visible after login
+   * Application-specific navigation for authenticated users
    */
-  const appNavLinks = user ? [
+  const appNavLinks = [
     { name: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
     { name: "Marketplace", path: "/marketplace", icon: BarChart3 },
+    { name: "Signals", path: "/quantx", icon: Shield },
     { name: "Academy", path: "/academy", icon: GraduationCap },
-    { name: "Webinars", path: "/webinars", icon: BookOpen },
     { name: "Results", path: "/results", icon: LineChart },
-    ...(isAdmin ? [{ name: "Admin Hub", path: "/admin", icon: Shield }] : []),
-    ...(isAgent ? [{ name: "Growth Hub", path: "/agent", icon: Trophy }] : []),
-  ] : [];
+  ];
+
+  /**
+   * Unified navigation logic to prevent duplication
+   */
+  const unifiedLinks = useMemo(() => {
+    if (!user) return publicNavLinks;
+    
+    // Start with core app links
+    const links = [...appNavLinks];
+    
+    // Add public links that aren't already represented by path
+    publicNavLinks.forEach(pubLink => {
+      if (!links.some(appLink => appLink.path === pubLink.path)) {
+        // Avoid adding 'Terminal' if 'Dashboard' is present
+        if (pubLink.name === 'Terminal' && links.some(l => l.name === 'Dashboard')) return;
+        links.push(pubLink);
+      }
+    });
+    
+    return links;
+  }, [user, appNavLinks, publicNavLinks]);
 
   return (
     <>
@@ -249,6 +265,10 @@ export const Navbar = () => {
                 </div>
                 <div className="flex flex-col gap-3">
                   {publicNavLinks.map((link, index) => {
+                    // Avoid duplication: if user is logged in, don't show links that are also in appNavLinks
+                    const isDuplicated = user && appNavLinks.some(appLink => appLink.path === link.path);
+                    if (isDuplicated) return null;
+
                     const isActive = location.pathname === link.path || 
                       (link.path === '/' && location.pathname === '/');
                     return (

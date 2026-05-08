@@ -134,7 +134,7 @@ export const subscribeToAlgo = async (userId: string, algoId: string, durationDa
 export const getBlogPosts = async (page = 0, pageSize = 9, searchQuery = "") => {
   try {
     let query = supabase
-      .from('content_posts')
+      .from('blog_posts')
       .select('id, author_name, category, title, slug, featured_image_url, created_at, excerpt, body')
       .order('created_at', { ascending: false })
       .range(page * pageSize, (page + 1) * pageSize - 1);
@@ -161,7 +161,7 @@ export const getBlogPosts = async (page = 0, pageSize = 9, searchQuery = "") => 
 
 export const getBlogPostBySlug = async (slug: string) => {
   const { data, error } = await supabase
-    .from('content_posts')
+    .from('blog_posts')
     .select('id, author_name, category, title, slug, body as content, featured_image_url, created_at, excerpt')
     .eq('slug', slug)
     .single();
@@ -178,8 +178,8 @@ export const getCourses = async () => {
   try {
     const res = await safeQuery<Course[]>(
       supabase
-        .from("courses")
-        .select("*, chapters:lessons(*)")
+        .from("university_courses")
+        .select("*, chapters:course_lessons(*)")
         .order("created_at", { ascending: false })
     );
 
@@ -193,8 +193,8 @@ export const getCourses = async () => {
 
 export const getCourseById = async (id: string) => {
   const { data, error } = await supabase
-    .from("courses")
-    .select("*, chapters:lessons(*)")
+    .from("university_courses")
+    .select("*, chapters:course_lessons(*)")
     .eq("id", id)
     .maybeSingle();
 
@@ -261,7 +261,7 @@ export const trackSale = async (agentId: string, userId: string, productId: stri
     const res = await safeExecute(() =>
       withTimeout(
         supabase
-          .from("sales_tracking")
+          .from("sales_tracking" as any)
           .insert({
             agent_id: agentId,
             user_id: userId,
@@ -331,7 +331,7 @@ export const submitPaymentProof = async (userId: string, plan: string, amount: n
   try {
     // 2. Performance Discovery: Prevent Spam Toggles
     const { data: existing } = await supabase
-      .from("payment_proofs")
+      .from("payment_proofs" as any)
       .select("id")
       .eq("user_id", userId)
       .eq("status", "pending")
@@ -343,7 +343,7 @@ export const submitPaymentProof = async (userId: string, plan: string, amount: n
 
     // 3. Fulfill Discovery: Register Proof Signal
     const { error } = await supabase
-      .from("payment_proofs")
+      .from("payment_proofs" as any)
       .insert([{
         user_id: userId,
         plan,
@@ -405,7 +405,7 @@ export const getMarketData = async () => {
 export const subscribeToMarketData = (callback: (payload: any) => void) => {
   return supabase
     .channel('public:market_data')
-    .on('postgres_changes', { event: '*', schema: 'public', table: 'market_data' }, callback)
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'market_data' as any }, callback)
     .subscribe();
 };
 
@@ -414,7 +414,7 @@ export const subscribeToMarketData = (callback: (payload: any) => void) => {
 export const getPerformanceResults = async () => {
   return safeQuery<any[]>(
     supabase
-      .from("performance_results")
+      .from("performance_results" as any)
       .select("id, win_rate, return_pct, drawdown, total_trades, created_at")
       .order("created_at", { ascending: true })
   );

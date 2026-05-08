@@ -15,6 +15,7 @@ import { Product } from "../types";
 import { EliteSocialProof } from "../components/institutional/EliteSocialProof";
 import { CustomStrategyTerminal } from "../components/institutional/CustomStrategyTerminal";
 import { ResizedImage } from "../components/ui/ResizedImage";
+import { StandardLayout } from "../components/site/StandardLayout";
 
 export const Marketplace = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -130,7 +131,7 @@ export const Marketplace = () => {
             >
               Institutional Asset Catalog
             </motion.div>
-            <h1 className="text-[clamp(2.5rem,10vw,5rem)] lg:text-[8rem] font-black mb-2 md:mb-6 text-white tracking-tighter leading-[0.9] md:leading-[0.85] uppercase italic">
+            <h1 className="text-[clamp(2.5rem,9vw,5rem)] lg:text-[8rem] font-black mb-2 md:mb-6 text-white tracking-tighter leading-[0.9] md:leading-[0.85] uppercase italic break-words">
               Quantitative <br />
               <span className="text-emerald-400">Allocations.</span>
             </h1>
@@ -278,5 +279,5 @@ export const Marketplace = () => {
     return <DashboardLayout>{content}</DashboardLayout>;
   }
 
-  return content;
+  return <StandardLayout>{content}</StandardLayout>;
 };

@@ -195,33 +195,7 @@ export function useWebinar(id: string | undefined) {
   };
 }
 
-/**
- * Hook for fetching products with real-time updates
- */
-export function useProducts(category?: string, includeInactive = false) {
-  let filter = '';
-  if (!includeInactive) {
-    filter = 'is_active=eq.true';
-  }
-  if (category) {
-    filter = filter ? `${filter},category=eq.${category}` : `category=eq.${category}`;
-  }
 
-  const { rows, loading, error, refresh } = useRealtimeTable<any>(
-    'products',
-    filter || undefined,
-    { initialPageSize: 100 }
-  );
-
-  return {
-    products: rows || [],
-    data: rows || [],
-    loading,
-    isLoading: loading,
-    error,
-    refreshProducts: refresh
-  };
-}
 
 /**
  * Hook for user's active algo licenses
