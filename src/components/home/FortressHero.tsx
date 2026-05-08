@@ -9,6 +9,7 @@ const ENTRY   = [0.16, 1, 0.3, 1] as const;
 
 import { useFeatureFlag } from "@/hooks/useFeatureFlag";
 import { supabase } from "@/lib/supabase";
+import { EliteButton } from "@/components/ui/Button";
 
 // ─── HERO COMPONENT ────────────────────────────────────────────────────────────
 export const FortressHero = () => {
