@@ -111,20 +111,20 @@ export const QuantX = () => {
           <div className="absolute inset-0 opacity-[0.03] bg-[url('/noise.png')]" />
         </motion.div>
 
-        <div className="container mx-auto px-6 relative z-10 text-center">
+        <div className="container mx-auto px-6 relative z-10 text-center pt-20">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-black uppercase tracking-[0.4em] mb-8">
-              <Brain className="w-3.5 h-3.5" />
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[9px] font-black uppercase tracking-[0.4em] mb-6 sm:mb-8">
+              <Brain className="w-3 h-3" />
               Intelligence Protocol
             </div>
-            <h1 className="text-7xl md:text-9xl font-bold tracking-tighter mb-8 leading-[0.9]">
-              QUANT<span className="text-emerald-400 font-black italic">X</span>
+            <h1 className="text-5xl sm:text-7xl md:text-9xl font-bold tracking-tighter mb-6 sm:mb-8 leading-[0.9] uppercase italic">
+              Quant<span className="text-emerald-400 font-black">X</span>
             </h1>
-            <p className="text-white/40 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+            <p className="text-white/40 text-sm sm:text-lg md:text-xl max-w-2xl mx-auto leading-relaxed px-4">
               Not a bot. A multi-layer cognitive ecosystem designed for institutional-grade gold execution.
             </p>
           </motion.div>
@@ -142,16 +142,16 @@ export const QuantX = () => {
       {/* Core Architecture Flow */}
       <section className="py-32 border-b border-white/[0.05]">
         <div className="container mx-auto px-6">
-          <div className="max-w-4xl mx-auto text-center mb-24">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight italic uppercase">Institutional Infrastructure</h2>
-            <p className="text-white/40 text-lg">A seamless data-to-execution pipeline engineered for precision and reliability.</p>
+          <div className="max-w-4xl mx-auto text-center mb-16 md:mb-24">
+            <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight italic uppercase">Institutional Infrastructure</h2>
+            <p className="text-white/40 text-sm md:text-lg px-4">A seamless data-to-execution pipeline engineered for precision and reliability.</p>
           </div>
 
           <div className="relative max-w-5xl mx-auto">
             {/* Visual Flow Lines */}
             <div className="absolute inset-x-0 top-1/2 h-px bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent -translate-y-1/2 hidden lg:block" />
             
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 relative z-10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 sm:gap-4 relative z-10">
               <ArchitectureNode title="Market Data" icon={Database} subtext="L-Feed" active />
               <ArchitectureNode title="Core Analyzer" icon={Brain} subtext="Engine-v8" active />
               <ArchitectureNode title="Risk Engine" icon={ShieldAlert} subtext="Strict-Mode" active />
@@ -165,12 +165,12 @@ export const QuantX = () => {
       {/* Intelligence Layers */}
       <section className="py-32 bg-white/[0.01]">
         <div className="container mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-24">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 md:gap-8 mb-16 md:mb-24">
             <div className="max-w-2xl">
-              <div className="text-emerald-500 text-[10px] font-black tracking-[0.4em] uppercase mb-4">Institutional Framework</div>
-              <h2 className="text-5xl md:text-7xl font-bold tracking-tighter leading-none italic uppercase">Core Analysis <br />Layers</h2>
+              <div className="text-emerald-500 text-[9px] font-black tracking-[0.4em] uppercase mb-3">Institutional Framework</div>
+              <h2 className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tighter leading-none italic uppercase">Core Analysis <br className="hidden sm:block" />Layers</h2>
             </div>
-            <p className="text-white/30 text-lg max-w-sm leading-relaxed pb-2">
+            <p className="text-white/30 text-sm sm:text-lg max-w-sm leading-relaxed pb-2">
               Processing thousands of data points across five specialized intelligence vectors.
             </p>
           </div>

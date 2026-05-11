@@ -3,11 +3,11 @@ import { motion } from "motion/react";
 import { containerVariants, itemVariants } from "@/lib/motion";
 
 const PARTNERS = [
-  { name: "Binance", logo: "https://cryptologos.cc/logos/binance-coin-bnb-logo.svg" },
-  { name: "MetaTrader 5", logo: "https://upload.wikimedia.org/wikipedia/commons/2/23/MetaTrader_4_logo.png" },
+  { name: "Binance", logo: "https://upload.wikimedia.org/wikipedia/commons/e/e8/Binance_Logo.svg" },
+  { name: "MetaTrader 5", logo: "https://vcl-corp.s3.ap-southeast-1.amazonaws.com/media/images/MetaTrader_5_logo.original.png" },
   { name: "Amazon Web Services", logo: "https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" },
-  { name: "TradingView", logo: "https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr:1/v1481103649/k4c5p4t2gqjymnld10c9.png" },
-  { name: "Stripe", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Stripe_Logo%2C_revised_2016.svg/1024px-Stripe_Logo%2C_revised_2016.svg.png" },
+  { name: "TradingView", logo: "https://upload.wikimedia.org/wikipedia/commons/e/e2/TradingView_logo.svg" },
+  { name: "Stripe", logo: "https://upload.wikimedia.org/wikipedia/commons/b/ba/Stripe_Logo%2C_revised_2016.svg" },
 ];
 
 const PRESS = [

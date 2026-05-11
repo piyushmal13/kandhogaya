@@ -113,7 +113,7 @@ export const Marketplace = () => {
   };
 
   const content = (
-    <div className={user ? "pb-24" : "pt-32 pb-24 md:pt-48 md:pb-48"}>
+    <div className={user ? "pb-24" : "pt-24 pb-12 md:pt-32 md:pb-24"}>
       <PageMeta
         title="Execution Desk | Institutional Assets"
         description="Access the IFX TRADES Execution Desk. High-frequency algorithmic models and institutional macro intelligence."
@@ -129,14 +129,14 @@ export const Marketplace = () => {
               animate={{ opacity: 1, x: 0 }}
               className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-emerald-500/[0.04] border border-emerald-500/[0.15] text-emerald-400 text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em]"
             >
-              Asset Catalog
+              Institutional Inventory
             </motion.div>
-            <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold mb-4 sm:mb-6 text-white tracking-tight leading-[0.9]">
+            <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold mb-4 sm:mb-6 text-white tracking-tight leading-[0.9] uppercase italic">
               Institutional <br />
               <span className="text-emerald-400">Allocations.</span>
             </h1>
             <p className="text-sm sm:text-base md:text-xl text-white/40 max-w-2xl font-medium leading-relaxed">
-              Professional execution models and systematic trading protocols designed for high-performance capital management and institutional risk governance.
+              Professional execution models and systematic trading protocols designed for high-performance capital management.
             </p>
           </div>
 

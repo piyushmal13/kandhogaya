@@ -63,7 +63,7 @@ const AnimatedRoutes = () => {
             <Route path="/solutions" element={<Solutions />} />
             <Route path="/consultation" element={<Consultation />} />
             <Route path="/marketplace" element={<FeatureGuard flag="marketplace" redirect="/dashboard"><Marketplace /></FeatureGuard>} />
-            <Route path="/quantx" element={<ProtectedRoute><QuantX /></ProtectedRoute>} />
+            <Route path="/quantx" element={<QuantX />} />
             <Route path="/webinars" element={<FeatureGuard flag="webinars" redirect="/dashboard"><Webinars /></FeatureGuard>} />
             <Route path="/webinars/:id" element={<WebinarDetail />} />
             <Route path="/blog" element={<Blog />} />
@@ -93,7 +93,7 @@ const AnimatedRoutes = () => {
 
 function AppContent() {
   const location = useLocation();
-  const isPlainLayout = ['/login'].some(path => location.pathname.startsWith(path));
+  const isPlainLayout = ['/login', '/dashboard', '/admin', '/agent', '/affiliate'].some(path => location.pathname.startsWith(path));
 
   if (isPlainLayout) {
     return <AnimatedRoutes />;
