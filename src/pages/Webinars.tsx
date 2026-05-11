@@ -20,7 +20,7 @@ export const Webinars = () => {
   const liveWebinar = webinars?.find(w => w.status === 'live');
 
   return (
-    <div className="relative pt-32 pb-24 min-h-screen overflow-hidden">
+    <div className="relative pt-24 md:pt-32 pb-16 md:pb-24 min-h-screen overflow-hidden">
         {/* Background Ambience */}
         <div className="absolute inset-0 pointer-events-none" aria-hidden>
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[120%] h-[60%] bg-[radial-gradient(ellipse_at_center,rgba(16,185,129,0.06)_0%,transparent_60%)] blur-3xl" />
@@ -34,7 +34,7 @@ export const Webinars = () => {
 
         <div className="max-w-7xl mx-auto px-4 md:px-8 space-y-16">
           <div className="relative z-10 space-y-8 pt-8 md:pt-12">
-            <h1 className="text-4xl md:text-7xl font-black text-white tracking-tight uppercase italic leading-none">
+            <h1 className="text-3xl sm:text-4xl md:text-7xl font-black text-white tracking-tight uppercase italic leading-none">
               Institutional <br />
               <span className="text-emerald-500">Research Terminal.</span>
             </h1>

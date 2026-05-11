@@ -59,34 +59,45 @@ export const SocialProof = () => {
             className="flex gap-6 w-max px-6"
          >
             {[...reviews, ...reviews].map((review, i) => (
-               <div key={`institutional-review-v2-${review.id || i}-${i}`} className="w-[280px] sm:w-[350px] md:w-[450px] shrink-0 bg-[var(--color6)] border border-white/5 rounded-[32px] p-6 md:p-8 relative overflow-hidden group hover:border-emerald-500/20 transition-all duration-500">
-                  <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                  
-                  <div className="flex items-center justify-between mb-6">
-                     <div className="flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
-                        <ShieldCheck className="w-3 h-3 text-emerald-500" />
-                        <span className="text-[8px] font-black text-emerald-500 uppercase tracking-widest">Audited Excellence</span>
-                     </div>
-                     <Verified className="w-5 h-5 text-blue-400 opacity-80" />
-                  </div>
-                  
-                  <p className="text-sm md:text-base text-gray-400 font-sans font-medium leading-relaxed mb-8">
-                     "{review.feedback || review.text}"
-                  </p>
-                  
-                  <div className="flex items-center gap-4 border-t border-white/5 pt-6">
-                     <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white font-black text-sm">
-                        {review.name.charAt(0)}
-                     </div>
-                     <div>
-                       <h4 className="text-xs font-black text-white uppercase tracking-widest">{review.name}</h4>
-                       <p className="text-[10px] text-emerald-500/80 font-bold uppercase tracking-[0.2em] mt-1">
-                          {review.role} • {review.location}
-                       </p>
-                     </div>
-                  </div>
-               </div>
-            ))}
+                <div key={`institutional-review-v3-${review.id || i}-${i}`} className="w-[300px] sm:w-[380px] md:w-[480px] shrink-0 bg-[#080B12]/60 backdrop-blur-xl border border-white/5 rounded-[2.5rem] p-8 md:p-10 relative overflow-hidden group hover:border-emerald-500/20 transition-all duration-700">
+                   <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                   
+                   <div className="flex items-center justify-between mb-8">
+                      <div className="flex gap-1">
+                         {[...Array(5)].map((_, starIdx) => (
+                           <Star 
+                             key={starIdx} 
+                             className={cn(
+                               "w-3.5 h-3.5",
+                               starIdx < (review.rating || 5) ? "text-emerald-500 fill-emerald-500" : "text-white/10"
+                             )} 
+                           />
+                         ))}
+                      </div>
+                      <div className="flex items-center gap-2 px-3 py-1 bg-emerald-500/5 border border-emerald-500/10 rounded-full">
+                         <ShieldCheck className="w-3 h-3 text-emerald-500/60" />
+                         <span className="text-[8px] font-black text-emerald-500/60 uppercase tracking-widest">Verified</span>
+                      </div>
+                   </div>
+                   
+                   <p className="text-sm md:text-lg text-white/60 font-light leading-relaxed mb-10 italic">
+                      "{review.feedback || review.text}"
+                   </p>
+                   
+                   <div className="flex items-center gap-5 border-t border-white/5 pt-8">
+                      <div className="w-14 h-14 rounded-2xl bg-emerald-500/5 border border-white/5 flex items-center justify-center text-emerald-500 font-black text-lg relative overflow-hidden group-hover:border-emerald-500/20 transition-all">
+                         <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                         <span className="relative z-10">{review.name.charAt(0)}</span>
+                      </div>
+                      <div>
+                        <h4 className="text-xs md:text-sm font-black text-white uppercase tracking-widest leading-none mb-2">{review.name}</h4>
+                        <p className="text-[10px] text-emerald-500/60 font-bold uppercase tracking-[0.2em]">
+                           {review.role} <span className="mx-2 text-white/10">|</span> {review.location}
+                        </p>
+                      </div>
+                   </div>
+                </div>
+             ))}
          </motion.div>
       </div>
     </section>

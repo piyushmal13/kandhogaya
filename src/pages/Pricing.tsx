@@ -69,7 +69,7 @@ export const Pricing = () => {
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-[#020202] pt-48 pb-32 px-6 overflow-hidden">
+    <div className="relative min-h-screen bg-[#020202] pt-32 md:pt-48 pb-20 md:pb-32 px-4 sm:px-6 overflow-hidden">
       {/* Background Decor */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden>
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.06)_0%,transparent_70%)]" />
@@ -109,9 +109,9 @@ export const Pricing = () => {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: idx * 0.1 }}
               className={cn(
-                "relative p-12 rounded-[3.5rem] border transition-all duration-700 group flex flex-col",
+                "relative p-8 md:p-12 rounded-[2.5rem] md:rounded-[3.5rem] border transition-all duration-700 group flex flex-col",
                 plan.popular 
-                  ? "bg-emerald-500/[0.03] border-emerald-500/30 shadow-[0_40px_80px_rgba(16,185,129,0.1)] scale-[1.05] z-10" 
+                  ? "bg-emerald-500/[0.03] border-emerald-500/30 shadow-[0_40px_80px_rgba(16,185,129,0.1)] scale-100 md:scale-[1.05] z-10" 
                   : "bg-white/[0.01] border-white/[0.06] hover:bg-white/[0.02] hover:border-white/[0.15]"
               )}
             >

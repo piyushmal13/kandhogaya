@@ -18,6 +18,9 @@ import { AdBanner } from "../components/ui/AdBanner";
 import { CustomAlgoTeam } from "../components/home/CustomAlgoTeam";
 
 
+import { InstitutionalAlgorithms } from "../components/home/InstitutionalAlgorithms";
+
+
 import { faqSchema, educationalOrganizationSchema, websiteSchema, breadcrumbSchema } from "../utils/structuredData";
 
 import { useQuery } from "@tanstack/react-query";
@@ -87,6 +90,9 @@ const Home = () => {
 
         {/* L3: Why Institutional Standard */}
         <TrustGrid />
+
+        {/* L3.1: Bespoke Algorithmic Machinery (Main Business) */}
+        <InstitutionalAlgorithms />
 
         {/* L3.5: Social Proof & Market Authority */}
         <SocialProof />

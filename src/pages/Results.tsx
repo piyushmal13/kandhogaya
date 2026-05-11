@@ -28,7 +28,7 @@ export const Results = () => {
   ];
 
   return (
-    <div className="pt-48 pb-32 bg-[#020202] relative overflow-hidden">
+    <div className="pt-32 md:pt-48 pb-20 md:pb-32 bg-[#020202] relative overflow-hidden">
       {/* Background Decor */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden>
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.06)_0%,transparent_70%)]" />
@@ -70,7 +70,7 @@ export const Results = () => {
           <motion.div 
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
-            className="p-12 rounded-[3.5rem] bg-[#080B12] border border-white/[0.06] space-y-10 shadow-2xl"
+            className="p-6 md:p-12 rounded-[2.5rem] md:rounded-[3.5rem] bg-[#080B12] border border-white/[0.06] space-y-10 shadow-2xl"
           >
             <div className="flex items-center justify-between">
                <h3 className="text-[10px] font-black text-white uppercase tracking-[0.4em] flex items-center gap-4">

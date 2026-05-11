@@ -72,36 +72,40 @@ export const Admin = () => {
   return (
     <DashboardLayout>
       <div className="flex flex-col lg:flex-row gap-10">
-        {/* Internal Admin Sidebar Replacement */}
-        <aside className="lg:w-64 shrink-0 space-y-6">
-           {GROUPS.map(group => (
-             <div key={group} className="space-y-1">
-                <h4 className="px-4 py-2 text-[8px] font-black uppercase tracking-[0.4em] text-gray-700">{GROUP_LABELS[group]}</h4>
-                {tabs.filter(t => t.group === group).map(tab => (
-                   <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={cn(
-                      "w-full flex items-center gap-3 px-4 py-2 rounded-xl text-left transition-all",
-                      activeTab === tab.id ? "bg-emerald-500/10 text-emerald-500 font-black" : "text-gray-500 hover:text-white"
-                    )}
-                   >
-                     <tab.icon className="w-4 h-4" />
-                     <span className="text-[10px] font-bold uppercase tracking-widest">{tab.name}</span>
-                   </button>
-                ))}
-             </div>
-           ))}
+        {/* Internal Admin Sidebar / Mobile Tabs */}
+        <aside className="w-full lg:w-64 shrink-0 overflow-x-auto lg:overflow-visible pb-4 lg:pb-0 scrollbar-hide">
+           <div className="flex lg:flex-col gap-2 min-w-max lg:min-w-0">
+             {GROUPS.map(group => (
+               <div key={group} className="flex lg:flex-col gap-1 items-center lg:items-stretch">
+                  <h4 className="hidden lg:block px-4 py-2 text-[8px] font-black uppercase tracking-[0.4em] text-gray-700 mt-4 first:mt-0">{GROUP_LABELS[group]}</h4>
+                  {tabs.filter(t => t.group === group).map(tab => (
+                     <button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id)}
+                      className={cn(
+                        "flex items-center gap-2 lg:gap-3 px-4 py-2.5 rounded-xl text-left transition-all whitespace-nowrap",
+                        activeTab === tab.id ? "bg-emerald-500/10 text-emerald-400 font-black border border-emerald-500/20" : "text-gray-500 hover:text-white bg-white/[0.02] border border-transparent"
+                      )}
+                     >
+                       <tab.icon className="w-4 h-4" />
+                       <span className="text-[10px] font-black uppercase tracking-widest">{tab.name}</span>
+                     </button>
+                  ))}
+               </div>
+             ))}
+           </div>
         </aside>
 
         {/* Admin Content Stage */}
         <div className="flex-1 min-w-0">
-          <div className="flex items-center justify-between mb-10 pb-6 border-b border-white/5">
-             <h1 className="text-4xl font-black uppercase tracking-tighter italic">Admin <span className="text-emerald-500">{activeTabDef?.name}</span></h1>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 pb-6 border-b border-white/5 gap-4">
+             <h1 className="text-2xl md:text-4xl font-black uppercase tracking-tighter italic leading-none">
+                Admin <span className="text-emerald-500">{activeTabDef?.name}</span>
+             </h1>
              <div className="flex items-center gap-4">
-                <div className="px-4 py-2 bg-white/5 border border-white/5 rounded-xl flex items-center gap-2">
+                <div className="px-4 py-2 bg-emerald-500/5 border border-emerald-500/10 rounded-xl flex items-center gap-2">
                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                   <span className="text-[9px] font-black uppercase tracking-widest">Protocol Sync</span>
+                   <span className="text-[9px] font-black uppercase tracking-widest text-emerald-400">Protocol Sync</span>
                 </div>
              </div>
           </div>

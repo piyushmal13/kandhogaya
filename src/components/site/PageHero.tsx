@@ -70,7 +70,7 @@ export const PageHero = ({
   aside,
   className,
 }: PageHeroProps) => (
-  <section className={cn("relative overflow-hidden pt-32 pb-16 md:pt-40 md:pb-24", className)}>
+  <section className={cn("relative overflow-hidden pt-24 pb-16 md:pt-40 md:pb-24", className)}>
     <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(88,242,182,0.18),transparent_32%),radial-gradient(circle_at_82%_14%,rgba(89,180,255,0.16),transparent_24%),linear-gradient(180deg,rgba(255,255,255,0.03),transparent_30%)]" />
     <div className="site-grid pointer-events-none absolute inset-0 opacity-50" />
 
@@ -84,7 +84,7 @@ export const PageHero = ({
           </Reveal>
 
           <Reveal delay={0.05}>
-            <h1 className="max-w-5xl text-5xl font-semibold leading-none tracking-[-0.04em] text-white md:text-7xl xl:text-[5.6rem]">
+            <h1 className="max-w-5xl text-4xl font-semibold leading-none tracking-[-0.04em] text-white md:text-7xl xl:text-[5.6rem]">
               {title}
             </h1>
           </Reveal>

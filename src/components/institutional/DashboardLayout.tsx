@@ -44,11 +44,11 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         className="relative z-10 flex-1 flex flex-col min-w-0"
       >
         <div className={cn(
-          "w-full transition-all duration-700 ease-in-out px-4 sm:px-8 md:px-12 pt-24",
+          "w-full transition-all duration-700 ease-in-out px-4 sm:px-8 md:px-12 pt-20 md:pt-24",
           contextPanel ? "max-w-[1800px]" : "max-w-[1400px]"
         )}>
           
-          <div className="flex flex-col lg:flex-row gap-10 py-10">
+          <div className="flex flex-col lg:flex-row gap-6 md:gap-10 py-6 md:py-10">
             
             {/* === MAIN EXECUTION SURFACE === */}
             <main className="flex-1 flex flex-col outline-none" tabIndex={-1}>
