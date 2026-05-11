@@ -53,24 +53,24 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
         initial={{ scale: 0.95, y: 20 }}
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.95, y: 20 }}
-        className="bg-[var(--color7)] border border-white/10 rounded-3xl w-full max-w-5xl overflow-hidden shadow-2xl relative flex flex-col md:flex-row h-[90vh] md:h-auto"
+        className="bg-[var(--color7)] border border-white/10 rounded-2xl md:rounded-3xl w-full max-w-5xl overflow-hidden shadow-2xl relative flex flex-col md:flex-row h-full md:h-auto max-h-[95vh] md:max-h-none"
       >
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 z-20 p-2 bg-black/50 rounded-full hover:bg-white/10 transition-colors text-white"
+          className="absolute top-4 right-4 z-30 p-2 bg-black/50 rounded-full hover:bg-white/10 transition-colors text-white"
         >
           <X className="w-5 h-5 md:w-6 md:h-6" />
         </button>
 
         {/* Left: Details & Tabs */}
-        <div className="flex-1 p-6 md:p-12 overflow-y-auto border-b md:border-b-0 md:border-r border-white/5">
-          <div className="mb-6 md:mb-8">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] md:text-xs font-mono tracking-widest mb-3 md:mb-4">
+        <div className="flex-1 p-5 sm:p-8 md:p-12 overflow-y-auto border-b md:border-b-0 md:border-r border-white/5 custom-scrollbar">
+          <div className="mb-6 md:mb-8 pr-10 md:pr-0">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[9px] md:text-xs font-mono tracking-widest mb-3 md:mb-4">
               <Zap className="w-3 h-3" />
               {algo.category || "Algorithm"}
             </div>
-            <div className="flex justify-between items-start gap-4 mb-3 md:mb-4">
-              <h2 className="text-2xl md:text-4xl font-bold text-white">{algo.name}</h2>
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-3 md:mb-4">
+              <h2 className="text-xl md:text-4xl font-bold text-white">{algo.name}</h2>
               <button 
                 onClick={() => {
                   let url = `${globalThis.location.origin}/marketplace`;
@@ -80,23 +80,23 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
                   globalThis.navigator.clipboard.writeText(url);
                   info("Referral link copied to clipboard!");
                 }}
-                className="flex items-center gap-2 px-3 py-1.5 bg-emerald-500/10 text-emerald-500 rounded-lg hover:bg-emerald-500 hover:text-black transition-colors border border-emerald-500/20 text-[10px] font-bold uppercase tracking-widest whitespace-nowrap mt-1"
+                className="inline-flex items-center justify-center gap-2 px-3 py-2 bg-emerald-500/10 text-emerald-500 rounded-lg hover:bg-emerald-500 hover:text-black transition-colors border border-emerald-500/20 text-[9px] font-bold uppercase tracking-widest whitespace-nowrap"
                 title={user?.role === 'admin' || user?.role === 'agent' ? "Copy Your Referral Link" : "Share Link"}
               >
                 <Share2 className="w-3 h-3" /> {user?.role === 'admin' || user?.role === 'agent' ? "Copy Link" : "Share"}
               </button>
             </div>
-            <p className="text-gray-400 leading-relaxed text-sm md:text-lg">{algo.description}</p>
+            <p className="text-white/40 leading-relaxed text-xs md:text-lg max-w-2xl">{algo.description}</p>
           </div>
 
           {/* Tabs Navigation */}
-          <div className="flex gap-4 md:gap-6 border-b border-white/5 mb-6 md:mb-8 overflow-x-auto whitespace-nowrap scrollbar-hide">
+          <div className="flex gap-4 md:gap-6 border-b border-white/5 mb-6 md:mb-8 overflow-x-auto whitespace-nowrap scrollbar-hide no-scrollbar">
             {['overview', 'performance', 'reviews', 'qa', 'terms'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab as any)}
-                className={`pb-3 md:pb-4 text-[10px] md:text-sm font-bold uppercase tracking-widest transition-all relative ${
-                  activeTab === tab ? 'text-emerald-500' : 'text-gray-500 hover:text-white'
+                className={`pb-3 md:pb-4 text-[9px] md:text-sm font-bold uppercase tracking-[0.2em] transition-all relative shrink-0 ${
+                  activeTab === tab ? 'text-emerald-500' : 'text-white/20 hover:text-white'
                 }`}
               >
                 {tab}
@@ -221,8 +221,8 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
 
             {activeTab === 'reviews' && (
               <div className="space-y-6">
-                {algo.reviews?.length ? algo.reviews.map((review) => (
-                  <div key={review.id || review.user_name || Math.random()} className="p-6 rounded-2xl bg-white/5 border border-white/5">
+                {algo.reviews?.length ? algo.reviews.map((review, idx) => (
+                  <div key={review.id || `review-${idx}`} className="p-5 sm:p-6 rounded-2xl bg-white/5 border border-white/5">
                     <div className="flex justify-between items-start mb-4">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 font-bold">
@@ -284,21 +284,24 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
         </div>
 
         {/* Right: Subscription */}
-        <div className="w-full md:w-[400px] bg-[var(--color6)] p-6 md:p-12 flex flex-col justify-center relative">
+        <div className="w-full md:w-[400px] bg-[var(--color6)] p-6 md:p-12 flex flex-col relative custom-scrollbar overflow-y-auto">
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-cyan-500" />
           
-          <h3 className="text-xl md:text-2xl font-bold text-white mb-4 md:mb-6">Subscription Plans</h3>
+          <div className="mb-6 md:mb-10 mt-4">
+            <h3 className="text-sm md:text-xl font-black text-white uppercase tracking-[0.2em] mb-2 md:mb-4">Deployment</h3>
+            <p className="text-white/30 text-[10px] md:text-xs uppercase tracking-widest font-mono">Select Execution Window</p>
+          </div>
 
-          <div className="space-y-3 md:space-y-4 mb-6 md:mb-8">
+          <div className="space-y-4 md:space-y-6 mb-8 md:mb-12">
             <button 
               onClick={() => handleSubscribeClick('Monthly')}
               className="w-full p-5 md:p-6 rounded-xl md:rounded-2xl bg-white/5 border border-white/10 hover:border-emerald-500/50 transition-all text-left group"
             >
               <div className="flex justify-between items-center mb-1 md:mb-2">
                 <span className="text-white font-bold text-sm md:text-base">Monthly Access</span>
-                <span className="text-xl md:text-2xl font-bold text-white">${algo.price}</span>
+                <span className="text-xl md:text-2xl font-bold text-emerald-400">${algo.price}</span>
               </div>
-              <p className="text-gray-500 text-[10px] md:text-xs">Full algorithm access with 24/5 support.</p>
+              <p className="text-white/30 text-[10px] md:text-xs">Full algorithm access with 24/5 support.</p>
             </button>
 
             {algo.long_plan_offers?.map((offer) => {
@@ -323,22 +326,22 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
                     <span className="text-white font-bold text-sm md:text-base">{offer.duration} Plan</span>
                     <span className="text-xl md:text-2xl font-bold text-emerald-400">${offer.price}</span>
                   </div>
-                  <p className="text-gray-400 text-[10px] md:text-xs">Best value for long-term institutional trading.</p>
+                  <p className="text-white/30 text-[10px] md:text-xs">Best value for long-term institutional trading.</p>
                 </button>
               );
             })}
           </div>
 
-          <ul className="space-y-3 md:space-y-4 mb-6 md:mb-8">
-            <li className="flex items-center gap-3 text-xs md:text-sm text-gray-300">
+          <ul className="space-y-3 md:space-y-4 mb-8 md:mb-12">
+            <li className="flex items-center gap-3 text-xs md:text-sm text-white/60">
               <Check className="w-3.5 h-3.5 md:w-4 h-4 text-emerald-500" />
               Full Algorithm Access
             </li>
-            <li className="flex items-center gap-3 text-xs md:text-sm text-gray-300">
+            <li className="flex items-center gap-3 text-xs md:text-sm text-white/60">
               <Check className="w-3.5 h-3.5 md:w-4 h-4 text-emerald-500" />
               24/7 VPS Hosting Included
             </li>
-            <li className="flex items-center gap-3 text-xs md:text-sm text-gray-300">
+            <li className="flex items-center gap-3 text-xs md:text-sm text-white/60">
               <ShieldCheck className="w-3.5 h-3.5 md:w-4 h-4 text-emerald-500" />
               Institutional Liquidity
             </li>
@@ -346,14 +349,14 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
 
           <button 
             onClick={() => handleSubscribeClick('Monthly')}
-            className="w-full py-3.5 md:py-4 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] flex items-center justify-center gap-2 group text-sm md:text-base"
+            className="w-full py-4 md:py-5 bg-emerald-500 text-black font-black text-xs md:text-sm uppercase tracking-[0.2em] rounded-xl md:rounded-2xl hover:bg-emerald-400 transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] flex items-center justify-center gap-3 group"
           >
             {!user && <Lock className="w-3.5 h-3.5 md:w-4 h-4" />}
             Get Started
             <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
           </button>
           
-          <div className="text-center mt-4 text-[10px] md:text-xs text-gray-600">
+          <div className="text-center mt-6 text-[9px] md:text-[10px] text-white/20 uppercase tracking-widest">
             Secure payment via Stripe. Cancel anytime.
           </div>
         </div>

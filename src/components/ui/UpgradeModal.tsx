@@ -69,8 +69,8 @@ export const UpgradeModal = ({ isOpen, onClose, requiredPlan = 'pro', title, des
             </p>
 
             <div className="grid gap-6 text-left mb-12">
-              {features.map((f, i) => (
-                <div key={i} className="flex gap-4 p-4 rounded-3xl hover:bg-white/5 transition-colors border border-transparent hover:border-white/5">
+              {features.map((f) => (
+                <div key={f.text} className="flex gap-4 p-4 rounded-3xl hover:bg-white/5 transition-colors border border-transparent hover:border-white/5">
                   <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 shrink-0">
                     <f.icon className="w-6 h-6" />
                   </div>

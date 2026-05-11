@@ -120,44 +120,44 @@ export const Marketplace = () => {
         path="/marketplace"
       />
 
-      <div className="max-w-[1440px] mx-auto px-6 sm:px-12 space-y-16">
+      <div className="max-w-[1440px] mx-auto px-5 sm:px-12 space-y-10 sm:space-y-16">
         {/* Header Block */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-12">
-          <div className="space-y-10 flex-1">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10 sm:gap-12">
+          <div className="space-y-6 sm:space-y-10 flex-1">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-emerald-500/[0.04] border border-emerald-500/[0.15] text-emerald-400 text-[10px] font-bold uppercase tracking-[0.2em]"
+              className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-emerald-500/[0.04] border border-emerald-500/[0.15] text-emerald-400 text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em]"
             >
               Asset Catalog
             </motion.div>
-            <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 text-white tracking-tight leading-[0.9]">
+            <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold mb-4 sm:mb-6 text-white tracking-tight leading-[0.9]">
               Institutional <br />
               <span className="text-emerald-400">Allocations.</span>
             </h1>
-            <p className="text-base md:text-xl text-white/40 max-w-2xl font-medium leading-relaxed">
+            <p className="text-sm sm:text-base md:text-xl text-white/40 max-w-2xl font-medium leading-relaxed">
               Professional execution models and systematic trading protocols designed for high-performance capital management and institutional risk governance.
             </p>
           </div>
 
           {/* Catalog Controls */}
           <div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
-            <div className="relative flex-1 lg:w-80 group">
+            <div className="relative w-full sm:flex-1 lg:w-80 group">
               <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20 group-focus-within:text-emerald-500 transition-colors" />
               <input
                 type="text"
                 placeholder="Search Asset..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-white/[0.02] border border-white/5 rounded-2xl py-4 pl-12 pr-6 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-emerald-500/30 focus:bg-white/[0.04] transition-all"
+                className="w-full bg-white/[0.02] border border-white/5 rounded-xl sm:rounded-2xl py-3.5 sm:py-4 pl-12 pr-6 text-xs sm:text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-emerald-500/30 focus:bg-white/[0.04] transition-all"
               />
             </div>
-            <div className="flex p-1.5 bg-white/[0.02] border border-white/5 rounded-2xl">
+            <div className="flex w-full sm:w-auto p-1.5 bg-white/[0.02] border border-white/5 rounded-xl sm:rounded-2xl">
               {categories.map((cat) => (
                 <button
                   key={cat.id}
                   onClick={() => setActiveCategory(cat.id)}
-                  className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
+                  className={`flex-1 sm:flex-none px-4 sm:px-6 py-2 rounded-lg sm:rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-widest transition-all ${
                     activeCategory === cat.id
                        ? "bg-emerald-500 text-black"
                        : "text-white/40 hover:text-white hover:bg-white/5"

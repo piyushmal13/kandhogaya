@@ -83,9 +83,8 @@ export const Academy = () => {
         <section className="space-y-12">
           {loading ? (
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-              {Array.from({ length: 3 }).map((_, i) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <CourseCardSkeleton key={`academy-skeleton-${i}`} />
+              {[1, 2, 3].map((i) => (
+                <CourseCardSkeleton key={`academy-skel-${i}`} />
               ))}
             </div>
           ) : (
@@ -97,8 +96,11 @@ export const Academy = () => {
                 </div>
               ) : (
                 <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-3">
-                  {courses.map((course, index) => {
+                   {courses.map((course, index) => {
                     const persona = getInstitutionalPersona(course);
+                    const courseLevel = course.level?.toLowerCase();
+                    const institutionalLevel = courseLevel === 'advanced' ? 'institutional' : (courseLevel || 'beginner');
+
                     return (
                       <AcademyCourseCard 
                         key={course.id}
@@ -110,7 +112,7 @@ export const Academy = () => {
                           thumbnailUrl: getCourseImage(course),
                           duration: typeof course.duration === 'string' ? Number.parseInt(course.duration, 10) || 60 : 60,
                           moduleCount: course.chapters?.length || course.lessons?.length || 0,
-                          level: (course.level?.toLowerCase() === 'advanced' ? 'institutional' : course.level?.toLowerCase() || 'beginner') as any,
+                          level: institutionalLevel as any,
                           isPremium: course.price > 0,
                           enrolledCount: 1420 + index * 85,
                           description: course.description,

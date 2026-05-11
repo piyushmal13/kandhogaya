@@ -3,7 +3,7 @@ import {
   Search, Filter, 
   Target, Zap,
   ChevronLeft, ChevronRight,
-  TrendingUp, Clock
+  TrendingUp
 } from "lucide-react";
 import { cn } from "../../utils/cn";
 import { formatDistanceToNow } from "date-fns";
