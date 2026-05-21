@@ -111,9 +111,9 @@ export const Footer = () => (
 
           {/* --- Column 3: Quantitative Edge --- */}
           <div>
-            <h4 className="mb-10 text-[10px] font-black uppercase tracking-[0.3em] text-white">Knowledge</h4>
+            <h4 className="mb-10 text-[10px] font-black uppercase tracking-[0.3em] text-white">Talent Desk</h4>
             <ul className="space-y-5 text-[13px] text-[#8A9AAB] font-light">
-              <li><Link to="/academy" className="hover:text-emerald-400 transition-colors">Quant Curriculum</Link></li>
+              <li><Link to="/academy" className="hover:text-emerald-400 transition-colors">Talent Network</Link></li>
               <li><Link to="/blog" className="hover:text-emerald-400 transition-colors">Macro Intelligence</Link></li>
               <li><Link to="/webinars" className="hover:text-emerald-400 transition-colors">Desk Sessions</Link></li>
             </ul>
@@ -124,7 +124,7 @@ export const Footer = () => (
             <h4 className="mb-10 text-[10px] font-black uppercase tracking-[0.3em] text-white">Infrastructure</h4>
             <ul className="space-y-5 text-[13px] text-[#8A9AAB] font-light">
               <li><Link to="/about" className="hover:text-emerald-400 transition-colors">Operations</Link></li>
-              <li><Link to="/hiring" className="hover:text-emerald-400 transition-colors">Desk Recruiting</Link></li>
+              <li><Link to="/academy" className="hover:text-emerald-400 transition-colors">Enterprise Hiring</Link></li>
               <li><Link to="/contact" className="hover:text-emerald-400 transition-colors">Support Portal</Link></li>
             </ul>
           </div>

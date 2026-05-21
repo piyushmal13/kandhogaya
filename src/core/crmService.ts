@@ -11,7 +11,12 @@ export const CRMService = {
    * Captures a high-intent discovery signal (Lead).
    * Implements upsert logic to track returning institutional interests.
    */
-  async captureLead(email: string, source: string = "Global_Discovery", actionDetail?: string) {
+  async captureLead(
+    email: string,
+    source: string = "Global_Discovery",
+    actionDetail?: string,
+    additionalMetadata?: Record<string, any>
+  ) {
     // 1. Fetch existing lead to preserve metadata if possible
     const { data: existing } = await supabase
       .from("leads")
@@ -23,6 +28,7 @@ export const CRMService = {
       ...(existing?.crm_metadata || {}),
       last_action: actionDetail || source,
       last_action_at: new Date().toISOString(),
+      ...(additionalMetadata || {}),
       [new Date().getTime()]: actionDetail || source // Simple activity log
     };
 

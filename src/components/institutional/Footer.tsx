@@ -36,7 +36,7 @@ export function Footer() {
                 <span className="text-[9px] font-black uppercase tracking-[0.4em] text-emerald-500/50">Institutional Platform</span>
               </div>
               <p className="text-[11px] font-medium text-white/40 leading-relaxed uppercase tracking-widest max-w-[200px]">
-                Elite algorithmic trading education and quantitative execution architecture.
+                Elite quantitative recruitment pipeline and custom algorithmic trading architecture.
               </p>
             </div>
             
@@ -45,7 +45,7 @@ export function Footer() {
               <h4 className="text-[10px] font-black text-white uppercase tracking-[0.3em]">Master Clusters</h4>
               <ul className="space-y-3 text-[11px] font-medium text-white/30 uppercase tracking-widest">
                 <li><Link to="/marketplace" className="hover:text-emerald-500 transition-colors">Marketplace</Link></li>
-                <li><Link to="/academy" className="hover:text-emerald-500 transition-colors">Academy</Link></li>
+                <li><Link to="/academy" className="hover:text-emerald-500 transition-colors">Talent Desk</Link></li>
                 <li><Link to="/webinars" className="hover:text-emerald-500 transition-colors">Webinars</Link></li>
               </ul>
             </div>

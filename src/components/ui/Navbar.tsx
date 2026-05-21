@@ -54,10 +54,10 @@ export const Navbar = () => {
   const navLinks = [
     { name: "Terminal", path: "/", icon: Home },
     { name: "Ecosystem", path: "/quantx", icon: Zap },
+    { name: "Talent Desk", path: "/academy", icon: Zap },
     { name: "Webinars", path: "/webinars", icon: BookOpen },
     { name: "Marketplace", path: "/marketplace", icon: BarChart3 },
     { name: "About", path: "/about", icon: Zap },
-    { name: "Blog", path: "/blog", icon: MessageSquare },
   ];
 
   const isAdmin = userProfile?.role === "admin";

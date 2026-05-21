@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import { 
   LayoutDashboard, 
   Store, 
-  GraduationCap, 
+  Briefcase, 
   Video, 
   LineChart, 
   Settings,
@@ -31,7 +31,7 @@ export function GlobalNavigation() {
   const navItems: NavItem[] = [
     { path: '/dashboard', label: 'Omni-View', icon: LayoutDashboard, flag: 'admin_panel' },
     { path: '/marketplace', label: 'Marketplace', icon: Store, flag: 'marketplace' },
-    { path: '/academy', label: 'Academy', icon: GraduationCap, flag: 'academy' },
+    { path: '/academy', label: 'Talent Desk', icon: Briefcase, flag: 'academy' },
     { path: '/webinars', label: 'Webinars', icon: Video, flag: 'webinars' },
     { path: '/results', label: 'Performance', icon: LineChart, flag: 'algo' },
   ];

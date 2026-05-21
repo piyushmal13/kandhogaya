@@ -84,8 +84,8 @@ export const InstitutionalAlgorithms = () => {
                <div className="relative h-full flex flex-col justify-center space-y-12">
                   <div className="flex items-center justify-between">
                      <div className="space-y-2">
-                        <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Compiler Sync</span>
-                        <div className="text-3xl font-black text-white italic">0.2ms Execution</div>
+                        <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Model Synthesis</span>
+                        <div className="text-3xl font-black text-white italic">99.8% Core Accuracy</div>
                      </div>
                      <Terminal className="text-emerald-500/40 w-12 h-12" />
                   </div>

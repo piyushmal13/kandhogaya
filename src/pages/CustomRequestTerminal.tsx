@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { Navbar } from '../components/ui/Navbar';
 import { Footer } from '../components/ui/Footer';
 import { EliteButton } from '../components/ui/Button';
 import { logger } from '../core/logger';
 import { useToast } from '../contexts/ToastContext';
+import { CRMService } from '../core/crmService';
 
 /**
  * CustomRequestTerminal
@@ -31,13 +32,20 @@ export const CustomRequestTerminal: React.FC = () => {
     setIsSubmitting(true);
     
     try {
-      const response = await fetch('/api/custom-request', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
+      const res = await CRMService.captureLead(
+        formData.email,
+        "Custom_Algo_Build_Inquiry",
+        `Bespoke Build: ${formData.project_type} with Budget ${formData.budget}`,
+        {
+          sender_name: formData.name,
+          project_type: formData.project_type,
+          description: formData.description,
+          budget: formData.budget,
+          timeline: formData.timeline
+        }
+      );
       
-      if (!response.ok) throw new Error('System failure during transmission');
+      if (res?.error) throw res.error;
       
       setIsSuccess(true);
       success('Protocol Initiated: Request Transmitted');
