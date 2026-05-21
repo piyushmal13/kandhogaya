@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
+import { Link } from 'react-router-dom';
 import { Check, Code, Cpu, Gauge } from 'lucide-react';
 
 const TIERS = [
@@ -102,15 +103,16 @@ export function ServiceConfigurator() {
                 ))}
               </ul>
 
-              <button 
-                className={`w-full relative overflow-hidden rounded-2xl px-10 py-5 font-black uppercase tracking-[0.3em] text-[10px] transition-all duration-500 ${
+              <Link 
+                to="/solutions/custom"
+                className={`block text-center w-full relative overflow-hidden rounded-2xl px-10 py-5 font-black uppercase tracking-[0.3em] text-[10px] transition-all duration-500 ${
                   selected === tier.id 
                     ? 'bg-white text-black hover:scale-[1.02]' 
                     : 'bg-white/[0.05] text-white hover:bg-white/[0.1] hover:scale-[1.02]'
                 }`}
               >
-                {selected === tier.id ? 'Active Selection' : 'Configure Tier'}
-              </button>
+                {selected === tier.id ? 'Initiate Build Protocol' : 'Configure Tier'}
+              </Link>
             </motion.div>
           ))}
         </div>

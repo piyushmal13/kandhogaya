@@ -36,6 +36,7 @@ const NotFound = lazy(() => import("./pages/NotFound").then(m => ({ default: m.N
 const InstitutionalError = lazy(() => import("./pages/Error").then(m => ({ default: m.InstitutionalError })));
 const Solutions = lazy(() => import("./pages/Solutions").then(m => ({ default: m.Solutions })));
 const Consultation = lazy(() => import("./pages/Consultation").then(m => ({ default: m.Consultation })));
+const CustomRequestTerminal = lazy(() => import("./pages/CustomRequestTerminal").then(m => ({ default: m.CustomRequestTerminal })));
 const InstitutionalSkeleton = lazy(() => import("./components/institutional/InstitutionalSkeleton").then(m => ({ default: m.InstitutionalSkeleton })));
 const DashboardLayout = lazy(() => import("./components/institutional/DashboardLayout").then(m => ({ default: m.DashboardLayout })));
 
@@ -61,6 +62,7 @@ const AnimatedRoutes = () => {
           <Routes location={location}>
             <Route path="/" element={<Home />} />
             <Route path="/solutions" element={<Solutions />} />
+            <Route path="/solutions/custom" element={<CustomRequestTerminal />} />
             <Route path="/consultation" element={<Consultation />} />
             <Route path="/marketplace" element={<FeatureGuard flag="marketplace" redirect="/dashboard"><Marketplace /></FeatureGuard>} />
             <Route path="/quantx" element={<QuantX />} />
