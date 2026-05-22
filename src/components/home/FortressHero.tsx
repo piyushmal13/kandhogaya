@@ -157,7 +157,7 @@ export const FortressHero = () => {
           className="max-w-2xl mx-auto text-white/40 leading-relaxed mb-10 font-medium"
         >
           Senior-led quantitative execution and market architecture. 
-          Direct connectivity to Asia's most sophisticated institutional engineering desk.
+          Direct educational exposure to Asia's most sophisticated institutional quantitative models.
         </motion.p>
 
         {/* Live Operational Telemetry */}

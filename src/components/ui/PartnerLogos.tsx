@@ -15,7 +15,7 @@ const PARTNERS = [
   {
     name: "Binance",
     category: "Global Exchange",
-    logoUrl: "https://cryptologos.cc/logos/binance-coin-bnb-logo.svg",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e8/Binance_Logo.svg",
     color: "from-yellow-600 to-yellow-400",
   },
   {
@@ -33,7 +33,7 @@ const PARTNERS = [
   {
     name: "TradingView",
     category: "Chart Partner",
-    logoUrl: "https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/v1481103649/k4c5p4t2gqjymnld10c9.png",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e2/TradingView_logo.svg",
     color: "from-sky-500 to-cyan-400",
   },
   {

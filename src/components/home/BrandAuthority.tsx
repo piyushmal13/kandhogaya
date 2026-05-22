@@ -4,7 +4,7 @@ import { containerVariants, itemVariants } from "@/lib/motion";
 
 const PARTNERS = [
   { name: "Binance", logo: "https://upload.wikimedia.org/wikipedia/commons/e/e8/Binance_Logo.svg" },
-  { name: "MetaTrader 5", logo: "https://vcl-corp.s3.ap-southeast-1.amazonaws.com/media/images/MetaTrader_5_logo.original.png" },
+  { name: "MetaTrader 5", logo: "https://upload.wikimedia.org/wikipedia/commons/e/e0/MetaTrader_5.png" },
   { name: "Amazon Web Services", logo: "https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" },
   { name: "TradingView", logo: "https://upload.wikimedia.org/wikipedia/commons/e/e2/TradingView_logo.svg" },
   { name: "Stripe", logo: "https://upload.wikimedia.org/wikipedia/commons/b/ba/Stripe_Logo%2C_revised_2016.svg" },

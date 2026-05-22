@@ -97,8 +97,8 @@ export const QuantX = () => {
   return (
     <div ref={containerRef} className="min-h-screen bg-[#010203] text-white selection:bg-emerald-500/30">
       <PageMeta 
-        title="QuantX Ecosystem | Institutional Intelligence Trading System"
-        description="Explore the multi-layer architecture behind QuantX. From market regime detection to autonomous execution and recursive feedback loops."
+        title="QuantX Ecosystem | Institutional Systematic Execution Infrastructure"
+        description="Explore the multi-layer architecture behind QuantX. From market regime detection to systematic macro execution and recursive feedback loops."
       />
 
       {/* Hero Section */}
@@ -119,13 +119,13 @@ export const QuantX = () => {
           >
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[9px] font-black uppercase tracking-[0.4em] mb-6 sm:mb-8">
               <Brain className="w-3 h-3" />
-              Intelligence Protocol
+              Systematic Execution Protocol
             </div>
             <h1 className="text-5xl sm:text-7xl md:text-9xl font-bold tracking-tighter mb-6 sm:mb-8 leading-[0.9] uppercase italic">
               Quant<span className="text-emerald-400 font-black">X</span>
             </h1>
             <p className="text-white/40 text-sm sm:text-lg md:text-xl max-w-2xl mx-auto leading-relaxed px-4">
-              Not a bot. A multi-layer cognitive ecosystem designed for institutional-grade gold execution.
+              Not a retail bot. A multi-layered systematic framework designed for institutional-grade gold research, analyzed in our educational demo environment.
             </p>
           </motion.div>
         </div>
@@ -152,11 +152,11 @@ export const QuantX = () => {
             <div className="absolute inset-x-0 top-1/2 h-px bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent -translate-y-1/2 hidden lg:block" />
             
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 sm:gap-4 relative z-10">
-              <ArchitectureNode title="Market Data" icon={Database} subtext="L-Feed" active />
-              <ArchitectureNode title="Core Analyzer" icon={Brain} subtext="Engine-v8" active />
-              <ArchitectureNode title="Risk Engine" icon={ShieldAlert} subtext="Strict-Mode" active />
-              <ArchitectureNode title="Execution Model" icon={Zap} subtext="Demo Environment" active />
-              <ArchitectureNode title="Optimization" icon={RefreshCcw} subtext="Auto-Recal" active />
+              <ArchitectureNode title="Market Data" icon={Database} subtext="L1/L2 Feed" active />
+              <ArchitectureNode title="Quantitative Core" icon={Brain} subtext="Systematic v2.4" active />
+              <ArchitectureNode title="Risk Controls" icon={ShieldAlert} subtext="Hard Cap 1.5%" active />
+              <ArchitectureNode title="Execution Engine" icon={Zap} subtext="Simulation Desk" active />
+              <ArchitectureNode title="Model Recalibration" icon={RefreshCcw} subtext="Auto-Recal" active />
             </div>
           </div>
         </div>
@@ -179,7 +179,7 @@ export const QuantX = () => {
             <IntelligenceLayer 
               number="1"
               title="Regime Classification"
-              description="Real-time market environment analysis. Identifies if the current structure is trending, ranging, or exhibiting institutional manipulation."
+              description="Real-time market environment analysis. Classifies whether the market structure is trending, mean-reverting, or exhibiting structural liquidity sweeps."
               inputs={["Volatility (ATR)", "Price Action", "Liquidity Zones"]}
               outputs="MARKET REGIME"
               icon={Activity}
@@ -189,7 +189,7 @@ export const QuantX = () => {
               number="2"
               title="Framework Selection"
               description="Dynamically activates the most robust execution engine based on the current market environment output."
-              inputs={["Trend Engine", "Mean Reversion", "SMC Engine"]}
+              inputs={["Trend Engine", "Mean Reversion", "Systematic Order Flow Engine"]}
               outputs="ACTIVE STRATEGY"
               icon={Layers}
               delay={0.1}
@@ -205,18 +205,18 @@ export const QuantX = () => {
             />
             <IntelligenceLayer 
               number="4"
-              title="Risk Intelligence"
-              description="Dynamic lot sizing and capital preservation algorithms. Adjusts exposure based on winning/losing streaks."
+              title="Systematic Risk Governance"
+              description="Dynamic position sizing and capital preservation algorithms. Adjusts exposure based on rolling historical drawdown profiles."
               inputs={["Balance", "Equity Curve", "Drawdown"]}
-              outputs="LOT SIZE / STOP"
+              outputs="EXPOSURE / STOP"
               icon={ShieldAlert}
               delay={0.3}
             />
             <div className="md:col-span-2">
               <IntelligenceLayer 
                 number="5"
-                title="Trade Management"
-                description="The precision profit-capture layer. Automates break-even moves, partial closes, and advanced trailing stops."
+                title="Dynamic Liquidation Logic"
+                description="The precision profit-capture and exit layer. Optimizes order scaling, dynamic limit placement, and systematic risk reduction."
                 inputs={["MFE Tracking", "Liquidity Gaps", "Time In Trade"]}
                 outputs="DYNAMIC EXIT"
                 icon={Workflow}
@@ -243,7 +243,7 @@ export const QuantX = () => {
                   </div>
                   <div>
                     <h4 className="text-xl font-bold mb-3">MT5 Core Bridge</h4>
-                    <p className="text-white/40 leading-relaxed">High-performance data pipeline ensuring strategy signals occur within milliseconds of AI confirmation in the demo environment.</p>
+                    <p className="text-white/40 leading-relaxed">High-performance data pipeline ensuring strategy signals occur within milliseconds of algorithmic confirmation in the educational demo environment.</p>
                   </div>
                 </div>
                 
@@ -302,7 +302,7 @@ export const QuantX = () => {
             <span className="text-emerald-400">Zero Guesswork.</span>
           </h2>
           <button className="btn-primary px-10 py-5 text-sm">
-            ACCESS QUANTX SYSTEM <ChevronRight size={18} />
+            REQUEST QUANTX RESEARCH ACCESS <ChevronRight size={18} />
           </button>
         </div>
       </section>

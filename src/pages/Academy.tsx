@@ -38,9 +38,9 @@ const vettedQuants = [
   },
   {
     id: "ALGO-102Z",
-    role: "C++ High-Frequency Developer",
+    role: "C++ Systematic Execution Engineer",
     credentials: "Proprietary Fund Architect",
-    specialty: "Ultra-Low Latency FIX Engines & Gold Arbitrage",
+    specialty: "Systematic Execution Logic & Gold Arbitrage Models",
     metric: "Drawdown < 4.2%",
     experience: "6 Years",
     languages: ["C++", "Rust", "FIX Protocol"],
