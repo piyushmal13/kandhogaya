@@ -59,6 +59,7 @@ body {
   --color-cyan:        #06B6D4;
   --color-violet:      #8B5CF6;
   --color-imperial:    linear-gradient(135deg, #10B981 0%, #06B6D4 50%, #D4AF37 100%);
+  --grad-royale:       linear-gradient(135deg, #10B981 0%, #06B6D4 50%, #D4AF37 100%);
 
   /* Surfaces */
   --color-background: #010203;
@@ -84,6 +85,7 @@ body {
     --brand-secondary: #00FFA3;
     --brand-accent:    #06B6D4;
     --brand-gold:      #D4AF37;
+    --grad-royale:      linear-gradient(135deg, #10B981 0%, #06B6D4 50%, #D4AF37 100%);
 
     --text-primary:   #FFFFFF;
     --text-secondary: #8A9AAB;

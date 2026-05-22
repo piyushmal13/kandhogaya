@@ -44,11 +44,11 @@ const variantStyles: Record<ButtonVariant, string> = {
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
-  sm: "px-4 py-2 text-xs tracking-wider",
-  md: "px-6 py-3 text-sm tracking-widest",
-  lg: "px-8 py-4 text-base tracking-[0.15em]",
-  xl: "px-10 py-5 text-lg tracking-[0.2em]",
-  'elite-hero': "px-12 py-6 text-xl tracking-[0.25em] min-w-[280px]",
+  sm: "px-3 py-1.5 text-[10px] tracking-wider sm:px-4 sm:py-2 sm:text-xs",
+  md: "px-4 py-2 text-xs tracking-wide sm:px-6 sm:py-3 sm:text-sm sm:tracking-widest",
+  lg: "px-5 py-2.5 text-sm tracking-widest sm:px-8 sm:py-4 sm:text-base sm:tracking-[0.15em]",
+  xl: "px-6 py-3 text-base tracking-[0.12em] sm:px-10 sm:py-5 sm:text-lg sm:tracking-[0.2em]",
+  'elite-hero': "px-8 py-4 text-base tracking-[0.15em] min-w-[200px] sm:px-12 sm:py-6 sm:text-xl sm:tracking-[0.25em] sm:min-w-[280px]",
 };
 
 export const Button = forwardRef<HTMLButtonElement, EliteButtonProps>(
@@ -95,7 +95,7 @@ export const Button = forwardRef<HTMLButtonElement, EliteButtonProps>(
       if (onClick) onClick(e);
     };
 
-    const baseClasses = "relative inline-flex items-center justify-center uppercase transition-all duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color14)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color10)] active:scale-[0.98] overflow-hidden rounded-[1.25rem] group z-10";
+    const baseClasses = "relative inline-flex items-center justify-center uppercase transition-all duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color14)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color10)] active:scale-[0.97] active:brightness-90 overflow-hidden rounded-[1.25rem] group z-10";
     
     return (
       <div className={cn("relative z-10", fluid ? "w-full" : "inline-block")}>
@@ -133,7 +133,7 @@ export const Button = forwardRef<HTMLButtonElement, EliteButtonProps>(
             <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:animate-[shimmer_1.5s_infinite]" />
           )}
 
-          <div className={cn("flex items-center gap-3 relative z-10 transition-transform duration-200", isPressed && "scale-95")}>
+          <div className={cn("flex items-center gap-1.5 sm:gap-3 relative z-10 transition-transform duration-200", isPressed && "scale-95")}>
             {isLoading && (
               <Loader2 className="w-5 h-5 animate-spin data-[variant=elite]:text-[var(--color29)] data-[variant=secondary]:text-white" />
             )}
