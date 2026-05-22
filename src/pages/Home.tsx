@@ -25,8 +25,10 @@ import { faqSchema, educationalOrganizationSchema, websiteSchema, breadcrumbSche
 
 import { useQuery } from "@tanstack/react-query";
 import { getFaqs } from "../services/apiHandlers";
+import { useFlags } from "../hooks/useFlags";
 
 const Home = () => {
+  const { flags } = useFlags();
   const { data: homeFaqs = [] } = useQuery({
     queryKey: ['home_faqs'],
     queryFn: async () => {
@@ -86,48 +88,51 @@ const Home = () => {
         <AdBanner placement="home" />
 
         {/* L2: Partner Matrix & Authority */}
-        <BrandAuthority />
+        {flags.home_brand_authority && <BrandAuthority />}
 
         {/* L3: Why Institutional Standard */}
-        <TrustGrid />
+        {flags.home_trust_grid && <TrustGrid />}
 
         {/* L3.1: Bespoke Algorithmic Machinery (Main Business) */}
-        <InstitutionalAlgorithms />
+        {flags.home_institutional_algorithms && <InstitutionalAlgorithms />}
 
         {/* L3.5: Social Proof & Market Authority */}
-        <SocialProof />
+        {flags.institutional_reviews_live && <SocialProof />}
 
         {/* L4: Quantitative Lifecycle */}
-        <HowItWorks />
+        {flags.home_how_it_works && <HowItWorks />}
 
         {/* L5: Institutional Performance Registry */}
-        <PerformanceHistory />
+        {flags.home_performance_history && <PerformanceHistory />}
 
         {/* L6: Engineering Journey */}
-        <JourneySection />
+        {flags.home_journey && <JourneySection />}
 
         {/* L6.5: Custom Engineering Authority */}
-        <section className="hidden sm:block">
-          <CustomAlgoTeam />
-        </section>
-
+        {flags.home_custom_algo_team && (
+          <section className="hidden sm:block">
+            <CustomAlgoTeam />
+          </section>
+        )}
 
         {/* L7: Global Network */}
-        <section className="hidden md:block">
-          <GlobalReach />
-        </section>
+        {flags.home_global_reach && (
+          <section className="hidden md:block">
+            <GlobalReach />
+          </section>
+        )}
 
         {/* L8: Institutional Intelligence (Live from Supabase) */}
-        <BlogSection />
+        {flags.home_blog && <BlogSection />}
 
         {/* L9: Masterclass Engagement */}
-        <WebinarPromo />
+        {flags.home_webinar_promo && <WebinarPromo />}
 
         {/* L10: Institutional FAQ (Sovereign Data) */}
-        <InstitutionalFAQ faqs={formattedFaqs} />
+        {flags.home_faq && <InstitutionalFAQ faqs={formattedFaqs} />}
 
         {/* L11: Capital Inquiry / Consultation */}
-        <ConsultationSection />
+        {flags.home_consultation && <ConsultationSection />}
       </main>
     </>
   );

@@ -2,10 +2,13 @@ import React, { useState, useEffect } from "react";
 import {
   TrendingUp, Users, Target, DollarSign, Activity,
   Globe, Clock, ShieldAlert, RefreshCw,
-  ArrowUpRight, CreditCard, Video, Star, Zap, Trophy
+  ArrowUpRight, CreditCard, Video, Star, Zap, Trophy,
+  ToggleLeft, ToggleRight
 } from "lucide-react";
 import { cn } from "../../utils/cn";
 import { supabase } from "../../lib/supabase";
+import { useFlags } from "../../hooks/useFlags";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface LiveStats {
   revenueToday: number;
@@ -37,6 +40,43 @@ export const CEOPanel = () => {
   const [stats, setStats] = useState<LiveStats>(INITIAL_STATS);
   const [loading, setLoading] = useState(true);
   const [lastSync, setLastSync] = useState<Date | null>(null);
+
+  const { flags } = useFlags();
+  const queryClient = useQueryClient();
+  const [localFlags, setLocalFlags] = useState<Record<string, boolean>>({});
+  const [updatingFlag, setUpdatingFlag] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (flags) {
+      setLocalFlags({
+        urgency_banner_active: !!flags.urgency_banner_active,
+        market_ticker_active: !!flags.market_ticker_active,
+        institutional_reviews_live: !!flags.institutional_reviews_live,
+        show_retail_brokers: !!flags.show_retail_brokers,
+        maintenance_mode: !!flags.maintenance_mode,
+      });
+    }
+  }, [flags]);
+
+  const handleToggle = async (key: string) => {
+    const nextVal = !localFlags[key];
+    setUpdatingFlag(key);
+    setLocalFlags(prev => ({ ...prev, [key]: nextVal }));
+
+    try {
+      const { error } = await supabase
+        .from("feature_flags")
+        .upsert({ key, enabled: nextVal }, { onConflict: "key" });
+
+      if (error) throw error;
+      await queryClient.invalidateQueries({ queryKey: ["flags"] });
+    } catch (err) {
+      console.error(`[CEOPanel] Failed to toggle flag ${key}:`, err);
+      setLocalFlags(prev => ({ ...prev, [key]: !nextVal }));
+    } finally {
+      setUpdatingFlag(null);
+    }
+  };
 
   const fetchAllStats = async () => {
     setLoading(true);
@@ -427,6 +467,130 @@ export const CEOPanel = () => {
           </div>
         </div>
       )}
+      {/* Master Command Center Widget */}
+      <div className="bg-[var(--raised)] border border-white/5 p-8 rounded-[48px] shadow-2xl relative overflow-hidden group">
+        <div className="absolute top-0 right-0 p-8 opacity-[0.02] pointer-events-none">
+          <Zap className="w-48 h-48 text-emerald-500" />
+        </div>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+          <div>
+            <h3 className="text-xl font-black text-white uppercase tracking-tighter italic">
+              Master Command <span className="text-emerald-500">Control Room</span>
+            </h3>
+            <p className="text-[10px] text-gray-500 uppercase tracking-widest font-black mt-1">
+              Zero-Code Live Dashboard remote configurations
+            </p>
+          </div>
+          <span className="flex items-center gap-2 px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-[9px] font-black uppercase text-emerald-400 tracking-wider">
+            <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_#10B981]" />
+            Postgres Realtime Link Active
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          {[
+            {
+              key: "urgency_banner_active",
+              label: "Urgency Banner",
+              desc: "Top countdown promo banner bar.",
+              icon: Clock,
+              color: "text-amber-500",
+              bg: "bg-amber-500/5",
+              border: "border-amber-500/20"
+            },
+            {
+              key: "market_ticker_active",
+              label: "Live Market Ticker",
+              desc: "Dynamic streaming indices banner.",
+              icon: Activity,
+              color: "text-cyan-500",
+              bg: "bg-cyan-500/5",
+              border: "border-cyan-500/20"
+            },
+            {
+              key: "institutional_reviews_live",
+              label: "Social Proof Desk",
+              desc: "Synchronized reviews & feedback.",
+              icon: Star,
+              color: "text-purple-500",
+              bg: "bg-purple-500/5",
+              border: "border-purple-500/20"
+            },
+            {
+              key: "show_retail_brokers",
+              label: "Retail Brokers",
+              desc: "Toggle Dhan, Zerodha, IBKR, Refinitiv.",
+              icon: Globe,
+              color: "text-emerald-500",
+              bg: "bg-emerald-500/5",
+              border: "border-emerald-500/20"
+            },
+            {
+              key: "maintenance_mode",
+              label: "Maintenance Mode",
+              desc: "Locks public pages, redirects users.",
+              icon: ShieldAlert,
+              color: "text-red-500",
+              bg: "bg-red-500/5",
+              border: "border-red-500/20",
+              danger: true
+            }
+          ].map((item) => {
+            const isFlagOn = !!localFlags[item.key];
+            const isUpdating = updatingFlag === item.key;
+            const Icon = item.icon;
+
+            return (
+              <div
+                key={item.key}
+                className={cn(
+                  "p-6 rounded-[28px] border bg-white/[0.01] flex flex-col justify-between transition-all duration-300 relative group/card",
+                  isFlagOn 
+                    ? cn("border-white/10 bg-white/[0.03]", item.danger && "border-red-500/30 bg-red-500/[0.02]") 
+                    : "border-white/5 opacity-50 hover:opacity-85 hover:border-white/10"
+                )}
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className={cn("p-3 rounded-2xl bg-white/5", isFlagOn && item.bg)}>
+                      <Icon className={cn("w-4 h-4", isFlagOn ? item.color : "text-gray-600")} />
+                    </div>
+                    {isFlagOn && (
+                      <span className={cn(
+                        "text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded border",
+                        item.danger ? "text-red-400 bg-red-400/10 border-red-400/20" : "text-emerald-400 bg-emerald-400/10 border-emerald-400/20"
+                      )}>
+                        Active
+                      </span>
+                    )}
+                  </div>
+                  <h4 className="text-xs font-black text-white uppercase tracking-wider mb-1">{item.label}</h4>
+                  <p className="text-[10px] text-gray-500 leading-normal">{item.desc}</p>
+                </div>
+
+                <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between">
+                  <span className="text-[9px] font-black tracking-widest text-gray-600 font-mono uppercase">{item.key}</span>
+                  <button
+                    onClick={() => handleToggle(item.key)}
+                    disabled={isUpdating}
+                    className="focus:outline-none"
+                    aria-label={`Toggle ${item.label}`}
+                  >
+                    {isUpdating ? (
+                      <RefreshCw className="w-6 h-6 text-gray-400 animate-spin" />
+                    ) : isFlagOn ? (
+                      <ToggleRight className={cn("w-7 h-7 cursor-pointer transition-colors", item.danger ? "text-red-500" : "text-emerald-500")} />
+                    ) : (
+                      <ToggleLeft className="w-7 h-7 text-gray-700 cursor-pointer" />
+                    )}
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
     </div>
   );
 };

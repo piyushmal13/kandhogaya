@@ -21,7 +21,22 @@ export type FlagKey =
   | 'algo_marketplace_live'
   | 'urgency_banner_active'
   | 'maintenance_mode'
-  | 'webinar_realtime_updates';
+  | 'webinar_realtime_updates'
+  // Homepage Sections toggles
+  | 'home_brand_authority'
+  | 'home_trust_grid'
+  | 'home_institutional_algorithms'
+  | 'home_how_it_works'
+  | 'home_performance_history'
+  | 'home_journey'
+  | 'home_custom_algo_team'
+  | 'home_global_reach'
+  | 'home_blog'
+  | 'home_webinar_promo'
+  | 'home_faq'
+  | 'home_consultation'
+  | 'institutional_reviews_live'
+  | 'market_ticker_active';
 
 type Flags = Record<FlagKey, boolean>;
 
@@ -45,6 +60,21 @@ const FLAG_DEFAULTS: Flags = {
   urgency_banner_active:     true,
   maintenance_mode:          false,
   webinar_realtime_updates:  false,
+  // Homepage Sections defaults (graceful degradation)
+  home_brand_authority:         true,
+  home_trust_grid:              true,
+  home_institutional_algorithms: true,
+  home_how_it_works:            true,
+  home_performance_history:     true,
+  home_journey:                 true,
+  home_custom_algo_team:        true,
+  home_global_reach:            true,
+  home_blog:                    true,
+  home_webinar_promo:           true,
+  home_faq:                     true,
+  home_consultation:            true,
+  institutional_reviews_live:   true,
+  market_ticker_active:         true,
 };
 
 // ── Hook ──────────────────────────────────────────────────────────────────────

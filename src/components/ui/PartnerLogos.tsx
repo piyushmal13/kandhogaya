@@ -133,8 +133,10 @@ const StarRating = ({ count }: { count: number }) => {
   );
 };
 
+import { useFlag } from "../../hooks/useFlags";
+
 export const PartnerLogos = () => {
-  const SHOW_RETAIL = import.meta.env.VITE_SHOW_RETAIL === 'true';
+  const SHOW_RETAIL = useFlag('show_retail_brokers');
 
   return (
     <section

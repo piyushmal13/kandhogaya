@@ -86,7 +86,9 @@ export const Navbar = () => {
             <div
               className={cn(
                 "flex items-center justify-center transition-all duration-500 overflow-hidden rounded-[14px] border bg-[#010203] group-hover:shadow-[0_0_30px_rgba(16,185,129,0.3)] group-hover:border-emerald-500/30",
-                scrolled ? "h-9 w-9 sm:h-11 sm:w-11 border-white/10" : "h-11 w-11 sm:h-14 sm:w-14 border-white/5"
+                scrolled 
+                  ? "h-9 w-9 sm:h-11 sm:w-11 border-white/10 md:max-lg:h-8 md:max-lg:w-8" 
+                  : "h-11 w-11 sm:h-14 sm:w-14 border-white/5 md:max-lg:h-9 md:max-lg:w-9"
               )}
             >
               <img
@@ -99,7 +101,7 @@ export const Navbar = () => {
 
           {/* Desktop Nav */}
           <nav 
-            className="hidden md:flex items-center gap-1.5"
+            className="hidden md:flex items-center gap-1.5 md:max-lg:gap-0.5"
             aria-label="Main Navigation"
             itemScope
             itemType="https://schema.org/SiteNavigationElement"
@@ -112,7 +114,7 @@ export const Navbar = () => {
                   to={link.path}
                   itemProp="url"
                   className={cn(
-                    "relative px-4 py-2.5 text-[10px] font-black uppercase tracking-[0.25em] transition-all duration-300 rounded-xl group/link",
+                    "relative px-4 py-2.5 text-[10px] font-black uppercase tracking-[0.25em] md:max-lg:px-2 md:max-lg:py-1.5 md:max-lg:text-[8px] md:max-lg:tracking-[0.1em] transition-all duration-300 rounded-xl group/link",
                     isActive
                       ? "text-emerald-400 bg-emerald-500/[0.05] border border-emerald-500/10"
                       : "text-white/40 hover:text-white hover:bg-white/[0.04] border border-transparent"
@@ -132,7 +134,7 @@ export const Navbar = () => {
           </nav>
 
           {/* Desktop Auth */}
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-3 md:max-lg:gap-1.5">
             {user ? (
               <div className="flex items-center gap-2 bg-white/[0.02] p-1.5 rounded-[1.25rem] border border-white/[0.05]">
                 <Link
@@ -164,7 +166,7 @@ export const Navbar = () => {
               <Link
                 to="/login"
                 data-cursor="LOGIN"
-                className="group relative inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 text-[10px] font-black text-black uppercase tracking-[0.25em] overflow-hidden shadow-[0_10px_30px_rgba(255,255,255,0.15)] hover:shadow-[0_10px_40px_rgba(16,185,129,0.3)] transition-all duration-500"
+                className="group relative inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 text-[10px] font-black text-black uppercase tracking-[0.25em] md:max-lg:px-3 md:max-lg:py-2.5 md:max-lg:text-[8px] md:max-lg:tracking-[0.1em] overflow-hidden shadow-[0_10px_30px_rgba(255,255,255,0.15)] hover:shadow-[0_10px_40px_rgba(16,185,129,0.3)] transition-all duration-500"
               >
                 <div className="absolute inset-0 bg-emerald-400 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" />
                 <span className="relative z-10 flex items-center gap-2">

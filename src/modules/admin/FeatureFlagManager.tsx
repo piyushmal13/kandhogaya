@@ -6,7 +6,7 @@ import { supabase } from "../../lib/supabase";
 // ──────────────────────────────────────────────────────────────────────────────
 // Flag Definitions — add new flags here. They are stored in platform_flags table.
 // ──────────────────────────────────────────────────────────────────────────────
-const FLAG_REGISTRY: { key: string; label: string; description: string; group: string; danger?: boolean }[] = [
+const FLAG_REGISTRY: { key: string; label: string; description: string; group: string; danger?: boolean; defaultVal?: boolean }[] = [
   // ── Core Module Toggles (live in DB) ──
   {
     key:         "signals",
@@ -106,12 +106,14 @@ const FLAG_REGISTRY: { key: string; label: string; description: string; group: s
     label:       "Institutional Social Proof",
     description: "Enables the synchronized reviews/feedback section on the home page.",
     group:       "Branding",
+    defaultVal:  true,
   },
   {
     key:         "market_ticker_active",
     label:       "Live Market Ticker",
     description: "Enables the real-time ticker stream in the hero section.",
     group:       "Branding",
+    defaultVal:  true,
   },
   {
     key:         "maintenance_mode",
@@ -120,11 +122,96 @@ const FLAG_REGISTRY: { key: string; label: string; description: string; group: s
     group:       "System",
     danger:      true,
   },
+  // ── Homepage Sections Toggles ──
+  {
+    key:         "home_brand_authority",
+    label:       "Home Brand Authority",
+    description: "Displays partner logo matrix and Bloomberg ticker.",
+    group:       "Homepage Sections",
+    defaultVal:  true,
+  },
+  {
+    key:         "home_trust_grid",
+    label:       "Home Trust Grid",
+    description: "Displays the 3-column Why Institutional Standard grid.",
+    group:       "Homepage Sections",
+    defaultVal:  true,
+  },
+  {
+    key:         "home_institutional_algorithms",
+    label:       "Home Institutional Algorithms",
+    description: "Displays Bespoke Algorithmic Machinery section.",
+    group:       "Homepage Sections",
+    defaultVal:  true,
+  },
+  {
+    key:         "home_how_it_works",
+    label:       "Home How It Works",
+    description: "Displays the Quantitative Lifecycle / How It Works steps.",
+    group:       "Homepage Sections",
+    defaultVal:  true,
+  },
+  {
+    key:         "home_performance_history",
+    label:       "Home Performance History",
+    description: "Displays the Performance Registry and audited reports.",
+    group:       "Homepage Sections",
+    defaultVal:  true,
+  },
+  {
+    key:         "home_journey",
+    label:       "Home Journey Section",
+    description: "Displays the Engineering Journey / Timeline section.",
+    group:       "Homepage Sections",
+    defaultVal:  true,
+  },
+  {
+    key:         "home_custom_algo_team",
+    label:       "Home Custom Algo Team",
+    description: "Displays the Custom Engineering Team section (Desktop).",
+    group:       "Homepage Sections",
+    defaultVal:  true,
+  },
+  {
+    key:         "home_global_reach",
+    label:       "Home Global Reach",
+    description: "Displays the Global Reach / Network section (Desktop).",
+    group:       "Homepage Sections",
+    defaultVal:  true,
+  },
+  {
+    key:         "home_blog",
+    label:       "Home Blog Section",
+    description: "Displays the Live Intelligence blog post stream.",
+    group:       "Homepage Sections",
+    defaultVal:  true,
+  },
+  {
+    key:         "home_webinar_promo",
+    label:       "Home Webinar Promo",
+    description: "Displays the Institutional Masterclass promo section.",
+    group:       "Homepage Sections",
+    defaultVal:  true,
+  },
+  {
+    key:         "home_faq",
+    label:       "Home FAQ Section",
+    description: "Displays the Institutional FAQ sovereign data section.",
+    group:       "Homepage Sections",
+    defaultVal:  true,
+  },
+  {
+    key:         "home_consultation",
+    label:       "Home Consultation",
+    description: "Displays the bottom Capital Inquiry / Consultation form.",
+    group:       "Homepage Sections",
+    defaultVal:  true,
+  },
 ];
 
 type FlagState = Record<string, boolean>;
 
-const GROUP_ORDER = ["Modules", "Branding", "Webinars", "Growth", "Products", "Marketing", "System"];
+const GROUP_ORDER = ["Modules", "Branding", "Webinars", "Growth", "Products", "Marketing", "Homepage Sections", "System"];
 
 // ──────────────────────────────────────────────────────────────────────────────
 
@@ -155,9 +242,9 @@ export const FeatureFlagManager = () => {
         remote[row.key] = row.enabled;
       });
 
-      // Backfill any registry flag not yet in the DB with `false`
+      // Backfill any registry flag not yet in the DB with default values
       FLAG_REGISTRY.forEach(f => {
-        if (!(f.key in remote)) remote[f.key] = false;
+        if (!(f.key in remote)) remote[f.key] = f.defaultVal ?? false;
       });
 
       setFlags(remote);
