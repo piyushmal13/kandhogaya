@@ -117,7 +117,7 @@ export const About = () => {
               <FeatureSection 
                 icon={Globe} 
                 title="Global Reach" 
-                description="Operating from India to the UAE, we provide the infrastructure for a borderless quant economy."
+                description="Operating on a globally distributed infrastructure, we provide the backbone for a borderless quant economy."
               />
               <FeatureSection 
                 icon={BarChart3} 

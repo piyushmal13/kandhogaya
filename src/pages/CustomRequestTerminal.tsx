@@ -17,7 +17,7 @@ export const CustomRequestTerminal: React.FC = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    project_type: 'MT5_ALGO',
+    project_type: 'CPP_HFT',
     description: '',
     budget: '',
     timeline: ''
@@ -134,11 +134,12 @@ export const CustomRequestTerminal: React.FC = () => {
                   onChange={(e) => setFormData({...formData, project_type: e.target.value})}
                   className="w-full bg-[#121214] border border-[#BAC9CC]/10 p-3 rounded text-white focus:outline-none focus:border-[#00E5FF]/50 transition-colors appearance-none"
                 >
-                  <option value="MT5_ALGO">MetaTrader 5 Algorithmic Development</option>
-                  <option value="PYTHON_QUANT">Python Quantitative Infrastructure</option>
-                  <option value="WEB_DASHBOARD">Custom Institutional Dashboard</option>
-                  <option value="AI_INTEGRATION">AI/ML Signal Optimization</option>
-                  <option value="OTHER">Other Custom Engineering</option>
+                  <option value="CPP_HFT">C++ High-Frequency Execution Systems</option>
+                  <option value="PYTHON_QUANT">Python Quantitative Infrastructure & Backtesting</option>
+                  <option value="MT5_SUITE">MetaTrader 5 Systematic Suite</option>
+                  <option value="NEURAL_RISK">Deep Neural Risk & Portfolio Optimizers</option>
+                  <option value="INSTITUTIONAL_DASHBOARD">Custom Institutional Dashboard & Telemetry</option>
+                  <option value="OTHER">Other Custom Quantitative Engineering</option>
                 </select>
               </div>
 
@@ -184,7 +185,9 @@ export const CustomRequestTerminal: React.FC = () => {
                 <EliteButton 
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-4 text-lg"
+                  fluid
+                  variant="elite"
+                  size="lg"
                 >
                   {isSubmitting ? 'TRANSMITTING...' : 'INITIATE PROTOCOL'}
                 </EliteButton>

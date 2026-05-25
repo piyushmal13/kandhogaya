@@ -147,8 +147,8 @@ export const FortressHero = () => {
           className="font-black text-white tracking-[-0.05em] leading-[0.85] uppercase max-w-6xl mx-auto mb-8 preserve-3d"
         >
           World-Class <br />
-          <span className="italic font-serif text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">CFD & Forex</span>
-          <br />Intelligence.
+          <span className="italic font-serif text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Institutional FX</span>
+          <br />& Macro.
         </motion.h1>
 
         {/* Subheading with Operational Focus */}
@@ -157,7 +157,7 @@ export const FortressHero = () => {
           className="max-w-2xl mx-auto text-white/40 leading-relaxed mb-10 font-medium"
         >
           Senior-led quantitative execution and market architecture. 
-          Direct educational exposure to Asia's most sophisticated institutional quantitative models.
+          Direct educational exposure to the world's most sophisticated institutional quantitative models.
         </motion.p>
 
         {/* Live Operational Telemetry */}

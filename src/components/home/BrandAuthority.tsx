@@ -3,11 +3,11 @@ import { motion } from "motion/react";
 import { containerVariants, itemVariants } from "@/lib/motion";
 
 const PARTNERS = [
-  { name: "Binance", logo: "https://upload.wikimedia.org/wikipedia/commons/e/e8/Binance_Logo.svg" },
-  { name: "MetaTrader 5", logo: "https://upload.wikimedia.org/wikipedia/commons/e/e0/MetaTrader_5.png" },
-  { name: "Amazon Web Services", logo: "https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" },
-  { name: "TradingView", logo: "https://upload.wikimedia.org/wikipedia/commons/e/e2/TradingView_logo.svg" },
-  { name: "Stripe", logo: "https://upload.wikimedia.org/wikipedia/commons/b/ba/Stripe_Logo%2C_revised_2016.svg" },
+  { name: "Binance Engine", category: "Liquidity Link" },
+  { name: "FIX Protocol", category: "Execution Bridge" },
+  { name: "MetaTrader 5", category: "Terminal Node" },
+  { name: "AWS Cloud", category: "Compute Cluster" },
+  { name: "TradingView", category: "Telemetry Feed" },
 ];
 
 const PRESS = [
@@ -34,15 +34,23 @@ export const BrandAuthority = () => {
 
           <motion.div 
             variants={itemVariants} 
-            className="flex flex-wrap justify-center items-center gap-8 md:gap-24 opacity-40 grayscale hover:grayscale-0 transition-all duration-700"
+            className="flex flex-wrap justify-center items-center gap-4 md:gap-6"
           >
             {PARTNERS.map((partner) => (
-              <img 
+              <div 
                 key={partner.name} 
-                src={partner.logo} 
-                alt={partner.name}
-                className="h-8 md:h-10 w-auto object-contain hover:scale-110 transition-transform"
-              />
+                className="px-6 py-4 rounded-[1.5rem] bg-white/[0.02] border border-white/[0.05] hover:border-emerald-500/20 hover:bg-emerald-500/[0.02] transition-all duration-500 flex items-center gap-3 group shadow-xl hover:scale-105"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 group-hover:animate-pulse" />
+                <div className="flex flex-col text-left">
+                  <span className="text-[11px] font-black uppercase tracking-wider text-white group-hover:text-emerald-400 transition-colors">
+                    {partner.name}
+                  </span>
+                  <span className="text-[8px] font-bold uppercase tracking-[0.2em] text-white/30">
+                    {partner.category}
+                  </span>
+                </div>
+              </div>
             ))}
           </motion.div>
 

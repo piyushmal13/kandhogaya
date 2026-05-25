@@ -1,6 +1,8 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { PageMeta } from "@/components/site/PageMeta";
+import { EliteButton } from "@/components/ui/Button";
 import { 
   Brain, 
   Cpu, 
@@ -234,7 +236,7 @@ export const QuantX = () => {
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
             <div>
-              <h2 className="text-4xl md:text-6xl font-bold mb-12 tracking-tight">Institutional Execution.</h2>
+              <h2 className="text-4xl md:text-6xl font-bold mb-12 tracking-tight">Institutional Research.</h2>
               
               <div className="space-y-12">
                 <div className="flex gap-6">
@@ -242,8 +244,8 @@ export const QuantX = () => {
                     <Zap size={20} />
                   </div>
                   <div>
-                    <h4 className="text-xl font-bold mb-3">MT5 Core Bridge</h4>
-                    <p className="text-white/40 leading-relaxed">High-performance data pipeline ensuring strategy signals occur within milliseconds of algorithmic confirmation in the educational demo environment.</p>
+                    <h4 className="text-xl font-bold mb-3">High-Fidelity Quantitative Data Feed</h4>
+                    <p className="text-white/40 leading-relaxed">Proprietary research pipelines feeding clean macroeconomic indices and price action structures into backtesting environments under academic supervision.</p>
                   </div>
                 </div>
                 
@@ -252,8 +254,8 @@ export const QuantX = () => {
                     <Database size={20} />
                   </div>
                   <div>
-                    <h4 className="text-xl font-bold mb-3">Hybrid Infrastructure</h4>
-                    <p className="text-white/40 leading-relaxed">Dedicated VPS infrastructure with 24/7 uptime monitoring and automated failover systems.</p>
+                    <h4 className="text-xl font-bold mb-3">Secure Quantitative Workstations</h4>
+                    <p className="text-white/40 leading-relaxed">Secure cloud workstations and high-availability modeling engines featuring automated model versioning control and full auditability.</p>
                   </div>
                 </div>
 
@@ -262,8 +264,8 @@ export const QuantX = () => {
                     <LineChart size={20} />
                   </div>
                   <div>
-                    <h4 className="text-xl font-bold mb-3">Continuous Performance Review</h4>
-                    <p className="text-white/40 leading-relaxed">Every execution is recorded and audited. The desk automatically recalibrates strategy thresholds based on 30-day rolling performance data.</p>
+                    <h4 className="text-xl font-bold mb-3">Ongoing Model Validation</h4>
+                    <p className="text-white/40 leading-relaxed">Ongoing model validation. The research team systematically recalibrates algorithmic thresholds and regimes under human oversight to prevent statistical drift.</p>
                   </div>
                 </div>
               </div>
@@ -284,8 +286,8 @@ export const QuantX = () => {
                     <div className="w-24 h-24 rounded-3xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mx-auto mb-6 shadow-[0_0_50px_-12px_rgba(16,185,129,0.5)]">
                       <Cpu size={40} />
                     </div>
-                    <div className="text-[10px] font-black tracking-[0.5em] text-emerald-500 uppercase mb-2">Execution Processor</div>
-                    <div className="text-2xl font-bold">DESK ACTIVE</div>
+                    <div className="text-[10px] font-black tracking-[0.5em] text-emerald-500 uppercase mb-2">Model Validation Enclave</div>
+                    <div className="text-2xl font-bold">MONITORING LAB</div>
                   </div>
                 </div>
               </div>
@@ -301,9 +303,11 @@ export const QuantX = () => {
             Elite Alpha. <br />
             <span className="text-emerald-400">Zero Guesswork.</span>
           </h2>
-          <button className="btn-primary px-10 py-5 text-sm">
-            REQUEST QUANTX RESEARCH ACCESS <ChevronRight size={18} />
-          </button>
+          <Link to="/webinars">
+            <EliteButton variant="premium-gold" size="lg" rightIcon={<ChevronRight className="w-4 h-4" />}>
+              REQUEST QUANTX RESEARCH ACCESS
+            </EliteButton>
+          </Link>
         </div>
       </section>
     </div>

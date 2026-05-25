@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, Link } from "react-router-dom";
 import {
   BarChart3, Zap, ShieldCheck, Users, Video, Settings, Star,
   ShoppingCart, Activity, Trophy, DollarSign, FileText, CreditCard,
@@ -65,7 +65,47 @@ export const Admin = () => {
   const isAdmin = userProfile?.role === "admin";
 
   // Guard — must be AFTER all hooks
-  if (!user || !isAdmin) return <Navigate to="/dashboard" />;
+  if (!user || !isAdmin) {
+    return (
+      <div className="min-h-screen bg-[#010203] text-[#BAC9CC] flex items-center justify-center p-6 relative overflow-hidden font-sans">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[120%] h-[600px] bg-[radial-gradient(ellipse_at_center,rgba(239,68,68,0.05)_0%,transparent_70%)] pointer-events-none" />
+        <div className="site-panel p-8 md:p-12 max-w-md w-full relative overflow-hidden border border-red-500/20 bg-gradient-to-b from-[#050404] to-[#020202] text-center shadow-2xl rounded-3xl">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(239,68,68,0.02),transparent)]" />
+          
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-red-500/10 text-red-500 border border-red-500/20 mx-auto mb-6 animate-pulse">
+            <ShieldCheck className="h-8 w-8" />
+          </div>
+          
+          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-red-500/30 bg-red-500/10 text-red-400 text-[9px] font-black uppercase tracking-widest font-mono mb-4">
+            Security Protocol Exclusion
+          </span>
+          
+          <h1 className="text-xl md:text-2xl font-extrabold text-white uppercase tracking-tight mb-3">
+            Unauthorized Access Node
+          </h1>
+          
+          <p className="text-white/40 text-xs leading-relaxed mb-8">
+            Your current credential signature lacks Level-1 Administrator clearance. Access to this core CRM node has been restricted and logged.
+          </p>
+
+          <div className="bg-black/60 border border-white/5 p-4 rounded-xl font-mono text-[10px] text-left space-y-1 mb-8">
+            <div className="text-red-400 font-bold uppercase tracking-wider">Diagnostic Log:</div>
+            <div className="text-white/50">TIMESTAMP: {new Date().toISOString()}</div>
+            <div className="text-white/50">CLIENT_ID: {user?.id || "anonymous"}</div>
+            <div className="text-white/50">CREDENTIAL_ROLE: {userProfile?.role || "null"}</div>
+            <div className="text-white/50">ENCLAVE_NODE: IFX_CORE_ADMIN</div>
+          </div>
+          
+          <Link
+            to="/dashboard"
+            className="group w-full relative inline-flex items-center justify-center gap-2 rounded-xl bg-white px-6 py-3.5 text-xs font-black text-black uppercase tracking-[0.2em] overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300"
+          >
+            Return to Dashboard
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   const activeTabDef = tabs.find(t => t.id === activeTab);
 

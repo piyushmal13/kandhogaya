@@ -12,14 +12,14 @@ export const BRANDING = {
 };
 
 export const PAGE_META_KEYWORDS = [
-  "forex education Asia",
-  "best algo trading course India",
-  "best algo trading course Dubai",
+  "global forex education",
+  "institutional algo trading course",
+  "elite algo trading course",
   "institutional forex education",
-  "forex academy India",
-  "forex webinar India 2026",
+  "global quant trading desk",
+  "institutional quant webinar 2026",
   "quantitative research XAUUSD",
   "automated forex trading strategies",
-  "quantitative trading course India",
+  "institutional quantitative trading course",
   "institutional research desk",
 ];

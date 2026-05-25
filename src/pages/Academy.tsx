@@ -23,6 +23,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { DashboardLayout } from "../components/institutional/DashboardLayout";
 import { CRMService } from "../core/crmService";
 import { useToast } from "../contexts/ToastContext";
+import { EliteButton } from "../components/ui/Button";
 
 // ── ELITE ROSTER DATA ──
 const vettedQuants = [
@@ -258,7 +259,7 @@ export const Academy = () => {
                 </div>
 
                 <div className="mt-8">
-                  <button 
+                  <EliteButton 
                     onClick={() => {
                       setActiveTab("clients");
                       setClientForm(prev => ({
@@ -270,10 +271,13 @@ export const Academy = () => {
                         behavior: "smooth"
                       });
                     }}
-                    className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-white/[0.02] border border-white/5 text-[10px] font-black text-white uppercase tracking-widest hover:bg-emerald-500/10 hover:border-emerald-500/20 hover:text-emerald-400 transition-all duration-300"
+                    variant="secondary"
+                    size="md"
+                    fluid
+                    rightIcon={<ArrowUpRight className="w-3.5 h-3.5" />}
                   >
-                    Request Placement <ArrowUpRight className="w-3.5 h-3.5" />
-                  </button>
+                    Request Placement
+                  </EliteButton>
                 </div>
               </motion.article>
             ))}
@@ -428,13 +432,17 @@ export const Academy = () => {
                       </div>
 
                       <div className="pt-4">
-                        <button
+                        <EliteButton
                           type="submit"
-                          disabled={loading}
-                          className="w-full md:w-auto inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-8 py-4 text-[10px] font-black text-black uppercase tracking-[0.25em] hover:bg-emerald-400 transition-colors shadow-lg disabled:opacity-50"
+                          isLoading={loading}
+                          variant="elite"
+                          size="lg"
+                          fluid
+                          className="md:w-auto"
+                          rightIcon={<ChevronRight className="w-4 h-4" />}
                         >
-                          {loading ? "Filing Inquiry..." : "Log Sourcing Inquiry"} <ChevronRight className="w-4 h-4" />
-                        </button>
+                          Log Sourcing Inquiry
+                        </EliteButton>
                       </div>
                     </motion.form>
                   ) : (
@@ -522,13 +530,17 @@ export const Academy = () => {
                       </div>
 
                       <div className="pt-4">
-                        <button
+                        <EliteButton
                           type="submit"
-                          disabled={loading}
-                          className="w-full md:w-auto inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-8 py-4 text-[10px] font-black text-black uppercase tracking-[0.25em] hover:bg-emerald-400 transition-colors shadow-lg disabled:opacity-50"
+                          isLoading={loading}
+                          variant="elite"
+                          size="lg"
+                          fluid
+                          className="md:w-auto"
+                          rightIcon={<ChevronRight className="w-4 h-4" />}
                         >
-                          {loading ? "Submitting Application..." : "File Application Pipeline"} <ChevronRight className="w-4 h-4" />
-                        </button>
+                          File Application Pipeline
+                        </EliteButton>
                       </div>
                     </motion.form>
                   )}

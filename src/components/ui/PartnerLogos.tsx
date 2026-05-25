@@ -15,13 +15,13 @@ const PARTNERS = [
   {
     name: "Binance",
     category: "Global Exchange",
-    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e8/Binance_Logo.svg",
+    abbr: "BN",
     color: "from-yellow-600 to-yellow-400",
   },
   {
     name: "MetaTrader 4",
     category: "Trading Platform",
-    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/2/23/MetaTrader_4_logo.png",
+    abbr: "MT4",
     color: "from-blue-700 to-blue-500",
   },
   {
@@ -33,7 +33,7 @@ const PARTNERS = [
   {
     name: "TradingView",
     category: "Chart Partner",
-    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e2/TradingView_logo.svg",
+    abbr: "TV",
     color: "from-sky-500 to-cyan-400",
   },
   {
@@ -184,19 +184,10 @@ export const PartnerLogos = () => {
               className="group relative p-5 sm:p-6 bg-white/[0.02] border border-white/[0.05] rounded-2xl hover:border-white/15 hover:bg-white/[0.04] transition-all duration-500 flex items-center gap-4 overflow-hidden"
             >
               {/* Logo Avatar */}
-              <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center font-black text-white text-sm shrink-0 shadow-lg overflow-hidden border border-white/10 p-1 bg-white/5`}>
-                {'logoUrl' in partner && partner.logoUrl ? (
-                  <img 
-                    src={partner.logoUrl} 
-                    alt={`${partner.name} logo`} 
-                    loading="lazy"
-                    className="w-full h-full object-contain" 
-                  />
-                ) : (
-                  <div className={`w-full h-full flex items-center justify-center bg-gradient-to-br ${partner.color} rounded-lg`}>
-                    {partner.abbr}
-                  </div>
-                )}
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center font-black text-white text-sm shrink-0 shadow-lg overflow-hidden border border-white/10 p-1 bg-white/5">
+                <div className={`w-full h-full flex items-center justify-center bg-gradient-to-br ${partner.color} rounded-lg text-white font-extrabold`}>
+                  {partner.abbr}
+                </div>
               </div>
               <div>
                 <div className="text-white font-bold text-sm leading-tight">{partner.name}</div>

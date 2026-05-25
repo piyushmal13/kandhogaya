@@ -44,11 +44,11 @@ const variantStyles: Record<ButtonVariant, string> = {
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
-  sm: "px-3 py-1.5 text-[10px] tracking-wider sm:px-4 sm:py-2 sm:text-xs",
-  md: "px-4 py-2 text-xs tracking-wide sm:px-6 sm:py-3 sm:text-sm sm:tracking-widest",
-  lg: "px-5 py-2.5 text-sm tracking-widest sm:px-8 sm:py-4 sm:text-base sm:tracking-[0.15em]",
-  xl: "px-6 py-3 text-base tracking-[0.12em] sm:px-10 sm:py-5 sm:text-lg sm:tracking-[0.2em]",
-  'elite-hero': "px-8 py-4 text-base tracking-[0.15em] min-w-[200px] sm:px-12 sm:py-6 sm:text-xl sm:tracking-[0.25em] sm:min-w-[280px]",
+  sm: "px-3 py-1.5 text-[10px] tracking-wider md:px-4 md:py-2 md:text-xs",
+  md: "px-4 py-2 text-xs tracking-wide md:px-6 md:py-3 md:text-sm md:tracking-widest",
+  lg: "px-6 py-3 text-xs tracking-wider md:px-8 md:py-4 md:text-base md:tracking-[0.15em]",
+  xl: "px-6 py-3.5 text-xs tracking-wide md:px-10 md:py-5 md:text-lg md:tracking-[0.2em]",
+  'elite-hero': "px-6 py-4 text-xs tracking-widest min-w-[200px] md:px-12 md:py-6 md:text-xl md:tracking-[0.25em] md:min-w-[280px]",
 };
 
 export const Button = forwardRef<HTMLButtonElement, EliteButtonProps>(
