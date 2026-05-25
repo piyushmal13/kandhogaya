@@ -85,21 +85,21 @@ export const InstitutionalAlgorithms = () => {
                   <div className="flex items-center justify-between">
                      <div className="space-y-2">
                         <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Model Synthesis</span>
-                        <div className="text-3xl font-black text-white italic">99.8% Core Accuracy</div>
+                        <div className="text-3xl font-black text-white italic">Institutional Validation</div>
                      </div>
                      <Terminal className="text-emerald-500/40 w-12 h-12" />
                   </div>
 
                   <div className="space-y-6">
                      {[
-                       { label: 'Latency Optimization', value: 99.99 },
-                       { label: 'Risk Intelligence', value: 87.4 },
-                       { label: 'Data Processing', value: 94.2 }
+                       { label: 'Latency Optimization', status: 'Sub-Millisecond', value: 100 },
+                       { label: 'Risk Intelligence', status: 'Strict Controls', value: 92 },
+                       { label: 'Data Processing', status: 'High Fidelity', value: 96 }
                      ].map((metric, i) => (
                        <div key={metric.label} className="space-y-2">
                           <div className="flex justify-between text-[9px] font-black uppercase tracking-widest text-white/30">
                              <span>{metric.label}</span>
-                             <span className="text-emerald-500">{metric.value}%</span>
+                             <span className="text-emerald-500">{metric.status}</span>
                           </div>
                           <div className="h-1 bg-white/5 rounded-full overflow-hidden">
                              <motion.div 

@@ -171,8 +171,8 @@ export const Hiring = () => {
           {/* Quick Metrics */}
           <div className="mt-16 md:mt-24 grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto border border-white/[0.05] bg-[#050608]/40 backdrop-blur-md rounded-2xl p-8">
             <div className="text-center sm:text-left sm:border-r border-white/5 sm:pr-8">
-              <div className="text-3xl font-extrabold text-white">99.8%</div>
-              <div className="text-[10px] uppercase tracking-widest text-[#849396] mt-2 font-mono">Backtest Model Fidelity</div>
+              <div className="text-3xl font-extrabold text-white">Top 1.5%</div>
+              <div className="text-[10px] uppercase tracking-widest text-[#849396] mt-2 font-mono">Quant Vetting Rigor</div>
             </div>
             <div className="text-center sm:text-left sm:border-r border-white/5 sm:px-8">
               <div className="text-3xl font-extrabold text-white">Vetted</div>

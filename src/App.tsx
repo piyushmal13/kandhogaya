@@ -29,7 +29,6 @@ const AgentDashboard = lazy(() => import("./pages/AgentDashboard").then(m => ({ 
 const Contact = lazy(() => import("./pages/Contact").then(m => ({ default: m.Contact })));
 const About = lazy(() => import("./pages/About").then(m => ({ default: m.About })));
 const Results = lazy(() => import("./pages/Results").then(m => ({ default: m.Results })));
-const Academy = lazy(() => import("./pages/Academy").then(m => ({ default: m.Academy })));
 const Pricing = lazy(() => import("./pages/Pricing").then(m => ({ default: m.Pricing })));
 const Hiring = lazy(() => import("./pages/Hiring").then(m => ({ default: m.Hiring })));
 const NotFound = lazy(() => import("./pages/NotFound").then(m => ({ default: m.NotFound })));
@@ -76,7 +75,6 @@ const AnimatedRoutes = () => {
             <Route path="/agent" element={<ProtectedRoute><AgentDashboard /></ProtectedRoute>} />
             <Route path="/affiliate" element={<ProtectedRoute><AffiliateHub /></ProtectedRoute>} />
             <Route path="/results" element={<Results />} />
-            <Route path="/academy" element={<FeatureGuard flag="academy" redirect="/dashboard"><Academy /></FeatureGuard>} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/hiring" element={<Hiring />} />
             <Route path="/about" element={<About />} />

@@ -40,7 +40,7 @@ export const SocialProof = () => {
         
         <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mt-8">
             <div className="h-10 px-6 rounded border border-emerald-500/30 bg-emerald-500/5 flex items-center gap-2 text-[10px] font-bold text-emerald-400 uppercase tracking-[0.2em]">
-               <ShieldCheck className="w-3.5 h-3.5" /> INSTITUTIONAL TRUST INDEX: 99.8%
+               <ShieldCheck className="w-3.5 h-3.5" /> INSTITUTIONAL TRUST INDEX: VERIFIED
             </div>
             <div className="h-10 px-6 rounded border border-white/10 bg-white/5 flex items-center gap-2 text-[10px] font-bold text-white/50 uppercase tracking-[0.2em]">
                <Verified className="w-3.5 h-3.5" /> AUDITED FULFILLMENT

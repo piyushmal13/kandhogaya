@@ -46,7 +46,7 @@ export function Breadcrumb() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }} />
-      <nav aria-label="Breadcrumb" className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-white/30 mb-8 px-2">
+      <nav aria-label="Breadcrumb" className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-white/30 px-2">
         <Link to="/dashboard" className="hover:text-emerald-500 transition-colors flex items-center gap-2 group">
           <Home className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" />
           <span className="sr-only">Home</span>

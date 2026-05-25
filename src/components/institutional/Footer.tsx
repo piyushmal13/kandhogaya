@@ -45,7 +45,6 @@ export function Footer() {
               <h4 className="text-[10px] font-black text-white uppercase tracking-[0.3em]">Master Clusters</h4>
               <ul className="space-y-3 text-[11px] font-medium text-white/30 uppercase tracking-widest">
                 <li><Link to="/marketplace" className="hover:text-emerald-500 transition-colors">Marketplace</Link></li>
-                <li><Link to="/academy" className="hover:text-emerald-500 transition-colors">Talent Desk</Link></li>
                 <li><Link to="/webinars" className="hover:text-emerald-500 transition-colors">Webinars</Link></li>
               </ul>
             </div>

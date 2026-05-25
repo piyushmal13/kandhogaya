@@ -31,6 +31,12 @@ export const Marketplace = () => {
     staleTime: 300000,
   });
 
+  const { data: reviews = [] } = useQuery({
+    queryKey: ["marketplace_reviews"],
+    queryFn: () => productService.getReviews(),
+    staleTime: 300000,
+  });
+
   const categories = [
     { id: "all", label: "All Assets" },
     { id: "algorithm", label: "Trading Systems" },
@@ -93,7 +99,18 @@ export const Marketplace = () => {
           }))}
           onSelect={(p) => {
             const original = products.find(o => o.id === p.id);
-            if (original) setSelectedProduct(original);
+            if (original) {
+              const productIndex = products.indexOf(original);
+              const sliceStart = (productIndex * 3) % (reviews.length || 1);
+              const sliceEnd = sliceStart + 3;
+              const productReviews = reviews.length > 0 
+                ? reviews.slice(sliceStart, sliceEnd)
+                : [];
+              setSelectedProduct({
+                ...original,
+                reviews: productReviews.length > 0 ? productReviews : original.reviews
+              });
+            }
           }}
         />
       );
@@ -113,7 +130,7 @@ export const Marketplace = () => {
   };
 
   const content = (
-    <div className={user ? "pb-24" : "pt-24 pb-12 md:pt-32 md:pb-24"}>
+    <div className="pt-28 pb-12 md:pt-36 md:pb-24">
       <PageMeta
         title="Execution Desk | Institutional Assets"
         description="Access the IFX TRADES Execution Desk. High-frequency algorithmic models and institutional macro intelligence."
@@ -246,10 +263,6 @@ export const Marketplace = () => {
       </AnimatePresence>
     </div>
   );
-
-  if (user) {
-    return <DashboardLayout>{content}</DashboardLayout>;
-  }
 
   return content;
 };

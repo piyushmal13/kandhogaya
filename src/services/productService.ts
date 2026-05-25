@@ -12,11 +12,30 @@ export const productService = {
     try {
       const { data: products, error } = await supabase
         .from("products")
-        .select("id, name, description, price, category, video_explanation_url, image_url, created_at, performance_data, long_plan_offers")
+        .select(`
+          id, name, description, price, category, video_explanation_url, image_url, created_at, 
+          performance_data, long_plan_offers, strategy_details, risk_profile, q_and_a, 
+          terms_and_conditions, strategy_graph_url, backtesting_result_url
+        `)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
       return (products || []) as unknown as Product[];
+    } catch {
+      return [];
+    }
+  },
+
+  getReviews: async (): Promise<any[]> => {
+    try {
+      const { data, error } = await supabase
+        .from("reviews")
+        .select("id, name, role, text, rating, created_at, image_url, region, user_name")
+        .eq("status", "approved")
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+      return data || [];
     } catch {
       return [];
     }
