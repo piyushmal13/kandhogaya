@@ -140,70 +140,111 @@ export const PerformanceHistory = () => {
           </motion.p>
         </div>
 
-        {/* Dynamic Algorithms Grid */}
-        {isLoading ? (
-          <div className="flex justify-center items-center py-20">
-            <Loader2 className="w-8 h-8 text-emerald-400 animate-spin" />
+        {/* Algorithmic Trust Showcase */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-stretch mb-24">
+          
+          {/* Column 1: Trust Pillars & Explanations (lg:col-span-7) */}
+          <div className="lg:col-span-7 flex flex-col justify-center space-y-8">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="space-y-6"
+            >
+              <div className="flex items-start gap-4">
+                <div className="p-3.5 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl text-emerald-400 shrink-0">
+                  <ShieldCheck className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="text-lg font-black text-white uppercase tracking-wider mb-2">100% Client Sovereignty &amp; Privacy</h4>
+                  <p className="text-xs text-gray-400 leading-relaxed uppercase tracking-wide">
+                    We do not manage your funds or take capital under custody. Every proprietary algorithm or indicator is compiled directly as a clean binary or source file (.ex5, .ex4, .tpl, .json) and handed over. You retain absolute control over your setup.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <div className="p-3.5 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl text-emerald-400 shrink-0">
+                  <Activity className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="text-lg font-black text-white uppercase tracking-wider mb-2">High-Fidelity Historical Verification</h4>
+                  <p className="text-xs text-gray-400 leading-relaxed uppercase tracking-wide">
+                    Every algorithm in our system passes through comprehensive 10+ year tick-level historical emulation. We test strategies under dynamic spreads, severe slippages, and volatile macro environments to guarantee system resilience.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <div className="p-3.5 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl text-emerald-400 shrink-0">
+                  <Zap className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="text-lg font-black text-white uppercase tracking-wider mb-2">Automated Risk Safeguard Guardrails</h4>
+                  <p className="text-xs text-gray-400 leading-relaxed uppercase tracking-wide">
+                    Our architectures contain native safety filters: trailing stop losses, spread limits, session volatility filters, and maximum drawdown cutoffs, designed strictly to protect balance health.
+                  </p>
+                </div>
+              </div>
+            </motion.div>
           </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
-            {products.slice(0, 3).map((product, index) => {
-              const metrics = getAlgoMetrics(product);
-              return (
-                <motion.div
-                  key={product.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1, duration: 0.6 }}
-                  className="p-8 bg-zinc-900/40 border border-white/5 hover:border-emerald-500/20 rounded-[2.5rem] flex flex-col justify-between group transition-all duration-500 shadow-2xl relative overflow-hidden"
-                >
-                  {/* Ambient Glow */}
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-emerald-500/10 to-transparent blur-2xl group-hover:scale-150 transition-all duration-500" />
-                  
+
+          {/* Column 2: Marketplace Summary Card (lg:col-span-5) */}
+          <div className="lg:col-span-5 flex">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+              className="w-full p-8 md:p-10 bg-zinc-900/40 border border-white/5 hover:border-emerald-500/20 rounded-[2.5rem] flex flex-col justify-between group transition-all duration-500 shadow-2xl relative overflow-hidden"
+            >
+              {/* Glow Accent */}
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-500/10 to-transparent blur-3xl group-hover:scale-150 transition-all duration-500" />
+              
+              <div>
+                <div className="flex justify-between items-start gap-4 mb-6">
+                  <span className="px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border text-emerald-400 bg-emerald-500/10 border-emerald-500/20">
+                    MT5 / TradingView / FIX API
+                  </span>
+                  <Cpu className="w-5 h-5 text-gray-500 group-hover:text-emerald-400 transition-colors" />
+                </div>
+
+                <h3 className="text-2xl sm:text-3xl font-black text-white uppercase italic tracking-tighter mb-4 leading-none group-hover:text-emerald-400 transition-colors">
+                  Algorithmic <br />Portfolio.
+                </h3>
+                
+                <p className="text-xs text-gray-400 leading-relaxed uppercase tracking-wider mb-8">
+                  Browse our high-performance suite of indicators, macro engines, and institutional expert advisors. Explore live backtesting data, logic breakdowns, and deploy instantly.
+                </p>
+              </div>
+
+              <div className="space-y-8 pt-6 border-t border-white/5">
+                <div className="grid grid-cols-3 gap-2">
                   <div>
-                    <div className="flex justify-between items-start gap-4 mb-6">
-                      <div className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border ${metrics.badgeColor}`}>
-                        {metrics.type}
-                      </div>
-                      <Cpu className="w-5 h-5 text-gray-500 group-hover:text-emerald-400 transition-colors" />
-                    </div>
-
-                    <h3 className="text-2xl font-black text-white uppercase italic tracking-tighter mb-4 group-hover:text-emerald-400 transition-colors">
-                      {product.name}
-                    </h3>
-                    <p className="text-xs text-gray-400 leading-relaxed uppercase tracking-wider mb-8 line-clamp-3">
-                      {product.description}
-                    </p>
+                    <span className="text-[8px] font-bold text-gray-500 uppercase tracking-widest block mb-1">Win Rate Avg</span>
+                    <span className="text-sm font-mono font-black text-white">84.5%</span>
                   </div>
-
-                  <div className="space-y-6 pt-6 border-t border-white/5">
-                    <div className="grid grid-cols-3 gap-4">
-                      <div>
-                        <span className="text-[8px] font-bold text-gray-500 uppercase tracking-widest block mb-1">Win Rate</span>
-                        <span className="text-sm font-mono font-black text-white">{metrics.winRate}</span>
-                      </div>
-                      <div>
-                        <span className="text-[8px] font-bold text-gray-500 uppercase tracking-widest block mb-1">Profit Factor</span>
-                        <span className="text-sm font-mono font-black text-emerald-400">{metrics.profitFactor}</span>
-                      </div>
-                      <div>
-                        <span className="text-[8px] font-bold text-gray-500 uppercase tracking-widest block mb-1">Max DD</span>
-                        <span className="text-sm font-mono font-black text-red-400">{metrics.maxDrawdown}</span>
-                      </div>
-                    </div>
-
-                    <Link to="/marketplace" className="block w-full">
-                      <EliteButton variant="secondary" size="sm" fluid rightIcon={<ArrowRight className="w-3.5 h-3.5" />}>
-                        Acquire Algorithm
-                      </EliteButton>
-                    </Link>
+                  <div>
+                    <span className="text-[8px] font-bold text-gray-500 uppercase tracking-widest block mb-1">Profit Factor</span>
+                    <span className="text-sm font-mono font-black text-emerald-400">2.5x</span>
                   </div>
-                </motion.div>
-              );
-            })}
+                  <div>
+                    <span className="text-[8px] font-bold text-gray-500 uppercase tracking-widest block mb-1">Execution</span>
+                    <span className="text-sm font-mono font-black text-cyan-400">&lt;50ms</span>
+                  </div>
+                </div>
+
+                <Link to="/marketplace" className="block w-full">
+                  <EliteButton variant="gemini" size="md" fluid rightIcon={<ArrowRight className="w-3.5 h-3.5" />} glowEffect>
+                    Access Marketplace
+                  </EliteButton>
+                </Link>
+              </div>
+            </motion.div>
           </div>
-        )}
+
+        </div>
 
         {/* Bespoke Strategy Request Hub */}
         <motion.div

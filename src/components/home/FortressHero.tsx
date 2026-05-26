@@ -134,7 +134,7 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
       {/* ── LIVE MARKET TICKER ── */}
       {isTickerActive && (
         <div
-          className="relative z-30 mt-16 sm:mt-20 border-b border-emerald-500/10 bg-black/60 backdrop-blur-2xl overflow-hidden flex items-center shrink-0 shadow-sm"
+          className="relative z-30 mt-24 sm:mt-28 border-b border-emerald-500/10 bg-black/60 backdrop-blur-2xl overflow-hidden flex items-center shrink-0 shadow-sm"
           style={{ height: "1.75rem", minHeight: "1.75rem", contain: "layout paint" }}
         >
           <div className="absolute left-0 z-10 w-16 sm:w-24 h-full bg-gradient-to-r from-[#010203] to-transparent" />
@@ -172,14 +172,17 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
         {/* Headline */}
         <motion.h1
           style={{ opacity, y: textY }}
-          className="font-black text-white tracking-[-0.03em] leading-[1] uppercase max-w-5xl mx-auto mb-6 sm:mb-8 select-none px-4"
+          className="font-black text-white tracking-tight leading-[1.05] sm:leading-[0.95] uppercase max-w-5xl mx-auto mb-6 sm:mb-8 select-none px-2 sm:px-4"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.8, ease: ENTRY }}
         >
-          <span className="block text-5xl md:text-7xl lg:text-[5.5rem] tracking-tight">World-Class</span>
-          <span className="block text-5xl md:text-7xl lg:text-[5.5rem] tracking-tight mt-1 sm:mt-2">
-            <span className="italic font-serif text-shimmer pr-2 sm:pr-3">Institutional FX</span> <br className="md:hidden" /> &amp; Macro.
+          <span className="block text-[clamp(2.0rem,9vw,5.5rem)] tracking-tight whitespace-nowrap break-keep">World-Class</span>
+          <span className="block text-[clamp(1.8rem,8vw,5.5rem)] tracking-tight mt-1 sm:mt-2">
+            <span className="italic font-serif text-shimmer pr-2 sm:pr-3 text-[clamp(1.8rem,8vw,5.5rem)]">Institutional</span>
+          </span>
+          <span className="block text-[clamp(2.0rem,9vw,5.5rem)] tracking-tight mt-1">
+            FX &amp; Macro.
           </span>
         </motion.h1>
 
