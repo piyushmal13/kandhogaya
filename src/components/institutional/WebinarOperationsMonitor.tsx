@@ -37,7 +37,7 @@ export const WebinarOperationsMonitor = () => {
       <div className="space-y-1">
         <div className="flex items-center gap-2 text-[10px] font-black text-amber-500 uppercase tracking-widest">
           <Zap className="w-3 h-3" />
-          Signal Integrity
+          Execution Integrity
         </div>
         <div className="text-xl font-black text-white tracking-tighter uppercase italic">
           High <span className="text-amber-500/40">Precision</span>

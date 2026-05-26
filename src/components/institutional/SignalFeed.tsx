@@ -1,32 +1,32 @@
-import { Activity, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { Activity, ArrowUpRight, ArrowDownRight, HardDrive, Terminal } from 'lucide-react';
 import { EliteButton } from '@/components/ui/Button';
 import { motion, AnimatePresence } from "motion/react";
 import { useSignals } from '@/hooks/useSignals';
 
 /**
- * SignalFeed — Live Algorithmic Intelligence Stream
- * Shows active trade signals from the signals table.
- * Labels cleaned up for human readability.
+ * SignalFeed — Overhauled to: Quantitative Operations & Execution Logs Feed
+ * Displays high-density systematic execution logs from the quant desk.
+ * Absolutely 0 retail signal jargon.
  */
 export function SignalFeed() {
-  const { data: signals, isLoading } = useSignals();
+  const { data: executions, isLoading } = useSignals();
 
   return (
     <div className="flex flex-col h-[600px] rounded-[2.5rem] bg-white/[0.02] border border-white/10 overflow-hidden backdrop-blur-xl shadow-2xl relative">
       {/* Dynamic Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary-500/[0.02] to-transparent pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/[0.02] to-transparent pointer-events-none" />
 
       {/* Header */}
       <div className="p-6 md:p-8 border-b border-white/5 flex items-center justify-between bg-white/[0.03] relative z-10">
         <div className="flex items-center gap-3">
           <div className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
           </div>
-          <h3 className="text-xs font-black uppercase tracking-[0.3em] text-foreground">Live Signals</h3>
+          <h3 className="text-xs font-black uppercase tracking-[0.3em] text-foreground">Sovereign Desk Logs</h3>
         </div>
         <div className="text-[9px] font-mono text-white/20 uppercase tracking-widest">
-          {signals?.length || 0} Active
+          {executions?.length || 0} Systems Active
         </div>
       </div>
 
@@ -38,63 +38,63 @@ export function SignalFeed() {
               <div key={i} className="h-24 rounded-2xl bg-white/5 animate-pulse border border-white/5" />
             ))}
           </div>
-        ) : !signals?.length ? (
+        ) : !executions?.length ? (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
-              <Activity className="w-8 h-8 text-white/10 mx-auto mb-4" />
-              <p className="text-white/30 text-sm font-bold">No Active Signals</p>
-              <p className="text-white/15 text-xs mt-1">Signals will appear here when published.</p>
+              <Terminal className="w-8 h-8 text-white/10 mx-auto mb-4" />
+              <p className="text-white/30 text-sm font-bold">Awaiting Operational Cycles</p>
+              <p className="text-white/15 text-xs mt-1">Quantitative logs will sync automatically when active.</p>
             </div>
           </div>
         ) : (
           <AnimatePresence initial={false}>
-            {signals.map((signal) => (
+            {executions.map((exec) => (
               <motion.div
-                key={signal.id}
+                key={exec.id}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                className="group relative p-4 md:p-5 rounded-2xl bg-white/[0.03] border border-white/5 hover:bg-white/[0.05] hover:border-primary-500/20 transition-all duration-300"
+                className="group relative p-4 md:p-5 rounded-2xl bg-white/[0.03] border border-white/5 hover:bg-white/[0.05] hover:border-emerald-500/20 transition-all duration-300"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4 md:gap-5">
                     <div className={`p-2.5 md:p-3 rounded-xl border ${
-                      signal.direction === 'BUY'
-                        ? 'bg-primary-500/10 border-primary-500/20 text-primary-400'
+                      exec.direction === 'BUY'
+                        ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
                         : 'bg-red-500/10 border-red-500/20 text-red-500'
                     }`}>
-                      {signal.direction === 'BUY' ? <ArrowUpRight className="w-5 h-5" /> : <ArrowDownRight className="w-5 h-5" />}
+                      {exec.direction === 'BUY' ? <ArrowUpRight className="w-5 h-5" /> : <ArrowDownRight className="w-5 h-5" />}
                     </div>
                     <div>
                       <div className="text-base md:text-lg font-black text-foreground tracking-tighter uppercase leading-none mb-1">
-                        {signal.symbol}
-                        <span className={`ml-2 text-[10px] ${signal.direction === 'BUY' ? 'text-primary-400' : 'text-red-500'}`}>
-                          {signal.direction}
+                        {exec.symbol}
+                        <span className={`ml-2 text-[10px] ${exec.direction === 'BUY' ? 'text-emerald-400' : 'text-red-500'}`}>
+                          {exec.direction === 'BUY' ? 'LONG' : 'SHORT'}
                         </span>
                       </div>
                       <div className="text-[10px] font-mono text-white/20 uppercase tracking-widest">
-                        {signal.status === 'active' ? '● Live' : signal.status}
+                        {exec.status === 'active' ? '● Executing' : 'Concluded'}
                       </div>
                     </div>
                   </div>
 
                   <div className="text-right">
                     <div className="text-base md:text-lg font-mono font-black text-foreground tracking-tighter tabular-nums mb-0.5">
-                      {signal.entry?.toFixed(5) || '0.00000'}
+                      {exec.entry?.toFixed(5) || '0.00000'}
                     </div>
-                    <div className="text-[8px] font-black uppercase tracking-[0.2em] text-primary-500/60">Entry Price</div>
+                    <div className="text-[8px] font-black uppercase tracking-[0.2em] text-emerald-500/60">Execution Value</div>
                   </div>
                 </div>
 
                 <div className="mt-4 md:mt-5 flex items-center justify-between">
                   <div className="flex gap-4">
                     <div className="flex flex-col">
-                      <span className="text-[8px] font-black uppercase tracking-widest text-white/20">Take Profit</span>
-                      <span className="text-xs font-mono font-black text-primary-400">{signal.take_profit?.toFixed(5) || '—'}</span>
+                      <span className="text-[8px] font-black uppercase tracking-widest text-white/20">Target Ceiling</span>
+                      <span className="text-xs font-mono font-black text-emerald-400">{exec.take_profit?.toFixed(5) || '—'}</span>
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-[8px] font-black uppercase tracking-widest text-white/20">Stop Loss</span>
-                      <span className="text-xs font-mono font-black text-red-400">{signal.stop_loss?.toFixed(5) || '—'}</span>
+                      <span className="text-[8px] font-black uppercase tracking-widest text-white/20">Risk Floor</span>
+                      <span className="text-xs font-mono font-black text-red-400">{exec.stop_loss?.toFixed(5) || '—'}</span>
                     </div>
                   </div>
 
@@ -102,9 +102,9 @@ export function SignalFeed() {
                     variant="institutional-outline"
                     size="sm"
                     className="h-8 px-4"
-                    trackingEvent={`signal_view_${signal.id}`}
+                    trackingEvent={`execution_log_view_${exec.id}`}
                   >
-                    Details
+                    System Specs
                   </EliteButton>
                 </div>
               </motion.div>
@@ -116,8 +116,8 @@ export function SignalFeed() {
       {/* Footer */}
       <div className="h-10 px-6 md:px-8 flex items-center justify-between border-t border-white/5 bg-black/20 relative z-10">
         <div className="flex items-center gap-2">
-           <Activity className="w-3 h-3 text-white/20" />
-           <span className="text-[8px] font-black uppercase tracking-widest text-white/20">Real-Time Feed</span>
+           <HardDrive className="w-3 h-3 text-white/20" />
+           <span className="text-[8px] font-black uppercase tracking-widest text-white/20">System Telemetry Feed</span>
         </div>
         <span className="text-[8px] font-mono text-white/10 uppercase tracking-widest">IFX Trades</span>
       </div>

@@ -31,7 +31,7 @@ const generateMonthlyResults = () =>
 
 
 export const LiveAlgoTerminal = () => {
-  const { data: signals = [] } = useSignals();
+  const { data: executions = [] } = useSignals();
   const { isElite } = useAccess();
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [isScanning, setIsScanning] = useState(false);
@@ -51,7 +51,7 @@ export const LiveAlgoTerminal = () => {
   const positiveCount = useMemo(() => monthlyResults.filter(m => m.isPositive).length, [monthlyResults]);
   const bestMonth = useMemo(() => Math.max(...monthlyResults.map(m => m.value)), [monthlyResults]);
 
-  const activeSignals = signals.slice(0, 5);
+  const activeOperations = executions.slice(0, 5);
 
   return (
     <section className="py-24 md:py-32 bg-[var(--color10)] border-t border-white/5 relative overflow-hidden">
@@ -84,9 +84,9 @@ export const LiveAlgoTerminal = () => {
             {/* Trades List */}
             <div className="flex-1 overflow-y-auto space-y-4 pr-2 relative min-h-[440px]">
               <AnimatePresence mode="popLayout">
-                {activeSignals.map((signal, idx) => (
+                {activeOperations.map((exec, idx) => (
                   <motion.div
-                    key={signal.id}
+                    key={exec.id}
                     layout
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -95,23 +95,23 @@ export const LiveAlgoTerminal = () => {
                   >
                     <div className="flex items-center gap-5">
                       <div className={`w-12 h-12 rounded-2xl flex items-center justify-center border transition-all duration-500 group-hover:scale-110 ${
-                        signal.direction === 'BUY' 
+                        exec.direction === 'BUY' 
                           ? 'bg-emerald-500/5 border-emerald-500/10 text-emerald-400' 
                           : 'bg-rose-500/5 border-rose-500/10 text-rose-400'
                       }`}>
-                        {signal.direction === 'BUY' ? <TrendingUp className="w-6 h-6" /> : <TrendingDown className="w-6 h-6" />}
+                        {exec.direction === 'BUY' ? <TrendingUp className="w-6 h-6" /> : <TrendingDown className="w-6 h-6" />}
                       </div>
                       <div>
                         <div className="text-white font-bold text-base tracking-tight flex items-center gap-3 font-mono">
-                          {signal.symbol}
+                          {exec.symbol}
                           <span className={`text-[9px] px-2 py-0.5 rounded-full border font-bold tracking-widest ${
-                            signal.direction === 'BUY' ? 'bg-emerald-500/5 border-emerald-500/20 text-emerald-400' : 'bg-rose-500/5 border-rose-500/20 text-rose-400'
+                            exec.direction === 'BUY' ? 'bg-emerald-500/5 border-emerald-500/20 text-emerald-400' : 'bg-rose-500/5 border-rose-500/20 text-rose-400'
                           }`}>
-                            {signal.direction}
+                            {exec.direction === 'BUY' ? 'LONG' : 'SHORT'}
                           </span>
                         </div>
                         <div className="text-[10px] text-[var(--color5)] font-mono font-bold mt-1 uppercase tracking-widest">
-                          ENTRY: <span className="text-white/80">{signal.entry}</span> 
+                          EXEC VALUE: <span className="text-white/80">{exec.entry}</span> 
                         </div>
                       </div>
                     </div>

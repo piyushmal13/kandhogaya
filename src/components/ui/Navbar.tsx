@@ -177,35 +177,35 @@ export const Navbar = () => {
           </div>
 
           {/* Mobile controls */}
-          <div className="md:hidden flex items-center gap-1.5">
+          <div className="md:hidden flex items-center gap-2">
             {!user && (
               <Link
                 to="/login"
-                className="rounded-xl bg-white/10 border border-white/10 px-3.5 py-2 text-[8px] font-black text-white uppercase tracking-widest hover:bg-white/20 transition-all active:scale-95"
+                className="rounded-xl bg-white/10 border border-white/10 px-4 py-2.5 text-[10px] font-black text-white uppercase tracking-widest hover:bg-white/20 transition-all active:scale-95"
               >
                 Sign In
               </Link>
             )}
             {user && (
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-2">
                 {isAdmin && (
-                  <Link to="/admin" className="p-2 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-400 active:scale-90 transition-transform shrink-0">
-                    <Settings className="h-4 w-4" />
+                  <Link to="/admin" className="p-2.5 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-400 active:scale-90 transition-transform shrink-0">
+                    <Settings className="h-4.5 w-4.5" />
                   </Link>
                 )}
-                <Link to="/dashboard" className="p-2 bg-white/5 border border-white/10 rounded-xl text-white active:scale-90 transition-transform shrink-0">
-                  <LayoutDashboard className="h-4 w-4" />
+                <Link to="/dashboard" className="p-2.5 bg-white/5 border border-white/10 rounded-xl text-white active:scale-90 transition-transform shrink-0">
+                  <LayoutDashboard className="h-4.5 w-4.5" />
                 </Link>
               </div>
             )}
             <button
               type="button"
               onClick={() => setIsOpen((o) => !o)}
-              className="rounded-xl border border-white/10 bg-white/[0.04] p-2 text-white/50 hover:text-white hover:bg-white/[0.08] transition-all active:scale-90 shrink-0"
+              className="rounded-xl border border-white/10 bg-white/[0.04] p-2.5 text-white/50 hover:text-white hover:bg-white/[0.08] transition-all active:scale-90 shrink-0"
               aria-label="Toggle menu"
               aria-expanded={isOpen}
             >
-              {isOpen ? <X className="h-4.5 w-4.5" /> : <Menu className="h-4.5 w-4.5" />}
+              {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
           </div>
         </div>
