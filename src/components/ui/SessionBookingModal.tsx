@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { X, Send, CheckCircle2, ShieldCheck, Mail, User, Briefcase, Lock, Cpu, Globe } from "lucide-react";
 import { supabase } from "@/lib/supabase";
@@ -54,7 +55,12 @@ export const SessionBookingModal: React.FC<SessionBookingModalProps> = ({
     }
   };
 
-  return (
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  if (!mounted) return null;
+
+  return createPortal(
     <AnimatePresence>
       {isOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
@@ -74,12 +80,12 @@ export const SessionBookingModal: React.FC<SessionBookingModalProps> = ({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="relative w-full max-w-xl overflow-hidden rounded-[2.5rem] border border-white/10 bg-[#0A0A0A] p-6 sm:p-10 shadow-2xl z-10"
+            className="relative w-full max-w-xl overflow-hidden rounded-[2.5rem] bg-[#0A0A0A] p-6 sm:p-10 shadow-2xl z-10 gemini-border border border-white/5"
             role="dialog"
             aria-modal="true"
           >
             {/* Top Accent Line */}
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-emerald-500/40 to-transparent" />
+            <div className="absolute top-0 left-0 right-0 h-1 gemini-shading opacity-30" />
 
             {/* Close Button */}
             <button
@@ -126,7 +132,7 @@ export const SessionBookingModal: React.FC<SessionBookingModalProps> = ({
                           required
                           type="text"
                           placeholder="Sender Identity"
-                          className="w-full bg-black/60 border border-white/5 rounded-2xl py-4 pl-12 pr-4 text-white outline-none focus:border-emerald-500/40 transition-all font-mono text-xs"
+                          className="w-full bg-black/60 border border-white/5 rounded-2xl py-4 pl-12 pr-4 text-white outline-none focus:border-[#8B5CF6]/50 focus:ring-1 focus:ring-[#8B5CF6]/40 transition-all font-mono text-xs"
                           value={formData.full_name}
                           onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
                         />
@@ -140,7 +146,7 @@ export const SessionBookingModal: React.FC<SessionBookingModalProps> = ({
                           required
                           type="email"
                           placeholder="Contact Protocol"
-                          className="w-full bg-black/60 border border-white/5 rounded-2xl py-4 pl-12 pr-4 text-white outline-none focus:border-emerald-500/40 transition-all font-mono text-xs"
+                          className="w-full bg-black/60 border border-white/5 rounded-2xl py-4 pl-12 pr-4 text-white outline-none focus:border-[#8B5CF6]/50 focus:ring-1 focus:ring-[#8B5CF6]/40 transition-all font-mono text-xs"
                           value={formData.email}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         />
@@ -152,7 +158,7 @@ export const SessionBookingModal: React.FC<SessionBookingModalProps> = ({
                     <label className="text-[9px] font-black uppercase tracking-widest text-white/30 ml-1">Target Allocation capital ($)</label>
                     <select
                       required
-                      className="w-full bg-black/60 border border-white/5 rounded-2xl py-4 px-5 text-white outline-none focus:border-emerald-500/40 transition-all font-mono text-xs appearance-none"
+                      className="w-full bg-black/60 border border-white/5 rounded-2xl py-4 px-5 text-white outline-none focus:border-[#8B5CF6]/50 focus:ring-1 focus:ring-[#8B5CF6]/40 transition-all font-mono text-xs appearance-none"
                       value={formData.account_size}
                       onChange={(e) => setFormData({ ...formData, account_size: e.target.value })}
                     >
@@ -170,7 +176,7 @@ export const SessionBookingModal: React.FC<SessionBookingModalProps> = ({
                       required
                       rows={3}
                       placeholder="Outline your algorithmic execution objective or macro briefing request..."
-                      className="w-full bg-black/60 border border-white/5 rounded-2xl py-4 px-5 text-white outline-none focus:border-emerald-500/40 transition-all font-mono text-xs resize-none"
+                      className="w-full bg-black/60 border border-white/5 rounded-2xl py-4 px-5 text-white outline-none focus:border-[#8B5CF6]/50 focus:ring-1 focus:ring-[#8B5CF6]/40 transition-all font-mono text-xs resize-none"
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     />
@@ -178,10 +184,11 @@ export const SessionBookingModal: React.FC<SessionBookingModalProps> = ({
 
                   <EliteButton
                     type="submit"
-                    variant="elite"
+                    variant="gemini"
                     size="lg"
                     className="w-full mt-2"
                     isLoading={status === 'loading'}
+                    glowEffect
                   >
                     <div className="flex items-center gap-2">
                       <Send className="w-4 h-4" />
@@ -200,6 +207,7 @@ export const SessionBookingModal: React.FC<SessionBookingModalProps> = ({
           </motion.div>
         </div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 };

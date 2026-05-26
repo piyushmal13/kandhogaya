@@ -65,14 +65,14 @@ export const CustomRequestTerminal: React.FC = () => {
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="border border-[#00E5FF]/20 bg-[#0a0a0b] p-8 rounded-lg shadow-2xl relative overflow-hidden"
+          className="bg-[#0a0a0b] p-8 rounded-2xl shadow-2xl relative overflow-hidden gemini-border border border-white/5"
         >
           {/* Terminal Header Decor */}
-          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#00E5FF]/40 to-transparent" />
+          <div className="absolute top-0 left-0 right-0 h-1 gemini-shading opacity-30" />
           
           <div className="mb-10">
-            <h1 className="text-3xl font-bold text-[#00E5FF] mb-2 tracking-tight">DEEP CODING TERMINAL</h1>
-            <p className="text-sm text-[#849396] uppercase tracking-widest">Institutional Engineering Fulfillment Protocol</p>
+            <h1 className="text-3xl font-black gemini-text mb-2 tracking-tight">DEEP CODING TERMINAL</h1>
+            <p className="text-[10px] text-[#849396] uppercase tracking-[0.3em] font-bold">Institutional Engineering Fulfillment Protocol</p>
           </div>
 
           {isSuccess ? (
@@ -101,38 +101,38 @@ export const CustomRequestTerminal: React.FC = () => {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label htmlFor="full_name" className="block text-xs font-semibold text-[#00E5FF] mb-1 uppercase">Full Name</label>
+                  <label htmlFor="full_name" className="block text-[9px] font-black tracking-widest text-[#849396] mb-1.5 uppercase">Full Name</label>
                   <input 
                     id="full_name"
                     required
                     type="text"
                     value={formData.name}
                     onChange={(e) => setFormData({...formData, name: e.target.value})}
-                    className="w-full bg-[#121214] border border-[#BAC9CC]/10 p-3 rounded text-white focus:outline-none focus:border-[#00E5FF]/50 transition-colors"
+                    className="w-full bg-[#121214] border border-[#BAC9CC]/10 p-3.5 rounded-xl text-white focus:outline-none focus:border-[#8B5CF6]/50 focus:ring-1 focus:ring-[#8B5CF6]/40 transition-all font-mono text-xs"
                     placeholder="IDENTIFY SENDER"
                   />
                 </div>
                 <div>
-                  <label htmlFor="email_address" className="block text-xs font-semibold text-[#00E5FF] mb-1 uppercase">Email Address</label>
+                  <label htmlFor="email_address" className="block text-[9px] font-black tracking-widest text-[#849396] mb-1.5 uppercase">Email Address</label>
                   <input 
                     id="email_address"
                     required
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({...formData, email: e.target.value})}
-                    className="w-full bg-[#121214] border border-[#BAC9CC]/10 p-3 rounded text-white focus:outline-none focus:border-[#00E5FF]/50 transition-colors"
+                    className="w-full bg-[#121214] border border-[#BAC9CC]/10 p-3.5 rounded-xl text-white focus:outline-none focus:border-[#8B5CF6]/50 focus:ring-1 focus:ring-[#8B5CF6]/40 transition-all font-mono text-xs"
                     placeholder="PROTOCOL CONTACT"
                   />
                 </div>
               </div>
 
               <div>
-                <label htmlFor="project_domain" className="block text-xs font-semibold text-[#00E5FF] mb-1 uppercase">Project Domain</label>
+                <label htmlFor="project_domain" className="block text-[9px] font-black tracking-widest text-[#849396] mb-1.5 uppercase">Project Domain</label>
                 <select 
                   id="project_domain"
                   value={formData.project_type}
                   onChange={(e) => setFormData({...formData, project_type: e.target.value})}
-                  className="w-full bg-[#121214] border border-[#BAC9CC]/10 p-3 rounded text-white focus:outline-none focus:border-[#00E5FF]/50 transition-colors appearance-none"
+                  className="w-full bg-[#121214] border border-[#BAC9CC]/10 p-3.5 rounded-xl text-white focus:outline-none focus:border-[#8B5CF6]/50 focus:ring-1 focus:ring-[#8B5CF6]/40 transition-all font-mono text-xs appearance-none"
                 >
                   <option value="CPP_HFT">C++ High-Frequency Execution Systems</option>
                   <option value="PYTHON_QUANT">Python Quantitative Infrastructure & Backtesting</option>
@@ -144,38 +144,38 @@ export const CustomRequestTerminal: React.FC = () => {
               </div>
 
               <div>
-                <label htmlFor="project_spec" className="block text-xs font-semibold text-[#00E5FF] mb-1 uppercase">Project Specification</label>
+                <label htmlFor="project_spec" className="block text-[9px] font-black tracking-widest text-[#849396] mb-1.5 uppercase">Project Specification</label>
                 <textarea 
                   id="project_spec"
                   required
                   rows={5}
                   value={formData.description}
                   onChange={(e) => setFormData({...formData, description: e.target.value})}
-                  className="w-full bg-[#121214] border border-[#BAC9CC]/10 p-3 rounded text-white focus:outline-none focus:border-[#00E5FF]/50 transition-colors resize-none"
+                  className="w-full bg-[#121214] border border-[#BAC9CC]/10 p-3.5 rounded-xl text-white focus:outline-none focus:border-[#8B5CF6]/50 focus:ring-1 focus:ring-[#8B5CF6]/40 transition-all font-mono text-xs resize-none"
                   placeholder="Describe your architectural requirements..."
                 />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label htmlFor="budget_alloc" className="block text-xs font-semibold text-[#00E5FF] mb-1 uppercase">Budget Allocation (USD)</label>
+                  <label htmlFor="budget_alloc" className="block text-[9px] font-black tracking-widest text-[#849396] mb-1.5 uppercase">Budget Allocation (USD)</label>
                   <input 
                     id="budget_alloc"
                     type="text"
                     value={formData.budget}
                     onChange={(e) => setFormData({...formData, budget: e.target.value})}
-                    className="w-full bg-[#121214] border border-[#BAC9CC]/10 p-3 rounded text-white focus:outline-none focus:border-[#00E5FF]/50 transition-colors"
+                    className="w-full bg-[#121214] border border-[#BAC9CC]/10 p-3.5 rounded-xl text-white focus:outline-none focus:border-[#8B5CF6]/50 focus:ring-1 focus:ring-[#8B5CF6]/40 transition-all font-mono text-xs"
                     placeholder="ESTIMATED RESOURCE COMMITMENT"
                   />
                 </div>
                 <div>
-                  <label htmlFor="timeline_req" className="block text-xs font-semibold text-[#00E5FF] mb-1 uppercase">Timeline Requirement</label>
+                  <label htmlFor="timeline_req" className="block text-[9px] font-black tracking-widest text-[#849396] mb-1.5 uppercase">Timeline Requirement</label>
                   <input 
                     id="timeline_req"
                     type="text"
                     value={formData.timeline}
                     onChange={(e) => setFormData({...formData, timeline: e.target.value})}
-                    className="w-full bg-[#121214] border border-[#BAC9CC]/10 p-3 rounded text-white focus:outline-none focus:border-[#00E5FF]/50 transition-colors"
+                    className="w-full bg-[#121214] border border-[#BAC9CC]/10 p-3.5 rounded-xl text-white focus:outline-none focus:border-[#8B5CF6]/50 focus:ring-1 focus:ring-[#8B5CF6]/40 transition-all font-mono text-xs"
                     placeholder="FULFILLMENT WINDOW"
                   />
                 </div>
@@ -186,8 +186,9 @@ export const CustomRequestTerminal: React.FC = () => {
                   type="submit"
                   disabled={isSubmitting}
                   fluid
-                  variant="elite"
+                  variant="gemini"
                   size="lg"
+                  glowEffect
                 >
                   {isSubmitting ? 'TRANSMITTING...' : 'INITIATE PROTOCOL'}
                 </EliteButton>

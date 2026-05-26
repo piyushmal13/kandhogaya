@@ -10,6 +10,7 @@ import {
   Menu,
   MessageSquare,
   Settings,
+  Terminal,
   X,
   Zap,
 } from "lucide-react";
@@ -59,6 +60,14 @@ export const Navbar = () => {
     { name: "About", path: "/about", icon: Zap },
   ];
 
+  const bottomLinks = [
+    { name: "Home", path: "/", icon: Home },
+    { name: "Ecosystem", path: "/quantx", icon: Zap },
+    { name: "Webinars", path: "/webinars", icon: BookOpen },
+    { name: "Market", path: "/marketplace", icon: BarChart3 },
+    { name: "Terminal", path: "/solutions/custom", icon: Terminal },
+  ];
+
   const isAdmin = userProfile?.role === "admin";
 
   return (
@@ -86,8 +95,8 @@ export const Navbar = () => {
               className={cn(
                 "flex items-center justify-center transition-all duration-500 overflow-hidden rounded-full border bg-[#010203] group-hover:shadow-[0_0_30px_rgba(16,185,129,0.3)] group-hover:border-emerald-500/30 border-white/10",
                 scrolled 
-                  ? "h-9 w-9 sm:h-10 sm:w-10" 
-                  : "h-10 w-10 sm:h-11 sm:w-11"
+                  ? "h-11 w-11 sm:h-12 sm:w-12" 
+                  : "h-12 w-12 sm:h-14 sm:w-14"
               )}
             >
               <img
@@ -304,6 +313,49 @@ export const Navbar = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* ── Mobile Bottom Navigation Tab Bar ── */}
+      <div 
+        className="fixed bottom-0 inset-x-0 z-[50] md:hidden bg-[#020304]/80 border-t border-white/5 backdrop-blur-2xl px-4 py-2 flex items-center justify-around shadow-[0_-15px_40px_rgba(0,0,0,0.8)] pb-[env(safe-area-inset-bottom,0px)]"
+        style={{ height: "4.5rem" }}
+      >
+        {bottomLinks.map((link) => {
+          const isActive = location.pathname === link.path || (link.path === '/' && location.pathname === '');
+          return (
+            <Link
+              key={link.path}
+              to={link.path}
+              className="flex flex-col items-center justify-center gap-1 flex-1 py-1 text-center group active:scale-95 transition-transform"
+            >
+              <div 
+                className={cn(
+                  "p-2.5 rounded-2xl transition-all duration-300 relative overflow-hidden",
+                  isActive 
+                    ? "text-emerald-400 bg-emerald-500/[0.08]" 
+                    : "text-white/40 hover:text-white/70"
+                )}
+              >
+                <link.icon className={cn("h-5 w-5", isActive && "scale-110 transition-transform")} />
+                
+                {/* Dynamic Gemini shifting glow backing inside the active icon container */}
+                {isActive && (
+                  <motion.div 
+                    layoutId="bottom-nav-glow"
+                    className="absolute inset-0 -z-10 gemini-shading opacity-15 blur-sm rounded-2xl"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+              </div>
+              <span className={cn(
+                "text-[9px] font-black uppercase tracking-widest transition-colors duration-300",
+                isActive ? "gemini-text font-black" : "text-white/30"
+              )}>
+                {link.name}
+              </span>
+            </Link>
+          );
+        })}
+      </div>
     </>
   );
 };

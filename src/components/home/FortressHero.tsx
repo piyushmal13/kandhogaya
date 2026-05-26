@@ -135,10 +135,10 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
       {isTickerActive && (
         <div
           className="relative z-30 mt-16 sm:mt-20 border-b border-emerald-500/10 bg-black/60 backdrop-blur-2xl overflow-hidden flex items-center shrink-0 shadow-sm"
-          style={{ height: "2rem", minHeight: "2rem", contain: "layout paint" }}
+          style={{ height: "1.75rem", minHeight: "1.75rem", contain: "layout paint" }}
         >
-          <div className="absolute left-0 z-10 w-24 h-full bg-gradient-to-r from-[#010203] to-transparent" />
-          <div className="absolute right-0 z-10 w-24 h-full bg-gradient-to-l from-[#010203] to-transparent" />
+          <div className="absolute left-0 z-10 w-16 sm:w-24 h-full bg-gradient-to-r from-[#010203] to-transparent" />
+          <div className="absolute right-0 z-10 w-16 sm:w-24 h-full bg-gradient-to-l from-[#010203] to-transparent" />
           
           {/* LIVE indicator */}
           <div className="absolute left-4 z-20 flex items-center gap-1.5">
@@ -156,7 +156,7 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
             {[...displayTickers, ...displayTickers, ...displayTickers].map((t, i) => (
               <span
                 key={`${t}-${i}`}
-                className="text-[9px] sm:text-[10px] font-mono font-bold uppercase tracking-[0.25em] text-white/35 flex items-center gap-2"
+                className="text-[8px] sm:text-[9px] font-mono font-bold uppercase tracking-[0.25em] text-white/35 flex items-center gap-2"
               >
                 <span className="w-0.5 h-0.5 rounded-full bg-emerald-500/50" />
                 {t}
@@ -172,14 +172,15 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
         {/* Headline */}
         <motion.h1
           style={{ opacity, y: textY }}
-          className="font-black text-white tracking-[-0.05em] leading-[0.8] uppercase max-w-4xl mx-auto mb-6 sm:mb-8 select-none break-keep px-2 space-y-1 sm:space-y-2"
+          className="font-black text-white tracking-[-0.03em] leading-[1] uppercase max-w-5xl mx-auto mb-6 sm:mb-8 select-none px-4"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.8, ease: ENTRY }}
         >
-          <span className="block text-[clamp(1.8rem,7vw,5.5rem)] tracking-tighter leading-none">World-Class</span>
-          <span className="block text-[clamp(2.0rem,8.2vw,6.5rem)] italic font-serif text-shimmer pr-8 md:pr-10 tracking-tighter leading-none inline-block select-none">Institutional FX</span>
-          <span className="block text-[clamp(1.8rem,7vw,5.5rem)] tracking-tighter leading-none">&amp; Macro.</span>
+          <span className="block text-5xl md:text-7xl lg:text-[5.5rem] tracking-tight">World-Class</span>
+          <span className="block text-5xl md:text-7xl lg:text-[5.5rem] tracking-tight mt-1 sm:mt-2">
+            <span className="italic font-serif text-shimmer pr-2 sm:pr-3">Institutional FX</span> <br className="md:hidden" /> &amp; Macro.
+          </span>
         </motion.h1>
 
         {/* Subheading */}
@@ -198,16 +199,16 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.45, duration: 0.6, ease: EASING }}
-          className="flex flex-row items-center gap-3.5 sm:gap-5 justify-center w-full px-2 max-w-md mx-auto z-30"
+          className="flex flex-row flex-wrap items-center gap-3.5 sm:gap-5 justify-center w-full px-2 max-w-md mx-auto z-30"
         >
           <button onClick={handleRequestSessionClick} className="shrink-0">
-            <EliteButton variant="premium-gold" size="sm" rightIcon={<ArrowRight className="w-3.5 h-3.5" />}>
+            <EliteButton variant="gemini" size="lg" rightIcon={<ArrowRight className="w-3.5 h-3.5" />} glowEffect>
               Request Session
             </EliteButton>
           </button>
 
           <button onClick={handleSeeResults} className="shrink-0">
-            <EliteButton variant="secondary" size="sm" leftIcon={<Play className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400/20" />}>
+            <EliteButton variant="secondary" size="lg" leftIcon={<Play className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400/20" />}>
               See Results
             </EliteButton>
           </button>

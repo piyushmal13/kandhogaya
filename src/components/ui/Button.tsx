@@ -16,7 +16,8 @@ export type ButtonVariant =
   | 'ghost' 
   | 'danger' 
   | 'institutional-outline'
-  | 'premium-gold';
+  | 'premium-gold'
+  | 'gemini';
 
 export type ButtonSize = 'sm' | 'md' | 'lg' | 'xl' | 'elite-hero';
 
@@ -40,7 +41,8 @@ const variantStyles: Record<ButtonVariant, string> = {
   ghost: "bg-transparent hover:bg-white/5 text-gray-400 hover:text-white",
   danger: "bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 hover:border-red-500/40",
   'institutional-outline': "bg-transparent border-2 border-white/10 text-white hover:bg-white/[0.02] hover:border-emerald-500/40 hover:text-emerald-400",
-  'premium-gold': "bg-gradient-to-r from-[#D4AF37] to-[#F5E6A3] hover:from-[#F5E6A3] hover:to-[#D4AF37] text-black hover:text-white font-black hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] border border-yellow-400/20 shadow-[inset_0_1px_2px_rgba(255,255,255,0.2)]",
+  'premium-gold': "bg-gradient-to-r from-[#D4AF37] to-[#F5E6A3] hover:from-[#F5E6A3] hover:to-[#D4AF37] text-black hover:text-white font-black hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] border border-yellow-400/20 shadow-[inset_0_1px_2px_rgba(255,255,255,0.25)]",
+  gemini: "gemini-shading hover:shadow-[0_0_35px_rgba(139,92,246,0.5)] text-white font-black border border-white/10 shadow-[inset_0_1px_2px_rgba(255,255,255,0.25)]",
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
@@ -106,6 +108,7 @@ export const Button = forwardRef<HTMLButtonElement, EliteButtonProps>(
             (() => {
               if (variant === 'elite') return 'bg-[var(--color14)]/40';
               if (variant === 'execution') return 'bg-emerald-500/40';
+              if (variant === 'gemini') return 'gemini-shading opacity-50';
               return 'bg-white/10';
             })()
           )} />

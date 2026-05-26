@@ -183,11 +183,12 @@ export const WebinarDetail = () => {
   const isUpcoming = webinar.status === "upcoming" || (webinar.status === "live" && !webinar.streaming_url);
 
   return (
-    <div className="pt-20 bg-[#020203] min-h-screen relative overflow-hidden">
+    <div className="pt-20 bg-[#000000] min-h-screen relative overflow-hidden">
       {/* Background Ambience */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden>
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[120%] h-[50%] bg-[radial-gradient(ellipse_at_center,rgba(16,185,129,0.06)_0%,transparent_60%)] blur-3xl" />
-        <div className="dot-grid absolute inset-0 opacity-[0.02]" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[140%] h-[60%] bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.08)_0%,transparent_60%)] blur-3xl opacity-60" />
+        <div className="absolute bottom-0 right-0 w-[80%] h-[50%] bg-[radial-gradient(ellipse_at_bottom_right,rgba(16,185,129,0.03)_0%,transparent_60%)] blur-3xl" />
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03]" />
       </div>
 
       <PageMeta
@@ -198,7 +199,7 @@ export const WebinarDetail = () => {
       />
       
       {/* Dynamic Navigation & Title Bar */}
-      <div className="bg-white/[0.01] border-b border-white/5 py-6 relative z-10">
+      <div className="bg-white/[0.02] border-b border-white/10 py-6 relative z-10 backdrop-blur-3xl shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
         <div className="max-w-7xl mx-auto px-4 md:px-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-center gap-4">
             <Link to="/webinars" className="p-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-400 transition-colors border border-white/5 shrink-0">
@@ -297,7 +298,7 @@ export const WebinarDetail = () => {
           <div className="lg:col-span-8 space-y-12">
             
             {/* Dynamic Media Section */}
-            <div className="relative aspect-video bg-black rounded-3xl overflow-hidden border border-white/5 shadow-2xl group">
+            <div className="relative aspect-video bg-[#010203] rounded-[2rem] overflow-hidden border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] group ring-1 ring-white/5">
               {(() => {
                 if (isLive) {
                   const url = webinar.streaming_url || "";
@@ -453,20 +454,9 @@ export const WebinarDetail = () => {
                               </li>
                             ))
                           ) : (
-                            <>
-                              <li className="flex items-start gap-3 text-[11px] text-white/40">
-                                <Check className="w-3.5 h-3.5 text-emerald-500 mt-0.5 shrink-0" />
-                                <span className="leading-relaxed">Advanced institutional quantitative models breakdown.</span>
-                              </li>
-                              <li className="flex items-start gap-3 text-[11px] text-white/40">
-                                <Check className="w-3.5 h-3.5 text-emerald-500 mt-0.5 shrink-0" />
-                                <span className="leading-relaxed">Risk parameters and sub-millisecond execution logic.</span>
-                              </li>
-                              <li className="flex items-start gap-3 text-[11px] text-white/40">
-                                <Check className="w-3.5 h-3.5 text-emerald-500 mt-0.5 shrink-0" />
-                                <span className="leading-relaxed">Live macro regime identification and flow charting.</span>
-                              </li>
-                            </>
+                            <li className="flex items-start gap-3 text-[11px] text-white/40">
+                               <span className="leading-relaxed italic">Learning points not yet specified for this session.</span>
+                            </li>
                           )}
                         </ul>
                       </div>
@@ -495,12 +485,16 @@ export const WebinarDetail = () => {
                       </div>
                       <div className="text-center md:text-left space-y-4">
                         <div>
-                          <h3 className="text-xl md:text-3xl font-black text-white uppercase">{webinar.speaker_name || "IFX Lead Analyst"}</h3>
-                          <p className="text-emerald-500 font-black uppercase tracking-[0.25em] text-[9px] mt-1">{webinar.speaker_role || "Senior FX Strategist"}</p>
+                          <h3 className="text-xl md:text-3xl font-black text-white uppercase">{webinar.speaker_name}</h3>
+                          {webinar.speaker_role && (
+                             <p className="text-emerald-500 font-black uppercase tracking-[0.25em] text-[9px] mt-1">{webinar.speaker_role}</p>
+                          )}
                         </div>
-                        <p className="text-xs md:text-sm text-white/40 leading-relaxed max-w-xl">
-                          Professional strategist at the IFX Trades quantitative modeling desks. Specializes in institutional order flow mechanics and high-frequency macroeconomic capital movements.
-                        </p>
+                        {webinar.metadata?.author_bio && (
+                          <p className="text-xs md:text-sm text-white/40 leading-relaxed max-w-xl">
+                            {webinar.metadata.author_bio}
+                          </p>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -574,12 +568,12 @@ export const WebinarDetail = () => {
  
           {/* RIGHT: Embedded Registration Page Card (4 cols) */}
           <div id="registration-card" className="lg:col-span-4">
-            <div className="bg-white/[0.01] backdrop-blur-3xl border border-white/5 rounded-[2.5rem] p-8 md:p-10 shadow-2xl relative overflow-hidden space-y-8">
-              <div className="absolute top-0 right-0 p-8 opacity-[0.02] pointer-events-none">
-                 <ShieldCheck className="w-36 h-36 text-emerald-500" />
+            <div className="bg-[#050505]/60 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] p-8 md:p-10 shadow-[0_0_40px_rgba(16,185,129,0.05)] relative overflow-hidden space-y-8 ring-1 ring-white/5">
+              <div className="absolute top-0 right-0 p-8 opacity-[0.03] pointer-events-none transform translate-x-4 -translate-y-4">
+                 <ShieldCheck className="w-48 h-48 text-emerald-500" />
               </div>
               
-              {isUpcoming ? (
+              {isUpcoming || isLive ? (
                 <>
                   {!isRegistered ? (
                     // EMBEDDED REGISTRATION INTERFACE
