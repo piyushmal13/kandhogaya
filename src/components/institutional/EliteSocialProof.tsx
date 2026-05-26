@@ -136,7 +136,7 @@ export const EliteSocialProof = () => {
             <motion.div 
               initial={{ opacity: 0, scale: 0.96 }}
               whileInView={{ opacity: 1, scale: 1 }}
-              className="relative rounded-[2.5rem] overflow-hidden border border-white/10 bg-[#0b141a] shadow-2xl flex flex-col h-[520px] max-w-sm mx-auto"
+              className="relative w-full max-w-sm rounded-[2.5rem] overflow-hidden border border-white/10 bg-[#0b141a] shadow-2xl flex flex-col h-[520px] mx-auto"
             >
               {/* WhatsApp Header */}
               <div className="bg-[#202c33] p-4 border-b border-white/5 flex items-center justify-between shrink-0">
