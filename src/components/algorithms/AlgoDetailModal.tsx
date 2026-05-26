@@ -53,7 +53,7 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
         initial={{ scale: 0.95, y: 20 }}
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.95, y: 20 }}
-        className="bg-[var(--color7)] border border-white/10 rounded-2xl md:rounded-3xl w-full max-w-5xl overflow-hidden shadow-2xl relative flex flex-col md:flex-row h-full md:h-auto max-h-[95vh] md:max-h-none"
+        className="bg-[var(--color7)] border border-white/10 rounded-2xl md:rounded-3xl w-full max-w-5xl overflow-y-auto flex flex-col md:flex-row h-full max-h-[92vh] md:max-h-[85vh] shadow-2xl relative"
       >
         <button 
           onClick={onClose}
@@ -63,7 +63,7 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
         </button>
 
         {/* Left: Details & Tabs */}
-        <div className="flex-1 p-5 sm:p-8 md:p-12 overflow-y-auto border-b md:border-b-0 md:border-r border-white/5 custom-scrollbar">
+        <div className="flex-1 p-5 sm:p-8 md:p-12 overflow-y-visible md:overflow-y-auto border-b md:border-b-0 md:border-r border-white/5 custom-scrollbar">
           <div className="mb-6 md:mb-8 pr-10 md:pr-0">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[9px] md:text-xs font-mono tracking-widest mb-3 md:mb-4">
               <Zap className="w-3 h-3" />
@@ -277,6 +277,9 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
                   <p className="whitespace-pre-wrap leading-relaxed">
                     {algo.terms_and_conditions || "Standard institutional trading terms apply. This algorithm is designed for high-liquidity environments and requires a minimum capital allocation of $500. Past performance is not indicative of future results."}
                   </p>
+                  <div className="mt-6 pt-4 border-t border-white/5 text-[10px] text-emerald-400/80 uppercase font-black tracking-wider leading-relaxed">
+                     VPS Promotion: A free, ultra-low latency VPS setup is available for all active clients who maintain a funded account value exceeding $1,000 with our trusted B2B partner brokerage.
+                  </div>
                 </div>
               </div>
             )}
@@ -284,7 +287,7 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
         </div>
 
         {/* Right: Subscription */}
-        <div className="w-full md:w-[400px] bg-[var(--color6)] p-6 md:p-12 flex flex-col relative custom-scrollbar overflow-y-auto">
+        <div className="w-full md:w-[400px] bg-[var(--color6)] p-6 md:p-12 flex flex-col relative shrink-0 overflow-y-visible md:overflow-y-auto">
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-cyan-500" />
           
           <div className="mb-6 md:mb-10 mt-4">
