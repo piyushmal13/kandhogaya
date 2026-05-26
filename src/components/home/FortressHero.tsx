@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { motion, useScroll, useTransform, useSpring } from "motion/react";
 import { ArrowRight, ChevronDown, Play, ShieldCheck, Zap, Globe, Timer, Lock } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 const EASING = [0.4, 0, 0.2, 1] as const;
 const ENTRY = [0.16, 1, 0.3, 1] as const;
@@ -16,7 +16,7 @@ const FloatingParticles = () => (
     {Array.from({ length: 30 }).map((_, i) => (
       <div
         key={i}
-        className="absolute w-[2px] h-[2px] rounded-full bg-emerald-400/20"
+        className="absolute w-[2px] h-[2px] rounded-full bg-emerald-500/20"
         style={{
           left: `${Math.random() * 100}%`,
           top: `${Math.random() * 100}%`,
@@ -40,6 +40,8 @@ export const FortressHero = () => {
   const { isEnabled: isTickerActive } = useFeatureFlag('market_ticker_active', true);
   const [tickers, setTickers] = useState<string[]>([]);
   const sectionRef = useRef<HTMLElement>(null);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     if (!isTickerActive) return;
@@ -88,46 +90,53 @@ export const FortressHero = () => {
     window.scrollBy({ top: window.innerHeight, behavior: "smooth" });
   }, []);
 
+  const handleRequestSession = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (location.pathname !== '/') {
+      navigate('/?session=true');
+      return;
+    }
+    const el = document.getElementById('consultation');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const handleSeeResults = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (location.pathname !== '/') {
+      navigate('/?results=true');
+      return;
+    }
+    const el = document.getElementById('algo-heading') || document.getElementById('performance');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-[100svh] overflow-hidden flex flex-col"
+      className="relative min-h-[100svh] overflow-hidden flex flex-col justify-between"
       aria-label="IFX Trades — Institutional Trading Education"
       style={{
         backgroundColor: "#010203",
-        backgroundImage: "radial-gradient(ellipse 80% 50% at 50% 60%, rgba(16,185,129,0.10) 0%, transparent 70%)",
+        backgroundImage: "radial-gradient(circle at 50% 50%, rgba(16,185,129,0.06) 0%, #030509 50%, #010203 100%)",
       }}
     >
-      {/* ── CANVAS BACKGROUND ── */}
-      <motion.div
-        style={{ scale, y: backgroundY, opacity: 0.7, willChange: "transform" }}
-        className="absolute inset-0 origin-center flex items-center justify-center"
-      >
-        <img
-          src="/brain/c68f6654-c41f-4f65-a861-7f7e83c4a21d/institutional_rocket_hero_1777829335535.png"
-          alt="IFX Institutional Spacecraft"
-          className="w-full h-full object-cover opacity-50"
-        />
-        <div className="absolute inset-0 bg-black/50" />
-      </motion.div>
+      {/* ── CANVAS BACKGROUND DECOR ── */}
+      <div className="absolute inset-0 pointer-events-none z-0" aria-hidden="true">
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-emerald-500/[0.03] blur-[150px] rounded-full" />
+        <div className="absolute -top-40 right-10 w-[300px] h-[300px] bg-blue-500/[0.02] blur-[100px] rounded-full" />
+      </div>
 
       {/* ── FLOATING PARTICLES ── */}
       <FloatingParticles />
 
-      {/* ── GRADIENT OVERLAY ── */}
-      <div
-        className="absolute inset-0 pointer-events-none z-10"
-        style={{
-          background:
-            "radial-gradient(circle at 50% 50%, transparent 0%, rgba(1,2,3,0.4) 50%, rgba(1,2,3,0.85) 100%), linear-gradient(to bottom, rgba(1,2,3,0.3) 0%, transparent 30%, rgba(1,2,3,1) 100%)",
-        }}
-        aria-hidden="true"
-      />
-
       {/* ── LIVE MARKET TICKER ── */}
       {isTickerActive && (
         <div
-          className="relative z-30 mt-20 border-b border-emerald-500/10 bg-black/60 backdrop-blur-2xl overflow-hidden flex items-center"
+          className="relative z-30 mt-20 border-b border-emerald-500/10 bg-black/60 backdrop-blur-2xl overflow-hidden flex items-center shrink-0"
           style={{ height: "2.75rem", minHeight: "2.75rem", contain: "layout paint" }}
         >
           <div className="absolute left-0 z-10 w-28 h-full bg-gradient-to-r from-[#010203] to-transparent" />
@@ -160,41 +169,25 @@ export const FortressHero = () => {
       )}
 
       {/* ── MAIN CONTENT ── */}
-      <div className="relative z-20 flex-1 flex flex-col items-center justify-center px-4 sm:px-6 pt-8 sm:pt-16 pb-12 md:pb-24 text-center">
+      <div className="relative z-20 flex-1 flex flex-col items-center justify-center px-4 sm:px-6 py-12 md:py-24 text-center max-w-5xl mx-auto w-full">
         
-        {/* Institutional Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1, duration: 0.6, ease: ENTRY }}
-          className="mb-6 sm:mb-8"
-        >
-          <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/[0.03] border border-white/[0.08] backdrop-blur-xl">
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
-            </span>
-            <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.3em] text-white/50">Institutional Research Desk</span>
-          </div>
-        </motion.div>
-
         {/* Headline */}
         <motion.h1
           style={{ opacity, y: textY }}
-          className="font-black text-white tracking-[-0.05em] leading-[0.85] uppercase max-w-5xl mx-auto mb-6 sm:mb-8"
+          className="font-black text-white tracking-[-0.05em] leading-[0.88] uppercase max-w-4xl mx-auto mb-6 sm:mb-8 select-none break-keep px-2"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.8, ease: ENTRY }}
         >
-          <span className="block text-[clamp(2rem,8vw,7rem)]">World-Class</span>
-          <span className="block text-[clamp(2.2rem,9vw,8rem)] italic font-serif text-shimmer">Institutional FX</span>
-          <span className="block text-[clamp(2rem,8vw,7rem)]">&amp; Macro.</span>
+          <span className="block text-[clamp(1.8rem,7vw,5.5rem)] tracking-tighter">World-Class</span>
+          <span className="block text-[clamp(2.0rem,8.2vw,6.5rem)] italic font-serif text-shimmer pr-2 tracking-tighter">Institutional FX</span>
+          <span className="block text-[clamp(1.8rem,7vw,5.5rem)] tracking-tighter">&amp; Macro.</span>
         </motion.h1>
 
         {/* Subheading */}
         <motion.p
           style={{ opacity, y: subTextY }}
-          className="max-w-2xl mx-auto text-white/35 leading-relaxed mb-8 sm:mb-12 font-medium text-[clamp(0.85rem,1.8vw,1.15rem)] px-2"
+          className="max-w-2xl mx-auto text-white/35 leading-relaxed mb-10 sm:mb-14 font-medium text-[clamp(0.85rem,1.8vw,1.15rem)] px-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35, duration: 0.7, ease: ENTRY }}
@@ -207,19 +200,19 @@ export const FortressHero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.45, duration: 0.6, ease: EASING }}
-          className="flex flex-row items-center gap-3 sm:gap-4 justify-center w-full px-2 max-w-md mx-auto"
+          className="flex flex-row items-center gap-3.5 sm:gap-5 justify-center w-full px-2 max-w-md mx-auto z-30"
         >
-          <Link to="/webinars" className="shrink-0">
+          <a href="#consultation" onClick={handleRequestSession} className="shrink-0">
             <EliteButton variant="premium-gold" size="sm" rightIcon={<ArrowRight className="w-3.5 h-3.5" />}>
               Request Session
             </EliteButton>
-          </Link>
+          </a>
 
-          <Link to="/quantx" className="shrink-0">
+          <a href="#performance" onClick={handleSeeResults} className="shrink-0">
             <EliteButton variant="secondary" size="sm" leftIcon={<Play className="w-3 h-3 text-emerald-400 fill-emerald-400/20" />}>
               See Results
             </EliteButton>
-          </Link>
+          </a>
         </motion.div>
 
         {/* Trust Badges */}
@@ -227,7 +220,7 @@ export const FortressHero = () => {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6, duration: 0.6, ease: ENTRY }}
-          className="mt-10 sm:mt-14 flex flex-wrap items-center justify-center gap-3 sm:gap-6"
+          className="mt-12 sm:mt-16 flex flex-wrap items-center justify-center gap-3 sm:gap-6"
         >
           {TRUST_ITEMS.map((item) => (
             <div
@@ -242,16 +235,18 @@ export const FortressHero = () => {
       </div>
 
       {/* ── SCROLL INDICATOR ── */}
-      <motion.button
-        animate={{ y: [0, 8, 0] }}
-        transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-        onClick={scrollDown}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 hidden sm:flex flex-col items-center gap-2 opacity-40 hover:opacity-90 transition-opacity duration-300 cursor-pointer"
-        aria-label="Scroll down to explore"
-      >
-        <span className="text-[9px] font-black uppercase tracking-[0.45em] text-white">Explore</span>
-        <ChevronDown className="w-4 h-4 text-emerald-400" />
-      </motion.button>
+      <div className="relative h-12 w-full flex justify-center items-center shrink-0 pb-6">
+        <motion.button
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+          onClick={scrollDown}
+          className="z-30 hidden sm:flex flex-col items-center gap-2 opacity-40 hover:opacity-90 transition-opacity duration-300 cursor-pointer"
+          aria-label="Scroll down to explore"
+        >
+          <span className="text-[9px] font-black uppercase tracking-[0.45em] text-white">Explore</span>
+          <ChevronDown className="w-4 h-4 text-emerald-400" />
+        </motion.button>
+      </div>
     </section>
   );
 };

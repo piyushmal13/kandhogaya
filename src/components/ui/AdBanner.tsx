@@ -60,14 +60,26 @@ export const AdBanner: React.FC<{ placement?: string }> = ({ placement = "webina
 
           <div className="flex flex-wrap items-center gap-4 lg:gap-6">
             {banner.link_url && (
-              <a 
-                href={banner.link_url}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-3 px-6 py-3 rounded-xl bg-emerald-500 text-black font-black text-[10px] uppercase tracking-widest hover:bg-emerald-400 transition-all shadow-[0_10px_20px_rgba(16,185,129,0.1)] active:scale-95"
-              >
-                Secure Entry <ArrowRight className="w-4 h-4" />
-              </a>
+              banner.link_url.startsWith('#') ? (
+                <button 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.getElementById(banner.link_url.substring(1))?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  className="inline-flex items-center gap-3 px-6 py-3 rounded-xl bg-emerald-500 text-black font-black text-[10px] uppercase tracking-widest hover:bg-emerald-400 transition-all shadow-[0_10px_20px_rgba(16,185,129,0.1)] active:scale-95"
+                >
+                  Secure Entry <ArrowRight className="w-4 h-4" />
+                </button>
+              ) : (
+                <a 
+                  href={banner.link_url}
+                  target={banner.link_url.startsWith('http') ? "_blank" : undefined}
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-3 px-6 py-3 rounded-xl bg-emerald-500 text-black font-black text-[10px] uppercase tracking-widest hover:bg-emerald-400 transition-all shadow-[0_10px_20px_rgba(16,185,129,0.1)] active:scale-95"
+                >
+                  Secure Entry <ArrowRight className="w-4 h-4" />
+                </a>
+              )
             )}
             
             {isInstitutional && (

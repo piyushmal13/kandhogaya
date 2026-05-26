@@ -43,7 +43,7 @@ export const ConsultationSection = () => {
   };
 
   return (
-    <section className="py-12 md:py-32 bg-[#020202] relative overflow-hidden">
+    <section id="consultation" className="py-12 md:py-32 bg-[#020202] relative overflow-hidden">
       {/* Background Gradient */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#58F2B6]/5 blur-[120px] rounded-full pointer-events-none" />
 
