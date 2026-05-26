@@ -8,16 +8,29 @@ import { formatDistanceToNow } from 'date-fns';
  * Shows real account stats: active licenses, subscription status, and member age.
  */
 export function RiskMetrics() {
-  const { userProfile } = useAuth();
+  const { user, userProfile } = useAuth();
   const { data: dashData } = useDashboardData();
 
-  const memberSince = dashData?.memberSince
-    ? formatDistanceToNow(new Date(dashData.memberSince), { addSuffix: false })
+  // Flawless, exact timestamp from Supabase session
+  const createdTimestamp = user?.created_at || dashData?.memberSince;
+
+  const memberSince = createdTimestamp
+    ? formatDistanceToNow(new Date(createdTimestamp), { addSuffix: false })
+    : '—';
+
+  const regDateTimeString = createdTimestamp
+    ? new Date(createdTimestamp).toLocaleString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true
+      })
     : '—';
 
   const activeLicenses = dashData?.licenses?.length || 0;
   const totalPurchases = dashData?.purchases?.length || 0;
-  const registeredWebinars = dashData?.webinarRegistrations?.length || 0;
 
   const metrics = [
     {
@@ -33,6 +46,13 @@ export function RiskMetrics() {
       status: totalPurchases > 0 ? 'Verified' : 'None',
       color: '#58F2B6',
       width: totalPurchases > 0 ? `${Math.min(totalPurchases * 25, 100)}%` : '10%'
+    },
+    {
+      label: 'Registered On',
+      value: regDateTimeString,
+      status: 'UTC Sync',
+      color: '#58F2B6',
+      width: '100%'
     },
     {
       label: 'Member For',

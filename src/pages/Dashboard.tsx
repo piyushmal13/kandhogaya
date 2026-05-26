@@ -1,8 +1,7 @@
 import React from 'react';
 import { DashboardLayout } from '@/components/institutional/DashboardLayout';
-import { MarketIntelligencePanel } from '@/components/institutional/MarketIntelligencePanel';
 import { PortfolioValue } from '@/components/institutional/PortfolioValue';
-import { SignalFeed } from '@/components/institutional/SignalFeed';
+import { DashboardPromo } from '@/components/institutional/DashboardPromo';
 import { QuickActions } from '@/components/institutional/QuickActions';
 import { RiskMetrics } from '@/components/institutional/RiskMetrics';
 import { RecentActivity } from '@/components/institutional/RecentActivity';
@@ -30,15 +29,13 @@ export const Dashboard = () => {
         path="/dashboard"
       />
       
-      <DashboardLayout
-        contextPanel={<MarketIntelligencePanel />}
-      >
+      <DashboardLayout>
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
           
           {/* PRIMARY ALPHA SURFACE (2/3) */}
           <div className="xl:col-span-2 space-y-8">
             <PortfolioValue />
-            <SignalFeed />
+            <DashboardPromo />
           </div>
           
           {/* INTELLIGENCE RAIL (1/3) */}
