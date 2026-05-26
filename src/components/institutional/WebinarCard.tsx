@@ -47,7 +47,7 @@ export function WebinarCard({ webinar }: Readonly<{ webinar: ExtendedWebinar }>)
   const getButtonContent = () => {
     if (!isRegistrationOpen) return 'Registration Offline';
     if (attendees >= maxSeats) return 'Capacity Reached';
-    return isLive ? 'Link to Session' : 'Claim Seat';
+    return isLive ? 'Join Live Session' : 'Reserve Spot';
   };
   
   const formatDate = (iso: string) => new Date(iso).toLocaleDateString('en-US', {

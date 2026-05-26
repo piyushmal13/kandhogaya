@@ -79,17 +79,17 @@ export function WebinarAccessPanel() {
       <div className="flex items-center justify-between mb-8">
         <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-foreground/40 flex items-center gap-3">
           <Video className="w-3.5 h-3.5 text-emerald-500" />
-          Research Sessions
+          Institutional Webinars
         </h3>
         <div className="px-3 py-1 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[8px] font-black uppercase tracking-widest">
-          Live Feed Active
+          Education Desk
         </div>
       </div>
 
       <div className="space-y-4 relative z-10">
         {sessions.length === 0 ? (
           <div className="py-12 text-center border border-dashed border-white/5 rounded-3xl">
-             <p className="text-[10px] text-gray-600 font-black uppercase tracking-widest">No Active Sessions Found</p>
+             <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">No Active Sessions Scheduled</p>
           </div>
         ) : (
           sessions.map((session) => (
