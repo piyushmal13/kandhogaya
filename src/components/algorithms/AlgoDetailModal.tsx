@@ -3,7 +3,7 @@ import { motion } from "motion/react";
 import { 
   X, Check, ArrowRight, ShieldCheck, 
   Activity, Zap, HelpCircle, Star, 
-  BarChart3, Lock, FileText, TrendingUp, Share2
+  BarChart3, Lock, FileText, TrendingUp, Share2, Play
 } from "lucide-react";
 import { Product } from "../../types";
 import { useAuth } from "../../contexts/AuthContext";
@@ -11,6 +11,7 @@ import { useToast } from "../../contexts/ToastContext";
 import { useNavigate } from "react-router-dom";
 import { Sparkline } from "../ui/Sparkline";
 import { ResizedImage } from "../ui/ResizedImage";
+import { TrialRegistrationModal } from "./TrialRegistrationModal";
 
 interface AlgoDetailModalProps {
   algo: Product;
@@ -20,6 +21,7 @@ interface AlgoDetailModalProps {
 
 export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalProps) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'performance' | 'reviews' | 'qa' | 'terms'>('overview');
+  const [isTrialOpen, setIsTrialOpen] = useState(false);
   const { user } = useAuth();
   const { info } = useToast();
   const navigate = useNavigate();
@@ -401,11 +403,28 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
             <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
           </button>
           
+          {/* Dynamic VPS Free Trial / Demo Registration Button */}
+          <button 
+            onClick={() => setIsTrialOpen(true)}
+            className="w-full mt-3 py-4 bg-white/5 border border-white/10 hover:border-emerald-500/30 text-white font-black text-xs md:text-sm uppercase tracking-[0.2em] rounded-xl md:rounded-2xl hover:bg-white/10 transition-all flex items-center justify-center gap-3 active:scale-95 transition-transform shrink-0"
+          >
+            <Play className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400/20" />
+            Request 7-Day Demo
+          </button>
+          
           <div className="text-center mt-6 text-[9px] md:text-[10px] text-white/20 uppercase tracking-widest">
             Secure payment via Stripe. Cancel anytime.
           </div>
         </div>
       </motion.div>
+
+      {/* Trial Lead Capture Registration Modal */}
+      {isTrialOpen && (
+        <TrialRegistrationModal 
+          algo={algo}
+          onClose={() => setIsTrialOpen(false)}
+        />
+      )}
     </motion.div>
   );
 };

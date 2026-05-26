@@ -41,5 +41,36 @@ export const leadService = {
   getHighIntentLeads: async (): Promise<Lead[]> => {
     // Logic for filtering based on pricing_click frequency
     return leadService.getLeads(0, 10);
+  },
+
+  /**
+   * Ingests a new prospect lead with institutional telemetry.
+   */
+  createLead: async (leadData: { 
+    email: string; 
+    source: string; 
+    stage?: string;
+    referred_by_code?: string;
+    crm_metadata: Record<string, any>;
+  }) => {
+    try {
+      const { data, error } = await publicSupabase
+        .from('leads')
+        .insert({
+          email: leadData.email,
+          source: leadData.source,
+          stage: leadData.stage || 'NEW',
+          referred_by_code: leadData.referred_by_code || null,
+          crm_metadata: leadData.crm_metadata
+        })
+        .select()
+        .maybeSingle();
+        
+      if (error) throw error;
+      return { success: true, data };
+    } catch (err: any) {
+      console.error("[CRM Lead Ingestion Failure]:", err);
+      return { success: false, error: err.message || "Failed to ingest lead." };
+    }
   }
 };
