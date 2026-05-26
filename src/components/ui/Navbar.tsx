@@ -84,10 +84,10 @@ export const Navbar = () => {
           >
             <div
               className={cn(
-                "flex items-center justify-center transition-all duration-500 overflow-hidden rounded-full border bg-[#010203] group-hover:shadow-[0_0_30px_rgba(16,185,129,0.3)] group-hover:border-emerald-500/30",
+                "flex items-center justify-center transition-all duration-500 overflow-hidden rounded-full border bg-[#010203] group-hover:shadow-[0_0_30px_rgba(16,185,129,0.3)] group-hover:border-emerald-500/30 border-white/10",
                 scrolled 
-                  ? "h-8 w-8 sm:h-9 sm:w-9 border-white/10" 
-                  : "h-9 w-9 sm:h-10 sm:w-10 border-white/5"
+                  ? "h-9 w-9 sm:h-10 sm:w-10" 
+                  : "h-10 w-10 sm:h-11 sm:w-11"
               )}
             >
               <img
@@ -177,23 +177,23 @@ export const Navbar = () => {
           </div>
 
           {/* Mobile controls */}
-          <div className="md:hidden flex items-center gap-2">
+          <div className="md:hidden flex items-center gap-1.5">
             {!user && (
               <Link
                 to="/login"
-                className="rounded-xl bg-white/10 border border-white/10 px-5 py-2.5 text-[9px] font-black text-white uppercase tracking-widest hover:bg-white/20 transition-all active:scale-95"
+                className="rounded-xl bg-white/10 border border-white/10 px-3.5 py-2 text-[8px] font-black text-white uppercase tracking-widest hover:bg-white/20 transition-all active:scale-95"
               >
                 Sign In
               </Link>
             )}
             {user && (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 {isAdmin && (
-                  <Link to="/admin" className="p-2.5 bg-emerald-500/10 border border-emerald-500/20 rounded-[14px] text-emerald-400 active:scale-90 transition-transform">
+                  <Link to="/admin" className="p-2 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-400 active:scale-90 transition-transform shrink-0">
                     <Settings className="h-4 w-4" />
                   </Link>
                 )}
-                <Link to="/dashboard" className="p-2.5 bg-white/5 border border-white/10 rounded-[14px] text-white active:scale-90 transition-transform">
+                <Link to="/dashboard" className="p-2 bg-white/5 border border-white/10 rounded-xl text-white active:scale-90 transition-transform shrink-0">
                   <LayoutDashboard className="h-4 w-4" />
                 </Link>
               </div>
@@ -201,11 +201,11 @@ export const Navbar = () => {
             <button
               type="button"
               onClick={() => setIsOpen((o) => !o)}
-              className="rounded-[14px] border border-white/10 bg-white/[0.04] p-2.5 text-white/50 hover:text-white hover:bg-white/[0.08] transition-all active:scale-90"
+              className="rounded-xl border border-white/10 bg-white/[0.04] p-2 text-white/50 hover:text-white hover:bg-white/[0.08] transition-all active:scale-90 shrink-0"
               aria-label="Toggle menu"
               aria-expanded={isOpen}
             >
-              {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              {isOpen ? <X className="h-4.5 w-4.5" /> : <Menu className="h-4.5 w-4.5" />}
             </button>
           </div>
         </div>

@@ -11,6 +11,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { useToast } from "../contexts/ToastContext";
 import { supabase } from "../lib/supabase";
 import { useWebinar } from "../hooks/useWebinars";
+import { VideoPlayer } from "../components/institutional/VideoPlayer";
 
 // Extend representation of Webinar for co-branding support
 interface ExtendedWebinar {
@@ -31,6 +32,11 @@ interface ExtendedWebinar {
   co_brand_name?: string;
   co_brand_logo?: string;
   co_brand_banner?: string;
+  metadata?: {
+    partner_name?: string;
+    learning_points?: string[];
+    author_bio?: string;
+  };
 }
 
 export const WebinarDetail = () => {
@@ -195,7 +201,7 @@ export const WebinarDetail = () => {
       <div className="bg-white/[0.01] border-b border-white/5 py-6 relative z-10">
         <div className="max-w-7xl mx-auto px-4 md:px-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-center gap-4">
-            <Link to="/webinars" className="p-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-400 transition-colors border border-white/5">
+            <Link to="/webinars" className="p-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-400 transition-colors border border-white/5 shrink-0">
               <ArrowRight className="w-5 h-5 rotate-180" />
             </Link>
             <div>
@@ -225,22 +231,34 @@ export const WebinarDetail = () => {
             </div>
           </div>
           
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 justify-between sm:justify-end w-full sm:w-auto">
             <div className="flex items-center gap-2 text-gray-400 text-xs font-mono font-bold uppercase tracking-widest">
               <Users className="w-4 h-4 text-emerald-500" />
-              <span>{webinar.registration_count}+ Units Registered</span>
+              <span>{webinar.registration_count}+ Registered</span>
             </div>
-            <button 
-              onClick={() => {
-                const url = globalThis.location.href.split('?')[0];
-                navigator.clipboard.writeText(url);
-                success("Attribution link copied to clipboard!");
-              }}
-              className="p-3 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-500 transition-colors border border-emerald-500/20"
-              title="Copy Attributable Link"
-            >
-              <Share2 className="w-4 h-4" />
-            </button>
+            
+            <div className="flex items-center gap-2">
+              {isUpcoming && !isRegistered && (
+                <button 
+                  onClick={() => document.getElementById("registration-card")?.scrollIntoView({ behavior: "smooth" })}
+                  className="lg:hidden px-4 py-2 bg-emerald-500 text-black text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-emerald-400 transition-all active:scale-95 shrink-0"
+                >
+                  Secure Seat
+                </button>
+              )}
+              
+              <button 
+                onClick={() => {
+                  const url = globalThis.location.href.split('?')[0];
+                  navigator.clipboard.writeText(url);
+                  success("Attribution link copied to clipboard!");
+                }}
+                className="p-3 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-500 transition-colors border border-emerald-500/20"
+                title="Copy Attributable Link"
+              >
+                <Share2 className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -282,9 +300,26 @@ export const WebinarDetail = () => {
             <div className="relative aspect-video bg-black rounded-3xl overflow-hidden border border-white/5 shadow-2xl group">
               {(() => {
                 if (isLive) {
+                  const url = webinar.streaming_url || "";
+                  const isEmbed = url.includes("youtube.com") || url.includes("youtu.be") || url.includes("embed") || url.includes("vimeo.com");
+                  
+                  if (isEmbed) {
+                    return (
+                      <div className="aspect-video bg-black w-full h-full flex items-center justify-center">
+                        <iframe 
+                          src={url} 
+                          title={webinar.title}
+                          className="w-full h-full border-none"
+                          allowFullScreen
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        />
+                      </div>
+                    );
+                  }
+
                   return (
                     <VideoPlayer 
-                      src={webinar.streaming_url || ""}
+                      src={url}
                       title={webinar.title}
                       isLive={true}
                     />
@@ -374,7 +409,7 @@ export const WebinarDetail = () => {
 
             {/* Dynamic Tabs (Overview, Speaker, Q&A) */}
             <div className="space-y-8">
-              <ul className="flex border-b border-white/5 overflow-x-auto hide-scrollbar gap-2">
+              <ul className="flex border-b border-white/5 overflow-x-auto hide-scrollbar gap-2" role="tablist">
                 {["Overview", "Speaker", "Q&A"].map((tab) => {
                   const isActive = activeTab === tab.toLowerCase();
                   return (
@@ -400,25 +435,38 @@ export const WebinarDetail = () => {
                   <div className="text-white/60 leading-relaxed animate-in fade-in slide-in-from-bottom-2 duration-500 space-y-6">
                     <p className="text-base md:text-lg text-white/80 font-medium leading-relaxed">{webinar.description}</p>
                     {webinar.about_content && (
-                      <p className="text-xs md:text-sm text-white/40 leading-relaxed whitespace-pre-line">{webinar.about_content}</p>
+                      <p className="text-xs md:text-sm text-white/45 leading-relaxed whitespace-pre-line bg-white/[0.01] border border-white/5 p-6 rounded-2xl font-medium">{webinar.about_content}</p>
                     )}
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
                       <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5">
                         <h4 className="text-white font-black text-[10px] uppercase tracking-widest mb-4 flex items-center gap-2">
                           <Star className="w-4 h-4 text-emerald-500" />
-                          Key Outcomes
+                          Key Outcomes &amp; Topics
                         </h4>
                         <ul className="space-y-3">
-                          {Array.isArray(webinar.q_and_a) && webinar.q_and_a.length > 0 ? (
-                            webinar.q_and_a.slice(0, 3).map((item: any, i: number) => (
+                          {webinar.metadata?.learning_points && webinar.metadata.learning_points.length > 0 ? (
+                            webinar.metadata.learning_points.map((pt: string, i: number) => (
                               <li key={i} className="flex items-start gap-3 text-[11px] text-white/40">
                                 <Check className="w-3.5 h-3.5 text-emerald-500 mt-0.5 shrink-0" />
-                                <span className="leading-relaxed">{item.question}</span>
+                                <span className="leading-relaxed">{pt}</span>
                               </li>
                             ))
                           ) : (
-                            <li className="text-white/20 text-xs italic">Outcome nodes processing...</li>
+                            <>
+                              <li className="flex items-start gap-3 text-[11px] text-white/40">
+                                <Check className="w-3.5 h-3.5 text-emerald-500 mt-0.5 shrink-0" />
+                                <span className="leading-relaxed">Advanced institutional quantitative models breakdown.</span>
+                              </li>
+                              <li className="flex items-start gap-3 text-[11px] text-white/40">
+                                <Check className="w-3.5 h-3.5 text-emerald-500 mt-0.5 shrink-0" />
+                                <span className="leading-relaxed">Risk parameters and sub-millisecond execution logic.</span>
+                              </li>
+                              <li className="flex items-start gap-3 text-[11px] text-white/40">
+                                <Check className="w-3.5 h-3.5 text-emerald-500 mt-0.5 shrink-0" />
+                                <span className="leading-relaxed">Live macro regime identification and flow charting.</span>
+                              </li>
+                            </>
                           )}
                         </ul>
                       </div>
@@ -523,9 +571,9 @@ export const WebinarDetail = () => {
               </div>
             </div>
           </div>
-
+ 
           {/* RIGHT: Embedded Registration Page Card (4 cols) */}
-          <div className="lg:col-span-4">
+          <div id="registration-card" className="lg:col-span-4">
             <div className="bg-white/[0.01] backdrop-blur-3xl border border-white/5 rounded-[2.5rem] p-8 md:p-10 shadow-2xl relative overflow-hidden space-y-8">
               <div className="absolute top-0 right-0 p-8 opacity-[0.02] pointer-events-none">
                  <ShieldCheck className="w-36 h-36 text-emerald-500" />
@@ -644,25 +692,25 @@ export const WebinarDetail = () => {
                     <div className="flex justify-between">
                        <span>Clearance Level</span>
                        <span className="text-emerald-400">Standard Desk</span>
-                    </div>
-                    <div className="flex justify-between">
+                     </div>
+                     <div className="flex justify-between">
                        <span>Max Allocation</span>
                        <span>{webinar.max_attendees} Slots</span>
-                    </div>
-                    <div className="flex justify-between">
+                     </div>
+                     <div className="flex justify-between">
                        <span>Compliant Risk Code</span>
                        <span>IFX-MACRO-V2</span>
-                    </div>
-                 </div>
-              </div>
-
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default WebinarDetail;
+                     </div>
+                  </div>
+               </div>
+ 
+             </div>
+           </div>
+ 
+         </div>
+       </div>
+     </div>
+   );
+ };
+ 
+ export default WebinarDetail;

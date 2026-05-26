@@ -134,31 +134,31 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
       {/* ── LIVE MARKET TICKER ── */}
       {isTickerActive && (
         <div
-          className="relative z-30 mt-20 border-b border-emerald-500/10 bg-black/60 backdrop-blur-2xl overflow-hidden flex items-center shrink-0"
-          style={{ height: "2.75rem", minHeight: "2.75rem", contain: "layout paint" }}
+          className="relative z-30 mt-16 sm:mt-20 border-b border-emerald-500/10 bg-black/60 backdrop-blur-2xl overflow-hidden flex items-center shrink-0 shadow-sm"
+          style={{ height: "2rem", minHeight: "2rem", contain: "layout paint" }}
         >
-          <div className="absolute left-0 z-10 w-28 h-full bg-gradient-to-r from-[#010203] to-transparent" />
-          <div className="absolute right-0 z-10 w-28 h-full bg-gradient-to-l from-[#010203] to-transparent" />
+          <div className="absolute left-0 z-10 w-24 h-full bg-gradient-to-r from-[#010203] to-transparent" />
+          <div className="absolute right-0 z-10 w-24 h-full bg-gradient-to-l from-[#010203] to-transparent" />
           
           {/* LIVE indicator */}
-          <div className="absolute left-4 z-20 flex items-center gap-2">
-            <span className="relative flex h-2 w-2">
+          <div className="absolute left-4 z-20 flex items-center gap-1.5">
+            <span className="relative flex h-1.5 w-1.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
             </span>
-            <span className="text-[9px] font-black uppercase tracking-[0.3em] text-emerald-400/60 hidden sm:inline">Live</span>
+            <span className="text-[8px] font-black uppercase tracking-[0.25em] text-emerald-400/60 hidden sm:inline">Live</span>
           </div>
 
           <div
-            className="flex gap-16 sm:gap-20 whitespace-nowrap pl-20"
-            style={{ transform: `translateX(${tickerOffset % (displayTickers.length * 200)}px)` }}
+            className="flex gap-12 sm:gap-16 whitespace-nowrap pl-16"
+            style={{ transform: `translateX(${tickerOffset % (displayTickers.length * 160)}px)` }}
           >
             {[...displayTickers, ...displayTickers, ...displayTickers].map((t, i) => (
               <span
                 key={`${t}-${i}`}
-                className="text-[10px] sm:text-[11px] font-mono font-bold uppercase tracking-[0.3em] text-white/40 flex items-center gap-3"
+                className="text-[9px] sm:text-[10px] font-mono font-bold uppercase tracking-[0.25em] text-white/35 flex items-center gap-2"
               >
-                <span className="w-1 h-1 rounded-full bg-emerald-500/50" />
+                <span className="w-0.5 h-0.5 rounded-full bg-emerald-500/50" />
                 {t}
               </span>
             ))}
@@ -172,14 +172,14 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
         {/* Headline */}
         <motion.h1
           style={{ opacity, y: textY }}
-          className="font-black text-white tracking-[-0.05em] leading-[0.88] uppercase max-w-4xl mx-auto mb-6 sm:mb-8 select-none break-keep px-2"
+          className="font-black text-white tracking-[-0.05em] leading-[0.8] uppercase max-w-4xl mx-auto mb-6 sm:mb-8 select-none break-keep px-2 space-y-1 sm:space-y-2"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.8, ease: ENTRY }}
         >
-          <span className="block text-[clamp(1.8rem,7vw,5.5rem)] tracking-tighter">World-Class</span>
-          <span className="block text-[clamp(2.0rem,8.2vw,6.5rem)] italic font-serif text-shimmer pr-8 md:pr-10 tracking-tighter inline-block select-none">Institutional FX</span>
-          <span className="block text-[clamp(1.8rem,7vw,5.5rem)] tracking-tighter">&amp; Macro.</span>
+          <span className="block text-[clamp(1.8rem,7vw,5.5rem)] tracking-tighter leading-none">World-Class</span>
+          <span className="block text-[clamp(2.0rem,8.2vw,6.5rem)] italic font-serif text-shimmer pr-8 md:pr-10 tracking-tighter leading-none inline-block select-none">Institutional FX</span>
+          <span className="block text-[clamp(1.8rem,7vw,5.5rem)] tracking-tighter leading-none">&amp; Macro.</span>
         </motion.h1>
 
         {/* Subheading */}
