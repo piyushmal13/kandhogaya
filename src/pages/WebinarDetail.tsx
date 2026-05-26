@@ -49,7 +49,7 @@ export const WebinarDetail = () => {
   const [isRegistered, setIsRegistered] = useState(false);
   const [registering, setRegistering] = useState(false);
   const [sponsors, setSponsors] = useState<any[]>([]);
-  const [realRegCount, setRealRegCount] = useState(142);
+  const [realRegCount, setRealRegCount] = useState(0);
   const [activeTab, setActiveTab] = useState("overview"); 
   const [questionText, setQuestionText] = useState("");
   const [submittingQuestion, setSubmittingQuestion] = useState(false);
@@ -395,26 +395,11 @@ export const WebinarDetail = () => {
                 
                 // Upcoming Cover Display
                 return (
-                  <>
-                    <img 
-                      src={webinar.webinar_image_url || "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop"} 
-                      alt="Session Cover" 
-                      className="w-full h-full object-cover opacity-35" 
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#020203] via-transparent to-transparent" />
-                    <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
-                       <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-white/40 text-[9px] font-black uppercase tracking-widest mb-4">
-                          <Clock className="w-3.5 h-3.5 text-emerald-400" />
-                          Masterclass Briefing Protocol
-                       </span>
-                       <h2 className="text-2xl md:text-4xl font-black text-white uppercase italic tracking-tighter leading-none mb-6">
-                          Transmission Schedule Confirmed
-                       </h2>
-                       <p className="text-xs text-white/35 max-w-sm">
-                          Use the registration module on the right to secure your session transmission credentials.
-                       </p>
-                    </div>
-                  </>
+                  <img 
+                    src={webinar.webinar_image_url || "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop"} 
+                    alt={webinar.title} 
+                    className="w-full h-full object-cover opacity-100" 
+                  />
                 );
               })()}
             </div>

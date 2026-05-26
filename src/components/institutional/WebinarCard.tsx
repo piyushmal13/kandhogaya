@@ -16,7 +16,7 @@ interface ExtendedWebinar extends Webinar {
 export function WebinarCard({ webinar }: Readonly<{ webinar: ExtendedWebinar }>) {
   const navigate = useNavigate();
   const { isEnabled: isRegistrationOpen } = useFeatureFlag('webinar_registration_open', true);
-  const isLive = webinar.status === 'live';
+  const isLive = webinar.status === 'live' && !!webinar.streaming_url;
   const isRecorded = webinar.status === 'past';
 
   const hasSponsor = Array.isArray(webinar.sponsors) && webinar.sponsors.length > 0;

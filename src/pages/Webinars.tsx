@@ -69,40 +69,6 @@ export const Webinars = () => {
 
           <AdBanner placement="webinar" />
 
-          {/* Direct Live Session (ONLY shown when actually live & streaming) */}
-          {liveWebinar && (
-            <AnimatePresence mode="wait">
-              <motion.section 
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 15 }}
-                className="space-y-6 bg-emerald-500/[0.01] border border-emerald-500/10 p-6 rounded-[2rem] relative overflow-hidden"
-              >
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.03),transparent_70%)] pointer-events-none" />
-                <div className="flex items-center justify-between relative z-10 flex-wrap gap-4">
-                  <div className="flex items-center gap-2">
-                    <span className="relative flex h-1.5 w-1.5">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
-                    </span>
-                    <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest">TRANSMISSION BROADCAST ONLINE</span>
-                  </div>
-                </div>
-                <div className="relative z-10 rounded-2xl overflow-hidden border border-white/5 shadow-2xl">
-                  {/* Active Live Video Element */}
-                  <div className="aspect-video bg-black flex items-center justify-center">
-                     <iframe 
-                       src={liveWebinar.streaming_url} 
-                       title={liveWebinar.title}
-                       className="w-full h-full border-none"
-                       allowFullScreen
-                     />
-                  </div>
-                </div>
-              </motion.section>
-            </AnimatePresence>
-          )}
-
           {/* Webinars Grid Section */}
           <div className="space-y-8 relative z-10">
             <div className="flex flex-wrap gap-6 md:gap-10 border-b border-white/5 pb-2">
