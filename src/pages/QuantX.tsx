@@ -149,7 +149,7 @@ export const QuantX = () => {
       </section>
 
       {/* Psychological Alignment: The Pain vs. The Sanctuary */}
-      <section className="py-24 md:py-36 border-b border-white/[0.05] relative overflow-hidden bg-gradient-to-b from-black to-[#020305]">
+      <section className="py-16 md:py-36 border-b border-white/[0.05] relative overflow-hidden bg-gradient-to-b from-black to-[#020305]">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(16,185,129,0.03),transparent_60%)] pointer-events-none" />
         
         <div className="container mx-auto px-6 relative z-10">
@@ -243,7 +243,7 @@ export const QuantX = () => {
       </section>
 
       {/* Core Architecture Flow */}
-      <section className="py-24 md:py-36 border-b border-white/[0.05]">
+      <section className="py-16 md:py-36 border-b border-white/[0.05]">
         <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto text-center mb-16 md:mb-24">
             <span className="text-xs font-black uppercase tracking-[0.4em] text-white/30 block mb-3">Modular Synthesis Pipeline</span>
@@ -269,7 +269,7 @@ export const QuantX = () => {
       </section>
 
       {/* Intelligence Layers */}
-      <section className="py-24 md:py-36 bg-white/[0.01]">
+      <section className="py-16 md:py-36 bg-white/[0.01]">
         <div className="container mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 md:gap-8 mb-16 md:mb-24 max-w-6xl mx-auto">
             <div className="max-w-2xl">
@@ -334,7 +334,7 @@ export const QuantX = () => {
       </section>
 
       {/* Execution Infrastructure */}
-      <section className="py-24 md:py-36 relative overflow-hidden">
+      <section className="py-16 md:py-36 relative overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-emerald-500/[0.03] rounded-full blur-[120px] pointer-events-none" />
         
         <div className="container mx-auto px-6">
@@ -402,7 +402,7 @@ export const QuantX = () => {
       </section>
 
       {/* Final CTA */}
-      <section className="py-24 md:py-40 bg-emerald-600/[0.01] border-t border-white/[0.05] relative overflow-hidden">
+      <section className="py-16 md:py-40 bg-emerald-600/[0.01] border-t border-white/[0.05] relative overflow-hidden">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-emerald-500/30 to-transparent" />
         
         <div className="container mx-auto px-4 md:px-6 text-center max-w-4xl">

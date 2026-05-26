@@ -208,12 +208,7 @@ export const WebinarDetail = () => {
             </Link>
             <div>
               <div className="flex items-center gap-2.5 mb-1.5 flex-wrap">
-                {isLive ? (
-                  <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-500 text-[9px] font-black uppercase tracking-widest animate-pulse">
-                    <span className="w-1.5 h-1.5 rounded-full bg-red-500" />{" "}
-                    LIVE STREAM ACTIVE
-                  </span>
-                ) : isRecorded ? (
+                {isRecorded ? (
                   <span className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-white/50 text-[9px] font-black uppercase tracking-widest">
                     ARCHIVED RECORDING
                   </span>
@@ -270,7 +265,7 @@ export const WebinarDetail = () => {
         
         {/* Dynamic co-branding partner block (High Visual Priority) */}
         {webinar.co_brand_name && (
-          <div className="mb-12 p-8 md:p-12 rounded-[2.5rem] bg-gradient-to-r from-amber-500/[0.03] to-transparent border border-amber-500/20 relative overflow-hidden group shadow-2xl">
+          <div className="mb-8 p-6 md:p-12 rounded-[2.5rem] bg-gradient-to-r from-amber-500/[0.03] to-transparent border border-amber-500/20 relative overflow-hidden group shadow-2xl">
              <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none">
                 <HeartHandshake className="w-48 h-48 text-amber-500" />
              </div>

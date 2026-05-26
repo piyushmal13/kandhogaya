@@ -6,6 +6,7 @@ import { motion, useScroll, useSpring } from "motion/react";
 import { PageMeta } from "../components/site/PageMeta";
 import { WebinarPromoInline } from "../components/webinars/WebinarPromoInline";
 import { getBlogPostBySlug } from "../services/apiHandlers";
+import { bannerService, Banner } from "../services/bannerService";
 import { Blog } from "../types";
 import { KeyInsightsCard } from "../components/blog/KeyInsightsCard";
 import { BrokerAdBanner } from "../components/blog/BrokerAdBanner";
@@ -17,6 +18,8 @@ export const BlogDetail = () => {
   const slug = pathname.split("/").pop();
   const [post, setPost] = useState<Blog | null>(null);
   const [loading, setLoading] = useState(true);
+  const [incontentBanner, setIncontentBanner] = useState<Banner | null>(null);
+  const [sidebarBanner, setSidebarBanner] = useState<Banner | null>(null);
 
   // Scroll Progress Bar
   const { scrollYProgress } = useScroll();
@@ -40,7 +43,20 @@ export const BlogDetail = () => {
       }
     };
 
+    const fetchBanners = async () => {
+      try {
+        const incontent = await bannerService.getBanners("blog_incontent");
+        if (incontent && incontent.length > 0) setIncontentBanner(incontent[0]);
+
+        const sidebar = await bannerService.getBanners("blog_sidebar");
+        if (sidebar && sidebar.length > 0) setSidebarBanner(sidebar[0]);
+      } catch (e) {
+        console.error("Banner fetch failed", e);
+      }
+    };
+
     fetchPost();
+    fetchBanners();
     window.scrollTo(0, 0);
   }, [slug]);
 
@@ -255,7 +271,15 @@ export const BlogDetail = () => {
             </motion.div>
 
             {/* In-content Broker Ad */}
-            {meta.broker_ad ? (
+            {incontentBanner ? (
+              <BrokerAdBanner 
+                name={incontentBanner.title}
+                logoUrl={incontentBanner.image_url || ""}
+                referralUrl={incontentBanner.link_url || "#"}
+                tagline={incontentBanner.metadata?.tagline || "Institutional Partner"}
+                description={incontentBanner.description || ""}
+              />
+            ) : meta.broker_ad ? (
               <BrokerAdBanner 
                 name={meta.broker_ad.name}
                 logoUrl={meta.broker_ad.logo_url}
@@ -324,7 +348,29 @@ export const BlogDetail = () => {
               {/* Telegram Promo - REMOVED AS PER INSTITUTIONAL DIRECTIVE */}
               
               {/* Dynamic Ad Slot */}
-              {meta.sidebar_ad && (
+              {sidebarBanner ? (
+                <div className="p-[1px] bg-gradient-to-br from-emerald-500/20 via-white/5 to-transparent rounded-[40px] border border-white/5">
+                  <div className="bg-[var(--color6)] p-10 rounded-[39px] relative overflow-hidden text-center">
+                    {sidebarBanner.image_url && (
+                      <img src={sidebarBanner.image_url} className="h-8 mx-auto mb-6 grayscale opacity-60" alt="Partner" />
+                    )}
+                    <h3 className="text-xl font-black text-white uppercase tracking-tighter mb-4 leading-none">
+                      {sidebarBanner.title}
+                    </h3>
+                    <p className="text-gray-500 text-[10px] leading-relaxed mb-8 uppercase tracking-widest">
+                      {sidebarBanner.description}
+                    </p>
+                    <a 
+                      href={sidebarBanner.link_url || "#"} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="block w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-black text-center font-black text-[10px] uppercase tracking-widest rounded-2xl shadow-2xl transition-all"
+                    >
+                      {sidebarBanner.metadata?.button_text || "Enter Node"}
+                    </a>
+                  </div>
+                </div>
+              ) : meta.sidebar_ad && (
                 <div className="p-[1px] bg-gradient-to-br from-emerald-500/20 via-white/5 to-transparent rounded-[40px] border border-white/5">
                   <div className="bg-[var(--color6)] p-10 rounded-[39px] relative overflow-hidden text-center">
                     <img src={meta.sidebar_ad.logo_url} className="h-8 mx-auto mb-6 grayscale opacity-60" alt="Partner" />
@@ -337,6 +383,7 @@ export const BlogDetail = () => {
                     <a 
                       href={meta.sidebar_ad.link_url} 
                       target="_blank" 
+                      rel="noopener noreferrer"
                       className="block w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-black text-center font-black text-[10px] uppercase tracking-widest rounded-2xl shadow-2xl transition-all"
                     >
                       {meta.sidebar_ad.button_text || "Enter Node"}

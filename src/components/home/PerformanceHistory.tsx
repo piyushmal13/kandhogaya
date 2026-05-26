@@ -126,7 +126,7 @@ export const PerformanceHistory = () => {
             id="algo-heading" 
             className="text-4xl sm:text-5xl md:text-6xl font-black text-white mb-6 tracking-tight leading-[1.1] uppercase italic"
           >
-            Algorithmic <span className="text-emerald-500">Registry.</span>
+            Algorithmic <span className="text-emerald-500">Trust System.</span>
           </motion.h2>
           
           <motion.p 
@@ -136,7 +136,7 @@ export const PerformanceHistory = () => {
             transition={{ delay: 0.2 }}
             className="text-white/40 max-w-2xl mx-auto text-sm md:text-base leading-relaxed"
           >
-            Deploy Asia's elite quantitative software models or commission a bespoke, institutional-grade algorithm built specifically to your execution guidelines.
+            Institutional-grade algorithmic infrastructure built for total capital protection and flawless execution. Discover our core proprietary systems or commission a bespoke quantitative build.
           </motion.p>
         </div>
 
@@ -147,7 +147,7 @@ export const PerformanceHistory = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
-            {products.map((product, index) => {
+            {products.slice(0, 3).map((product, index) => {
               const metrics = getAlgoMetrics(product);
               return (
                 <motion.div
@@ -211,9 +211,9 @@ export const PerformanceHistory = () => {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="p-10 md:p-16 bg-gradient-to-b from-zinc-900/60 to-black border border-white/[0.08] rounded-[3.5rem] shadow-[0_45px_90px_rgba(0,0,0,0.7)]"
+          className="p-6 md:p-16 bg-gradient-to-b from-zinc-900/60 to-black border border-white/[0.08] rounded-[2rem] md:rounded-[3.5rem] shadow-[0_45px_90px_rgba(0,0,0,0.7)]"
         >
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-center">
             
             {/* Column 1: Intro */}
             <div className="lg:col-span-5 space-y-8">
@@ -240,9 +240,9 @@ export const PerformanceHistory = () => {
             </div>
 
             {/* Column 2: Pipeline Steps */}
-            <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-8">
+            <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8">
               {QUANT_STEPS.map((step) => (
-                <div key={step.step} className="p-6 bg-white/[0.02] border border-white/[0.04] rounded-3xl space-y-4 hover:border-emerald-500/10 transition-colors">
+                <div key={step.step} className="p-5 sm:p-6 bg-white/[0.02] border border-white/[0.04] rounded-2xl sm:rounded-3xl space-y-3 sm:space-y-4 hover:border-emerald-500/10 transition-colors">
                   <div className="flex justify-between items-center">
                     <span className="font-mono text-emerald-400 text-sm font-black">{step.step}</span>
                     <CheckCircle className="w-4 h-4 text-emerald-500/40" />
