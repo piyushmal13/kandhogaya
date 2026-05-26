@@ -7,6 +7,7 @@ import { OperationalPillars } from "../components/home/OperationalPillars";
 import { SessionBookingModal } from "../components/ui/SessionBookingModal";
 import { BrandAuthority } from "../components/home/BrandAuthority";
 import { PerformanceHistory } from "../components/home/PerformanceHistory";
+import { JourneySection } from "../components/home/JourneySection";
 import { CustomAlgoTeam } from "../components/home/CustomAlgoTeam";
 import { ConsultationSection } from "../components/home/ConsultationSection";
 
@@ -57,6 +58,9 @@ const Home = () => {
 
         {/* L4: Institutional Performance Registry (Dynamic product cards loaded from Supabase) */}
         <PerformanceHistory />
+
+        {/* L4.5: Our Story (Journey Timeline for Trust & Authority) */}
+        <JourneySection />
 
         {/* L5: Custom Engineering Authority (Our story, team size, bespoke desk) */}
         <section className="hidden sm:block">
