@@ -121,7 +121,9 @@ export const BannerManager = () => {
         >
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-1">
-              <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Title</label>
+              <label className="text-[10px] font-black uppercase tracking-widest text-white/40">
+                {form.placement === "partner" ? "Partner / Brand Name" : "Title"}
+              </label>
               <input 
                 className="w-full bg-black border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm outline-none focus:border-emerald-500/50 transition-all" 
                 value={form.title} 
@@ -138,6 +140,7 @@ export const BannerManager = () => {
                 <option value="home">Home Page</option>
                 <option value="webinar">Webinar Hub</option>
                 <option value="marketplace">Marketplace</option>
+                <option value="partner">Integration Partner</option>
                 <option value="global">Global Broadcast</option>
               </select>
             </div>
@@ -178,7 +181,9 @@ export const BannerManager = () => {
 
 
           <div className="space-y-1">
-            <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Description</label>
+            <label className="text-[10px] font-black uppercase tracking-widest text-white/40">
+              {form.placement === "partner" ? "Category / Role (e.g. Charting Terminal)" : "Description"}
+            </label>
             <textarea 
               className="w-full bg-black border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm outline-none focus:border-emerald-500/50 transition-all" 
               rows={2} 
@@ -189,7 +194,9 @@ export const BannerManager = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Link URL</label>
+              <label className="text-[10px] font-black uppercase tracking-widest text-white/40">
+                {form.placement === "partner" ? "Partner Referral Link (Optional)" : "Link URL"}
+              </label>
               <input 
                 className="w-full bg-black border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm outline-none focus:border-emerald-500/50 transition-all" 
                 value={form.link_url || ''} 
@@ -197,7 +204,9 @@ export const BannerManager = () => {
               />
             </div>
             <div className="space-y-1">
-              <label className="text-[10px] font-black uppercase tracking-widest text-white/40">Image URL</label>
+              <label className="text-[10px] font-black uppercase tracking-widest text-white/40">
+                {form.placement === "partner" ? "Logo Image URL (Optional)" : "Image URL"}
+              </label>
               <input 
                 className="w-full bg-black border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm outline-none focus:border-emerald-500/50 transition-all" 
                 value={form.image_url || ''} 

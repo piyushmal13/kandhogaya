@@ -70,24 +70,24 @@ export const Navbar = () => {
       >
         <div
           className={cn(
-            "mt-4 mx-4 sm:mx-12 flex-1 max-w-7xl flex items-center justify-between rounded-[1.5rem] px-4 sm:px-7 transition-all duration-500 will-change-transform",
+            "mt-4 mx-auto w-[92%] md:w-[58%] max-w-5xl flex items-center justify-between rounded-full px-4 sm:px-6 transition-all duration-500 will-change-transform",
             scrolled
-              ? "h-14 sm:h-16 bg-[#040608]/80 border border-white/5 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)] backdrop-blur-[48px] saturate-[180%]"
-              : "h-16 sm:h-20 bg-transparent border border-transparent"
+              ? "h-12 sm:h-14 bg-[#040608]/85 border border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.8)] backdrop-blur-2xl"
+              : "h-14 sm:h-16 bg-white/[0.02] border border-white/[0.05] backdrop-blur-xl"
           )}
         >
           {/* Logo */}
           <Link
             to="/"
-            className="flex items-center gap-2 sm:gap-3 group shrink-0"
+            className="flex items-center gap-2 group shrink-0"
             aria-label="IFX Trades — Institutional Master Terminal"
           >
             <div
               className={cn(
-                "flex items-center justify-center transition-all duration-500 overflow-hidden rounded-[14px] border bg-[#010203] group-hover:shadow-[0_0_30px_rgba(16,185,129,0.3)] group-hover:border-emerald-500/30",
+                "flex items-center justify-center transition-all duration-500 overflow-hidden rounded-full border bg-[#010203] group-hover:shadow-[0_0_30px_rgba(16,185,129,0.3)] group-hover:border-emerald-500/30",
                 scrolled 
-                  ? "h-9 w-9 sm:h-11 sm:w-11 border-white/10 md:max-lg:h-8 md:max-lg:w-8" 
-                  : "h-11 w-11 sm:h-14 sm:w-14 border-white/5 md:max-lg:h-9 md:max-lg:w-9"
+                  ? "h-8 w-8 sm:h-9 sm:w-9 border-white/10" 
+                  : "h-9 w-9 sm:h-10 sm:w-10 border-white/5"
               )}
             >
               <img
@@ -100,7 +100,7 @@ export const Navbar = () => {
 
           {/* Desktop Nav */}
           <nav 
-            className="hidden md:flex items-center gap-1 md:max-lg:gap-0.5"
+            className="hidden md:flex items-center gap-1"
             aria-label="Main Navigation"
             itemScope
             itemType="https://schema.org/SiteNavigationElement"
@@ -113,7 +113,7 @@ export const Navbar = () => {
                   to={link.path}
                   itemProp="url"
                   className={cn(
-                    "relative px-4 py-2.5 text-[10px] font-black uppercase tracking-[0.25em] md:max-lg:px-2 md:max-lg:py-1.5 md:max-lg:text-[8px] md:max-lg:tracking-[0.1em] transition-all duration-300 rounded-xl group/link",
+                    "relative px-3.5 py-1.5 text-[9px] font-black uppercase tracking-[0.2em] transition-all duration-300 rounded-full group/link",
                     isActive
                       ? "text-emerald-400 bg-emerald-500/[0.05] border border-emerald-500/10"
                       : "text-white/40 hover:text-white hover:bg-white/[0.04] border border-transparent"
@@ -133,44 +133,44 @@ export const Navbar = () => {
           </nav>
 
           {/* Desktop Auth */}
-          <div className="hidden md:flex items-center gap-3 md:max-lg:gap-1.5">
+          <div className="hidden md:flex items-center gap-3">
             {user ? (
-              <div className="flex items-center gap-2 bg-white/[0.02] p-1.5 rounded-[1.25rem] border border-white/[0.05]">
+              <div className="flex items-center gap-2 bg-white/[0.02] p-1.5 rounded-full border border-white/[0.05]">
                 <Link
                   to="/dashboard"
-                  className="text-white/50 hover:text-white transition-all p-2.5 hover:bg-white/[0.04] rounded-xl"
+                  className="text-white/50 hover:text-white transition-all p-2 hover:bg-white/[0.04] rounded-full"
                   aria-label="Dashboard"
                 >
-                  <LayoutDashboard className="h-4 w-4" />
+                  <LayoutDashboard className="h-3.5 w-3.5" />
                 </Link>
                 {isAdmin && (
                   <Link
                     to="/admin"
-                    className="text-emerald-400 p-2.5 bg-emerald-500/10 border border-emerald-500/20 rounded-xl hover:bg-emerald-500/20 transition-all shadow-[0_0_15px_rgba(16,185,129,0.1)]"
+                    className="text-emerald-400 p-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full hover:bg-emerald-500/20 transition-all"
                     aria-label="Admin"
                   >
-                    <Settings className="h-4 w-4" />
+                    <Settings className="h-3.5 w-3.5" />
                   </Link>
                 )}
                 <button
                   type="button"
                   onClick={logout}
-                  className="text-white/30 hover:text-red-400 p-2.5 rounded-xl hover:bg-red-500/10 transition-all"
+                  className="text-white/30 hover:text-red-400 p-2 rounded-full hover:bg-red-500/10 transition-all"
                   aria-label="Logout"
                 >
-                  <LogOut className="h-4 w-4" />
+                  <LogOut className="h-3.5 w-3.5" />
                 </button>
               </div>
             ) : (
               <Link
                 to="/login"
                 data-cursor="LOGIN"
-                className="group relative inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 text-[10px] font-black text-black uppercase tracking-[0.25em] md:max-lg:px-3 md:max-lg:py-2.5 md:max-lg:text-[8px] md:max-lg:tracking-[0.1em] overflow-hidden shadow-[0_10px_30px_rgba(255,255,255,0.15)] hover:shadow-[0_10px_40px_rgba(16,185,129,0.3)] transition-all duration-500"
+                className="group relative inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-[9px] font-black text-black uppercase tracking-[0.2em] overflow-hidden shadow-lg transition-all duration-500"
               >
                 <div className="absolute inset-0 bg-emerald-400 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" />
                 <span className="relative z-10 flex items-center gap-2">
                   Portal
-                  <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="h-3 w-3 group-hover:translate-x-0.5 transition-transform" />
                 </span>
               </Link>
             )}

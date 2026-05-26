@@ -5,7 +5,8 @@ import {
   Shield, 
   BarChart3, 
   Settings, 
-  Zap
+  Zap,
+  Trophy
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Link, useLocation } from 'react-router-dom';
@@ -14,13 +15,20 @@ import { useAuth } from '@/contexts/AuthContext';
 export function DashboardNavigation() {
   const location = useLocation();
   const { userProfile } = useAuth();
+  
   const navItems = [
     { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
     { icon: Terminal, label: 'Marketplace', path: '/marketplace' },
-    { icon: Shield, label: 'Signals', path: '/dashboard' },
+    { icon: Trophy, label: 'Partnership', path: '/affiliate' },
     { icon: BarChart3, label: 'Performance', path: '/results' },
     { icon: Settings, label: 'Settings', path: '/settings' },
   ];
+
+  // Conditional Agent Desk for admins and agents
+  if (userProfile?.role === 'admin' || userProfile?.role === 'agent') {
+    // Insert after Partnership
+    navItems.splice(3, 0, { icon: Shield, label: 'Agent Desk', path: '/agent' });
+  }
 
   return (
     <div className="flex flex-col h-full">

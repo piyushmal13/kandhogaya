@@ -151,17 +151,17 @@ export const FortressHero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.32, duration: 0.6, ease: EASING }}
-          className="flex flex-col sm:flex-row items-center gap-6 justify-center w-full px-4 max-w-lg mx-auto"
+          className="flex flex-row items-center gap-3 sm:gap-4 justify-center w-full px-2 max-w-md mx-auto mt-4"
         >
-          <Link to="/webinars" className="w-full sm:w-auto">
-            <EliteButton variant="premium-gold" size="md" fluid rightIcon={<ArrowRight className="w-4 h-4" />}>
-              Request Session Access
+          <Link to="/webinars" className="shrink-0">
+            <EliteButton variant="premium-gold" size="sm" rightIcon={<ArrowRight className="w-3.5 h-3.5" />}>
+              Request Session
             </EliteButton>
           </Link>
 
-          <Link to="/quantx" className="w-full sm:w-auto">
-            <EliteButton variant="secondary" size="md" fluid leftIcon={<Play className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400/20" />}>
-              See QuantX Results
+          <Link to="/quantx" className="shrink-0">
+            <EliteButton variant="secondary" size="sm" leftIcon={<Play className="w-3 h-3 text-emerald-400 fill-emerald-400/20" />}>
+              See Results
             </EliteButton>
           </Link>
         </motion.div>
@@ -172,7 +172,7 @@ export const FortressHero = () => {
         animate={{ y: [0, 8, 0] }}
         transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
         onClick={scrollDown}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2 opacity-40 hover:opacity-90 transition-opacity duration-300 cursor-pointer"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 hidden sm:flex flex-col items-center gap-2 opacity-40 hover:opacity-90 transition-opacity duration-300 cursor-pointer"
         aria-label="Scroll down to explore"
       >
         <span className="text-[9px] font-black uppercase tracking-[0.45em] text-white">Explore</span>

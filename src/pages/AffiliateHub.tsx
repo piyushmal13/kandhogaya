@@ -26,6 +26,7 @@ export const AffiliateHub = () => {
   const [affiliateCode, setAffiliateCode] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [referredClients, setReferredClients] = useState<any[]>([]);
   const [stats, setStats] = useState({
     clicks: 124, // Mock if newly created
     registrations: 12,
@@ -58,6 +59,17 @@ export const AffiliateHub = () => {
           commissions: 0, // Calculated from commissions table
           pendingPayouts: 0
         });
+
+        // Fetch referred clients dynamically
+        const { data: leadsData } = await supabase
+          .from("leads")
+          .select("id, email, full_name, created_at, stage, crm_metadata")
+          .eq("referred_by_code", data.code)
+          .order("created_at", { ascending: false });
+
+        if (leadsData) {
+          setReferredClients(leadsData);
+        }
         
         // Fetch commissions (Mocking for now as we transition to SQL commissions)
         const { data: comms } = await supabase
@@ -247,46 +259,114 @@ export const AffiliateHub = () => {
               </div>
            </motion.div>
 
-           {/* Performance Board */}
-           <motion.div 
-             initial={{ opacity: 0, x: 20 }}
-             animate={{ opacity: 1, x: 0 }}
-             className="p-10 bg-[var(--color50)] border border-white/5 rounded-[3rem] flex flex-col"
-           >
-              <h2 className="text-xl font-black text-white uppercase italic tracking-tighter mb-8 flex items-center gap-3">
-                <TrendingUp className="w-5 h-5 text-emerald-500" />
-                Network Feed
-              </h2>
-              
-              <div className="space-y-6 flex-1">
-                 {[
-                   { event: "New Lead Capture", time: "2m ago", meta: "Forex Scalper X", status: "PENDING" },
-                   { event: "Conversion Event", time: "1h ago", meta: "Gold Hunter Pro", status: "VERIFIED" },
-                   { event: "Signal Click", time: "3h ago", meta: "Source: Twitter", status: "ACTIVE" },
-                   { event: "New Lead Capture", time: "5h ago", meta: "MT5 Trend Master", status: "PENDING" },
-                 ].map((act, i) => (
-                   <div key={`${act.event}-${i}`} className="flex items-start gap-4 pb-6 border-b border-white/5 last:border-0">
-                      <div className={`w-2 h-2 rounded-full mt-2 ${act.status === 'VERIFIED' ? 'bg-emerald-500 shadow-[0_0_8px_var(--color8)]' : 'bg-gray-700'}`} />
-                      <div className="flex-1">
-                         <div className="flex justify-between items-center mb-1">
-                            <span className="text-[11px] font-bold text-white uppercase tracking-widest">{act.event}</span>
-                            <span className="text-[9px] font-mono text-gray-600">{act.time}</span>
-                         </div>
-                         <div className="flex justify-between items-center">
-                            <span className="text-[9px] font-black text-gray-500 uppercase tracking-widest">{act.meta}</span>
-                            <span className={`text-[8px] font-black px-2 py-0.5 rounded-full ${act.status === 'VERIFIED' ? 'bg-emerald-500/20 text-emerald-500' : 'bg-white/5 text-gray-600'}`}>{act.status}</span>
-                         </div>
-                      </div>
-                   </div>
-                 ))}
-              </div>
+            {/* Performance Board */}
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="p-10 bg-[var(--color50)] border border-white/5 rounded-[3rem] flex flex-col"
+            >
+               <h2 className="text-xl font-black text-white uppercase italic tracking-tighter mb-8 flex items-center gap-3">
+                 <TrendingUp className="w-5 h-5 text-emerald-500" />
+                 Network Feed
+               </h2>
+               
+               <div className="space-y-6 flex-1">
+                  {referredClients.slice(0, 4).map((client) => {
+                     const status = client.stage === 'CONVERTED' ? 'VERIFIED' : 'PENDING';
+                     const time = new Date(client.created_at).toLocaleDateString();
+                     return (
+                       <div key={client.id} className="flex items-start gap-4 pb-6 border-b border-white/5 last:border-0 animate-in fade-in duration-300">
+                          <div className={`w-2 h-2 rounded-full mt-2 ${status === 'VERIFIED' ? 'bg-emerald-500 shadow-[0_0_8px_var(--color8)]' : 'bg-gray-700'}`} />
+                          <div className="flex-1">
+                             <div className="flex justify-between items-center mb-1">
+                                <span className="text-[11px] font-bold text-white uppercase tracking-widest truncate max-w-[120px]" title={client.email}>
+                                   {client.full_name || client.email.split('@')[0]}
+                                </span>
+                                <span className="text-[9px] font-mono text-gray-600">{time}</span>
+                             </div>
+                             <div className="flex justify-between items-center">
+                                <span className="text-[9px] font-black text-gray-500 uppercase tracking-widest">{client.crm_metadata?.location || 'Global'}</span>
+                                <span className={`text-[8px] font-black px-2 py-0.5 rounded-full ${status === 'VERIFIED' ? 'bg-emerald-500/20 text-emerald-500' : 'bg-white/5 text-gray-600'}`}>{status}</span>
+                             </div>
+                          </div>
+                       </div>
+                     );
+                  })}
+                  {referredClients.length === 0 && (
+                     <div className="text-center py-20 text-[10px] font-black uppercase text-gray-600 tracking-wider italic">
+                        No recent activity
+                     </div>
+                  )}
+               </div>
 
-              <button className="w-full py-4 mt-8 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-white transition-all">
-                 View Historical Logs
-              </button>
+               <button className="w-full py-4 mt-8 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-white transition-all">
+                  View Historical Logs
+               </button>
             </motion.div>
          </div>
-        </div>
+
+         {/* Referred Clients Directory Table */}
+         <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="mt-12 p-10 bg-[var(--color50)] border border-white/5 rounded-[3rem] overflow-hidden"
+         >
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+               <div>
+                  <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter">Referred Network Directory</h2>
+                  <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">Real-time attribution & geographic intelligence</p>
+               </div>
+               <div className="flex items-center gap-3 bg-white/5 px-4 py-2 rounded-xl border border-white/5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">{referredClients.length} Connections</span>
+               </div>
+            </div>
+
+            <div className="overflow-x-auto">
+               <table className="w-full text-left border-separate border-spacing-y-2.5">
+                  <thead>
+                     <tr className="text-[9px] text-gray-500 uppercase font-black tracking-[0.2em] border-b border-white/5">
+                        <th className="px-6 py-4">Client Email</th>
+                        <th className="px-6 py-4">Full Name</th>
+                        <th className="px-6 py-4">Geographic Origin</th>
+                        <th className="px-6 py-4">Registration Date</th>
+                     </tr>
+                  </thead>
+                  <tbody className="text-xs">
+                     {referredClients.map((client) => {
+                        const location = client.crm_metadata?.location || "Global";
+                        return (
+                           <tr key={client.id} className="bg-white/5 hover:bg-emerald-500/5 transition-all">
+                              <td className="px-6 py-5 first:rounded-l-[20px] border-y border-l border-white/5 font-mono text-emerald-400">
+                                 {client.email}
+                              </td>
+                              <td className="px-6 py-5 border-y border-white/5 font-black uppercase text-white tracking-wide">
+                                 {client.full_name || "PROSPECTIVE CLIENT"}
+                              </td>
+                              <td className="px-6 py-5 border-y border-white/5">
+                                 <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg text-[9px] font-black uppercase tracking-widest text-zinc-300">
+                                    {location}
+                                 </span>
+                              </td>
+                              <td className="px-6 py-5 last:rounded-r-[20px] border-y border-r border-white/5 text-gray-500 font-mono">
+                                 {new Date(client.created_at).toLocaleString()}
+                              </td>
+                           </tr>
+                        );
+                     })}
+                     {referredClients.length === 0 && (
+                        <tr>
+                           <td colSpan={4} className="text-center py-20 bg-black/20 rounded-[20px] border border-dashed border-white/5 uppercase font-black text-gray-700 text-[10px] tracking-widest italic">
+                              Awaiting first network connection registration.
+                           </td>
+                        </tr>
+                     )}
+                  </tbody>
+               </table>
+            </div>
+         </motion.div>
+      </div>
       </div>
     </DashboardLayout>
   );

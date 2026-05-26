@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { supabase } from "../../lib/supabase";
 import { ArrowRight, ShieldCheck, Lock, Cpu, Globe } from "lucide-react";
+import { fetchGeographicLocation } from "../../utils/geo";
 
 export const SignupForm = () => {
   const [email, setEmail] = useState("");
@@ -14,14 +15,16 @@ export const SignupForm = () => {
     
     try {
       const urlParams = new URLSearchParams(globalThis.location.search);
-      const refCode = urlParams.get('ref') || null;
+      const refCode = urlParams.get('ref') || localStorage.getItem("ifx_referral_code") || null;
+      const location = await fetchGeographicLocation();
 
       await supabase.from('leads').upsert({
         email: email.toLowerCase(),
         source: 'Landing Page OTP',
         referred_by_code: refCode,
         stage: 'NEW',
-        last_action_at: new Date().toISOString()
+        last_action_at: new Date().toISOString(),
+        crm_metadata: { location }
       }, { onConflict: 'email' });
 
       const { error: authError } = await supabase.auth.signInWithOtp({ 

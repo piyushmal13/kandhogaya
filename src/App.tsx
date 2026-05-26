@@ -14,6 +14,7 @@ import { loadSystem } from "./core/systemLoader";
 import { HelmetProvider } from "react-helmet-async";
 import { FeatureGuard } from "./components/ui/FeatureGuard";
 import { GlobalPromotionBanner } from "./components/institutional/GlobalPromotionBanner";
+import { useReferral } from "./hooks/useReferral";
 
 const Home = lazy(() => import("./pages/Home"));
 const Marketplace = lazy(() => import("./pages/Marketplace").then(m => ({ default: m.Marketplace })));
@@ -92,6 +93,7 @@ const AnimatedRoutes = () => {
 };
 
 function AppContent() {
+  useReferral();
   const location = useLocation();
   const isPlainLayout = ['/login', '/dashboard', '/admin', '/agent', '/affiliate'].some(path => location.pathname.startsWith(path));
 

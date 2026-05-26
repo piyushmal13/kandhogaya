@@ -48,24 +48,7 @@ export const Footer = () => (
             The global benchmark for systematic CFD intelligence and algorithmic forex execution. Engineered for elite capital scaling across the world's primary financial hubs.
           </p>
 
-          <div 
-            className="inline-flex items-center gap-4 px-5 py-3 bg-white/[0.02] border border-white/[0.04] rounded-2xl mb-10 hover:bg-white/[0.04] hover:border-white/[0.08] transition-all cursor-default shadow-lg"
-            itemProp="aggregateRating"
-            itemScope
-            itemType="https://schema.org/AggregateRating"
-          >
-             <meta itemProp="ratingValue" content="4.9" />
-             <meta itemProp="reviewCount" content="12400" />
-             <div className="flex items-center gap-2">
-               <ShieldCheck className="w-5 h-5 text-emerald-400" />
-               <span className="text-[10px] font-black text-white/90 uppercase tracking-[0.3em]">Institutional Grade</span>
-             </div>
-             <span className="text-[9px] font-black text-white/40 uppercase tracking-[0.25em] italic border-l border-white/10 pl-4 py-1">
-               Verified Alpha
-             </span>
-          </div>
-
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 mb-10">
             {[
               { Icon: InstagramIcon, url: `https://instagram.com/${BRANDING.name}` },
               { Icon: LinkedinIcon, url: `https://linkedin.com/company/${BRANDING.name}` }
@@ -95,6 +78,7 @@ export const Footer = () => (
             <ul className="space-y-5 text-[13px] text-[#8A9AAB] font-light">
               <li><Link to="/marketplace" className="hover:text-emerald-400 transition-colors flex items-center gap-2 group">Execution Desk <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
               <li><Link to="/results" className="hover:text-emerald-400 transition-colors flex items-center gap-2 group">Audit Logs <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
+              <li><Link to="/affiliate" className="hover:text-emerald-400 transition-colors flex items-center gap-2 group">Affiliate Desk <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
             </ul>
           </div>
 
@@ -112,8 +96,8 @@ export const Footer = () => (
           <div className="col-span-2 md:col-span-1">
             <h4 className="mb-10 text-[10px] font-black uppercase tracking-[0.3em] text-white">Infrastructure</h4>
             <ul className="space-y-5 text-[13px] text-[#8A9AAB] font-light">
+              <li><Link to="/consultation" className="hover:text-emerald-400 transition-colors flex items-center gap-2 group">Custom Request <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
               <li><Link to="/about" className="hover:text-emerald-400 transition-colors">Operations</Link></li>
-              <li><Link to="/hiring" className="hover:text-emerald-400 transition-colors">Enterprise Hiring</Link></li>
               <li><Link to="/contact" className="hover:text-emerald-400 transition-colors">Support Portal</Link></li>
             </ul>
           </div>

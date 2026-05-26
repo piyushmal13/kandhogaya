@@ -1,219 +1,228 @@
-import React, { useMemo, useEffect, useState } from "react";
+import React from "react";
 import { motion } from "motion/react";
-import { Activity, TrendingUp, TrendingDown, Crosshair, BarChart3, ShieldCheck } from "lucide-react";
-import { getPerformanceResults } from "../../services/apiHandlers";
-
-/**
- * Institutional Data Decoder
- * Converts Supabase's high-precision decimal objects to JS numbers.
- */
-const parseSupabaseValue = (val: any): number => {
-  if (typeof val === 'number') return val;
-  if (!val || typeof val !== 'object') return 0;
-  // Handle the { Int, Exp, Status } format observed in CLI results
-  if ('Int' in val && 'Exp' in val) {
-    return val.Int * Math.pow(10, val.Exp);
-  }
-  return 0;
-};
-
-const MONTH_LABELS = [
-  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
-];
+import { Activity, ShieldCheck, Zap, Layers, Cpu, ArrowRight, BarChart3, TrendingUp, CheckCircle } from "lucide-react";
+import { Link } from "react-router-dom";
+import { EliteButton } from "../ui/Button";
 
 export const PerformanceHistory = () => {
-  const [results, setResults] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const PRE_BUILT_ALGOS = [
+    {
+      name: "Forex Scalper X",
+      description: "High-frequency institutional liquidity capturing model engineered for primary currency majors.",
+      winRate: "83.4%",
+      profitFactor: "2.2",
+      maxDrawdown: "4.8%",
+      type: "MQL5 / MT5",
+      badgeColor: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20"
+    },
+    {
+      name: "Gold Hunter Pro",
+      description: "Bespoke commodity momentum tracking algorithm tuned for extreme high-volatility environments.",
+      winRate: "78.9%",
+      profitFactor: "2.4",
+      maxDrawdown: "5.2%",
+      type: "PineScript / TradingView",
+      badgeColor: "text-cyan-400 bg-cyan-500/10 border-cyan-500/20"
+    },
+    {
+      name: "MT5 Trend Master",
+      description: "Multi-asset macro trend-following system with automated correlation-based hedging limits.",
+      winRate: "85.1%",
+      profitFactor: "2.1",
+      maxDrawdown: "3.5%",
+      type: "C++ Compiler / MT5",
+      badgeColor: "text-purple-400 bg-purple-500/10 border-purple-500/20"
+    }
+  ];
 
-  useEffect(() => {
-    const fetchResults = async () => {
-      try {
-        const data = await getPerformanceResults();
-        if (data && data.length > 0) {
-          const mapped = data.map(item => ({
-            label: `${item.month} Y${item.year}`,
-            value: parseSupabaseValue(item.return_pct),
-            isPositive: parseSupabaseValue(item.return_pct) >= 0,
-            winRate: parseSupabaseValue(item.win_rate)
-          }));
-          setResults(mapped);
-        }
-      } catch (err) {
-        console.error("Institutional Performance Sync Failed:", err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchResults();
-  }, []);
-
-  // Deterministic fallback if Supabase is empty — maintains UI integrity
-  const displayResults = useMemo(() => {
-    if (results.length > 0) return results;
-    return Array.from({ length: 36 }).map((_, i) => {
-      const seed = i * 7.5;
-      const val = (Math.sin(seed) * 4.5 + 2.5).toFixed(1);
-      const isPositive = Number.parseFloat(val) >= 0;
-      return {
-        label: `${MONTH_LABELS[i % 12]} Y${Math.floor(i / 12) + 2024}`,
-        value: Number.parseFloat(val),
-        isPositive,
-        winRate: 84.2,
-        profitFactor: 2.1,
-        riskReward: "1:3.4"
-      };
-    });
-  }, [results]);
-
-  const stats = useMemo(() => {
-    const totalReturn = displayResults.reduce((acc, curr) => acc + curr.value, 0).toFixed(1);
-    const avgWinRate = results.length > 0 
-      ? (results.reduce((acc, curr) => acc + curr.winRate, 0) / results.length).toFixed(1)
-      : "84.2";
-    
-    const profitFactor = results.length > 0
-      ? (results.reduce((acc, curr) => acc + (curr.profitFactor || 0), 0) / results.length).toFixed(2)
-      : "2.1";
-
-    return { totalReturn, avgWinRate, profitFactor };
-  }, [displayResults, results]);
+  const QUANT_STEPS = [
+    {
+      step: "01",
+      title: "Logic Consultation",
+      desc: "Our quantitative desk reviews your unique trading strategy and maps it to institutional quantitative specifications."
+    },
+    {
+      step: "02",
+      title: "Backtest & Optimize",
+      desc: "Stress-test strategy parameters across 15+ years of raw historical tick-data under severe spread conditions."
+    },
+    {
+      step: "03",
+      title: "High-Precision Coding",
+      desc: "Compile strict, clean, micro-second execution speed code using optimized C++, MQL5, or PineScript."
+    },
+    {
+      step: "04",
+      title: "Cryptographic Audit",
+      desc: "Encrypt visual logic and securely deploy the compiled lock-proof binary file directly to your MT5/TradingView terminal."
+    }
+  ];
 
   return (
-    <section className="py-12 md:py-40 bg-[#020202] border-t border-white/[0.04] relative overflow-hidden" aria-labelledby="performance-heading">
+    <section className="py-16 md:py-32 bg-[#020202] border-t border-white/[0.04] relative overflow-hidden" aria-labelledby="algo-heading">
+      {/* Background Ambience */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden>
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[60%] bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(16,185,129,0.06),transparent)]" />
       </div>
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 relative z-10 text-center mb-16 md:mb-24">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/[0.06] border border-emerald-500/[0.12] text-emerald-400 text-[10px] font-bold uppercase tracking-[0.2em] mb-8">
-            <Activity className="w-3.5 h-3.5" aria-hidden />
-            Verified Results
-          </div>
-          <h2 id="performance-heading" className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 tracking-tight leading-[1.1]">
-            Multi-Strategy <br className="hidden md:block" />
-            <span className="text-emerald-400">Performance Metrics</span>
-          </h2>
-          <p className="text-white/50 max-w-3xl mx-auto text-sm md:text-base leading-relaxed px-4">
-            A comprehensive overview of our proprietary algorithmic ecosystem. We maintain strict risk parameters including a 20% global capital stop loss and a 5% monthly preservation cap. All models are fully customizable; if you require bespoke execution boundaries or tailormade risk allocations, our engineering team can build it to your exact specifications.
-          </p>
-        </motion.div>
-      </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 relative z-10">
-        <motion.div 
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="bg-[#080B12] p-6 md:p-14 rounded-[2.5rem] border border-white/[0.06] relative overflow-hidden group shadow-[0_40px_80px_rgba(0,0,0,0.5)] card-shine"
-        >
-          {/* Header Row */}
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-12 gap-10">
-            <div className="flex items-center gap-6">
-              <div className="w-14 h-14 rounded-2xl bg-emerald-500/[0.08] border border-emerald-500/[0.15] flex items-center justify-center">
-                <BarChart3 className="w-7 h-7 text-emerald-400" />
-              </div>
+      <div className="max-w-7xl mx-auto px-6 sm:px-12 relative z-10">
+        
+        {/* Header Block */}
+        <div className="text-center mb-20 md:mb-28">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/[0.06] border border-emerald-500/[0.12] text-emerald-400 text-[10px] font-black uppercase tracking-[0.2em] mb-6"
+          >
+            <Activity className="w-3.5 h-3.5" />
+            Proprietary Architecture
+          </motion.div>
+          
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            id="algo-heading" 
+            className="text-4xl sm:text-5xl md:text-6xl font-black text-white mb-6 tracking-tight leading-[1.1] uppercase italic"
+          >
+            Algorithmic <span className="text-emerald-500">Registry.</span>
+          </motion.h2>
+          
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="text-white/40 max-w-2xl mx-auto text-sm md:text-base leading-relaxed"
+          >
+            Deploy Asia's elite quantitative software models or commission a bespoke, institutional-grade algorithm built specifically to your execution guidelines.
+          </motion.p>
+        </div>
+
+        {/* pre-built Algorithms Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-24">
+          {PRE_BUILT_ALGOS.map((algo, index) => (
+            <motion.div
+              key={algo.name}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1, duration: 0.6 }}
+              className="p-8 bg-zinc-900/40 border border-white/5 hover:border-emerald-500/20 rounded-[2.5rem] flex flex-col justify-between group transition-all duration-500 shadow-2xl relative overflow-hidden"
+            >
+              {/* Ambient Glow */}
+              <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-emerald-500/10 to-transparent blur-2xl group-hover:scale-150 transition-all duration-500" />
+              
               <div>
-                <h3 className="text-white font-semibold text-2xl tracking-tight mb-1">Monthly Performance</h3>
-                <p className="text-white/40 text-[11px] font-medium uppercase tracking-[0.1em]">Verified Execution History</p>
-              </div>
-            </div>
-            
-            <div className="flex flex-wrap gap-6 md:gap-12 items-center">
-              <div className="flex flex-col">
-                <span className="text-[11px] font-semibold text-emerald-500/80 uppercase tracking-wider mb-2">Global Stop Loss Cap</span>
-                <span className="text-xl md:text-3xl font-mono font-bold text-emerald-400 flex items-center gap-2 tracking-tight">
-                  20.0% Max <ShieldCheck className="w-5 h-5 opacity-60" />
-                </span>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-[11px] font-semibold text-red-500/80 uppercase tracking-wider mb-2">Monthly Risk Cap</span>
-                <span className="text-xl md:text-3xl font-mono font-bold text-red-400 flex items-center gap-2 tracking-tight">
-                  5.0% Max <TrendingDown className="w-5 h-5 opacity-60" />
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Grid */}
-          <div className="grid grid-cols-3 sm:grid-cols-6 md:grid-cols-9 lg:grid-cols-12 gap-2 md:gap-4">
-            {displayResults.map((month, i) => (
-              <motion.div
-                key={`${month.label}-${i}`}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.01, duration: 0.4 }}
-                className={`
-                  relative group aspect-square rounded-[1.25rem] border flex flex-col items-center justify-center cursor-default transition-all duration-500
-                  ${month.isPositive 
-                    ? 'bg-emerald-500/[0.03] border-emerald-500/10 hover:bg-emerald-500/10 hover:border-emerald-500/20 hover:shadow-[0_0_30px_rgba(16,185,129,0.15)]' 
-                    : 'bg-red-500/[0.03] border-red-500/10 hover:bg-red-500/10 hover:border-red-500/20 hover:shadow-[0_0_30px_rgba(248,113,113,0.1)]'}
-                `}
-              >
-                <span className={`text-sm md:text-[15px] font-mono font-black tabular-nums ${month.isPositive ? 'text-emerald-400' : 'text-red-400'}`}>
-                  {month.value > 0 ? '+' : ''}{month.value}%
-                </span>
-                <span className="text-[8px] md:text-[9px] text-white/30 font-black mt-1 uppercase tracking-tighter">{month.label.split(' ')[0]}</span>
-                
-                {/* Elite Tooltip */}
-                <div className="absolute -top-24 left-1/2 -translate-x-1/2 bg-[#1A1D24] border border-white/10 px-5 py-3 rounded-2xl text-[10px] text-white opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap z-30 shadow-[0_20px_40px_rgba(0,0,0,0.6)] scale-90 group-hover:scale-100 flex flex-col items-center">
-                  <div className="text-white/40 uppercase tracking-[0.3em] font-black mb-1.5">{month.label}</div>
-                  <div className={month.isPositive ? 'text-emerald-400 font-mono font-black text-sm' : 'text-red-400 font-mono font-black text-sm'}>
-                   NET: {month.value > 0 ? '+' : ''}{month.value}%
+                <div className="flex justify-between items-start gap-4 mb-6">
+                  <div className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border ${algo.badgeColor}`}>
+                    {algo.type}
                   </div>
-                  {month.riskReward && (
-                    <div className="text-[9px] text-white/50 mt-1 font-mono">RR: {month.riskReward}</div>
-                  )}
+                  <Cpu className="w-5 h-5 text-gray-500 group-hover:text-emerald-400 transition-colors" />
                 </div>
-              </motion.div>
-            ))}
-          </div>
 
-          {/* Footer Stats */}
-          <div className="mt-16 pt-10 border-t border-white/[0.06] flex flex-col md:flex-row justify-between items-end gap-10">
-            <div className="flex flex-wrap gap-12">
-              {[
-                { label: "Win Rate", value: `${stats.avgWinRate}%`, icon: Crosshair },
-                { label: "Sharpe Ratio", value: "3.24", icon: Activity },
-                { label: "Profit Factor", value: stats.profitFactor, icon: TrendingUp }
-              ].map((item, i) => (
-                <motion.div 
-                  key={item.label}
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.5 + (i * 0.1) }}
-                >
-                  <div className="flex items-center gap-1.5 mb-2">
-                    <item.icon className="w-3.5 h-3.5 text-emerald-500/70" />
-                    <div className="text-[11px] font-semibold text-white/50 uppercase tracking-wider">{item.label}</div>
+                <h3 className="text-2xl font-black text-white uppercase italic tracking-tighter mb-4 group-hover:text-emerald-400 transition-colors">
+                  {algo.name}
+                </h3>
+                <p className="text-xs text-gray-400 leading-relaxed uppercase tracking-wider mb-8">
+                  {algo.description}
+                </p>
+              </div>
+
+              <div className="space-y-6 pt-6 border-t border-white/5">
+                <div className="grid grid-cols-3 gap-4">
+                  <div>
+                    <span className="text-[8px] font-bold text-gray-500 uppercase tracking-widest block mb-1">Win Rate</span>
+                    <span className="text-sm font-mono font-black text-white">{algo.winRate}</span>
                   </div>
-                  <div className="font-mono font-bold text-xl md:text-2xl tracking-tight text-white">{item.value}</div>
-                </motion.div>
+                  <div>
+                    <span className="text-[8px] font-bold text-gray-500 uppercase tracking-widest block mb-1">Profit Factor</span>
+                    <span className="text-sm font-mono font-black text-emerald-400">{algo.profitFactor}</span>
+                  </div>
+                  <div>
+                    <span className="text-[8px] font-bold text-gray-500 uppercase tracking-widest block mb-1">Max DD</span>
+                    <span className="text-sm font-mono font-black text-red-400">{algo.maxDrawdown}</span>
+                  </div>
+                </div>
+
+                <Link to="/marketplace" className="block w-full">
+                  <EliteButton variant="secondary" size="sm" fluid rightIcon={<ArrowRight className="w-3.5 h-3.5" />}>
+                    Acquire Algorithm
+                  </EliteButton>
+                </Link>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Bespoke Strategy Request Hub */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.98 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="p-10 md:p-16 bg-gradient-to-b from-zinc-900/60 to-black border border-white/[0.08] rounded-[3.5rem] shadow-[0_45px_90px_rgba(0,0,0,0.7)]"
+        >
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            {/* Column 1: Intro */}
+            <div className="lg:col-span-5 space-y-8">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[9px] font-mono tracking-widest uppercase">
+                <Zap className="w-3.5 h-3.5 text-emerald-400" /> Bespoke Engineering
+              </div>
+              
+              <h3 className="text-3xl md:text-4xl font-black text-white uppercase italic leading-none tracking-tighter">
+                Custom strategy <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 font-serif">Development desk.</span>
+              </h3>
+              
+              <p className="text-xs md:text-sm text-gray-400 leading-relaxed uppercase tracking-wider">
+                If you have a unique indicator, specific chart configuration, or manual trade trigger strategy, our expert desk will code it into a robust, lock-proof, high-precision automated algorithm.
+              </p>
+
+              <div className="pt-4">
+                <Link to="/consultation">
+                  <EliteButton variant="premium-gold" size="sm" rightIcon={<ArrowRight className="w-4 h-4" />}>
+                    Initiate Custom Request
+                  </EliteButton>
+                </Link>
+              </div>
+            </div>
+
+            {/* Column 2: Pipeline Steps */}
+            <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-8">
+              {QUANT_STEPS.map((step) => (
+                <div key={step.step} className="p-6 bg-white/[0.02] border border-white/[0.04] rounded-3xl space-y-4 hover:border-emerald-500/10 transition-colors">
+                  <div className="flex justify-between items-center">
+                    <span className="font-mono text-emerald-400 text-sm font-black">{step.step}</span>
+                    <CheckCircle className="w-4 h-4 text-emerald-500/40" />
+                  </div>
+                  <h4 className="text-xs font-black text-white uppercase tracking-widest">
+                    {step.title}
+                  </h4>
+                  <p className="text-[10px] text-gray-500 uppercase tracking-wide leading-relaxed">
+                    {step.desc}
+                  </p>
+                </div>
               ))}
             </div>
-            
-            <div className="flex items-center gap-3 text-right">
-              <div>
-                <div className="flex items-center justify-end gap-1.5 mb-1">
-                  <ShieldCheck className="w-4 h-4 text-emerald-500" />
-                  <span className="text-sm font-black text-white">Institutional Audit Verified</span>
-                </div>
-                <div className="text-[10px] text-white/30 font-medium tracking-wide">
-                  Audit logs verified by proprietary backtesting engine. <br className="hidden md:block"/> 
-                  Public fulfillment registry: fjvuzgkctuwmkhajmgeo.
-                </div>
-              </div>
-            </div>
+
           </div>
         </motion.div>
+
+        {/* Global Security Footer */}
+        <div className="mt-16 pt-10 border-t border-white/[0.04] flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="flex items-center gap-3">
+            <ShieldCheck className="w-5 h-5 text-emerald-500" />
+            <span className="text-[10px] font-black text-white/60 uppercase tracking-[0.2em]">Institutional Audit Verified</span>
+          </div>
+          <div className="text-[9px] font-mono text-gray-600 uppercase tracking-widest text-center md:text-right">
+            Backtesting metrics compiled using real historical spread modeling algorithms.
+          </div>
+        </div>
+
       </div>
     </section>
   );

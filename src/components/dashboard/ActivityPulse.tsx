@@ -1,11 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { 
   Zap, TrendingUp, UserPlus, 
-  ShoppingCart
+  ShoppingCart, LucideIcon
 } from "lucide-react";
 import { cn } from "@/utils/cn";
+import { useRealtime } from "../../hooks/useRealtime";
 
-const MOCK_EVENTS = [
+interface ActivityEvent {
+  id: string | number;
+  type: string;
+  user: string;
+  time: string;
+  icon: LucideIcon;
+  color: string;
+}
+
+const MOCK_EVENTS: ActivityEvent[] = [
   { id: 1, type: "registration", user: "Alexander R.", time: "2m ago", icon: UserPlus, color: "text-emerald-500" },
   { id: 2, type: "sale", user: "Pro Trader", time: "5m ago", icon: ShoppingCart, color: "text-blue-500" },
   { id: 3, type: "signal", user: "BTC Long", time: "12m ago", icon: TrendingUp, color: "text-orange-500" },
@@ -13,11 +23,71 @@ const MOCK_EVENTS = [
 ];
 
 export const ActivityPulse = () => {
-  const [events, setEvents] = useState(MOCK_EVENTS);
+  const { data: liveEvents } = useRealtime<ActivityEvent>(
+    "user_events",
+    undefined,
+    undefined,
+    (raw: any) => {
+      let icon = Zap;
+      let color = "text-purple-500";
+      const type = raw.event_type || "activity";
+      
+      if (type.includes("signup") || type.includes("register")) {
+        icon = UserPlus;
+        color = "text-emerald-500";
+      } else if (type.includes("purchase") || type.includes("sale") || type.includes("pay")) {
+        icon = ShoppingCart;
+        color = "text-blue-500";
+      } else if (type.includes("signal")) {
+        icon = TrendingUp;
+        color = "text-orange-500";
+      }
+
+      let displayUser = "Anonymous";
+      if (raw.metadata?.user_email) {
+        displayUser = raw.metadata.user_email.split('@')[0];
+      } else if (raw.metadata?.email) {
+        displayUser = raw.metadata.email.split('@')[0];
+      } else if (raw.anon_id) {
+        displayUser = `Session ${raw.anon_id.replace("anon_", "").substring(0, 6)}`;
+      }
+
+      let displayTime = "Just now";
+      const timestamp = raw.created_at || raw.event_at;
+      if (timestamp) {
+        const date = new Date(timestamp);
+        const diffMs = Date.now() - date.getTime();
+        const diffMins = Math.floor(diffMs / 60000);
+        if (diffMins > 0) {
+          displayTime = `${diffMins}m ago`;
+        }
+      }
+
+      return {
+        id: raw.id,
+        type,
+        user: displayUser,
+        time: displayTime,
+        icon,
+        color
+      };
+    }
+  );
+
+  const [events, setEvents] = useState<ActivityEvent[]>(MOCK_EVENTS);
+
+  useEffect(() => {
+    if (liveEvents && liveEvents.length > 0) {
+      setEvents(liveEvents.slice(0, 4));
+    } else {
+      setEvents(MOCK_EVENTS);
+    }
+  }, [liveEvents]);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setEvents(prev => {
+        if (prev.length <= 1) return prev;
         const next = [...prev];
         const last = next.pop();
         if (last) next.unshift(last);
@@ -64,3 +134,4 @@ const ActivityPulseIcon = () => (
     <div className="absolute inset-1 bg-emerald-500 rounded-full" />
   </div>
 );
+

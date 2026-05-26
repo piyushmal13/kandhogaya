@@ -78,6 +78,21 @@ export const AgentSystem = () => {
     }
   };
 
+  const updateCommissionRate = async (affiliateId: string, rate: number) => {
+    try {
+      const { error } = await supabase
+        .from('affiliate_codes')
+        .update({ commission_rate: rate })
+        .eq('id', affiliateId);
+
+      if (error) throw error;
+      success(`Authorized commission rate updated to ${rate}%.`);
+      fetchAffiliateData();
+    } catch (err: any) {
+      toastError(err.message);
+    }
+  };
+
   const filteredAffiliates = affiliates.filter(a => 
     a.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
     a.users?.email?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -143,6 +158,26 @@ export const AgentSystem = () => {
                        <div>
                           <span className="text-[9px] font-black text-emerald-500 uppercase tracking-widest block mb-1">Registrations</span>
                           <span className="text-2xl font-black text-emerald-500 italic">{aff.total_registrations || 0}</span>
+                       </div>
+                    </div>
+
+                    <div className="pt-6 mt-6 border-t border-white/5">
+                       <span className="text-[9px] font-black text-zinc-500 uppercase tracking-widest block mb-3">Commission Rate Setting</span>
+                       <div className="grid grid-cols-4 gap-2 bg-black/40 p-1.5 rounded-2xl border border-white/5">
+                          {[10, 20, 30, 40].map((rate) => (
+                             <button
+                                key={rate}
+                                onClick={() => updateCommissionRate(aff.id, rate)}
+                                className={cn(
+                                   "py-2.5 rounded-xl text-[10px] font-black transition-all",
+                                   Number(aff.commission_rate || 10) === rate
+                                      ? "bg-emerald-500 text-black shadow-lg shadow-emerald-500/20"
+                                      : "text-gray-400 hover:text-white hover:bg-white/5"
+                                )}
+                             >
+                                {rate}%
+                             </button>
+                          ))}
                        </div>
                     </div>
                  </div>
