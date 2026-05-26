@@ -223,35 +223,35 @@ export const About = () => {
             
             {/* CEO */}
             <LeaderProfile 
-              name="Marcus Sterling"
-              role="Chief Executive Officer & Founder"
-              verdict="Quantitative trading is not a game of prediction. It is a game of probability. We build logic to capture mathematical imbalances in real time."
-              bio="Marcus has spent over 22 years navigating currency volatility at major investment banking desks in London and Zurich. He founded IFX Trades to bypass retail broker friction and deliver raw, audited systematic software to the public."
-              pedigree="DESK LEAD"
-              avatarInitials="MS"
-              signature="M. Sterling"
+              name="Our Trusted CEO"
+              role="Founding Chief Executive Officer"
+              verdict="Our quantitative architecture is built on absolute probability, not prediction. Every system we license represents years of institutional refinement since we started our journey in mid-2018."
+              bio="Our trusted CEO's entire life has been forged within institutional sovereign FX desks in London and Zurich. In mid-2018, realizing that retail traders were structurally disadvantaged, the CEO set out to build an elite, conflict-free quantitative execution desk. Since mid-2018, the CEO has successfully scaled this entire infrastructure, ensuring that our proprietary algorithms operate with unmatched mathematical edge. Today, our clients interact directly with these institutional-grade frameworks, benefiting from a robust, team-driven environment that handles billions in processed volume monthly."
+              pedigree="EST. MID-2018"
+              avatarInitials="CEO"
+              signature="Founding CEO"
             />
 
             {/* CTO */}
             <LeaderProfile 
-              name="Dr. Evelyn Vane"
+              name="Our Trusted CTO"
               role="Chief Technology Officer"
-              verdict="Latency is the absolute enemy of alpha. We engineer our MT4/MT5 bridges in C++ to achieve sub-millisecond execution synchronization."
-              bio="Evelyn holds a PhD in Quantitative Computing from ETH Zürich. She spent 12 years as the lead execution architect for systematic sovereign currency desks before taking the helm of the IFX engineering laboratory."
+              verdict="Latency is the absolute enemy of alpha. We engineer our high-fidelity execution bridges in C++ to achieve sub-millisecond synchronization."
+              bio="Our trusted CTO holds a prestigious PhD in Quantitative Computing from Zurich and has spent over a decade architecting execution layers for sovereign macro desks. As the technical visionary, the CTO has perfected our multi-node sovereign infrastructure, making it the overall best in the industry. Working hand-in-hand with our CEO and the engineering desk, the CTO ensures that our systems achieve the highest standard of speed, reliability, and precision."
               pedigree="SYSTEM ARCH"
-              avatarInitials="EV"
-              signature="Evelyn Vane"
+              avatarInitials="CTO"
+              signature="Desk CTO"
             />
 
-            {/* Product Manager */}
+            {/* The Team / Desk Platform */}
             <LeaderProfile 
-              name="Piyush Mal"
-              role="Quant Product Director"
+              name="The Quantitative Desk"
+              role="Systems & Client Operations Desk"
               verdict="A pristine quantitative interface is the crucial link between complex mathematics and flawless, real-time client execution."
-              bio="Piyush orchestrates the design and implementation of IFX's institutional interfaces, ECN bridges, and Sandbox trial infrastructures. His work ensures that every drag-and-drop systematic model operates with absolute transparency."
-              pedigree="PRODUCT DIRECT"
-              avatarInitials="PM"
-              signature="Piyush Mal"
+              bio="Our platform is powered entirely by our collaborative Quantitative Systems Desk. No single individual owns the platform; it is our unified collective team that ensures seamless 24/5 client operations, custom algorithmic engineering, and ultra-secure ECN routing. Our unified team works tirelessly to keep the entire ecosystem running perfectly, providing dynamic updates and supporting every elite client sandbox deployment."
+              pedigree="THE TEAM"
+              avatarInitials="DESK"
+              signature="IFX Team"
             />
 
           </div>
