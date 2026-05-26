@@ -23,7 +23,7 @@ export const StandardLayout = ({ children }: { children: React.ReactNode }) => {
         
         <Navbar />
         
-        <main id="main-content" className="relative z-10">
+        <main id="main-content" className="relative">
           {children}
         </main>
         

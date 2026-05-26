@@ -49,15 +49,26 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
       exit={{ opacity: 0 }}
       className="fixed inset-0 z-[200] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 overflow-y-auto"
     >
+      {/* Mobile Floating Close Button: Remains fixed at top-right of screen, independent of card scroll */}
+      <button 
+        onClick={onClose}
+        className="fixed top-6 right-6 z-[220] p-2.5 bg-black/60 border border-white/10 rounded-full hover:bg-white/10 transition-all text-white md:hidden shadow-2xl active:scale-95 flex items-center justify-center"
+        aria-label="Close modal"
+      >
+        <X className="w-5 h-5" />
+      </button>
+
       <motion.div
         initial={{ scale: 0.95, y: 20 }}
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.95, y: 20 }}
         className="bg-[var(--color7)] border border-white/10 rounded-2xl md:rounded-3xl w-full max-w-5xl overflow-y-auto flex flex-col md:flex-row h-full max-h-[92vh] md:max-h-[85vh] shadow-2xl relative"
       >
+        {/* Desktop Close Button: Absolute positioned inside the card */}
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 z-30 p-2 bg-black/50 rounded-full hover:bg-white/10 transition-colors text-white"
+          className="hidden md:flex absolute top-4 right-4 z-30 p-2 bg-black/50 rounded-full hover:bg-white/10 transition-colors text-white"
+          aria-label="Close modal"
         >
           <X className="w-5 h-5 md:w-6 md:h-6" />
         </button>

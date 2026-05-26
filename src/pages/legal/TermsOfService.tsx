@@ -31,5 +31,16 @@ export const TermsOfService = () => (
       <h2>4. Limitation of Liability</h2>
       <p>To the maximum extent permitted by law, IFXTrades is not liable for losses resulting from use of or inability to use the platform, including trading outcomes, interruptions, or third-party service failures.</p>
     </section>
+
+    <section>
+      <h2>5. Promotional Campaigns & VPS Hosting ("Promo")</h2>
+      <p>Under active promotional offers (the "Promo"), eligible systematic users may qualify for a complimentary ultra-low latency VPS hosting server setup. The following conditions govern eligibility under the Promo:</p>
+      <ul>
+        <li>The client must open and maintain a fully funded active trading account with one of our officially partnered B2B brokerages.</li>
+        <li>The minimum capital balance maintained in the partnered trading account must exceed $1,000 USD at all times.</li>
+        <li>Compromising account integrity, fraudulent referrals, or failing to maintain the minimum balance will result in immediate termination of the complimentary VPS hosting server.</li>
+        <li>The Promo is subject to availability and may be modified, suspended, or terminated at any time at the platform's sole discretion without prior notice.</li>
+      </ul>
+    </section>
   </LegalDocument>
 );

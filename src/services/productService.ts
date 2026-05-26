@@ -15,7 +15,7 @@ export const productService = {
         .select(`
           id, name, description, price, category, video_explanation_url, image_url, created_at, 
           performance_data, long_plan_offers, strategy_details, risk_profile, q_and_a, 
-          terms_and_conditions, strategy_graph_url, backtesting_result_url
+          terms_and_conditions, strategy_graph_url, backtesting_result_url, metadata
         `)
         .order("created_at", { ascending: false });
 

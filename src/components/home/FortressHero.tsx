@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { motion, useScroll, useTransform, useSpring } from "motion/react";
-import { ArrowRight, ChevronDown, Play, ShieldCheck, Zap, Globe, Timer, Lock } from "lucide-react";
+import { ArrowRight, ChevronDown, Play, ShieldCheck, Zap, Globe, Timer, Lock, Server } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const EASING = [0.4, 0, 0.2, 1] as const;
@@ -38,6 +38,7 @@ const TRUST_ITEMS = [
   { icon: Lock, label: "256-bit Encrypted" },
   { icon: Timer, label: "<50ms Execution" },
   { icon: Globe, label: "40+ Countries" },
+  { icon: Server, label: "VPS Hosting*" },
   { icon: ShieldCheck, label: "Audit Verified" },
 ];
 
@@ -233,6 +234,18 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
               <span className="text-[8px] sm:text-[9px] font-bold uppercase tracking-[0.2em] text-white/30">{item.label}</span>
             </div>
           ))}
+        </motion.div>
+
+        {/* Smallest Star Footnote */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.08 }}
+          whileHover={{ opacity: 0.8 }}
+          transition={{ delay: 0.7, duration: 0.5 }}
+          className="mt-3 text-[5px] sm:text-[6px] text-white/40 tracking-widest uppercase font-mono transition-opacity select-none cursor-help"
+          title="VPS Promotion: Complimentary ultra-low latency VPS server setup is available for all active funded clients. Detailed requirements and conditions are specified in our official Terms of Service."
+        >
+          *Complimentary partner server programs. Terms apply.
         </motion.div>
       </div>
 
