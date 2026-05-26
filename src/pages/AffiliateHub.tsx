@@ -12,7 +12,8 @@ import {
   ShieldCheck,
   Activity,
   Zap,
-  LayoutDashboard
+  LayoutDashboard,
+  Trophy
 } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "../contexts/AuthContext";
@@ -33,6 +34,23 @@ export const AffiliateHub = () => {
     commissions: 450,
     pendingPayouts: 150
   });
+
+  const getTierDetails = () => {
+    const clicks = stats.clicks || 0;
+    const earnings = stats.commissions || 0;
+    if (clicks > 500 || earnings > 1000) {
+      return { name: "VIP Infinite", color: "from-amber-400/20 to-amber-600/20 border-amber-500/30 text-amber-300", glow: "shadow-[0_0_35px_rgba(245,158,11,0.25)]" };
+    }
+    if (clicks > 200 || earnings > 500) {
+      return { name: "Platinum Pro", color: "from-slate-400/20 to-slate-600/20 border-slate-400/30 text-slate-200", glow: "shadow-[0_0_25px_rgba(203,213,225,0.15)]" };
+    }
+    if (clicks > 100 || earnings > 200) {
+      return { name: "Gold Associate", color: "from-yellow-500/20 to-yellow-600/20 border-yellow-500/30 text-yellow-300", glow: "shadow-[0_0_20px_rgba(234,179,8,0.15)]" };
+    }
+    return { name: "Silver Elite", color: "from-zinc-500/20 to-zinc-600/20 border-zinc-500/30 text-zinc-300", glow: "" };
+  };
+
+  const tier = getTierDetails();
 
   useEffect(() => {
     if (userProfile?.id) {
@@ -134,9 +152,15 @@ export const AffiliateHub = () => {
             className="flex flex-col md:flex-row md:items-end justify-between gap-8"
           >
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-mono tracking-widest mb-4 uppercase">
-                <LayoutDashboard className="w-3 h-3" />
-                Growth Protocol Active
+              <div className="flex flex-wrap items-center gap-3 mb-4">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-mono tracking-widest uppercase">
+                  <LayoutDashboard className="w-3 h-3" />
+                  Growth Protocol Active
+                </div>
+                <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r ${tier.color} border border-white/10 text-[9px] font-black uppercase tracking-widest ${tier.glow}`}>
+                  <Trophy className="w-3 h-3 text-emerald-400" />
+                  {tier.name}
+                </div>
               </div>
               <h1 className="text-4xl md:text-6xl font-black text-white uppercase italic tracking-tighter leading-none">
                 Affiliate <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">Terminal</span>

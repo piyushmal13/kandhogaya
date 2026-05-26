@@ -13,6 +13,7 @@ import { PageMeta } from "../components/site/PageMeta";
 import { useAuth } from "../contexts/AuthContext";
 import { useToast } from "../contexts/ToastContext";
 import { ResizedImage } from "../components/ui/ResizedImage";
+import { supabase } from "../lib/supabase";
 
 import { useWebinar } from "../hooks/useWebinars";
 import { webinarService } from "../services/webinarService";
@@ -24,11 +25,38 @@ export const WebinarDetail = () => {
   const [showRegModal, setShowRegModal] = useState(false);
   const [messages, setMessages] = useState<any[]>([]);
   const [newMessage, setNewMessage] = useState("");
+  const [questionText, setQuestionText] = useState("");
+  const [submittingQuestion, setSubmittingQuestion] = useState(false);
   const [activeTab, setActiveTab] = useState("overview"); // chat, agenda, resources
   const chatEndRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
-  const { success } = useToast();
+  const { success, error: toastError } = useToast();
   const particles = React.useMemo(() => new Array(20).fill(null).map((_, i) => ({ id: `particle-${i}` })), []);
+
+  const handlePostQuestion = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!questionText.trim() || !user || !id) return;
+    setSubmittingQuestion(true);
+    try {
+      const currentQA = Array.isArray(webinar?.q_and_a) ? [...webinar.q_and_a] : [];
+      const newQA = [...currentQA, { question: questionText, answer: "Awaiting research desk response...", asked_by: user.email }];
+      
+      const { error } = await supabase
+        .from('webinars')
+        .update({ q_and_a: newQA })
+        .eq('id', id);
+
+      if (error) throw error;
+      success("Question dispatched to research desk.");
+      setQuestionText("");
+      if (webinar) webinar.q_and_a = newQA;
+    } catch (err: any) {
+      console.error(err);
+      toastError(err.message);
+    } finally {
+      setSubmittingQuestion(false);
+    }
+  };
 
   useEffect(() => {
     const checkReg = async () => {
@@ -353,21 +381,66 @@ export const WebinarDetail = () => {
                 )}
 
                 {activeTab === "qa" && (
-                  <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 space-y-4">
-                    <h3 className="text-xs font-black text-white uppercase tracking-widest mb-8">Intelligence Retrieval</h3>
-                    {Array.isArray(webinar.q_and_a) ? webinar.q_and_a.map((qa: any) => (
-                      <div key={qa.question} className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-emerald-500/20 transition-colors">
-                        <h4 className="text-white font-bold text-sm mb-3 flex items-start gap-3">
-                          <span className="text-emerald-500 font-black">Q.</span>
-                          {qa.question}
-                        </h4>
-                        <p className="text-white/40 leading-relaxed text-xs flex items-start gap-3 ml-4">
-                          {qa.answer}
-                        </p>
+                  <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 space-y-8">
+                    <div className="flex items-center justify-between border-b border-white/5 pb-4">
+                      <h3 className="text-xs font-black text-white uppercase tracking-widest">Intelligence Retrieval</h3>
+                      <span className="text-[9px] font-black text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                        Live with Analyst
+                      </span>
+                    </div>
+
+                    {/* Question submission form */}
+                    {user ? (
+                      <form onSubmit={handlePostQuestion} className="p-6 rounded-2xl bg-white/[0.02] border border-white/10 space-y-4">
+                        <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest block">Dispatch intelligence query directly to lead strategist</span>
+                        <div className="flex gap-4">
+                          <input 
+                            type="text" 
+                            placeholder="Submit your strategy or execution query..." 
+                            value={questionText}
+                            onChange={(e) => setQuestionText(e.target.value)}
+                            disabled={submittingQuestion}
+                            className="flex-1 bg-black/40 border border-white/10 rounded-xl px-4 py-3.5 text-xs text-white outline-none focus:border-emerald-500/30 transition-all placeholder-white/20"
+                          />
+                          <button 
+                            type="submit" 
+                            disabled={submittingQuestion || !questionText.trim()}
+                            className="px-6 py-3.5 bg-emerald-500 text-black text-xs font-black uppercase tracking-wider rounded-xl hover:bg-emerald-400 disabled:opacity-50 transition-all flex items-center gap-2"
+                          >
+                            {submittingQuestion ? "Sending..." : "Submit Query"}
+                            <Send className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </form>
+                    ) : (
+                      <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 text-center">
+                        <p className="text-xs text-gray-500 uppercase font-black tracking-widest">Login to establish transmission query clearance.</p>
                       </div>
-                    )) : (
-                      <p className="text-gray-600 text-xs italic">No Q&A provided for this session yet.</p>
                     )}
+
+                    <div className="space-y-4">
+                      {Array.isArray(webinar.q_and_a) && webinar.q_and_a.length > 0 ? webinar.q_and_a.map((qa: any, idx: number) => (
+                        <div key={`${qa.question}-${idx}`} className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-emerald-500/20 transition-all">
+                          <div className="flex items-center justify-between mb-4">
+                            <h4 className="text-white font-bold text-sm flex items-start gap-3">
+                              <span className="text-emerald-500 font-black">Q.</span>
+                              {qa.question}
+                            </h4>
+                            {qa.asked_by && (
+                              <span className="text-[8px] font-mono text-white/20 uppercase">Clearance: {qa.asked_by.slice(0, 10)}...</span>
+                            )}
+                          </div>
+                          <p className="text-white/40 leading-relaxed text-xs flex items-start gap-3 ml-4">
+                            <span className="text-cyan-500 font-black">A.</span>
+                            {qa.answer}
+                          </p>
+                        </div>
+                      )) : (
+                        <div className="py-12 text-center border border-dashed border-white/5 rounded-3xl bg-white/[0.01]">
+                          <p className="text-[10px] text-gray-600 font-black uppercase tracking-widest">No intelligence nodes resolved for this session.</p>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
