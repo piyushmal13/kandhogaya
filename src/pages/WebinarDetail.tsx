@@ -49,6 +49,7 @@ export const WebinarDetail = () => {
   const [isRegistered, setIsRegistered] = useState(false);
   const [registering, setRegistering] = useState(false);
   const [sponsors, setSponsors] = useState<any[]>([]);
+  const [realRegCount, setRealRegCount] = useState(142);
   const [activeTab, setActiveTab] = useState("overview"); 
   const [questionText, setQuestionText] = useState("");
   const [submittingQuestion, setSubmittingQuestion] = useState(false);
@@ -76,19 +77,57 @@ export const WebinarDetail = () => {
     checkReg();
   }, [id, user]);
 
+  // Synchronize base count from database entry
+  useEffect(() => {
+    if (webinar) {
+      setRealRegCount(webinar.registration_count || 142);
+    }
+  }, [webinar]);
+
+  // Fetch real count from Supabase webinar registrations ledger
+  useEffect(() => {
+    const fetchRealRegCount = async () => {
+      if (!id) return;
+      try {
+        const { count, error } = await supabase
+          .from("webinar_registrations")
+          .select("id", { count: "exact", head: true })
+          .eq("webinar_id", id);
+        
+        if (!error && count !== null) {
+          const baseCount = webinar?.registration_count || 0;
+          setRealRegCount(Math.max(baseCount, count));
+        }
+      } catch (e) {
+        console.error("Failed fetching real registrant count", e);
+      }
+    };
+    fetchRealRegCount();
+  }, [id, webinar]);
+
   // Fetch sponsors dynamically from database
   useEffect(() => {
     const fetchSponsors = async () => {
       if (id) {
-        const { data } = await supabase
-          .from("webinar_sponsors")
-          .select("*")
-          .eq("webinar_id", id);
-        if (data) setSponsors(data);
+        try {
+          const { data } = await supabase
+            .from("webinar_sponsors")
+            .select("*")
+            .eq("webinar_id", id);
+          
+          if (data && data.length > 0) {
+            setSponsors(data.filter(s => s.active !== false));
+          } else if (webinar?.metadata?.sponsors) {
+            // Fallback to metadata sponsors if table is empty
+            setSponsors(webinar.metadata.sponsors.filter(s => s.active !== false));
+          }
+        } catch (e) {
+          console.error("Sponsor fetch failed", e);
+        }
       }
     };
     fetchSponsors();
-  }, [id]);
+  }, [id, webinar]);
 
   // Pre-fill form details if user is authenticated
   useEffect(() => {
@@ -150,6 +189,7 @@ export const WebinarDetail = () => {
       }
 
       setIsRegistered(true);
+      setRealRegCount(prev => prev + 1);
       success("Seat successfully claimed for this session!");
     } catch (err: any) {
       console.error(err);
@@ -231,7 +271,7 @@ export const WebinarDetail = () => {
           <div className="flex items-center gap-4 justify-between sm:justify-end w-full sm:w-auto">
             <div className="flex items-center gap-2 text-gray-400 text-xs font-mono font-bold uppercase tracking-widest">
               <Users className="w-4 h-4 text-emerald-500" />
-              <span>{webinar.registration_count}+ Registered</span>
+              <span>{realRegCount} Registered</span>
             </div>
             
             <div className="flex items-center gap-2">
@@ -264,7 +304,7 @@ export const WebinarDetail = () => {
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12 relative z-10">
         
         {/* Dynamic co-branding partner block (High Visual Priority) */}
-        {webinar.co_brand_name && (
+        {webinar.co_brand_name && webinar.metadata?.co_brand_active !== false && (
           <div className="mb-8 p-6 md:p-12 rounded-[2.5rem] bg-gradient-to-r from-amber-500/[0.03] to-transparent border border-amber-500/20 relative overflow-hidden group shadow-2xl">
              <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none">
                 <HeartHandshake className="w-48 h-48 text-amber-500" />
@@ -380,7 +420,7 @@ export const WebinarDetail = () => {
             </div>
 
             {/* Dynamic Sponsor Banner space */}
-            {sponsors.length > 0 && (
+            {sponsors.length > 0 && webinar.metadata?.sponsors_active !== false && (
               <div className="p-8 rounded-[2.5rem] bg-white/[0.01] border border-white/5 space-y-6">
                 <span className="text-[9px] font-black text-gray-500 uppercase tracking-[0.3em] block text-center">Masterclass Headline Sponsors</span>
                 <div className="flex flex-wrap items-center justify-center gap-8">

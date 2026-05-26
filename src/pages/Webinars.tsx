@@ -50,19 +50,19 @@ export const Webinars = () => {
           </div>
 
           {/* Institutional Trust Badges */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-6 rounded-[2rem] bg-white/[0.01] border border-white/5 backdrop-blur-sm">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 p-4 sm:p-6 rounded-2xl sm:rounded-[2rem] bg-white/[0.01] border border-white/5 backdrop-blur-sm">
             {[
-              { icon: ShieldCheck, title: "Structured Curriculum", desc: "Professionally curated syllabus standards" },
-              { icon: BookOpen, title: "Broker Integrated", desc: "Designed for liquidity providers & clients" },
-              { icon: Video, title: "On-Demand Access", desc: "Stream pre-recorded macro masterclasses" },
-              { icon: HelpCircle, title: "Interactive Q&A", desc: "Submit queries directly to strategy leaders" }
+              { icon: ShieldCheck, title: "Curriculum", desc: "Curated syllabus" },
+              { icon: BookOpen, title: "Integrated", desc: "Liquidity designs" },
+              { icon: Video, title: "On-Demand", desc: "Micro classes" },
+              { icon: HelpCircle, title: "Interactive Q&A", desc: "Strategy queries" }
             ].map((metric) => (
-              <div key={metric.title} className="p-4 flex flex-col items-center text-center space-y-2 group hover:bg-white/[0.01] rounded-2xl transition-all border border-transparent hover:border-white/5">
-                <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 group-hover:scale-105 transition-transform">
-                  <metric.icon className="w-5 h-5 text-emerald-400" />
+              <div key={metric.title} className="p-2 sm:p-4 flex flex-col items-center text-center space-y-1.5 group hover:bg-white/[0.01] rounded-2xl transition-all border border-transparent hover:border-white/5">
+                <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 group-hover:scale-105 transition-transform">
+                  <metric.icon className="w-3.5 h-3.5 sm:w-5 sm:h-5 text-emerald-400" />
                 </div>
-                <h4 className="text-xs font-bold text-white uppercase tracking-wider">{metric.title}</h4>
-                <p className="text-[10px] text-gray-400">{metric.desc}</p>
+                <h4 className="text-[10px] sm:text-xs font-bold text-white uppercase tracking-wider leading-none">{metric.title}</h4>
+                <p className="text-[8px] sm:text-[10px] text-gray-400 leading-tight">{metric.desc}</p>
               </div>
             ))}
           </div>
@@ -76,16 +76,16 @@ export const Webinars = () => {
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 15 }}
-                className="space-y-6 bg-red-500/[0.01] border border-red-500/15 p-6 rounded-[2rem] relative overflow-hidden"
+                className="space-y-6 bg-emerald-500/[0.01] border border-emerald-500/10 p-6 rounded-[2rem] relative overflow-hidden"
               >
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(239,68,68,0.03),transparent_70%)] pointer-events-none" />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.03),transparent_70%)] pointer-events-none" />
                 <div className="flex items-center justify-between relative z-10 flex-wrap gap-4">
                   <div className="flex items-center gap-2">
-                    <span className="relative flex h-2 w-2">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                    <span className="relative flex h-1.5 w-1.5">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
                     </span>
-                    <span className="text-[10px] font-black text-red-400 uppercase tracking-widest">LIVE STREAM CURRENTLY ACTIVE</span>
+                    <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest">TRANSMISSION BROADCAST ONLINE</span>
                   </div>
                 </div>
                 <div className="relative z-10 rounded-2xl overflow-hidden border border-white/5 shadow-2xl">

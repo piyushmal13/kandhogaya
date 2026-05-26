@@ -9,6 +9,8 @@ interface ExtendedWebinar extends Webinar {
   co_brand_name?: string;
   co_brand_logo?: string;
   co_brand_banner?: string;
+  speaker_role?: string;
+  speaker_profile_url?: string;
 }
 
 export function WebinarCard({ webinar }: Readonly<{ webinar: ExtendedWebinar }>) {
