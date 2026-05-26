@@ -48,6 +48,7 @@ export interface Webinar {
   price: number;
   created_at: string;
   speaker_profile_url?: string;
+  speaker_role?: string;
   brand_logo_url?: string;
   webinar_image_url?: string;
   sponsor_logos: string[]; // jsonb

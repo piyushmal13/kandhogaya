@@ -32,6 +32,7 @@ interface ExtendedWebinar {
   co_brand_name?: string;
   co_brand_logo?: string;
   co_brand_banner?: string;
+  about_content?: string;
   metadata?: {
     partner_name?: string;
     learning_points?: string[];
