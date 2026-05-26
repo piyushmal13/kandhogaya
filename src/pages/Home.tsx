@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { PageMeta } from "../components/site/PageMeta";
 
 // Institutional Components
 import { FortressHero } from "../components/home/FortressHero";
+import { OperationalPillars } from "../components/home/OperationalPillars";
+import { SessionBookingModal } from "../components/ui/SessionBookingModal";
 import { BrandAuthority } from "../components/home/BrandAuthority";
 import { TrustGrid } from "../components/home/TrustGrid";
 import { PerformanceHistory } from "../components/home/PerformanceHistory";
@@ -17,9 +19,7 @@ import { SocialProof } from "../components/home/SocialProof";
 import { AdBanner } from "../components/ui/AdBanner";
 import { CustomAlgoTeam } from "../components/home/CustomAlgoTeam";
 
-
 import { InstitutionalAlgorithms } from "../components/home/InstitutionalAlgorithms";
-
 
 import { faqSchema, educationalOrganizationSchema, websiteSchema, breadcrumbSchema } from "../utils/structuredData";
 
@@ -28,6 +28,9 @@ import { getFaqs } from "../services/apiHandlers";
 import { useFlags } from "../hooks/useFlags";
 
 const Home = () => {
+  const [isBookingOpen, setBookingOpen] = useState(false);
+  const [defaultObjective, setDefaultObjective] = useState("");
+  
   const { flags } = useFlags();
   const { data: homeFaqs = [] } = useQuery({
     queryKey: ['home_faqs'],
@@ -54,6 +57,17 @@ const Home = () => {
     question: f.title || f.question,
     answer: f.content || f.body || f.answer
   }));
+
+  const triggerSessionRequest = () => {
+    setDefaultObjective("General Session Consultation Request");
+    setBookingOpen(true);
+  };
+
+  const triggerBespokeBuildRequest = () => {
+    setDefaultObjective("Bespoke Quantitative Algorithm Custom Build Request");
+    setBookingOpen(true);
+  };
+
   return (
     <>
       <PageMeta
@@ -82,7 +96,15 @@ const Home = () => {
 
       <main>
         {/* L1: Elite Execution Hero */}
-        <FortressHero />
+        <FortressHero 
+          onRequestSession={triggerSessionRequest}
+          onRequestBuild={triggerBespokeBuildRequest}
+        />
+
+        {/* L1.5: [NEW] Operational Scope Pillars */}
+        <OperationalPillars 
+          onRequestBuild={triggerBespokeBuildRequest}
+        />
 
         {/* Editable advertisement banner (Supabase-driven) */}
         <AdBanner placement="home" />
@@ -134,6 +156,13 @@ const Home = () => {
         {/* L11: Capital Inquiry / Consultation */}
         {flags.home_consultation && <ConsultationSection />}
       </main>
+
+      {/* Global Interactive Intake Onboarding Modal */}
+      <SessionBookingModal 
+        isOpen={isBookingOpen}
+        onClose={() => setBookingOpen(false)}
+        defaultObjective={defaultObjective}
+      />
     </>
   );
 };

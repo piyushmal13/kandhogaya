@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { motion, useScroll, useTransform, useSpring } from "motion/react";
 import { ArrowRight, ChevronDown, Play, ShieldCheck, Zap, Globe, Timer, Lock } from "lucide-react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const EASING = [0.4, 0, 0.2, 1] as const;
 const ENTRY = [0.16, 1, 0.3, 1] as const;
@@ -9,6 +9,11 @@ const ENTRY = [0.16, 1, 0.3, 1] as const;
 import { useFeatureFlag } from "@/hooks/useFeatureFlag";
 import { supabase } from "@/lib/supabase";
 import { EliteButton } from "@/components/ui/Button";
+
+interface FortressHeroProps {
+  onRequestSession: () => void;
+  onRequestBuild: () => void;
+}
 
 // ── FLOATING PARTICLES ──
 const FloatingParticles = () => (
@@ -36,7 +41,7 @@ const TRUST_ITEMS = [
   { icon: ShieldCheck, label: "Audit Verified" },
 ];
 
-export const FortressHero = () => {
+export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, onRequestBuild }) => {
   const { isEnabled: isTickerActive } = useFeatureFlag('market_ticker_active', true);
   const [tickers, setTickers] = useState<string[]>([]);
   const sectionRef = useRef<HTMLElement>(null);
@@ -90,16 +95,9 @@ export const FortressHero = () => {
     window.scrollBy({ top: window.innerHeight, behavior: "smooth" });
   }, []);
 
-  const handleRequestSession = (e: React.MouseEvent) => {
+  const handleRequestSessionClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (location.pathname !== '/') {
-      navigate('/?session=true');
-      return;
-    }
-    const el = document.getElementById('consultation');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
+    onRequestSession();
   };
 
   const handleSeeResults = (e: React.MouseEvent) => {
@@ -180,7 +178,7 @@ export const FortressHero = () => {
           transition={{ delay: 0.2, duration: 0.8, ease: ENTRY }}
         >
           <span className="block text-[clamp(1.8rem,7vw,5.5rem)] tracking-tighter">World-Class</span>
-          <span className="block text-[clamp(2.0rem,8.2vw,6.5rem)] italic font-serif text-shimmer pr-2 tracking-tighter">Institutional FX</span>
+          <span className="block text-[clamp(2.0rem,8.2vw,6.5rem)] italic font-serif text-shimmer pr-8 md:pr-10 tracking-tighter inline-block select-none">Institutional FX</span>
           <span className="block text-[clamp(1.8rem,7vw,5.5rem)] tracking-tighter">&amp; Macro.</span>
         </motion.h1>
 
@@ -202,17 +200,17 @@ export const FortressHero = () => {
           transition={{ delay: 0.45, duration: 0.6, ease: EASING }}
           className="flex flex-row items-center gap-3.5 sm:gap-5 justify-center w-full px-2 max-w-md mx-auto z-30"
         >
-          <a href="#consultation" onClick={handleRequestSession} className="shrink-0">
+          <button onClick={handleRequestSessionClick} className="shrink-0">
             <EliteButton variant="premium-gold" size="sm" rightIcon={<ArrowRight className="w-3.5 h-3.5" />}>
               Request Session
             </EliteButton>
-          </a>
+          </button>
 
-          <a href="#performance" onClick={handleSeeResults} className="shrink-0">
-            <EliteButton variant="secondary" size="sm" leftIcon={<Play className="w-3 h-3 text-emerald-400 fill-emerald-400/20" />}>
+          <button onClick={handleSeeResults} className="shrink-0">
+            <EliteButton variant="secondary" size="sm" leftIcon={<Play className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400/20" />}>
               See Results
             </EliteButton>
-          </a>
+          </button>
         </motion.div>
 
         {/* Trust Badges */}
