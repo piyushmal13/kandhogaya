@@ -210,7 +210,7 @@ export const Marketplace = () => {
                  <div className="absolute inset-0 bg-emerald-500/5 blur-[100px] rounded-full opacity-30" />
                  <div className="relative rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl">
                     <img 
-                      src="/brain/efc31965-26c1-4320-a414-7f19a27d9e96/mt5_elite_terminal_v2_1777798969670.png" 
+                      src="/mt5_elite_terminal_v3.png" 
                       alt="MT5 Elite Terminal" 
                       className="w-full h-auto"
                     />
