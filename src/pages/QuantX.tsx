@@ -108,7 +108,7 @@ export const QuantX = () => {
       />
 
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden border-b border-white/[0.05]">
+      <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden border-b border-white/[0.05]">
         <motion.div 
           style={{ y: backgroundY }}
           className="absolute inset-0 z-0"
@@ -117,7 +117,7 @@ export const QuantX = () => {
           <div className="absolute inset-0 opacity-[0.03] bg-[url('/noise.png')]" />
         </motion.div>
 
-        <div className="container mx-auto px-6 relative z-10 text-center pt-20 max-w-5xl">
+        <div className="container mx-auto px-6 relative z-10 text-center pt-16 max-w-5xl">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
