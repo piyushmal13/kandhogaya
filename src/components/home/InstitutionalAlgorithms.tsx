@@ -70,36 +70,36 @@ export const InstitutionalAlgorithms = () => {
             </div>
 
             <div className="pt-6">
-              <Button variant="elite" className="px-10 py-5">
-                Request Custom Build <ChevronRight size={18} />
+              <Button variant="elite" className="px-8 py-4 md:px-10 md:py-5 whitespace-nowrap" rightIcon={<ChevronRight size={18} />}>
+                Request Custom Build
               </Button>
             </div>
           </div>
 
           <div className="relative">
-            <div className="aspect-square rounded-[4rem] bg-gradient-to-br from-white/[0.05] to-transparent border border-white/[0.1] p-8 md:p-16 relative overflow-hidden group">
+            <div className="h-auto min-h-[400px] lg:aspect-square rounded-[3rem] sm:rounded-[4rem] bg-gradient-to-br from-white/[0.05] to-transparent border border-white/[0.1] p-6 sm:p-10 md:p-16 relative overflow-hidden group">
                <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.05] group-hover:opacity-[0.1] transition-opacity" />
                <div className="absolute inset-0 bg-emerald-500/[0.02] blur-[100px]" />
                
-               <div className="relative h-full flex flex-col justify-center space-y-12">
+               <div className="relative h-full flex flex-col justify-center space-y-8 sm:space-y-12">
                   <div className="flex items-center justify-between">
                      <div className="space-y-2">
                         <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Model Synthesis</span>
-                        <div className="text-3xl font-black text-white italic">Institutional Validation</div>
+                        <div className="text-xl sm:text-2xl md:text-3xl font-black text-white italic">Institutional Validation</div>
                      </div>
-                     <Terminal className="text-emerald-500/40 w-12 h-12" />
+                     <Terminal className="text-emerald-500/40 w-10 h-10 sm:w-12 sm:h-12 shrink-0" />
                   </div>
 
                   <div className="space-y-6">
                      {[
-                       { label: 'Latency Optimization', status: 'Sub-Millisecond', value: 100 },
-                       { label: 'Risk Intelligence', status: 'Strict Controls', value: 92 },
-                       { label: 'Data Processing', status: 'High Fidelity', value: 96 }
+                       { label: 'Execution Speed', status: 'Sub-Millisecond', value: 100 },
+                       { label: 'Capital Preservation Stop-Loss', status: 'Enforced', value: 92 },
+                       { label: 'Backtest Validation', status: 'Verified', value: 96 }
                      ].map((metric, i) => (
                        <div key={metric.label} className="space-y-2">
-                          <div className="flex justify-between text-[9px] font-black uppercase tracking-widest text-white/30">
-                             <span>{metric.label}</span>
-                             <span className="text-emerald-500">{metric.status}</span>
+                          <div className="flex justify-between text-[9px] font-black uppercase tracking-widest text-white/30 gap-4">
+                             <span className="truncate">{metric.label}</span>
+                             <span className="text-emerald-500 shrink-0">{metric.status}</span>
                           </div>
                           <div className="h-1 bg-white/5 rounded-full overflow-hidden">
                              <motion.div 
@@ -113,11 +113,11 @@ export const InstitutionalAlgorithms = () => {
                      ))}
                   </div>
 
-                  <div className="pt-4 flex items-center gap-4">
-                     <div className="w-10 h-10 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center">
+                  <div className="pt-2 flex items-center gap-4">
+                     <div className="w-10 h-10 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center shrink-0">
                         <Zap size={18} className="text-emerald-400" />
                      </div>
-                     <span className="text-[11px] font-black text-white/60 uppercase tracking-[0.2em]">Engine v8.2 Elite Activated</span>
+                     <span className="text-[11px] font-black text-white/60 uppercase tracking-[0.2em] leading-none">Quantitative Engine Active</span>
                   </div>
                </div>
             </div>

@@ -1,0 +1,107 @@
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '../lib/supabase';
+import { useAuth } from '../contexts/AuthContext';
+import type { BotLicense } from '../types';
+
+export interface UserDashboardData {
+  licenses: BotLicense[];
+  purchases: { id: string; product_name: string; purchased_at: string; status: string }[];
+  webinarRegistrations: { id: string; title: string; date: string; status: string }[];
+  totalSpent: number;
+  memberSince: string | null;
+}
+
+/**
+ * Unified User Dashboard Hook
+ * Fetches all user-specific data in a single parallel batch.
+ * Every dashboard widget can consume from this shared cache.
+ */
+export function useDashboardData() {
+  const { user } = useAuth();
+
+  return useQuery({
+    queryKey: ['dashboard_data', user?.id],
+    queryFn: async (): Promise<UserDashboardData> => {
+      if (!user?.id) {
+        return {
+          licenses: [],
+          purchases: [],
+          webinarRegistrations: [],
+          totalSpent: 0,
+          memberSince: null,
+        };
+      }
+
+      const [licensesRes, purchasesRes, webinarsRes, userRes] = await Promise.all([
+        // Active bot licenses with real keys
+        supabase
+          .from('bot_licenses')
+          .select('id, user_id, algo_id, license_key, is_active, expires_at, created_at')
+          .eq('user_id', user.id)
+          .eq('is_active', true)
+          .order('created_at', { ascending: false }),
+
+        // User's product purchases via user_entitlements
+        supabase
+          .from('user_entitlements')
+          .select(`
+            id, active, expires_at, created_at,
+            product:product_id ( name, price )
+          `)
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false }),
+
+        // Webinar registrations
+        supabase
+          .from('webinar_registrations')
+          .select(`
+            id, created_at, payment_status,
+            webinars ( title, date_time )
+          `)
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(10),
+
+        // User profile for member-since
+        supabase
+          .from('users')
+          .select('created_at')
+          .eq('id', user.id)
+          .maybeSingle(),
+      ]);
+
+      const licenses = (licensesRes.data || []) as BotLicense[];
+
+      const purchases = (purchasesRes.data || []).map((e: any) => ({
+        id: e.id,
+        product_name: e.product?.name || 'Algorithm License',
+        purchased_at: e.created_at,
+        status: e.active ? 'Active' : 'Expired',
+      }));
+
+      const webinarRegistrations = (webinarsRes.data || []).map((r: any) => ({
+        id: r.id,
+        title: r.webinars?.title || 'Session',
+        date: r.webinars?.date_time || r.created_at,
+        status: r.payment_status === 'completed' ? 'Confirmed' : 'Pending',
+      }));
+
+      const totalSpent = (purchasesRes.data || []).reduce(
+        (sum: number, e: any) => sum + (e.product?.price || 0),
+        0
+      );
+
+      return {
+        licenses,
+        purchases,
+        webinarRegistrations,
+        totalSpent,
+        memberSince: userRes.data?.created_at || null,
+      };
+    },
+    staleTime: 60_000,
+    refetchInterval: 120_000,
+    enabled: !!user?.id,
+    retry: 2,
+  });
+}

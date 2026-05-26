@@ -25,7 +25,7 @@ const IntelligenceLayer = ({ number, title, description, inputs, outputs, icon: 
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay, duration: 0.8 }}
-      className="relative p-8 rounded-[2rem] bg-white/[0.02] border border-white/[0.05] hover:border-emerald-500/20 transition-all group overflow-hidden"
+      className="relative p-6 sm:p-8 rounded-[1.75rem] sm:rounded-[2rem] bg-white/[0.02] border border-white/[0.05] hover:border-emerald-500/20 transition-all group overflow-hidden"
     >
       <div className="absolute top-0 right-0 p-8 opacity-[0.03] group-hover:opacity-[0.06] transition-opacity">
         <Icon size={120} />
@@ -33,36 +33,36 @@ const IntelligenceLayer = ({ number, title, description, inputs, outputs, icon: 
       
       <div className="relative z-10">
         <div className="flex items-center gap-4 mb-6">
-          <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
-            <Icon size={24} />
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
+            <Icon size={22} />
           </div>
           <div>
-            <span className="text-[10px] font-black tracking-[0.3em] text-emerald-500/60 uppercase">Layer {number}</span>
-            <h3 className="text-2xl font-bold text-white tracking-tight">{title}</h3>
+            <span className="text-[9px] font-black tracking-[0.3em] text-emerald-500/60 uppercase">Layer {number}</span>
+            <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">{title}</h3>
           </div>
         </div>
         
-        <p className="text-white/40 leading-relaxed mb-8 max-w-md">
+        <p className="text-xs sm:text-base text-white/40 leading-relaxed mb-6 sm:mb-8 max-w-md">
           {description}
         </p>
         
-        <div className="grid grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
           <div>
-            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#58F2B6]/80">
-              Elite Execution Environment <span className="text-white/20 ml-2">v2.0_ELITE</span>
+            <span className="block text-[8px] sm:text-[10px] font-black uppercase tracking-[0.3em] text-[#58F2B6]/80 mb-2 leading-none">
+              Elite Execution Environment
             </span>
-            <ul className="space-y-2">
+            <ul className="space-y-1.5">
               {inputs.map((input: string) => (
-                <li key={input} className="text-sm text-white/60 flex items-center gap-2">
-                  <div className="w-1 h-1 rounded-full bg-emerald-500/40" />
+                <li key={input} className="text-xs sm:text-sm text-white/60 flex items-center gap-2">
+                  <div className="w-1 h-1 rounded-full bg-emerald-500/40 shrink-0" />
                   {input}
                 </li>
               ))}
             </ul>
           </div>
           <div>
-            <span className="block text-[10px] font-black tracking-[0.2em] text-white/20 uppercase mb-3">Intelligence Output</span>
-            <div className="inline-flex px-3 py-1 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold tracking-wider">
+            <span className="block text-[8px] sm:text-[10px] font-black tracking-[0.2em] text-white/20 uppercase mb-2 leading-none">Intelligence Output</span>
+            <div className="inline-flex px-2.5 py-1 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] sm:text-xs font-bold tracking-wider">
               {outputs}
             </div>
           </div>
@@ -230,64 +230,64 @@ export const QuantX = () => {
       </section>
 
       {/* Execution Infrastructure */}
-      <section className="py-32 relative overflow-hidden">
+      <section className="py-24 md:py-32 relative overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-emerald-500/[0.03] rounded-full blur-[120px] pointer-events-none" />
         
         <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
             <div>
-              <h2 className="text-4xl md:text-6xl font-bold mb-12 tracking-tight">Institutional Research.</h2>
+              <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold mb-10 tracking-tight uppercase italic">Institutional Research.</h2>
               
-              <div className="space-y-12">
-                <div className="flex gap-6">
-                  <div className="w-12 h-12 shrink-0 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/60">
+              <div className="space-y-8 sm:space-y-12">
+                <div className="flex gap-4 sm:gap-6">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 shrink-0 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/60">
                     <Zap size={20} />
                   </div>
                   <div>
-                    <h4 className="text-xl font-bold mb-3">High-Fidelity Quantitative Data Feed</h4>
-                    <p className="text-white/40 leading-relaxed">Proprietary research pipelines feeding clean macroeconomic indices and price action structures into backtesting environments under academic supervision.</p>
+                    <h4 className="text-lg sm:text-xl font-bold mb-2">High-Fidelity Quantitative Data Feed</h4>
+                    <p className="text-xs sm:text-sm text-white/40 leading-relaxed">Proprietary research pipelines feeding clean macroeconomic indices and price action structures into backtesting environments under academic supervision.</p>
                   </div>
                 </div>
                 
-                <div className="flex gap-6">
-                  <div className="w-12 h-12 shrink-0 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/60">
+                <div className="flex gap-4 sm:gap-6">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 shrink-0 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/60">
                     <Database size={20} />
                   </div>
                   <div>
-                    <h4 className="text-xl font-bold mb-3">Secure Quantitative Workstations</h4>
-                    <p className="text-white/40 leading-relaxed">Secure cloud workstations and high-availability modeling engines featuring automated model versioning control and full auditability.</p>
+                    <h4 className="text-lg sm:text-xl font-bold mb-2">Secure Quantitative Workstations</h4>
+                    <p className="text-xs sm:text-sm text-white/40 leading-relaxed">Secure cloud workstations and high-availability modeling engines featuring automated model versioning control and full auditability.</p>
                   </div>
                 </div>
 
-                <div className="flex gap-6">
-                  <div className="w-12 h-12 shrink-0 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/60">
+                <div className="flex gap-4 sm:gap-6">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 shrink-0 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/60">
                     <LineChart size={20} />
                   </div>
                   <div>
-                    <h4 className="text-xl font-bold mb-3">Ongoing Model Validation</h4>
-                    <p className="text-white/40 leading-relaxed">Ongoing model validation. The research team systematically recalibrates algorithmic thresholds and regimes under human oversight to prevent statistical drift.</p>
+                    <h4 className="text-lg sm:text-xl font-bold mb-2">Ongoing Model Validation</h4>
+                    <p className="text-xs sm:text-sm text-white/40 leading-relaxed">Ongoing model validation. The research team systematically recalibrates algorithmic thresholds and regimes under human oversight to prevent statistical drift.</p>
                   </div>
                 </div>
               </div>
             </div>
 
             <div className="relative">
-              <div className="aspect-square rounded-[3rem] bg-gradient-to-br from-white/[0.05] to-transparent border border-white/[0.05] p-12 overflow-hidden group">
+              <div className="h-auto min-h-[300px] lg:aspect-square rounded-2xl sm:rounded-[3rem] bg-gradient-to-br from-white/[0.05] to-transparent border border-white/[0.05] p-6 sm:p-12 overflow-hidden group">
                 <div className="absolute inset-0 bg-emerald-500/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                 
                 {/* Visual Representation of the "Loop" */}
-                <div className="relative h-full flex flex-col justify-center items-center">
+                <div className="relative h-full flex flex-col justify-center items-center min-h-[250px]">
                   <motion.div
                     animate={{ rotate: 360 }}
                     transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
                     className="absolute inset-0 border border-emerald-500/10 rounded-full border-dashed"
                   />
                   <div className="text-center relative z-10">
-                    <div className="w-24 h-24 rounded-3xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mx-auto mb-6 shadow-[0_0_50px_-12px_rgba(16,185,129,0.5)]">
-                      <Cpu size={40} />
+                    <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-2xl sm:rounded-3xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mx-auto mb-4 sm:mb-6 shadow-[0_0_50px_-12px_rgba(16,185,129,0.5)]">
+                      <Cpu className="w-8 h-8 sm:w-10 sm:h-10 text-emerald-400" />
                     </div>
-                    <div className="text-[10px] font-black tracking-[0.5em] text-emerald-500 uppercase mb-2">Model Validation Enclave</div>
-                    <div className="text-2xl font-bold">MONITORING LAB</div>
+                    <div className="text-[9px] font-black tracking-[0.4em] text-emerald-500 uppercase mb-2">Model Validation Enclave</div>
+                    <div className="text-xl sm:text-2xl font-bold">MONITORING LAB</div>
                   </div>
                 </div>
               </div>

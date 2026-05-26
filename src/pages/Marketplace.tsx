@@ -8,7 +8,6 @@ import { AlgoDetailModal } from "../components/algorithms/AlgoDetailModal";
 import { PurchaseModal } from "../components/payments/PurchaseModal";
 import { productService } from "../services/productService";
 import { useAuth } from "../contexts/AuthContext";
-import { DashboardLayout } from "../components/institutional/DashboardLayout";
 import { useToast } from "../contexts/ToastContext";
 import { useNavigate } from "react-router-dom";
 import { Product } from "../types";
@@ -146,14 +145,14 @@ export const Marketplace = () => {
               animate={{ opacity: 1, x: 0 }}
               className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-emerald-500/[0.04] border border-emerald-500/[0.15] text-emerald-400 text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em]"
             >
-              Institutional Inventory
+              Algorithm Marketplace
             </motion.div>
             <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold mb-4 sm:mb-6 text-white tracking-tight leading-[0.9] uppercase italic">
               Institutional <br />
-              <span className="text-emerald-400">Allocations.</span>
+              <span className="text-emerald-400">Algorithms.</span>
             </h1>
             <p className="text-sm sm:text-base md:text-xl text-white/40 max-w-2xl font-medium leading-relaxed">
-              Professional execution models and systematic trading protocols designed for high-performance capital management.
+              Browse our collection of proven algorithmic trading systems. Each algorithm comes with full performance data, backtesting results, and detailed documentation.
             </p>
           </div>
 
@@ -227,7 +226,7 @@ export const Marketplace = () => {
                     Native MetaTrader 5 (MT5) integration with our proprietary bridge protocols. Experience zero-latency synchronization between our research models and your personal execution workstation.
                  </p>
                  <ul className="space-y-4">
-                    {['Automated Liquidity Discovery', 'Algorithmic Risk Enforcement', 'Institutional Order Slicing'].map(feature => (
+                    {['Automated Strategy Execution', 'Built-in Risk Management', 'Real-time Performance Tracking'].map(feature => (
                        <li key={feature} className="flex items-center gap-4 text-[11px] font-black uppercase tracking-widest text-white/60">
                           <div className="w-2 h-2 rounded-full bg-emerald-500" />
                           {feature}

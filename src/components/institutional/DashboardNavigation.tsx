@@ -3,21 +3,21 @@ import {
   LayoutDashboard, 
   Terminal, 
   Shield, 
-  BookOpen, 
   BarChart3, 
   Settings, 
   Zap
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 
 export function DashboardNavigation() {
   const location = useLocation();
+  const { userProfile } = useAuth();
   const navItems = [
     { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
     { icon: Terminal, label: 'Marketplace', path: '/marketplace' },
-    { icon: Shield, label: 'Signals', path: '/risk' },
-    { icon: BookOpen, label: 'Academy', path: '/academy' },
+    { icon: Shield, label: 'Signals', path: '/dashboard' },
     { icon: BarChart3, label: 'Performance', path: '/results' },
     { icon: Settings, label: 'Settings', path: '/settings' },
   ];
@@ -58,7 +58,9 @@ export function DashboardNavigation() {
       <div className="p-6 border-t border-white/5">
         <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/5">
           <p className="text-[9px] font-bold text-white/20 uppercase tracking-[0.2em] mb-1">Account Tier</p>
-          <p className="text-[11px] font-bold text-emerald-500 uppercase tracking-widest">Premium Access</p>
+          <p className="text-[11px] font-bold text-emerald-500 uppercase tracking-widest">
+            {userProfile?.isPro ? 'Premium Access' : 'Standard'}
+          </p>
         </div>
       </div>
     </div>

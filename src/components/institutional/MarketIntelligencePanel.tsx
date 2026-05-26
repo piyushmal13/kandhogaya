@@ -37,9 +37,9 @@ export function MarketIntelligencePanel() {
           <div className="flex items-center justify-between">
             <h4 className="text-[9px] font-black flex items-center gap-2 uppercase tracking-widest text-emerald-500">
               <Activity className="w-3 h-3" />
-              Strategic Intelligence
+              Market Pairs
             </h4>
-            <span className="text-[9px] font-mono text-white/20 uppercase">Live Exchange Feed</span>
+            <span className="text-[9px] font-mono text-white/20 uppercase">Live Prices</span>
           </div>
           
           <div className="space-y-3">
@@ -66,7 +66,7 @@ export function MarketIntelligencePanel() {
                       </div>
                       <div className="flex flex-col gap-1">
                         <span className="text-[11px] font-black uppercase text-white group-hover:text-emerald-400 transition-colors">{pair.symbol}</span>
-                        <span className="text-[9px] font-mono text-white/40">Verified Institutional Node</span>
+                        <span className="text-[9px] font-mono text-white/40">Forex Pair</span>
                       </div>
                     </div>
                     <div className="flex flex-col items-end">

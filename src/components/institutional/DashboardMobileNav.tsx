@@ -1,24 +1,30 @@
 import React from 'react';
 import { 
   LayoutDashboard, 
-  Terminal, 
-  Shield, 
-  BookOpen, 
+  ShoppingBag, 
   BarChart3, 
-  Settings 
+  Settings,
+  Home
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/contexts/AuthContext';
 
+/**
+ * DashboardMobileNav — Bottom navigation bar for mobile dashboard.
+ * Shows only relevant links. No Academy, no broken paths.
+ */
 export function DashboardMobileNav() {
   const location = useLocation();
+  const { userProfile } = useAuth();
+  const isAdmin = userProfile?.role === 'admin';
+
   const navItems = [
-    { icon: LayoutDashboard, label: 'Home', path: '/dashboard' },
-    { icon: Terminal, label: 'Market', path: '/marketplace' },
-    { icon: Shield, label: 'Signals', path: '/risk' },
-    { icon: BookOpen, label: 'Academy', path: '/academy' },
+    { icon: Home, label: 'Home', path: '/' },
+    { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
+    { icon: ShoppingBag, label: 'Market', path: '/marketplace' },
     { icon: BarChart3, label: 'Results', path: '/results' },
-    { icon: Settings, label: 'Admin', path: '/admin' },
+    ...(isAdmin ? [{ icon: Settings, label: 'Admin', path: '/admin' }] : []),
   ];
 
   return (

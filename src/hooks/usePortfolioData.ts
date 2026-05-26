@@ -1,42 +1,59 @@
 import { useQuery } from '@tanstack/react-query';
-import { supabase, safeQuery } from '../lib/supabase';
+import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 
 export interface PortfolioData {
   total: number;
   change: number;
   currency: string;
+  activeLicenses: number;
+  lastUpdated: string | null;
 }
 
 /**
- * Atomic Portfolio Data Hook
- * Fetches user equity and performance metrics with optimized egress management.
+ * User-Specific Portfolio Data Hook
+ * Fetches the authenticated user's equity, performance, and license count.
+ * Falls back gracefully if no user-specific data exists yet.
  */
 export function usePortfolioData() {
   const { user } = useAuth();
-  
+
   return useQuery({
-    queryKey: ['pulse_portfolio', user?.id],
-    queryFn: async () => {
-      // Fetch performance summary from consolidated table
-      const query = supabase
-        .from('performance_results')
-        .select('id, total_balance, daily_change, is_featured')
-        .eq('is_featured', true)
-        .maybeSingle();
-      
-      const result = await safeQuery<any>(query);
-      const data = Array.isArray(result) ? result[0] : (result?.data || result);
+    queryKey: ['portfolio', user?.id],
+    queryFn: async (): Promise<PortfolioData> => {
+      if (!user?.id) {
+        return { total: 0, change: 0, currency: 'USD', activeLicenses: 0, lastUpdated: null };
+      }
+
+      // Parallel fetch: user performance + active licenses count
+      const [perfRes, licenseRes] = await Promise.all([
+        supabase
+          .from('performance_results')
+          .select('total_balance, daily_change, last_updated')
+          .eq('user_id', user.id)
+          .order('last_updated', { ascending: false })
+          .limit(1)
+          .maybeSingle(),
+        supabase
+          .from('bot_licenses')
+          .select('id', { count: 'exact', head: true })
+          .eq('user_id', user.id)
+          .eq('is_active', true)
+      ]);
+
+      const perf = perfRes.data;
+      const licenseCount = licenseRes.count ?? 0;
 
       return {
-        total: data?.total_balance || 125480.2,
-        change: data?.daily_change || 12.45,
-        currency: 'USD'
-      } as PortfolioData;
+        total: perf?.total_balance ?? 0,
+        change: perf?.daily_change ?? 0,
+        currency: 'USD',
+        activeLicenses: licenseCount,
+        lastUpdated: perf?.last_updated ?? null,
+      };
     },
-    // High-performance egress gating: 30s stale-time
-    staleTime: 30000,
-    refetchInterval: 60000, 
+    staleTime: 30_000,
+    refetchInterval: 60_000,
     enabled: !!user?.id,
     retry: 2,
   });

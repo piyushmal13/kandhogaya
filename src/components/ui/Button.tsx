@@ -95,7 +95,7 @@ export const Button = forwardRef<HTMLButtonElement, EliteButtonProps>(
       if (onClick) onClick(e);
     };
 
-    const baseClasses = "relative inline-flex items-center justify-center uppercase transition-all duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color14)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color10)] active:scale-[0.97] active:brightness-90 overflow-hidden rounded-[1.25rem] group z-10";
+    const baseClasses = "relative inline-flex items-center justify-center uppercase transition-all duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color14)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color10)] active:scale-[0.97] active:brightness-90 overflow-hidden rounded-[1.25rem] group z-10 whitespace-nowrap";
     
     return (
       <div className={cn("relative z-10", fluid ? "w-full" : "inline-block")}>
@@ -133,15 +133,15 @@ export const Button = forwardRef<HTMLButtonElement, EliteButtonProps>(
             <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:animate-[shimmer_1.5s_infinite]" />
           )}
 
-          <div className={cn("flex items-center gap-1.5 sm:gap-3 relative z-10 transition-transform duration-200", isPressed && "scale-95")}>
+          <div className={cn("flex flex-row flex-nowrap items-center justify-center gap-1.5 sm:gap-3 relative z-10 transition-transform duration-200 w-full whitespace-nowrap", isPressed && "scale-95")}>
             {isLoading && (
               <Loader2 className="w-5 h-5 animate-spin data-[variant=elite]:text-[var(--color29)] data-[variant=secondary]:text-white" />
             )}
-            {!isLoading && leftIcon && <span className="group-hover:-translate-x-1 transition-transform">{leftIcon}</span>}
+            {!isLoading && leftIcon && <span className="group-hover:-translate-x-1 transition-transform flex items-center shrink-0">{leftIcon}</span>}
             
-            <span className="flex-1 whitespace-nowrap">{children}</span>
+            <span className="flex-1 whitespace-nowrap text-center">{children}</span>
             
-            {!isLoading && rightIcon && <span className="group-hover:translate-x-1 transition-transform">{rightIcon}</span>}
+            {!isLoading && rightIcon && <span className="group-hover:translate-x-1 transition-transform flex items-center shrink-0">{rightIcon}</span>}
           </div>
         </button>
       </div>

@@ -52,7 +52,7 @@ export const Navbar = () => {
   }, [handleScroll]);
 
   const navLinks = [
-    { name: "Terminal", path: "/", icon: Home },
+    { name: "Home", path: "/", icon: Home },
     { name: "Ecosystem", path: "/quantx", icon: Zap },
     { name: "Webinars", path: "/webinars", icon: BookOpen },
     { name: "Marketplace", path: "/marketplace", icon: BarChart3 },
@@ -100,7 +100,7 @@ export const Navbar = () => {
 
           {/* Desktop Nav */}
           <nav 
-            className="hidden md:flex items-center gap-1.5 md:max-lg:gap-0.5"
+            className="hidden md:flex items-center gap-1 md:max-lg:gap-0.5"
             aria-label="Main Navigation"
             itemScope
             itemType="https://schema.org/SiteNavigationElement"
@@ -269,7 +269,7 @@ export const Navbar = () => {
                       className="flex items-center gap-5 rounded-[1.5rem] border border-white/[0.05] bg-white/[0.02] px-6 py-5 text-white/60 hover:text-white"
                     >
                       <LayoutDashboard className="h-6 w-6" />
-                      <span className="text-xl font-bold">Console</span>
+                      <span className="text-xl font-bold">Dashboard</span>
                     </Link>
                     {isAdmin && (
                       <Link
@@ -301,14 +301,6 @@ export const Navbar = () => {
               </div>
             </div>
 
-            {/* Bottom badge */}
-            <div className="mt-10 p-6 rounded-[1.5rem] bg-emerald-500/[0.05] border border-emerald-500/[0.1] text-center">
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <div className="text-[10px] font-black text-emerald-400 uppercase tracking-[0.4em]">IFX Desk Acknowledged</div>
-              </div>
-              <div className="text-[11px] text-white/30 font-mono tracking-widest">SESSION SECURED</div>
-            </div>
           </motion.div>
         )}
       </AnimatePresence>

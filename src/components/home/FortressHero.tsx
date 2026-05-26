@@ -126,21 +126,7 @@ export const FortressHero = () => {
       )}
 
       {/* ── MAIN CONTENT (Triple Parallax Stack) ── */}
-      <div className="relative z-20 flex-1 flex flex-col items-center justify-center px-6 pt-12 pb-12 md:pb-24 text-center">
-        {/* Status badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8 md:mb-12 group cursor-default"
-        >
-          <div className="site-pill">
-            <span className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 bg-emerald-500 rounded-sm animate-pulse" />
-              Institutional Research Operations
-            </span>
-          </div>
-        </motion.div>
-
+      <div className="relative z-20 flex-1 flex flex-col items-center justify-center px-6 pt-16 pb-12 md:pb-24 text-center">
         {/* Headline (Imperial Typography) */}
         <motion.h1
           style={{ opacity, y: textY, fontSize: "clamp(2.4rem, 10vw, 8rem)" }}
@@ -154,34 +140,10 @@ export const FortressHero = () => {
         {/* Subheading with Operational Focus */}
         <motion.p
           style={{ opacity, y: subTextY, fontSize: "clamp(1.1rem, 2vw, 1.3rem)" }}
-          className="max-w-2xl mx-auto text-white/40 leading-relaxed mb-10 font-medium"
+          className="max-w-3xl mx-auto text-white/40 leading-relaxed mb-12 font-medium"
         >
-          Senior-led quantitative execution and market architecture. 
-          Direct educational exposure to the world's most sophisticated institutional quantitative models.
+          We provide professional proprietary trading algorithms at the best cost. If you have a specific trading strategy, our quantitative desk will build it for you with high precision and institutional-grade reliability.
         </motion.p>
-
-        {/* Live Operational Telemetry */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.25 }}
-          className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4 sm:gap-8 mb-8 md:mb-12 py-6 sm:py-4 px-6 sm:px-8 rounded-3xl sm:rounded-full bg-white/[0.02] border border-white/5 backdrop-blur-md"
-        >
-          <div className="flex items-center gap-3">
-             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10B981]" />
-             <span className="text-[10px] font-black text-white/60 uppercase tracking-[0.2em]">1,248 Active Partners</span>
-          </div>
-          <div className="hidden sm:block w-px h-3 bg-white/10" />
-          <div className="flex items-center gap-3">
-             <ShieldCheck className="w-3.5 h-3.5 text-emerald-500/50" />
-             <span className="text-[10px] font-black text-white/60 uppercase tracking-[0.2em]">Audited Research: Verified</span>
-          </div>
-          <div className="hidden sm:block w-px h-3 bg-white/10" />
-          <div className="flex items-center gap-3">
-             <Zap className="w-3.5 h-3.5 text-cyan-500/50" />
-             <span className="text-[10px] font-black text-white/60 uppercase tracking-[0.2em]">Model Fidelity: Verified Historicals</span>
-          </div>
-        </motion.div>
 
 
         {/* CTAs */}
@@ -189,41 +151,19 @@ export const FortressHero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.32, duration: 0.6, ease: EASING }}
-          className="flex flex-col sm:flex-row items-center gap-6 justify-center w-full px-4"
+          className="flex flex-col sm:flex-row items-center gap-6 justify-center w-full px-4 max-w-lg mx-auto"
         >
           <Link to="/webinars" className="w-full sm:w-auto">
-            <EliteButton variant="premium-gold" size="md" fluid>
+            <EliteButton variant="premium-gold" size="md" fluid rightIcon={<ArrowRight className="w-4 h-4" />}>
               Request Session Access
-              <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1.5 transition-transform duration-300" />
             </EliteButton>
           </Link>
 
           <Link to="/quantx" className="w-full sm:w-auto">
-            <EliteButton variant="secondary" size="md" fluid>
-              <Play className="w-3.5 h-3.5 mr-2 text-emerald-400 fill-emerald-400/20" />
+            <EliteButton variant="secondary" size="md" fluid leftIcon={<Play className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400/20" />}>
               See QuantX Results
             </EliteButton>
           </Link>
-        </motion.div>
-
-        {/* Social proof strip */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.55, duration: 0.8 }}
-          className="grid grid-cols-2 md:flex md:flex-wrap justify-center items-center gap-x-10 gap-y-6 mt-8 md:mt-14 pt-10 border-t border-white/[0.06] w-full max-w-3xl mx-auto"
-        >
-          {[
-            { value: "Institutional", label: "Quantitative Desk" },
-            { value: "Multi-Asset", label: "Execution Logic" },
-            { value: "High-Fidelity", label: "Research Terminal" },
-            { value: "Proprietary", label: "Risk Governance" },
-          ].map((s) => (
-            <div key={s.label} className="flex flex-col items-center gap-1.5 px-4 md:px-6 md:border-r last:border-0 border-white/5 text-center">
-              <span className="text-sm md:text-xl font-black text-white tracking-tight uppercase italic">{s.value}</span>
-              <span className="text-[8px] md:text-[10px] font-bold uppercase tracking-[0.2em] text-white/35 whitespace-nowrap">{s.label}</span>
-            </div>
-          ))}
         </motion.div>
       </div>
 

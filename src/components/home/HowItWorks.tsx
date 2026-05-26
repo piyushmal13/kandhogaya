@@ -38,7 +38,7 @@ const STEPS = [
 export const HowItWorks = () => {
   return (
     <section className="py-12 md:py-32 bg-[#020202] relative">
-      <div className="container mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -49,20 +49,20 @@ export const HowItWorks = () => {
             <span className="text-[10px] font-black uppercase tracking-[0.5em] text-[#58F2B6] mb-4 block">
               How It Works
             </span>
-            <h2 className="text-3xl md:text-7xl font-black text-white uppercase tracking-tighter max-w-4xl">
+            <h2 className="text-3xl sm:text-5xl md:text-7xl font-black text-white uppercase tracking-tighter max-w-4xl leading-tight">
               From Market Insight <br />
-              <span className="text-white/20">To Your Winning Trade.</span>
+              <span className="text-white/20">To Your Coded Edge.</span>
             </h2>
           </motion.div>
 
-          <div className="grid grid-cols-12 gap-6">
+          <div className="grid grid-cols-12 gap-4 md:gap-6">
             {STEPS.map((step, i) => (
               <motion.div
                 key={i}
                 variants={itemVariants}
                 whileHover={{ y: -5 }}
                 className={cn(
-                  "p-6 md:p-12 rounded-[2rem] md:rounded-[2.5rem] border border-white/5 bg-[#0A0A0A] relative overflow-hidden group transition-all duration-500 hover:border-white/20",
+                  "p-6 sm:p-10 md:p-12 rounded-[2rem] md:rounded-[2.5rem] border border-white/5 bg-[#0A0A0A] relative overflow-hidden group transition-all duration-500 hover:border-white/20",
                   step.span
                 )}
               >
@@ -72,20 +72,20 @@ export const HowItWorks = () => {
                 )} />
                 
                 <div className={cn(
-                  "w-16 h-16 rounded-2xl flex items-center justify-center border mb-8 transition-transform group-hover:scale-110 duration-500",
+                  "w-12 h-12 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center border mb-6 sm:mb-8 transition-transform group-hover:scale-110 duration-500",
                   step.color
                 )}>
                   {step.icon}
                 </div>
 
-                <h3 className="text-2xl font-black text-white uppercase tracking-tight mb-4">
+                <h3 className="text-lg sm:text-2xl font-black text-white uppercase tracking-tight mb-3 sm:mb-4">
                   {step.title}
                 </h3>
-                <p className="text-[rgba(248,250,252,0.6)] text-lg leading-relaxed max-w-md">
+                <p className="text-[rgba(248,250,252,0.6)] text-xs sm:text-base leading-relaxed max-w-md">
                   {step.description}
                 </p>
 
-                <div className="mt-12 flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.3em] text-white/10 group-hover:text-white/40 transition-colors">
+                <div className="mt-8 sm:mt-12 flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.3em] text-white/10 group-hover:text-white/40 transition-colors">
                   <span>Step 0{i + 1}</span>
                   <div className="h-px flex-1 bg-white/5 group-hover:bg-white/10 transition-colors" />
                 </div>

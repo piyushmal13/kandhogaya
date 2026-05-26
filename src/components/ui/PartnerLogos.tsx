@@ -24,12 +24,11 @@ const GRADIENTS = [
 
 // HARDCODED INSTITUTIONAL BACKUPS IF DATABASE FAILS OR IS EMPTY
 const BACKUP_PARTNERS = [
-  { name: "Binance", category: "Global Exchange", abbr: "BN", color: "from-yellow-600 to-yellow-400" },
-  { name: "MetaTrader 4", category: "Trading Platform", abbr: "MT4", color: "from-blue-700 to-blue-500" },
-  { name: "MetaTrader 5", category: "Supported Platform", abbr: "MT5", color: "from-blue-600 to-blue-400" },
-  { name: "TradingView", category: "Chart Partner", abbr: "TV", color: "from-sky-500 to-cyan-400" },
-  { name: "cTrader", category: "Execution Platform", abbr: "CT", color: "from-orange-600 to-amber-400" },
-  { name: "Bloomberg", category: "Market Data", abbr: "BB", color: "from-rose-700 to-pink-500" },
+  { name: "MetaTrader 5", category: "Trading Platform", abbr: "MT5", color: "from-blue-600 to-blue-400" },
+  { name: "TradingView", category: "Charting Terminal", abbr: "TV", color: "from-sky-500 to-cyan-400" },
+  { name: "Vantage Markets", category: "Liquidity Bridge", abbr: "VTG", color: "from-emerald-600 to-green-400" },
+  { name: "VT Markets", category: "Execution Partner", abbr: "VTM", color: "from-violet-600 to-purple-400" },
+  { name: "Markets4you", category: "CFD Provider", abbr: "M4Y", color: "from-orange-600 to-amber-400" },
 ];
 
 const BACKUP_SUCCESS_STORIES = [

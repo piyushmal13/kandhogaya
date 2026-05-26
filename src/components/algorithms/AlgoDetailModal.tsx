@@ -146,19 +146,19 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
                   <div className="grid grid-cols-2 gap-y-6 gap-x-8">
                     <div>
                       <div className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Slippage Tolerance</div>
-                      <div className="text-white font-mono font-bold">{(algo.performance as any)?.slippage || "0.5 Pips Max"}</div>
+                      <div className="text-white font-mono font-bold">{(algo.performance as any)?.slippage || "N/A"}</div>
                     </div>
                     <div>
                       <div className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Recommended Capital</div>
-                      <div className="text-white font-mono font-bold">{(algo.performance as any)?.min_capital || "$5,000"}</div>
+                      <div className="text-white font-mono font-bold">{(algo.performance as any)?.min_capital || "N/A"}</div>
                     </div>
                     <div>
                       <div className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Avg Monthly Return</div>
-                      <div className="text-emerald-400 font-mono font-bold">+{algo.performance?.monthly_return || "12.4"}%</div>
+                      <div className="text-emerald-400 font-mono font-bold">{algo.performance?.monthly_return ? `+${algo.performance.monthly_return}%` : 'N/A'}</div>
                     </div>
                     <div>
                       <div className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Max Drawdown</div>
-                      <div className="text-red-400 font-mono font-bold">-{algo.performance?.drawdown || "4.1"}%</div>
+                      <div className="text-red-400 font-mono font-bold">{algo.performance?.drawdown ? `-${algo.performance.drawdown}%` : 'N/A'}</div>
                     </div>
                   </div>
                 </div>
@@ -288,8 +288,8 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-cyan-500" />
           
           <div className="mb-6 md:mb-10 mt-4">
-            <h3 className="text-sm md:text-xl font-black text-white uppercase tracking-[0.2em] mb-2 md:mb-4">Deployment</h3>
-            <p className="text-white/30 text-[10px] md:text-xs uppercase tracking-widest font-mono">Select Execution Window</p>
+            <h3 className="text-sm md:text-xl font-black text-white uppercase tracking-[0.2em] mb-2 md:mb-4">Subscribe</h3>
+            <p className="text-white/30 text-[10px] md:text-xs uppercase tracking-widest font-mono">Choose a Plan</p>
           </div>
 
           <div className="space-y-4 md:space-y-6 mb-8 md:mb-12">

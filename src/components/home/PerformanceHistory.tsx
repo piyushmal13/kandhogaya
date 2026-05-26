@@ -99,9 +99,8 @@ export const PerformanceHistory = () => {
             Multi-Strategy <br className="hidden md:block" />
             <span className="text-emerald-400">Performance Metrics</span>
           </h2>
-          <p className="text-white/50 max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
-            A comprehensive overview of our proprietary algorithmic ecosystem. 
-            Execution results are driven by elite quantitative teams and systematic high-performance protocols.
+          <p className="text-white/50 max-w-3xl mx-auto text-sm md:text-base leading-relaxed px-4">
+            A comprehensive overview of our proprietary algorithmic ecosystem. We maintain strict risk parameters including a 20% global capital stop loss and a 5% monthly preservation cap. All models are fully customizable; if you require bespoke execution boundaries or tailormade risk allocations, our engineering team can build it to your exact specifications.
           </p>
         </motion.div>
       </div>
@@ -126,17 +125,17 @@ export const PerformanceHistory = () => {
               </div>
             </div>
             
-            <div className="flex gap-12 items-center">
+            <div className="flex flex-wrap gap-6 md:gap-12 items-center">
               <div className="flex flex-col">
-                <span className="text-[11px] font-semibold text-emerald-500/80 uppercase tracking-wider mb-2">Total Return</span>
-                <span className="text-2xl md:text-4xl font-mono font-bold text-emerald-400 flex items-center gap-2 tracking-tight">
-                  +{stats.totalReturn}% <TrendingUp className="w-5 h-5 opacity-60" />
+                <span className="text-[11px] font-semibold text-emerald-500/80 uppercase tracking-wider mb-2">Global Stop Loss Cap</span>
+                <span className="text-xl md:text-3xl font-mono font-bold text-emerald-400 flex items-center gap-2 tracking-tight">
+                  20.0% Max <ShieldCheck className="w-5 h-5 opacity-60" />
                 </span>
               </div>
               <div className="flex flex-col">
-                <span className="text-[11px] font-semibold text-white/40 uppercase tracking-wider mb-2">Max Drawdown</span>
-                <span className="text-2xl md:text-4xl font-mono font-bold text-red-400 flex items-center gap-2 tracking-tight">
-                  -8.2% <TrendingDown className="w-5 h-5 opacity-60" />
+                <span className="text-[11px] font-semibold text-red-500/80 uppercase tracking-wider mb-2">Monthly Risk Cap</span>
+                <span className="text-xl md:text-3xl font-mono font-bold text-red-400 flex items-center gap-2 tracking-tight">
+                  5.0% Max <TrendingDown className="w-5 h-5 opacity-60" />
                 </span>
               </div>
             </div>

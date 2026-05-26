@@ -3,11 +3,11 @@ import { motion } from "motion/react";
 import { containerVariants, itemVariants } from "@/lib/motion";
 
 const PARTNERS = [
-  { name: "Binance Engine", category: "Liquidity Link" },
-  { name: "FIX Protocol", category: "Execution Bridge" },
-  { name: "MetaTrader 5", category: "Terminal Node" },
-  { name: "AWS Cloud", category: "Compute Cluster" },
-  { name: "TradingView", category: "Telemetry Feed" },
+  { name: "MetaTrader 5", category: "Trading Platform" },
+  { name: "TradingView", category: "Charting Terminal" },
+  { name: "Vantage Markets", category: "Liquidity Bridge" },
+  { name: "VT Markets", category: "Execution Partner" },
+  { name: "Markets4you", category: "CFD Provider" },
 ];
 
 const PRESS = [

@@ -65,18 +65,7 @@ export const Footer = () => (
              </span>
           </div>
 
-          <div className="flex flex-col gap-5 text-[9px] font-black text-[#4F5A69] uppercase tracking-[0.25em] mb-12">
-             <div className="flex items-start gap-4" itemProp="address" itemScope itemType="https://schema.org/PostalAddress">
-               <Activity className="w-4 h-4 text-emerald-500/50 shrink-0 mt-px" />
-               <span className="leading-relaxed mt-0.5">Global Presence: <span className="text-white/60">Institutional Network</span></span>
-             </div>
-             <div className="flex items-start gap-4" itemProp="address" itemScope itemType="https://schema.org/PostalAddress">
-               <TerminalSquare className="w-4 h-4 text-emerald-500/50 shrink-0 mt-px" />
-               <span className="leading-relaxed mt-0.5">Operational Hubs: <span className="text-white/60">Multi-Asset Execution</span></span>
-             </div>
-          </div>
-          
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5">
             {[
               { Icon: InstagramIcon, url: `https://instagram.com/${BRANDING.name}` },
               { Icon: LinkedinIcon, url: `https://linkedin.com/company/${BRANDING.name}` }
@@ -86,11 +75,11 @@ export const Footer = () => (
                 href={social.url} 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="p-3 border border-white/[0.05] rounded-xl bg-[#030406] text-[#4F5A69] hover:text-emerald-400 hover:border-emerald-500/30 hover:bg-emerald-500/10 hover:scale-105 transition-all duration-300 shadow-md"
+                className="p-1.5 border border-white/[0.04] rounded-lg bg-[#030406] text-[#4F5A69] hover:text-emerald-400 hover:border-emerald-500/30 hover:bg-emerald-500/10 hover:scale-105 transition-all duration-300 shadow-md flex items-center justify-center shrink-0"
                 itemProp="sameAs"
                 aria-label="Social Link"
               >
-                <social.Icon className="w-5 h-5" />
+                <social.Icon className="w-3.5 h-3.5" />
               </a>
             ))}
           </div>
@@ -113,7 +102,7 @@ export const Footer = () => (
           <div>
             <h4 className="mb-10 text-[10px] font-black uppercase tracking-[0.3em] text-white">Talent Desk</h4>
             <ul className="space-y-5 text-[13px] text-[#8A9AAB] font-light">
-              <li><Link to="/academy" className="hover:text-emerald-400 transition-colors">Talent Network</Link></li>
+              <li><Link to="/hiring" className="hover:text-emerald-400 transition-colors">Talent Network</Link></li>
               <li><Link to="/blog" className="hover:text-emerald-400 transition-colors">Macro Intelligence</Link></li>
               <li><Link to="/webinars" className="hover:text-emerald-400 transition-colors">Desk Sessions</Link></li>
             </ul>
@@ -124,7 +113,7 @@ export const Footer = () => (
             <h4 className="mb-10 text-[10px] font-black uppercase tracking-[0.3em] text-white">Infrastructure</h4>
             <ul className="space-y-5 text-[13px] text-[#8A9AAB] font-light">
               <li><Link to="/about" className="hover:text-emerald-400 transition-colors">Operations</Link></li>
-              <li><Link to="/academy" className="hover:text-emerald-400 transition-colors">Enterprise Hiring</Link></li>
+              <li><Link to="/hiring" className="hover:text-emerald-400 transition-colors">Enterprise Hiring</Link></li>
               <li><Link to="/contact" className="hover:text-emerald-400 transition-colors">Support Portal</Link></li>
             </ul>
           </div>
