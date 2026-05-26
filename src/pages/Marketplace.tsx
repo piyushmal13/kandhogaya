@@ -186,33 +186,6 @@ export const Marketplace = () => {
           </div>
         </div>
 
-        {/* FREE VPS PROMOTION BANNER */}
-        <div className="p-1.5 bg-gradient-to-r from-emerald-500/20 via-white/5 to-transparent rounded-[2rem] sm:rounded-[2.5rem] border border-white/5 relative overflow-hidden group">
-          <div className="bg-[#030406]/90 p-6 sm:p-8 rounded-[1.8rem] sm:rounded-[2.3rem] flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden">
-             {/* Gloss */}
-             <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/[0.03] rounded-full blur-[80px] pointer-events-none" />
-             
-             <div className="space-y-3 flex-1 text-center md:text-left">
-                <span className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[8px] sm:text-[9px] font-black uppercase tracking-widest leading-none">
-                  Elite B2B Collaboration
-                </span>
-                <h3 className="text-xl sm:text-2xl font-black text-white uppercase italic tracking-tighter leading-none">
-                  Free Ultra-Low Latency <span className="text-emerald-400 font-serif">VPS Hosting.</span>
-                </h3>
-                <p className="text-[10px] sm:text-xs text-white/40 leading-relaxed uppercase tracking-wider max-w-2xl">
-                  Deploy your systematic algorithm on a premium VPS with sub-1ms execution speeds. Compliant for account balances funded with over $1,000 via our trusted institutional broker.
-                </p>
-             </div>
-             
-             <button
-               onClick={() => navigate('/consultation')}
-               className="px-6 py-3.5 bg-emerald-500 hover:bg-emerald-400 text-black text-center font-black text-[9px] sm:text-[10px] uppercase tracking-widest rounded-xl shadow-2xl transition-all shrink-0 active:scale-95"
-             >
-               Claim Free VPS
-             </button>
-          </div>
-        </div>
-
         {/* Assets Grid */}
         <div className="relative min-h-[400px]">
           {renderGrid()}

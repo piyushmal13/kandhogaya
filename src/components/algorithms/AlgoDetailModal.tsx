@@ -47,7 +47,7 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-4 overflow-y-auto"
+      className="fixed inset-0 z-[200] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 overflow-y-auto"
     >
       <motion.div
         initial={{ scale: 0.95, y: 20 }}
@@ -220,30 +220,39 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
             )}
 
             {activeTab === 'reviews' && (
-              <div className="space-y-6">
-                {algo.reviews?.length ? algo.reviews.map((review, idx) => (
-                  <div key={review.id || `review-${idx}`} className="p-5 sm:p-6 rounded-2xl bg-white/5 border border-white/5">
-                    <div className="flex justify-between items-start mb-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 font-bold">
-                          {(review.user_name || review.name || "U").charAt(0)}
-                        </div>
-                        <div>
-                          <div className="text-white font-bold">{review.user_name || review.name}</div>
-                          <div className="text-xs text-gray-500">
-                            {review.created_at ? new Date(review.created_at).toLocaleDateString() : 'Recent'}
+              <div>
+                {algo.reviews?.length ? (
+                  <div className="flex gap-4 overflow-x-auto pb-4 hide-scrollbar snap-x snap-mandatory scroll-smooth">
+                    {algo.reviews.map((review, idx) => (
+                      <div 
+                        key={review.id || `review-${idx}`} 
+                        className="w-[285px] sm:w-[350px] shrink-0 snap-start p-5 sm:p-6 rounded-2xl bg-white/[0.03] border border-white/5 flex flex-col justify-between"
+                      >
+                        <div className="space-y-4">
+                          <div className="flex justify-between items-start">
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 font-bold">
+                                {(review.user_name || review.name || "U").charAt(0)}
+                              </div>
+                              <div>
+                                <div className="text-white font-bold text-xs sm:text-sm">{review.user_name || review.name}</div>
+                                <div className="text-[10px] text-gray-500">
+                                  {review.created_at ? new Date(review.created_at).toLocaleDateString() : 'Recent'}
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex gap-1 shrink-0">
+                              {['s1', 's2', 's3', 's4', 's5'].map((starKey, j) => (
+                                <Star key={starKey} className={`w-2.5 h-2.5 ${j < review.rating ? 'text-amber-500 fill-amber-500' : 'text-gray-600'}`} />
+                              ))}
+                            </div>
                           </div>
+                          <p className="text-gray-400 text-xs italic leading-relaxed">"{review.text}"</p>
                         </div>
                       </div>
-                      <div className="flex gap-1">
-                        {['s1', 's2', 's3', 's4', 's5'].map((starKey, j) => (
-                          <Star key={starKey} className={`w-3 h-3 ${j < review.rating ? 'text-amber-500 fill-amber-500' : 'text-gray-600'}`} />
-                        ))}
-                      </div>
-                    </div>
-                    <p className="text-gray-400 text-sm italic">"{review.text}"</p>
+                    ))}
                   </div>
-                )) : (
+                ) : (
                   <div className="text-center py-20 text-gray-500">No reviews yet for this algorithm.</div>
                 )}
               </div>
@@ -268,17 +277,39 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
             )}
 
             {activeTab === 'terms' && (
-              <div className="p-8 rounded-2xl bg-white/5 border border-white/5">
+              <div className="p-8 rounded-2xl bg-white/5 border border-white/5 font-medium">
                 <h4 className="text-white font-bold mb-6 flex items-center gap-2">
                   <FileText className="w-5 h-5 text-emerald-500" />
                   Terms & Strategy Details
                 </h4>
-                <div className="prose prose-invert prose-sm max-w-none text-gray-400">
-                  <p className="whitespace-pre-wrap leading-relaxed">
+                <div className="prose prose-invert prose-sm max-w-none text-gray-400 space-y-6">
+                  <p className="whitespace-pre-wrap leading-relaxed text-xs">
                     {algo.terms_and_conditions || "Standard institutional trading terms apply. This algorithm is designed for high-liquidity environments and requires a minimum capital allocation of $500. Past performance is not indicative of future results."}
                   </p>
-                  <div className="mt-6 pt-4 border-t border-white/5 text-[10px] text-emerald-400/80 uppercase font-black tracking-wider leading-relaxed">
-                     VPS Promotion: A free, ultra-low latency VPS setup is available for all active clients who maintain a funded account value exceeding $1,000 with our trusted B2B partner brokerage.
+
+                  {/* Dynamic Terms PDF Strategy Document Link */}
+                  {(algo.advanced_features?.terms_pdf_url || (algo as any).metadata?.terms_pdf_url) && (
+                    <div className="p-4 bg-emerald-500/5 border border-emerald-500/10 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
+                      <div className="flex items-center gap-3 text-center sm:text-left">
+                        <FileText className="w-5 h-5 text-emerald-500 shrink-0" />
+                        <div>
+                          <div className="text-white text-xs font-black uppercase tracking-wider">Strategy Specifications PDF</div>
+                          <div className="text-[8px] text-gray-500 uppercase tracking-widest font-mono">Official Document Ledger</div>
+                        </div>
+                      </div>
+                      <a 
+                        href={algo.advanced_features?.terms_pdf_url || (algo as any).metadata?.terms_pdf_url} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="px-5 py-3 bg-emerald-500 hover:bg-emerald-400 text-black text-[9px] font-black uppercase tracking-widest rounded-xl shadow-2xl transition-all whitespace-nowrap active:scale-95"
+                      >
+                        View PDF Document
+                      </a>
+                    </div>
+                  )}
+
+                  <div className="pt-4 border-t border-white/5 text-[9px] text-white/30 uppercase font-medium leading-relaxed">
+                     *VPS Promotion: A free, ultra-low latency VPS setup is available for all active clients who maintain a funded account value exceeding $1,000 with our trusted B2B partner brokerage.
                   </div>
                 </div>
               </div>
