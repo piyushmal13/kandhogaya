@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import { Video, Calendar, ArrowRight, Play, Clock } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { EliteButton } from '@/components/ui/Button';
@@ -15,13 +16,14 @@ interface WebinarSession {
 }
 
 /**
- * WebinarAccessPanel (v1.0)
+ * WebinarAccessPanel (v1.1)
  * 
  * Integrated research session portal for the elite dashboard.
  * Shows upcoming sessions and those the user is registered for.
  */
 export function WebinarAccessPanel() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [sessions, setSessions] = useState<WebinarSession[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -101,7 +103,7 @@ export function WebinarAccessPanel() {
                     <h4 className="text-sm font-black text-white uppercase tracking-tight truncate">{session.title}</h4>
                     {session.status === 'live' && (
                       <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-[8px] font-black uppercase animate-pulse">
-                        <div className="w-1 h-1 rounded-full bg-red-500" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-red-500" />
                         Live
                       </span>
                     )}
@@ -124,18 +126,18 @@ export function WebinarAccessPanel() {
                     <EliteButton 
                       variant="institutional-outline" 
                       size="sm" 
-                      className="gap-2 px-4 border-emerald-500/20 text-emerald-400"
-                      onClick={() => window.location.href = `/webinars/${session.id}`}
+                      className="gap-2 px-4 border-emerald-500/20 text-emerald-400 animate-pulse-glow"
+                      onClick={() => navigate(`/webinars/${session.id}`)}
                     >
                        <Play size={12} fill="currentColor" />
                        Access
-                    </EliteButton>
+                     </EliteButton>
                   ) : (
                     <EliteButton 
                       variant="institutional-outline" 
                       size="sm" 
                       className="gap-2 px-4"
-                      onClick={() => window.location.href = `/webinars/${session.id}`}
+                      onClick={() => navigate(`/webinars/${session.id}`)}
                     >
                        Join
                        <ArrowRight size={12} />
@@ -149,7 +151,7 @@ export function WebinarAccessPanel() {
       </div>
 
       <button 
-        onClick={() => window.location.href = '/webinars'}
+        onClick={() => navigate('/webinars')}
         className="w-full mt-6 pt-6 border-t border-white/5 text-[9px] font-black text-white/30 hover:text-emerald-500 uppercase tracking-[0.4em] transition-all"
       >
         View Full Schedule
