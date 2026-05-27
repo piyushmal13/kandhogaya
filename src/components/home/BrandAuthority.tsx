@@ -113,7 +113,15 @@ export const BrandAuthority = () => {
                 className="px-4 py-2.5 sm:px-6 sm:py-4 rounded-xl sm:rounded-[1.5rem] bg-white/[0.02] border border-white/[0.05] hover:border-emerald-500/20 hover:bg-emerald-500/[0.02] transition-all duration-500 flex items-center gap-2 sm:gap-3 group shadow-xl hover:scale-105"
               >
                 {partner.logo_url && partner.logo_url !== "" ? (
-                  <img src={partner.logo_url} alt={partner.name} className="h-4 w-auto object-contain opacity-40 group-hover:opacity-100 transition-opacity" />
+                  <img 
+                    src={partner.logo_url} 
+                    alt={partner.name} 
+                    className="h-6 sm:h-7 w-auto max-w-[100px] object-contain opacity-30 group-hover:opacity-100 filter brightness-0 invert transition-all duration-300" 
+                    onError={(e) => {
+                      // Fallback if image fails to load
+                      (e.currentTarget as HTMLElement).style.display = "none";
+                    }}
+                  />
                 ) : partner.logo_svg ? (
                   <div className="w-5 h-5 shrink-0 opacity-40 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                     {partner.logo_svg}

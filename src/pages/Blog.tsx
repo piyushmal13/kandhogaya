@@ -21,6 +21,8 @@ export const Blog = () => {
   const observer = useRef<IntersectionObserver | null>(null);
   const PAGE_SIZE = 9;
 
+  const [selectedIntel, setSelectedIntel] = useState<string>("ALL");
+
   const lastPostElementRef = useCallback((node: HTMLDivElement | null) => {
     if (loading) return;
     if (observer.current) observer.current.disconnect();
@@ -54,8 +56,28 @@ export const Blog = () => {
   const handleSearch = (e: React.SyntheticEvent) => {
     e.preventDefault();
     setPage(0);
-    // Search is handled by the useEffect dependency on searchQuery
   };
+
+  // Dynamic Intel Filter Logic
+  const filteredPosts = posts.filter((post) => {
+    if (selectedIntel === "ALL") return true;
+    const cat = (post.category || "").toLowerCase();
+    const tags = Array.isArray(post.metadata?.tags) ? post.metadata.tags.map((t: string) => t.toLowerCase()) : [];
+    
+    if (selectedIntel === "MACRO") {
+      return cat.includes("macro") || cat.includes("strategy") || cat.includes("hedge") || tags.includes("macroeconomics") || tags.includes("forex analysis");
+    }
+    if (selectedIntel === "QUANT") {
+      return cat.includes("algo") || cat.includes("fintech") || cat.includes("infrastructure") || cat.includes("setup") || tags.includes("algorithms") || tags.includes("automation");
+    }
+    if (selectedIntel === "ORDER_FLOW") {
+      return cat.includes("order") || cat.includes("forex") || tags.includes("order flow") || tags.includes("smart money") || tags.includes("forex");
+    }
+    if (selectedIntel === "BEHAVIORAL") {
+      return cat.includes("psych") || cat.includes("gym") || cat.includes("anxiety") || tags.includes("discipline") || tags.includes("trader gym");
+    }
+    return true;
+  });
 
   return (
     <div className="relative overflow-hidden pb-20">
@@ -83,7 +105,7 @@ export const Blog = () => {
           { label: "Desk Cadence", value: "Systematic Pulse", helper: "Daily live market intelligence" },
         ]}
         aside={
-          <div className="space-y-4">
+          <div className="space-y-4 max-w-md w-full ml-auto">
             <form onSubmit={handleSearch} className="relative group">
               <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500 group-focus-within:text-emerald-200" />
               <input
@@ -94,10 +116,36 @@ export const Blog = () => {
                 className="w-full rounded-2xl border border-white/10 bg-black/30 py-3 pr-4 pl-12 text-sm text-white outline-none focus:border-emerald-300/40"
               />
             </form>
-            <button className="inline-flex items-center gap-3 rounded-2xl border border-white/5 bg-white/5 px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-emerald-400 transition-all">
-              <Filter className="h-3.5 w-3.5 text-emerald-500" />
-              INTELLIGENCE TYPE
-            </button>
+            <div className="text-[9px] font-black tracking-widest text-emerald-400/50 uppercase">
+              SCAN INTEL MATRIX:
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              {[
+                { id: "ALL", label: "ALL DEEP DIVES" },
+                { id: "MACRO", label: "SYSTEMIC MACRO" },
+                { id: "QUANT", label: "QUANT & ALGO" },
+                { id: "ORDER_FLOW", label: "ORDER FLOW DESK" },
+                { id: "BEHAVIORAL", label: "BEHAVIORAL LAB" }
+              ].map((intel) => {
+                const isActive = selectedIntel === intel.id;
+                return (
+                  <button
+                    key={intel.id}
+                    onClick={() => {
+                      setSelectedIntel(intel.id);
+                      setPage(0);
+                    }}
+                    className={`px-3 py-2 rounded-xl border text-[9px] font-black uppercase tracking-wider transition-all duration-300 ${
+                      isActive
+                        ? "border-emerald-500/30 bg-emerald-500/10 text-white"
+                        : "border-white/5 bg-white/[0.02] text-gray-500 hover:text-white"
+                    }`}
+                  >
+                    {intel.label}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         }
       />
@@ -105,10 +153,10 @@ export const Blog = () => {
       <PageSection className="pt-0">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           <AnimatePresence mode="popLayout">
-            {posts.map((post: BlogPost, index: number) => (
+            {filteredPosts.map((post: BlogPost, index: number) => (
               <motion.div
                 key={post.id}
-                ref={index === posts.length - 1 ? lastPostElementRef : null}
+                ref={index === filteredPosts.length - 1 ? lastPostElementRef : null}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: (index % 3) * 0.1 }}

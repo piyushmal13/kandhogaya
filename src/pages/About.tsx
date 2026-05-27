@@ -223,32 +223,32 @@ export const About = () => {
             
             {/* CEO */}
             <LeaderProfile 
-              name="Our Trusted CEO"
-              role="Founding Chief Executive Officer"
-              verdict="Our quantitative architecture is built on absolute probability, not prediction. Every system we license represents years of institutional refinement since we started our journey in mid-2018."
-              bio="Our trusted CEO's entire life has been forged within institutional sovereign FX desks in London and Zurich. In mid-2018, realizing that retail traders were structurally disadvantaged, the CEO set out to build an elite, conflict-free quantitative execution desk. Since mid-2018, the CEO has successfully scaled this entire infrastructure, ensuring that our proprietary algorithms operate with unmatched mathematical edge. Today, our clients interact directly with these institutional-grade frameworks, benefiting from a robust, team-driven environment that handles billions in processed volume monthly."
+              name="Founding Partner"
+              role="Chief Executive Officer"
+              verdict="Our quantitative engines operate on absolute mathematical probability, not prediction, establishing a pristine standard of execution consistency."
+              bio="Forged inside tier-1 sovereign currency desks in London and Zurich, the CEO's career is defined by high-frequency risk management. In mid-2018, the CEO founded this quantitative desk to eliminate retail broker conflicts, successfully scaling our execution infrastructure to handle billions in monthly volume. Today, clients interact directly with our institutional-grade algorithms, supported 24/5 by our elite desk."
               pedigree="EST. MID-2018"
               avatarInitials="CEO"
-              signature="Founding CEO"
+              signature="Chief Executive"
             />
 
             {/* CTO */}
             <LeaderProfile 
-              name="Our Trusted CTO"
+              name="Desk Director"
               role="Chief Technology Officer"
-              verdict="Latency is the absolute enemy of alpha. We engineer our high-fidelity execution bridges in C++ to achieve sub-millisecond synchronization."
-              bio="Our trusted CTO holds a prestigious PhD in Quantitative Computing from Zurich and has spent over a decade architecting execution layers for sovereign macro desks. As the technical visionary, the CTO has perfected our multi-node sovereign infrastructure, making it the overall best in the industry. Working hand-in-hand with our CEO and the engineering desk, the CTO ensures that our systems achieve the highest standard of speed, reliability, and precision."
+              verdict="Latency is the absolute enemy of alpha. We engineer our MT4/MT5 bridges in optimized C++ to achieve sub-millisecond synchronization."
+              bio="Holding a PhD in Quantitative Computing from ETH Zurich, the CTO is the master architect behind our low-latency sovereign node network. Collaborating with the CEO and the engineering desk, the CTO has perfected our core systems to become the overall best execution infrastructure in the market today."
               pedigree="SYSTEM ARCH"
               avatarInitials="CTO"
-              signature="Desk CTO"
+              signature="Tech Director"
             />
 
             {/* The Team / Desk Platform */}
             <LeaderProfile 
-              name="The Quantitative Desk"
-              role="Systems & Client Operations Desk"
+              name="Quantitative Desk"
+              role="Systems & Client Operations"
               verdict="A pristine quantitative interface is the crucial link between complex mathematics and flawless, real-time client execution."
-              bio="Our platform is powered entirely by our collaborative Quantitative Systems Desk. No single individual owns the platform; it is our unified collective team that ensures seamless 24/5 client operations, custom algorithmic engineering, and ultra-secure ECN routing. Our unified team works tirelessly to keep the entire ecosystem running perfectly, providing dynamic updates and supporting every elite client sandbox deployment."
+              bio="Our entire multi-disciplinary platform engineering desk coordinates our Sandbox infrastructures, ECN bridges, and dynamic client routing systems. Every model is supported by a unified team effort, ensuring high-fidelity reliability and zero single-point-of-failure vulnerabilities."
               pedigree="THE TEAM"
               avatarInitials="DESK"
               signature="IFX Team"

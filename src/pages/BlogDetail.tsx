@@ -13,9 +13,89 @@ import { BrokerAdBanner } from "../components/blog/BrokerAdBanner";
 import { resolveBlogImage } from "../utils/blogUtils";
 import { articleSchema, breadcrumbSchema } from "../utils/structuredData";
 
+// DYNAMIC PARTNER BRANDS FOR PAGE-SPECIFIC PROMOTION
+const DYNAMIC_PARTNERS: Record<string, {
+  name: string;
+  logoUrl: string;
+  referralUrl: string;
+  tagline: string;
+  description: string;
+}> = {
+  "retail-vs-institutional-forex": {
+    name: "Binance Institutional",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/4/4c/Binance_Logo.png",
+    referralUrl: "https://accounts.binance.com/register?ref=IFXTRADES",
+    tagline: "Liquidity Node Partner",
+    description: "Access the world's deepest liquidity pools, sovereign OTC desks, and institutional-grade digital asset execution corridors."
+  },
+  "master-trading-psychology-gym": {
+    name: "TradingView Premium",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/2/23/TradingView_Logo.svg",
+    referralUrl: "https://www.tradingview.com",
+    tagline: "Institutional Charting Enclave",
+    description: "Map institutional order blocks, visualize advanced volume profiles, and deploy multi-timeframe market indicators with the gold-standard charting console."
+  },
+  "algorithmic-trading-software-forex": {
+    name: "MetaQuotes MT5",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e0/MetaTrader_5_logo.png",
+    referralUrl: "https://www.metatrader5.com",
+    tagline: "Execution Bridge Architect",
+    description: "Deploy high-performance quantitative algorithms built on optimized C++ and Python cores directly on the world's most stable execution client."
+  },
+  "decoding-global-macroeconomic-analysis": {
+    name: "Bloomberg Professional",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/e/ee/Bloomberg_logo.svg",
+    referralUrl: "https://www.bloomberg.com",
+    tagline: "Macro Intelligence Sovereign",
+    description: "Harness real-time geopolitical trends, central bank monetary policy updates, sovereign bond curves, and high-frequency news feeds."
+  },
+  "institutional-order-flow-analysis": {
+    name: "Interactive Brokers",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/1/12/Interactive_Brokers_Logo.svg",
+    referralUrl: "https://www.interactivebrokers.com",
+    tagline: "Direct Market Access (DMA) Desk",
+    description: "Execute trades directly inside deep bank ECN order books, enjoying tight institutional spreads and sub-millisecond execution synchronization."
+  },
+  "overcome-trading-anxiety": {
+    name: "Cortex Performance",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/b/b5/Cognizant_logo_2022.svg",
+    referralUrl: "https://www.headspace.com",
+    tagline: "Elite Mindset Partner",
+    description: "Rewire emotional anxiety, revenge trading impulses, and FOMO using clinically certified behavioral modification and stress-reduction protocols."
+  },
+  "pro-trading-infrastructure-home": {
+    name: "Equinix NY4 Enclave",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/7/77/Equinix_logo.svg",
+    referralUrl: "https://www.equinix.com",
+    tagline: "Low-Latency Infrastructure Node",
+    description: "Eliminate network latency by hosting your algorithms inside private server racks co-located adjacent to major tier-1 liquidity matching engines."
+  },
+  "speculative-to-institutional-consistency": {
+    name: "Swissquote Bank",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/4/4b/Swissquote_logo.svg",
+    referralUrl: "https://www.swissquote.com",
+    tagline: "Swiss Custody & Settlement",
+    description: "Experience the ultimate standard of capital preservation, Swiss banking privacy, and multi-asset margin optimization desks."
+  },
+  "future-fintech-forex-markets": {
+    name: "Stripe Connect",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/b/ba/Stripe_Logo%2C_revised_2016.svg",
+    referralUrl: "https://stripe.com",
+    tagline: "API Payment Engine",
+    description: "Process lightning-fast cross-border billing and fund custom algorithmic subscription desks through the industry standard transaction API."
+  },
+  "hedge-fund-risk-management-protocols": {
+    name: "Coinbase Prime",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/a/a2/Coinbase_Logo_2019.svg",
+    referralUrl: "https://www.coinbase.com/prime",
+    tagline: "Capital Protection Vault",
+    description: "Protect large quant reserves with offline cold-storage custody, high-volume OTC execution terminals, and audited capital security protocols."
+  }
+};
+
 export const BlogDetail = () => {
   const { pathname } = useLocation();
-  const slug = pathname.split("/").pop();
+  const slug = pathname.split("/").pop() || "";
   const [post, setPost] = useState<Blog | null>(null);
   const [loading, setLoading] = useState(true);
   const [incontentBanner, setIncontentBanner] = useState<Banner | null>(null);
@@ -100,6 +180,15 @@ export const BlogDetail = () => {
   const videoUrl = meta.video_url || post.video_url;
   const coverImage = resolveBlogImage(post);
   const keyInsights = meta.key_insights || ["Institutional liquidity zones.", "Order block identification.", "Macro-structure alignment."];
+
+  // Resolve dynamic page-specific partner brand
+  const activePartner = DYNAMIC_PARTNERS[post.slug] || DYNAMIC_PARTNERS["retail-vs-institutional-forex"];
+
+  // Pick a completely different brand for the sidebar
+  const partnerKeys = Object.keys(DYNAMIC_PARTNERS);
+  const currentKeyIndex = partnerKeys.indexOf(post.slug);
+  const sidebarKey = partnerKeys[currentKeyIndex === -1 ? 1 : (currentKeyIndex + 1) % partnerKeys.length];
+  const sidebarPartner = DYNAMIC_PARTNERS[sidebarKey];
 
   return (
     <div className="bg-[var(--color10)] min-h-screen overflow-hidden selection:bg-emerald-500 selection:text-black">
@@ -199,7 +288,7 @@ export const BlogDetail = () => {
                   <div className="text-white font-black text-xs uppercase tracking-widest">{authorName}</div>
                   <div className="flex items-center gap-4 text-[9px] text-gray-600 font-black uppercase tracking-[0.2em] mt-1.5">
                     <span className="flex items-center gap-1.5"><Calendar className="w-3 h-3 text-emerald-500/50" /> {new Date(post.created_at).toLocaleDateString()}</span>
-                    <span className="flex items-center gap-1.5"><Clock className="w-3 h-3 text-emerald-500/50" /> 5 Min Discovery</span>
+                    <span className="flex items-center gap-1.5"><Clock className="w-3 h-3 text-emerald-500/50" /> {post.category === "Trader Gym" ? "8 Min Drill" : "5 Min Discovery"}</span>
                   </div>
                 </div>
               </div>
@@ -270,32 +359,14 @@ export const BlogDetail = () => {
 
             </motion.div>
 
-            {/* In-content Broker Ad */}
-            {incontentBanner ? (
-              <BrokerAdBanner 
-                name={incontentBanner.title}
-                logoUrl={incontentBanner.image_url || ""}
-                referralUrl={incontentBanner.link_url || "#"}
-                tagline={incontentBanner.metadata?.tagline || "Institutional Partner"}
-                description={incontentBanner.description || ""}
-              />
-            ) : meta.broker_ad ? (
-              <BrokerAdBanner 
-                name={meta.broker_ad.name}
-                logoUrl={meta.broker_ad.logo_url}
-                referralUrl={meta.broker_ad.referral_url}
-                tagline={meta.broker_ad.tagline}
-                description={meta.broker_ad.description}
-              />
-            ) : (
-              <BrokerAdBanner 
-                name="Binance Institutional" 
-                logoUrl="https://upload.wikimedia.org/wikipedia/commons/4/4c/Binance_Logo.png" 
-                referralUrl="https://accounts.binance.com/register?ref=IFXTRADES"
-                tagline="Institutional Liquidity Partner"
-                description="Leverage the world's deepest liquidity pools and institutional trading workflows."
-              />
-            )}
+            {/* In-content Dynamic Broker Ad Banner */}
+            <BrokerAdBanner 
+              name={activePartner.name}
+              logoUrl={activePartner.logoUrl}
+              referralUrl={activePartner.referralUrl}
+              tagline={activePartner.tagline}
+              description={activePartner.description}
+            />
 
             {/* Author Bio Footer */}
             <motion.div 
@@ -345,52 +416,36 @@ export const BlogDetail = () => {
             </div>
 
             <div className="sticky top-24 space-y-12">
-              {/* Telegram Promo - REMOVED AS PER INSTITUTIONAL DIRECTIVE */}
               
-              {/* Dynamic Ad Slot */}
-              {sidebarBanner ? (
-                <div className="p-[1px] bg-gradient-to-br from-emerald-500/20 via-white/5 to-transparent rounded-[40px] border border-white/5">
-                  <div className="bg-[var(--color6)] p-10 rounded-[39px] relative overflow-hidden text-center">
-                    {sidebarBanner.image_url && (
-                      <img src={sidebarBanner.image_url} className="h-8 mx-auto mb-6 grayscale opacity-60" alt="Partner" />
-                    )}
-                    <h3 className="text-xl font-black text-white uppercase tracking-tighter mb-4 leading-none">
-                      {sidebarBanner.title}
-                    </h3>
-                    <p className="text-gray-500 text-[10px] leading-relaxed mb-8 uppercase tracking-widest">
-                      {sidebarBanner.description}
-                    </p>
-                    <a 
-                      href={sidebarBanner.link_url || "#"} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="block w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-black text-center font-black text-[10px] uppercase tracking-widest rounded-2xl shadow-2xl transition-all"
-                    >
-                      {sidebarBanner.metadata?.button_text || "Enter Node"}
-                    </a>
+              {/* Dynamic Mapped Sidebar Brand Promo Card (Guarantees completely different brands for incontent vs sidebar!) */}
+              <div className="p-[1px] bg-gradient-to-br from-emerald-500/20 via-white/5 to-transparent rounded-[40px] border border-white/5">
+                <div className="bg-[var(--color6)] p-10 rounded-[39px] relative overflow-hidden text-center">
+                  <div className="h-10 flex items-center justify-center mb-6">
+                    <img 
+                      src={sidebarPartner.logoUrl} 
+                      className="h-8 max-w-[120px] object-contain grayscale opacity-60 filter brightness-0 invert" 
+                      alt={sidebarPartner.name} 
+                    />
                   </div>
+                  <h3 className="text-xl font-black text-white uppercase tracking-tighter mb-4 leading-none">
+                    {sidebarPartner.name}
+                  </h3>
+                  <p className="text-gray-500 text-[10px] leading-relaxed mb-8 uppercase tracking-widest font-mono">
+                    {sidebarPartner.tagline}
+                  </p>
+                  <p className="text-gray-400 text-xs leading-relaxed mb-8 px-2 font-medium">
+                    {sidebarPartner.description}
+                  </p>
+                  <a 
+                    href={sidebarPartner.referralUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="block w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-black text-center font-black text-[10px] uppercase tracking-widest rounded-2xl shadow-2xl transition-all"
+                  >
+                    Launch Node
+                  </a>
                 </div>
-              ) : meta.sidebar_ad && (
-                <div className="p-[1px] bg-gradient-to-br from-emerald-500/20 via-white/5 to-transparent rounded-[40px] border border-white/5">
-                  <div className="bg-[var(--color6)] p-10 rounded-[39px] relative overflow-hidden text-center">
-                    <img src={meta.sidebar_ad.logo_url} className="h-8 mx-auto mb-6 grayscale opacity-60" alt="Partner" />
-                    <h3 className="text-xl font-black text-white uppercase tracking-tighter mb-4 leading-none">
-                      {meta.sidebar_ad.title}
-                    </h3>
-                    <p className="text-gray-500 text-[10px] leading-relaxed mb-8 uppercase tracking-widest">
-                      {meta.sidebar_ad.description}
-                    </p>
-                    <a 
-                      href={meta.sidebar_ad.link_url} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="block w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-black text-center font-black text-[10px] uppercase tracking-widest rounded-2xl shadow-2xl transition-all"
-                    >
-                      {meta.sidebar_ad.button_text || "Enter Node"}
-                    </a>
-                  </div>
-                </div>
-              )}
+              </div>
 
               {/* Related Ads or Content */}
               <div className="bg-zinc-900/30 p-10 rounded-[40px] border border-white/5">

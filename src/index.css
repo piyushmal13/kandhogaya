@@ -508,6 +508,60 @@ body {
   /* ── Mobile Optimization Utils ── */
   .mobile-p { @apply px-4 py-8 md:px-12 md:py-24; }
   .mobile-text-clamp { @apply text-2xl sm:text-4xl md:text-7xl; }
+
+  /* ── Prose Institutional Blog/Research Content Styles ── */
+  .prose-institutional h2 {
+    font-size: clamp(1.35rem, 3vw, 2.25rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+    color: #ffffff;
+    margin-top: 2.75rem;
+    margin-bottom: 1.25rem;
+    line-height: 1.1;
+    font-style: italic;
+  }
+  .prose-institutional h3 {
+    font-size: clamp(1.15rem, 2.2vw, 1.6rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    color: #10b981; /* Emerald-500 */
+    margin-top: 2.25rem;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+  .prose-institutional p {
+    font-size: 15px;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.65);
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+  }
+  .prose-institutional a {
+    color: #10b981;
+    text-decoration: underline;
+    font-weight: 700;
+    transition: color 0.2s ease;
+  }
+  .prose-institutional a:hover {
+    color: #34d399;
+  }
+  .prose-institutional strong {
+    color: #ffffff;
+    font-weight: 800;
+  }
+  .prose-institutional ul {
+    list-style-type: square;
+    padding-left: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .prose-institutional li {
+    font-size: 14px;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 0.5rem;
+  }
 }
 
 /* ── Reduced motion respect ── */
