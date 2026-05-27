@@ -28,9 +28,11 @@ export const automationEngine = {
 
   /**
    * High-Velocity Sales Assignment
+   * Evaluates if a hot prospect has been assigned an agent.
+   * If not, dynamically queries an online agent profile and triggers a high-priority dispatch.
    */
   triggerPriorityActions: async (leadId: string, leadData: any) => {
-    // 1. Audit Assignment status
+    // 1. Audit lead assignment status to prevent duplicate handovers
     const { data: lead } = await publicSupabase
       .from('leads')
       .select('assigned_to, email')
@@ -38,8 +40,10 @@ export const automationEngine = {
       .maybeSingle();
 
     if (!lead?.assigned_to) {
+      // Find an available representative to process the client
       const agentId = await automationEngine.discoverRoundRobinAgent();
       if (agentId) {
+        // Log assignment and stamp high-intent priority tag
         await publicSupabase
           .from('leads')
           .update({ 
@@ -48,22 +52,24 @@ export const automationEngine = {
             priority_tag: 'HOT_BUYER'
           })
           .eq('id', leadId);
-          
-        // Increment agent load
-        await publicSupabase.rpc('increment_agent_load', { agent_id: agentId });
 
-        // [PHASE 6] Enqueue External Notification
-        const { data: agentProfile } = await publicSupabase.from('agents').select('phone').eq('id', agentId).maybeSingle();
+        // Fetch representative communication node
+        const { data: agentProfile } = await publicSupabase
+          .from('users')
+          .select('email, full_name')
+          .eq('id', agentId)
+          .maybeSingle();
         
-        if (agentProfile?.phone) {
+        if (agentProfile?.email) {
           const leadName = lead.email || 'Anonymous Lead';
+          // Dispatch lead handover alert to target communication channel
           notificationEngine.enqueue({
-            recipient: agentProfile.phone,
+            recipient: agentProfile.email,
             channel: 'WHATSAPP',
             priority: 'HIGH',
             content: {
-              message: `🔥 Hot Lead Assigned: ${leadName}`,
-              user_name: leadName,
+              message: `🔥 Hot Lead Assigned: ${leadName} has been routed to you.`,
+              user_name: agentProfile.full_name || 'Agent',
               lead_score: leadData.score,
               action_link: `/agent/leads/${leadId}`
             }
@@ -74,16 +80,16 @@ export const automationEngine = {
   },
 
   /**
-   * Round-Robin Logic (v1.24)
-   * Discovers the next agent based on current load and performance.
+   * Round-Robin Representative Discovery (v1.25)
+   * Dynamically routes B2B leads to qualified active representatives.
+   * Leverages public.users profile lookups with direct agent role filters.
    */
   discoverRoundRobinAgent: async (): Promise<string | null> => {
+    // Query users database for members holding the sales agent role
     const { data: agents } = await publicSupabase
-      .from('agents')
+      .from('users')
       .select('id')
-      .eq('is_online', true)
-      .order('current_load', { ascending: true })
-      .order('performance_score', { ascending: false })
+      .eq('role', 'agent')
       .limit(1);
 
     return agents?.[0]?.id || null;
