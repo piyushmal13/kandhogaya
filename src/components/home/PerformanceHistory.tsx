@@ -114,7 +114,10 @@ export const PerformanceHistory = () => {
             viewport={{ once: true }}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/[0.06] border border-blue-500/[0.12] text-blue-400 text-[10px] font-black uppercase tracking-[0.2em] mb-6"
           >
-            <Activity className="w-3.5 h-3.5" />
+            <span className="relative flex h-1.5 w-1.5 mr-1.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-blue-500" />
+            </span>
             Proprietary Architecture
           </motion.div>
           
@@ -259,7 +262,10 @@ export const PerformanceHistory = () => {
             {/* Column 1: Intro */}
             <div className="lg:col-span-5 space-y-8">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[9px] font-mono tracking-widest uppercase">
-                <Zap className="w-3.5 h-3.5 text-blue-400" /> Bespoke Engineering
+                <svg className="w-3.5 h-3.5 text-blue-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="3" fill="#00A3FF" />
+                  <path d="M3 12 h6 M15 12 h6 M12 3 v6 M12 15 v6" stroke="#00A3FF" />
+                </svg> Bespoke Engineering
               </div>
               
               <h3 className="text-3xl md:text-4xl font-black text-white uppercase italic leading-none tracking-tighter">
@@ -268,7 +274,7 @@ export const PerformanceHistory = () => {
               </h3>
               
               <p className="text-xs md:text-sm text-gray-400 leading-relaxed uppercase tracking-wider">
-                If you have a unique indicator, specific chart configuration, or manual trade trigger strategy, our expert desk will code it into a robust, lock-proof, high-precision automated algorithm.
+                If you have a proprietary indicator, specific chart configuration, or manual trade execution strategy, our quantitative engineering desk will compile it into a robust, sub-millisecond, high-precision automated systematic algorithm.
               </p>
 
               <div className="pt-4">

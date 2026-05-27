@@ -51,7 +51,11 @@ input:focus, textarea:focus, select:focus {
 
 /* ── INSTITUTIONAL BASELINE ── */
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  max-width: 100%;
+  overflow-x: hidden;
+}
 body {
   background-color: #000000;
   margin: 0;

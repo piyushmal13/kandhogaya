@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 
 interface Candle {
   open: number;
@@ -25,8 +25,8 @@ const generateCandles = (count: number): Candle[] => {
   return candles;
 };
 
-const CHART_H = 200;
-const CANDLE_COUNT = 28;
+const CHART_H = 160;
+const CANDLE_COUNT = 24;
 
 export const AnimatedCandlesticks: React.FC<{ className?: string }> = ({ className = "" }) => {
   const [candles, setCandles] = useState<Candle[]>(() => generateCandles(CANDLE_COUNT));
@@ -83,7 +83,7 @@ export const AnimatedCandlesticks: React.FC<{ className?: string }> = ({ classNa
         animate={{ opacity: [0.8, 1, 0.8] }}
         transition={{ duration: 2, repeat: Infinity }}
       >
-        <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-black font-mono backdrop-blur-sm border ${isUp ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400" : "bg-red-500/10 border-red-500/20 text-red-400"}`}>
+        <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[9px] font-black font-mono backdrop-blur-sm border ${isUp ? "bg-[#00A3FF]/10 border-[#00A3FF]/20 text-[#00A3FF]" : "bg-red-500/10 border-red-500/20 text-red-400"}`}>
           <span>{isUp ? "▲" : "▼"}</span>
           <span>XAU/USD {lastClose.toFixed(2)}</span>
         </div>
@@ -116,7 +116,7 @@ export const AnimatedCandlesticks: React.FC<{ className?: string }> = ({ classNa
           const bodyBot = toY(Math.min(candle.open, candle.close));
           const bodyH = Math.max(0.8, bodyBot - bodyTop);
           const green = candle.close >= candle.open;
-          const fill = green ? "#10B981" : "#EF4444";
+          const fill = green ? "#00A3FF" : "#EF4444";
           const isLast = i === candles.length - 1;
 
           return (
@@ -171,7 +171,7 @@ export const AnimatedCandlesticks: React.FC<{ className?: string }> = ({ classNa
           x2="100"
           y1={toY(lastClose)}
           y2={toY(lastClose)}
-          stroke={isUp ? "#10B981" : "#EF4444"}
+          stroke={isUp ? "#00A3FF" : "#EF4444"}
           strokeWidth="0.3"
           strokeDasharray="2 2"
           animate={{ opacity: [0.3, 0.7, 0.3] }}
@@ -189,7 +189,7 @@ export const AnimatedCandlesticks: React.FC<{ className?: string }> = ({ classNa
               className="flex-1 rounded-sm"
               style={{
                 height: `${c.volume * 100}%`,
-                background: green ? "rgba(16,185,129,0.25)" : "rgba(239,68,68,0.2)",
+                background: green ? "rgba(0,163,255,0.25)" : "rgba(239,68,68,0.2)",
               }}
               initial={{ scaleY: 0 }}
               animate={{ scaleY: 1 }}
@@ -202,7 +202,7 @@ export const AnimatedCandlesticks: React.FC<{ className?: string }> = ({ classNa
       {/* Scan line animation */}
       <motion.div
         className="absolute inset-0 pointer-events-none"
-        style={{ background: "linear-gradient(180deg, transparent 0%, rgba(16,185,129,0.03) 50%, transparent 100%)" }}
+        style={{ background: "linear-gradient(180deg, transparent 0%, rgba(0,163,255,0.03) 50%, transparent 100%)" }}
         animate={{ y: ["-100%", "200%"] }}
         transition={{ duration: 4, repeat: Infinity, ease: "linear", repeatDelay: 2 }}
       />

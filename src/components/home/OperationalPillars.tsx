@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "motion/react";
-import { BookOpen, Cpu, Terminal, ArrowRight, Award } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { EliteButton } from "../ui/Button";
 
@@ -8,14 +8,48 @@ interface OperationalPillarsProps {
   onRequestBuild: () => void;
 }
 
+// ── CUSTOM HIGH-FIDELITY GEOMETRIC SVGS (Zero Cheap outlines) ──
+
+const AcademyIcon = () => (
+  <svg className="w-6 h-6 text-blue-400 group-hover:scale-105 transition-transform duration-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="3" y1="18" x2="21" y2="6" strokeDasharray="3 3" opacity="0.3" />
+    <line x1="3" y1="14" x2="21" y2="2" strokeDasharray="3 3" opacity="0.3" />
+    <path d="M3 20 L9 14 L14 15.5 L21 7" stroke="#00A3FF" strokeWidth="2.5" />
+    <circle cx="21" cy="7" r="2" fill="#00A3FF" />
+  </svg>
+);
+
+const MachineryIcon = () => (
+  <svg className="w-6 h-6 text-cyan-400 group-hover:scale-105 transition-transform duration-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3" y="16" width="3.5" height="5" rx="0.5" fill="#00A3FF" opacity="0.8" stroke="none" />
+    <rect x="8" y="11" width="3.5" height="10" rx="0.5" fill="#00D2FF" opacity="0.8" stroke="none" />
+    <rect x="13" y="6" width="3.5" height="15" rx="0.5" fill="#8B5CF6" opacity="0.8" stroke="none" />
+    <rect x="18" y="2" width="3.5" height="19" rx="0.5" fill="#3B82F6" opacity="0.8" stroke="none" />
+  </svg>
+);
+
+const EngineeringIcon = () => (
+  <svg className="w-6 h-6 text-purple-400 group-hover:scale-105 transition-transform duration-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="4" r="1.5" fill="#8B5CF6" />
+    <circle cx="4" cy="12" r="1.5" fill="#00A3FF" />
+    <circle cx="20" cy="12" r="1.5" fill="#00E5FF" />
+    <circle cx="12" cy="20" r="1.5" fill="#3B82F6" />
+    <line x1="12" y1="5.5" x2="4" y2="12" />
+    <line x1="12" y1="5.5" x2="20" y2="12" />
+    <line x1="4" y1="12" x2="12" y2="19.5" />
+    <line x1="20" y1="12" x2="12" y2="19.5" />
+    <circle cx="12" cy="12" r="2.5" fill="#ffffff" opacity="0.15" />
+  </svg>
+);
+
 export const OperationalPillars: React.FC<OperationalPillarsProps> = ({ onRequestBuild }) => {
   const pillars = [
     {
       num: "01",
-      icon: BookOpen,
+      icon: AcademyIcon,
       title: "Quant Academy",
       subtitle: "Webinar Masterclasses",
-      description: "Webinar masterclasses led by global quants, breaking down raw macro indicators and systematic trend strategies.",
+      description: "Webinar masterclasses led by global quants, breaking down raw macro indicators and systematic trend-following models.",
       cta: "Explore Masterclasses",
       link: "/webinars",
       isModal: false,
@@ -24,10 +58,10 @@ export const OperationalPillars: React.FC<OperationalPillarsProps> = ({ onReques
     },
     {
       num: "02",
-      icon: Cpu,
+      icon: MachineryIcon,
       title: "Systematic Machinery",
       subtitle: "Algorithmic Registry",
-      description: "Pre-built institutional algorithms. Clean, secure, drag-and-drop compiled binaries optimized for MT5 and TradingView.",
+      description: "High-fidelity systematic models. Deploy fully compiled binary files (.ex5, .ex4) directly on secure MT4/MT5 and TradingView architectures.",
       cta: "View Algo Registry",
       link: "#performance",
       isModal: false,
@@ -36,10 +70,10 @@ export const OperationalPillars: React.FC<OperationalPillarsProps> = ({ onReques
     },
     {
       num: "03",
-      icon: Terminal,
+      icon: EngineeringIcon,
       title: "Engineering Desk",
       subtitle: "Bespoke Coding Desk",
-      description: "Bespoke algorithmic software development. Our quants engineer custom FIX API bridges, indicators, and risk protocols.",
+      description: "Custom strategic programming. Our quantitative desk engineers bespoke FIX API liquidity bridges, low-latency indicators, and rigorous drawdown guardrails.",
       cta: "Request Bespoke Build",
       link: "#",
       isModal: true,
@@ -71,7 +105,10 @@ export const OperationalPillars: React.FC<OperationalPillarsProps> = ({ onReques
             viewport={{ once: true }}
             className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-blue-500/[0.05] border border-blue-500/[0.12] text-blue-400 text-[10px] font-black uppercase tracking-[0.25em] mb-6"
           >
-            <Award className="w-3.5 h-3.5" />
+            <span className="relative flex h-1.5 w-1.5 mr-1">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-blue-500" />
+            </span>
             Operational Framework &amp; Scope
           </motion.div>
 
@@ -93,7 +130,7 @@ export const OperationalPillars: React.FC<OperationalPillarsProps> = ({ onReques
             transition={{ delay: 0.2 }}
             className="text-white/40 max-w-xl mx-auto text-xs sm:text-sm leading-relaxed uppercase tracking-wider font-semibold"
           >
-            We simplify systematic complexity. From developer webinars to compiled algorithms and bespoke quantitative code, our desk delivers clean execution parameters.
+            We compile quantitative solutions with absolute precision. From developer webinars to drag-and-drop compiled binaries and custom API integrations, our desk delivers clean execution parameters.
           </motion.p>
         </div>
 
@@ -116,7 +153,7 @@ export const OperationalPillars: React.FC<OperationalPillarsProps> = ({ onReques
               <div className="space-y-6">
                 {/* Icon Container */}
                 <div className={`w-12 h-12 rounded-2xl bg-white/[0.02] border border-white/5 flex items-center justify-center ${pillar.iconColor} group-hover:scale-110 transition-transform duration-500`}>
-                  <pillar.icon className="w-6 h-6" />
+                  <pillar.icon />
                 </div>
 
                 <div className="space-y-2">
@@ -137,14 +174,14 @@ export const OperationalPillars: React.FC<OperationalPillarsProps> = ({ onReques
                 {pillar.isModal ? (
                   <button
                     onClick={(e) => handlePillarCta(e, true, pillar.link)}
-                    className="w-full flex items-center justify-center"
+                    className="w-full flex items-center justify-center cursor-pointer"
                   >
                     <EliteButton
                       variant="secondary"
                       size="sm"
                       fluid
                       rightIcon={<ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />}
-                      className="group"
+                      className="group animate-none"
                     >
                       {pillar.cta}
                     </EliteButton>
@@ -153,14 +190,14 @@ export const OperationalPillars: React.FC<OperationalPillarsProps> = ({ onReques
                   <Link
                     to={pillar.link}
                     onClick={(e) => handlePillarCta(e, false, pillar.link)}
-                    className="block w-full"
+                    className="block w-full cursor-pointer"
                   >
                     <EliteButton
                       variant="secondary"
                       size="sm"
                       fluid
                       rightIcon={<ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />}
-                      className="group"
+                      className="group animate-none"
                     >
                       {pillar.cta}
                     </EliteButton>

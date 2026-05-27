@@ -10,6 +10,7 @@ import { useFeatureFlag } from "@/hooks/useFeatureFlag";
 import { supabase } from "@/lib/supabase";
 import { EliteButton } from "@/components/ui/Button";
 import { useLanguage } from "../../contexts/LanguageContext";
+import { AnimatedCandlesticks } from "../ui/AnimatedCandlesticks";
 
 interface FortressHeroProps {
   onRequestSession: () => void;
@@ -107,32 +108,49 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
     e.preventDefault();
     if (location.pathname !== '/') {
       navigate('/?results=true');
-      return;
-    }
-    const el = document.getElementById('algo-heading') || document.getElementById('performance');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
+      setTimeout(() => {
+        document.getElementById('performance')?.scrollIntoView({ behavior: 'smooth' });
+      }, 300);
+    } else {
+      document.getElementById('performance')?.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-[100svh] overflow-hidden flex flex-col justify-between"
+      className="relative min-h-[100svh] overflow-hidden flex flex-col"
       aria-label="IFX Trades — Institutional Trading Education"
       style={{
-        backgroundColor: "var(--bg-base)",
-        backgroundImage: "radial-gradient(circle at 50% 50%, rgba(59,130,246,0.08) 0%, #080B1C 50%, var(--bg-base) 100%)",
+        backgroundColor: "#010203",
+        backgroundImage: "radial-gradient(ellipse 80% 50% at 50% 60%, rgba(59,130,246,0.06) 0%, transparent 70%)",
       }}
     >
-      {/* ── CANVAS BACKGROUND DECOR ── */}
-      <div className="absolute inset-0 pointer-events-none z-0" aria-hidden="true">
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-blue-500/[0.03] blur-[150px] rounded-full" />
-        <div className="absolute -top-40 right-10 w-[300px] h-[300px] bg-blue-500/[0.02] blur-[100px] rounded-full" />
-      </div>
+      {/* ── CANVAS BACKGROUND ── */}
+      <motion.div
+        style={{ scale, y: backgroundY, opacity: 0.5, willChange: "transform" }}
+        className="absolute inset-0 origin-center flex items-center justify-center pointer-events-none"
+      >
+        <img
+          src="/brain/c68f6654-c41f-4f65-a861-7f7e83c4a21d/institutional_rocket_hero_1777829335535.png"
+          alt="IFX Institutional Spacecraft"
+          className="w-full h-full object-cover opacity-20"
+        />
+        <div className="absolute inset-0 bg-black/50" />
+      </motion.div>
 
       {/* ── FLOATING PARTICLES ── */}
       <FloatingParticles />
+
+      {/* ── GRADIENT OVERLAY ── */}
+      <div
+        className="absolute inset-0 pointer-events-none z-10"
+        style={{
+          background:
+            "radial-gradient(circle at 50% 50%, transparent 0%, rgba(1,2,3,0.4) 50%, rgba(1,2,3,0.85) 100%), linear-gradient(to bottom, rgba(1,2,3,0.3) 0%, transparent 30%, rgba(1,2,3,1) 100%)",
+        }}
+        aria-hidden="true"
+      />
 
       {/* ── LIVE MARKET TICKER ── */}
       {isTickerActive && (
@@ -170,85 +188,154 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
       )}
 
       {/* ── MAIN CONTENT ── */}
-      <div className="relative z-20 flex-1 flex flex-col items-center justify-center px-4 sm:px-6 py-12 md:py-24 text-center max-w-5xl mx-auto w-full">
-        
-        {/* Headline */}
-        <motion.h1
-          style={{ opacity, y: textY }}
-          className="font-black text-white tracking-tight leading-[1.05] sm:leading-[0.95] uppercase max-w-5xl mx-auto mb-6 sm:mb-8 select-none px-2 sm:px-4"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.8, ease: ENTRY }}
-        >
-          <span className="block text-[clamp(2.0rem,9vw,5.5rem)] tracking-tight whitespace-nowrap break-keep">{t("hero_world_class")}</span>
-          <span className="block text-[clamp(1.8rem,8vw,5.5rem)] tracking-tight mt-1 sm:mt-2">
-            <span className="italic font-serif text-shimmer pr-2 sm:pr-3 text-[clamp(1.8rem,8vw,5.5rem)]">{t("hero_inst_fx")}</span>
-          </span>
-          <span className="block text-[clamp(2.0rem,9vw,5.5rem)] tracking-tight mt-1">
-            {t("hero_macro")}
-          </span>
-        </motion.h1>
-
-        {/* Subheading */}
-        <motion.p
-          style={{ opacity, y: subTextY }}
-          className="max-w-2xl mx-auto text-white/35 leading-relaxed mb-10 sm:mb-14 font-medium text-[clamp(0.85rem,1.8vw,1.15rem)] px-4"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.35, duration: 0.7, ease: ENTRY }}
-        >
-          {t("hero_sub")}
-        </motion.p>
-
-        {/* CTAs */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.45, duration: 0.6, ease: EASING }}
-          className="flex flex-row flex-wrap items-center gap-3.5 sm:gap-5 justify-center w-full px-2 max-w-md mx-auto z-30"
-        >
-          <button onClick={handleRequestSessionClick} className="shrink-0">
-            <EliteButton variant="gemini" size="lg" rightIcon={<ArrowRight className="w-3.5 h-3.5" />} glowEffect>
-              {t("cta_request")}
-            </EliteButton>
-          </button>
-
-          <button onClick={handleSeeResults} className="shrink-0">
-            <EliteButton variant="secondary" size="lg" leftIcon={<Play className="w-3.5 h-3.5 text-blue-400 fill-blue-400/20" />}>
-              {t("cta_results")}
-            </EliteButton>
-          </button>
-        </motion.div>
-
-        {/* Trust Badges */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.6, ease: ENTRY }}
-          className="mt-12 sm:mt-16 flex flex-wrap items-center justify-center gap-3 sm:gap-6"
-        >
-          {TRUST_ITEMS.map((item) => (
-            <div
-              key={item.label}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.02] border border-white/[0.06]"
+      <div className="relative z-20 flex-1 flex items-center justify-center px-6 sm:px-8 py-16 md:py-28 max-w-7xl mx-auto w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center w-full">
+          
+          {/* LEFT COLUMN: CRISP TEXT & RESPONSIVE ACTIONS */}
+          <div className="lg:col-span-7 text-center lg:text-left flex flex-col items-center lg:items-start justify-center space-y-8 max-w-2xl mx-auto lg:mx-0">
+            
+            {/* Sovereign Badge */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1, duration: 0.6, ease: ENTRY }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/[0.05] border border-blue-500/[0.12]"
             >
-              <item.icon className="w-3 h-3 text-blue-400/60" />
-              <span className="text-[8px] sm:text-[9px] font-bold uppercase tracking-[0.2em] text-white/30">{item.label}</span>
-            </div>
-          ))}
-        </motion.div>
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-blue-500" />
+              </span>
+              <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.3em] text-white/50">Institutional Research Desk</span>
+            </motion.div>
 
-        {/* Smallest Star Footnote */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.08 }}
-          whileHover={{ opacity: 0.8 }}
-          transition={{ delay: 0.7, duration: 0.5 }}
-          className="mt-3 text-[5px] sm:text-[6px] text-white/40 tracking-widest uppercase font-mono transition-opacity select-none cursor-help"
-          title="VPS Promotion: Complimentary ultra-low latency VPS server setup is available for all active funded clients. Detailed requirements and conditions are specified in our official Terms of Service."
-        >
-          *Complimentary partner server programs. Terms apply.
-        </motion.div>
+            {/* Headline */}
+            <motion.h1
+              style={{ opacity, y: textY }}
+              className="font-black text-white tracking-tight leading-[1.05] sm:leading-[0.95] uppercase mb-2 select-none"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.8, ease: ENTRY }}
+            >
+              <span className="block text-[clamp(2.0rem,9vw,5.2rem)] tracking-tight whitespace-nowrap break-keep">{t("hero_world_class")}</span>
+              <span className="block text-[clamp(1.8rem,8vw,5.2rem)] tracking-tight mt-1">
+                <span className="italic font-serif text-shimmer text-[clamp(1.8rem,8vw,5.2rem)]">{t("hero_inst_fx")}</span>
+              </span>
+              <span className="block text-[clamp(2.0rem,9vw,5.2rem)] tracking-tight mt-1">
+                {t("hero_macro")}
+              </span>
+            </motion.h1>
+
+            {/* Subheading (Dry B2B Content) */}
+            <motion.p
+              style={{ opacity, y: subTextY }}
+              className="text-white/35 leading-relaxed font-medium text-[clamp(0.85rem,1.8vw,1.15rem)] max-w-xl"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.35, duration: 0.7, ease: ENTRY }}
+            >
+              {t("hero_sub")}
+            </motion.p>
+
+            {/* CTAs (Responsive Stacked Column on Mobile, Row on Desktop) */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.45, duration: 0.6, ease: EASING }}
+              className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto z-30"
+            >
+              <button onClick={handleRequestSessionClick} className="w-full sm:w-auto shrink-0 cursor-pointer">
+                <EliteButton variant="gemini" size="lg" fluid rightIcon={<ArrowRight className="w-3.5 h-3.5" />} glowEffect>
+                  {t("cta_request")}
+                </EliteButton>
+              </button>
+
+              <button onClick={handleSeeResults} className="w-full sm:w-auto shrink-0 cursor-pointer">
+                <EliteButton variant="secondary" size="lg" fluid leftIcon={<Play className="w-3.5 h-3.5 text-blue-400 fill-blue-400/20" />}>
+                  {t("cta_results")}
+                </EliteButton>
+              </button>
+            </motion.div>
+
+            {/* Trust Badges */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 0.6, ease: ENTRY }}
+              className="flex flex-wrap items-center justify-center lg:justify-start gap-3 sm:gap-6 pt-2"
+            >
+              {TRUST_ITEMS.map((item) => (
+                <div
+                  key={item.label}
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.02] border border-white/[0.06]"
+                >
+                  <item.icon className="w-3 h-3 text-blue-400/60" />
+                  <span className="text-[8px] sm:text-[9px] font-bold uppercase tracking-[0.2em] text-white/30">{item.label}</span>
+                </div>
+              ))}
+            </motion.div>
+
+            {/* Smallest Star Footnote */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.08 }}
+              whileHover={{ opacity: 0.8 }}
+              transition={{ delay: 0.7, duration: 0.5 }}
+              className="text-[5px] sm:text-[6px] text-white/40 tracking-widest uppercase font-mono transition-opacity select-none cursor-help pt-2"
+              title="VPS Promotion: Complimentary ultra-low latency VPS server setup is available for all active funded clients. Detailed requirements and conditions are specified in our official Terms of Service."
+            >
+              *Complimentary partner server programs. Terms apply.
+            </motion.div>
+
+          </div>
+
+          {/* RIGHT COLUMN: HIGH-TRUST DYNAMIC REAL-TIME TRADING CHART WIDGET */}
+          <div className="lg:col-span-5 w-full flex justify-center lg:justify-end">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.8, ease: ENTRY }}
+              className="w-full max-w-md p-6 bg-zinc-950/45 border border-white/10 rounded-[2.5rem] shadow-[0_30px_60px_rgba(0,0,0,0.8)] backdrop-blur-2xl relative overflow-hidden group select-none hover:border-blue-500/20 transition-all duration-500"
+            >
+              {/* Top Bar simulating a real Bloomberg window */}
+              <div className="flex items-center justify-between border-b border-white/5 pb-4 mb-4">
+                <div className="flex items-center gap-2">
+                  <div className="w-2.5 h-2.5 rounded-full bg-red-500/40" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/40" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#00A3FF]/40" />
+                  <span className="text-[8px] font-mono font-bold text-white/30 uppercase tracking-widest ml-2">
+                    IFX // ECN_TELEMETRY_FEED
+                  </span>
+                </div>
+                <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-blue-500/10 border border-blue-500/20 text-[7.5px] font-mono font-bold text-blue-400">
+                  <span className="w-1 h-1 rounded-full bg-blue-400 animate-ping" />
+                  <span>LATENCY: 1.15ms</span>
+                </div>
+              </div>
+
+              {/* Dynamic Live Candlesticks */}
+              <div className="h-44 sm:h-52 w-full">
+                <AnimatedCandlesticks />
+              </div>
+
+              {/* Bottom statistics panel */}
+              <div className="mt-4 pt-4 border-t border-white/5 grid grid-cols-3 gap-2 text-left">
+                <div>
+                  <span className="text-[7px] font-black text-gray-500 uppercase tracking-widest block mb-0.5">MATCHING ENGINE</span>
+                  <span className="text-[9px] font-mono font-bold text-white">EQUINIX NY4</span>
+                </div>
+                <div>
+                  <span className="text-[7px] font-black text-gray-500 uppercase tracking-widest block mb-0.5">VOLATILITY REGIME</span>
+                  <span className="text-[9px] font-mono font-bold text-[#00A3FF]">HIGH_LIQUIDITY</span>
+                </div>
+                <div>
+                  <span className="text-[7px] font-black text-gray-500 uppercase tracking-widest block mb-0.5">FEED TELEMETRY</span>
+                  <span className="text-[9px] font-mono font-bold text-cyan-400">SECURE_SYNC</span>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+        </div>
       </div>
 
       {/* ── SCROLL INDICATOR ── */}

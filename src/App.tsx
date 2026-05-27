@@ -27,6 +27,7 @@ import { Results } from "./pages/Results";
 import { Pricing } from "./pages/Pricing";
 import { Solutions } from "./pages/Solutions";
 import { QuantX } from "./pages/QuantX";
+import { NewsletterPopup } from "./components/ui/NewsletterPopup";
 
 // 🦥 LAZY IMPORTS FOR PRIVATE & ADMIN SECTIONS (Maintains clean bundle sizes)
 const WebinarDetail = lazy(() => import("./pages/WebinarDetail").then(m => ({ default: m.WebinarDetail })));
@@ -112,6 +113,7 @@ function AppContent() {
     <StandardLayout>
       {/* <GlobalPromotionBanner /> - Deactivated per CEO's 'zero pop-up' directive */}
       <AnimatedRoutes />
+      <NewsletterPopup />
     </StandardLayout>
   );
 }

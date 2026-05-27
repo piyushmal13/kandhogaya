@@ -1,18 +1,18 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Shield, Zap, Globe, Target, BarChart3, Users, Mail, Compass, Award, HeartHandshake } from 'lucide-react';
+import { Shield, Zap, Globe, Target, BarChart3, Users, HeartHandshake } from 'lucide-react';
 
 const StatCard = ({ label, value, sub }: { label: string; value: string; sub: string }) => (
-  <div className="p-6 md:p-8 rounded-2xl md:rounded-[2rem] bg-white/[0.02] border border-white/5 backdrop-blur-md">
-    <p className="text-emerald-500 text-[8px] md:text-[9px] font-black uppercase tracking-[0.3em] mb-2">{label}</p>
+  <div className="p-6 md:p-8 rounded-2xl md:rounded-[2rem] bg-white/[0.02] border border-white/5 backdrop-blur-md hover:border-[#00A3FF]/20 hover:bg-white/[0.04] transition-all duration-500 shadow-2xl">
+    <p className="text-[#00A3FF] text-[8px] md:text-[9px] font-black uppercase tracking-[0.3em] mb-2">{label}</p>
     <h3 className="text-xl md:text-3xl font-black text-white tracking-tighter mb-1">{value}</h3>
     <p className="text-white/40 text-[9px] md:text-xs font-medium uppercase tracking-widest">{sub}</p>
   </div>
 );
 
 const FeatureSection = ({ icon: Icon, title, description }: { icon: any, title: string, description: string }) => (
-  <div className="group p-6 md:p-8 rounded-2xl md:rounded-[2.5rem] bg-gradient-to-br from-white/[0.02] to-transparent border border-white/5 hover:border-emerald-500/20 transition-all duration-500">
-    <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 mb-5 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
+  <div className="group p-6 md:p-8 rounded-2xl md:rounded-[2.5rem] bg-gradient-to-br from-white/[0.02] to-transparent border border-white/5 hover:border-[#00A3FF]/20 transition-all duration-500 shadow-2xl">
+    <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-[#00A3FF]/10 flex items-center justify-center text-[#00A3FF] mb-5 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500 border border-[#00A3FF]/20 shadow-[0_0_15px_rgba(0,163,255,0.15)]">
       <Icon size={20} className="md:w-6 md:h-6" />
     </div>
     <h3 className="text-base md:text-lg font-black text-white mb-2 md:mb-3 tracking-tight uppercase">{title}</h3>
@@ -33,14 +33,14 @@ interface LeaderProfileProps {
 }
 
 const LeaderProfile = ({ name, role, verdict, bio, pedigree, avatarInitials, signature }: LeaderProfileProps) => (
-  <div className="p-6 md:p-8 rounded-[2.5rem] bg-white/[0.02] border border-white/5 backdrop-blur-3xl flex flex-col justify-between h-full group hover:border-emerald-500/25 transition-all duration-500">
+  <div className="p-6 md:p-8 rounded-[2.5rem] bg-[#0A0A0A] border border-white/5 backdrop-blur-3xl flex flex-col justify-between h-full group hover:border-[#00A3FF]/25 hover:shadow-[0_20px_45px_rgba(0,163,255,0.05)] transition-all duration-500">
     <div className="space-y-6">
       {/* Avatar Initials Badge */}
       <div className="flex items-center justify-between">
-        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 font-black text-base shadow-inner group-hover:scale-105 transition-transform duration-500">
+        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#00A3FF]/10 to-[#8B5CF6]/10 border border-[#00A3FF]/20 flex items-center justify-center text-[#00E5FF] font-black text-base shadow-inner group-hover:scale-105 transition-transform duration-500">
           {avatarInitials}
         </div>
-        <span className="text-[8px] font-black uppercase tracking-widest text-[#53bdeb] px-3 py-1 rounded-full bg-[#53bdeb]/10 border border-[#53bdeb]/20">
+        <span className="text-[8px] font-black uppercase tracking-widest text-[#00E5FF] px-3 py-1 rounded-full bg-[#00E5FF]/10 border border-[#00E5FF]/20">
           {pedigree}
         </span>
       </div>
@@ -48,11 +48,11 @@ const LeaderProfile = ({ name, role, verdict, bio, pedigree, avatarInitials, sig
       {/* Title & Role */}
       <div className="space-y-1">
         <h3 className="text-lg md:text-xl font-black text-white tracking-tight uppercase italic">{name}</h3>
-        <p className="text-[9px] font-black uppercase tracking-widest text-emerald-500/60 font-mono">{role}</p>
+        <p className="text-[9px] font-black uppercase tracking-widest text-[#00A3FF]/60 font-mono">{role}</p>
       </div>
 
       {/* The Leader's Personal Verdict */}
-      <blockquote className="text-white/80 text-xs italic leading-relaxed font-serif p-4 rounded-xl bg-white/[0.01] border-l-2 border-emerald-500/50">
+      <blockquote className="text-white/80 text-xs italic leading-relaxed font-serif p-4 rounded-xl bg-white/[0.01] border-l-2 border-[#00A3FF]/50">
         "{verdict}"
       </blockquote>
 
@@ -65,7 +65,7 @@ const LeaderProfile = ({ name, role, verdict, bio, pedigree, avatarInitials, sig
     {/* Hand-signed Signature style Footer */}
     <div className="pt-6 mt-6 border-t border-white/[0.04] flex items-center justify-between">
       <span className="text-[8px] font-black uppercase tracking-widest text-white/20">Executive Signature</span>
-      <span className="font-serif italic text-emerald-400/60 text-sm tracking-widest font-black select-none pointer-events-none pr-2">
+      <span className="font-serif italic text-cyan-400/60 text-sm tracking-widest font-black select-none pointer-events-none pr-2">
         {signature}
       </span>
     </div>
@@ -74,12 +74,12 @@ const LeaderProfile = ({ name, role, verdict, bio, pedigree, avatarInitials, sig
 
 export const About = () => {
   return (
-    <div className="min-h-screen bg-[#010203] text-white selection:bg-emerald-500 selection:text-black">
+    <div className="min-h-screen bg-[#010203] text-white selection:bg-[#00A3FF] selection:text-black">
       
       {/* ── HERO SECTION ── */}
       <section className="relative pt-36 pb-20 px-6 overflow-hidden">
         {/* Ambient VFX */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[120%] h-[700px] bg-[radial-gradient(ellipse_at_center,rgba(16,185,129,0.06)_0%,transparent_70%)] pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[120%] h-[700px] bg-[radial-gradient(ellipse_at_center,rgba(0,163,255,0.06)_0%,transparent_70%)] pointer-events-none" />
         
         <div className="max-w-7xl mx-auto relative z-10 text-center">
           <motion.div
@@ -87,7 +87,7 @@ export const About = () => {
             animate={{ opacity: 1, y: 0 }}
             className="mb-8"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/[0.04] border border-emerald-500/[0.15] text-emerald-400 text-[9px] font-black uppercase tracking-[0.25em]">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#00A3FF]/[0.04] border border-[#00A3FF]/[0.15] text-[#00A3FF] text-[9px] font-black uppercase tracking-[0.25em]">
               <Shield className="w-3.5 h-3.5" />
               Institutional Quantitative Desk
             </div>
@@ -100,7 +100,7 @@ export const About = () => {
             className="text-4xl sm:text-6xl md:text-8xl font-black tracking-[-0.04em] leading-[0.95] uppercase mb-10"
           >
             The New Standard in <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-400 to-emerald-400 italic font-serif">Quant Pedigree.</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00A3FF] via-[#00E5FF] to-[#8B5CF6] italic font-serif">Quant Pedigree.</span>
           </motion.h1>
           
           <motion.p
@@ -109,7 +109,7 @@ export const About = () => {
             transition={{ delay: 0.2 }}
             className="max-w-2xl mx-auto text-white/50 text-sm sm:text-base leading-relaxed mb-16 font-medium"
           >
-            IFX Trades was built to eliminate the conflict of interest in retail trading. We operate as an elite quantitative software laboratory, licensing high-fidelity systematic models and building secure execution infrastructure.
+            IFX Trades operates as an elite quantitative software laboratory, compiling robust systematic models and deploying high-performance execution bridges. We deliver absolute technical transparency.
           </motion.p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
@@ -133,24 +133,24 @@ export const About = () => {
             
             {/* Mission Copy in Warm Human Language */}
             <div className="space-y-8">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[8px] font-black uppercase tracking-[0.25em]">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00A3FF]/10 border border-[#00A3FF]/20 text-[#00A3FF] text-[8px] font-black uppercase tracking-[0.25em]">
                  Our Absolute Charter
               </div>
               
               <h2 className="text-3xl sm:text-5xl font-black tracking-tight uppercase leading-[1.05] italic">
                 Why We Build. <br />
-                <span className="text-emerald-500">Democratizing Edge.</span>
+                <span className="text-[#00A3FF]">Democratizing Edge.</span>
               </h2>
               
               <div className="space-y-4 text-white/50 text-sm leading-relaxed font-medium">
                 <p>
-                  Most retail services profit from your ignorance or your losses. They sell lagged indicators, high-ticket "secrets," or channel you to biased partner brokers. We built IFX Trades to end this cycle.
+                  Most retail services rely on lagged indicators or channel you to biased partner brokers. We built IFX Trades to end this conflict of interest, operating strictly as systematic quantitative developers and technology providers.
                 </p>
                 <p>
-                  We are software developers, macro strategists, and quantitative developers—not retail "gurus." Every systematic binary we compile and license operates with absolute transparency. We license our software at a fair price and build custom algorithmic solutions with audited precision.
+                  We are quantitative developers and macro software strategists. Every systematic binary we compile and license operates with complete performance transparency. We provide compiled algorithms and bespoke quantitative solutions with audited technical precision.
                 </p>
                 <p>
-                  Our mission is simple: to equip you with the exact same execution tools, lightning-fast bridges, and mathematical edge that major financial desks utilize daily. Zero conflict. Absolute integrity.
+                  Our mission is simple: to equip modern professional participants with the exact same low-latency execution bridges, risk guardrails, and mathematical edge that major systematic desks deploy daily. Zero conflict. Pristine execution.
                 </p>
               </div>
               
@@ -162,7 +162,7 @@ export const About = () => {
                   { icon: HeartHandshake, text: "100% Secure Enclaves" }
                 ].map((item, idx) => (
                   <div key={idx} className="flex items-center gap-3 group">
-                    <div className="w-7 h-7 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-black transition-colors shrink-0">
+                    <div className="w-7 h-7 rounded-full bg-[#00A3FF]/10 flex items-center justify-center text-[#00A3FF] group-hover:bg-[#00A3FF] group-hover:text-black transition-colors shrink-0">
                       <item.icon className="w-3.5 h-3.5" />
                     </div>
                     <span className="text-[9px] font-black uppercase tracking-widest text-white/70">{item.text}</span>
@@ -207,7 +207,7 @@ export const About = () => {
           
           {/* Header */}
           <div className="text-center mb-16 md:mb-20 space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#53bdeb]/10 border border-[#53bdeb]/20 text-[#53bdeb] text-[8px] font-black uppercase tracking-[0.25em]">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-[#00A3FF] text-[8px] font-black uppercase tracking-[0.25em]">
               Executive Enclave
             </div>
             <h2 className="text-3xl sm:text-5xl font-black text-white uppercase italic tracking-tighter">
@@ -226,7 +226,7 @@ export const About = () => {
               name="Founding Partner"
               role="Chief Executive Officer"
               verdict="Our quantitative engines operate on absolute mathematical probability, not prediction, establishing a pristine standard of execution consistency."
-              bio="Forged inside tier-1 sovereign currency desks in London and Zurich, the CEO's career is defined by high-frequency risk management. In mid-2018, the CEO founded this quantitative desk to eliminate retail broker conflicts, successfully scaling our execution infrastructure to handle billions in monthly volume. Today, clients interact directly with our institutional-grade algorithms, supported 24/5 by our elite desk."
+              bio="Forged inside tier-1 sovereign currency desks in London and Zurich, the CEO's career is defined by high-frequency risk management. In mid-2018, the CEO founded this quantitative desk to eliminate retail broker conflicts, successfully scaling our execution infrastructure to handle billions in monthly volume. Today, clients deploy our institutional-grade algorithms, supported 24/5 by our elite desk."
               pedigree="EST. MID-2018"
               avatarInitials="CEO"
               signature="Chief Executive"
@@ -267,8 +267,8 @@ export const About = () => {
             <p className="text-lg sm:text-2xl font-serif italic text-white/80 leading-relaxed mb-8">
               "In a global market flooded with noise, the only pristine signal is mathematics. We built IFX Trades to deliver that signal with absolute mechanical integrity. We do not gamble; we execute."
             </p>
-            <div className="w-12 h-0.5 bg-emerald-500 mx-auto mb-5" />
-            <p className="text-[9px] font-black uppercase tracking-[0.4em] text-emerald-500">IFX Quantitative &amp; Risk Council</p>
+            <div className="w-12 h-0.5 bg-[#00A3FF] mx-auto mb-5" />
+            <p className="text-[9px] font-black uppercase tracking-[0.4em] text-[#00A3FF]">IFX Quantitative &amp; Risk Council</p>
           </div>
         </div>
       </section>

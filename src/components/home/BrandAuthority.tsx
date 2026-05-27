@@ -16,7 +16,7 @@ const SVG_MAP: Record<string, React.ReactNode> = {
     </svg>
   ),
   "tradingview": (
-    <svg className="w-5 h-5 text-emerald-400 group-hover:text-emerald-300 transition-colors" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <svg className="w-5 h-5 text-blue-400 group-hover:text-blue-300 transition-colors" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
     </svg>
   ),
@@ -26,7 +26,7 @@ const SVG_MAP: Record<string, React.ReactNode> = {
     </svg>
   ),
   "vt markets": (
-    <svg className="w-5 h-5 text-amber-400 group-hover:text-amber-300 transition-colors" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <svg className="w-5 h-5 text-blue-400 group-hover:text-blue-300 transition-colors" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
     </svg>
   ),
@@ -110,7 +110,7 @@ export const BrandAuthority = () => {
             {partners.map((partner) => (
               <div 
                 key={partner.name} 
-                className="px-4 py-2.5 sm:px-6 sm:py-4 rounded-xl sm:rounded-[1.5rem] bg-white/[0.02] border border-white/[0.05] hover:border-emerald-500/20 hover:bg-emerald-500/[0.02] transition-all duration-500 flex items-center gap-2 sm:gap-3 group shadow-xl hover:scale-105"
+                className="px-4 py-2.5 sm:px-6 sm:py-4 rounded-xl sm:rounded-[1.5rem] bg-white/[0.02] border border-white/[0.05] hover:border-blue-500/20 hover:bg-blue-500/[0.02] transition-all duration-500 flex items-center gap-2 sm:gap-3 group shadow-xl hover:scale-105"
               >
                 {partner.logo_url && partner.logo_url !== "" ? (
                   <img 
@@ -127,10 +127,10 @@ export const BrandAuthority = () => {
                     {partner.logo_svg}
                   </div>
                 ) : (
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 group-hover:animate-pulse" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500 group-hover:animate-pulse" />
                 )}
                 <div className="flex flex-col text-left">
-                  <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-white group-hover:text-emerald-400 transition-colors">
+                  <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-white group-hover:text-blue-400 transition-colors">
                     {partner.name}
                   </span>
                   <span className="text-[7px] sm:text-[8px] font-bold uppercase tracking-[0.2em] text-white/30 hidden sm:block">
@@ -151,7 +151,7 @@ export const BrandAuthority = () => {
                 {[...PRESS, ...PRESS, ...PRESS].map((press, i) => (
                   <span 
                     key={i} 
-                    className="text-xs sm:text-sm font-black uppercase tracking-[0.3em] sm:tracking-[0.4em] text-white/15 hover:text-emerald-400/40 transition-colors duration-500 cursor-default"
+                    className="text-xs sm:text-sm font-black uppercase tracking-[0.3em] sm:tracking-[0.4em] text-white/15 hover:text-blue-400/40 transition-colors duration-500 cursor-default"
                   >
                     {press}
                   </span>
