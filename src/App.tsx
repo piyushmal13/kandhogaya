@@ -46,6 +46,7 @@ const RiskDisclosure = lazy(() => import("./pages/legal/RiskDisclosure").then(m 
 const CookiePolicy = lazy(() => import("./pages/legal/CookiePolicy").then(m => ({ default: m.CookiePolicy })));
 const AffiliateHub = lazy(() => import("./pages/AffiliateHub").then(m => ({ default: m.AffiliateHub })));
 const QuantX = lazy(() => import("./pages/QuantX").then(m => ({ default: m.QuantX })));
+const B2BLiquidity = lazy(() => import("./pages/B2BLiquidity").then(m => ({ default: m.B2BLiquidity })));
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -80,6 +81,7 @@ const AnimatedRoutes = () => {
             <Route path="/hiring" element={<Hiring />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/b2b/liquidity" element={<B2BLiquidity />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/terms" element={<TermsOfService />} />
             <Route path="/risk" element={<RiskDisclosure />} />

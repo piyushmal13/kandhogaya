@@ -3,8 +3,6 @@ import { Link } from "react-router-dom";
 import {
   ArrowUpRight,
   ShieldCheck,
-  Star,
-  Activity,
   TerminalSquare,
   Globe,
   Building,
@@ -47,7 +45,6 @@ export const Footer = () => (
             </div>
             <div className="flex flex-col">
               <div className="text-[11px] font-black tracking-[0.45em] text-white uppercase leading-tight">IFX TRADES</div>
-              <div className="text-[6.5px] font-black tracking-[0.3em] text-emerald-500 uppercase mt-1">QUANTITATIVE CORE</div>
             </div>
           </Link>
           <p className="text-xs leading-[1.8] text-[#8A9AAB] font-medium max-w-sm mb-8" itemProp="description">
@@ -72,10 +69,6 @@ export const Footer = () => (
                 <social.Icon className="w-3.5 h-3.5" />
               </a>
             ))}
-            <div className="ml-2 flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/5 border border-emerald-500/10 text-emerald-400/60 text-[8px] font-black uppercase tracking-widest">
-              <ShieldCheck className="w-3 h-3 text-emerald-400" />
-              256-bit Enclave
-            </div>
           </div>
         </div>
 
@@ -85,39 +78,38 @@ export const Footer = () => (
           {/* --- Column 1: Core Protocol --- */}
           <div>
             <h4 className="mb-6 text-[10px] font-black uppercase tracking-[0.3em] text-white flex items-center gap-2">
-              <TerminalSquare className="w-3.5 h-3.5 text-emerald-500/50 animate-pulse" /> Core System
+              <TerminalSquare className="w-3.5 h-3.5 text-emerald-500/50" /> Core System
             </h4>
             <ul className="space-y-4 text-xs text-[#8A9AAB] font-medium">
               <li><Link to="/marketplace" className="hover:text-emerald-400 transition-colors flex items-center gap-1.5 group">Algorithms <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
               <li><Link to="/results" className="hover:text-emerald-400 transition-colors">Verified Audit Logs</Link></li>
-              <li><Link to="/webinars" className="hover:text-emerald-400 transition-colors">Desk Masterclasses</Link></li>
+              <li><Link to="/webinars" className="hover:text-emerald-400 transition-colors">Desk Sessions</Link></li>
               <li><Link to="/blog" className="hover:text-emerald-400 transition-colors">Intelligence Feed</Link></li>
             </ul>
           </div>
 
-          {/* --- Column 2: B2B Broker Services (Sovereign business addition!) --- */}
+          {/* --- Column 2: B2B Broker Services --- */}
           <div>
             <h4 className="mb-6 text-[10px] font-black uppercase tracking-[0.3em] text-white flex items-center gap-2">
               <Building className="w-3.5 h-3.5 text-emerald-500/50" /> B2B Services
             </h4>
             <ul className="space-y-4 text-xs text-[#8A9AAB] font-medium">
-              <li><Link to="/consultation" className="hover:text-emerald-400 transition-colors flex items-center gap-1.5 group">Custom Engineering <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
-              <li><a href="#live-chat" className="hover:text-emerald-400 transition-colors">ECN Bridge Setup</a></li>
-              <li><a href="#live-chat" className="hover:text-emerald-400 transition-colors">Liquidity Integration</a></li>
-              <li><a href="#live-chat" className="hover:text-emerald-400 transition-colors">Turnkey CRM Desks</a></li>
+              <li><Link to="/solutions/custom" className="hover:text-emerald-400 transition-colors flex items-center gap-1.5 group">Custom Strategy <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
+              <li><Link to="/b2b/liquidity" className="hover:text-emerald-400 transition-colors flex items-center gap-1.5 group">Liquidity Integration <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
+              <li><Link to="/hiring" className="hover:text-emerald-400 transition-colors">Broker Talent Recruitment</Link></li>
             </ul>
           </div>
 
-          {/* --- Column 3: Partner Program (Affiliate Node addition!) --- */}
+          {/* --- Column 3: Partner Program --- */}
           <div>
             <h4 className="mb-6 text-[10px] font-black uppercase tracking-[0.3em] text-white flex items-center gap-2">
               <Users className="w-3.5 h-3.5 text-emerald-500/50" /> Partners
             </h4>
             <ul className="space-y-4 text-xs text-[#8A9AAB] font-medium">
-              <li><Link to="/affiliate" className="hover:text-emerald-400 transition-colors flex items-center gap-1.5 group">Affiliate Desk <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
-              <li><a href="#live-chat" className="hover:text-emerald-400 transition-colors">Broker Referral Node</a></li>
-              <li><a href="#live-chat" className="hover:text-emerald-400 transition-colors">Strategic Allocations</a></li>
-              <li><a href="#live-chat" className="hover:text-emerald-400 transition-colors">Joint Ventures</a></li>
+              <li><Link to="/affiliate" className="hover:text-emerald-400 transition-colors flex items-center gap-1.5 group">Elite Affiliate Desk <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
+              <li><Link to="/contact" className="hover:text-emerald-400 transition-colors">Broker Referral Node</Link></li>
+              <li><Link to="/contact" className="hover:text-emerald-400 transition-colors">Strategic Allocations</Link></li>
+              <li><Link to="/contact" className="hover:text-emerald-400 transition-colors">Joint Ventures</Link></li>
             </ul>
           </div>
 
@@ -140,7 +132,7 @@ export const Footer = () => (
       {/* --- Minimalist Master Base --- */}
       <div className="pt-8 pb-4 border-t border-white/[0.04] flex flex-col lg:flex-row items-center justify-between gap-8">
         <div className="text-[9px] font-black text-[#4F5A69] uppercase tracking-[0.3em] text-center lg:text-left">
-          &copy; {new Date().getFullYear()} {BRANDING.name}. REGULATED CRYPTOGRAPHIC NODES ACTIVE.
+          &copy; {new Date().getFullYear()} {BRANDING.name}.
         </div>
 
         <div className="flex flex-wrap items-center justify-center gap-8 text-[9px] font-black text-[#4F5A69] uppercase tracking-[0.25em]">

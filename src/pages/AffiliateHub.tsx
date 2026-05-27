@@ -28,6 +28,7 @@ export const AffiliateHub = () => {
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const [referredClients, setReferredClients] = useState<any[]>([]);
+  const [commissionRate, setCommissionRate] = useState<number>(10.00);
   const [stats, setStats] = useState({
     clicks: 124, // Mock if newly created
     registrations: 12,
@@ -71,6 +72,7 @@ export const AffiliateHub = () => {
 
       if (data) {
         setAffiliateCode(data.code);
+        setCommissionRate(Number(data.commission_rate || 10.00));
         setStats({
           clicks: data.total_clicks || 0,
           registrations: data.total_registrations || 0,
@@ -259,18 +261,17 @@ export const AffiliateHub = () => {
                     <h3 className="text-sm font-black text-white uppercase tracking-widest italic">Commission Hierarchy</h3>
                     <div className="space-y-3">
                        <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-gray-500">
-                          <span>Standard Algorithms</span>
-                          <span className="text-emerald-500">20% Share</span>
+                          <span>Standard Algorithms & Signals</span>
+                          <span className="text-emerald-500">{commissionRate}% CPA Share</span>
                        </div>
                        <div className="w-full bg-white/5 h-1 rounded-full overflow-hidden">
-                          <div className="w-[20%] h-full bg-emerald-500 shadow-[0_0_10px_var(--color8)]" />
+                          <div 
+                            className="h-full bg-emerald-500 shadow-[0_0_10px_var(--color8)] transition-all duration-1000" 
+                            style={{ width: `${commissionRate}%` }}
+                          />
                        </div>
-                       <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-gray-500">
-                          <span>Enterprise Signals</span>
-                          <span className="text-cyan-400">15% Share</span>
-                       </div>
-                       <div className="w-full bg-white/5 h-1 rounded-full overflow-hidden">
-                          <div className="w-[15%] h-full bg-cyan-400 shadow-[0_0_10px_var(--color51)]" />
+                       <div className="text-[9px] text-gray-500 leading-relaxed font-bold uppercase tracking-wider">
+                         By default, your account starts at 10.00% CPA commission. Custom higher percentages are dynamically assigned from the central admin desk based on broker referral volumes.
                        </div>
                     </div>
                  </div>
