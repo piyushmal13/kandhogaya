@@ -82,7 +82,7 @@ export const mapWebinar = (raw: any): Webinar => {
 export const mapLead = (raw: any): any => ({
   id: raw.id,
   email: raw.email || '',
-  name: raw.name || raw.crm_metadata?.name || raw.email?.split('@')[0] || 'Anonymous',
+  name: raw.full_name || raw.name || raw.crm_metadata?.name || raw.email?.split('@')[0] || 'Anonymous',
   source: raw.source || 'Organic Discovery',
   created_at: raw.created_at,
   stage: raw.stage || 'NEW',

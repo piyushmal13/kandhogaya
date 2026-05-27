@@ -9,6 +9,7 @@ const ENTRY = [0.16, 1, 0.3, 1] as const;
 import { useFeatureFlag } from "@/hooks/useFeatureFlag";
 import { supabase } from "@/lib/supabase";
 import { EliteButton } from "@/components/ui/Button";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 interface FortressHeroProps {
   onRequestSession: () => void;
@@ -43,6 +44,7 @@ const TRUST_ITEMS = [
 ];
 
 export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, onRequestBuild }) => {
+  const { t } = useLanguage();
   const { isEnabled: isTickerActive } = useFeatureFlag('market_ticker_active', true);
   const [tickers, setTickers] = useState<string[]>([]);
   const sectionRef = useRef<HTMLElement>(null);
@@ -178,12 +180,12 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.8, ease: ENTRY }}
         >
-          <span className="block text-[clamp(2.0rem,9vw,5.5rem)] tracking-tight whitespace-nowrap break-keep">World-Class</span>
+          <span className="block text-[clamp(2.0rem,9vw,5.5rem)] tracking-tight whitespace-nowrap break-keep">{t("hero_world_class")}</span>
           <span className="block text-[clamp(1.8rem,8vw,5.5rem)] tracking-tight mt-1 sm:mt-2">
-            <span className="italic font-serif text-shimmer pr-2 sm:pr-3 text-[clamp(1.8rem,8vw,5.5rem)]">Institutional</span>
+            <span className="italic font-serif text-shimmer pr-2 sm:pr-3 text-[clamp(1.8rem,8vw,5.5rem)]">{t("hero_inst_fx")}</span>
           </span>
           <span className="block text-[clamp(2.0rem,9vw,5.5rem)] tracking-tight mt-1">
-            FX &amp; Macro.
+            {t("hero_macro")}
           </span>
         </motion.h1>
 
@@ -195,7 +197,7 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35, duration: 0.7, ease: ENTRY }}
         >
-          We provide professional proprietary trading algorithms at the best cost. If you have a specific trading strategy, our quantitative desk will build it for you with high precision and institutional-grade reliability.
+          {t("hero_sub")}
         </motion.p>
 
         {/* CTAs */}
@@ -207,13 +209,13 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
         >
           <button onClick={handleRequestSessionClick} className="shrink-0">
             <EliteButton variant="gemini" size="lg" rightIcon={<ArrowRight className="w-3.5 h-3.5" />} glowEffect>
-              Request Session
+              {t("cta_request")}
             </EliteButton>
           </button>
 
           <button onClick={handleSeeResults} className="shrink-0">
             <EliteButton variant="secondary" size="lg" leftIcon={<Play className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400/20" />}>
-              See Results
+              {t("cta_results")}
             </EliteButton>
           </button>
         </motion.div>
@@ -258,7 +260,7 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
           className="z-30 hidden sm:flex flex-col items-center gap-2 opacity-40 hover:opacity-90 transition-opacity duration-300 cursor-pointer"
           aria-label="Scroll down to explore"
         >
-          <span className="text-[9px] font-black uppercase tracking-[0.45em] text-white">Explore</span>
+          <span className="text-[9px] font-black uppercase tracking-[0.45em] text-white">{t("cta_explore")}</span>
           <ChevronDown className="w-4 h-4 text-emerald-400" />
         </motion.button>
       </div>

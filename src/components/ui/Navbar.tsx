@@ -19,8 +19,10 @@ import { AnimatePresence, motion } from "motion/react";
 import { BRANDING } from "../../constants/branding";
 import { useAuth } from "../../contexts/AuthContext";
 import { cn } from "../../utils/cn";
+import { useLanguage, LanguageCode } from "../../contexts/LanguageContext";
 
 export const Navbar = () => {
+  const { t, language, setLanguage } = useLanguage();
   const { user, userProfile, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -54,20 +56,20 @@ export const Navbar = () => {
   }, [handleScroll]);
 
   const navLinks = [
-    { name: "Home", path: "/", icon: Home },
-    { name: "Ecosystem", path: "/quantx", icon: Zap },
-    { name: "Webinars", path: "/webinars", icon: BookOpen },
-    { name: "Marketplace", path: "/marketplace", icon: BarChart3 },
-    { name: "Research", path: "/blog", icon: FileText },
-    { name: "About", path: "/about", icon: Zap },
+    { name: t("nav_home"), path: "/", icon: Home },
+    { name: t("nav_ecosystem"), path: "/quantx", icon: Zap },
+    { name: t("nav_webinars"), path: "/webinars", icon: BookOpen },
+    { name: t("nav_market"), path: "/marketplace", icon: BarChart3 },
+    { name: t("nav_research"), path: "/blog", icon: FileText },
+    { name: t("nav_about"), path: "/about", icon: Zap },
   ];
 
   const bottomLinks = [
-    { name: "Home", path: "/", icon: Home },
-    { name: "Ecosystem", path: "/quantx", icon: Zap },
-    { name: "Webinars", path: "/webinars", icon: BookOpen },
-    { name: "Market", path: "/marketplace", icon: BarChart3 },
-    { name: "Terminal", path: "/solutions/custom", icon: Terminal },
+    { name: t("nav_home"), path: "/", icon: Home },
+    { name: t("nav_ecosystem"), path: "/quantx", icon: Zap },
+    { name: t("nav_webinars"), path: "/webinars", icon: BookOpen },
+    { name: t("nav_market"), path: "/marketplace", icon: BarChart3 },
+    { name: t("portal"), path: "/solutions/custom", icon: Terminal },
   ];
 
   const isAdmin = userProfile?.role === "admin";
@@ -145,6 +147,36 @@ export const Navbar = () => {
 
           {/* Desktop Auth */}
           <div className="hidden md:flex items-center gap-3">
+            {/* Language Dropdown Selector */}
+            <div className="relative group/lang">
+              <button 
+                type="button"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.02] border border-white/[0.05] text-[9px] font-black uppercase tracking-widest text-white/50 hover:text-white hover:bg-white/[0.04] transition-all cursor-pointer"
+              >
+                <span>{language.toUpperCase()}</span>
+              </button>
+              <div className="absolute right-0 top-full mt-2 w-36 bg-[#040608]/95 border border-white/10 rounded-2xl overflow-hidden shadow-2xl opacity-0 translate-y-2 group-hover/lang:opacity-100 group-hover/lang:translate-y-0 pointer-events-none group-hover/lang:pointer-events-auto transition-all duration-300 z-50">
+                {(["en", "hi", "ar", "es", "de", "fr"] as LanguageCode[]).map((lang) => (
+                  <button
+                    key={lang}
+                    type="button"
+                    onClick={() => setLanguage(lang)}
+                    className={cn(
+                      "w-full text-left px-4 py-2.5 text-[9px] font-black uppercase tracking-widest transition-all cursor-pointer",
+                      language === lang ? "bg-emerald-500/10 text-emerald-400" : "text-white/40 hover:text-white hover:bg-white/5"
+                    )}
+                  >
+                    {lang === "en" && "English"}
+                    {lang === "hi" && "हिंदी 🇮🇳"}
+                    {lang === "ar" && "العربية 🇦🇪"}
+                    {lang === "es" && "Español 🇪🇸"}
+                    {lang === "de" && "Deutsch 🇩🇪"}
+                    {lang === "fr" && "Français 🇫🇷"}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {user ? (
               <div className="flex items-center gap-2 bg-white/[0.02] p-1.5 rounded-full border border-white/[0.05]">
                 <Link
@@ -180,7 +212,7 @@ export const Navbar = () => {
               >
                 <div className="absolute inset-0 bg-emerald-400 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" />
                 <span className="relative z-10 flex items-center gap-2">
-                  Portal
+                  {t("portal")}
                   <ArrowRight className="h-3 w-3 group-hover:translate-x-0.5 transition-transform" />
                 </span>
               </Link>
@@ -306,7 +338,7 @@ export const Navbar = () => {
                     onClick={() => setIsOpen(false)}
                     className="flex items-center justify-center gap-3 rounded-[1.25rem] bg-white px-5 py-4 text-xs font-black uppercase tracking-[0.2em] text-black shadow-[0_15px_40px_rgba(255,255,255,0.2)]"
                   >
-                    Access Portal <ArrowRight className="h-5 w-5" />
+                    {t("portal")} <ArrowRight className="h-5 w-5" />
                   </Link>
                 )}
               </div>

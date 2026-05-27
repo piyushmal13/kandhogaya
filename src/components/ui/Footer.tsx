@@ -96,6 +96,7 @@ export const Footer = () => (
             <ul className="space-y-4 text-xs text-[#8A9AAB] font-medium">
               <li><Link to="/solutions/custom" className="hover:text-emerald-400 transition-colors flex items-center gap-1.5 group">Custom Strategy <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
               <li><Link to="/b2b/liquidity" className="hover:text-emerald-400 transition-colors flex items-center gap-1.5 group">Liquidity Integration <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
+              <li><Link to="/b2b/white-label" className="hover:text-emerald-400 transition-colors flex items-center gap-1.5 group">White Label Partnering <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
               <li><Link to="/hiring" className="hover:text-emerald-400 transition-colors">Broker Talent Recruitment</Link></li>
             </ul>
           </div>
@@ -108,15 +109,13 @@ export const Footer = () => (
             <ul className="space-y-4 text-xs text-[#8A9AAB] font-medium">
               <li><Link to="/affiliate" className="hover:text-emerald-400 transition-colors flex items-center gap-1.5 group">Elite Affiliate Desk <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
               <li><Link to="/contact" className="hover:text-emerald-400 transition-colors">Broker Referral Node</Link></li>
-              <li><Link to="/contact" className="hover:text-emerald-400 transition-colors">Strategic Allocations</Link></li>
-              <li><Link to="/contact" className="hover:text-emerald-400 transition-colors">Joint Ventures</Link></li>
             </ul>
           </div>
 
           {/* --- Column 4: Corporate Hub --- */}
           <div>
             <h4 className="mb-6 text-[10px] font-black uppercase tracking-[0.3em] text-white flex items-center gap-2">
-              <Globe className="w-3.5 h-3.5 text-emerald-500/50" /> Corporate
+              <Globe className="w-3.5 h-3.5 text-emerald-500/50" /> About Us
             </h4>
             <ul className="space-y-4 text-xs text-[#8A9AAB] font-medium">
               <li><Link to="/about" className="hover:text-emerald-400 transition-colors">About Operations</Link></li>

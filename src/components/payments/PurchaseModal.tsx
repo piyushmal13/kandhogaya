@@ -178,6 +178,25 @@ export const PurchaseModal = ({ plan, amount, productId, onClose }: PurchaseModa
                 >
                   Initiate Verification Flow
                 </button>
+
+                {/* Accepted Payment Systems Visual Badging */}
+                <div className="pt-6 border-t border-white/5 space-y-3">
+                  <div className="text-[8px] font-black uppercase tracking-[0.25em] text-gray-500 text-center">Accepted Settlement Systems</div>
+                  <div className="flex flex-wrap items-center justify-center gap-2 bg-black/30 p-4 rounded-2xl border border-white/5">
+                    <div className="px-2.5 py-1 bg-white/[0.02] border border-white/10 rounded-lg shrink-0">
+                      <span className="text-[8px] font-bold text-white/50 uppercase tracking-widest">Mastercard</span>
+                    </div>
+                    <div className="px-2.5 py-1 bg-emerald-500/5 border border-emerald-500/10 rounded-lg shrink-0">
+                      <span className="text-[8px] font-bold text-emerald-400 uppercase tracking-widest">UPI (PhonePe, GPay)</span>
+                    </div>
+                    <div className="px-2.5 py-1 bg-white/[0.02] border border-white/10 rounded-lg shrink-0">
+                      <span className="text-[8px] font-bold text-white/50 uppercase tracking-widest">Credit/Debit Cards</span>
+                    </div>
+                    <div className="px-2.5 py-1 bg-amber-500/5 border border-amber-500/10 rounded-lg shrink-0">
+                      <span className="text-[8px] font-bold text-amber-500 uppercase tracking-widest">Crypto (BTC, USDT)</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           )}

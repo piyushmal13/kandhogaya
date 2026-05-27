@@ -3,43 +3,50 @@ import { motion } from "motion/react";
 import { 
   Building, 
   ShieldCheck, 
-  Activity, 
   Send, 
   Cpu, 
   Zap, 
   Globe, 
   Server, 
-  FileTerminal 
+  Layout, 
+  Smartphone,
+  CreditCard,
+  Network
 } from "lucide-react";
 import { leadService } from "../services/crm/leadService";
 import { useToast } from "../contexts/ToastContext";
 import { PageMeta } from "../components/site/PageMeta";
 
-export const B2BLiquidity = () => {
+export const B2BWhiteLabel = () => {
   const { success, error: toastError } = useToast();
-  const [brokerName, setBrokerName] = useState("");
+  const [orgName, setOrgName] = useState("");
   const [contactName, setContactName] = useState("");
   const [email, setEmail] = useState("");
-  const [volume, setVolume] = useState("Under $500M");
-  const [protocol, setProtocol] = useState("FIX 4.4");
+  const [audienceSize, setAudienceSize] = useState("0 - 1,000 clients");
+  const [timeline, setTimeline] = useState("Immediate (< 30 days)");
+  const [requirements, setRequirements] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [trackingId, setTrackingId] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!brokerName || !contactName || !email) return;
+    if (!orgName || !contactName || !email || !requirements) return;
 
     setIsSubmitting(true);
     try {
+      const generatedId = Math.random().toString(36).substring(2, 12).toUpperCase();
       const result = await leadService.createLead({
         email: email.trim(),
-        source: "b2b_liquidity_desk",
+        source: "b2b_whitelabel_desk",
         stage: "B2B_PARTNER",
         crm_metadata: {
-          broker_name: brokerName.trim(),
+          organization_name: orgName.trim(),
           contact_officer: contactName.trim(),
-          monthly_volume: volume,
-          protocol: protocol,
+          audience_size: audienceSize,
+          target_timeline: timeline,
+          custom_requirements: requirements.trim(),
+          tracking_id: `IFX-WLB-${generatedId}`,
           system_telemetry: {
             timestamp: new Date().toISOString(),
             userAgent: navigator.userAgent
@@ -48,16 +55,18 @@ export const B2BLiquidity = () => {
       });
 
       if (result.success) {
-        success("B2B Liquidity Brief safely transmitted to institutional desk.");
+        setTrackingId(`IFX-WLB-${generatedId}`);
+        success("B2B White Label Partner Brief safely logged.");
         setIsSuccess(true);
-        setBrokerName("");
+        setOrgName("");
         setContactName("");
         setEmail("");
+        setRequirements("");
       } else {
         toastError(result.error || "Failed to submit request.");
       }
     } catch (err) {
-      console.error("B2B Submission Error:", err);
+      console.error("B2B White Label Submission Error:", err);
       toastError("Network connection interrupted. Please try again.");
     } finally {
       setIsSubmitting(false);
@@ -67,9 +76,9 @@ export const B2BLiquidity = () => {
   return (
     <div className="bg-[#010203] text-white selection:bg-emerald-500 selection:text-black min-h-screen pt-36 pb-24 overflow-hidden relative">
       <PageMeta 
-        title="B2B Liquidity Integration Desk" 
-        description="Connect your brokerage to direct Tier-1 institutional ECN liquidity aggregates. FIX 4.4, MT4/MT5 bridges, and sub-millisecond execution routing."
-        path="/b2b/liquidity"
+        title="B2B Turnkey White Label Solutions" 
+        description="Launch your proprietary algorithmic brokerage inside 30 days. Complete turnkey solutions including branded consoles, custom logos, payment processing, and deep ECN aggregates."
+        path="/b2b/white-label"
       />
 
       {/* Ambient background VFX */}
@@ -81,23 +90,23 @@ export const B2BLiquidity = () => {
         <div className="text-center max-w-3xl mx-auto mb-20 space-y-6">
           <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-emerald-500/5 border border-emerald-500/10 text-emerald-400 text-[10px] font-black uppercase tracking-[0.25em]">
             <Server className="w-3.5 h-3.5 animate-pulse" />
-            Institutional B2B Infrastructure
+            Turnkey Enterprise Ecosystem
           </div>
           <h1 className="text-4xl sm:text-6xl font-black uppercase tracking-tight leading-none italic">
-            Direct ECN <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Liquidity</span> Aggregation.
+            Your Premium <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">White Label</span> Partner.
           </h1>
           <p className="text-gray-400 text-sm leading-relaxed max-w-xl mx-auto font-medium">
-            Aggregated multi-asset liquidity sourced from 15+ Tier-1 global banking institutions. Built to support brokerages, hedge funds, and corporate trading floors.
+            Launch your own fully branded quantitative algorithmic trading business inside 30 days. We provide the frontend website, bespoke brand logos, MT4/MT5 bridges, automated client consoles, payment gateways, and backend management suites.
           </p>
         </div>
 
-        {/* Dynamic Metric Grid */}
+        {/* Dynamic Deliverables Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto mb-24">
           {[
-            { label: "Fill Speed", value: "< 0.15ms", desc: "Sub-millisecond direct routing" },
-            { label: "Raw Spreads", value: "0.0 Pips", desc: "Zero broker markup feeds" },
-            { label: "Bank Liquidity Pools", value: "15+ Nodes", desc: "Tier-1 prime brokers" },
-            { label: "Supported Volume", value: "$8.5B+", desc: "Aggregated monthly capacity" }
+            { label: "Bespoke Frontend", value: "Custom Website", desc: "Tailored design and corporate styling" },
+            { label: "Corporate Identity", value: "Branded Logos", desc: "Designed by premium finance creatives" },
+            { label: "Execution Layer", value: "MT4 / MT5 Desk", desc: "Robust algorithmic server pipelines" },
+            { label: "Billing & Settlement", value: "Fiat & Crypto", desc: "Integrated multi-currency gateways" }
           ].map((m, idx) => (
             <div key={idx} className="p-6 rounded-[2rem] bg-white/[0.01] border border-white/5 text-center">
               <span className="text-[8px] font-black uppercase tracking-widest text-emerald-400/60 block mb-2">{m.label}</span>
@@ -107,36 +116,41 @@ export const B2BLiquidity = () => {
           ))}
         </div>
 
-        {/* Split Grid: Value Proposition & Request form */}
+        {/* Split Grid: Deliverables detail & Intake form */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start max-w-6xl mx-auto">
           
-          {/* Left panel: Value Props */}
+          {/* Left panel: Core Value Props */}
           <div className="lg:col-span-6 space-y-10">
             <div className="space-y-4">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[8px] font-black uppercase tracking-[0.25em]">
-                Direct Market Access
+                Complete Brokerage in a Box
               </div>
               <h2 className="text-3xl font-black uppercase tracking-tight italic">
-                Why Brokerages Partner With IFX.
+                A True Institutional Partnership.
               </h2>
             </div>
 
             <div className="space-y-8">
               {[
                 { 
+                  icon: Layout, 
+                  title: "Custom Brand & Website Setup", 
+                  desc: "We construct a stunning, high-converting dark-mode interface carrying your name, customized typography, corporate logo, and tailored brand aesthetics." 
+                },
+                { 
                   icon: Cpu, 
-                  title: "OneZero Hub & PrimeXM ECN Aggregation", 
-                  desc: "Connect via ultra-low latency fiber networks co-located directly inside global ECN nodes, securing institutional price discovery and direct market routing." 
+                  title: "Pre-Integrated Algorithmic Engine", 
+                  desc: "Deliver instant high-probability trading signals and system execution directly to your clients' dashboards. Fully connected to our elite backtest-verified models." 
                 },
                 { 
-                  icon: Zap, 
-                  title: "Depth of Market Liquidity Pools", 
-                  desc: "Access aggregated order books exceeding $750,000,000 per leg across major currency pairs, metals, and index assets sourced from Tier-1 bank engines." 
+                  icon: Smartphone, 
+                  title: "Client & Administration Consoles", 
+                  desc: "Turnkey client terminals with comprehensive analytics, real-time balance tracking, referred affiliate hubs, and master desks for admin operations." 
                 },
                 { 
-                  icon: Globe, 
-                  title: "Physical Equinix NY4 & LD4 Co-Location", 
-                  desc: "Our matching engines are physically rack-mounted adjacent to prime liquidity providers, bypassing internet latency to guarantee sub-0.1ms tick execution." 
+                  icon: CreditCard, 
+                  title: "Payment Gateway Enclaves", 
+                  desc: "Pre-integrated checkout nodes supporting credit/debit networks, regional wire systems, and secure on-chain cryptographic settlement paths." 
                 }
               ].map((prop, idx) => (
                 <div key={idx} className="flex gap-5">
@@ -152,84 +166,96 @@ export const B2BLiquidity = () => {
             </div>
           </div>
 
-          {/* Right panel: Glassmorphic Request Form */}
+          {/* Right panel: Intake Form */}
           <div className="lg:col-span-6">
             <div className="p-10 rounded-[3rem] bg-[#030508]/80 border border-white/10 backdrop-blur-3xl shadow-[0_30px_60px_rgba(0,0,0,0.5)]">
               {!isSuccess ? (
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div>
-                    <h3 className="text-xl font-black text-white uppercase italic tracking-tighter mb-2">Request Liquidity Setup</h3>
-                    <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Connect your server directly to our institutional feed.</p>
+                    <h3 className="text-xl font-black text-white uppercase italic tracking-tighter mb-2">White Label Strategic Intake</h3>
+                    <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Connect with an enterprise integration analyst.</p>
                   </div>
 
-                  {/* Broker Name */}
+                  {/* Organization Name */}
                   <div className="space-y-1.5">
-                    <label className="text-[8px] font-black uppercase tracking-widest text-emerald-400">Brokerage / Company Name</label>
+                    <label className="text-[8px] font-black uppercase tracking-widest text-emerald-400">Organization Name</label>
                     <input 
                       type="text" 
                       required 
-                      value={brokerName}
-                      onChange={(e) => setBrokerName(e.target.value)}
-                      placeholder="e.g. Sovereign Markets Corp"
+                      value={orgName}
+                      onChange={(e) => setOrgName(e.target.value)}
+                      placeholder="e.g. Apex Trading International"
                       className="w-full bg-black/40 border border-white/5 rounded-xl py-3 px-4 text-xs text-white outline-none focus:border-emerald-500/30 transition-all font-medium"
                     />
                   </div>
 
-                  {/* Contact Name */}
+                  {/* Authorized Officer */}
                   <div className="space-y-1.5">
-                    <label className="text-[8px] font-black uppercase tracking-widest text-emerald-400">Authorized Contact Officer</label>
+                    <label className="text-[8px] font-black uppercase tracking-widest text-emerald-400">Authorized Officer / Representative</label>
                     <input 
                       type="text" 
                       required 
                       value={contactName}
                       onChange={(e) => setContactName(e.target.value)}
-                      placeholder="e.g. Alexander Vance"
+                      placeholder="e.g. Sarah Sterling"
                       className="w-full bg-black/40 border border-white/5 rounded-xl py-3 px-4 text-xs text-white outline-none focus:border-emerald-500/30 transition-all font-medium"
                     />
                   </div>
 
-                  {/* Business Email */}
+                  {/* Corporate Email */}
                   <div className="space-y-1.5">
-                    <label className="text-[8px] font-black uppercase tracking-widest text-emerald-400">Business Email Node</label>
+                    <label className="text-[8px] font-black uppercase tracking-widest text-emerald-400">Corporate Email Address</label>
                     <input 
                       type="email" 
                       required 
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="e.g. operations@sovereignmarkets.com"
+                      placeholder="e.g. integration@apextrading.com"
                       className="w-full bg-black/40 border border-white/5 rounded-xl py-3 px-4 text-xs text-white outline-none focus:border-emerald-500/30 transition-all font-mono"
                     />
                   </div>
 
-                  {/* Two column dropdown selectors */}
+                  {/* Dropdowns */}
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-1.5">
-                      <label className="text-[8px] font-black uppercase tracking-widest text-emerald-400">Est. Monthly Volume</label>
+                      <label className="text-[8px] font-black uppercase tracking-widest text-emerald-400">Est. Audience Size</label>
                       <select 
-                        value={volume}
-                        onChange={(e) => setVolume(e.target.value)}
+                        value={audienceSize}
+                        onChange={(e) => setAudienceSize(e.target.value)}
                         className="w-full bg-[#030508] border border-white/5 rounded-xl py-3 px-4 text-xs text-white outline-none focus:border-emerald-500/30 transition-all font-medium"
                       >
-                        <option value="Under $500M">Under $500M</option>
-                        <option value="$500M - $1B">$500M - $1B</option>
-                        <option value="$1B - $5B">$1B - $5B</option>
-                        <option value="Above $5B">Above $5B</option>
+                        <option value="0 - 1,000 clients">0 - 1,000 clients</option>
+                        <option value="1,000 - 5,000 clients">1,000 - 5,000 clients</option>
+                        <option value="5,000 - 20,000 clients">5,000 - 20,000 clients</option>
+                        <option value="Above 20,000 clients">Above 20,000 clients</option>
                       </select>
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-[8px] font-black uppercase tracking-widest text-emerald-400">Target Bridge Protocol</label>
+                      <label className="text-[8px] font-black uppercase tracking-widest text-emerald-400">Target Launch Window</label>
                       <select 
-                        value={protocol}
-                        onChange={(e) => setProtocol(e.target.value)}
+                        value={timeline}
+                        onChange={(e) => setTimeline(e.target.value)}
                         className="w-full bg-[#030508] border border-white/5 rounded-xl py-3 px-4 text-xs text-white outline-none focus:border-emerald-500/30 transition-all font-medium"
                       >
-                        <option value="PrimeXM X-Connect">PrimeXM X-Connect</option>
-                        <option value="OneZero Hub Link">OneZero Hub Link</option>
-                        <option value="FIX API (Binary/Protobuf)">FIX API (Binary/Protobuf)</option>
-                        <option value="MT5 Gateway Tunnel">MT5 Gateway Tunnel</option>
+                        <option value="Immediate (< 30 days)">Immediate (&lt; 30 days)</option>
+                        <option value="Short Term (1 - 3 months)">Short Term (1 - 3 mos)</option>
+                        <option value="Strategic (3 - 6 months)">Strategic (3 - 6 mos)</option>
                       </select>
                     </div>
+                  </div>
+
+                  {/* Requirements Textarea */}
+                  <div className="space-y-1.5">
+                    <label className="text-[8px] font-black uppercase tracking-widest text-emerald-400">White Label Strategy & Custom Requirements</label>
+                    <textarea 
+                      required
+                      value={requirements}
+                      onChange={(e) => setRequirements(e.target.value)}
+                      placeholder="Please summarize your target market, custom integrations needed (MT4, MT5, or custom web terminal), billing preferences, and brand vision..."
+                      rows={4}
+                      className="w-full bg-black/40 border border-white/5 rounded-xl py-3 px-4 text-xs text-white outline-none focus:border-emerald-500/30 transition-all font-medium resize-none"
+                    />
                   </div>
 
                   {/* Submit button */}
@@ -242,7 +268,7 @@ export const B2BLiquidity = () => {
                       <div className="w-3.5 h-3.5 border-2 border-black border-t-transparent rounded-full animate-spin" />
                     ) : (
                       <>
-                        Transmit Integration Request
+                        Transmit Partnership Request
                         <Send className="w-3.5 h-3.5" />
                       </>
                     )}
@@ -253,15 +279,19 @@ export const B2BLiquidity = () => {
                   <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto shadow-2xl">
                     <ShieldCheck className="w-8 h-8 animate-pulse" />
                   </div>
-                  <h4 className="text-white font-black text-xl uppercase tracking-tighter">Request Safely Logged</h4>
+                  <h4 className="text-white font-black text-xl uppercase tracking-tighter">Brief Registered</h4>
                   <p className="text-xs text-gray-400 leading-relaxed max-w-sm mx-auto">
-                    Your B2B Liquidity integration brief has been registered. An aggregation specialist will initiate communication with your secure email node within 12 business hours.
+                    Your white label partnership ingestion brief has been securely established. An enterprise specialist has been assigned to lead your integration audit.
                   </p>
+                  <div className="bg-black/40 border border-white/5 p-4 rounded-xl font-mono text-xs max-w-xs mx-auto">
+                    <div className="text-[#849396] uppercase tracking-wider mb-1">Receipt Hash</div>
+                    <div className="text-emerald-400 font-bold tracking-widest">{trackingId}</div>
+                  </div>
                   <button 
                     onClick={() => setIsSuccess(false)}
                     className="px-6 py-2.5 border border-white/5 bg-white/[0.02] hover:bg-white/5 rounded-xl text-[9px] font-black uppercase tracking-widest text-gray-400 hover:text-white transition-all"
                   >
-                    Submit Another Brief
+                    Submit Another Inquiry
                   </button>
                 </div>
               )}

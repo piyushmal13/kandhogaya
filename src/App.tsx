@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from "react-route
 import { motion, AnimatePresence } from "motion/react";
 
 import { ErrorBoundary } from "./components/ui/ErrorBoundary";
-import { AuthProvider } from "./contexts/AuthContext";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { LanguageProvider } from "./contexts/LanguageContext";
 import { DataPulseProvider } from "./hooks/useDataPulse";
 import { ToastProvider } from "./contexts/ToastContext";
 import { StandardLayout } from "./components/site/StandardLayout";
@@ -47,6 +48,7 @@ const CookiePolicy = lazy(() => import("./pages/legal/CookiePolicy").then(m => (
 const AffiliateHub = lazy(() => import("./pages/AffiliateHub").then(m => ({ default: m.AffiliateHub })));
 const QuantX = lazy(() => import("./pages/QuantX").then(m => ({ default: m.QuantX })));
 const B2BLiquidity = lazy(() => import("./pages/B2BLiquidity").then(m => ({ default: m.B2BLiquidity })));
+const B2BWhiteLabel = lazy(() => import("./pages/B2BWhiteLabel").then(m => ({ default: m.B2BWhiteLabel })));
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -75,13 +77,14 @@ const AnimatedRoutes = () => {
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/admin" element={<ProtectedRoute adminOnly><Admin /></ProtectedRoute>} />
             <Route path="/agent" element={<ProtectedRoute><AgentDashboard /></ProtectedRoute>} />
-            <Route path="/affiliate" element={<ProtectedRoute><AffiliateHub /></ProtectedRoute>} />
+            <Route path="/affiliate" element={<AffiliateHub />} />
             <Route path="/results" element={<Results />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/hiring" element={<Hiring />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/b2b/liquidity" element={<B2BLiquidity />} />
+            <Route path="/b2b/white-label" element={<B2BWhiteLabel />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/terms" element={<TermsOfService />} />
             <Route path="/risk" element={<RiskDisclosure />} />
@@ -97,7 +100,8 @@ const AnimatedRoutes = () => {
 function AppContent() {
   useReferral();
   const location = useLocation();
-  const isPlainLayout = ['/login', '/dashboard', '/admin', '/agent', '/affiliate'].some(path => location.pathname.startsWith(path));
+  const { user } = useAuth();
+  const isPlainLayout = ['/login', '/dashboard', '/admin', '/agent'].some(path => location.pathname.startsWith(path)) || (location.pathname.startsWith('/affiliate') && !!user);
 
   if (isPlainLayout) {
     return <AnimatedRoutes />;
@@ -122,11 +126,13 @@ export default function App() {
         <QueryClientProvider client={queryClient}>
           <ToastProvider>
             <AuthProvider>
-              <DataPulseProvider>
-                <Router>
-                  <AppContent />
-                </Router>
-              </DataPulseProvider>
+              <LanguageProvider>
+                <DataPulseProvider>
+                  <Router>
+                    <AppContent />
+                  </Router>
+                </DataPulseProvider>
+              </LanguageProvider>
             </AuthProvider>
           </ToastProvider>
         </QueryClientProvider>

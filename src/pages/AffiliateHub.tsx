@@ -13,16 +13,24 @@ import {
   Activity,
   Zap,
   LayoutDashboard,
-  Trophy
+  Trophy,
+  ArrowRight,
+  Calculator,
+  Percent,
+  Layers,
+  ChevronRight
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "../contexts/AuthContext";
 import { useToast } from "../contexts/ToastContext";
 import { PageMeta } from "../components/site/PageMeta";
 import { DashboardLayout } from "@/components/institutional/DashboardLayout";
+import { EliteButton } from "@/components/ui/Button";
+import { useRealtime } from "../hooks/useRealtime";
 
 export const AffiliateHub = () => {
-  const { userProfile } = useAuth();
+  const { userProfile, loading: authLoading } = useAuth();
   const { success, error: toastError } = useToast();
   const [affiliateCode, setAffiliateCode] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -30,11 +38,33 @@ export const AffiliateHub = () => {
   const [referredClients, setReferredClients] = useState<any[]>([]);
   const [commissionRate, setCommissionRate] = useState<number>(10.00);
   const [stats, setStats] = useState({
-    clicks: 124, // Mock if newly created
+    clicks: 124, 
     registrations: 12,
     commissions: 450,
     pendingPayouts: 150
   });
+
+  // Public Landing Page Interactive states
+  const [calcVolume, setCalcVolume] = useState<number>(20);
+  const [calcPlan, setCalcPlan] = useState<number>(499); // Avg algorithm sub value
+
+  // Real-time referred clients synchronization hook
+  const { data: realtimeLeads } = useRealtime<any>(
+    'leads',
+    affiliateCode ? `referred_by_code=${affiliateCode}` : undefined,
+    (payload) => {
+      if (payload.eventType === 'INSERT') {
+        const newLead = payload.new as any;
+        success(`Attribution Alert: New client ${newLead.full_name || newLead.email} registered with your link!`);
+      }
+    }
+  );
+
+  useEffect(() => {
+    if (realtimeLeads && realtimeLeads.length > 0) {
+      setReferredClients(realtimeLeads);
+    }
+  }, [realtimeLeads]);
 
   const getTierDetails = () => {
     const clicks = stats.clicks || 0;
@@ -56,6 +86,8 @@ export const AffiliateHub = () => {
   useEffect(() => {
     if (userProfile?.id) {
        fetchAffiliateData();
+    } else {
+       setLoading(false);
     }
   }, [userProfile]);
 
@@ -76,7 +108,7 @@ export const AffiliateHub = () => {
         setStats({
           clicks: data.total_clicks || 0,
           registrations: data.total_registrations || 0,
-          commissions: 0, // Calculated from commissions table
+          commissions: 0, 
           pendingPayouts: 0
         });
 
@@ -91,7 +123,7 @@ export const AffiliateHub = () => {
           setReferredClients(leadsData);
         }
         
-        // Fetch commissions (Mocking for now as we transition to SQL commissions)
+        // Fetch commissions from DB
         const { data: comms } = await supabase
           .from("commissions")
           .select("amount, status")
@@ -136,6 +168,194 @@ export const AffiliateHub = () => {
 
   const referralLink = affiliateCode ? `${globalThis.location.origin}?ref=${affiliateCode}` : "Login to generate...";
 
+  // Loading indicator for authentication resolution
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-[#010203] flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <div className="w-10 h-10 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto" />
+          <span className="text-[9px] font-black uppercase tracking-[0.3em] text-emerald-400">Authenticating Signal...</span>
+        </div>
+      </div>
+    );
+  }
+
+  // ── PUBLIC LANDING PAGE (For Logged-Out Visitors) ──
+  if (!userProfile) {
+    const estimatedCommission = Math.floor(calcVolume * calcPlan * 0.10);
+    return (
+      <div className="bg-[#010203] text-white selection:bg-emerald-500 selection:text-black min-h-screen pt-36 pb-24 overflow-hidden relative">
+        <PageMeta 
+          title="Elite Affiliate Program" 
+          description="Become an institutional marketing partner. Earn 10% CPA standard commission sharing on premium algorithmic trades with sub-second transparency."
+          path="/affiliate"
+        />
+
+        {/* Dynamic Glow Overlay */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[140%] h-[700px] bg-[radial-gradient(ellipse_at_center,rgba(16,185,129,0.05)_0%,transparent_70%)] pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          
+          {/* Header Block */}
+          <div className="text-center max-w-3xl mx-auto mb-20 space-y-6">
+            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-emerald-500/5 border border-emerald-500/10 text-emerald-400 text-[10px] font-black uppercase tracking-[0.25em]">
+              <Trophy className="w-3.5 h-3.5" />
+              Growth Protocol Network
+            </div>
+            <h1 className="text-4xl sm:text-6xl font-black uppercase tracking-tight leading-none italic">
+              Elite Affiliate <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Partner</span> Desk.
+            </h1>
+            <p className="text-gray-400 text-sm leading-relaxed max-w-xl mx-auto font-medium">
+              Join Asia's premier quantitative marketing framework. Refer your audience to our industry-leading backtest-verified execution systems and earn a baseline 10% CPA commission on every product purchase.
+            </p>
+            <div className="pt-4">
+              <Link to="/login">
+                <EliteButton variant="premium-gold" size="lg" rightIcon={<ArrowRight className="w-4 h-4" />}>
+                  Become an Active Partner
+                </EliteButton>
+              </Link>
+            </div>
+          </div>
+
+          {/* Quick Metrics Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto mb-24">
+            {[
+              { label: "Standard CPA", value: "10% Payout", desc: "High baseline percentage rate" },
+              { label: "Client Conversion", value: "14.8% Avg", desc: "Best-in-class product appeal" },
+              { label: "Settlement Cycle", value: "48 Hours", desc: "Ultra-fast security auditing" },
+              { label: "Attribution System", value: "100% Signal", desc: "Cryptographic client mapping" }
+            ].map((m, idx) => (
+              <div key={idx} className="p-6 rounded-[2rem] bg-white/[0.01] border border-white/5 text-center">
+                <span className="text-[8px] font-black uppercase tracking-widest text-emerald-400/60 block mb-2">{m.label}</span>
+                <h3 className="text-2xl font-black text-white tracking-tighter mb-1 uppercase">{m.value}</h3>
+                <span className="text-[8px] text-gray-500 font-bold uppercase tracking-widest">{m.desc}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Interactive Calculator and Propositions */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center max-w-6xl mx-auto">
+            
+            {/* Left Column: Interactive Calculator */}
+            <div className="lg:col-span-6 bg-[#030508]/80 border border-white/10 rounded-[3rem] p-10 backdrop-blur-3xl relative overflow-hidden shadow-2xl">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-2xl pointer-events-none" />
+              
+              <div className="flex items-center gap-3 mb-8">
+                <Calculator className="w-6 h-6 text-emerald-500" />
+                <h2 className="text-xl font-black uppercase italic tracking-tighter text-white">Referral Income Estimator</h2>
+              </div>
+
+              <div className="space-y-8">
+                {/* Volume slider */}
+                <div className="space-y-3">
+                  <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-gray-500">
+                    <span>Referred Clients / Month</span>
+                    <span className="text-white font-mono text-xs">{calcVolume} Accounts</span>
+                  </div>
+                  <input 
+                    type="range" 
+                    min="5" 
+                    max="100" 
+                    step="5"
+                    value={calcVolume}
+                    onChange={(e) => setCalcVolume(Number(e.target.value))}
+                    className="w-full h-1 bg-white/5 rounded-lg appearance-none cursor-pointer accent-emerald-500"
+                  />
+                </div>
+
+                {/* Plan Cost selector */}
+                <div className="space-y-3">
+                  <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-gray-500">
+                    <span>Average Subscription Value</span>
+                    <span className="text-white font-mono text-xs">${calcPlan} USD</span>
+                  </div>
+                  <div className="flex gap-2">
+                    {[299, 499, 999].map((val) => (
+                      <button
+                        key={val}
+                        onClick={() => setCalcPlan(val)}
+                        className={`flex-1 py-2.5 rounded-xl border text-[10px] font-black uppercase tracking-widest transition-all ${
+                          calcPlan === val 
+                            ? "bg-emerald-500 text-black border-emerald-500" 
+                            : "bg-white/5 text-gray-400 border-white/5 hover:bg-white/10 hover:text-white"
+                        }`}
+                      >
+                        ${val} {val === 499 && "(Avg)"}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Estimate Result Display */}
+                <div className="p-6 bg-emerald-500/5 border border-emerald-500/10 rounded-2xl text-center space-y-2 mt-4">
+                  <span className="text-[9px] font-black text-emerald-400 uppercase tracking-[0.2em] block">ESTIMATED MONTHLY COMMISSION</span>
+                  <div className="text-4xl sm:text-5xl font-black text-white tracking-tighter uppercase font-mono">
+                    ${estimatedCommission.toLocaleString()}
+                    <span className="text-xs text-gray-500 font-sans tracking-widest lowercase">/mo</span>
+                  </div>
+                  <span className="text-[8px] text-gray-500 font-bold uppercase tracking-widest block">Based on baseline 10% CPA conversion value</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: Key Value Propositions */}
+            <div className="lg:col-span-6 space-y-8">
+              <div className="space-y-2">
+                <span className="text-emerald-400 text-xs font-mono uppercase tracking-[0.3em] block">// PLATFORM INTEGRITY</span>
+                <h2 className="text-3xl font-black uppercase tracking-tight italic text-white leading-tight">
+                  Transparent Attribution Systems.
+                </h2>
+                <p className="text-gray-400 text-xs leading-relaxed font-medium">
+                  We don't believe in manual tracking errors. Our referral portal operates on cryptographically-secure URL tags and browser enclaves, assuring every registration and signal purchase maps directly to your active agent.
+                </p>
+              </div>
+
+              <div className="space-y-6">
+                {[
+                  {
+                    icon: Percent,
+                    title: "Volume-Tier Commission Adjustments",
+                    desc: "Deliver high referred volume and see your commission automatically adjusted up from 10% standard CPA to customized enterprise thresholds by our quant desks."
+                  },
+                  {
+                    icon: Layers,
+                    title: "Advanced Tracking Dashboard",
+                    desc: "Gain instant dashboard access. View raw link clicks, successful conversion logs, geo-locations, and pending payouts in one central corporate terminal."
+                  },
+                  {
+                    icon: ShieldCheck,
+                    title: "Direct Bank Broker Settlement Protocols",
+                    desc: "Commissions are audited automatically every 48 hours. Request instantaneous wire withdrawals or cryptocurrency transfers straight into your wallet."
+                  }
+                ].map((item, index) => (
+                  <div key={index} className="flex gap-4">
+                    <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
+                      <item.icon className="w-4 h-4" />
+                    </div>
+                    <div className="space-y-1">
+                      <h3 className="text-sm font-black uppercase text-white tracking-tight leading-none">{item.title}</h3>
+                      <p className="text-[11px] text-gray-400 leading-relaxed font-medium">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="pt-4 flex items-center gap-4">
+                <Link to="/login" className="inline-flex items-center gap-2 text-emerald-400 text-xs font-black uppercase tracking-[0.2em] hover:text-emerald-300 transition-colors group">
+                  Become a Referral Partner
+                  <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    );
+  }
+
+  // ── DASHBOARD LAYOUT VIEW (For Authenticated Users) ──
   return (
     <DashboardLayout>
       <div className="pb-24">
@@ -372,7 +592,7 @@ export const AffiliateHub = () => {
                               <td className="px-6 py-5 border-y border-white/5">
                                  <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg text-[9px] font-black uppercase tracking-widest text-zinc-300">
                                     {location}
-                                 </span>
+                                  </span>
                               </td>
                               <td className="px-6 py-5 last:rounded-r-[20px] border-y border-r border-white/5 text-gray-500 font-mono">
                                  {new Date(client.created_at).toLocaleString()}
@@ -386,7 +606,7 @@ export const AffiliateHub = () => {
                               Awaiting first network connection registration.
                            </td>
                         </tr>
-                     )}
+                      )}
                   </tbody>
                </table>
             </div>

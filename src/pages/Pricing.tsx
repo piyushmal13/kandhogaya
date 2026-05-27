@@ -170,6 +170,22 @@ export const Pricing = () => {
           ))}
         </div>
 
+        {/* Accepted Settlement Systems Visual Badging */}
+        <div className="mb-24 p-6 sm:p-8 rounded-[2rem] bg-white/[0.01] border border-white/5 flex flex-col md:flex-row items-center justify-between gap-6 max-w-4xl mx-auto">
+          <div className="space-y-1 text-center md:text-left">
+            <h4 className="text-sm font-black text-white uppercase tracking-wider italic">Elite Settlement Gateways</h4>
+            <p className="text-[10px] text-white/35 font-bold uppercase tracking-widest leading-relaxed">
+              We fully support global settlement methods for secure, co-located algorithmic activations.
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-2.5">
+            <span className="px-3.5 py-1.5 bg-white/[0.02] border border-white/10 rounded-lg text-[9px] font-mono text-white/50 uppercase tracking-widest">Mastercard</span>
+            <span className="px-3.5 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-lg text-[9px] font-mono text-emerald-400 uppercase tracking-widest font-black">UPI (PhonePe, GPay)</span>
+            <span className="px-3.5 py-1.5 bg-white/[0.02] border border-white/10 rounded-lg text-[9px] font-mono text-white/50 uppercase tracking-widest">Credit/Debit Cards</span>
+            <span className="px-3.5 py-1.5 bg-amber-500/10 border border-amber-500/20 rounded-lg text-[9px] font-mono text-amber-500 uppercase tracking-widest font-black">Crypto (BTC, USDT)</span>
+          </div>
+        </div>
+
         {/* --- Performance Algos --- */}
         <div className="mb-48">
           <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-6">

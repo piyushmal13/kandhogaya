@@ -26,7 +26,7 @@ async function startServer() {
 
   // --- SOVEREIGN SECURITY & PERFORMANCE ---
   app.use(helmet({
-    contentSecurityPolicy: {
+    contentSecurityPolicy: !config.isProduction ? false : {
       directives: {
         ...helmet.contentSecurityPolicy.getDefaultDirectives(),
         "img-src": ["'self'", "data:", "https://*.supabase.co", "file:", "*"],
