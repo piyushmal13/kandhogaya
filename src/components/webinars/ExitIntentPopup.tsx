@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { X, Zap, ArrowRight, Bell } from "lucide-react";
+import { X, ArrowRight, Bell } from "lucide-react";
 
 interface ExitIntentPopupProps {
   onRegister: () => void;
@@ -51,10 +51,10 @@ export const ExitIntentPopup = ({ onRegister, webinarTitle }: ExitIntentPopupPro
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="relative w-full max-w-lg bg-[var(--color7)] border border-emerald-500/30 rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(16,185,129,0.2)]"
+            className="relative w-full max-w-lg bg-[var(--color7)] border border-blue-500/30 rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(59,130,246,0.2)]"
           >
             {/* Background Glow */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(16,185,129,0.1),transparent_70%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(59,130,246,0.1),transparent_70%)]" />
             
             <button 
               onClick={handleClose}
@@ -64,33 +64,33 @@ export const ExitIntentPopup = ({ onRegister, webinarTitle }: ExitIntentPopupPro
             </button>
 
             <div className="p-8 md:p-10 relative z-10">
-              <div className="w-16 h-16 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-500 mb-6 border border-emerald-500/20">
+              <div className="w-16 h-16 bg-blue-500/10 rounded-2xl flex items-center justify-center text-blue-500 mb-6 border border-blue-500/20">
                 <Bell className="w-8 h-8" />
               </div>
 
-              <h2 className="text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">
-                Wait! Don't miss out.
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight uppercase">
+                Attention: Institutional Briefing Pending.
               </h2>
               
-              <p className="text-gray-400 mb-8 leading-relaxed">
-                Don't miss the upcoming <span className="text-emerald-400 font-bold">IFXTrades market outlook webinar</span>. 
+              <p className="text-gray-400 mb-8 leading-relaxed text-sm">
+                Active telemetry queue detected: Align your strategies with compiled ECN order flow and mean-reversion metrics. 
                 {webinarTitle && <span> Join us for: <strong className="text-white">{webinarTitle}</strong></span>}
-                Join 1,200+ elite traders for institutional-grade insights.
+                {' '}Join 1,200+ quantitative professionals for the upcoming session.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4">
                 <button
                   onClick={handleAction}
-                  className="flex-1 py-4 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)] flex items-center justify-center gap-2 group"
+                  className="flex-1 py-4 bg-blue-500 text-white font-bold rounded-xl hover:bg-blue-400 transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)] flex items-center justify-center gap-2 group cursor-pointer"
                 >
-                  Secure My Spot
+                  Secure Spot
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </button>
                 <button
                   onClick={handleClose}
-                  className="flex-1 py-4 bg-white/5 text-white font-bold rounded-xl border border-white/10 hover:bg-white/10 transition-all"
+                  className="flex-1 py-4 bg-white/5 text-white font-bold rounded-xl border border-white/10 hover:bg-white/10 transition-all cursor-pointer"
                 >
-                  Maybe Later
+                  Close Telemetry
                 </button>
               </div>
 

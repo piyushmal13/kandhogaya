@@ -1,5 +1,5 @@
 import React from "react";
-import { X, ShieldCheck, Zap, Star, LayoutGrid, ArrowRight } from "lucide-react";
+import { X, ShieldCheck, Zap, Award, LayoutGrid, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -25,7 +25,7 @@ export const UpgradeModal = ({ isOpen, onClose, requiredPlan = 'pro', title, des
     { icon: Zap, text: "Institutional-Grade Intelligence Logic", sub: "Exact entry, SL, and TP for all setups." },
     { icon: LayoutGrid, text: "Algo Terminal Discovery", sub: "Explore proprietary systematic trading bots." },
     { icon: ShieldCheck, text: "Validated Performance", sub: "Equity growth tranches updated in real-time." },
-    { icon: Star, text: "Elite Execution Masterclasses", sub: "Live institutional analysis with the research desk." },
+    { icon: Award, text: "Elite Execution Masterclasses", sub: "Live institutional analysis with the research desk." },
   ];
 
   return (
@@ -46,7 +46,7 @@ export const UpgradeModal = ({ isOpen, onClose, requiredPlan = 'pro', title, des
           className="relative w-full max-w-xl bg-zinc-950 border border-white/10 rounded-[2.5rem] overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.5)]"
         >
           {/* Top Banner */}
-          <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-emerald-500 via-cyan-500 to-emerald-500" />
+          <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-500" />
 
           {/* Close Button */}
           <button 
@@ -57,7 +57,7 @@ export const UpgradeModal = ({ isOpen, onClose, requiredPlan = 'pro', title, des
           </button>
 
           <div className="p-10 md:p-14 text-center">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] uppercase font-mono tracking-widest mb-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] uppercase font-mono tracking-widest mb-6">
               Platform Entitlements
             </div>
             
@@ -71,7 +71,7 @@ export const UpgradeModal = ({ isOpen, onClose, requiredPlan = 'pro', title, des
             <div className="grid gap-6 text-left mb-12">
               {features.map((f) => (
                 <div key={f.text} className="flex gap-4 p-4 rounded-3xl hover:bg-white/5 transition-colors border border-transparent hover:border-white/5">
-                  <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 shrink-0">
+                  <div className="w-12 h-12 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-400 shrink-0">
                     <f.icon className="w-6 h-6" />
                   </div>
                   <div>
@@ -84,7 +84,7 @@ export const UpgradeModal = ({ isOpen, onClose, requiredPlan = 'pro', title, des
 
             <Link 
               to="/marketplace" 
-              className="w-full py-5 bg-emerald-500 hover:bg-emerald-400 text-black font-bold rounded-full transition-all duration-300 flex items-center justify-center gap-2 shadow-[0_0_40px_rgba(16,185,129,0.2)] hover:shadow-[0_0_60px_rgba(16,185,129,0.3)] text-base md:text-lg mb-4"
+              className="w-full py-5 bg-blue-500 hover:bg-blue-400 text-white font-bold rounded-full transition-all duration-300 flex items-center justify-center gap-2 shadow-[0_0_40px_rgba(59,130,246,0.2)] hover:shadow-[0_0_60px_rgba(59,130,246,0.3)] text-base md:text-lg mb-4"
             >
               <span>Explore The Marketplace</span>
               <ArrowRight className="w-5 h-5" />

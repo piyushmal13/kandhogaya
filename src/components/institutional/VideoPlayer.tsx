@@ -143,7 +143,7 @@ export function VideoPlayer({ src, poster, title, isLive = false, markers = [] }
                }}
           >
             <div 
-              className="h-full bg-emerald-500 shadow-[0_0_10px_#10b981] transition-all duration-100"
+              className="h-full bg-blue-500 shadow-[0_0_10px_#3B82F6] transition-all duration-100"
               style={{ width: `${progress}%` }}
             />
             
@@ -169,7 +169,7 @@ export function VideoPlayer({ src, poster, title, isLive = false, markers = [] }
           <div className="flex items-center gap-4">
             <button
               onClick={togglePlay}
-              className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
               aria-label={isPlaying ? 'Pause' : 'Play'}
             >
               {isPlaying ? <Pause className="w-6 h-6 text-white" /> : <Play className="w-6 h-6 text-white ml-0.5" />}
@@ -177,7 +177,7 @@ export function VideoPlayer({ src, poster, title, isLive = false, markers = [] }
 
             <button
               onClick={toggleMute}
-              className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
               aria-label={isMuted ? 'Unmute' : 'Mute'}
             >
               {isMuted ? <VolumeX className="w-5 h-5 text-white" /> : <Volume2 className="w-5 h-5 text-white" />}
@@ -187,7 +187,7 @@ export function VideoPlayer({ src, poster, title, isLive = false, markers = [] }
 
             <button
               onClick={toggleFullscreen}
-              className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
               aria-label="Fullscreen"
             >
               <Maximize className="w-5 h-5 text-white" />

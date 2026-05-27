@@ -22,16 +22,16 @@ export const Results = () => {
   const featured = results.find(r => r.is_featured) || results.at(-1) || {};
 
   const stats = [
-    { label: "Win Rate", value: featured.win_rate ? `${featured.win_rate}%` : "82.4%", icon: Target, color: "text-emerald-500" },
+    { label: "Win Rate", value: featured.win_rate ? `${featured.win_rate}%` : "82.4%", icon: Target, color: "text-blue-500" },
     { label: "Profit Factor", value: featured.profit_factor || "3.24", icon: TrendingUp, color: "text-white" },
-    { label: "Risk Management", value: featured.risk_reward || "1:3.5", icon: ShieldCheck, color: "text-emerald-500" },
+    { label: "Risk Management", value: featured.risk_reward || "1:3.5", icon: ShieldCheck, color: "text-blue-500" },
   ];
 
   return (
     <div className="pt-32 md:pt-48 pb-20 md:pb-32 bg-[#020202] relative overflow-hidden">
       {/* Background Decor */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden>
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.06)_0%,transparent_70%)]" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.06)_0%,transparent_70%)]" />
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.02]" />
       </div>
 
@@ -44,7 +44,7 @@ export const Results = () => {
       <div className="max-w-7xl mx-auto px-6 sm:px-12 relative z-10">
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-12 mb-32">
           <div className="space-y-10">
-            <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-emerald-500/[0.04] border border-emerald-500/[0.15] text-emerald-500 text-[10px] font-black uppercase tracking-[0.4em]">
+            <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-blue-500/[0.04] border border-blue-500/[0.15] text-blue-500 text-[10px] font-black uppercase tracking-[0.4em]">
               Institutional Performance Data
             </div>
             <h1 className="text-shimmer leading-[0.9]">
@@ -59,7 +59,7 @@ export const Results = () => {
           <div className="flex gap-12">
              <div className="flex flex-col items-end">
                 <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em] mb-3">Pips Captured</span>
-                <span className="text-4xl font-black text-emerald-500 font-mono tracking-tighter italic">
+                <span className="text-4xl font-black text-blue-500 font-mono tracking-tighter italic">
                    +{results.reduce((acc, r) => acc + (r.pips || 0), 0).toLocaleString() || "48,240"}
                 </span>
              </div>
@@ -74,10 +74,10 @@ export const Results = () => {
           >
             <div className="flex items-center justify-between">
                <h3 className="text-[10px] font-black text-white uppercase tracking-[0.4em] flex items-center gap-4">
-                  <Activity className="w-4 h-4 text-emerald-500" />
+                  <Activity className="w-4 h-4 text-blue-500" />
                   Equity Curve Analysis
                </h3>
-               <div className="px-4 py-2 bg-emerald-500/[0.05] border border-emerald-500/[0.1] rounded-full text-[9px] font-black text-emerald-500/60 uppercase tracking-widest italic">
+               <div className="px-4 py-2 bg-blue-500/[0.05] border border-blue-500/[0.1] rounded-full text-[9px] font-black text-blue-500/60 uppercase tracking-widest italic">
                   Verified Strategy Data
                </div>
             </div>
@@ -85,15 +85,15 @@ export const Results = () => {
             <div className="h-[400px] w-full">
               {loading ? (
                 <div className="flex h-full items-center justify-center">
-                   <div className="h-10 w-10 animate-spin rounded-full border-2 border-emerald-500 border-t-transparent" />
+                   <div className="h-10 w-10 animate-spin rounded-full border-2 border-blue-500 border-t-transparent" />
                 </div>
               ) : (
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={results}>
                     <defs>
                       <linearGradient id="ifxCurve" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#10B981" stopOpacity={0.15} />
-                        <stop offset="95%" stopColor="#10B981" stopOpacity={0} />
+                        <stop offset="5%" stopColor="#3B82F6" stopOpacity="0.15" />
+                        <stop offset="95%" stopColor="#3B82F6" stopOpacity="0" />
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.02)" vertical={false} />
@@ -102,18 +102,18 @@ export const Results = () => {
                     <Tooltip
                       contentStyle={{
                         backgroundColor: "#080B12",
-                        border: "1px solid rgba(16,185,129,0.1)",
+                        border: "1px solid rgba(59,130,246,0.1)",
                         borderRadius: "20px",
                         fontSize: "9px",
                         fontWeight: "900",
                         textTransform: "uppercase",
                         letterSpacing: "0.2em"
                       }}
-                      itemStyle={{ color: "#10B981" }}
+                      itemStyle={{ color: "#3B82F6" }}
                       labelFormatter={(label) => `Period: ${label}`}
                       formatter={(value: any) => [`${value} Pips`, 'Strategy Performance']}
                     />
-                    <Area type="monotone" dataKey="pips" stroke="#10B981" strokeWidth={3} fill="url(#ifxCurve)" />
+                    <Area type="monotone" dataKey="pips" stroke="#3B82F6" strokeWidth={3} fill="url(#ifxCurve)" />
                   </AreaChart>
                 </ResponsiveContainer>
               )}
@@ -127,15 +127,15 @@ export const Results = () => {
                 initial={{ opacity: 0, x: 30 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: idx * 0.1 }}
-                className="p-10 rounded-[2.5rem] bg-[#080B12] border border-white/[0.06] hover:border-emerald-500/20 transition-all duration-700 group hover:shadow-xl"
+                className="p-10 rounded-[2.5rem] bg-[#080B12] border border-white/[0.06] hover:border-blue-500/20 transition-all duration-700 group hover:shadow-xl"
               >
                 <div className="flex items-center gap-8">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-[1.5rem] bg-white/[0.03] border border-white/[0.06] group-hover:bg-emerald-500/10 group-hover:text-emerald-500 transition-all duration-700">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-[1.5rem] bg-white/[0.03] border border-white/[0.06] group-hover:bg-blue-500/10 group-hover:text-blue-500 transition-all duration-700">
                     <stat.icon className={cn("h-7 w-7", stat.color)} />
                   </div>
                   <div>
                     <div className="text-4xl font-black tracking-tighter text-white italic mb-1">{stat.value}</div>
-                    <div className="text-[9px] font-black uppercase tracking-[0.4em] text-white/20 group-hover:text-emerald-500/60 transition-colors duration-700">{stat.label}</div>
+                    <div className="text-[9px] font-black uppercase tracking-[0.4em] text-white/20 group-hover:text-blue-500/60 transition-colors duration-700">{stat.label}</div>
                   </div>
                 </div>
               </motion.div>
@@ -145,10 +145,10 @@ export const Results = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="p-10 rounded-[3rem] bg-emerald-500/[0.02] border border-emerald-500/[0.1] space-y-6"
+              className="p-10 rounded-[3rem] bg-blue-500/[0.02] border border-blue-500/[0.1] space-y-6"
             >
               <div className="flex items-center gap-4">
-                 <Award className="w-5 h-5 text-emerald-500" />
+                 <Award className="w-5 h-5 text-blue-500" />
                  <h3 className="text-[10px] font-black text-white uppercase tracking-[0.4em]">Verification Standards</h3>
               </div>
               <p className="text-[11px] font-light text-white/30 uppercase tracking-[0.2em] leading-relaxed italic">
@@ -162,9 +162,9 @@ export const Results = () => {
            <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              className="p-12 rounded-[4rem] bg-[#080B12] border border-white/[0.06] space-y-8 group hover:border-emerald-500/30 transition-all duration-700"
+              className="p-12 rounded-[4rem] bg-[#080B12] border border-white/[0.06] space-y-8 group hover:border-blue-500/30 transition-all duration-700"
             >
-              <Award className="h-12 w-12 text-emerald-500" />
+              <Award className="h-12 w-12 text-blue-500" />
               <h3 className="text-3xl font-black text-white uppercase italic tracking-tighter">Institutional Reporting</h3>
               <p className="text-[11px] text-white/30 uppercase tracking-[0.2em] leading-relaxed font-light">
                 We align with institutional standards of transparency. No vanity metrics, just verified equity trends and risk posture metrics.
@@ -174,9 +174,9 @@ export const Results = () => {
            <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              className="p-12 rounded-[4rem] bg-[#080B12] border border-white/[0.06] space-y-8 group hover:border-emerald-500/30 transition-all duration-700"
+              className="p-12 rounded-[4rem] bg-[#080B12] border border-white/[0.06] space-y-8 group hover:border-blue-500/30 transition-all duration-700"
             >
-              <CheckCircle2 className="h-12 w-12 text-emerald-500" />
+              <CheckCircle2 className="h-12 w-12 text-blue-500" />
               <h3 className="text-3xl font-black text-white uppercase italic tracking-tighter">Elite Execution</h3>
               <p className="text-[11px] text-white/30 uppercase tracking-[0.2em] leading-relaxed font-light">
                 Transition from discretionary noise to systematic excellence. Gain access to our full institutional multi-strategy alpha.

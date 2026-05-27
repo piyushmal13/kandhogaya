@@ -44,8 +44,8 @@ export const GlobalReach = () => {
       mapSamples: 25000,
       mapBrightness: 9,
       baseColor: [0.04, 0.04, 0.06],
-      markerColor: [16 / 255, 185 / 255, 129 / 255],
-      glowColor: [16 / 255, 185 / 255, 129 / 255],
+      markerColor: [59 / 255, 130 / 255, 246 / 255],
+      glowColor: [59 / 255, 130 / 255, 246 / 255],
       markers: REGIONS.map((region) => ({
         location: [region.lat, region.lng] as [number, number],
         size: region.key ? 0.12 : 0.07,
@@ -74,8 +74,8 @@ export const GlobalReach = () => {
     >
       {/* Ambient */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden>
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[70%] bg-[radial-gradient(ellipse_55%_45%_at_50%_0%,rgba(16,185,129,0.07),transparent)]" />
-        <div className="absolute bottom-0 w-full h-px bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[70%] bg-[radial-gradient(ellipse_55%_45%_at_50%_0%,rgba(59,130,246,0.07),transparent)]" />
+        <div className="absolute bottom-0 w-full h-px bg-gradient-to-r from-transparent via-blue-500/20 to-transparent" />
       </div>
 
       <div className="max-w-7xl mx-auto px-6 sm:px-12 relative z-10">
@@ -88,11 +88,11 @@ export const GlobalReach = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-emerald-500/[0.05] border border-emerald-500/[0.15] text-emerald-500 text-[10px] font-black uppercase tracking-[0.35em] mb-10"
+              className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-blue-500/[0.05] border border-blue-500/[0.15] text-blue-500 text-[10px] font-black uppercase tracking-[0.35em] mb-10"
             >
               <span className="relative flex h-1.5 w-1.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-blue-500" />
               </span>
               {" "}Global Alpha Network
             </motion.div>
@@ -109,7 +109,7 @@ export const GlobalReach = () => {
               <span
                 className="italic font-serif mx-3"
                 style={{
-                  background: "linear-gradient(135deg, #10B981, #00FFA3)",
+                  background: "linear-gradient(135deg, #3B82F6, #8B5CF6)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                 }}
@@ -142,13 +142,13 @@ export const GlobalReach = () => {
                   key={region.name}
                   className={`group inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border transition-all duration-300 cursor-default ${
                     region.key
-                      ? "bg-emerald-500/[0.06] border-emerald-500/[0.2] text-white/70 hover:border-emerald-500/40"
+                      ? "bg-blue-500/[0.06] border-blue-500/[0.2] text-white/70 hover:border-blue-500/40"
                       : "bg-white/[0.02] border-white/[0.07] text-white/30 hover:border-white/[0.14]"
                   }`}
                 >
                   <span className={`text-sm ${!region.key && "grayscale group-hover:grayscale-0 transition-all"}`}>{region.flag}</span>
                   <span className="text-[11px] font-bold uppercase tracking-[0.18em]">{region.name}</span>
-                  {region.key && <MapPin className="w-2.5 h-2.5 text-emerald-400 ml-0.5" />}
+                  {region.key && <MapPin className="w-2.5 h-2.5 text-blue-400 ml-0.5" />}
                 </div>
               ))}
             </motion.div>
@@ -161,7 +161,7 @@ export const GlobalReach = () => {
             >
               <Link
                 to="/academy"
-                className="group inline-flex items-center gap-3 px-8 py-4 rounded-xl bg-white text-black font-black text-xs uppercase tracking-[0.25em] hover:bg-emerald-500 transition-all duration-300 hover:scale-[1.03] active:scale-[0.97]"
+                className="group inline-flex items-center gap-3 px-8 py-4 rounded-xl bg-white text-black font-black text-xs uppercase tracking-[0.25em] hover:bg-blue-500 transition-all duration-300 hover:scale-[1.03] active:scale-[0.97]"
               >
                 Access Intelligence Terminal
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
@@ -177,7 +177,7 @@ export const GlobalReach = () => {
             transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1] }}
             className="flex-1 w-full max-w-[320px] sm:max-w-[480px] lg:max-w-[580px] aspect-square relative mx-auto order-1 lg:order-2"
           >
-            <div className="absolute inset-[-15%] bg-emerald-500/[0.09] blur-[100px] rounded-full pointer-events-none" />
+            <div className="absolute inset-[-15%] bg-blue-500/[0.09] blur-[100px] rounded-full pointer-events-none" />
             <div className="absolute inset-0 flex items-center justify-center">
               <canvas
                 ref={canvasRef}

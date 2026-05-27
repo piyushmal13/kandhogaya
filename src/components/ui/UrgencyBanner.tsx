@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Zap, Flame, X } from "lucide-react";
+import { Zap, Clock, X } from "lucide-react";
 import { publicSupabase } from "../../lib/supabase";
 import { useFlag } from "../../hooks/useFlags";
 
@@ -31,11 +31,11 @@ export const UrgencyBanner = ({ leadId }: { leadId?: string }) => {
          // Fake dynamic social proof or movement logic
          const rando = Math.floor(Math.random() * 5) + 2;
          const messages = [
-            `Institutional alert: ${signal.pair} setup is active right now.`,
-            `High Volatility: ${signal.pair} just moved +${Math.floor(Math.random() * 50) + 20} points.`,
-            `Social Pulse: ${rando} accounts synchronized with the ${signal.pair} setup in the last 15 mins.`,
-            `Yield Logic: Your last verified pair is hitting TP1.`,
-            `Priority Access: Expert Masterclass starting in 45 minutes.`
+            `Institutional Allocation Alert: ${signal.pair} quantitative trigger verified.`,
+            `ECN Order Sweep: ${signal.pair} liquidity depth shifted.`,
+            `Telemetry Feed: ${rando} institutional nodes compiled ${signal.pair} parameters.`,
+            `Verification Logic: Active model limits achieved.`,
+            `Research Desk Alert: Live briefing session starting in 45 minutes.`
          ];
          setMessage(messages[Math.floor(Math.random() * messages.length)]);
          setIsVisible(true);
@@ -58,19 +58,19 @@ export const UrgencyBanner = ({ leadId }: { leadId?: string }) => {
           exit={{ y: 100, opacity: 0 }}
           className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[100] w-full max-w-xl px-4"
         >
-          <div className="relative p-6 rounded-[2rem] bg-black/80 backdrop-blur-3xl border border-emerald-500/30 shadow-[0_20px_60px_rgba(16,185,129,0.2)] overflow-hidden group">
+          <div className="relative p-6 rounded-[2rem] bg-black/80 backdrop-blur-3xl border border-blue-500/30 shadow-[0_20px_60px_rgba(59,130,246,0.2)] overflow-hidden group">
             {/* Ambient Pulse */}
-            <div className="absolute inset-0 bg-emerald-500/5 group-hover:bg-emerald-500/10 transition-colors" />
+            <div className="absolute inset-0 bg-blue-500/5 group-hover:bg-blue-500/10 transition-colors" />
             
             <div className="relative flex items-center gap-5">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-500 flex items-center justify-center text-black shadow-lg animate-pulse shrink-0">
+              <div className="w-12 h-12 rounded-2xl bg-blue-500 flex items-center justify-center text-white shadow-lg animate-pulse shrink-0">
                 <Zap className="w-6 h-6" />
               </div>
               
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em]">Institutional Alert</span>
-                  <Flame className="w-3 h-3 text-emerald-500" />
+                  <span className="text-[10px] font-black text-blue-500 uppercase tracking-[0.2em]">Institutional Alert</span>
+                  <Clock className="w-3 h-3 text-blue-500" />
                 </div>
                 <p className="text-white text-sm font-bold uppercase tracking-tight leading-snug">
                   {message}
@@ -90,7 +90,7 @@ export const UrgencyBanner = ({ leadId }: { leadId?: string }) => {
               initial={{ width: "100%" }}
               animate={{ width: 0 }}
               transition={{ duration: 8, ease: "linear" }}
-              className="absolute bottom-0 left-0 h-1 bg-emerald-500"
+              className="absolute bottom-0 left-0 h-1 bg-blue-500"
             />
           </div>
         </motion.div>

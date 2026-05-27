@@ -51,7 +51,7 @@ export const AnimatedAlgoCube = ({ className = "" }: { className?: string }) => 
       {/* Background glow that expands */}
       <motion.div 
         style={{ scale: coreScale, opacity: topLayerOpacity }}
-        className="absolute w-[300px] h-[300px] bg-emerald-500/[0.2] blur-[120px] rounded-full"
+        className="absolute w-[300px] h-[300px] bg-blue-500/[0.2] blur-[120px] rounded-full"
       />
 
       <motion.div 
@@ -70,17 +70,17 @@ export const AnimatedAlgoCube = ({ className = "" }: { className?: string }) => 
           <svg viewBox="0 0 200 200" className="w-full h-full overflow-visible">
             <defs>
               <linearGradient id="core-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#10b981" stopOpacity="0.6" />
-                <stop offset="100%" stopColor="#059669" stopOpacity="0.2" />
+                <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.6" />
+                <stop offset="100%" stopColor="#2563EB" stopOpacity="0.2" />
               </linearGradient>
             </defs>
-            <rect x="20" y="20" width="160" height="160" fill="url(#core-grad)" stroke="#10b981" strokeWidth="1.5" strokeOpacity="0.4" rx="12" />
+            <rect x="20" y="20" width="160" height="160" fill="url(#core-grad)" stroke="#3B82F6" strokeWidth="1.5" strokeOpacity="0.4" rx="12" />
             {/* Grid Lines */}
             {Array.from({length: 8}).map((_, i) => (
               // eslint-disable-next-line react/no-array-index-key
               <React.Fragment key={`grid-line-${i}`}>
-                <line x1={20 + i*20} y1="20" x2={20 + i*20} y2="180" stroke="#10b981" strokeWidth="0.5" strokeOpacity="0.4" />
-                <line x1="20" y1={20 + i*20} x2="180" y2={20 + i*20} stroke="#10b981" strokeWidth="0.5" strokeOpacity="0.4" />
+                <line x1={20 + i*20} y1="20" x2={20 + i*20} y2="180" stroke="#3B82F6" strokeWidth="0.5" strokeOpacity="0.4" />
+                <line x1="20" y1={20 + i*20} x2="180" y2={20 + i*20} stroke="#3B82F6" strokeWidth="0.5" strokeOpacity="0.4" />
               </React.Fragment>
             ))}
           </svg>
@@ -92,7 +92,7 @@ export const AnimatedAlgoCube = ({ className = "" }: { className?: string }) => 
           style={{ y: midLayerY, scale: midLayerScale, rotateX: "65deg", rotateZ: "45deg" }}
         >
           <svg viewBox="0 0 200 200" className="w-full h-full overflow-visible">
-            <rect x="40" y="40" width="120" height="120" fill="transparent" stroke="#10b981" strokeWidth="2.5" strokeOpacity="0.6" rx="10" />
+            <rect x="40" y="40" width="120" height="120" fill="transparent" stroke="#3B82F6" strokeWidth="2.5" strokeOpacity="0.6" rx="10" />
             {/* Nodes */}
             {[
               {x: 40, y: 40}, {x: 100, y: 40}, {x: 160, y: 40},
@@ -100,11 +100,11 @@ export const AnimatedAlgoCube = ({ className = "" }: { className?: string }) => 
               {x: 40, y: 160}, {x: 100, y: 160}, {x: 160, y: 160}
             ].map((node, i) => (
               // eslint-disable-next-line react/no-array-index-key
-              <circle key={`node-point-${i}`} cx={node.x} cy={node.y} r="5" fill="#34d399" className="animate-pulse shadow-[0_0_10px_#10b981]" style={{ animationDelay: `${i * 0.15}s` }} />
+              <circle key={`node-point-${i}`} cx={node.x} cy={node.y} r="5" fill="#8B5CF6" className="animate-pulse shadow-[0_0_10px_#3B82F6]" style={{ animationDelay: `${i * 0.15}s` }} />
             ))}
             {/* Connections */}
-            <path d="M 40 40 L 100 100 L 160 40" fill="none" stroke="#34d399" strokeWidth="1.5" strokeOpacity="0.6" strokeDasharray="6 4" />
-            <path d="M 40 160 L 100 100 L 160 160" fill="none" stroke="#34d399" strokeWidth="1.5" strokeOpacity="0.6" strokeDasharray="6 4" />
+            <path d="M 40 40 L 100 100 L 160 40" fill="none" stroke="#8B5CF6" strokeWidth="1.5" strokeOpacity="0.6" strokeDasharray="6 4" />
+            <path d="M 40 160 L 100 100 L 160 160" fill="none" stroke="#8B5CF6" strokeWidth="1.5" strokeOpacity="0.6" strokeDasharray="6 4" />
           </svg>
         </motion.div>
 
@@ -113,7 +113,7 @@ export const AnimatedAlgoCube = ({ className = "" }: { className?: string }) => 
           className="absolute inset-0 flex items-center justify-center transform-gpu pointer-events-none z-10"
           style={{ y: topLayerY, scale: topLayerScale, rotateX: "65deg", rotateZ: "45deg", opacity: topLayerOpacity }}
         >
-          <svg viewBox="0 0 200 200" className="w-full h-full drop-shadow-[0_30px_50px_rgba(16,185,129,0.4)] overflow-visible">
+          <svg viewBox="0 0 200 200" className="w-full h-full drop-shadow-[0_30px_50px_rgba(59,130,246,0.4)] overflow-visible">
             <defs>
               <linearGradient id="top-grad" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stopColor="rgba(255, 255, 255, 0.15)" />
@@ -123,9 +123,9 @@ export const AnimatedAlgoCube = ({ className = "" }: { className?: string }) => 
             {/* Glass panel */}
             <rect x="30" y="30" width="140" height="140" fill="url(#top-grad)" stroke="rgba(255,255,255,0.5)" strokeWidth="1" rx="15" />
             {/* Inner Ring */}
-            <circle cx="100" cy="100" r="45" fill="none" stroke="rgba(16,185,129,0.9)" strokeWidth="3" strokeDasharray="12 6" className="origin-center animate-[spin_8s_linear_infinite]" />
-            <circle cx="100" cy="100" r="35" fill="rgba(16,185,129,0.2)" stroke="#fff" strokeWidth="1.5" strokeOpacity="0.6" />
-            <circle cx="100" cy="100" r="12" fill="#10b981" className="animate-pulse shadow-[0_0_15px_#10b981]" />
+            <circle cx="100" cy="100" r="45" fill="none" stroke="rgba(59,130,246,0.9)" strokeWidth="3" strokeDasharray="12 6" className="origin-center animate-[spin_8s_linear_infinite]" />
+            <circle cx="100" cy="100" r="35" fill="rgba(59,130,246,0.2)" stroke="#fff" strokeWidth="1.5" strokeOpacity="0.6" />
+            <circle cx="100" cy="100" r="12" fill="#3B82F6" className="animate-pulse shadow-[0_0_15px_#3B82F6]" />
           </svg>
         </motion.div>
 
@@ -136,10 +136,10 @@ export const AnimatedAlgoCube = ({ className = "" }: { className?: string }) => 
         >
           <svg viewBox="0 0 200 200" className="w-full h-full overflow-visible">
             {/* Simulate vertical connecting lasers */}
-            <motion.path d="M 40 40 L 40 -120" fill="none" stroke="#10b981" strokeWidth="1.5" strokeOpacity="0.5" style={{ pathLength: smoothProgress }} />
-            <motion.path d="M 160 40 L 160 -120" fill="none" stroke="#10b981" strokeWidth="1.5" strokeOpacity="0.5" style={{ pathLength: smoothProgress }} />
-            <motion.path d="M 40 160 L 40 -120" fill="none" stroke="#10b981" strokeWidth="1.5" strokeOpacity="0.5" style={{ pathLength: smoothProgress }} />
-            <motion.path d="M 160 160 L 160 -120" fill="none" stroke="#10b981" strokeWidth="1.5" strokeOpacity="0.5" style={{ pathLength: smoothProgress }} />
+            <motion.path d="M 40 40 L 40 -120" fill="none" stroke="#3B82F6" strokeWidth="1.5" strokeOpacity="0.5" style={{ pathLength: smoothProgress }} />
+            <motion.path d="M 160 40 L 160 -120" fill="none" stroke="#3B82F6" strokeWidth="1.5" strokeOpacity="0.5" style={{ pathLength: smoothProgress }} />
+            <motion.path d="M 40 160 L 40 -120" fill="none" stroke="#3B82F6" strokeWidth="1.5" strokeOpacity="0.5" style={{ pathLength: smoothProgress }} />
+            <motion.path d="M 160 160 L 160 -120" fill="none" stroke="#3B82F6" strokeWidth="1.5" strokeOpacity="0.5" style={{ pathLength: smoothProgress }} />
           </svg>
         </motion.div>
 

@@ -41,18 +41,18 @@ export function PortfolioValue() {
       className="relative p-6 sm:p-10 rounded-[3rem] bg-gradient-to-br from-zinc-950 via-[#040608] to-black border border-white/10 backdrop-blur-3xl overflow-hidden group shadow-2xl space-y-8"
     >
       {/* Premium Strobe Lights */}
-      <div className="absolute -top-32 -right-32 w-80 h-80 bg-emerald-500/10 rounded-full blur-[120px] group-hover:bg-emerald-500/15 transition-all duration-1000 pointer-events-none" />
+      <div className="absolute -top-32 -right-32 w-80 h-80 bg-blue-500/10 rounded-full blur-[120px] group-hover:bg-blue-500/15 transition-all duration-1000 pointer-events-none" />
       <div className="absolute inset-0 bg-gradient-to-b from-white/[0.01] to-transparent pointer-events-none" />
 
       {/* Header and Telemetry Toggle */}
       <div className="relative z-10 flex flex-wrap justify-between items-center gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+          <div className="w-8 h-8 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
             <Activity className="w-4 h-4 animate-pulse" />
           </div>
           <div>
             <div className="flex items-center gap-2 text-white/40 text-[9px] font-black uppercase tracking-[0.3em]">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+              <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
               Institutional Portfolio Node
             </div>
             <div className="text-[10px] text-gray-500 font-mono">NODE: IFX_CAPITAL_DESK_v4</div>
@@ -82,7 +82,7 @@ export function PortfolioValue() {
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest bg-blue-500/10 text-blue-400 border border-blue-500/20">
               <TrendingUp className="w-3.5 h-3.5 animate-bounce" />
               <span>+{change}% Monthly Yield</span>
             </div>
@@ -102,19 +102,19 @@ export function PortfolioValue() {
           <svg className="w-full h-full" viewBox="0 0 600 120" preserveAspectRatio="none">
             <defs>
               <linearGradient id="chartGlow" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#10B981" stopOpacity="0.25" />
-                <stop offset="100%" stopColor="#10B981" stopOpacity="0" />
+                <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.25" />
+                <stop offset="100%" stopColor="#3B82F6" stopOpacity="0" />
               </linearGradient>
             </defs>
             {/* Area fill */}
             <path d={areaPath} fill="url(#chartGlow)" />
             {/* Glow stroke line */}
-            <path d={chartPath} fill="none" stroke="#10B981" strokeWidth="2.5" strokeLinecap="round" />
+            <path d={chartPath} fill="none" stroke="#3B82F6" strokeWidth="2.5" strokeLinecap="round" />
           </svg>
 
           <div className="absolute top-3 right-4 flex items-center gap-1 bg-black/60 px-2 py-0.5 rounded-lg border border-white/10">
-            <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping" />
-            <span className="text-[8px] font-mono text-emerald-400 font-bold">100% Attributed</span>
+            <span className="w-1.5 h-1.5 bg-blue-50 rounded-full animate-ping" />
+            <span className="text-[8px] font-mono text-blue-400 font-bold">100% Attributed</span>
           </div>
         </div>
 
@@ -124,7 +124,7 @@ export function PortfolioValue() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-white/5 relative z-10">
         {[
           { label: "Active Licenses", value: activeLicenses > 0 ? `${activeLicenses} Engines` : "0 Systems", icon: Target, desc: "Settle direct allocations" },
-          { label: "Drawdown Shield", value: "4.5% Cap Active", icon: ShieldAlert, desc: "Pre-packaged protection", color: "text-emerald-400" },
+          { label: "Drawdown Shield", value: "4.5% Cap Active", icon: ShieldAlert, desc: "Pre-packaged protection", color: "text-blue-400" },
           { label: "Broker Leverage Limit", value: "1:100 Max", icon: Cpu, desc: "Capital control threshold" },
           { label: "NY4 Aggregation", value: "<12ms Speed", icon: Zap, desc: "Co-location fiber line", color: "text-cyan-400" },
         ].map((item, idx) => (
@@ -153,7 +153,7 @@ export function PortfolioValue() {
           <div className="w-px h-6 bg-white/10" />
           <div className="flex flex-col gap-0.5">
             <span className="text-[7px] font-black uppercase tracking-widest">Telemetry</span>
-            <span className="text-[9px] font-mono text-emerald-400 leading-none">Live Connection Verified</span>
+            <span className="text-[9px] font-mono text-blue-400 leading-none">Live Connection Verified</span>
           </div>
         </div>
 
