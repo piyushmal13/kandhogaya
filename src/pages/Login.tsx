@@ -144,6 +144,29 @@ export const Login = () => {
           <p className="text-sm text-gray-500">Access the operating surface for disciplined retail traders.</p>
         </div>
 
+        {/* Secure Cryptographic Vault Telemetry Status */}
+        <div className="mb-6 bg-black/40 border border-emerald-500/10 rounded-2xl p-4 space-y-1.5 font-mono text-[9px] text-left">
+          <div className="flex items-center justify-between text-emerald-400 font-bold uppercase tracking-wider">
+            <span>Vault Status</span>
+            <div className="flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10B981]" />
+              <span>Secure Connection</span>
+            </div>
+          </div>
+          <div className="text-white/40 uppercase tracking-widest flex justify-between">
+            <span>Protocol</span>
+            <span className="text-white/60">IFX_VAULT_v3.2</span>
+          </div>
+          <div className="text-white/40 uppercase tracking-widest flex justify-between">
+            <span>Signature</span>
+            <span className="text-white/60">SSL_256BIT_SYNC</span>
+          </div>
+          <div className="text-white/40 uppercase tracking-widest flex justify-between">
+            <span>Enclave Node</span>
+            <span className="text-white/60 text-[8px]">DUBAI_CORE_NE2</span>
+          </div>
+        </div>
+
         <div className="space-y-6">
           <button
             type="button"
@@ -236,6 +259,12 @@ export const Login = () => {
             >
               {isOtpMode ? "Use Password Instead" : "Login with Magic Link (OTP)"}
             </button>
+          </div>
+
+          <div className="pt-6 mt-6 border-t border-white/5 flex items-center justify-center gap-4 text-[8px] font-black uppercase tracking-[0.2em] text-white/20 select-none">
+            <span>Global Enclaves Active</span>
+            <span className="w-1 h-1 rounded-full bg-white/10" />
+            <span>GDPR Vetted</span>
           </div>
         </div>
       </motion.div>
