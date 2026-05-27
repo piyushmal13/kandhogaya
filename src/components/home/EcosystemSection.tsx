@@ -1,14 +1,14 @@
 import React, { useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform, useMotionTemplate } from "motion/react";
 import { Link } from "react-router-dom";
-import { Cpu, Video, ArrowUpRight, BarChart2, BookOpen, ChevronRight, Brain, ShieldCheck } from "lucide-react";
+import { Cpu, Video, ArrowUpRight, BarChart2, BookOpen, ChevronRight, Workflow, ShieldCheck } from "lucide-react";
 
 const modules = [
   {
     id: "quantx",
-    title: "Neural Logic Execution",
-    description: "Our flagship multi-layer AI intelligence system. Unlike static, dead systems, QuantX dynamically adapts to live market conditions for precision execution.",
-    icon: Brain,
+    title: "Systematic Logic Execution",
+    description: "Our flagship multi-layered quantitative model. Unlike static, legacy systems, QuantX dynamically adjusts to live market conditions to achieve precision execution.",
+    icon: Workflow,
     link: "/quantx",
     accent: "#10B981",
     tag: "ELITE",
@@ -36,8 +36,8 @@ const modules = [
   },
   {
     id: "adaptive_systems",
-    title: "Adaptive Self-Learning",
-    description: "Our models employ deep-learning loops to evolve alongside shifting market regimes, keeping you consistently ahead of the curve.",
+    title: "Regime Adaptation",
+    description: "Our models employ systematic optimization loops to adjust alongside shifting market conditions, maintaining disciplined execution parameters.",
     icon: Cpu,
     link: "/quantx",
     accent: "#8B5CF6",

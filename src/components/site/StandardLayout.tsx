@@ -2,7 +2,7 @@ import React from "react";
 import { Navbar } from "../ui/Navbar";
 import { Footer } from "../ui/Footer";
 import { WhatsAppButton } from "../ui/WhatsAppButton";
-import { LiveChatbot } from "../ui/LiveChatbot";
+import { CorporateIntakeWidget } from "../ui/CorporateIntakeWidget";
 import { SiteBackdrop } from "./SiteBackdrop";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { ScrollToTop } from "../ScrollToTop";
@@ -31,7 +31,7 @@ export const StandardLayout = ({ children }: { children: React.ReactNode }) => {
         <Footer />
         
         <WhatsAppButton />
-        <LiveChatbot />
+        <CorporateIntakeWidget />
         
         <div 
           id="regulatory-notice"

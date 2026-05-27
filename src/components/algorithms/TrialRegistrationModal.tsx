@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "motion/react";
-import { X, CheckCircle2, Loader2, AlertCircle, Shield, Globe, Award, Sparkles, User, Mail, Phone, ChevronRight } from "lucide-react";
+import { X, CheckCircle2, Loader2, AlertCircle, Shield, Globe, Award, Zap, User, Mail, Phone, ChevronRight } from "lucide-react";
 import { Product } from "../../types";
 import { leadService } from "../../services/crm/leadService";
 
@@ -78,7 +78,7 @@ export const TrialRegistrationModal = ({ algo, onClose }: TrialRegistrationModal
         >
           <X className="w-5 h-5" />
         </button>
-
+ 
         <div className="p-8 sm:p-10">
           {!success ? (
             <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8 animate-in slide-in-from-bottom-4 duration-500">
@@ -86,7 +86,7 @@ export const TrialRegistrationModal = ({ algo, onClose }: TrialRegistrationModal
               {/* Header */}
               <div className="space-y-2">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[9px] font-mono tracking-widest uppercase">
-                  <Sparkles className="w-3 h-3" />
+                  <Zap className="w-3 h-3" />
                   Instant Sandbox Provisioning
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tighter uppercase italic">

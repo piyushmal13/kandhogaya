@@ -83,7 +83,7 @@ export const WebinarPromoInline = () => {
           to="/webinars"
           className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-500 text-black font-bold rounded-xl hover:bg-emerald-400 transition-all shadow-[0_0_20px_rgba(16,185,129,0.2)] group/btn"
         >
-          Reserve My Free Seat
+          Register for Briefing
           <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
         </Link>
       </div>

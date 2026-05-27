@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { PageMeta } from "@/components/site/PageMeta";
 import { EliteButton } from "@/components/ui/Button";
 import { 
-  Brain, 
   Cpu, 
   Activity, 
   ShieldAlert, 
@@ -16,7 +15,6 @@ import {
   Target,
   RefreshCcw,
   Workflow,
-  Sparkles,
   ShieldCheck,
   TrendingUp,
   HeartHandshake
@@ -104,7 +102,7 @@ export const QuantX = () => {
     <div ref={containerRef} className="min-h-screen bg-[#010203] text-white selection:bg-emerald-500/30 font-sans">
       <PageMeta 
         title="QuantX Ecosystem | Undisputed Systematic Software Engineering"
-        description="Discover the seamless, emotional-free systematic algorithms behind QuantX. Built for elite capital protection, high-performance rule execution, and total peace of mind."
+        description="Discover the systematic, disciplined quantitative models behind QuantX. Built for elite capital protection, high-performance rule execution, and absolute execution integrity."
       />
 
       {/* Hero Section */}
@@ -125,8 +123,8 @@ export const QuantX = () => {
             className="space-y-6"
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-black uppercase tracking-[0.4em] mb-4">
-              <Brain className="w-3.5 h-3.5" />
-              Sovereign Trading Sanctuary
+              <Workflow className="w-3.5 h-3.5" />
+              Sovereign Quantitative Desk
             </div>
             
             <h1 className="text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter mb-4 leading-[0.88] uppercase italic text-shimmer pr-2">
@@ -134,7 +132,7 @@ export const QuantX = () => {
             </h1>
             
             <p className="text-white/45 text-sm sm:text-lg md:text-xl max-w-3xl mx-auto leading-relaxed px-4">
-              Bypassing human emotional friction. We engineer seamless, institutional-grade systematic algorithmic frameworks that free thousands of professional traders from the constant anxiety of manual execution.
+              Executing mathematical models with absolute discipline. We engineer institutional-grade systematic quantitative frameworks designed to maintain strict risk parameters and remove human latency.
             </p>
           </motion.div>
         </div>
@@ -154,13 +152,13 @@ export const QuantX = () => {
         
         <div className="container mx-auto px-6 relative z-10">
           <div className="max-w-4xl mx-auto text-center mb-20 md:mb-28">
-            <span className="text-xs font-black uppercase tracking-[0.4em] text-emerald-400 mb-4 block">Psychological Engineering</span>
+            <span className="text-xs font-black uppercase tracking-[0.4em] text-emerald-400 mb-4 block">Systematic Engineering</span>
             <h2 className="text-3xl sm:text-5xl md:text-7xl font-black text-white uppercase italic tracking-tighter mb-6 leading-tight">
               Why Elite Traders <br />
-              <span className="text-white/30">Choose Systematic Peace.</span>
+              <span className="text-white/30">Choose Systematic Models.</span>
             </h2>
             <p className="text-white/40 text-xs sm:text-sm md:text-base leading-relaxed max-w-xl mx-auto uppercase tracking-wide">
-              Manual trading is a war against your own central nervous system. QuantX replaces screen fatigue and anxiety with flawless algorithmic discipline.
+              Retail setups often lack rigorous risk management. QuantX delivers highly disciplined systematic algorithmic solutions to replace emotional execution.
             </p>
           </div>
 
@@ -175,12 +173,12 @@ export const QuantX = () => {
             >
               <div>
                 <span className="text-[10px] font-black text-red-400 uppercase tracking-widest mb-6 block">The Chaos of Manual Execution</span>
-                <h3 className="text-xl md:text-2xl font-black uppercase tracking-tight text-white mb-6">Mental Burnout &amp; Anxiety</h3>
+                <h3 className="text-xl md:text-2xl font-black uppercase tracking-tight text-white mb-6">Mental Burnout &amp; Fatigue</h3>
                 
                 <ul className="space-y-4 text-xs md:text-sm text-white/50">
                   <li className="flex items-start gap-3">
                     <span className="w-1.5 h-1.5 rounded-full bg-red-500 mt-2 shrink-0" />
-                    <span><strong>Decision Fatigue:</strong> Constant market analysis depletes willpower, leading to catastrophic revenge trades.</span>
+                    <span><strong>Decision Fatigue:</strong> Constant market analysis depletes focus, leading to catastrophic off-plan trades.</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="w-1.5 h-1.5 rounded-full bg-red-500 mt-2 shrink-0" />
@@ -188,11 +186,11 @@ export const QuantX = () => {
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="w-1.5 h-1.5 rounded-full bg-red-500 mt-2 shrink-0" />
-                    <span><strong>Continuous Surveillance:</strong> Locked to screens 14 hours a day, sacrificing health and personal freedom.</span>
+                    <span><strong>Continuous Surveillance:</strong> Locked to screens 14 hours a day, sacrificing time and capital efficiency.</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="w-1.5 h-1.5 rounded-full bg-red-500 mt-2 shrink-0" />
-                    <span><strong>Emotional Drift:</strong> Breaking your own risk limits because of fear, greed, or market noise.</span>
+                    <span><strong>Emotional Drift:</strong> Breaking your own risk limits because of cognitive bias or market noise.</span>
                   </li>
                 </ul>
               </div>
@@ -212,7 +210,7 @@ export const QuantX = () => {
             >
               <div>
                 <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest mb-6 block">The QuantX Solution</span>
-                <h3 className="text-xl md:text-2xl font-black uppercase tracking-tight text-white mb-6">Seamless Systematic Liberation</h3>
+                <h3 className="text-xl md:text-2xl font-black uppercase tracking-tight text-white mb-6">Disciplined Systematic Execution</h3>
                 
                 <ul className="space-y-4 text-xs md:text-sm text-white/70">
                   <li className="flex items-start gap-3">
@@ -225,7 +223,7 @@ export const QuantX = () => {
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-2 shrink-0" />
-                    <span><strong>Total Time Freedom:</strong> Algorithms handle continuous market surveillance, letting you reclaim your life.</span>
+                    <span><strong>Continuous Monitoring:</strong> Algorithms handle continuous market surveillance, maintaining round-the-clock precision.</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-2 shrink-0" />
@@ -235,7 +233,7 @@ export const QuantX = () => {
               </div>
 
               <div className="mt-8 pt-6 border-t border-emerald-500/10 text-emerald-400 text-[10px] font-mono tracking-wider uppercase">
-                Result: Flawless execution, total peace of mind, professional stability.
+                Result: Systematic execution, strict risk management, professional stability.
               </div>
             </motion.div>
           </div>
@@ -247,9 +245,9 @@ export const QuantX = () => {
         <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto text-center mb-16 md:mb-24">
             <span className="text-xs font-black uppercase tracking-[0.4em] text-white/30 block mb-3">Modular Synthesis Pipeline</span>
-            <h2 className="text-3xl md:text-5xl font-black mb-6 tracking-tight italic uppercase">Seamless Softwares, Flawless Output.</h2>
+            <h2 className="text-3xl md:text-5xl font-black mb-6 tracking-tight italic uppercase">Quantitative Softwares, Disciplined Execution.</h2>
             <p className="text-white/40 text-sm md:text-lg max-w-xl mx-auto leading-relaxed">
-              We create state-of-the-art automated strategies, enabling thousands of traders worldwide to enjoy hassle-free execution.
+              We create state-of-the-art automated strategies, enabling professional market participants to access institutional-grade systematic execution.
             </p>
           </div>
 
@@ -259,7 +257,7 @@ export const QuantX = () => {
             
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 relative z-10">
               <ArchitectureNode title="Macro Data Feed" icon={Database} subtext="Global Liquidity Core" active />
-              <ArchitectureNode title="Quant Core Analysis" icon={Brain} subtext="Systematic Synthesizer" active />
+              <ArchitectureNode title="Quant Core Analysis" icon={Workflow} subtext="Systematic Synthesizer" active />
               <ArchitectureNode title="Drawdown Guard" icon={ShieldAlert} subtext="Hard Position Stop" active />
               <ArchitectureNode title="Execution Desk" icon={Zap} subtext="Sub-Millisecond Fill" active />
               <ArchitectureNode title="Auto-Recalibration" icon={RefreshCcw} subtext="Recursive Optimization" active />
@@ -354,12 +352,12 @@ export const QuantX = () => {
                   </div>
                 </div>
                 
-                <div className="flex gap-4 sm:gap-6">
+                 <div className="flex gap-4 sm:gap-6">
                   <div className="w-12 h-12 shrink-0 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-emerald-400 shadow-lg">
                     <Cpu size={24} />
                   </div>
                   <div>
-                    <h4 className="text-lg sm:text-xl font-bold mb-2 uppercase text-white">Hassle-Free Implementation</h4>
+                    <h4 className="text-lg sm:text-xl font-bold mb-2 uppercase text-white">Turnkey Integration</h4>
                     <p className="text-xs sm:text-sm text-white/40 leading-relaxed">No complicated setups. We compile all algorithmic parameters into clean, secure, drag-and-drop binaries ready for MT5, TradingView, or proprietary bridges.</p>
                   </div>
                 </div>
@@ -409,10 +407,10 @@ export const QuantX = () => {
           <span className="text-xs font-black uppercase tracking-[0.4em] text-emerald-400 mb-6 block">Join the Quantitative Frontier</span>
           <h2 className="text-4xl md:text-7xl font-black mb-10 tracking-tight italic uppercase leading-none">
             Total Systematic Control. <br />
-            <span className="text-emerald-400">Zero Nervous Friction.</span>
+            <span className="text-emerald-400">Zero Execution Latency.</span>
           </h2>
           <p className="text-white/40 text-sm md:text-base leading-relaxed mb-12 max-w-lg mx-auto">
-            Stop waging a stressful manual war against high-frequency liquidity pools. Step into the QuantX Sanctuary and automate with supreme tactical authority.
+            Integrate institutional quantitative models. Connect to the QuantX research framework to deploy disciplined systematic strategies.
           </p>
           <Link to="/webinars">
             <EliteButton variant="premium-gold" size="lg" rightIcon={<ChevronRight className="w-4 h-4" />}>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
-import { Briefcase, ShieldCheck, Code2, TrendingUp, ArrowRight, Globe, Cpu, CheckCircle2, AlertCircle, Users, BarChart3, Star, Sparkles, Building, Landmark } from "lucide-react";
+import { Briefcase, ShieldCheck, Code2, TrendingUp, ArrowRight, Globe, Cpu, CheckCircle2, AlertCircle, Users, BarChart3, Star, Building, Landmark } from "lucide-react";
 import { PageMeta } from "../components/site/PageMeta";
 import { Reveal } from "../components/site/Reveal";
 import { BRANDING } from "../constants/branding";
@@ -209,7 +209,7 @@ export const Hiring = () => {
                 </>
               ) : (
                 <>
-                  <Sparkles className="h-3.5 w-3.5" /> IFX CORE PROPRIETARY ENCLAVE
+                  <ShieldCheck className="h-3.5 w-3.5" /> IFX CORE PROPRIETARY ENCLAVE
                 </>
               )}
             </span>

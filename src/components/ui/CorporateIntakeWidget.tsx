@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { MessageSquare, X, Send, ShieldCheck, Mail, UserCheck } from "lucide-react";
+import { HelpCircle, X, Send, ShieldCheck, Mail, UserCheck } from "lucide-react";
 import { leadService } from "../../services/crm/leadService";
 
-export const LiveChatbot = () => {
+export const CorporateIntakeWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [clientId, setClientId] = useState("");
@@ -17,10 +17,10 @@ export const LiveChatbot = () => {
 
     setIsSubmitting(true);
     try {
-      // Ingest the chat inquiry directly into Supabase via the leadService
+      // Ingest the operational inquiry directly into Supabase via the leadService
       const result = await leadService.createLead({
         email: email.trim(),
-        source: "live_chat_desk",
+        source: "desk_intake",
         stage: "HIGH_INTENT",
         referred_by_code: clientId.trim() || undefined,
         crm_metadata: {
@@ -46,7 +46,7 @@ export const LiveChatbot = () => {
         alert("Transmission pipeline interrupted. Please verify your connection.");
       }
     } catch (err) {
-      console.error("Chat Ingestion Error:", err);
+      console.error("Operational Ingestion Error:", err);
     } finally {
       setIsSubmitting(false);
     }
@@ -54,19 +54,19 @@ export const LiveChatbot = () => {
 
   return (
     <>
-      {/* Floating Chat Trigger Icon (Floats beautifully above the WhatsApp button) */}
+      {/* Floating Intake Trigger Icon */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="fixed bottom-20 right-4 sm:bottom-24 sm:right-6 z-50 bg-[#0A0D12] text-emerald-400 border border-emerald-500/30 p-3.5 sm:p-4 rounded-full shadow-[0_0_20px_rgba(16,185,129,0.2)] hover:scale-110 active:scale-95 hover:shadow-[0_0_30px_rgba(16,185,129,0.4)] transition-all flex items-center justify-center group"
-        aria-label="Toggle Support Chat"
+        aria-label="Toggle Operations Intake"
       >
-        <MessageSquare className="w-5.5 h-5.5 sm:w-6.5 sm:h-6.5" />
+        <HelpCircle className="w-5.5 h-5.5 sm:w-6.5 sm:h-6.5" />
         <span className="absolute right-full mr-4 bg-zinc-900 text-white text-[10px] font-black uppercase tracking-widest px-3 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none border border-white/10">
-          Support Desk
+          Desk Intake
         </span>
       </button>
 
-      {/* Chat Window Panel */}
+      {/* Intake Window Panel */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -83,7 +83,7 @@ export const LiveChatbot = () => {
                   <div className="absolute inset-0 rounded-full bg-emerald-500 opacity-70 animate-ping" />
                 </div>
                 <div>
-                  <h4 className="text-white font-black text-xs uppercase tracking-widest leading-none">IFX Alpha Desk</h4>
+                  <h4 className="text-white font-black text-xs uppercase tracking-widest leading-none">IFX Operations Desk</h4>
                   <p className="text-[7.5px] text-gray-500 font-bold uppercase tracking-widest mt-1">Operational Bridge Active</p>
                 </div>
               </div>
@@ -98,12 +98,12 @@ export const LiveChatbot = () => {
               </button>
             </div>
 
-            {/* Chat Body */}
+            {/* Content Body */}
             <div className="p-6">
               {!isSuccess ? (
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="text-[10px] leading-relaxed text-gray-400 font-medium">
-                    Submit your quantitative development request, ECN integration, or general inquiry. Our desk will route it directly to <span className="text-emerald-400 font-semibold">info@ifxtrades.com</span>.
+                    Submit your quantitative development request, ECN integration, or general inquiry. Our desk will route it directly to our central operational node.
                   </div>
 
                   {/* Email */}
@@ -177,7 +177,7 @@ export const LiveChatbot = () => {
                   </div>
                   <h5 className="text-white font-black text-sm uppercase tracking-tighter">Transmission Secured</h5>
                   <p className="text-gray-400 text-[11px] leading-relaxed px-4">
-                    Your inquiry has been successfully logged in Supabase and routed to our central operational node at <span className="text-emerald-400 font-semibold font-mono">info@ifxtrades.com</span>.
+                    Your inquiry has been successfully logged and routed to our central operational node.
                   </p>
                   <button
                     onClick={() => setIsSuccess(false)}
