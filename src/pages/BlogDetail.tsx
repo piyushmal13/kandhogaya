@@ -47,7 +47,7 @@ const DYNAMIC_PARTNERS: Record<string, {
     logoUrl: "https://upload.wikimedia.org/wikipedia/commons/e/ee/Bloomberg_logo.svg",
     referralUrl: "https://www.bloomberg.com",
     tagline: "Macro Intelligence Sovereign",
-    description: "Harness real-time geopolitical trends, central bank monetary policy updates, sovereign bond curves, and high-frequency news feeds."
+    description: "Analyze real-time geopolitical trends, central bank monetary policy updates, sovereign bond curves, and high-frequency news feeds."
   },
   "institutional-order-flow-analysis": {
     name: "Interactive Brokers",

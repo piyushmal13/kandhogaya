@@ -48,13 +48,13 @@ const Home = () => {
           onRequestBuild={triggerBespokeBuildRequest}
         />
 
-        {/* L2: Operational Scope Pillars (What we actually do clearly explained) */}
+        {/* L2: Partner Matrix & Authority (Dynamic integrations) */}
+        <BrandAuthority />
+
+        {/* L3: Operational Scope Pillars (What we actually do clearly explained) */}
         <OperationalPillars 
           onRequestBuild={triggerBespokeBuildRequest}
         />
-
-        {/* L3: Partner Matrix & Authority (Dynamic integrations) */}
-        <BrandAuthority />
 
         {/* L4: Institutional Performance Registry (Dynamic product cards loaded from Supabase) */}
         <PerformanceHistory />

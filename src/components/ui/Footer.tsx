@@ -82,6 +82,7 @@ export const Footer = () => (
             </h4>
             <ul className="space-y-4 text-xs text-[#8A9AAB] font-medium">
               <li><Link to="/marketplace" className="hover:text-emerald-400 transition-colors flex items-center gap-1.5 group">Algorithms <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
+              <li><Link to="/solutions/custom" className="hover:text-emerald-400 transition-colors flex items-center gap-1.5 group">Custom Strategy <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
               <li><Link to="/results" className="hover:text-emerald-400 transition-colors">Verified Audit Logs</Link></li>
               <li><Link to="/webinars" className="hover:text-emerald-400 transition-colors">Desk Sessions</Link></li>
               <li><Link to="/blog" className="hover:text-emerald-400 transition-colors">Intelligence Feed</Link></li>
@@ -94,7 +95,6 @@ export const Footer = () => (
               <Building className="w-3.5 h-3.5 text-emerald-500/50" /> B2B Services
             </h4>
             <ul className="space-y-4 text-xs text-[#8A9AAB] font-medium">
-              <li><Link to="/solutions/custom" className="hover:text-emerald-400 transition-colors flex items-center gap-1.5 group">Custom Strategy <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
               <li><Link to="/b2b/liquidity" className="hover:text-emerald-400 transition-colors flex items-center gap-1.5 group">Liquidity Integration <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
               <li><Link to="/b2b/white-label" className="hover:text-emerald-400 transition-colors flex items-center gap-1.5 group">White Label Partnering <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
               <li><Link to="/hiring?mode=b2b" className="hover:text-emerald-400 transition-colors">Broker Talent Recruitment</Link></li>
@@ -108,7 +108,7 @@ export const Footer = () => (
             </h4>
             <ul className="space-y-4 text-xs text-[#8A9AAB] font-medium">
               <li><Link to="/affiliate" className="hover:text-emerald-400 transition-colors flex items-center gap-1.5 group">Elite Affiliate Desk <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
-              <li><Link to="/contact" className="hover:text-emerald-400 transition-colors">Broker Referral Node</Link></li>
+              <li><Link to="/contact?intent=referral" className="hover:text-emerald-400 transition-colors">Broker Referral Node</Link></li>
             </ul>
           </div>
 

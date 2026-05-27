@@ -82,7 +82,7 @@ export const OperationalPillars: React.FC<OperationalPillarsProps> = ({ onReques
             transition={{ delay: 0.1 }}
             className="text-3xl sm:text-5xl md:text-7xl font-black text-white uppercase italic tracking-tighter mb-6 leading-[0.95]"
           >
-            Seamless Software, <br />
+            High-Fidelity Software, <br />
             <span className="text-white/20">Three Strategic Scope Pillars.</span>
           </motion.h2>
 

@@ -253,7 +253,7 @@ const AgentContent = ({
                 Partner <span className="text-transparent bg-clip-text bg-[var(--grad-royale)]">Intelligence</span>
               </h1>
               <p className="text-gray-500 mt-4 max-w-xl text-[10px] font-black uppercase tracking-[0.2em] leading-relaxed">
-                Execute growth strategies through institutional-grade referral protocols. Harness the power of the IFX ecosystem with sub-second transparency and automated settlement.
+                Execute growth strategies through institutional-grade referral protocols. Leverage the IFX institutional ecosystem with sub-second transparency and automated settlement.
               </p>
             </div>
 

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { CheckCircle2, Loader2, Mail, MessageSquare } from "lucide-react";
 
 import { PageHero } from "../components/site/PageHero";
@@ -10,18 +11,20 @@ import { sendContactMessage } from "../services/apiHandlers";
 
 type ContactStatus = "idle" | "loading" | "success" | "error";
 
-const initialFormState = {
-  name: "",
-  email: "",
-  subject: "General Inquiry",
-  message: "",
-};
-
 export const Contact = () => {
-  const [formData, setFormData] = useState(initialFormState);
+  const [searchParams] = useSearchParams();
+  const intent = searchParams.get("intent");
+  const isReferral = intent === "referral";
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: isReferral ? "Broker Referral Node" : "General Inquiry",
+    message: "",
+  });
   const [status, setStatus] = useState<ContactStatus>("idle");
 
-  const updateField = (field: keyof typeof initialFormState, value: string) => {
+  const updateField = (field: "name" | "email" | "subject" | "message", value: string) => {
     setFormData((current) => ({ ...current, [field]: value }));
   };
 
@@ -40,7 +43,12 @@ export const Contact = () => {
       if (!success) throw new Error(error);
 
       setStatus("success");
-      setFormData(initialFormState);
+      setFormData({
+        name: "",
+        email: "",
+        subject: isReferral ? "Broker Referral Node" : "General Inquiry",
+        message: "",
+      });
     } catch (error) {
       console.error("[Contact Form Error]:", error);
       setStatus("error");
@@ -57,18 +65,36 @@ export const Contact = () => {
       />
 
       <PageHero
-        eyebrow="Institutional Support Desk"
+        eyebrow={isReferral ? "Institutional Partnership Node" : "Institutional Support Desk"}
         title={
-          <>
-            Direct Connectivity to the <br />
-            <span className="text-emerald-500">IFX Engineering Desk.</span>
-          </>
+          isReferral ? (
+            <>
+              B2B Broker Referral & <br />
+              <span className="text-emerald-500">Allocation Bridge.</span>
+            </>
+          ) : (
+            <>
+              Direct Connectivity to the <br />
+              <span className="text-emerald-500">IFX Engineering Desk.</span>
+            </>
+          )
         }
-        description="Secure high-fidelity communication for institutional partners, algorithmic licensees, and professional research enclaves. Our desk operates with zero friction and absolute technical transparency."
-        actions={[
-          { label: "WhatsApp Secure", href: BRANDING.whatsappUrl },
-          { label: "Direct Email", href: `mailto:${BRANDING.supportEmail}`, variant: "secondary" },
-        ]}
+        description={
+          isReferral 
+            ? "Establish a secure allocation pipeline. Connect your client base directly to IFX Trades' systematic quantitative execution bridges under premium multi-tier commissions."
+            : "Secure high-fidelity communication for institutional partners, algorithmic licensees, and professional research enclaves. Our desk operates with zero friction and absolute technical transparency."
+        }
+        actions={
+          isReferral 
+            ? [
+                { label: "WhatsApp Secure", href: BRANDING.whatsappUrl },
+                { label: "Affiliate Terminal", href: "/affiliate", variant: "secondary" as const },
+              ]
+            : [
+                { label: "WhatsApp Secure", href: BRANDING.whatsappUrl },
+                { label: "Direct Email", href: `mailto:${BRANDING.supportEmail}`, variant: "secondary" as const },
+              ]
+        }
         metrics={[
           { label: "Response SLA", value: "< 2 Hours", helper: "During active market cycles" },
           { label: "Encryption", value: "End-to-End", helper: "Secure institutional data handling" },
@@ -187,10 +213,11 @@ export const Contact = () => {
                     onChange={(event) => updateField("subject", event.target.value)}
                     className="w-full rounded-xl border border-white/5 bg-white/[0.02] px-5 py-4 text-white outline-none focus:border-emerald-500/30 transition-all font-medium appearance-none"
                   >
-                    <option>General Inquiry</option>
-                    <option>Algo Licensing</option>
-                    <option>Bespoke Engineering</option>
-                    <option>Partnership</option>
+                    <option value="General Inquiry">General Inquiry</option>
+                    <option value="Algo Licensing">Algo Licensing</option>
+                    <option value="Bespoke Engineering">Bespoke Engineering</option>
+                    <option value="Partnership">Partnership</option>
+                    <option value="Broker Referral Node">Broker Referral Node</option>
                   </select>
                 </div>
                 <div>
