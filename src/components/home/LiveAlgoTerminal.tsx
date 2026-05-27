@@ -54,8 +54,8 @@ export const LiveAlgoTerminal = () => {
   const activeOperations = executions.slice(0, 5);
 
   return (
-    <section className="py-24 md:py-32 bg-[var(--color10)] border-t border-white/5 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(16,185,129,0.03),transparent_50%)]" />
+    <section className="py-24 md:py-32 bg-[var(--bg-base)] border-t border-white/5 relative overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(59,130,246,0.03),transparent_50%)]" />
       
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         
@@ -70,15 +70,15 @@ export const LiveAlgoTerminal = () => {
           >
             {/* Header */}
             <div className="flex items-center justify-between mb-8 border-b border-white/5 pb-8">
-              <div className="p-4 bg-white/[0.02] border border-white/5 rounded-3xl flex items-center gap-5 w-full">
-                <div className="p-3 rounded-2xl bg-emerald-500/5 text-emerald-400 border border-emerald-500/10">
-                  <Shield className="w-6 h-6" />
+                <div className="p-3.5 bg-white/[0.02] border border-white/5 rounded-3xl flex items-center gap-5 w-full">
+                  <div className="p-3 rounded-2xl bg-blue-500/5 text-blue-400 border border-blue-500/10">
+                    <Shield className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <div className="text-[10px] text-[var(--color5)] font-mono font-bold uppercase tracking-[0.3em]">Institutional Protocol</div>
+                    <div className="text-white font-bold font-mono text-xl">Systematic Flow <span className="text-[10px] text-blue-400 ml-2 tracking-widest uppercase opacity-80 animate-pulse">Live</span></div>
+                  </div>
                 </div>
-                <div>
-                  <div className="text-[10px] text-[var(--color5)] font-mono font-bold uppercase tracking-[0.3em]">Institutional Protocol</div>
-                  <div className="text-white font-bold font-mono text-xl">Systematic Flow <span className="text-[10px] text-emerald-400 ml-2 tracking-widest uppercase opacity-80 animate-pulse">Live</span></div>
-                </div>
-              </div>
             </div>
 
             {/* Trades List */}
@@ -91,12 +91,12 @@ export const LiveAlgoTerminal = () => {
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
-                    className="flex items-center justify-between p-5 bg-[var(--color26)]/40 border border-white/5 rounded-[1.5rem] hover:border-emerald-500/20 transition-all group"
+                    className="flex items-center justify-between p-5 bg-[var(--color26)]/40 border border-white/5 rounded-[1.5rem] hover:border-blue-500/20 transition-all group"
                   >
                     <div className="flex items-center gap-5">
                       <div className={`w-12 h-12 rounded-2xl flex items-center justify-center border transition-all duration-500 group-hover:scale-110 ${
                         exec.direction === 'BUY' 
-                          ? 'bg-emerald-500/5 border-emerald-500/10 text-emerald-400' 
+                          ? 'bg-blue-500/5 border-blue-500/10 text-blue-400' 
                           : 'bg-rose-500/5 border-rose-500/10 text-rose-400'
                       }`}>
                         {exec.direction === 'BUY' ? <TrendingUp className="w-6 h-6" /> : <TrendingDown className="w-6 h-6" />}
@@ -105,7 +105,7 @@ export const LiveAlgoTerminal = () => {
                         <div className="text-white font-bold text-base tracking-tight flex items-center gap-3 font-mono">
                           {exec.symbol}
                           <span className={`text-[9px] px-2 py-0.5 rounded-full border font-bold tracking-widest ${
-                            exec.direction === 'BUY' ? 'bg-emerald-500/5 border-emerald-500/20 text-emerald-400' : 'bg-rose-500/5 border-rose-500/20 text-rose-400'
+                            exec.direction === 'BUY' ? 'bg-blue-500/5 border-blue-500/20 text-blue-400' : 'bg-rose-500/5 border-rose-500/20 text-rose-400'
                           }`}>
                             {exec.direction === 'BUY' ? 'LONG' : 'SHORT'}
                           </span>
@@ -127,7 +127,7 @@ export const LiveAlgoTerminal = () => {
                       tracker.track("algo_click", { context: "terminal_locked" });
                       setShowUpgrade(true);
                     }}
-                    className="w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-black font-bold rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 shadow-[0_0_40px_rgba(16,185,129,0.2)]"
+                    className="w-full py-4 bg-blue-500 hover:bg-blue-400 text-white font-bold rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 shadow-[0_0_40px_rgba(59,130,246,0.2)] cursor-pointer"
                    >
                      <Lock className="w-4 h-4" />
                      <span>Unlock Educational Access</span>
@@ -141,9 +141,9 @@ export const LiveAlgoTerminal = () => {
                   initial={{ top: "-20%" }}
                   animate={{ top: "120%" }}
                   transition={{ duration: 2.5, ease: "linear" }}
-                  className="absolute left-0 right-0 h-32 bg-gradient-to-b from-transparent via-emerald-500/10 to-transparent pointer-events-none z-10"
+                  className="absolute left-0 right-0 h-32 bg-gradient-to-b from-transparent via-blue-500/10 to-transparent pointer-events-none z-10"
                 >
-                  <div className="absolute top-1/2 w-full h-px bg-emerald-500/30 shadow-[0_0_30px_rgba(16,185,129,0.4)]" />
+                  <div className="absolute top-1/2 w-full h-px bg-blue-500/30 shadow-[0_0_30px_rgba(59,130,246,0.4)]" />
                 </motion.div>
               )}
             </div>
@@ -159,12 +159,12 @@ export const LiveAlgoTerminal = () => {
           >
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-12 gap-6">
               <h3 className="text-white font-bold text-3xl flex items-center gap-4 tracking-[-0.03em]">
-                <Activity className="w-8 h-8 text-emerald-400 border border-emerald-500/20 p-1.5 rounded-xl bg-emerald-500/5" />
+                <Activity className="w-8 h-8 text-blue-400 border border-blue-500/20 p-1.5 rounded-xl bg-blue-500/5" />
                 Educational Audit (36M)
               </h3>
               <div className="flex gap-8 text-[10px] font-mono font-bold uppercase tracking-[0.3em]">
-                <div className="flex items-center gap-2 text-emerald-400">
-                  <div className="w-2 h-2 rounded-full bg-emerald-500" /> <span>Alpha Flow</span>
+                <div className="flex items-center gap-2 text-blue-400">
+                  <div className="w-2 h-2 rounded-full bg-blue-500" /> <span>ECN Order Stream</span>
                 </div>
                 <div className="flex items-center gap-2 text-[var(--color5)]">
                   <div className="w-2 h-2 rounded-full bg-rose-500/40" /> <span>Retraction</span>
@@ -183,11 +183,11 @@ export const LiveAlgoTerminal = () => {
                   className={`
                     relative group aspect-square rounded-[1rem] border flex items-center justify-center cursor-default transition-all duration-700
                     ${month.isPositive 
-                      ? 'bg-emerald-500/[0.03] border-emerald-500/10 hover:bg-emerald-500/10 hover:border-emerald-500/20' 
+                      ? 'bg-blue-500/[0.03] border-blue-500/10 hover:bg-blue-500/10 hover:border-blue-500/20' 
                       : 'bg-rose-500/[0.03] border-rose-500/10 hover:bg-rose-500/10 hover:border-rose-500/20'}
                   `}
                 >
-                  <span className={`text-[10px] md:text-sm font-mono font-bold ${month.isPositive ? 'text-emerald-400/80' : 'text-rose-400/40'}`}>
+                  <span className={`text-[10px] md:text-sm font-mono font-bold ${month.isPositive ? 'text-blue-400/80' : 'text-rose-400/40'}`}>
                     {month.value}%
                   </span>
                 </motion.div>
@@ -197,7 +197,7 @@ export const LiveAlgoTerminal = () => {
             <div className="mt-14 pt-12 border-t border-white/5 grid grid-cols-2 sm:grid-cols-4 gap-10">
               <div className="group">
                 <div className="text-[10px] font-mono font-bold text-[var(--color5)] uppercase tracking-[0.3em] mb-2">Total Alpha</div>
-                <div className="text-emerald-400 font-bold text-3xl md:text-4xl tracking-tighter">+1,240%</div>
+                <div className="text-blue-400 font-bold text-3xl md:text-4xl tracking-tighter">+1,240%</div>
               </div>
               <div className="group">
                 <div className="text-[10px] font-mono font-bold text-[var(--color5)] uppercase tracking-[0.3em] mb-2">Portfolio MDD</div>
@@ -209,7 +209,7 @@ export const LiveAlgoTerminal = () => {
               </div>
               <div className="group">
                 <div className="text-[10px] font-mono font-bold text-[var(--color5)] uppercase tracking-[0.3em] mb-2">Peak Capture</div>
-                <div className="text-emerald-400/60 font-bold text-3xl md:text-4xl tracking-tighter">
+                <div className="text-blue-400/60 font-bold text-3xl md:text-4xl tracking-tighter">
                   +{bestMonth.toFixed(1)}%
                 </div>
               </div>
@@ -226,7 +226,7 @@ export const LiveAlgoTerminal = () => {
         onClose={() => setShowUpgrade(false)} 
         requiredPlan="elite"
         title="Educational Access Locked"
-        description="Exploiting proprietary institutional liquidity clusters requires Elite-tier execution credentials. Upgrade currently to unlock full systematic control."
+        description="Exploiting proprietary institutional liquidity sweeps requires Elite-tier execution credentials. Upgrade currently to unlock full systematic control."
       />
     </section>
   );

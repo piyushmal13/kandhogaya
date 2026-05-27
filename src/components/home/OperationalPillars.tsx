@@ -19,8 +19,8 @@ export const OperationalPillars: React.FC<OperationalPillarsProps> = ({ onReques
       cta: "Explore Masterclasses",
       link: "/webinars",
       isModal: false,
-      color: "from-emerald-500/10 to-transparent border-emerald-500/10 hover:border-emerald-500/30",
-      iconColor: "text-emerald-400"
+      color: "from-blue-500/10 to-transparent border-blue-500/10 hover:border-blue-500/30",
+      iconColor: "text-blue-400"
     },
     {
       num: "02",
@@ -59,9 +59,9 @@ export const OperationalPillars: React.FC<OperationalPillarsProps> = ({ onReques
   };
 
   return (
-    <section className="py-20 md:py-32 bg-[#020202] relative overflow-hidden border-t border-white/5">
+    <section className="py-20 md:py-32 bg-[var(--bg-base)] relative overflow-hidden border-t border-white/5">
       {/* Background radial VFX */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-emerald-500/[0.02] blur-[130px] rounded-full pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-500/[0.02] blur-[130px] rounded-full pointer-events-none" />
 
       <div className="container mx-auto px-6 relative z-10 max-w-7xl">
         <div className="text-center mb-16 md:mb-24">
@@ -69,7 +69,7 @@ export const OperationalPillars: React.FC<OperationalPillarsProps> = ({ onReques
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-emerald-500/[0.05] border border-emerald-500/[0.12] text-emerald-400 text-[10px] font-black uppercase tracking-[0.25em] mb-6"
+            className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-blue-500/[0.05] border border-blue-500/[0.12] text-blue-400 text-[10px] font-black uppercase tracking-[0.25em] mb-6"
           >
             <Award className="w-3.5 h-3.5" />
             Operational Framework &amp; Scope

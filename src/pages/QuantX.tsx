@@ -27,7 +27,7 @@ const IntelligenceLayer = ({ number, title, description, inputs, outputs, icon: 
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay, duration: 0.8 }}
-      className="relative p-6 sm:p-8 rounded-[1.75rem] sm:rounded-[2rem] bg-white/[0.01] border border-white/[0.05] hover:border-emerald-500/20 hover:bg-emerald-500/[0.01] transition-all group overflow-hidden shadow-2xl"
+      className="relative p-6 sm:p-8 rounded-[1.75rem] sm:rounded-[2rem] bg-white/[0.01] border border-white/[0.05] hover:border-blue-500/20 hover:bg-blue-500/[0.01] transition-all group overflow-hidden shadow-2xl"
     >
       <div className="absolute top-0 right-0 p-8 opacity-[0.02] group-hover:opacity-[0.06] transition-opacity">
         <Icon size={120} />
@@ -35,11 +35,11 @@ const IntelligenceLayer = ({ number, title, description, inputs, outputs, icon: 
       
       <div className="relative z-10">
         <div className="flex items-center gap-4 mb-6">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 shrink-0">
             <Icon size={22} />
           </div>
           <div>
-            <span className="text-[9px] font-black tracking-[0.3em] text-emerald-500/60 uppercase">Layer {number}</span>
+            <span className="text-[9px] font-black tracking-[0.3em] text-blue-500/60 uppercase">Layer {number}</span>
             <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">{title}</h3>
           </div>
         </div>
@@ -50,13 +50,13 @@ const IntelligenceLayer = ({ number, title, description, inputs, outputs, icon: 
         
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 border-t border-white/5 pt-6">
           <div>
-            <span className="block text-[8px] sm:text-[9px] font-black uppercase tracking-[0.3em] text-[#58F2B6] mb-2 leading-none">
+            <span className="block text-[8px] sm:text-[9px] font-black uppercase tracking-[0.3em] text-blue-400 mb-2 leading-none">
               Operational Ingestion
             </span>
             <ul className="space-y-1.5">
               {inputs.map((input: string) => (
                 <li key={input} className="text-xs text-white/60 flex items-center gap-2">
-                  <div className="w-1 h-1 rounded-full bg-emerald-500/40 shrink-0" />
+                  <div className="w-1 h-1 rounded-full bg-blue-500/40 shrink-0" />
                   {input}
                 </li>
               ))}
@@ -64,7 +64,7 @@ const IntelligenceLayer = ({ number, title, description, inputs, outputs, icon: 
           </div>
           <div>
             <span className="block text-[8px] sm:text-[9px] font-black tracking-[0.2em] text-white/20 uppercase mb-2 leading-none">System Output</span>
-            <div className="inline-flex px-2.5 py-1 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold tracking-wider">
+            <div className="inline-flex px-2.5 py-1 rounded bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] font-bold tracking-wider">
               {outputs}
             </div>
           </div>
@@ -76,11 +76,11 @@ const IntelligenceLayer = ({ number, title, description, inputs, outputs, icon: 
 
 const ArchitectureNode = ({ title, icon: Icon, subtext, active = false }: any) => (
   <div className={`relative flex flex-col items-center gap-3 p-6 rounded-3xl border transition-all duration-500 ${
-    active ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400 shadow-[0_10px_35px_rgba(16,185,129,0.05)]' : 'bg-white/[0.01] border-white/[0.04] text-white/30'
+    active ? 'bg-blue-500/10 border-blue-500/30 text-blue-400 shadow-[0_10px_35px_rgba(59,130,246,0.05)]' : 'bg-white/[0.01] border-white/[0.04] text-white/30'
   }`}>
-    <Icon size={24} className={active ? 'text-emerald-400' : 'text-white/20'} />
+    <Icon size={24} className={active ? 'text-blue-400' : 'text-white/20'} />
     <div className="text-center">
-      <div className={`text-[10px] font-black tracking-widest uppercase mb-0.5 ${active ? 'text-emerald-400' : 'text-white/60'}`}>
+      <div className={`text-[10px] font-black tracking-widest uppercase mb-0.5 ${active ? 'text-blue-400' : 'text-white/60'}`}>
         {title}
       </div>
       {subtext && <div className="text-[8px] opacity-40 font-medium">{subtext}</div>}
@@ -99,7 +99,7 @@ export const QuantX = () => {
   const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-[#010203] text-white selection:bg-emerald-500/30 font-sans">
+    <div ref={containerRef} className="min-h-screen bg-[var(--bg-base)] text-white selection:bg-blue-500/30 font-sans">
       <PageMeta 
         title="QuantX Ecosystem | Undisputed Systematic Software Engineering"
         description="Discover the systematic, disciplined quantitative models behind QuantX. Built for elite capital protection, high-performance rule execution, and absolute execution integrity."
@@ -111,7 +111,7 @@ export const QuantX = () => {
           style={{ y: backgroundY }}
           className="absolute inset-0 z-0"
         >
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.05),transparent_70%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.05),transparent_70%)]" />
           <div className="absolute inset-0 opacity-[0.03] bg-[url('/noise.png')]" />
         </motion.div>
 
@@ -122,13 +122,13 @@ export const QuantX = () => {
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
             className="space-y-6"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-black uppercase tracking-[0.4em] mb-4">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] font-black uppercase tracking-[0.4em] mb-4">
               <Workflow className="w-3.5 h-3.5" />
               Sovereign Quantitative Desk
             </div>
             
             <h1 className="text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter mb-4 leading-[0.88] uppercase italic text-shimmer pr-2">
-              Quant<span className="text-emerald-400 font-serif">X</span>
+              Quant<span className="text-blue-400 font-serif">X</span>
             </h1>
             
             <p className="text-white/45 text-sm sm:text-lg md:text-xl max-w-3xl mx-auto leading-relaxed px-4">
@@ -142,17 +142,17 @@ export const QuantX = () => {
           className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3"
         >
           <div className="text-[9px] font-black tracking-[0.3em] text-white/20 uppercase">Initialize Core Matrix</div>
-          <div className="w-px h-12 bg-gradient-to-b from-emerald-500/50 to-transparent" />
+          <div className="w-px h-12 bg-gradient-to-b from-blue-500/50 to-transparent" />
         </motion.div>
       </section>
 
       {/* Psychological Alignment: The Pain vs. The Sanctuary */}
       <section className="py-16 md:py-36 border-b border-white/[0.05] relative overflow-hidden bg-gradient-to-b from-black to-[#020305]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(16,185,129,0.03),transparent_60%)] pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(59,130,246,0.03),transparent_60%)] pointer-events-none" />
         
         <div className="container mx-auto px-6 relative z-10">
           <div className="max-w-4xl mx-auto text-center mb-20 md:mb-28">
-            <span className="text-xs font-black uppercase tracking-[0.4em] text-emerald-400 mb-4 block">Systematic Engineering</span>
+            <span className="text-xs font-black uppercase tracking-[0.4em] text-blue-400 mb-4 block">Systematic Engineering</span>
             <h2 className="text-3xl sm:text-5xl md:text-7xl font-black text-white uppercase italic tracking-tighter mb-6 leading-tight">
               Why Elite Traders <br />
               <span className="text-white/30">Choose Systematic Models.</span>
@@ -206,33 +206,33 @@ export const QuantX = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="p-8 md:p-12 rounded-[2.5rem] bg-emerald-950/5 border border-emerald-500/10 flex flex-col justify-between shadow-[0_20px_50px_rgba(16,185,129,0.02)]"
+              className="p-8 md:p-12 rounded-[2.5rem] bg-blue-955/5 border border-blue-500/10 flex flex-col justify-between shadow-[0_20px_50px_rgba(59,130,246,0.02)]"
             >
               <div>
-                <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest mb-6 block">The QuantX Solution</span>
+                <span className="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-6 block">The QuantX Solution</span>
                 <h3 className="text-xl md:text-2xl font-black uppercase tracking-tight text-white mb-6">Disciplined Systematic Execution</h3>
                 
                 <ul className="space-y-4 text-xs md:text-sm text-white/70">
                   <li className="flex items-start gap-3">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-2 shrink-0" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-400 mt-2 shrink-0" />
                     <span><strong>Zero Emotion Rules:</strong> 100% mechanical mathematical compliance. Logic triggers execute exactly as backtested.</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-2 shrink-0" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-400 mt-2 shrink-0" />
                     <span><strong>Micro-Second Latency:</strong> Lightning-fast order routing bypassing retail platform bottlenecks completely.</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-2 shrink-0" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-400 mt-2 shrink-0" />
                     <span><strong>Continuous Monitoring:</strong> Algorithms handle continuous market surveillance, maintaining round-the-clock precision.</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-2 shrink-0" />
-                    <span><strong>Hardcoded Risk Governance:</strong> Capital preservation algorithms enforce strict caps on absolute exposure.</span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-400 mt-2 shrink-0" />
+                      <span><strong>Hardcoded Risk Governance:</strong> Capital preservation algorithms enforce strict caps on absolute exposure.</span>
                   </li>
                 </ul>
               </div>
 
-              <div className="mt-8 pt-6 border-t border-emerald-500/10 text-emerald-400 text-[10px] font-mono tracking-wider uppercase">
+              <div className="mt-8 pt-6 border-t border-blue-500/10 text-blue-400 text-[10px] font-mono tracking-wider uppercase">
                 Result: Systematic execution, strict risk management, professional stability.
               </div>
             </motion.div>
@@ -253,7 +253,7 @@ export const QuantX = () => {
 
           <div className="relative max-w-6xl mx-auto">
             {/* Visual Flow Lines */}
-            <div className="absolute inset-x-0 top-1/2 h-px bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent -translate-y-1/2 hidden lg:block" />
+            <div className="absolute inset-x-0 top-1/2 h-px bg-gradient-to-r from-transparent via-blue-500/20 to-transparent -translate-y-1/2 hidden lg:block" />
             
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 relative z-10">
               <ArchitectureNode title="Macro Data Feed" icon={Database} subtext="Global Liquidity Core" active />
@@ -271,7 +271,7 @@ export const QuantX = () => {
         <div className="container mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 md:gap-8 mb-16 md:mb-24 max-w-6xl mx-auto">
             <div className="max-w-2xl">
-              <div className="text-emerald-500 text-[9px] font-black tracking-[0.4em] uppercase mb-3">Tactical Operations</div>
+              <div className="text-blue-500 text-[9px] font-black tracking-[0.4em] uppercase mb-3">Tactical Operations</div>
               <h2 className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tighter leading-none italic uppercase">Systematic <br className="hidden sm:block" />Analysis Layers</h2>
             </div>
             <p className="text-white/30 text-xs sm:text-sm md:text-base max-w-xs leading-relaxed pb-2 uppercase tracking-wider font-semibold">
@@ -333,17 +333,17 @@ export const QuantX = () => {
 
       {/* Execution Infrastructure */}
       <section className="py-16 md:py-36 relative overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-emerald-500/[0.03] rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-500/[0.03] rounded-full blur-[120px] pointer-events-none" />
         
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center max-w-6xl mx-auto">
             <div>
-              <span className="text-emerald-400 text-xs font-black uppercase tracking-[0.4em] mb-4 block">Uncompromising Rigor</span>
+              <span className="text-blue-400 text-xs font-black uppercase tracking-[0.4em] mb-4 block">Uncompromising Rigor</span>
               <h2 className="text-3xl sm:text-5xl md:text-6xl font-black mb-10 tracking-tight uppercase italic leading-none">Designed for Absolute Trust.</h2>
               
               <div className="space-y-8 sm:space-y-10">
                 <div className="flex gap-4 sm:gap-6">
-                  <div className="w-12 h-12 shrink-0 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-emerald-400 shadow-lg">
+                  <div className="w-12 h-12 shrink-0 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-blue-400 shadow-lg">
                     <ShieldCheck size={24} />
                   </div>
                   <div>
@@ -353,7 +353,7 @@ export const QuantX = () => {
                 </div>
                 
                  <div className="flex gap-4 sm:gap-6">
-                  <div className="w-12 h-12 shrink-0 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-emerald-400 shadow-lg">
+                  <div className="w-12 h-12 shrink-0 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-blue-400 shadow-lg">
                     <Cpu size={24} />
                   </div>
                   <div>
@@ -363,7 +363,7 @@ export const QuantX = () => {
                 </div>
 
                 <div className="flex gap-4 sm:gap-6">
-                  <div className="w-12 h-12 shrink-0 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-emerald-400 shadow-lg">
+                  <div className="w-12 h-12 shrink-0 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-blue-400 shadow-lg">
                     <HeartHandshake size={24} />
                   </div>
                   <div>
@@ -376,20 +376,20 @@ export const QuantX = () => {
 
             <div className="relative">
               <div className="h-auto min-h-[300px] lg:aspect-square rounded-3xl sm:rounded-[3.5rem] bg-gradient-to-br from-white/[0.03] to-transparent border border-white/[0.06] p-8 overflow-hidden group">
-                <div className="absolute inset-0 bg-emerald-500/[0.01] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                <div className="absolute inset-0 bg-blue-500/[0.01] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                 
                 {/* Visual Representation of the "Loop" */}
                 <div className="relative h-full flex flex-col justify-center items-center min-h-[250px]">
                   <motion.div
                     animate={{ rotate: 360 }}
                     transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-                    className="absolute inset-0 border border-emerald-500/10 rounded-full border-dashed"
+                    className="absolute inset-0 border border-blue-500/10 rounded-full border-dashed"
                   />
                   <div className="text-center relative z-10">
-                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl sm:rounded-3xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mx-auto mb-4 sm:mb-6 shadow-[0_0_50px_-12px_rgba(16,185,129,0.4)]">
-                      <Cpu className="w-8 h-8 sm:w-10 sm:h-10 text-emerald-400" />
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl sm:rounded-3xl bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 mx-auto mb-4 sm:mb-6 shadow-[0_0_50px_-12px_rgba(59,130,246,0.4)]">
+                      <Cpu className="w-8 h-8 sm:w-10 sm:h-10 text-blue-400" />
                     </div>
-                    <div className="text-[9px] font-black tracking-[0.4em] text-emerald-500 uppercase mb-2">Model Audited Enclave</div>
+                    <div className="text-[9px] font-black tracking-[0.4em] text-blue-500 uppercase mb-2">Model Audited Enclave</div>
                     <div className="text-xl sm:text-2xl font-bold uppercase tracking-wide">Dynamic Verification</div>
                   </div>
                 </div>
@@ -400,14 +400,14 @@ export const QuantX = () => {
       </section>
 
       {/* Final CTA */}
-      <section className="py-16 md:py-40 bg-emerald-600/[0.01] border-t border-white/[0.05] relative overflow-hidden">
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-emerald-500/30 to-transparent" />
+      <section className="py-16 md:py-40 bg-blue-600/[0.01] border-t border-white/[0.05] relative overflow-hidden">
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500/30 to-transparent" />
         
         <div className="container mx-auto px-4 md:px-6 text-center max-w-4xl">
-          <span className="text-xs font-black uppercase tracking-[0.4em] text-emerald-400 mb-6 block">Join the Quantitative Frontier</span>
+          <span className="text-xs font-black uppercase tracking-[0.4em] text-blue-400 mb-6 block">Join the Quantitative Frontier</span>
           <h2 className="text-4xl md:text-7xl font-black mb-10 tracking-tight italic uppercase leading-none">
             Total Systematic Control. <br />
-            <span className="text-emerald-400">Zero Execution Latency.</span>
+            <span className="text-blue-400">Zero Execution Latency.</span>
           </h2>
           <p className="text-white/40 text-sm md:text-base leading-relaxed mb-12 max-w-lg mx-auto">
             Integrate institutional quantitative models. Connect to the QuantX research framework to deploy disciplined systematic strategies.

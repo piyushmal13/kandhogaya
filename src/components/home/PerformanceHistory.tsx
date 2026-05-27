@@ -25,7 +25,7 @@ export const PerformanceHistory = () => {
         profitFactor: "2.8",
         maxDrawdown: "4.2%",
         type: "MQL5 / MT5",
-        badgeColor: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20"
+        badgeColor: "text-blue-400 bg-blue-500/10 border-blue-500/20"
       };
     }
     if (name.includes("gold")) {
@@ -64,7 +64,7 @@ export const PerformanceHistory = () => {
     const platforms = ["MQL5 / MT5", "PineScript / TradingView", "C++ / FIX API", "Python / MetaApi"];
     const type = platforms[charCodeSum % platforms.length];
     const colors = [
-      "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
+      "text-blue-400 bg-blue-500/10 border-blue-500/20",
       "text-cyan-400 bg-cyan-500/10 border-cyan-500/20",
       "text-purple-400 bg-purple-500/10 border-purple-500/20",
       "text-blue-400 bg-blue-500/10 border-blue-500/20"
@@ -98,10 +98,10 @@ export const PerformanceHistory = () => {
   ];
 
   return (
-    <section id="performance" className="py-16 md:py-32 bg-[#020202] border-t border-white/[0.04] relative overflow-hidden" aria-labelledby="algo-heading">
+    <section id="performance" className="py-16 md:py-32 bg-[var(--bg-base)] border-t border-white/[0.04] relative overflow-hidden" aria-labelledby="algo-heading">
       {/* Background Ambience */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden>
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[60%] bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(16,185,129,0.06),transparent)]" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[60%] bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(59,130,246,0.06),transparent)]" />
       </div>
 
       <div className="max-w-7xl mx-auto px-6 sm:px-12 relative z-10">
@@ -112,7 +112,7 @@ export const PerformanceHistory = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/[0.06] border border-emerald-500/[0.12] text-emerald-400 text-[10px] font-black uppercase tracking-[0.2em] mb-6"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/[0.06] border border-blue-500/[0.12] text-blue-400 text-[10px] font-black uppercase tracking-[0.2em] mb-6"
           >
             <Activity className="w-3.5 h-3.5" />
             Proprietary Architecture
@@ -126,7 +126,7 @@ export const PerformanceHistory = () => {
             id="algo-heading" 
             className="text-4xl sm:text-5xl md:text-6xl font-black text-white mb-6 tracking-tight leading-[1.1] uppercase italic"
           >
-            Algorithmic <span className="text-emerald-500">Trust System.</span>
+            Algorithmic <span className="text-blue-500">Trust System.</span>
           </motion.h2>
           
           <motion.p 
@@ -153,7 +153,7 @@ export const PerformanceHistory = () => {
               className="space-y-6"
             >
               <div className="flex items-start gap-4">
-                <div className="p-3.5 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl text-emerald-400 shrink-0">
+                <div className="p-3.5 bg-blue-500/10 border border-blue-500/20 rounded-2xl text-blue-400 shrink-0">
                   <ShieldCheck className="w-5 h-5" />
                 </div>
                 <div>
@@ -165,7 +165,7 @@ export const PerformanceHistory = () => {
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="p-3.5 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl text-emerald-400 shrink-0">
+                <div className="p-3.5 bg-blue-500/10 border border-blue-500/20 rounded-2xl text-blue-400 shrink-0">
                   <Activity className="w-5 h-5" />
                 </div>
                 <div>
@@ -177,7 +177,7 @@ export const PerformanceHistory = () => {
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="p-3.5 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl text-emerald-400 shrink-0">
+                <div className="p-3.5 bg-blue-500/10 border border-blue-500/20 rounded-2xl text-blue-400 shrink-0">
                   <Zap className="w-5 h-5" />
                 </div>
                 <div>
@@ -197,20 +197,20 @@ export const PerformanceHistory = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="w-full p-8 md:p-10 bg-zinc-900/40 border border-white/5 hover:border-emerald-500/20 rounded-[2.5rem] flex flex-col justify-between group transition-all duration-500 shadow-2xl relative overflow-hidden"
+              className="w-full p-8 md:p-10 bg-zinc-900/40 border border-white/5 hover:border-blue-500/20 rounded-[2.5rem] flex flex-col justify-between group transition-all duration-500 shadow-2xl relative overflow-hidden"
             >
               {/* Glow Accent */}
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-500/10 to-transparent blur-3xl group-hover:scale-150 transition-all duration-500" />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 to-transparent blur-3xl group-hover:scale-150 transition-all duration-500" />
               
               <div>
                 <div className="flex justify-between items-start gap-4 mb-6">
-                  <span className="px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border text-emerald-400 bg-emerald-500/10 border-emerald-500/20">
+                  <span className="px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border text-blue-400 bg-blue-500/10 border-blue-500/20">
                     MT5 / TradingView / FIX API
                   </span>
-                  <Cpu className="w-5 h-5 text-gray-500 group-hover:text-emerald-400 transition-colors" />
+                  <Cpu className="w-5 h-5 text-gray-500 group-hover:text-blue-400 transition-colors" />
                 </div>
 
-                <h3 className="text-2xl sm:text-3xl font-black text-white uppercase italic tracking-tighter mb-4 leading-none group-hover:text-emerald-400 transition-colors">
+                <h3 className="text-2xl sm:text-3xl font-black text-white uppercase italic tracking-tighter mb-4 leading-none group-hover:text-blue-400 transition-colors">
                   Algorithmic <br />Portfolio.
                 </h3>
                 
@@ -227,7 +227,7 @@ export const PerformanceHistory = () => {
                   </div>
                   <div>
                     <span className="text-[8px] font-bold text-gray-500 uppercase tracking-widest block mb-1">Profit Factor</span>
-                    <span className="text-sm font-mono font-black text-emerald-400">2.5x</span>
+                    <span className="text-sm font-mono font-black text-blue-400">2.5x</span>
                   </div>
                   <div>
                     <span className="text-[8px] font-bold text-gray-500 uppercase tracking-widest block mb-1">Execution</span>
@@ -258,13 +258,13 @@ export const PerformanceHistory = () => {
             
             {/* Column 1: Intro */}
             <div className="lg:col-span-5 space-y-8">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[9px] font-mono tracking-widest uppercase">
-                <Zap className="w-3.5 h-3.5 text-emerald-400" /> Bespoke Engineering
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[9px] font-mono tracking-widest uppercase">
+                <Zap className="w-3.5 h-3.5 text-blue-400" /> Bespoke Engineering
               </div>
               
               <h3 className="text-3xl md:text-4xl font-black text-white uppercase italic leading-none tracking-tighter">
                 Custom strategy <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 font-serif">Development desk.</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400 font-serif">Development desk.</span>
               </h3>
               
               <p className="text-xs md:text-sm text-gray-400 leading-relaxed uppercase tracking-wider">
@@ -283,10 +283,10 @@ export const PerformanceHistory = () => {
             {/* Column 2: Pipeline Steps */}
             <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8">
               {QUANT_STEPS.map((step) => (
-                <div key={step.step} className="p-5 sm:p-6 bg-white/[0.02] border border-white/[0.04] rounded-2xl sm:rounded-3xl space-y-3 sm:space-y-4 hover:border-emerald-500/10 transition-colors">
+                <div key={step.step} className="p-5 sm:p-6 bg-white/[0.02] border border-white/[0.04] rounded-2xl sm:rounded-3xl space-y-3 sm:space-y-4 hover:border-blue-500/10 transition-colors">
                   <div className="flex justify-between items-center">
-                    <span className="font-mono text-emerald-400 text-sm font-black">{step.step}</span>
-                    <CheckCircle className="w-4 h-4 text-emerald-500/40" />
+                    <span className="font-mono text-blue-400 text-sm font-black">{step.step}</span>
+                    <CheckCircle className="w-4 h-4 text-blue-500/40" />
                   </div>
                   <h4 className="text-xs font-black text-white uppercase tracking-widest">
                     {step.title}
@@ -304,7 +304,7 @@ export const PerformanceHistory = () => {
         {/* Global Security Footer */}
         <div className="mt-16 pt-10 border-t border-white/[0.04] flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-3">
-            <ShieldCheck className="w-5 h-5 text-emerald-500" />
+            <ShieldCheck className="w-5 h-5 text-blue-500" />
             <span className="text-[10px] font-black text-white/60 uppercase tracking-[0.2em]">Institutional Audit Verified</span>
           </div>
           <div className="text-[9px] font-mono text-gray-600 uppercase tracking-widest text-center md:text-right">

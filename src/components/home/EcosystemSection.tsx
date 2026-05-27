@@ -10,7 +10,7 @@ const modules = [
     description: "Our flagship multi-layered quantitative model. Unlike static, legacy systems, QuantX dynamically adjusts to live market conditions to achieve precision execution.",
     icon: Workflow,
     link: "/quantx",
-    accent: "#10B981",
+    accent: "#3B82F6",
     tag: "ELITE",
     size: "lg",
   },
@@ -30,7 +30,7 @@ const modules = [
     description: "Join our developers in real-time as they break down algorithmic logic, execution models, and market regimes.",
     icon: Video,
     link: "/webinars",
-    accent: "#D4AF37",
+    accent: "#EC4899",
     tag: "MASTERCLASS",
     size: "sm",
   },
@@ -185,10 +185,10 @@ const TiltCard = ({ mod, index }: { mod: typeof modules[0]; index: number }) => 
 
 export const EcosystemSection = () => {
   return (
-    <section className="py-24 md:py-36 bg-[#010203] relative overflow-hidden" aria-labelledby="ecosystem-heading">
+    <section className="py-24 md:py-36 bg-[var(--bg-base)] relative overflow-hidden" aria-labelledby="ecosystem-heading">
       {/* Background ambient */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden>
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[55%] bg-[radial-gradient(ellipse_65%_50%_at_50%_0%,rgba(16,185,129,0.055),transparent)]" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[55%] bg-[radial-gradient(ellipse_65%_50%_at_50%_0%,rgba(59,130,246,0.055),transparent)]" />
         <div className="absolute bottom-0 w-full h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
       </div>
 
@@ -201,7 +201,7 @@ export const EcosystemSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/[0.06] border border-emerald-500/[0.12] text-emerald-400 text-[10px] font-black uppercase tracking-[0.3em] mb-7"
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/[0.06] border border-blue-500/[0.12] text-blue-400 text-[10px] font-black uppercase tracking-[0.3em] mb-7"
             >
               <BarChart2 className="w-3.5 h-3.5" aria-hidden />
               Institutional Core
@@ -216,7 +216,7 @@ export const EcosystemSection = () => {
               className="text-4xl sm:text-6xl md:text-7xl lg:text-[80px] font-bold text-white tracking-tight leading-[1] max-w-4xl"
             >
               The Next-Gen <br />
-              <span className="text-emerald-400">Algorithmic Ecosystem.</span>
+              <span className="text-blue-400">Algorithmic Ecosystem.</span>
             </motion.h2>
           </div>
 

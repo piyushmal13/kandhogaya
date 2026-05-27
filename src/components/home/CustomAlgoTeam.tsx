@@ -23,9 +23,9 @@ const features = [
 
 export const CustomAlgoTeam = () => {
   return (
-    <section className="py-24 md:py-40 bg-[#020202] relative overflow-hidden">
+    <section className="py-24 md:py-40 bg-[var(--bg-base)] relative overflow-hidden">
       {/* Background VFX */}
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#58F2B6]/5 blur-[120px] rounded-full pointer-events-none translate-x-1/2 -translate-y-1/2" />
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#3B82F6]/5 blur-[120px] rounded-full pointer-events-none translate-x-1/2 -translate-y-1/2" />
       
       <div className="container mx-auto px-6 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
@@ -35,7 +35,7 @@ export const CustomAlgoTeam = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#58F2B6]/5 border border-[#58F2B6]/10 text-[#58F2B6] text-[10px] font-black uppercase tracking-[0.3em] mb-8">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#3B82F6]/5 border border-[#3B82F6]/10 text-blue-400 text-[10px] font-black uppercase tracking-[0.3em] mb-8">
               <Code2 className="w-3.5 h-3.5" />
               Custom Engineering Desk
             </div>
@@ -51,7 +51,7 @@ export const CustomAlgoTeam = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
               <div className="flex items-center gap-4 p-6 rounded-3xl bg-white/[0.02] border border-white/5">
-                <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-400">
+                <div className="w-12 h-12 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-400">
                   <Users className="w-6 h-6" />
                 </div>
                 <div>
@@ -89,10 +89,10 @@ export const CustomAlgoTeam = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.5 }}
-                className="group p-8 rounded-[2.5rem] bg-[#0A0A0A] border border-white/5 hover:border-[#58F2B6]/30 transition-all hover:translate-y-[-4px]"
+                className="group p-8 rounded-[2.5rem] bg-[#0A0A0A] border border-white/5 hover:border-blue-500/30 transition-all hover:translate-y-[-4px]"
               >
                 <div className="flex gap-6 items-start">
-                  <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center text-white/40 group-hover:text-[#58F2B6] group-hover:border-[#58F2B6]/20 transition-all">
+                  <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center text-white/40 group-hover:text-blue-400 group-hover:border-blue-500/20 transition-all">
                     <f.icon className="w-7 h-7" />
                   </div>
                   <div>

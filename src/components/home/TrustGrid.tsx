@@ -10,7 +10,7 @@ const PILLARS = [
     icon: ShieldCheck,
     title: "100% Education. Zero Broker Affiliation.",
     desc: "We do not accept deposits, execute client trades, or hold funds. Rigorously verified by regulatory compliance standards across India and UAE.",
-    color: "#10B981",
+    color: "#3B82F6",
     num: "01",
   },
   {
@@ -55,12 +55,12 @@ const SNAP = [0.4, 0, 0.2, 1] as const;
 export const TrustGrid = () => {
   return (
     <section
-      className="py-24 md:py-36 bg-[#020202] relative overflow-hidden"
+      className="py-24 md:py-36 bg-[var(--bg-base)] relative overflow-hidden"
       aria-labelledby="trust-heading"
     >
       {/* Ambient */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[40%] bg-[radial-gradient(ellipse_70%_45%_at_50%_0%,rgba(16,185,129,0.04),transparent)]" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[40%] bg-[radial-gradient(ellipse_70%_45%_at_50%_0%,rgba(59,130,246,0.04),transparent)]" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-8 relative z-10">
@@ -74,9 +74,9 @@ export const TrustGrid = () => {
               transition={{ duration: 0.4, ease: SNAP }}
               className="flex items-center gap-3 mb-7"
             >
-              <div className="h-px w-8 bg-emerald-500" />
+              <div className="h-px w-8 bg-blue-500" />
               <span
-                className="text-[9px] uppercase text-emerald-500 font-black"
+                className="text-[9px] uppercase text-blue-500 font-black"
                 style={{ fontFamily: "IBM Plex Mono, monospace", letterSpacing: "0.35em" }}
               >
                 Why IFX Trades
@@ -95,7 +95,7 @@ export const TrustGrid = () => {
               <span
                 className="italic font-serif"
                 style={{
-                  background: "linear-gradient(135deg, #10B981, #00FFA3)",
+                  background: "linear-gradient(135deg, #3B82F6, #8B5CF6)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                 }}
@@ -126,7 +126,7 @@ export const TrustGrid = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}
               transition={{ delay: i * 0.06, duration: 0.55, ease: SNAP }}
-              className="group relative p-8 md:p-10 bg-[#020202] hover:bg-[#080B12] transition-colors duration-300 overflow-hidden"
+              className="group relative p-8 md:p-10 bg-[#0A0D1A] hover:bg-[#0E142B] transition-colors duration-300 overflow-hidden"
             >
               {/* Number watermark */}
               <div
@@ -166,7 +166,7 @@ export const TrustGrid = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.25, duration: 0.5, ease: SNAP }}
-          className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-6 p-8 md:p-10 rounded-[1.75rem] border border-white/[0.07] bg-gradient-to-br from-emerald-500/[0.04] to-transparent"
+          className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-6 p-8 md:p-10 rounded-[1.75rem] border border-white/[0.07] bg-gradient-to-br from-blue-500/[0.04] to-transparent"
         >
           <div>
             <div className="text-white font-black text-xl md:text-2xl tracking-tight mb-2">
@@ -181,7 +181,7 @@ export const TrustGrid = () => {
           </div>
           <Link
             to="/webinars"
-            className="shrink-0 inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl bg-emerald-500 text-black font-black text-[11px] uppercase tracking-[0.15em] hover:bg-emerald-400 transition-all duration-150 hover:scale-[1.02] active:scale-[0.98] shadow-[0_0_30px_rgba(16,185,129,0.25)] hover:shadow-[0_0_50px_rgba(16,185,129,0.35)] whitespace-nowrap"
+            className="shrink-0 inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl bg-blue-500 text-white font-black text-[11px] uppercase tracking-[0.15em] hover:bg-blue-400 transition-all duration-150 hover:scale-[1.02] active:scale-[0.98] shadow-[0_0_30px_rgba(59,130,246,0.25)] hover:shadow-[0_0_50px_rgba(59,130,246,0.35)] whitespace-nowrap cursor-pointer"
           >
             Register for Strategy Briefing <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </Link>
