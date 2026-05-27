@@ -80,7 +80,7 @@ export const SessionBookingModal: React.FC<SessionBookingModalProps> = ({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="relative w-full max-w-xl overflow-hidden rounded-[2.5rem] bg-[#0A0A0A] p-6 sm:p-10 shadow-2xl z-10 gemini-border border border-white/5"
+            className="relative w-full max-w-xl max-h-[90vh] overflow-y-auto scrollbar-thin rounded-[2.5rem] bg-[#0A0A0A] p-6 sm:p-10 shadow-2xl z-10 gemini-border border border-white/5"
             role="dialog"
             aria-modal="true"
           >
@@ -102,7 +102,7 @@ export const SessionBookingModal: React.FC<SessionBookingModalProps> = ({
                 animate={{ opacity: 1, scale: 1 }}
                 className="text-center py-12 flex flex-col items-center justify-center"
               >
-                <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-6 shadow-[0_0_40px_rgba(16,185,129,0.2)]">
+                <div className="w-16 h-16 rounded-full bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 mb-6 shadow-[0_0_40px_rgba(0,163,255,0.2)]">
                   <CheckCircle2 className="w-8 h-8" />
                 </div>
                 <h3 className="text-2xl font-black text-white uppercase tracking-tight mb-3">Transmission Secured</h3>
@@ -113,7 +113,7 @@ export const SessionBookingModal: React.FC<SessionBookingModalProps> = ({
             ) : (
               <div>
                 <div className="mb-8">
-                  <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[8px] font-black uppercase tracking-[0.25em] mb-4">
+                  <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[8px] font-black uppercase tracking-[0.25em] mb-4">
                     <Lock className="w-2.5 h-2.5" /> SECURED ONBOARDING PROTOCOL
                   </span>
                   <h3 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tighter leading-none">
@@ -198,7 +198,7 @@ export const SessionBookingModal: React.FC<SessionBookingModalProps> = ({
 
                   {/* Encryption Notice */}
                   <div className="flex items-center justify-center gap-2 pt-2 text-[9px] font-mono text-white/20 uppercase tracking-widest">
-                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-500/50" />
+                    <ShieldCheck className="w-3.5 h-3.5 text-cyan-500/50" />
                     <span>SECURE END-TO-END 256-BIT ENCRYPTION</span>
                   </div>
                 </form>

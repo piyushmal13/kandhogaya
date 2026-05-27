@@ -29,13 +29,13 @@ input:focus, textarea:focus, select:focus {
   --nav-h:        5rem;
   --nav-h-mobile: 4rem;
 
-  /* Brand palette overrides */
-  --color-primary-400: #60A5FA;
-  --color-emerald-300: #93C5FD;
-  --color-emerald-400: #60A5FA;
-  --color-emerald-500: #3B82F6;
-  --color-emerald-600: #2563EB;
-  --color-emerald-700: #1D4ED8;
+  /* Brand palette overrides (Luxury Ice-Blue Diamond Scheme) */
+  --color-primary-400: #60CDFF;
+  --color-emerald-300: #96E5FF;
+  --color-emerald-400: #60CDFF;
+  --color-emerald-500: #00A3FF;
+  --color-emerald-600: #008BE3;
+  --color-emerald-700: #005FB3;
   --color-teal-300: #C4B5FD;
   --color-teal-400: #A78BFA;
   --color-teal-500: #8B5CF6;
@@ -44,9 +44,9 @@ input:focus, textarea:focus, select:focus {
   --color-cyan-500: #06B6D4;
   --color-cyan-400: #22D3EE;
   --color-cyan-600: #0891B2;
-  --color-gold: #EC4899;
-  --color-gold-light: #F472B6;
-  --color-amber-500: #F43F5E;
+  --color-gold: #00E5FF;
+  --color-gold-light: #80F3FF;
+  --color-amber-500: #00D2FF;
 }
 
 /* ── INSTITUTIONAL BASELINE ── */
@@ -256,7 +256,7 @@ body {
     color: transparent;
   }
   .text-gradient-gold {
-    background: linear-gradient(135deg, #FFF5D1, #EC4899, #8A1C5A);
+    background: linear-gradient(135deg, #EAF2F8, #00A3FF, #005FB3);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -412,12 +412,12 @@ body {
   /* ── Gemini-style shifting gradient color shading ── */
   .gemini-shading {
     background: linear-gradient(135deg, 
-      #8B5CF6 0%,  
-      #3B82F6 20%, 
-      #06B6D4 40%, 
-      #EC4899 60%, 
-      #F43F5E 80%, 
-      #8B5CF6 100%
+      #8B5CF6 0%,  /* Deep Violet */
+      #00A3FF 20%, /* Brilliant Ice Blue */
+      #06B6D4 40%, /* Cyan */
+      #00E5FF 60%, /* Diamond-Cyan */
+      #3B82F6 80%, /* Sapphire Blue */
+      #8B5CF6 100% /* Loop */
     );
     background-size: 400% 400%;
     animation: gemini-gradient 12s cubic-bezier(0.4, 0, 0.2, 1) infinite;
@@ -426,10 +426,10 @@ body {
   .gemini-text {
     background: linear-gradient(135deg, 
       #8B5CF6 0%,  
-      #3B82F6 20%, 
+      #00A3FF 20%, 
       #06B6D4 40%, 
-      #EC4899 60%, 
-      #F43F5E 80%, 
+      #00E5FF 60%, 
+      #3B82F6 80%, 
       #8B5CF6 100%
     );
     background-size: 400% 400%;
@@ -451,10 +451,10 @@ body {
     padding: 1.5px;
     background: linear-gradient(135deg, 
       #8B5CF6 0%,  
-      #3B82F6 20%, 
+      #00A3FF 20%, 
       #06B6D4 40%, 
-      #EC4899 60%, 
-      #F43F5E 80%, 
+      #00E5FF 60%, 
+      #3B82F6 80%, 
       #8B5CF6 100%
     );
     background-size: 400% 400%;
@@ -510,7 +510,7 @@ body {
     @apply inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-lg bg-cyan-500 text-white font-black text-[10px] uppercase tracking-[0.2em] hover:bg-cyan-400 transition-all shadow-xl shadow-cyan-500/10 active:scale-[0.98] disabled:opacity-50 border-b-2 border-cyan-600;
   }
   .btn-premium {
-    @apply inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-lg bg-gradient-to-r from-[#EC4899] to-[#F472B6] text-white font-black text-[10px] uppercase tracking-[0.2em] hover:opacity-95 transition-all shadow-xl shadow-gold/10 active:scale-[0.98] border-b-2 border-pink-600;
+    @apply inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-lg bg-gradient-to-r from-[#00A3FF] to-[#60CDFF] text-black font-black text-[10px] uppercase tracking-[0.2em] hover:opacity-95 transition-all shadow-xl shadow-gold/10 active:scale-[0.98] border-b-2 border-blue-600;
   }
   .btn-ghost {
     @apply inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-lg bg-white/[0.03] border border-white/10 text-white font-black text-[10px] uppercase tracking-[0.2em] hover:bg-white/[0.08] hover:border-white/20 transition-all active:scale-[0.98];

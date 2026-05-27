@@ -60,7 +60,7 @@ const StarRating = ({ count }: { count: number }) => {
   return (
     <div className="flex gap-0.5">
       {starsArray.map((_, i) => (
-        <svg key={starKeys[i]} className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400" viewBox="0 0 20 20">
+        <svg key={starKeys[i]} className="w-3.5 h-3.5 text-[#00A3FF] fill-[#00A3FF]" viewBox="0 0 20 20">
           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
         </svg>
       ))}
@@ -89,33 +89,40 @@ const LogoPill: React.FC<LogoPillProps> = ({ name, category, logoUrl, index }) =
     .slice(0, 3)
     .toUpperCase();
 
+  const hasLogo = logoUrl && !imageError;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.05, duration: 0.6 }}
-      className="group relative p-4 sm:p-6 bg-white/[0.02] border border-white/[0.05] rounded-2xl hover:border-emerald-500/20 hover:bg-white/[0.04] transition-all duration-500 flex items-center gap-4 overflow-hidden"
+      className={`group relative p-4 sm:p-6 bg-white/[0.02] border border-white/[0.05] rounded-2xl hover:border-[#00A3FF]/25 hover:bg-white/[0.04] transition-all duration-500 flex ${hasLogo ? 'justify-center items-center h-24 sm:h-28' : 'items-center gap-4'} overflow-hidden`}
     >
-      {/* Dynamic Image Wrapper with complete error handling */}
-      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center font-black text-white text-sm shrink-0 shadow-lg overflow-hidden border border-white/10 p-1 bg-white/5 relative">
-        {logoUrl && !imageError ? (
+      {hasLogo ? (
+        // RENDER CENTRED LOGO IMAGE EXCLUSIVELY (NO TEXT LABELS)
+        <div className="w-full h-full flex items-center justify-center relative z-10 max-w-[80%]">
           <img
             src={logoUrl}
             alt={`${name} integration logo`}
             onError={() => setImageError(true)}
-            className="w-full h-full object-contain filter brightness-95 group-hover:brightness-100 transition-all"
+            className="max-w-full max-h-full object-contain filter opacity-65 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
           />
-        ) : (
-          <div className={`w-full h-full flex items-center justify-center bg-gradient-to-br ${colorGrad} rounded-lg text-white font-extrabold`}>
-            {initials || "IFX"}
+        </div>
+      ) : (
+        // RESILIENT MULTI-STAGE FALLBACK WITH LABELS
+        <>
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center font-black text-white text-sm shrink-0 shadow-lg overflow-hidden border border-white/10 p-1 bg-white/5 relative">
+            <div className={`w-full h-full flex items-center justify-center bg-gradient-to-br ${colorGrad} rounded-lg text-white font-extrabold`}>
+              {initials || "IFX"}
+            </div>
           </div>
-        )}
-      </div>
-      <div>
-        <div className="text-white font-bold text-sm leading-tight group-hover:text-emerald-400 transition-colors">{name}</div>
-        <div className="text-[10px] text-gray-500 font-medium mt-0.5">{category || "Desk Partner"}</div>
-      </div>
+          <div>
+            <div className="text-white font-bold text-sm leading-tight group-hover:text-[#00A3FF] transition-colors">{name}</div>
+            <div className="text-[10px] text-gray-500 font-medium mt-0.5">{category || "Desk Partner"}</div>
+          </div>
+        </>
+      )}
       <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/[0.02] to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
     </motion.div>
   );
@@ -191,7 +198,7 @@ export const PartnerLogos = () => {
       aria-label="IFX Trades partner platforms and student success stories"
       className="py-16 md:py-28 bg-[#040507] border-t border-white/5 relative overflow-hidden"
     >
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(16,185,129,0.03),transparent_65%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(0,163,255,0.03),transparent_65%)] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 sm:px-8 relative z-10">
         {/* === SECTION HEADER === */}
@@ -201,15 +208,15 @@ export const PartnerLogos = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full mb-6">
-            <Globe className="w-3.5 h-3.5 text-emerald-400" />
-            <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#00A3FF]/10 border border-[#00A3FF]/20 rounded-full mb-6">
+            <Globe className="w-3.5 h-3.5 text-[#00A3FF]" />
+            <span className="text-[10px] font-black text-[#00A3FF] uppercase tracking-widest">
               Trusted Platform Integrations
             </span>
           </div>
           <h2 className="text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tighter mb-4">
             Running on Platforms{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00A3FF] to-[#00E5FF]">
               Traders Already Trust
             </span>
           </h2>
@@ -241,14 +248,14 @@ export const PartnerLogos = () => {
               className="text-center mb-12"
             >
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-full mb-5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#00A3FF]" />
                 <span className="text-[10px] font-black text-white/60 uppercase tracking-widest">
                   Verified Client Outcomes
                 </span>
               </div>
               <h3 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
                 Real Performance from{" "}
-                <span className="text-emerald-400">Verified Portfolios</span>
+                <span className="text-[#00A3FF]">Verified Portfolios</span>
               </h3>
             </motion.div>
 
@@ -260,7 +267,7 @@ export const PartnerLogos = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1, duration: 0.7 }}
-                  className="relative p-8 bg-white/[0.015] border border-white/[0.05] rounded-3xl hover:border-emerald-500/20 hover:bg-emerald-500/[0.01] transition-all duration-500 group overflow-hidden"
+                  className="relative p-8 bg-white/[0.015] border border-white/[0.05] rounded-3xl hover:border-[#00A3FF]/20 hover:bg-[#00A3FF]/[0.01] transition-all duration-500 group overflow-hidden"
                 >
                   <div className="absolute top-5 right-6 text-6xl font-serif text-white/[0.02] leading-none select-none pointer-events-none">"</div>
 
@@ -275,16 +282,16 @@ export const PartnerLogos = () => {
                   </p>
 
                   {/* Result badge */}
-                  <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-500/5 border border-emerald-500/15 rounded-full mb-6">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                    <span className="text-[10px] font-black text-emerald-400 uppercase tracking-wider">
+                  <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#00A3FF]/5 border border-[#00A3FF]/15 rounded-full mb-6">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#00A3FF] shrink-0" />
+                    <span className="text-[10px] font-black text-[#00A3FF] uppercase tracking-wider">
                       {story.result}
                     </span>
                   </div>
 
                   {/* Author */}
                   <div className="flex items-center gap-3 pt-6 border-t border-white/5">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-600 to-emerald-400 flex items-center justify-center font-black text-black text-sm shrink-0">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#008BE3] to-[#00A3FF] flex items-center justify-center font-black text-black text-sm shrink-0">
                       {story.avatar}
                     </div>
                     <div>

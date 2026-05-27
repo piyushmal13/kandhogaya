@@ -14,28 +14,30 @@ import { queryClient } from "./lib/reactQuery";
 import { loadSystem } from "./core/systemLoader";
 import { HelmetProvider } from "react-helmet-async";
 import { FeatureGuard } from "./components/ui/FeatureGuard";
-import { GlobalPromotionBanner } from "./components/institutional/GlobalPromotionBanner";
 import { useReferral } from "./hooks/useReferral";
 
-const Home = lazy(() => import("./pages/Home"));
-const Marketplace = lazy(() => import("./pages/Marketplace").then(m => ({ default: m.Marketplace })));
+// ⚡ STATIC IMPORTS FOR EAGER PUBLIC PAGES (0ms chunk latency)
+import Home from "./pages/Home";
+import { Marketplace } from "./pages/Marketplace";
+import { Webinars } from "./pages/Webinars";
+import { Blog } from "./pages/Blog";
+import { Contact } from "./pages/Contact";
+import { About } from "./pages/About";
+import { Results } from "./pages/Results";
+import { Pricing } from "./pages/Pricing";
+import { Solutions } from "./pages/Solutions";
+import { QuantX } from "./pages/QuantX";
 
-const Webinars = lazy(() => import("./pages/Webinars").then(m => ({ default: m.Webinars })));
+// 🦥 LAZY IMPORTS FOR PRIVATE & ADMIN SECTIONS (Maintains clean bundle sizes)
 const WebinarDetail = lazy(() => import("./pages/WebinarDetail").then(m => ({ default: m.WebinarDetail })));
-const Blog = lazy(() => import("./pages/Blog").then(m => ({ default: m.Blog })));
 const BlogDetail = lazy(() => import("./pages/BlogDetail").then(m => ({ default: m.BlogDetail })));
 const Login = lazy(() => import("./pages/Login").then(m => ({ default: m.Login })));
 const Dashboard = lazy(() => import("./pages/Dashboard").then(m => ({ default: m.Dashboard })));
 const Admin = lazy(() => import("./pages/Admin").then(m => ({ default: m.Admin })));
 const AgentDashboard = lazy(() => import("./pages/AgentDashboard").then(m => ({ default: m.AgentDashboard })));
-const Contact = lazy(() => import("./pages/Contact").then(m => ({ default: m.Contact })));
-const About = lazy(() => import("./pages/About").then(m => ({ default: m.About })));
-const Results = lazy(() => import("./pages/Results").then(m => ({ default: m.Results })));
-const Pricing = lazy(() => import("./pages/Pricing").then(m => ({ default: m.Pricing })));
 const Hiring = lazy(() => import("./pages/Hiring").then(m => ({ default: m.Hiring })));
 const NotFound = lazy(() => import("./pages/NotFound").then(m => ({ default: m.NotFound })));
 const InstitutionalError = lazy(() => import("./pages/Error").then(m => ({ default: m.InstitutionalError })));
-const Solutions = lazy(() => import("./pages/Solutions").then(m => ({ default: m.Solutions })));
 const Consultation = lazy(() => import("./pages/Consultation").then(m => ({ default: m.Consultation })));
 const CustomRequestTerminal = lazy(() => import("./pages/CustomRequestTerminal").then(m => ({ default: m.CustomRequestTerminal })));
 const InstitutionalSkeleton = lazy(() => import("./components/institutional/InstitutionalSkeleton").then(m => ({ default: m.InstitutionalSkeleton })));
@@ -46,7 +48,6 @@ const TermsOfService = lazy(() => import("./pages/legal/TermsOfService").then(m 
 const RiskDisclosure = lazy(() => import("./pages/legal/RiskDisclosure").then(m => ({ default: m.RiskDisclosure })));
 const CookiePolicy = lazy(() => import("./pages/legal/CookiePolicy").then(m => ({ default: m.CookiePolicy })));
 const AffiliateHub = lazy(() => import("./pages/AffiliateHub").then(m => ({ default: m.AffiliateHub })));
-const QuantX = lazy(() => import("./pages/QuantX").then(m => ({ default: m.QuantX })));
 const B2BLiquidity = lazy(() => import("./pages/B2BLiquidity").then(m => ({ default: m.B2BLiquidity })));
 const B2BWhiteLabel = lazy(() => import("./pages/B2BWhiteLabel").then(m => ({ default: m.B2BWhiteLabel })));
 

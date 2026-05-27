@@ -123,7 +123,7 @@ export function useFlags() {
 
   return {
     flags:   data ?? FLAG_DEFAULTS,
-    loading: isLoading,
+    loading: isLoading && !data,
   };
 }
 

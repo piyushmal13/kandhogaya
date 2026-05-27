@@ -1,4 +1,4 @@
-# IFX Trades: Institutional Master Brand Kit & Design System (v5.0)
+# IFX Trades: Institutional Master Brand Kit & Design System (v6.0 - Ice-Blue Diamond Edition)
 
 This master document defines the precise mathematical visual schema, typography parameters, CSS utility formulas, tone of voice guidelines, and technical ECN dictionary for the **IFX Trades** brand. 
 
@@ -6,63 +6,65 @@ It is designed to serve as a complete, deterministic source of truth for human e
 
 ---
 
-## 🎨 1. THE CHROMATIC PALETTE (Cloud Gemini Scheme)
+## 🎨 1. THE CHROMATIC PALETTE (Ice-Blue Diamond Scheme)
 
-We employ a high-fidelity **Midnight Space Base** with vibrant **Holographic Aurora Highlights**. All retail green/yellow schemas have been systematically purged.
+We employ a premium **Midnight Space Base** with high-end **Swiss Ice-Blue Diamond & Platinum Highlights**. All retail green/yellow schemas and consumer pink/fuchsia colors have been systematically purged to uphold maximum forex institutional trust.
 
 ### 1.1 Core Colors & Surfaces
 | Token Name | CSS Variable | Hex Code | HSL / RGBA Value | Operational Context |
 | :--- | :--- | :--- | :--- | :--- |
-| **Midnight Base** | `--bg-base` | `#03050C` | `hsl(227, 60%, 3%)` | Primary page backdrop, ECN canvas |
-| **Abyss Raised** | `--bg-raised` | `#070A1A` | `hsl(229, 56%, 7%)` | Sub-sections, section separation grids |
-| **System Panel** | `--bg-panel` | `#0A0F2B` | `hsl(229, 62%, 10%)` | Dialog overlays, modular workspace panels |
-| **Metallic Card** | `--bg-card` | `#0E143C` | `hsl(230, 62%, 15%)` | Bento grids, performance cards |
-| **Sapphire Edge** | `--border-default`| — | `rgba(59, 130, 246, 0.06)`| Default mechanical border |
-| **Sapphire Glow** | `--border-glow` | — | `rgba(59, 130, 246, 0.3)` | Active component focus outlines |
+| **Midnight Base** | `--bg-base` | `#010203` | `hsl(210, 60%, 1%)` | Primary page backdrop, ECN canvas |
+| **Abyss Raised** | `--bg-raised` | `#040507` | `hsl(215, 45%, 3%)` | Sub-sections, section separation grids |
+| **System Panel** | `--bg-panel` | `#0A0A0A` | `hsl(0, 0%, 4%)` | Dialog overlays, modular workspace panels |
+| **Metallic Card** | `--bg-card` | `#0E1428` | `hsl(225, 48%, 10%)` | Bento grids, performance cards |
+| **Glacier Edge** | `--border-default`| — | `rgba(0, 163, 255, 0.06)`| Default mechanical border |
+| **Ice-Blue Glow** | `--border-glow` | — | `rgba(0, 163, 255, 0.3)` | Active component focus outlines |
 
-### 1.2 Holographic Aurora Highlights
-*   **Electric Blue (Primary)**: `#3B82F6` (mapped to Tailwind v4 `emerald` overrides)
+### 1.2 Ice-Blue & Platinum Highlights
+*   **Electric Ice-Blue (Primary)**: `#00A3FF`
     *   *Role*: Focus nodes, active status ticks, primary ECN actions, ECN order stream tracking.
-*   **Soft Purple/Violet (Secondary)**: `#8B5CF6` (mapped to Tailwind v4 `teal` overrides)
-    *   *Role*: Secondary systems, indicators, quantitative execution highlights.
-*   **Space Fuchsia/Pink (Accent)**: `#EC4899` / `#F43F5E` (mapped to Tailwind v4 `gold` / `amber` overrides)
+    *   *Tailwind Override*: Globally mapped to v4 `emerald-500` to automatically swap green to Ice-Blue.
+*   **Diamond-Cyan (Accent/Premium)**: `#00E5FF` / `#60CDFF`
     *   *Role*: High-tier highlights, premium masterclass badges, bespoke code desk signals.
+*   **Soft Purple/Violet (Secondary)**: `#8B5CF6`
+    *   *Role*: Secondary systems, indicators, quantitative execution highlights.
+*   **Space Fuchsia/Pink**: **PURGED** - Completely banned from all public booking paths to protect forex institutional authority.
 
 ---
 
-## 💎 2. SHIFTING AURORA & METALLIC GRADIENTS
+## 💎 2. SHIFTING ICE-BLUE & METALLIC GRADIENTS
 
-Our gradients simulate dynamic light refraction across dark metallic surfaces, reminiscent of Google Antigravity and Cloud Gemini pages.
+Our gradients simulate dynamic light refraction across dark metallic surfaces, reminiscent of Google Antigravity, Cloud Gemini pages, and premium Swiss banking interfaces.
 
-### 2.1 Shifting Aurora Spectrum (`.gemini-shading`)
+### 2.1 Shifting Ice-Blue Spectrum (`.gemini-shading`)
 A continuous multi-step looping gradient with smooth transition curves:
 ```css
 linear-gradient(135deg, 
-  #8B5CF6 0%,    /* Violet */
-  #3B82F6 20%,   /* Electric Blue */
+  #8B5CF6 0%,    /* Deep Violet */
+  #00A3FF 20%,   /* Brilliant Ice Blue */
   #06B6D4 40%,   /* Cyan */
-  #EC4899 60%,   /* Pink Aurora */
-  #F43F5E 80%,   /* Soft Fuchsia */
+  #00E5FF 60%,   /* Diamond-Cyan */
+  #3B82F6 80%,   /* Sapphire Blue */
   #8B5CF6 100%   /* Seamless Loop back */
 );
 background-size: 400% 400%;
-animation: gemini-gradient 8s ease infinite;
+animation: gemini-gradient 12s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 ```
 
 ### 2.2 Hero Text Gradient (`.text-gradient-hero`)
 Used to paint large, eye-catching institutional typography elements:
 ```css
 linear-gradient(135deg, 
-  #3B82F6 0%, 
-  #8B5CF6 50%, 
-  #EC4899 100%
+  #00A3FF 0%, 
+  #00E5FF 50%, 
+  #8B5CF6 100%
 );
 ```
 
-### 2.3 Metallic Double-Border Card System (`.glass-card`)
+### 2.3 Specular Specularspec Double-Border Card System (`.glass-card`)
 Provides structure with absolute depth, using a high-precision inner specular highlight and outer shadow profile:
 ```css
-background: rgba(14, 20, 60, 0.65);
+background: rgba(14, 20, 40, 0.65);
 backdrop-filter: blur(24px);
 border: 1px solid rgba(255, 255, 255, 0.07);
 box-shadow: 
@@ -101,7 +103,7 @@ IFX Trades speaks to **Senior IT Directors, Hedge Fund Allocators, Broker Execut
 
 ---
 
-## 🧭 5. PHYSICAL INFRASTRUCTURE & Latency specs
+## 🧭 5. PHYSICAL INFRASTRUCTURE & LATENCY SPECS
 
 To build absolute trust with industry veterans, we anchor our technical specs in physical hosting reality:
 *   **Primary Execution Desks**: Cross-connected directly inside **Equinix NY4 (Secaucus, New Jersey)**, **Equinix LD4 (Slough, London)**, and **Equinix TY3 (Tokyo)**.
