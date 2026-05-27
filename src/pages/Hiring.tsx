@@ -214,6 +214,18 @@ export const Hiring = () => {
               )}
             </span>
           </Reveal>
+
+          {activeTab === "careers" && (
+            <Reveal delay={0.07}>
+              <div className="mb-6 p-3 px-5 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-black uppercase tracking-widest inline-flex items-center gap-2.5 animate-pulse mx-auto">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                🔥 WE ARE HIRING — Join our Quantitative Desk Operations
+              </div>
+            </Reveal>
+          )}
           
           <Reveal delay={0.1}>
             <h1 className="text-4xl md:text-6xl font-extrabold text-white tracking-tight leading-[1.1] mb-6">
