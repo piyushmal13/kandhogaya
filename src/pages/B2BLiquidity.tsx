@@ -9,7 +9,10 @@ import {
   Zap, 
   Globe, 
   Server, 
-  FileTerminal 
+  FileTerminal,
+  Layers,
+  CheckCircle2,
+  TrendingUp
 } from "lucide-react";
 import { leadService } from "../services/crm/leadService";
 import { useToast } from "../contexts/ToastContext";
@@ -67,8 +70,8 @@ export const B2BLiquidity = () => {
   return (
     <div className="bg-[#010203] text-white selection:bg-emerald-500 selection:text-black min-h-screen pt-36 pb-24 overflow-hidden relative">
       <PageMeta 
-        title="B2B Liquidity Integration Desk" 
-        description="Connect your brokerage to direct Tier-1 institutional ECN liquidity aggregates. FIX 4.4, MT4/MT5 bridges, and sub-millisecond execution routing."
+        title="Direct ECN Tier-1 Liquidity Integration & Co-Location" 
+        description="Direct Prime-of-Prime multi-asset liquidity co-located adjacent to top liquidity providers in Equinix NY4 and LD4 fiber loops. FIX 4.4, MT4/MT5 bridges."
         path="/b2b/liquidity"
       />
 
@@ -81,23 +84,23 @@ export const B2BLiquidity = () => {
         <div className="text-center max-w-3xl mx-auto mb-20 space-y-6">
           <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-emerald-500/5 border border-emerald-500/10 text-emerald-400 text-[10px] font-black uppercase tracking-[0.25em]">
             <Server className="w-3.5 h-3.5 animate-pulse" />
-            Institutional B2B Infrastructure
+            Sovereign Prime-of-Prime ECN Aggregation
           </div>
           <h1 className="text-4xl sm:text-6xl font-black uppercase tracking-tight leading-none italic">
-            Direct ECN <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Liquidity</span> Aggregation.
+            Co-Located <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Equinix NY4</span> Aggregation.
           </h1>
           <p className="text-gray-400 text-sm leading-relaxed max-w-xl mx-auto font-medium">
-            Aggregated multi-asset liquidity sourced from 15+ Tier-1 global banking institutions. Built to support brokerages, hedge funds, and corporate trading floors.
+            Access multi-asset aggregated order books exceeding $1.2B per leg. Engineered with physical fiber cross-connections bypass for zero broker-side conflict.
           </p>
         </div>
 
         {/* Dynamic Metric Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto mb-24">
           {[
-            { label: "Fill Speed", value: "< 0.15ms", desc: "Sub-millisecond direct routing" },
-            { label: "Raw Spreads", value: "0.0 Pips", desc: "Zero broker markup feeds" },
-            { label: "Bank Liquidity Pools", value: "15+ Nodes", desc: "Tier-1 prime brokers" },
-            { label: "Supported Volume", value: "$8.5B+", desc: "Aggregated monthly capacity" }
+            { label: "Execution Latency", value: "< 0.05ms", desc: "Cross-connected fiber speed" },
+            { label: "Raw Spread Spacing", value: "0.0 Pips", desc: "No markups, direct feeds" },
+            { label: "Liquidity Depth", value: "20+ Nodes", desc: "Tier-1 bank ECN gateways" },
+            { label: "Aggregated Volume", value: "$12.4B+", desc: "Monthly operational flow" }
           ].map((m, idx) => (
             <div key={idx} className="p-6 rounded-[2rem] bg-white/[0.01] border border-white/5 text-center">
               <span className="text-[8px] font-black uppercase tracking-widest text-emerald-400/60 block mb-2">{m.label}</span>
@@ -114,10 +117,10 @@ export const B2BLiquidity = () => {
           <div className="lg:col-span-6 space-y-10">
             <div className="space-y-4">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[8px] font-black uppercase tracking-[0.25em]">
-                Direct Market Access
+                Direct Market Sourcing
               </div>
               <h2 className="text-3xl font-black uppercase tracking-tight italic">
-                Why Brokerages Partner With IFX.
+                Sovereign-Class Liquidity Distribution.
               </h2>
             </div>
 
@@ -125,18 +128,18 @@ export const B2BLiquidity = () => {
               {[
                 { 
                   icon: Cpu, 
-                  title: "OneZero Hub & PrimeXM ECN Aggregation", 
-                  desc: "Connect via ultra-low latency fiber networks co-located directly inside global ECN nodes, securing institutional price discovery and direct market routing." 
+                  title: "OneZero Hub & PrimeXM Bridge Aggregation", 
+                  desc: "Connect directly to the industry's most advanced aggregation centers. Route orders via optimized Smart Order Routing (SOR) protocols to instantly achieve the best available bid/ask fill pricing." 
                 },
                 { 
-                  icon: Zap, 
-                  title: "Depth of Market Liquidity Pools", 
-                  desc: "Access aggregated order books exceeding $750,000,000 per leg across major currency pairs, metals, and index assets sourced from Tier-1 bank engines." 
+                  icon: Layers, 
+                  title: "Deep Layer-2 Depth of Market", 
+                  desc: "Execute large institutional ticket flows without slippage. Access robust aggregated order books spanning major G10 currencies, gold, indices, and energy nodes with zero conflicts of interest." 
                 },
                 { 
                   icon: Globe, 
-                  title: "Physical Equinix NY4 & LD4 Co-Location", 
-                  desc: "Our matching engines are physically rack-mounted adjacent to prime liquidity providers, bypassing internet latency to guarantee sub-0.1ms tick execution." 
+                  title: "Sovereign Cross-Connected Hosting in NY4 & LD4", 
+                  desc: "Avoid public routing latency. Our matched engines are rack-mounted adjacent to prime liquidity engines inside the Equinix NY4 (New York) and LD4 (London) secure data centers." 
                 }
               ].map((prop, idx) => (
                 <div key={idx} className="flex gap-5">

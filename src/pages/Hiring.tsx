@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Briefcase, ShieldCheck, Code2, TrendingUp, ArrowRight, Globe, Cpu, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
+import { Briefcase, ShieldCheck, Code2, TrendingUp, ArrowRight, Globe, Cpu, CheckCircle2, AlertCircle, Users, BarChart3, Star } from "lucide-react";
 import { PageMeta } from "../components/site/PageMeta";
 import { Reveal } from "../components/site/Reveal";
 import { BRANDING } from "../constants/branding";
@@ -10,25 +10,32 @@ import { EliteButton } from "../components/ui/Button";
 export const Hiring = () => {
   const careerTiers = [
     {
-      title: "Lead Machine Learning Quant",
-      domain: "Neural Regime Detection & Alpha Mining",
-      reqs: "Deep experience with PyTorch, PyMC, and high-frequency G10 Forex modeling.",
-      placement: "Institutional Prop Desks & Custom Algo Pipelines",
-      icon: Cpu,
-    },
-    {
-      title: "Ultra-Low Latency Developer",
-      domain: "FIX Engines & Custom Trading Bridges",
-      reqs: "Expert C++ or Rust systems programmer. High-performance concurrency master.",
-      placement: "HFT Funds & Institutional Liquidity Integrators",
+      title: "Ultra-Low Latency C++ / Rust Systems Developer",
+      domain: "FIX Engines, MT4/MT5 Bridges & Low-Latency Execution Infrastructure",
+      reqs: "Expertise in kernel-bypass (Solarflare EF_VI), concurrency patterns, and real-time socket programming to route orders in under 50 microseconds.",
+      placement: "Sovereign Prop Desks & Prime-of-Prime Liquidity Tunnels",
       icon: Code2,
     },
     {
-      title: "SMC Strategy Architect",
-      domain: "Volume & Market Structure Automation",
-      reqs: "Advanced PineScript/MQL5 engineering. Proven historical backtest fidelity.",
-      placement: "Elite Capital Desks & Custom Retail Bridges",
+      title: "Senior Institutional Business Development Manager (BDM)",
+      domain: "CMT/CFT Brokerage Acquisition & High-Volume Asset Management Deals",
+      reqs: "Proven track record closing seven-figure liquidity deals, deep networks with institutional brokers, and structuring volume-based rebate schedules.",
+      placement: "Corporate FX Sales & Global Affiliate Desk Scaling",
       icon: TrendingUp,
+    },
+    {
+      title: "CRM, MT4/MT5 Gateway & API Integration Specialist",
+      domain: "Institutional Middle Office, Bridge Setup & Deep Telemetry Syncing",
+      reqs: "Expertise integrating comprehensive CRM APIs with MT4/MT5 servers, customized margin rules, and secure real-time trade synchronizations.",
+      placement: "Global Broker Back-Office & Supervised Liquidity Setup",
+      icon: Cpu,
+    },
+    {
+      title: "Institutional FX Marketing Specialist & Lead Designer",
+      domain: "Premium Corporate Presence, Campaign Growth & Trust Architecture",
+      reqs: "Crafting highly tailored high-net-worth B2B broker marketing strategies, quantitative brand visual engineering, and targeted elite conversion funnels.",
+      placement: "Direct Global Brand Desk & Affiliate Network Scaling",
+      icon: Users,
     }
   ];
 
@@ -36,7 +43,7 @@ export const Hiring = () => {
     fullName: "",
     email: "",
     phone: "",
-    specialization: "Lead Machine Learning Quant",
+    specialization: "Ultra-Low Latency C++ / Rust Systems Developer",
     trackRecord: "",
     portfolioLink: "",
     backtestFidelity: "",
@@ -76,7 +83,7 @@ export const Hiring = () => {
             full_name: formData.fullName,
             email: formData.email,
             phone: formData.phone || null,
-            subject: `B2B Vetting - ${formData.specialization}`,
+            subject: `B2B Broker Sourcing Registration - ${formData.specialization}`,
             message: formData.trackRecord,
             source: "B2B Talent Desk Portal",
             status: "new",
@@ -103,7 +110,7 @@ export const Hiring = () => {
           fullName: "",
           email: "",
           phone: "",
-          specialization: "Lead Machine Learning Quant",
+          specialization: "Ultra-Low Latency C++ / Rust Systems Developer",
           trackRecord: "",
           portfolioLink: "",
           backtestFidelity: "",
@@ -121,10 +128,10 @@ export const Hiring = () => {
   return (
     <div className="relative overflow-hidden min-h-screen bg-[#020203] text-[#BAC9CC] font-sans pb-24">
       <PageMeta
-        title="Global B2B Talent Desk & Quant Careers"
-        description="Join Asia's premier B2B quant talent network. We vet elite trading system architects and match them with top-tier global institutions."
+        title="Global B2B Broker Talent Desk & Quant Sourcing"
+        description="Asia's leading recruitment pipeline supplying elite software engineers, BDMs, CRM integrators, and marketing specialists to CMT/CFT brokers globally."
         path="/hiring"
-        keywords={["quant jobs", "forex algorithmic careers", "B2B trading developer recruitment", "C++ HFT developer roles"]}
+        keywords={["quant jobs", "broker talent sourcing", "C++ HFT developer roles", "MT4/MT5 bridge developers", "forex marketing recruitment"]}
       />
 
       {/* Decorative Gradients */}
@@ -135,20 +142,20 @@ export const Hiring = () => {
       <div className="relative pt-32 pb-16 md:pt-48 md:pb-24 border-b border-white/[0.03] bg-gradient-to-b from-[#010203] to-[#020203]">
         <div className="max-w-5xl mx-auto px-6 text-center">
           <Reveal delay={0.05}>
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-emerald-500/20 bg-emerald-500/10 text-emerald-400 text-[10px] font-black uppercase tracking-[0.25em] mb-8">
-              <Briefcase className="h-3 w-3" /> Global B2B Talent Desk
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 text-emerald-400 text-[10px] font-black uppercase tracking-[0.25em] mb-8">
+              <Briefcase className="h-3.5 w-3.5" /> GLOBAL CMT/CFT BROKER TALENT RESOURCE
             </span>
           </Reveal>
           
           <Reveal delay={0.1}>
             <h1 className="text-4xl md:text-6xl font-extrabold text-white tracking-tight leading-[1.1] mb-6">
-              Empowering Global <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-500">Elite Quant Talent</span>
+              Sourcing the World's Finest <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-500">Brokerage & Algo Talent</span>
             </h1>
           </Reveal>
           
           <Reveal delay={0.15}>
             <p className="text-lg md:text-xl text-white/50 max-w-3xl mx-auto font-light leading-relaxed mb-12">
-              IFX Trades is a premier B2B matchmaking engine. We vet the world's most resilient algorithmic architects and custom strategy engineers, bridging them directly with top-tier financial institutions and custom development desks.
+              We stand at the absolute summit of quantitative FX execution. We actively source and vet elite software developers, B2B sales professionals, CRM integration engineers, and high-conversion marketing specialists for the most sophisticated CMT and CFT brokers globally.
             </p>
           </Reveal>
 
@@ -156,13 +163,13 @@ export const Hiring = () => {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
               <a href="#vetting-form" className="w-full sm:w-auto">
                 <EliteButton variant="elite" size="lg" fluid glowEffect rightIcon={<ArrowRight className="h-4 w-4" />}>
-                  Apply for Vetting
+                  Register Your Profile
                 </EliteButton>
               </a>
               
               <a href="#vetting-form" className="w-full sm:w-auto">
                 <EliteButton variant="secondary" size="lg" fluid>
-                  Hire Elite Quants
+                  Hire Top-Tier Specialists
                 </EliteButton>
               </a>
             </div>
@@ -171,16 +178,16 @@ export const Hiring = () => {
           {/* Quick Metrics */}
           <div className="mt-16 md:mt-24 grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto border border-white/[0.05] bg-[#050608]/40 backdrop-blur-md rounded-2xl p-8">
             <div className="text-center sm:text-left sm:border-r border-white/5 sm:pr-8">
-              <div className="text-3xl font-extrabold text-white">Top 1.5%</div>
-              <div className="text-[10px] uppercase tracking-widest text-[#849396] mt-2 font-mono">Quant Vetting Rigor</div>
+              <div className="text-3xl font-extrabold text-white">40+ Brokers</div>
+              <div className="text-[10px] uppercase tracking-widest text-[#849396] mt-2 font-mono">Globally Sourced</div>
             </div>
             <div className="text-center sm:text-left sm:border-r border-white/5 sm:px-8">
-              <div className="text-3xl font-extrabold text-white">Vetted</div>
-              <div className="text-[10px] uppercase tracking-widest text-[#849396] mt-2 font-mono">Elite Proprietary Roster</div>
+              <div className="text-3xl font-extrabold text-white">Top 1.5%</div>
+              <div className="text-[10px] uppercase tracking-widest text-[#849396] mt-2 font-mono">Quant Vetting Standards</div>
             </div>
             <div className="text-center sm:text-left sm:pl-8">
-              <div className="text-3xl font-extrabold text-white">Direct</div>
-              <div className="text-[10px] uppercase tracking-widest text-[#849396] mt-2 font-mono">B2B Institutional Sourcing</div>
+              <div className="text-3xl font-extrabold text-white">100% Secure</div>
+              <div className="text-[10px] uppercase tracking-widest text-[#849396] mt-2 font-mono">Supabase Sync Pipeline</div>
             </div>
           </div>
         </div>
@@ -193,26 +200,26 @@ export const Hiring = () => {
           <Reveal delay={0.1}>
             <div className="space-y-6">
               <div className="inline-flex items-center gap-2 text-xs font-bold text-emerald-400 uppercase tracking-widest font-mono">
-                <ShieldCheck className="h-4 w-4" /> VETTING STANDARDS
+                <ShieldCheck className="h-4 w-4" /> COMPLIANCE & ELITE RECRUITMENT
               </div>
               <h2 className="text-3xl font-bold text-white tracking-tight">
-                Our strict algorithmic vetting pipeline.
+                Vetting standard for sovereign-class brokers.
               </h2>
               <p className="text-white/50 leading-relaxed">
-                We do not recruit based on generic résumés or retail training credentials. Every candidate entering our Global B2B Talent Desk undergoes comprehensive quantitative validation: structural code auditing, live historical forward-testing under rigorous regime filters, and capital exposure drawdown resilience verification.
+                Modern high-frequency trading requires more than standard resume matching. Our vetting desk operates a multi-stage quantitative check verifying practical system integration efficiency, low-latency code resilience, compliant CRM data operations, and direct MT4/MT5 bridge latency limits.
               </p>
               <div className="flex flex-col gap-3 pt-2">
                 <div className="flex items-center gap-3 text-sm text-white/80">
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                  Code Optimization & Execution Cleanliness Audits
+                  Solarflare kernel-bypass optimization check
                 </div>
                 <div className="flex items-center gap-3 text-sm text-white/80">
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                  Regime-shift GARCH Volatility Resilience Verification
+                  Compliance CRM gateway protocol setup
                 </div>
                 <div className="flex items-center gap-3 text-sm text-white/80">
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                  Verified MyFxBook / Track Record Cryptographic Validation
+                  Deep-market margin rules validation
                 </div>
               </div>
             </div>
@@ -222,18 +229,18 @@ export const Hiring = () => {
             <div className="site-panel p-8 relative overflow-hidden border border-emerald-500/10 bg-[#050608]/40">
               <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-2xl pointer-events-none" />
               <h3 className="text-lg font-bold text-white mb-6 uppercase tracking-wider font-mono text-emerald-400 border-b border-white/5 pb-3">
-                // PLATFORM DIRECTIVE
+                // EXECUTIVE PLATFORM STATUS
               </h3>
               <p className="text-sm font-mono text-white/70 leading-relaxed mb-6">
-                "IFX Trades is a premier global institutional matchmaking ecosystem. Rather than catering to casual retail audiences, we focus strictly on discovering, vetting, and positioning the world's most capable quantitative developers and systems engineering experts."
+                "IFX Trades supplies critical human infrastructure to the world's most capital-intensive CMT/CFT brokerages. When directors arrive on our desk, they obtain access to the absolute top tier of low-latency talent, ready to integrate into $10B+ operational models."
               </p>
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full border border-white/10 overflow-hidden bg-white/5 flex items-center justify-center text-xs font-bold text-emerald-400 font-mono">
                   B2B
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-white">Institutional Matchmaking</div>
-                  <div className="text-[10px] text-[#849396] font-mono">IFX EXECUTIVE OFFICE</div>
+                  <div className="text-xs font-bold text-white">Global Talent Desk</div>
+                  <div className="text-[10px] text-[#849396] font-mono">IFX OPERATIONAL SYSTEM</div>
                 </div>
               </div>
             </div>
@@ -245,18 +252,18 @@ export const Hiring = () => {
           <Reveal>
             <div className="text-center space-y-4">
               <div className="text-xs font-bold text-emerald-400 uppercase tracking-widest font-mono">
-                TALENT CAPABILITIES
+                BROKER STAFFING CAPABILITIES
               </div>
               <h2 className="text-3xl font-bold text-white tracking-tight">
-                Vetted Quant Specializations
+                Vetted Brokerage Support Specializations
               </h2>
               <p className="text-white/50 max-w-2xl mx-auto">
-                These represent the absolute focal points of our talent matching network. We track, vet, and place developers in these primary domains:
+                We track, vet, and place premium-class experts across the following critical brokerage divisions:
               </p>
             </div>
           </Reveal>
 
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-2">
             {careerTiers.map((tier, index) => (
               <Reveal key={tier.title} delay={index * 0.08} className="site-panel p-6 bg-[#040506]/80 hover:border-emerald-500/20 transition-all duration-300">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
@@ -282,13 +289,13 @@ export const Hiring = () => {
             <div className="max-w-3xl mx-auto">
               <div className="text-center space-y-4 mb-10">
                 <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-emerald-500/20 bg-emerald-500/5 text-emerald-400 text-[10px] font-black uppercase tracking-widest font-mono">
-                  Secure Data Uplink // Tier-1 Vetting
+                  SECURE DATA SYNCHRONIZATION // SUPABASE ACTIVE
                 </span>
                 <h2 className="text-2xl md:text-4xl font-extrabold text-white tracking-tight">
                   Talent Desk Registration Portal
                 </h2>
                 <p className="text-white/40 text-sm max-w-xl mx-auto leading-relaxed">
-                  Enter your verification metrics. Candidate profiles are cryptographically serialized and directly mapped into our private secure CRM enclave.
+                  Enter your operational capability metrics. Candidate profiles are cryptographically serialized and directly mapped into our private secure CRM enclave.
                 </p>
               </div>
 
@@ -299,7 +306,7 @@ export const Hiring = () => {
                   </div>
                   <h3 className="text-2xl font-bold text-white mb-2 uppercase tracking-wide">Application Authenticated</h3>
                   <p className="text-white/60 text-sm leading-relaxed max-w-md mx-auto mb-8">
-                    Your quant application record has been securely logged into the IFX Leads CRM. An institutional validation analyst will review your profile metrics within 48 business hours.
+                    Your professional broker application record has been securely logged into the IFX Leads CRM. An institutional validation analyst will review your profile metrics within 48 business hours.
                   </p>
                   <div className="bg-black/40 border border-white/5 p-4 rounded-xl font-mono text-xs max-w-xs mx-auto">
                     <div className="text-[#849396] uppercase tracking-wider mb-1">CRM Log Receipt</div>
@@ -379,11 +386,10 @@ export const Hiring = () => {
                         className="w-full bg-[#090b0e] border border-white/10 focus:border-emerald-500 rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition-colors appearance-none"
                         style={{ backgroundImage: 'url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3E%3Cpath stroke=\'%23BAC9CC\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3E%3C/svg%3E")', backgroundPosition: 'right 1rem center', backgroundSize: '1.25rem', backgroundRepeat: 'no-repeat' }}
                       >
-                        <option value="Lead Machine Learning Quant">Lead Machine Learning Quant</option>
-                        <option value="Ultra-Low Latency Developer">Ultra-Low Latency Developer</option>
-                        <option value="SMC Strategy Architect">SMC Strategy Architect</option>
-                        <option value="Quantitative Systems Engineer">Quantitative Systems Engineer</option>
-                        <option value="Custom Portfolio Designer">Custom Portfolio Designer</option>
+                        <option value="Ultra-Low Latency C++ / Rust Systems Developer">Ultra-Low Latency C++ / Rust Systems Developer</option>
+                        <option value="Senior Institutional Business Development Manager (BDM)">Senior Institutional Business Development Manager (BDM)</option>
+                        <option value="CRM, MT4/MT5 Gateway & API Integration Specialist">CRM, MT4/MT5 Gateway & API Integration Specialist</option>
+                        <option value="Institutional FX Marketing Specialist & Lead Designer">Institutional FX Marketing Specialist & Lead Designer</option>
                       </select>
                     </div>
                   </div>
@@ -437,7 +443,7 @@ export const Hiring = () => {
 
                   <div className="space-y-2">
                     <label className="block text-xs font-black text-white/60 uppercase tracking-widest font-mono">
-                      Mathematical Track Record & Architecture Summary *
+                      Operational Track Record & Sourcing Summary *
                     </label>
                     <textarea
                       name="trackRecord"
@@ -445,7 +451,7 @@ export const Hiring = () => {
                       onChange={handleInputChange}
                       required
                       rows={5}
-                      placeholder="Outline your backtest parameters, Sharpe ratio threshold capabilities, regime-shift filters, and programming experience..."
+                      placeholder="Outline your backtest parameters, low-latency optimizations, CRM API integration layouts, or strategic B2B acquisition achievements..."
                       className="w-full bg-[#090b0e] border border-white/10 focus:border-emerald-500 rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 focus:outline-none transition-colors resize-none"
                     />
                   </div>

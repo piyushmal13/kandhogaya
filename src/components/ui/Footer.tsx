@@ -119,7 +119,7 @@ export const Footer = () => (
             </h4>
             <ul className="space-y-4 text-xs text-[#8A9AAB] font-medium">
               <li><Link to="/about" className="hover:text-emerald-400 transition-colors">About Operations</Link></li>
-              <li><Link to="/hiring" className="hover:text-emerald-400 transition-colors">Talent Network</Link></li>
+              <li><Link to="/hiring" className="hover:text-emerald-400 transition-colors">Talent Network Desk</Link></li>
               <li><Link to="/contact" className="hover:text-emerald-400 transition-colors">Support Portal</Link></li>
               <li><Link to="/risk" className="hover:text-emerald-400 transition-colors">Risk Protocol</Link></li>
             </ul>
