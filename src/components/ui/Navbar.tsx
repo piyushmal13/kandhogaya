@@ -97,7 +97,7 @@ export const Navbar = () => {
           >
             <div
               className={cn(
-                "flex items-center justify-center transition-all duration-500 overflow-hidden rounded-full border bg-[#010203] group-hover:shadow-[0_0_30px_rgba(16,185,129,0.3)] group-hover:border-emerald-500/30 border-white/10",
+                "flex items-center justify-center transition-all duration-500 overflow-hidden rounded-full border bg-[#010203] group-hover:shadow-[0_0_30px_rgba(59,130,246,0.3)] group-hover:border-blue-500/30 border-white/10",
                 scrolled 
                   ? "h-11 w-11 sm:h-12 sm:w-12" 
                   : "h-12 w-12 sm:h-14 sm:w-14"
@@ -128,7 +128,7 @@ export const Navbar = () => {
                   className={cn(
                     "relative px-3.5 py-1.5 text-[9px] font-black uppercase tracking-[0.2em] transition-all duration-300 rounded-full group/link",
                     isActive
-                      ? "text-emerald-400 bg-emerald-500/[0.05] border border-emerald-500/10"
+                      ? "text-blue-400 bg-blue-500/[0.05] border border-blue-500/10"
                       : "text-white/40 hover:text-white hover:bg-white/[0.04] border border-transparent"
                   )}
                 >
@@ -136,7 +136,7 @@ export const Navbar = () => {
                   {isActive && (
                     <motion.div
                       layoutId="navbar-indicator"
-                      className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 w-6 bg-emerald-400 rounded-t-full shadow-[0_-2px_10px_rgba(16,185,129,0.5)]"
+                      className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 w-6 bg-blue-400 rounded-t-full shadow-[0_-2px_10px_rgba(59,130,246,0.5)]"
                       transition={{ type: "spring", stiffness: 400, damping: 30 }}
                     />
                   )}
@@ -163,7 +163,7 @@ export const Navbar = () => {
                     onClick={() => setLanguage(lang)}
                     className={cn(
                       "w-full text-left px-4 py-2.5 text-[9px] font-black uppercase tracking-widest transition-all cursor-pointer",
-                      language === lang ? "bg-emerald-500/10 text-emerald-400" : "text-white/40 hover:text-white hover:bg-white/5"
+                      language === lang ? "bg-blue-500/10 text-blue-400" : "text-white/40 hover:text-white hover:bg-white/5"
                     )}
                   >
                     {lang === "en" && "English"}
@@ -189,7 +189,7 @@ export const Navbar = () => {
                 {isAdmin && (
                   <Link
                     to="/admin"
-                    className="text-emerald-400 p-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full hover:bg-emerald-500/20 transition-all"
+                    className="text-blue-400 p-2 bg-blue-500/10 border border-blue-500/20 rounded-full hover:bg-blue-500/20 transition-all"
                     aria-label="Admin"
                   >
                     <Settings className="h-3.5 w-3.5" />
@@ -210,7 +210,7 @@ export const Navbar = () => {
                 data-cursor="LOGIN"
                 className="group relative inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-[9px] font-black text-black uppercase tracking-[0.2em] overflow-hidden shadow-lg transition-all duration-500"
               >
-                <div className="absolute inset-0 bg-emerald-400 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" />
+                <div className="absolute inset-0 bg-blue-500 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" />
                 <span className="relative z-10 flex items-center gap-2">
                   {t("portal")}
                   <ArrowRight className="h-3 w-3 group-hover:translate-x-0.5 transition-transform" />
@@ -232,7 +232,7 @@ export const Navbar = () => {
             {user && (
               <div className="flex items-center gap-2">
                 {isAdmin && (
-                  <Link to="/admin" className="p-2.5 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-400 active:scale-90 transition-transform shrink-0">
+                  <Link to="/admin" className="p-2.5 bg-blue-500/10 border border-blue-500/20 rounded-xl text-blue-400 active:scale-90 transition-transform shrink-0">
                     <Settings className="h-4.5 w-4.5" />
                   </Link>
                 )}
@@ -262,7 +262,7 @@ export const Navbar = () => {
             animate={{ opacity: 1, clipPath: "inset(0 0 0% 0)" }}
             exit={{ opacity: 0, clipPath: "inset(0 0 100% 0)" }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-[60] flex flex-col bg-[#010203]/98 backdrop-blur-3xl md:hidden overflow-y-auto pt-28 px-6 pb-12"
+            className="fixed inset-0 z-[60] flex flex-col bg-[#03050C]/98 backdrop-blur-3xl md:hidden overflow-y-auto pt-28 px-6 pb-12"
           >
             <button
               type="button"
@@ -275,7 +275,7 @@ export const Navbar = () => {
 
             <div className="flex flex-col gap-10 flex-1 mt-6">
               <div>
-                <div className="text-[10px] font-black uppercase tracking-[0.4em] text-emerald-400/50 mb-5">Navigation</div>
+                <div className="text-[10px] font-black uppercase tracking-[0.4em] text-blue-400/50 mb-5">Navigation</div>
                 <div className="flex flex-col gap-3">
                   {navLinks.map((link, index) => (
                     <motion.div
@@ -290,7 +290,7 @@ export const Navbar = () => {
                         className={cn(
                           "flex items-center gap-4 rounded-[1.25rem] border px-5 py-3.5 transition-all duration-300",
                           location.pathname === link.path
-                            ? "border-emerald-500/30 bg-emerald-500/[0.08] text-emerald-400 shadow-[0_10px_30px_rgba(16,185,129,0.1)]"
+                            ? "border-blue-500/30 bg-blue-500/[0.08] text-blue-400 shadow-[0_10px_30px_rgba(59,130,246,0.1)]"
                             : "border-white/[0.05] bg-white/[0.02] text-white/60 hover:border-white/15 hover:text-white hover:bg-white/[0.05]"
                         )}
                       >
@@ -318,7 +318,7 @@ export const Navbar = () => {
                       <Link
                         to="/admin"
                         onClick={() => setIsOpen(false)}
-                        className="flex items-center gap-4 rounded-[1.25rem] border border-emerald-500/20 bg-emerald-500/10 px-5 py-3.5 text-emerald-400"
+                        className="flex items-center gap-4 rounded-[1.25rem] border border-blue-500/20 bg-blue-500/10 px-5 py-3.5 text-blue-400"
                       >
                         <Settings className="h-5 w-5" />
                         <span className="text-base font-bold">Admin Terminal</span>

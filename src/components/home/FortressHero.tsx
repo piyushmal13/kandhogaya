@@ -22,7 +22,7 @@ const FloatingParticles = () => (
     {Array.from({ length: 30 }).map((_, i) => (
       <div
         key={i}
-        className="absolute w-[2px] h-[2px] rounded-full bg-emerald-500/20"
+        className="absolute w-[2px] h-[2px] rounded-full bg-blue-500/20"
         style={{
           left: `${Math.random() * 100}%`,
           top: `${Math.random() * 100}%`,
@@ -121,13 +121,13 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
       className="relative min-h-[100svh] overflow-hidden flex flex-col justify-between"
       aria-label="IFX Trades — Institutional Trading Education"
       style={{
-        backgroundColor: "#010203",
-        backgroundImage: "radial-gradient(circle at 50% 50%, rgba(16,185,129,0.06) 0%, #030509 50%, #010203 100%)",
+        backgroundColor: "var(--bg-base)",
+        backgroundImage: "radial-gradient(circle at 50% 50%, rgba(59,130,246,0.08) 0%, #080B1C 50%, var(--bg-base) 100%)",
       }}
     >
       {/* ── CANVAS BACKGROUND DECOR ── */}
       <div className="absolute inset-0 pointer-events-none z-0" aria-hidden="true">
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-emerald-500/[0.03] blur-[150px] rounded-full" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-blue-500/[0.03] blur-[150px] rounded-full" />
         <div className="absolute -top-40 right-10 w-[300px] h-[300px] bg-blue-500/[0.02] blur-[100px] rounded-full" />
       </div>
 
@@ -137,7 +137,7 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
       {/* ── LIVE MARKET TICKER ── */}
       {isTickerActive && (
         <div
-          className="relative z-30 mt-24 sm:mt-28 border-b border-emerald-500/10 bg-black/60 backdrop-blur-2xl overflow-hidden flex items-center shrink-0 shadow-sm"
+          className="relative z-30 mt-24 sm:mt-28 border-b border-blue-500/10 bg-black/60 backdrop-blur-2xl overflow-hidden flex items-center shrink-0 shadow-sm"
           style={{ height: "1.75rem", minHeight: "1.75rem", contain: "layout paint" }}
         >
           <div className="absolute left-0 z-10 w-16 sm:w-24 h-full bg-gradient-to-r from-[#010203] to-transparent" />
@@ -146,10 +146,10 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
           {/* LIVE indicator */}
           <div className="absolute left-4 z-20 flex items-center gap-1.5">
             <span className="relative flex h-1.5 w-1.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-blue-500" />
             </span>
-            <span className="text-[8px] font-black uppercase tracking-[0.25em] text-emerald-400/60 hidden sm:inline">Live</span>
+            <span className="text-[8px] font-black uppercase tracking-[0.25em] text-blue-400/60 hidden sm:inline">Live</span>
           </div>
 
           <div
@@ -161,7 +161,7 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
                 key={`${t}-${i}`}
                 className="text-[8px] sm:text-[9px] font-mono font-bold uppercase tracking-[0.25em] text-white/35 flex items-center gap-2"
               >
-                <span className="w-0.5 h-0.5 rounded-full bg-emerald-500/50" />
+                <span className="w-0.5 h-0.5 rounded-full bg-blue-500/50" />
                 {t}
               </span>
             ))}
@@ -214,7 +214,7 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
           </button>
 
           <button onClick={handleSeeResults} className="shrink-0">
-            <EliteButton variant="secondary" size="lg" leftIcon={<Play className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400/20" />}>
+            <EliteButton variant="secondary" size="lg" leftIcon={<Play className="w-3.5 h-3.5 text-blue-400 fill-blue-400/20" />}>
               {t("cta_results")}
             </EliteButton>
           </button>
@@ -232,7 +232,7 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
               key={item.label}
               className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.02] border border-white/[0.06]"
             >
-              <item.icon className="w-3 h-3 text-emerald-400/60" />
+              <item.icon className="w-3 h-3 text-blue-400/60" />
               <span className="text-[8px] sm:text-[9px] font-bold uppercase tracking-[0.2em] text-white/30">{item.label}</span>
             </div>
           ))}
@@ -261,7 +261,7 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
           aria-label="Scroll down to explore"
         >
           <span className="text-[9px] font-black uppercase tracking-[0.45em] text-white">{t("cta_explore")}</span>
-          <ChevronDown className="w-4 h-4 text-emerald-400" />
+          <ChevronDown className="w-4 h-4 text-blue-400" />
         </motion.button>
       </div>
     </section>

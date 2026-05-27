@@ -35,13 +35,13 @@ export interface EliteButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonEl
 }
 
 const variantStyles: Record<ButtonVariant, string> = {
-  elite: "bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-black hover:shadow-[0_0_30px_rgba(16,185,129,0.4)] border border-emerald-400/20 shadow-[inset_0_1px_2px_rgba(255,255,255,0.2)]",
-  execution: "bg-gradient-to-r from-teal-600 to-emerald-500 hover:from-teal-500 hover:to-emerald-400 text-white font-black hover:shadow-[0_0_30px_rgba(20,184,166,0.4)] border border-teal-400/20 shadow-[inset_0_1px_2px_rgba(255,255,255,0.2)]",
+  elite: "bg-gradient-to-r from-blue-600 to-indigo-500 hover:from-blue-500 hover:to-indigo-400 text-white font-black hover:shadow-[0_0_30px_rgba(59,130,246,0.4)] border border-blue-400/20 shadow-[inset_0_1px_2px_rgba(255,255,255,0.2)]",
+  execution: "bg-gradient-to-r from-violet-600 to-fuchsia-500 hover:from-violet-500 hover:to-fuchsia-400 text-white font-black hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] border border-violet-400/20 shadow-[inset_0_1px_2px_rgba(255,255,255,0.2)]",
   secondary: "bg-white/[0.03] hover:bg-white/[0.07] text-white border border-white/10 hover:border-white/20 shadow-2xl backdrop-blur-md",
   ghost: "bg-transparent hover:bg-white/5 text-gray-400 hover:text-white",
   danger: "bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 hover:border-red-500/40",
-  'institutional-outline': "bg-transparent border-2 border-white/10 text-white hover:bg-white/[0.02] hover:border-emerald-500/40 hover:text-emerald-400",
-  'premium-gold': "bg-gradient-to-r from-[#D4AF37] to-[#F5E6A3] hover:from-[#F5E6A3] hover:to-[#D4AF37] text-black hover:text-white font-black hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] border border-yellow-400/20 shadow-[inset_0_1px_2px_rgba(255,255,255,0.25)]",
+  'institutional-outline': "bg-transparent border-2 border-white/10 text-white hover:bg-white/[0.02] hover:border-blue-500/40 hover:text-blue-400",
+  'premium-gold': "bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 hover:from-pink-400 hover:via-purple-400 hover:to-blue-400 text-white font-black hover:shadow-[0_0_30px_rgba(236,72,153,0.4)] border border-pink-400/20 shadow-[inset_0_1px_2px_rgba(255,255,255,0.25)]",
   gemini: "gemini-shading hover:shadow-[0_0_35px_rgba(139,92,246,0.5)] text-white font-black border border-white/10 shadow-[inset_0_1px_2px_rgba(255,255,255,0.25)]",
 };
 
@@ -106,8 +106,9 @@ export const Button = forwardRef<HTMLButtonElement, EliteButtonProps>(
           <div className={cn(
             "absolute -inset-1 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 -z-10 mix-blend-screen",
             (() => {
-              if (variant === 'elite') return 'bg-[var(--color14)]/40';
-              if (variant === 'execution') return 'bg-emerald-500/40';
+              if (variant === 'elite') return 'bg-blue-500/40';
+              if (variant === 'execution') return 'bg-violet-500/40';
+              if (variant === 'premium-gold') return 'bg-pink-500/40';
               if (variant === 'gemini') return 'gemini-shading opacity-50';
               return 'bg-white/10';
             })()
