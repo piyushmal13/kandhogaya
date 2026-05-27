@@ -5,14 +5,17 @@ import {
   ShieldCheck,
   Star,
   Activity,
-  TerminalSquare
+  TerminalSquare,
+  Globe,
+  Building,
+  Users
 } from "lucide-react";
 
 import { BRANDING } from "../../constants/branding";
 import { InstagramIcon, LinkedinIcon } from "./Icons";
 
 export const Footer = () => (
-  <footer className="relative overflow-hidden border-t border-white/[0.03] pt-32 lg:pt-48 pb-12 bg-[#010203]">
+  <footer className="relative overflow-hidden border-t border-white/[0.03] pt-24 lg:pt-32 pb-12 bg-[#010203]">
     {/* Deep Void Ambient background */}
     <div className="absolute inset-0 pointer-events-none" aria-hidden>
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[1200px] h-[500px] bg-[radial-gradient(ellipse_at_bottom,rgba(16,185,129,0.03),transparent_70%)]" />
@@ -20,35 +23,39 @@ export const Footer = () => (
     </div>
 
     <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-12">
-      {/* --- Master Terminal SEO Sitemapping --- */}
+      
+      {/* Master Corporate Grid */}
       <div 
-        className="grid gap-16 lg:grid-cols-12 mb-24 md:mb-32"
+        className="grid gap-16 lg:grid-cols-12 mb-20 md:mb-28"
         itemScope
         itemType="https://schema.org/Organization"
       >
         <meta itemProp="url" content="https://ifxtrades.com" />
         <meta itemProp="logo" content="https://ifxtrades.com/logo.png" />
         
-        {/* --- Column 1: Brand & Identity (Spans more columns) --- */}
-        <div className="lg:col-span-5 pr-0 lg:pr-12">
-          <Link to="/" className="flex items-center gap-4 group mb-10" aria-label="Go to Home">
-            <div className="flex items-center justify-center transition-all duration-700 h-12 w-12 sm:h-14 sm:w-14 rounded-2xl overflow-hidden group-hover:scale-105 border border-white/5 bg-[#030406] shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+        {/* --- Column 1: Brand Corporate Identity --- */}
+        <div className="lg:col-span-4 pr-0 lg:pr-8">
+          <Link to="/" className="flex items-center gap-4 group mb-8" aria-label="Go to Home">
+            {/* Curved, border-free logo matching precisely */}
+            <div className="flex items-center justify-center transition-all duration-700 h-12 w-12 sm:h-14 sm:w-14 rounded-2xl overflow-hidden group-hover:scale-105">
               <img
                 src={BRANDING.logoUrl}
                 alt={BRANDING.name}
-                className="h-full w-full object-contain p-1.5"
+                className="h-full w-full object-contain rounded-2xl"
                 itemProp="image"
               />
             </div>
             <div className="flex flex-col">
-              <div className="text-[10px] font-black tracking-[0.4em] text-white uppercase leading-tight mb-1">IFX TRADES</div>
+              <div className="text-[11px] font-black tracking-[0.45em] text-white uppercase leading-tight">IFX TRADES</div>
+              <div className="text-[6.5px] font-black tracking-[0.3em] text-emerald-500 uppercase mt-1">QUANTITATIVE CORE</div>
             </div>
           </Link>
-          <p className="text-[13px] leading-[2] text-[#8A9AAB] font-light max-w-sm mb-10" itemProp="description">
-            The global benchmark for systematic CFD intelligence and algorithmic forex execution. Engineered for elite capital scaling across the world's primary financial hubs.
+          <p className="text-xs leading-[1.8] text-[#8A9AAB] font-medium max-w-sm mb-8" itemProp="description">
+            The global standard for systematic CFD intelligence, sub-millisecond execution bridges, and quantitative multi-asset allocations. Engineered for sovereign capital and elite institutional desks.
           </p>
 
-          <div className="flex items-center gap-1.5 mb-10">
+          {/* Socials & Compliance badging */}
+          <div className="flex items-center gap-2">
             {[
               { Icon: InstagramIcon, url: `https://instagram.com/${BRANDING.name}` },
               { Icon: LinkedinIcon, url: `https://linkedin.com/company/${BRANDING.name}` }
@@ -58,62 +65,88 @@ export const Footer = () => (
                 href={social.url} 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="p-1.5 border border-white/[0.04] rounded-lg bg-[#030406] text-[#4F5A69] hover:text-emerald-400 hover:border-emerald-500/30 hover:bg-emerald-500/10 hover:scale-105 transition-all duration-300 shadow-md flex items-center justify-center shrink-0"
+                className="p-2 border border-white/[0.04] rounded-xl bg-white/[0.01] text-[#4F5A69] hover:text-emerald-400 hover:border-emerald-500/30 hover:bg-emerald-500/10 hover:scale-105 transition-all duration-300 shadow-md flex items-center justify-center shrink-0"
                 itemProp="sameAs"
                 aria-label="Social Link"
               >
                 <social.Icon className="w-3.5 h-3.5" />
               </a>
             ))}
+            <div className="ml-2 flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/5 border border-emerald-500/10 text-emerald-400/60 text-[8px] font-black uppercase tracking-widest">
+              <ShieldCheck className="w-3 h-3 text-emerald-400" />
+              256-bit Enclave
+            </div>
           </div>
         </div>
 
-        {/* --- Navigation Columns --- */}
-        <div className="lg:col-span-7 grid grid-cols-2 md:grid-cols-3 gap-10">
-          {/* --- Column 2: Master Terminal --- */}
+        {/* --- Navigation Grid: Expanded for Professional B2B / Partners --- */}
+        <div className="lg:col-span-8 grid grid-cols-2 md:grid-cols-4 gap-8">
+          
+          {/* --- Column 1: Core Protocol --- */}
           <div>
-            <h4 className="mb-10 text-[10px] font-black uppercase tracking-[0.3em] text-white flex items-center gap-2">
-              <TerminalSquare className="w-3.5 h-3.5 text-emerald-500/50" /> Protocol
+            <h4 className="mb-6 text-[10px] font-black uppercase tracking-[0.3em] text-white flex items-center gap-2">
+              <TerminalSquare className="w-3.5 h-3.5 text-emerald-500/50 animate-pulse" /> Core System
             </h4>
-            <ul className="space-y-5 text-[13px] text-[#8A9AAB] font-light">
-              <li><Link to="/marketplace" className="hover:text-emerald-400 transition-colors flex items-center gap-2 group">Execution Desk <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
-              <li><Link to="/results" className="hover:text-emerald-400 transition-colors flex items-center gap-2 group">Audit Logs <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
-              <li><Link to="/affiliate" className="hover:text-emerald-400 transition-colors flex items-center gap-2 group">Affiliate Desk <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
+            <ul className="space-y-4 text-xs text-[#8A9AAB] font-medium">
+              <li><Link to="/marketplace" className="hover:text-emerald-400 transition-colors flex items-center gap-1.5 group">Algorithms <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
+              <li><Link to="/results" className="hover:text-emerald-400 transition-colors">Verified Audit Logs</Link></li>
+              <li><Link to="/webinars" className="hover:text-emerald-400 transition-colors">Desk Masterclasses</Link></li>
+              <li><Link to="/blog" className="hover:text-emerald-400 transition-colors">Intelligence Feed</Link></li>
             </ul>
           </div>
 
-          {/* --- Column 3: Quantitative Edge --- */}
+          {/* --- Column 2: B2B Broker Services (Sovereign business addition!) --- */}
           <div>
-            <h4 className="mb-10 text-[10px] font-black uppercase tracking-[0.3em] text-white">Talent Desk</h4>
-            <ul className="space-y-5 text-[13px] text-[#8A9AAB] font-light">
-              <li><Link to="/hiring" className="hover:text-emerald-400 transition-colors">Talent Network</Link></li>
-              <li><Link to="/blog" className="hover:text-emerald-400 transition-colors">Macro Intelligence</Link></li>
-              <li><Link to="/webinars" className="hover:text-emerald-400 transition-colors">Desk Sessions</Link></li>
+            <h4 className="mb-6 text-[10px] font-black uppercase tracking-[0.3em] text-white flex items-center gap-2">
+              <Building className="w-3.5 h-3.5 text-emerald-500/50" /> B2B Services
+            </h4>
+            <ul className="space-y-4 text-xs text-[#8A9AAB] font-medium">
+              <li><Link to="/consultation" className="hover:text-emerald-400 transition-colors flex items-center gap-1.5 group">Custom Engineering <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
+              <li><a href="#live-chat" className="hover:text-emerald-400 transition-colors">ECN Bridge Setup</a></li>
+              <li><a href="#live-chat" className="hover:text-emerald-400 transition-colors">Liquidity Integration</a></li>
+              <li><a href="#live-chat" className="hover:text-emerald-400 transition-colors">Turnkey CRM Desks</a></li>
             </ul>
           </div>
 
-          {/* --- Column 4: Infrastructure --- */}
-          <div className="col-span-2 md:col-span-1">
-            <h4 className="mb-10 text-[10px] font-black uppercase tracking-[0.3em] text-white">Infrastructure</h4>
-            <ul className="space-y-5 text-[13px] text-[#8A9AAB] font-light">
-              <li><Link to="/consultation" className="hover:text-emerald-400 transition-colors flex items-center gap-2 group">Custom Request <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
-              <li><Link to="/about" className="hover:text-emerald-400 transition-colors">Operations</Link></li>
-              <li><Link to="/contact" className="hover:text-emerald-400 transition-colors">Support Portal</Link></li>
+          {/* --- Column 3: Partner Program (Affiliate Node addition!) --- */}
+          <div>
+            <h4 className="mb-6 text-[10px] font-black uppercase tracking-[0.3em] text-white flex items-center gap-2">
+              <Users className="w-3.5 h-3.5 text-emerald-500/50" /> Partners
+            </h4>
+            <ul className="space-y-4 text-xs text-[#8A9AAB] font-medium">
+              <li><Link to="/affiliate" className="hover:text-emerald-400 transition-colors flex items-center gap-1.5 group">Affiliate Desk <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
+              <li><a href="#live-chat" className="hover:text-emerald-400 transition-colors">Broker Referral Node</a></li>
+              <li><a href="#live-chat" className="hover:text-emerald-400 transition-colors">Strategic Allocations</a></li>
+              <li><a href="#live-chat" className="hover:text-emerald-400 transition-colors">Joint Ventures</a></li>
             </ul>
           </div>
+
+          {/* --- Column 4: Corporate Hub --- */}
+          <div>
+            <h4 className="mb-6 text-[10px] font-black uppercase tracking-[0.3em] text-white flex items-center gap-2">
+              <Globe className="w-3.5 h-3.5 text-emerald-500/50" /> Corporate
+            </h4>
+            <ul className="space-y-4 text-xs text-[#8A9AAB] font-medium">
+              <li><Link to="/about" className="hover:text-emerald-400 transition-colors">About Operations</Link></li>
+              <li><Link to="/hiring" className="hover:text-emerald-400 transition-colors">Talent Network</Link></li>
+              <li><Link to="/contact" className="hover:text-emerald-400 transition-colors">Support Portal</Link></li>
+              <li><Link to="/risk" className="hover:text-emerald-400 transition-colors">Risk Protocol</Link></li>
+            </ul>
+          </div>
+
         </div>
       </div>
 
       {/* --- Minimalist Master Base --- */}
       <div className="pt-8 pb-4 border-t border-white/[0.04] flex flex-col lg:flex-row items-center justify-between gap-8">
         <div className="text-[9px] font-black text-[#4F5A69] uppercase tracking-[0.3em] text-center lg:text-left">
-          &copy; {new Date().getFullYear()} {BRANDING.name}.
+          &copy; {new Date().getFullYear()} {BRANDING.name}. REGULATED CRYPTOGRAPHIC NODES ACTIVE.
         </div>
 
         <div className="flex flex-wrap items-center justify-center gap-8 text-[9px] font-black text-[#4F5A69] uppercase tracking-[0.25em]">
-           <Link to="/privacy" className="hover:text-white transition-colors">Privacy</Link>
-           <Link to="/terms" className="hover:text-white transition-colors">Terms</Link>
-           <Link to="/risk" className="hover:text-red-400/80 text-red-500/50 transition-colors">Risk Protocol</Link>
+           <Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+           <Link to="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
+           <Link to="/risk" className="hover:text-red-400/80 text-red-500/50 transition-colors">Institutional Risk Disclosure</Link>
         </div>
       </div>
     </div>
