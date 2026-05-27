@@ -22,4 +22,14 @@ export const PAGE_META_KEYWORDS = [
   "automated forex trading strategies",
   "institutional quantitative trading course",
   "institutional research desk",
+  "algo trading systems",
+  "best automated forex signals",
+  "MT5 expert advisors India",
+  "TradingView Pinescript developer Dubai",
+  "high-frequency forex indicators",
+  "quantitative systematic trading",
+  "algorithmic forex trading bot",
+  "FIX API liquidity integration",
+  "institutional smart money concepts",
+  "prop firm passing algorithms"
 ];

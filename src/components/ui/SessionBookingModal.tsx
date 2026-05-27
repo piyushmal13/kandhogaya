@@ -74,13 +74,12 @@ export const SessionBookingModal: React.FC<SessionBookingModalProps> = ({
             aria-hidden="true"
           />
 
-          {/* Modal Container */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="relative w-full max-w-xl max-h-[90vh] overflow-y-auto scrollbar-thin rounded-[2.5rem] bg-[#0A0A0A] p-6 sm:p-10 shadow-2xl z-10 gemini-border border border-white/5"
+            className="relative w-full max-w-xl max-h-[95svh] sm:max-h-[90vh] overflow-y-auto scrollbar-thin rounded-2xl sm:rounded-[2.5rem] bg-[#0A0A0A] p-5 sm:p-8 shadow-2xl z-10 gemini-border border border-white/5"
             role="dialog"
             aria-modal="true"
           >
@@ -132,7 +131,7 @@ export const SessionBookingModal: React.FC<SessionBookingModalProps> = ({
                           required
                           type="text"
                           placeholder="Sender Identity"
-                          className="w-full bg-black/60 border border-white/5 rounded-2xl py-4 pl-12 pr-4 text-white outline-none focus:border-[#8B5CF6]/50 focus:ring-1 focus:ring-[#8B5CF6]/40 transition-all font-mono text-xs"
+                          className="w-full bg-black/60 border border-white/5 rounded-2xl py-3 sm:py-4 pl-12 pr-4 text-white outline-none focus:border-[#8B5CF6]/50 focus:ring-1 focus:ring-[#8B5CF6]/40 transition-all font-mono text-xs"
                           value={formData.full_name}
                           onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
                         />
@@ -146,7 +145,7 @@ export const SessionBookingModal: React.FC<SessionBookingModalProps> = ({
                           required
                           type="email"
                           placeholder="Contact Protocol"
-                          className="w-full bg-black/60 border border-white/5 rounded-2xl py-4 pl-12 pr-4 text-white outline-none focus:border-[#8B5CF6]/50 focus:ring-1 focus:ring-[#8B5CF6]/40 transition-all font-mono text-xs"
+                          className="w-full bg-black/60 border border-white/5 rounded-2xl py-3 sm:py-4 pl-12 pr-4 text-white outline-none focus:border-[#8B5CF6]/50 focus:ring-1 focus:ring-[#8B5CF6]/40 transition-all font-mono text-xs"
                           value={formData.email}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         />
@@ -158,7 +157,7 @@ export const SessionBookingModal: React.FC<SessionBookingModalProps> = ({
                     <label className="text-[9px] font-black uppercase tracking-widest text-white/30 ml-1">Target Allocation capital ($)</label>
                     <select
                       required
-                      className="w-full bg-black/60 border border-white/5 rounded-2xl py-4 px-5 text-white outline-none focus:border-[#8B5CF6]/50 focus:ring-1 focus:ring-[#8B5CF6]/40 transition-all font-mono text-xs appearance-none"
+                      className="w-full bg-black/60 border border-white/5 rounded-2xl py-3 sm:py-4 px-5 text-white outline-none focus:border-[#8B5CF6]/50 focus:ring-1 focus:ring-[#8B5CF6]/40 transition-all font-mono text-xs appearance-none"
                       value={formData.account_size}
                       onChange={(e) => setFormData({ ...formData, account_size: e.target.value })}
                     >
@@ -176,7 +175,7 @@ export const SessionBookingModal: React.FC<SessionBookingModalProps> = ({
                       required
                       rows={3}
                       placeholder="Outline your algorithmic execution objective or macro briefing request..."
-                      className="w-full bg-black/60 border border-white/5 rounded-2xl py-4 px-5 text-white outline-none focus:border-[#8B5CF6]/50 focus:ring-1 focus:ring-[#8B5CF6]/40 transition-all font-mono text-xs resize-none"
+                      className="w-full bg-black/60 border border-white/5 rounded-2xl py-3 sm:py-4 px-5 text-white outline-none focus:border-[#8B5CF6]/50 focus:ring-1 focus:ring-[#8B5CF6]/40 transition-all font-mono text-xs resize-none"
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     />

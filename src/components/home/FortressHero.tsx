@@ -188,25 +188,12 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
       )}
 
       {/* ── MAIN CONTENT ── */}
-      <div className="relative z-20 flex-1 flex items-center justify-center px-6 sm:px-8 py-16 md:py-28 max-w-7xl mx-auto w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center w-full">
+      <div className="relative z-20 flex-1 flex flex-col items-center justify-center text-center px-6 sm:px-8 py-16 md:py-28 max-w-5xl mx-auto w-full">
           
-          {/* LEFT COLUMN: CRISP TEXT & RESPONSIVE ACTIONS */}
-          <div className="lg:col-span-7 text-center lg:text-left flex flex-col items-center lg:items-start justify-center space-y-8 max-w-2xl mx-auto lg:mx-0">
+          {/* CENTERED SINGLE COLUMN: CRISP TEXT & RESPONSIVE ACTIONS */}
+          <div className="flex flex-col items-center justify-center space-y-8 w-full">
             
-            {/* Sovereign Badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1, duration: 0.6, ease: ENTRY }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/[0.05] border border-blue-500/[0.12]"
-            >
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-blue-500" />
-              </span>
-              <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.3em] text-white/50">Institutional Research Desk</span>
-            </motion.div>
+            {/* Sovereign Badge (Removed per CEO directive) */}
 
             {/* Headline */}
             <motion.h1
@@ -261,7 +248,7 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6, duration: 0.6, ease: ENTRY }}
-              className="flex flex-wrap items-center justify-center lg:justify-start gap-3 sm:gap-6 pt-2"
+              className="flex flex-wrap items-center justify-center gap-3 sm:gap-6 pt-2 w-full max-w-3xl mx-auto"
             >
               {TRUST_ITEMS.map((item) => (
                 <div
@@ -287,55 +274,6 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
             </motion.div>
 
           </div>
-
-          {/* RIGHT COLUMN: HIGH-TRUST DYNAMIC REAL-TIME TRADING CHART WIDGET */}
-          <div className="lg:col-span-5 w-full flex justify-center lg:justify-end">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.8, ease: ENTRY }}
-              className="w-full max-w-md p-6 bg-zinc-950/45 border border-white/10 rounded-[2.5rem] shadow-[0_30px_60px_rgba(0,0,0,0.8)] backdrop-blur-2xl relative overflow-hidden group select-none hover:border-blue-500/20 transition-all duration-500"
-            >
-              {/* Top Bar simulating a real Bloomberg window */}
-              <div className="flex items-center justify-between border-b border-white/5 pb-4 mb-4">
-                <div className="flex items-center gap-2">
-                  <div className="w-2.5 h-2.5 rounded-full bg-red-500/40" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/40" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-[#00A3FF]/40" />
-                  <span className="text-[8px] font-mono font-bold text-white/30 uppercase tracking-widest ml-2">
-                    IFX // ECN_TELEMETRY_FEED
-                  </span>
-                </div>
-                <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-blue-500/10 border border-blue-500/20 text-[7.5px] font-mono font-bold text-blue-400">
-                  <span className="w-1 h-1 rounded-full bg-blue-400 animate-ping" />
-                  <span>LATENCY: 1.15ms</span>
-                </div>
-              </div>
-
-              {/* Dynamic Live Candlesticks */}
-              <div className="h-44 sm:h-52 w-full">
-                <AnimatedCandlesticks />
-              </div>
-
-              {/* Bottom statistics panel */}
-              <div className="mt-4 pt-4 border-t border-white/5 grid grid-cols-3 gap-2 text-left">
-                <div>
-                  <span className="text-[7px] font-black text-gray-500 uppercase tracking-widest block mb-0.5">MATCHING ENGINE</span>
-                  <span className="text-[9px] font-mono font-bold text-white">EQUINIX NY4</span>
-                </div>
-                <div>
-                  <span className="text-[7px] font-black text-gray-500 uppercase tracking-widest block mb-0.5">VOLATILITY REGIME</span>
-                  <span className="text-[9px] font-mono font-bold text-[#00A3FF]">HIGH_LIQUIDITY</span>
-                </div>
-                <div>
-                  <span className="text-[7px] font-black text-gray-500 uppercase tracking-widest block mb-0.5">FEED TELEMETRY</span>
-                  <span className="text-[9px] font-mono font-bold text-cyan-400">SECURE_SYNC</span>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-
-        </div>
       </div>
 
       {/* ── SCROLL INDICATOR ── */}

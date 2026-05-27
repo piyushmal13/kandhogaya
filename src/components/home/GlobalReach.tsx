@@ -83,19 +83,7 @@ export const GlobalReach = () => {
         <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24 mb-24 md:mb-36">
           {/* Text */}
           <div className="flex-1 max-w-xl order-2 lg:order-1">
-            <motion.div
-              initial={{ opacity: 0, x: -16 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-blue-500/[0.05] border border-blue-500/[0.15] text-blue-500 text-[10px] font-black uppercase tracking-[0.35em] mb-10"
-            >
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-blue-500" />
-              </span>
-              {" "}Global Alpha Network
-            </motion.div>
+
 
             <motion.h2
               id="global-heading"

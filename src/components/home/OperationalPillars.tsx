@@ -99,18 +99,7 @@ export const OperationalPillars: React.FC<OperationalPillarsProps> = ({ onReques
 
       <div className="container mx-auto px-6 relative z-10 max-w-7xl">
         <div className="text-center mb-16 md:mb-24">
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-blue-500/[0.05] border border-blue-500/[0.12] text-blue-400 text-[10px] font-black uppercase tracking-[0.25em] mb-6"
-          >
-            <span className="relative flex h-1.5 w-1.5 mr-1">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-blue-500" />
-            </span>
-            Operational Framework &amp; Scope
-          </motion.div>
+
 
           <motion.h2
             initial={{ opacity: 0, y: 15 }}

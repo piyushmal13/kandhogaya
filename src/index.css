@@ -31,11 +31,6 @@ input:focus, textarea:focus, select:focus {
 
   /* Brand palette overrides (Luxury Ice-Blue Diamond Scheme) */
   --color-primary-400: #60CDFF;
-  --color-emerald-300: #96E5FF;
-  --color-emerald-400: #60CDFF;
-  --color-emerald-500: #00A3FF;
-  --color-emerald-600: #008BE3;
-  --color-emerald-700: #005FB3;
   --color-teal-300: #C4B5FD;
   --color-teal-400: #A78BFA;
   --color-teal-500: #8B5CF6;

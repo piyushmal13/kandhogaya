@@ -133,13 +133,46 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "IFX Trades",
-      "url": "https://ifxtrades.com",
-      "logo": "https://ifxtrades.com/logo.png",
-      "sameAs": [
-        "https://www.linkedin.com/company/ifxtrades",
-        "https://twitter.com/ifxtrades"
+      "@graph": [
+        {
+          "@type": "FinancialService",
+          "@id": "https://ifxtrades.com/#organization",
+          "name": "IFX Trades",
+          "url": "https://ifxtrades.com",
+          "logo": "https://ifxtrades.com/logo.png",
+          "image": "https://ifxtrades.com/logo.png",
+          "description": "Asia's leading institutional quantitative and algorithmic forex trading education desk.",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Dubai",
+            "addressCountry": "AE"
+          },
+          "sameAs": [
+            "https://www.linkedin.com/company/ifxtrades",
+            "https://twitter.com/ifxtrades"
+          ]
+        },
+        {
+          "@type": "SoftwareApplication",
+          "@id": "https://ifxtrades.com/#software",
+          "name": "IFX Proprietary Algorithmic Systems",
+          "applicationCategory": "FinanceApplication",
+          "operatingSystem": "MT4, MT5, TradingView",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          }
+        },
+        {
+          "@type": "Course",
+          "@id": "https://ifxtrades.com/#course",
+          "name": "Institutional Algorithmic Trading Masterclass",
+          "description": "Advanced B2B quantitative logic, systematic macro flow, and MT5 algorithm development course.",
+          "provider": {
+            "@id": "https://ifxtrades.com/#organization"
+          }
+        }
       ]
     }
     </script>
