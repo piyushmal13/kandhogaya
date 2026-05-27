@@ -15,7 +15,7 @@ export const OperationalPillars: React.FC<OperationalPillarsProps> = ({ onReques
       icon: BookOpen,
       title: "Quant Academy",
       subtitle: "Webinar Masterclasses",
-      description: "Elite educational platform delivering raw macro briefings, systematic trend tutorials, and live masterclass webinars led by global quantitative strategists.",
+      description: "Webinar masterclasses led by global quants, breaking down raw macro indicators and systematic trend strategies.",
       cta: "Explore Masterclasses",
       link: "/webinars",
       isModal: false,
@@ -27,7 +27,7 @@ export const OperationalPillars: React.FC<OperationalPillarsProps> = ({ onReques
       icon: Cpu,
       title: "Systematic Machinery",
       subtitle: "Algorithmic Registry",
-      description: "Licensing of pre-built, institutional-grade systematic algorithms. Clean, secure, drag-and-drop binaries optimized for MetaTrader 5 and TradingView.",
+      description: "Pre-built institutional algorithms. Clean, secure, drag-and-drop compiled binaries optimized for MT5 and TradingView.",
       cta: "View Algo Registry",
       link: "#performance",
       isModal: false,
@@ -39,7 +39,7 @@ export const OperationalPillars: React.FC<OperationalPillarsProps> = ({ onReques
       icon: Terminal,
       title: "Engineering Desk",
       subtitle: "Bespoke Coding Desk",
-      description: "Custom systematic software development. Our quantitative architects code high-frequency execution bridges, custom indicators, and risk optimizers.",
+      description: "Bespoke algorithmic software development. Our quants engineer custom FIX API bridges, indicators, and risk protocols.",
       cta: "Request Bespoke Build",
       link: "#",
       isModal: true,
@@ -91,9 +91,9 @@ export const OperationalPillars: React.FC<OperationalPillarsProps> = ({ onReques
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-white/40 max-w-xl mx-auto text-xs sm:text-sm md:text-base leading-relaxed uppercase tracking-wider font-semibold"
+            className="text-white/40 max-w-xl mx-auto text-xs sm:text-sm leading-relaxed uppercase tracking-wider font-semibold"
           >
-            We eliminate technical complexity. From advanced webinars to pre-built compiled algorithms and bespoke quantitative builds, our desk delivers peak mechanical performance.
+            We simplify systematic complexity. From developer webinars to compiled algorithms and bespoke quantitative code, our desk delivers clean execution parameters.
           </motion.p>
         </div>
 

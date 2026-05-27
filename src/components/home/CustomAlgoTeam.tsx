@@ -7,17 +7,17 @@ const features = [
   {
     icon: Code2,
     title: "Proprietary Execution Logic",
-    desc: "Our senior engineering team develops custom trading frameworks from the ground up, bypassing standard retail platform limitations."
+    desc: "Custom frameworks designed from the ground up to bypass retail platform limitations."
   },
   {
     icon: Cpu,
     title: "High-Performance Architecture",
-    desc: "Asia's largest specialized quant desk focusing exclusively on institutional-grade MQL5 and C++ bridge systems."
+    desc: "Specialized quantitative desk focusing exclusively on compiled C++ and MQL5 systems."
   },
   {
     icon: ShieldCheck,
     title: "Audited Trading Logs",
-    desc: "Every custom deployment comes with a full institutional audit trail and detailed performance reports."
+    desc: "Every bespoke software build is delivered with complete audit trails and performance logs."
   }
 ];
 
@@ -45,8 +45,8 @@ export const CustomAlgoTeam = () => {
               <span className="text-white/20">Senior Algo Team.</span>
             </h2>
             
-            <p className="text-white/60 text-xl leading-relaxed mb-12 max-w-xl">
-              We house Asia's largest and most senior team of algorithmic architects. Whether you require a proprietary HFT bridge or a specialized custom execution framework, our engineers are ready to build for your desk.
+            <p className="text-white/40 text-base leading-relaxed mb-12 max-w-xl">
+              We house Asia's largest and most senior team of algorithmic architects. Whether you require a proprietary ECN HFT bridge or a custom execution framework, our engineers build for your desk.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">

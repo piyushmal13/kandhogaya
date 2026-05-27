@@ -78,22 +78,22 @@ export const PerformanceHistory = () => {
     {
       step: "01",
       title: "Logic Consultation",
-      desc: "Our quantitative desk reviews your unique trading strategy and maps it to institutional quantitative specifications."
+      desc: "Review of your proprietary strategy to draft professional technical specifications."
     },
     {
       step: "02",
       title: "Backtest & Optimize",
-      desc: "Stress-test strategy parameters across 15+ years of raw historical tick-data under severe spread conditions."
+      desc: "Stress-test parameters across 15+ years of historical tick-data under high volatility spreads."
     },
     {
       step: "03",
       title: "High-Precision Coding",
-      desc: "Compile strict, clean, micro-second execution speed code using optimized C++, MQL5, or PineScript."
+      desc: "Compile clean, sub-millisecond execution code in optimized C++, MQL5, or PineScript."
     },
     {
       step: "04",
       title: "Cryptographic Audit",
-      desc: "Encrypt visual logic and securely deploy the compiled lock-proof binary file directly to your MT5/TradingView terminal."
+      desc: "Encrypt visual logic and securely deliver lock-proof compiled binaries."
     }
   ];
 

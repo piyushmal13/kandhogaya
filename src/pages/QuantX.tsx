@@ -283,7 +283,7 @@ export const QuantX = () => {
             <IntelligenceLayer 
               number="1"
               title="Regime Classification"
-              description="Identifies current structural environments. Dynamic models classify whether the asset is trending, mean-reverting, or undergoing range compression and institutional liquidity sweeps."
+              description="Dynamic ATR volatility indicators classify whether market conditions are trending, mean-reverting, or undergoing liquidity sweeps."
               inputs={["Adaptive Volatility (ATR)", "Market Volatility Index", "Liquidity Pool Clustery"]}
               outputs="MARKET REGIME MATRIX"
               icon={Activity}
@@ -292,7 +292,7 @@ export const QuantX = () => {
             <IntelligenceLayer 
               number="2"
               title="Tactical Engine Selector"
-              description="Dynamically routes orders and active strategies by selecting the exact high-fidelity algorithm designed for the detected market regime."
+              description="Selects and routes executed trade signals to the exact compiled algorithm built for the active market regime."
               inputs={["Trend-Following Modules", "High-Spread Scalping Logic", "Order Block Arbitrage"]}
               outputs="STRATEGY ALLOCATION"
               icon={Layers}
@@ -301,7 +301,7 @@ export const QuantX = () => {
             <IntelligenceLayer 
               number="3"
               title="Precision Probability Scoring"
-              description="Evaluates execution setups numerically. Each market edge triggers only when multiple confirming filters exceed a strict mathematical score threshold."
+              description="Calculates ECN execution setups. Orders trigger only when multiple confirming volume matrices exceed threshold boundaries."
               inputs={["Order Flow Ingestion", "Volatilty Compression Profile", "High-Precision Filters"]}
               outputs="CONFIDENCE RATINGS"
               icon={Target}
@@ -310,7 +310,7 @@ export const QuantX = () => {
             <IntelligenceLayer 
               number="4"
               title="Capital Protection Protocol"
-              description="Enforces strict risk management parameters automatically. System calculates position size dynamically based on your account size and the volatility risk signature."
+              description="Hardcoded drawdown cutoffs. Dynamically calculates contract sizes based on account metrics and ATR boundaries."
               inputs={["Absolute Capital Limits", "ATR Standard Risk Scaling", "Real-Time Drawdown Tracking"]}
               outputs="HARD LIMIT CONTROL"
               icon={ShieldAlert}
@@ -320,7 +320,7 @@ export const QuantX = () => {
               <IntelligenceLayer 
                 number="5"
                 title="Continuous Recursive Recalibration"
-                description="The systematic learning layer. Recalibrates thresholds hourly using historical feedback models to prevent algorithmic drift and adapt continuously to active price shifts."
+                description="Recalibrates execution boundaries using feed-forward drift logs to prevent decay and adapt to dynamic spreads."
                 inputs={["MFE Yield Tracking", "Microstructure Spread Profiling", "Historical Backtest Drift"]}
                 outputs="RECURSIVE FEEDBACK LOOP"
                 icon={Workflow}
