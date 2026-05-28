@@ -124,11 +124,12 @@ export const SessionBookingModal: React.FC<SessionBookingModalProps> = ({
                 <form onSubmit={handleSubmit} className="space-y-5">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div className="space-y-1.5">
-                      <label className="text-[9px] font-black uppercase tracking-widest text-white/30 ml-1">Operator Name</label>
+                      <label htmlFor="operator_name" className="text-[9px] font-black uppercase tracking-widest text-white/30 ml-1">Operator Name</label>
                       <div className="relative">
                         <User className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/10" />
                         <input
                           required
+                          id="operator_name"
                           type="text"
                           placeholder="Sender Identity"
                           className="w-full bg-black/60 border border-white/5 rounded-2xl py-3 sm:py-4 pl-12 pr-4 text-white outline-none focus:border-[#8B5CF6]/50 focus:ring-1 focus:ring-[#8B5CF6]/40 transition-all font-mono text-xs"
@@ -138,11 +139,12 @@ export const SessionBookingModal: React.FC<SessionBookingModalProps> = ({
                       </div>
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-[9px] font-black uppercase tracking-widest text-white/30 ml-1">Signal Email</label>
+                      <label htmlFor="signal_email" className="text-[9px] font-black uppercase tracking-widest text-white/30 ml-1">Signal Email</label>
                       <div className="relative">
                         <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/10" />
                         <input
                           required
+                          id="signal_email"
                           type="email"
                           placeholder="Contact Protocol"
                           className="w-full bg-black/60 border border-white/5 rounded-2xl py-3 sm:py-4 pl-12 pr-4 text-white outline-none focus:border-[#8B5CF6]/50 focus:ring-1 focus:ring-[#8B5CF6]/40 transition-all font-mono text-xs"
@@ -154,9 +156,10 @@ export const SessionBookingModal: React.FC<SessionBookingModalProps> = ({
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-[9px] font-black uppercase tracking-widest text-white/30 ml-1">Target Allocation capital ($)</label>
+                    <label htmlFor="account_size_select" className="text-[9px] font-black uppercase tracking-widest text-white/30 ml-1">Target Allocation capital ($)</label>
                     <select
                       required
+                      id="account_size_select"
                       className="w-full bg-black/60 border border-white/5 rounded-2xl py-3 sm:py-4 px-5 text-white outline-none focus:border-[#8B5CF6]/50 focus:ring-1 focus:ring-[#8B5CF6]/40 transition-all font-mono text-xs appearance-none"
                       value={formData.account_size}
                       onChange={(e) => setFormData({ ...formData, account_size: e.target.value })}
@@ -170,9 +173,10 @@ export const SessionBookingModal: React.FC<SessionBookingModalProps> = ({
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-[9px] font-black uppercase tracking-widest text-white/30 ml-1">Objective Protocol Specification</label>
+                    <label htmlFor="objective_protocol" className="text-[9px] font-black uppercase tracking-widest text-white/30 ml-1">Objective Protocol Specification</label>
                     <textarea
                       required
+                      id="objective_protocol"
                       rows={3}
                       placeholder="Outline your algorithmic execution objective or macro briefing request..."
                       className="w-full bg-black/60 border border-white/5 rounded-2xl py-3 sm:py-4 px-5 text-white outline-none focus:border-[#8B5CF6]/50 focus:ring-1 focus:ring-[#8B5CF6]/40 transition-all font-mono text-xs resize-none"
