@@ -40,7 +40,7 @@ interface AuthContextValue {
   entitlements: Entitlement[];
   access: ReturnType<typeof getAccess>;
   login: (email: string, password: string) => Promise<AuthResult>;
-  signup: (email: string, password: string) => Promise<SignupResult>;
+  signup: (email: string, password: string, fullName: string, phone: string) => Promise<SignupResult>;
   logout: () => Promise<void>;
   signInWithOtp: (email: string) => Promise<AuthResult>;
   verifyOtp: (email: string, token: string) => Promise<OtpVerifyResult>;
@@ -217,7 +217,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             setSession(newSession);
           }
           
-          tracker.track(event === 'SIGNED_IN' ? "login" : "session_restore", { protocol: "institutional" });
+          tracker.track("login", { protocol: "institutional" });
           await fetchUserProfile(userId, newSession.user.email || undefined);
         }
 
@@ -280,14 +280,33 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return error ? { success: false, error: error.message } : { success: true };
   }, []);
 
-  const signup = useCallback(async (email: string, password: string) => {
+  const signup = useCallback(async (email: string, password: string, fullName: string, phone: string) => {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: { emailRedirectTo: `${globalThis.location.origin}/dashboard` },
+      options: {
+        emailRedirectTo: `${globalThis.location.origin}/dashboard`,
+        data: {
+          full_name: fullName,
+          phone: phone,
+        }
+      },
     });
     if (!error && data.user) {
-      tracker.track("signup", { email });
+      tracker.track("signup", { email, full_name: fullName, phone });
+      
+      // Perform explicit DB insert to public.users to ensure zero latency sync
+      try {
+        await supabase.from("users").upsert({
+          id: data.user.id,
+          email,
+          full_name: fullName,
+          phone: phone,
+          role: "user",
+        });
+      } catch (dbErr) {
+        console.warn("Direct users profile upsert failed, relying on trigger:", dbErr);
+      }
     }
     return error ? { success: false, error: error.message } : { success: true, needsEmailConfirmation: !data.session };
   }, []);
