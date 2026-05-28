@@ -6,12 +6,68 @@ import {
   ShieldCheck, BarChart3, Check, Calendar, Clock, 
   Lock, HeartHandshake, User, Send, ChevronRight
 } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 import { PageMeta } from "../components/site/PageMeta";
 import { useAuth } from "../contexts/AuthContext";
 import { useToast } from "../contexts/ToastContext";
 import { supabase } from "../lib/supabase";
 import { useWebinar } from "../hooks/useWebinars";
 import { VideoPlayer } from "../components/institutional/VideoPlayer";
+
+// ── FLOATING LIVE COUNTDOWN TIMER ──
+const WebinarCountdown = ({ dateTime }: { dateTime: string }) => {
+  const [timeLeft, setTimeLeft] = useState<{ days: number; hours: number; minutes: number; seconds: number } | null>(null);
+
+  useEffect(() => {
+    const calculateTime = () => {
+      const difference = +new Date(dateTime) - +new Date();
+      if (difference <= 0) {
+        setTimeLeft(null);
+        return;
+      }
+
+      setTimeLeft({
+        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+        minutes: Math.floor((difference / 1000 / 60) % 60),
+        seconds: Math.floor((difference / 1000) % 60),
+      });
+    };
+
+    calculateTime();
+    const interval = setInterval(calculateTime, 1000);
+    return () => clearInterval(interval);
+  }, [dateTime]);
+
+  if (!timeLeft) {
+    return (
+      <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-center">
+        <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest animate-pulse block">
+          Session is Currently Live
+        </span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/5 space-y-3">
+      <span className="text-[9px] font-black text-gray-500 uppercase tracking-widest block text-center">Session Countdown</span>
+      <div className="grid grid-cols-4 gap-2 text-center">
+        {[
+          { label: "Days", value: timeLeft.days },
+          { label: "Hours", value: timeLeft.hours },
+          { label: "Mins", value: timeLeft.minutes },
+          { label: "Secs", value: timeLeft.seconds }
+        ].map((item) => (
+          <div key={item.label} className="p-2 rounded-xl bg-black/40 border border-white/5">
+            <div className="text-base sm:text-lg font-black text-emerald-400 font-mono leading-none">{String(item.value).padStart(2, '0')}</div>
+            <div className="text-[8px] font-bold text-gray-500 uppercase tracking-wider mt-1">{item.label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 // Extend representation of Webinar for co-branding support
 interface ExtendedWebinar {
@@ -43,6 +99,7 @@ interface ExtendedWebinar {
 export const WebinarDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { data: webinarData, isLoading: loading } = useWebinar(id);
   const webinar = webinarData as ExtendedWebinar | undefined;
 
@@ -151,6 +208,10 @@ export const WebinarDetail = () => {
         .eq('id', id);
 
       if (error) throw error;
+      
+      // Invalidate query to trigger live refresh
+      queryClient.invalidateQueries({ queryKey: ['webinar', id] });
+
       success("Question dispatched to research desk.");
       setQuestionText("");
       webinar.q_and_a = newQA;
@@ -187,6 +248,10 @@ export const WebinarDetail = () => {
           .update({ registration_count: (webinar.registration_count || 0) + 1 })
           .eq("id", id);
       }
+
+      // Invalidate queries to trigger instant reactive state changes
+      queryClient.invalidateQueries({ queryKey: ['webinar', id] });
+      queryClient.invalidateQueries({ queryKey: ['webinars'] });
 
       setIsRegistered(true);
       setRealRegCount(prev => prev + 1);
@@ -594,6 +659,11 @@ export const WebinarDetail = () => {
                  <ShieldCheck className="w-48 h-48 text-emerald-500" />
               </div>
               
+              {/* Dynamic Countdown Timer */}
+              {(isUpcoming || isLive) && (
+                <WebinarCountdown dateTime={webinar.date_time} />
+              )}
+
               {isUpcoming || isLive ? (
                 <>
                   {!isRegistered ? (
@@ -653,24 +723,33 @@ export const WebinarDetail = () => {
                   ) : (
                     // TICKETING AND CLEARANCE CONFIRMED STATE
                     <div className="space-y-6 text-center py-6">
-                      <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto mb-4 animate-pulse">
-                         <ShieldCheck className="w-8 h-8 text-emerald-400" />
+                      <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto mb-4">
+                         <Check className="w-8 h-8 text-emerald-400" />
                       </div>
                       <div className="space-y-2">
                          <span className="text-[9px] font-black text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full uppercase tracking-wider inline-block">
-                            Clearance Active
+                            Registration Confirmed
                          </span>
-                         <h3 className="text-xl font-black text-white uppercase">Seat Fully Claimed</h3>
-                         <p className="text-xs text-white/35 leading-normal">
-                            Cryptographic keys issued. We have assigned a node and will notify you when transmission starts.
+                         <h3 className="text-xl font-black text-white uppercase">Seat Secured</h3>
+                         <p className="text-xs text-white/40 leading-relaxed">
+                            Your seat is successfully reserved. Access details and the streaming link have been registered to your email.
                          </p>
                       </div>
 
-                      <div className="p-4 bg-white/[0.02] border border-white/5 rounded-2xl text-left space-y-2 font-mono text-[9px]">
-                         <div className="text-gray-500 uppercase font-black">Ledger Details:</div>
-                         <div className="text-white/60">TICKET_ID: {id?.slice(0, 16).toUpperCase()}</div>
-                         <div className="text-white/60">ROLE_TIER: Co-Branded Clearance</div>
-                         <div className="text-white/60">NODE_STATUS: Sync Complete</div>
+                      <div className="p-4 bg-white/[0.02] border border-white/5 rounded-2xl text-left space-y-2.5 text-[10px]">
+                         <div className="text-gray-500 font-bold uppercase tracking-wider text-[9px]">Session Clearance Profile:</div>
+                         <div className="text-white/60 flex justify-between">
+                           <span className="text-white/30">Cleared Client:</span>
+                           <span className="font-mono">{regName || user?.email}</span>
+                         </div>
+                         <div className="text-white/60 flex justify-between">
+                           <span className="text-white/30">Schedule:</span>
+                           <span>{new Date(webinar.date_time).toLocaleDateString(undefined, { dateStyle: 'medium' })}</span>
+                         </div>
+                         <div className="text-white/60 flex justify-between">
+                           <span className="text-white/30">Assigned Speaker:</span>
+                           <span>{webinar.speaker_name}</span>
+                         </div>
                       </div>
                     </div>
                   )}
@@ -702,19 +781,19 @@ export const WebinarDetail = () => {
 
               {/* General Technical Specifications block */}
               <div className="pt-6 border-t border-white/5 space-y-4">
-                 <h4 className="text-[10px] font-black text-white uppercase tracking-widest italic">Technical Briefing Specs</h4>
-                 <div className="space-y-3 font-mono text-[9px] text-white/30 uppercase tracking-wider">
+                 <h4 className="text-[10px] font-black text-white uppercase tracking-widest italic">Webinar Specifications</h4>
+                 <div className="space-y-3 text-[10px] text-white/40 uppercase tracking-wider">
                     <div className="flex justify-between">
-                       <span>Clearance Level</span>
-                       <span className="text-emerald-400">Standard Desk</span>
+                       <span className="text-white/20 font-bold">Session Format</span>
+                       <span className="text-emerald-400 font-bold">Online Live Stream</span>
                      </div>
                      <div className="flex justify-between">
-                       <span>Max Allocation</span>
-                       <span>{webinar.max_attendees} Slots</span>
+                       <span className="text-white/20 font-bold">Audience Capacity</span>
+                       <span>{webinar.max_attendees} Participants</span>
                      </div>
                      <div className="flex justify-between">
-                       <span>Compliant Risk Code</span>
-                       <span>IFX-MACRO-V2</span>
+                       <span className="text-white/20 font-bold">Q&amp;A Session</span>
+                       <span>Interactive Open Floor</span>
                      </div>
                   </div>
                </div>

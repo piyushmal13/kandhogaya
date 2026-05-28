@@ -295,6 +295,27 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (!error && data.user) {
       tracker.track("signup", { email, full_name: fullName, phone });
       
+      // Resolve referral code during explicit sign up insert to prevent RLS/Trigger sync lag
+      let referredBy: string | null = null;
+      const refCode = localStorage.getItem('ifx_referral_code');
+      if (refCode) {
+        try {
+          const { data: codeData } = await supabase
+            .from('affiliate_codes')
+            .select('user_id')
+            .eq('code', refCode)
+            .maybeSingle();
+            
+          if (codeData) {
+            referredBy = codeData.user_id;
+            tracker.track("referral_resolved", { code: refCode, agent_id: referredBy });
+            localStorage.removeItem('ifx_referral_code');
+          }
+        } catch (err) {
+          console.warn("Direct signup referral resolution failed:", err);
+        }
+      }
+
       // Perform explicit DB insert to public.users to ensure zero latency sync
       try {
         await supabase.from("users").upsert({
@@ -303,6 +324,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           full_name: fullName,
           phone: phone,
           role: "user",
+          referred_by: referredBy,
         });
       } catch (dbErr) {
         console.warn("Direct users profile upsert failed, relying on trigger:", dbErr);

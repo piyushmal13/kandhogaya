@@ -57,13 +57,12 @@ class Tracker {
           path: globalThis.window === undefined ? '' : globalThis.window.location.pathname,
           referrer: globalThis.document === undefined ? '' : globalThis.document.referrer,
           timestamp
-        },
-        event_at: timestamp
+        }
       };
 
-      // 2. Async Persistence (Standardized table: user_events)
+      // 2. Async Persistence (Standardized table: analytics_events)
       supabase
-        .from('user_events')
+        .from('analytics_events')
         .insert([payload])
         .then(({ error }) => {
            if (error) console.warn(`[CRM] Behavioral Error (${eventType}):`, error.message);
@@ -100,7 +99,7 @@ class Tracker {
     
     // Retroactive intelligence: link anon journey to this user
     supabase
-      .from('user_events')
+      .from('analytics_events')
       .update({ user_id: userId })
       .eq('anon_id', this.anonId)
       .is('user_id', null)
