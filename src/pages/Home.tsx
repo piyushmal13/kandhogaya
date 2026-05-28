@@ -28,16 +28,16 @@ const Home = () => {
   return (
     <>
       <PageMeta
-        title="Institutional Algorithmic Research & Education"
-        description="Asia's #1 Institutional Research Desk. Professional quantitative analysis, macro intelligence, and algorithmic education for modern market participants."
+        title="Systematic Algorithmic EA Deployment Desk"
+        description="Elite B2B institutional systematic algorithmic trading and Expert Advisor (EA) deployment desk. Verify low-latency NY4 server telemetry and deploy robust MT5 models."
         path="/"
         keywords={[
           "IFX Trades",
-          "institutional forex research",
+          "institutional forex algorithms",
           "quantitative analysis Dubai",
-          "macro research India",
-          "professional trader infrastructure",
-          "master terminal training",
+          "MT5 expert advisors India",
+          "low latency VPS co-location",
+          "algorithmic software desk",
         ]}
       />
 
