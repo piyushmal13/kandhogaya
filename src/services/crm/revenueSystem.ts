@@ -19,11 +19,33 @@ export const revenueSystem = {
       .eq('user_id', agentId)
       .maybeSingle();
 
-    let percentage = 10.00; // default 10%
+    // Fetch global affiliate settings from feature_flags
+    let defaultRate = 10.00;
+    let threshold = 4;
+    let escalatedRate = 20.00;
+
+    try {
+      const { data: flag } = await publicSupabase
+        .from('feature_flags')
+        .select('value, enabled')
+        .eq('key', 'affiliate_settings')
+        .maybeSingle();
+
+      if (flag && flag.enabled && flag.value) {
+        const val = flag.value as any;
+        defaultRate = Number(val.default_rate) || 10.00;
+        threshold = Number(val.threshold) || 4;
+        escalatedRate = Number(val.escalated_rate) || 20.00;
+      }
+    } catch (err) {
+      console.warn("Failed to fetch custom affiliate settings:", err);
+    }
+
+    let percentage = defaultRate;
     let referralCode = affiliate?.code || null;
 
     if (affiliate) {
-      percentage = Number(affiliate.commission_rate) || 10.00;
+      percentage = Number(affiliate.commission_rate) || defaultRate;
     } else {
       // Fallback: Check if they are in agent_accounts
       const { data: agent } = await publicSupabase
@@ -38,7 +60,7 @@ export const revenueSystem = {
     }
 
     // 2. Automated threshold scaling rule:
-    // If they have made >4 sales in the current month, scale their rate to 20% dynamically!
+    // If they have made sales in the current month exceeding the threshold, scale rate dynamically!
     try {
       const now = new Date();
       const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
@@ -49,15 +71,15 @@ export const revenueSystem = {
         .eq('agent_id', agentId)
         .gte('created_at', firstDayOfMonth);
 
-      if (count && count >= 4) {
-        percentage = 20.00; // Dynamic scale to 20%
-        console.log(`[CRM Commission Engine]: Escalated agent ${agentId} rate to 20% due to active performance.`);
+      if (count && count >= threshold) {
+        percentage = escalatedRate; // Dynamic scale to escalated bonus rate
+        console.log(`[CRM Commission Engine]: Escalated agent ${agentId} rate to ${escalatedRate}% due to active performance (${count} sales).`);
         
         // Persist the escalated rate to their affiliate_codes profile
         if (referralCode) {
           await publicSupabase
             .from('affiliate_codes')
-            .update({ commission_rate: 20.00 })
+            .update({ commission_rate: escalatedRate })
             .eq('user_id', agentId);
         }
       }

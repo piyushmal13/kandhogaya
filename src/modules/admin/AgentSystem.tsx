@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { 
   Trophy, TrendingUp, Wallet, 
-  User, RefreshCw, Search
+  User, RefreshCw, Search, Settings
 } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { cn } from "../../utils/cn";
@@ -10,7 +10,7 @@ import { useToast } from "../../contexts/ToastContext";
 /**
  * Institutional Affiliate Management Terminal
  * Allows administrators to monitor partner performance, audit commissions,
- * and finalize settlement signals with cryptographic certainty.
+ * manage commission rates, and update global dynamic tier configurations.
  */
 export const AgentSystem = () => {
   const { success, error: toastError } = useToast();
@@ -18,6 +18,13 @@ export const AgentSystem = () => {
   const [commissions, setCommissions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  
+  // Global Dynamic Tier Settings
+  const [globalSettings, setGlobalSettings] = useState({
+    default_rate: 10,
+    threshold: 4,
+    escalated_rate: 20
+  });
 
   const fetchAffiliateData = async () => {
     setLoading(true);
@@ -48,6 +55,22 @@ export const AgentSystem = () => {
         ...comm,
         agent_code: codes?.find(c => c.user_id === comm.agent_id)?.code || 'Direct'
       }));
+
+      // 3. Fetch Global Settings from Feature Flags
+      const { data: flag } = await supabase
+        .from('feature_flags')
+        .select('value')
+        .eq('key', 'affiliate_settings')
+        .maybeSingle();
+
+      if (flag?.value) {
+        const val = flag.value as any;
+        setGlobalSettings({
+          default_rate: Number(val.default_rate) || 10,
+          threshold: Number(val.threshold) || 4,
+          escalated_rate: Number(val.escalated_rate) || 20
+        });
+      }
 
       setAffiliates(codes || []);
       setCommissions(enhancedComms);
@@ -93,6 +116,41 @@ export const AgentSystem = () => {
     }
   };
 
+  const saveGlobalSettings = async () => {
+    try {
+      // Fetch key first to see if it exists
+      const { data: existingFlag } = await supabase
+        .from('feature_flags')
+        .select('id')
+        .eq('key', 'affiliate_settings')
+        .maybeSingle();
+
+      if (existingFlag) {
+        const { error } = await supabase
+          .from('feature_flags')
+          .update({
+            value: globalSettings,
+            enabled: true
+          })
+          .eq('key', 'affiliate_settings');
+        if (error) throw error;
+      } else {
+        const { error } = await supabase
+          .from('feature_flags')
+          .insert({
+            key: 'affiliate_settings',
+            value: globalSettings,
+            enabled: true
+          });
+        if (error) throw error;
+      }
+      
+      success("Global Affiliate escalation settings updated!");
+    } catch (err: any) {
+      toastError(err.message);
+    }
+  };
+
   const filteredAffiliates = affiliates.filter(a => 
     a.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
     a.users?.email?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -125,7 +183,56 @@ export const AgentSystem = () => {
         </div>
       </div>
 
-      {/* 2. Top Performers Matrix */}
+      {/* 2. Global Tier Parameters Management */}
+      <div className="p-8 bg-zinc-900 border border-white/5 rounded-[40px] space-y-6 relative overflow-hidden">
+         <div className="absolute top-0 right-0 p-10 opacity-5 pointer-events-none">
+            <Settings size={120} className="text-emerald-500" />
+         </div>
+         <div className="flex items-center gap-3 relative z-10">
+            <Settings className="w-5 h-5 text-emerald-500" />
+            <h3 className="text-xs font-black text-white uppercase tracking-widest italic">Global Affiliate Dynamic Tier Rules</h3>
+         </div>
+         <p className="text-xs text-white/40 max-w-2xl leading-relaxed">
+            Configure default and escalated settings below. When an affiliate generates sales above the threshold, their commission rate will automatically escalate to the bonus rate.
+         </p>
+         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+            <div className="space-y-2">
+               <label className="text-[9px] font-black text-gray-500 uppercase tracking-widest block">Default Base Rate (%)</label>
+               <input 
+                 type="number"
+                 value={globalSettings.default_rate}
+                 onChange={(e) => setGlobalSettings({...globalSettings, default_rate: Number(e.target.value)})}
+                 className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-xs font-mono text-white outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/40"
+               />
+            </div>
+            <div className="space-y-2">
+               <label className="text-[9px] font-black text-gray-500 uppercase tracking-widest block">Escalation Threshold (Sales)</label>
+               <input 
+                 type="number"
+                 value={globalSettings.threshold}
+                 onChange={(e) => setGlobalSettings({...globalSettings, threshold: Number(e.target.value)})}
+                 className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-xs font-mono text-white outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/40"
+               />
+            </div>
+            <div className="space-y-2">
+               <label className="text-[9px] font-black text-gray-500 uppercase tracking-widest block">Escalated Bonus Rate (%)</label>
+               <input 
+                 type="number"
+                 value={globalSettings.escalated_rate}
+                 onChange={(e) => setGlobalSettings({...globalSettings, escalated_rate: Number(e.target.value)})}
+                 className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-xs font-mono text-white outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/40"
+               />
+            </div>
+         </div>
+         <button 
+           onClick={saveGlobalSettings}
+           className="px-6 py-3.5 bg-emerald-500 text-black text-[9px] font-black uppercase tracking-widest rounded-xl hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/20"
+         >
+            Save Parameter Matrix
+         </button>
+      </div>
+
+      {/* 3. Top Performers Matrix */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
          <div className="lg:col-span-2 space-y-6">
             <h3 className="text-xs font-black text-gray-400 uppercase tracking-widest italic flex items-center gap-3">
@@ -185,7 +292,7 @@ export const AgentSystem = () => {
             </div>
          </div>
 
-         {/* 3. Settlement Audit queue */}
+         {/* 4. Settlement Audit queue */}
          <div className="bg-[var(--raised)] border border-white/5 rounded-[48px] p-10 flex flex-col">
             <h3 className="text-xs font-black text-gray-400 uppercase tracking-widest italic mb-8 flex items-center gap-3">
                <Wallet className="w-4 h-4 text-emerald-500" />
@@ -224,7 +331,7 @@ export const AgentSystem = () => {
                                onClick={() => approvePayout(comm.id)}
                                className="px-6 py-3 bg-emerald-500 text-black text-[9px] font-black uppercase tracking-widest rounded-xl hover:scale-105 transition-all shadow-lg shadow-emerald-500/10"
                              >
-                               Finalize
+                                Finalize
                              </button>
                           )}
                        </div>

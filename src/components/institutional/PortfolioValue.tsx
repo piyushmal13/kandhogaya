@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'motion/react';
 import { TrendingUp, ShieldCheck, Activity, Target, Zap, ShieldAlert, Cpu } from 'lucide-react';
 import { usePortfolioData } from '@/hooks/usePortfolioData';
@@ -8,12 +8,11 @@ import { useNavigate } from 'react-router-dom';
 /**
  * PortfolioValue — User-Specific Equity Display
  * Shows the authenticated user's actual portfolio balance and performance.
- * Upgraded to Royale Noir Institutional Dashboard Terminal with high-density glowing SVG.
+ * Completely pure and clean, aligned with client's real-time data.
  */
 export function PortfolioValue() {
   const { data: portfolio, isLoading } = usePortfolioData();
   const navigate = useNavigate();
-  const [demoMode, setDemoMode] = useState(false);
 
   if (isLoading) {
     return (
@@ -21,17 +20,15 @@ export function PortfolioValue() {
     );
   }
 
-  // Fallback to beautiful simulation data if user doesn't have live capital yet, with a gorgeous toggle!
-  const hasLiveCapital = (portfolio?.total ?? 0) > 0;
-  const isDemoActive = demoMode || !hasLiveCapital;
-
-  const total = isDemoActive ? 124580.42 : (portfolio?.total ?? 0);
-  const change = isDemoActive ? 14.85 : (portfolio?.change ?? 0);
-  const activeLicenses = isDemoActive ? 3 : (portfolio?.activeLicenses ?? 0);
-  const lastUpdated = isDemoActive ? new Date().toISOString() : (portfolio?.lastUpdated ?? new Date().toISOString());
+  const total = portfolio?.total ?? 0;
+  const change = portfolio?.change ?? 0;
+  const activeLicenses = portfolio?.activeLicenses ?? 0;
+  const lastUpdated = portfolio?.lastUpdated ?? new Date().toISOString();
 
   // Generate SVG path for a premium, smooth upward curve
-  const chartPath = "M 0 100 Q 60 70 120 85 T 240 30 T 360 40 T 480 10 T 600 5";
+  const chartPath = total > 0 
+    ? "M 0 100 Q 60 70 120 85 T 240 30 T 360 40 T 480 10 T 600 5" 
+    : "M 0 100 L 600 100"; // flat line if no capital
   const areaPath = `${chartPath} L 600 120 L 0 120 Z`;
 
   return (
@@ -41,14 +38,14 @@ export function PortfolioValue() {
       className="relative p-6 sm:p-10 rounded-[3rem] bg-gradient-to-br from-zinc-950 via-[#040608] to-black border border-white/10 backdrop-blur-3xl overflow-hidden group shadow-2xl space-y-8"
     >
       {/* Premium Strobe Lights */}
-      <div className="absolute -top-32 -right-32 w-80 h-80 bg-blue-500/10 rounded-full blur-[120px] group-hover:bg-blue-500/15 transition-all duration-1000 pointer-events-none" />
+      <div className="absolute -top-32 -right-32 w-80 h-80 bg-blue-500/10 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute inset-0 bg-gradient-to-b from-white/[0.01] to-transparent pointer-events-none" />
 
-      {/* Header and Telemetry Toggle */}
+      {/* Header */}
       <div className="relative z-10 flex flex-wrap justify-between items-center gap-4">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
-            <Activity className="w-4 h-4 animate-pulse" />
+            <Activity className="w-4 h-4" />
           </div>
           <div>
             <div className="flex items-center gap-2 text-white/40 text-[9px] font-black uppercase tracking-[0.3em]">
@@ -58,15 +55,6 @@ export function PortfolioValue() {
             <div className="text-[10px] text-gray-500 font-mono">NODE: IFX_CAPITAL_DESK_v4</div>
           </div>
         </div>
-
-        {hasLiveCapital && (
-          <button
-            onClick={() => setDemoMode(!demoMode)}
-            className="px-3.5 py-1.5 rounded-full border border-white/10 bg-white/[0.02] text-[8px] font-black uppercase tracking-widest text-white/40 hover:text-white hover:border-white/20 transition-all cursor-pointer"
-          >
-            {isDemoActive ? "Switch to Live Node" : "Enable Simulation View"}
-          </button>
-        )}
       </div>
 
       {/* Main balance and chart */}
@@ -82,13 +70,14 @@ export function PortfolioValue() {
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest bg-blue-500/10 text-blue-400 border border-blue-500/20">
-              <TrendingUp className="w-3.5 h-3.5 animate-bounce" />
-              <span>+{change}% Monthly Yield</span>
-            </div>
-            {isDemoActive && (
-              <span className="px-2.5 py-1 bg-amber-500/10 border border-amber-500/20 rounded-xl text-[8px] font-black text-amber-500 uppercase tracking-widest italic animate-pulse">
-                Simulation Feed
+            {total > 0 ? (
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                <TrendingUp className="w-3.5 h-3.5 animate-bounce" />
+                <span>+{change}% Monthly Yield</span>
+              </div>
+            ) : (
+              <span className="px-3 py-1.5 bg-white/[0.03] border border-white/5 rounded-xl text-[8px] font-black text-gray-500 uppercase tracking-widest">
+                No active allocation deployed
               </span>
             )}
           </div>
@@ -124,7 +113,7 @@ export function PortfolioValue() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-white/5 relative z-10">
         {[
           { label: "Active Licenses", value: activeLicenses > 0 ? `${activeLicenses} Engines` : "0 Systems", icon: Target, desc: "Settle direct allocations" },
-          { label: "Drawdown Shield", value: "4.5% Cap Active", icon: ShieldAlert, desc: "Pre-packaged protection", color: "text-blue-400" },
+          { label: "Drawdown Shield", value: total > 0 ? "4.5% Cap Active" : "Shield Standby", icon: ShieldAlert, desc: "Pre-packaged protection", color: "text-blue-400" },
           { label: "Broker Leverage Limit", value: "1:100 Max", icon: Cpu, desc: "Capital control threshold" },
           { label: "NY4 Aggregation", value: "<12ms Speed", icon: Zap, desc: "Co-location fiber line", color: "text-cyan-400" },
         ].map((item, idx) => (
@@ -166,7 +155,7 @@ export function PortfolioValue() {
             onClick={() => navigate('/marketplace')}
             trackingEvent="portfolio_marketplace"
           >
-            {hasLiveCapital ? 'Manage Portfolio' : 'Deploy Algorithmic Engine'}
+            {total > 0 ? 'Manage Portfolio' : 'Deploy Algorithmic Engine'}
           </EliteButton>
         </div>
       </div>
