@@ -52,6 +52,8 @@ const AffiliateHub = lazy(() => import("./pages/AffiliateHub").then(m => ({ defa
 const B2BLiquidity = lazy(() => import("./pages/B2BLiquidity").then(m => ({ default: m.B2BLiquidity })));
 const B2BWhiteLabel = lazy(() => import("./pages/B2BWhiteLabel").then(m => ({ default: m.B2BWhiteLabel })));
 
+import { LegacyRedirect } from "./components/ui/LegacyRedirect";
+
 const AnimatedRoutes = () => {
   const location = useLocation();
   return (
@@ -106,11 +108,17 @@ function AppContent() {
   const isPlainLayout = ['/login', '/dashboard', '/admin', '/agent'].some(path => location.pathname.startsWith(path)) || (location.pathname.startsWith('/affiliate') && !!user);
 
   if (isPlainLayout) {
-    return <AnimatedRoutes />;
+    return (
+      <>
+        <LegacyRedirect />
+        <AnimatedRoutes />
+      </>
+    );
   }
 
   return (
     <StandardLayout>
+      <LegacyRedirect />
       {/* <GlobalPromotionBanner /> - Deactivated per CEO's 'zero pop-up' directive */}
       <AnimatedRoutes />
       <NewsletterPopup />

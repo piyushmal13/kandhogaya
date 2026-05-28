@@ -1,57 +1,95 @@
-import { DashboardLayout } from '../components/institutional/DashboardLayout';
-import { EliteButton } from '../components/ui/Button';
-import { motion } from 'motion/react';
-import { AlertTriangle, Home } from 'lucide-react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'motion/react';
+import { Compass, BookOpen, Zap, ArrowRight } from 'lucide-react';
+import { PageMeta } from '../components/site/PageMeta';
+import { EliteButton } from '../components/ui/Button';
 
 /**
  * Institutional Error Surface (404 / 500).
- * High-authority fallback that maintains platform immersion.
+ * High-authority public page inspired by VT Markets design aesthetics.
+ * Elegant dark theme, glowing ambient backdrops, clean typography, and interactive navigation tiles.
  */
 export function InstitutionalError() {
   const navigate = useNavigate();
 
   return (
-    <DashboardLayout showBreadcrumb={false}>
-      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
-        <motion.div
-           initial={{ scale: 0.9, opacity: 0 }}
-           animate={{ scale: 1, opacity: 1 }}
-           className="space-y-8"
-        >
-          <div className="relative inline-flex">
-             <div className="absolute inset-0 blur-3xl bg-red-500/20 rounded-full" />
-             <div className="relative w-24 h-24 rounded-3xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-500">
-                <AlertTriangle className="w-12 h-12" />
-             </div>
-          </div>
-
-          <div className="space-y-4">
-            <h1 className="text-8xl font-black italic uppercase tracking-tighter text-white leading-none">
-               404 <span className="text-red-500">ERR</span>
-            </h1>
-            <p className="text-xl font-black text-white/40 uppercase tracking-[0.3em]">
-               Signal Lost. Cluster path not resolved.
-            </p>
-          </div>
-
-          <p className="max-w-md mx-auto text-[11px] font-medium text-white/20 uppercase tracking-[0.2em] leading-relaxed">
-             The requested node is currently offline or does not exist within the Elite grid. Verify your uplink parameters or return to the base omni-view.
-          </p>
-
-          <div className="pt-8">
-            <EliteButton 
-              onClick={() => navigate('/dashboard')}
-              className="px-10 py-5 bg-white text-black hover:bg-emerald-500 transition-all rounded-2xl"
-            >
-              <div className="flex items-center gap-3 font-black uppercase tracking-widest text-[11px]">
-                 <Home className="w-4 h-4" />
-                 Return to Base
-              </div>
-            </EliteButton>
-          </div>
-        </motion.div>
+    <div className="relative min-h-screen bg-[#020203] text-white flex items-center justify-center px-4 overflow-hidden pt-24 md:pt-32 pb-16">
+      {/* Background Ambience inspired by VT Markets */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden>
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[140%] h-[50%] bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.06)_0%,transparent_60%)] blur-3xl opacity-60" />
+        <div className="absolute bottom-0 right-0 w-[40%] h-[30%] bg-[radial-gradient(circle_at_bottom_right,rgba(6,182,212,0.04)_0%,transparent_70%)] blur-3xl" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:30px_30px] opacity-15" />
       </div>
-    </DashboardLayout>
+
+      <PageMeta
+        title="Page Not Found"
+        description="The requested page could not be located on IFX Trades. Return to our base omni-view or explore active strategies."
+        path="/404"
+        robots="noindex,follow"
+      />
+
+      <motion.div
+        initial={{ scale: 0.95, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        className="relative z-10 w-full max-w-xl text-center space-y-10"
+      >
+        <div className="relative inline-flex">
+          <div className="absolute inset-0 blur-3xl bg-emerald-500/10 rounded-full animate-pulse" />
+          <div className="relative w-20 h-20 rounded-2xl bg-emerald-500/5 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+            <Compass className="w-10 h-10" style={{ animation: 'spin 20s linear infinite' }} />
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <h1 className="text-7xl sm:text-8xl font-black italic uppercase tracking-tighter text-white leading-none">
+            404 <span className="text-emerald-500">Lost</span>
+          </h1>
+          <p className="text-lg sm:text-xl font-black text-white/40 uppercase tracking-[0.2em] font-sans">
+             This Route is Off the Grid
+          </p>
+          <p className="max-w-md mx-auto text-xs text-gray-400 leading-relaxed font-medium">
+             The page you are looking for has been relocated or does not exist. Explore our premier institutional algorithms, webinars, or platforms below.
+          </p>
+        </div>
+
+        {/* Cinematic Navigation Tiles inspired by VT Markets */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-lg mx-auto">
+          {[
+            { title: "Home Surface", path: "/", icon: Compass, desc: "Omni Overview" },
+            { title: "Masterclasses", path: "/webinars", icon: BookOpen, desc: "Trading Webinars" },
+            { title: "QuantX Algos", path: "/quantx", icon: Zap, desc: "Algorithmic Logic" }
+          ].map((item) => (
+            <button
+              key={item.title}
+              onClick={() => navigate(item.path)}
+              className="p-5 rounded-2xl bg-white/[0.01] border border-white/5 hover:border-emerald-500/30 hover:bg-white/[0.02] transition-all text-left flex flex-col justify-between h-28 group"
+            >
+              <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white/60 group-hover:text-emerald-400 transition-colors">
+                <item.icon className="w-4 h-4" />
+              </div>
+              <div>
+                <span className="text-[10px] font-black uppercase text-white block tracking-wider leading-none">{item.title}</span>
+                <span className="text-[8px] text-gray-500 uppercase tracking-widest block mt-1">{item.desc}</span>
+              </div>
+            </button>
+          ))}
+        </div>
+
+        <div className="pt-4">
+          <EliteButton
+            variant="gemini"
+            glowEffect={true}
+            size="lg"
+            onClick={() => navigate('/')}
+            className="px-10 uppercase tracking-widest font-black text-xs"
+          >
+            Go to Platform Home
+            <ArrowRight className="w-4 h-4 ml-2" />
+          </EliteButton>
+        </div>
+      </motion.div>
+    </div>
   );
 }
