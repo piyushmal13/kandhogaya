@@ -130,6 +130,10 @@ export interface Product {
   long_plan_offers: LongPlanOffer[]; // jsonb
   category?: string;
   supported_assets?: string[];
+  advanced_features?: {
+    terms_pdf_url?: string;
+    [key: string]: any;
+  };
   // joined via query
   product_variants?: ProductVariant[];
   reviews?: Review[];
@@ -214,6 +218,7 @@ export interface Blog {
       description?: string;
       tagline?: string;
     };
+    tags?: string[];
   };
   // joined via apiHandlers
   author?: {

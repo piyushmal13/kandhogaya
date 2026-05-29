@@ -28,7 +28,7 @@ const ScoreBadge = ({ score }: { score: number }) => {
 };
 
 export const LeadManager = () => {
-  const { data: leads, loading, error } = useRealtime<any>('leads', undefined, undefined, mapLead);
+  const { data: leads, loading } = useRealtime<any>('leads', undefined, undefined, mapLead);
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(0);
   

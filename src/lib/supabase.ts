@@ -6,7 +6,8 @@ const getSupabaseConfig = () => {
 
   if (typeof window !== "undefined") {
     // Client-side: route requests through Vercel proxy to conceal raw Supabase URL
-    injectedUrl = '/supabase-proxy';
+    // Ensure we use a fully-qualified URL to avoid "Failed to construct 'URL'" crash
+    injectedUrl = `${window.location.origin}/supabase-proxy`;
   }
 
   if (!injectedUrl || injectedUrl.includes('placeholder')) {

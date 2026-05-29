@@ -46,7 +46,7 @@ describe('Login Component', () => {
     expect(screen.getByPlaceholderText('name@company.com')).toBeInTheDocument();
   });
 
-  it('switches to magic link mode', async () => {
+  it('switches to sign up mode', async () => {
     render(
       <BrowserRouter>
         <ToastProvider>
@@ -58,13 +58,13 @@ describe('Login Component', () => {
     );
     
     await waitFor(() => {
-      expect(screen.getByText('Login with Magic Link (OTP)')).toBeInTheDocument();
+      expect(screen.getByText("Don't have an account? Sign Up")).toBeInTheDocument();
     });
     
-    const magicLinkBtn = screen.getByText('Login with Magic Link (OTP)');
-    fireEvent.click(magicLinkBtn);
+    const signUpBtn = screen.getByText("Don't have an account? Sign Up");
+    fireEvent.click(signUpBtn);
     
-    expect(screen.getByText('Send Magic Link / OTP')).toBeInTheDocument();
-    expect(screen.queryByPlaceholderText('••••••••')).not.toBeInTheDocument();
+    expect(screen.getByText('Already have an account? Sign In')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('John Doe')).toBeInTheDocument();
   });
 });

@@ -93,6 +93,9 @@ interface ExtendedWebinar {
     partner_name?: string;
     learning_points?: string[];
     author_bio?: string;
+    sponsors?: any[];
+    co_brand_active?: boolean;
+    sponsors_active?: boolean;
   };
 }
 
