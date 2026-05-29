@@ -1,8 +1,13 @@
 import { createClient } from '@supabase/supabase-js';
 
 const getSupabaseConfig = () => {
-  const injectedUrl = (globalThis as any)._SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL;
+  let injectedUrl = (globalThis as any)._SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL;
   const injectedKey = (globalThis as any)._SUPABASE_ANON_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+  if (typeof window !== "undefined") {
+    // Client-side: route requests through Vercel proxy to conceal raw Supabase URL
+    injectedUrl = '/supabase-proxy';
+  }
 
   if (!injectedUrl || injectedUrl.includes('placeholder')) {
     console.warn("⚠️ [INSTITUTIONAL DIAGNOSTIC]: Supabase credentials missing. Running in RESILIENCE MODE.");
@@ -64,7 +69,7 @@ export const safeQuery = async <T>(query: any): Promise<T | []> => {
 export const getSupabasePublicUrl = (bucket: string, path: string): string => {
   if (!path) return "";
   if (path.startsWith("http")) return path;
-  const bakedUrl = import.meta.env.VITE_SUPABASE_URL;
+  const bakedUrl = typeof window !== "undefined" ? '/supabase-proxy' : import.meta.env.VITE_SUPABASE_URL;
   return `${bakedUrl}/storage/v1/object/public/${bucket}/${path}`;
 };
 
