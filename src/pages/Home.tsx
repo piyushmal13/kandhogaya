@@ -10,6 +10,8 @@ import { PerformanceHistory } from "../components/home/PerformanceHistory";
 import { JourneySection } from "../components/home/JourneySection";
 import { CustomAlgoTeam } from "../components/home/CustomAlgoTeam";
 import { ConsultationSection } from "../components/home/ConsultationSection";
+import { TerminalShowcase } from "../components/home/TerminalShowcase";
+import { EliteSocialProof } from "../components/institutional/EliteSocialProof";
 
 const Home = () => {
   const [isBookingOpen, setBookingOpen] = useState(false);
@@ -50,6 +52,10 @@ const Home = () => {
 
         {/* L2: Partner Matrix & Authority (Dynamic integrations) */}
         <BrandAuthority />
+
+        {/* L2.5: Interactive Workstation Proof & WhatsApp Telemetry */}
+        <TerminalShowcase />
+        <EliteSocialProof />
 
         {/* L3: Operational Scope Pillars (What we actually do clearly explained) */}
         <OperationalPillars 

@@ -33,35 +33,35 @@ export const JourneySection = () => {
           </motion.div>
 
           {/* Timeline Surface */}
-          <div className="relative max-w-5xl mx-auto pl-8 md:pl-0">
-            {/* Center Line (Desktop) */}
-            <div className="absolute left-[8px] md:left-1/2 top-0 bottom-0 w-px bg-white/10 -translate-x-1/2" />
+          <div className="relative max-w-5xl mx-auto">
+            {/* Vertical Line */}
+            <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-px bg-white/10 -translate-x-1/2" />
 
-            <div className="space-y-24">
+            <div className="space-y-16 md:space-y-24">
               {MILESTONES.map((milestone, i) => (
                 <motion.div
                   key={i}
                   variants={itemVariants}
-                  className={`flex flex-col md:flex-row items-start md:items-center gap-12 ${
+                  className={`relative flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-12 pl-10 md:pl-0 ${
                     i % 2 === 0 ? "md:flex-row-reverse text-left md:text-right" : "text-left"
                   }`}
                 >
                   <div className="flex-1 w-full">
-                    <div className={`flex flex-col gap-4 ${i % 2 === 0 ? "md:items-end" : "md:items-start"}`}>
-                      <span className="text-5xl md:text-7xl font-black text-[#58F2B6]/20 font-mono tracking-tighter">
+                    <div className={`flex flex-col gap-2 md:gap-4 ${i % 2 === 0 ? "md:items-end" : "md:items-start"}`}>
+                      <span className="text-4xl md:text-7xl font-black text-[#58F2B6]/20 font-mono tracking-tighter">
                         {milestone.year}
                       </span>
-                      <h3 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tight">
+                      <h3 className="text-xl md:text-3xl font-black text-white uppercase tracking-tight">
                         {milestone.title}
                       </h3>
-                      <p className="text-[rgba(248,250,252,0.6)] text-lg leading-relaxed max-w-md">
+                      <p className="text-[rgba(248,250,252,0.6)] text-sm md:text-lg leading-relaxed max-w-md">
                         {milestone.desc}
                       </p>
                     </div>
                   </div>
 
                   {/* Marker Hook */}
-                  <div className="absolute left-[8px] md:left-1/2 w-4 h-4 rounded-full bg-[#58F2B6] border-4 border-[#020202] -translate-x-1/2 z-20 shadow-[0_0_15px_#58F2B6]" />
+                  <div className="absolute left-4 md:left-1/2 top-6 md:top-1/2 w-4 h-4 rounded-full bg-[#58F2B6] border-4 border-[#020202] -translate-x-1/2 -translate-y-1/2 z-20 shadow-[0_0_15px_#58F2B6]" />
 
                   <div className="flex-1 hidden md:block" />
                 </motion.div>
