@@ -112,7 +112,11 @@ export const BrandAuthority = () => {
                 key={partner.name} 
                 className="px-4 py-2.5 sm:px-6 sm:py-4 rounded-xl sm:rounded-[1.5rem] bg-white/[0.02] border border-white/[0.05] hover:border-blue-500/20 hover:bg-blue-500/[0.02] transition-all duration-500 flex items-center gap-2 sm:gap-3 group shadow-xl hover:scale-105"
               >
-                {partner.logo_url && partner.logo_url !== "" ? (
+                {partner.logo_svg ? (
+                  <div className="w-5 h-5 shrink-0 opacity-40 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    {partner.logo_svg}
+                  </div>
+                ) : partner.logo_url && partner.logo_url !== "" ? (
                   <img 
                     src={partner.logo_url} 
                     alt={partner.name} 
@@ -122,10 +126,6 @@ export const BrandAuthority = () => {
                       (e.currentTarget as HTMLElement).style.display = "none";
                     }}
                   />
-                ) : partner.logo_svg ? (
-                  <div className="w-5 h-5 shrink-0 opacity-40 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    {partner.logo_svg}
-                  </div>
                 ) : (
                   <span className="w-1.5 h-1.5 rounded-full bg-blue-500 group-hover:animate-pulse" />
                 )}
