@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { PageMeta } from "../components/site/PageMeta";
+import { educationalOrganizationSchema, websiteSchema } from "../utils/structuredData";
 
 // Institutional Components
 import { FortressHero } from "../components/home/FortressHero";
@@ -41,7 +42,12 @@ const Home = () => {
           "MT5 expert advisors India",
           "low latency VPS co-location",
           "algorithmic software desk",
+          "forex signals Dubai",
+          "best algorithmic trading course Dubai",
+          "quantitative systematic desk UAE",
+          "institutional VPS co-location Singapore"
         ]}
+        structuredData={[educationalOrganizationSchema(), websiteSchema()]}
       />
 
       <main>

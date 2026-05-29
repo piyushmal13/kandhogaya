@@ -3,9 +3,9 @@
   "version": 1,
   "allowedPaths": [
     {
-      "path": "c:\\Users\\Piyush\\kandhogaya",
+      "path": "c:\\Users\\Piyush\\kandhogaya-1",
       "allowReadWrite": true,
-      "description": "kandhogaya"
+      "description": "kandhogaya-1"
     }
   ],
   "commandDenyPatterns": [],

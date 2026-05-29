@@ -39,8 +39,8 @@ const SVG_MAP: Record<string, React.ReactNode> = {
 };
 
 const FALLBACK_PARTNERS: Partner[] = [
-  { name: "MetaTrader 5", category: "Trading Platform", logo_svg: SVG_MAP["metatrader 5"] },
-  { name: "TradingView", category: "Charting Terminal", logo_svg: SVG_MAP["tradingview"] },
+  { name: "MetaTrader 5", category: "Trading Platform", logo_url: "/metatrader5.png" },
+  { name: "TradingView", category: "Charting Terminal", logo_url: "/tradingview.png" },
   { name: "Vantage Markets", category: "Liquidity Bridge", logo_svg: SVG_MAP["vantage markets"] },
   { name: "VT Markets", category: "Execution Partner", logo_svg: SVG_MAP["vt markets"] },
   { name: "Markets4you", category: "CFD Provider", logo_svg: SVG_MAP["markets4you"] },
@@ -58,7 +58,7 @@ export const BrandAuthority = () => {
       try {
         const { data, error } = await supabase
           .from("banners")
-          .select("title, description, image_url")
+          .select("*")
           .eq("placement", "partner")
           .eq("is_active", true)
           .order("priority", { ascending: true });
@@ -66,13 +66,20 @@ export const BrandAuthority = () => {
         if (error) throw error;
 
         if (data && data.length > 0) {
-          const mapped: Partner[] = data.map(b => {
-            const name = b.title || "Integration Partner";
+          const mapped: Partner[] = data.map((b: any) => {
+            const name = b.title || b.name || "Integration Partner";
             const lowerName = name.toLowerCase().trim();
+            let logo_url = b.image_url || undefined;
+            if (lowerName === "metatrader 5" && !logo_url) {
+              logo_url = "/metatrader5.png";
+            }
+            if (lowerName === "tradingview" && !logo_url) {
+              logo_url = "/tradingview.png";
+            }
             return {
               name,
-              category: b.description || "Integration Partner",
-              logo_url: b.image_url || undefined,
+              category: b.description || b.html_content || "Integration Partner",
+              logo_url,
               logo_svg: SVG_MAP[lowerName] || undefined
             };
           });
@@ -112,20 +119,20 @@ export const BrandAuthority = () => {
                 key={partner.name} 
                 className="px-4 py-2.5 sm:px-6 sm:py-4 rounded-xl sm:rounded-[1.5rem] bg-white/[0.02] border border-white/[0.05] hover:border-blue-500/20 hover:bg-blue-500/[0.02] transition-all duration-500 flex items-center gap-2 sm:gap-3 group shadow-xl hover:scale-105"
               >
-                {partner.logo_svg ? (
-                  <div className="w-5 h-5 shrink-0 opacity-40 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    {partner.logo_svg}
-                  </div>
-                ) : partner.logo_url && partner.logo_url !== "" ? (
+                {partner.logo_url && partner.logo_url !== "" ? (
                   <img 
                     src={partner.logo_url} 
                     alt={partner.name} 
-                    className="h-6 sm:h-7 w-auto max-w-[100px] object-contain opacity-30 group-hover:opacity-100 filter brightness-0 invert transition-all duration-300" 
+                    className="h-6 sm:h-7 w-auto max-w-[120px] object-contain opacity-40 group-hover:opacity-100 transition-all duration-500 filter grayscale group-hover:grayscale-0" 
                     onError={(e) => {
                       // Fallback if image fails to load
                       (e.currentTarget as HTMLElement).style.display = "none";
                     }}
                   />
+                ) : partner.logo_svg ? (
+                  <div className="w-5 h-5 shrink-0 opacity-40 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    {partner.logo_svg}
+                  </div>
                 ) : (
                   <span className="w-1.5 h-1.5 rounded-full bg-blue-500 group-hover:animate-pulse" />
                 )}

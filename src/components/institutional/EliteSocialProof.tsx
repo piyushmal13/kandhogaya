@@ -36,6 +36,16 @@ export const EliteSocialProof = () => {
   const { isEnabled: isReviewsLive } = useFeatureFlag('institutional_reviews_live', true);
   const [members, setMembers] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [typingStatus, setTypingStatus] = useState("Active (1,420 online)");
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTypingStatus((prev) => 
+        prev === "Active (1,420 online)" ? "Tareq K. is typing..." : "Active (1,420 online)"
+      );
+    }, 4500);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     if (!isReviewsLive) {
@@ -69,7 +79,7 @@ export const EliteSocialProof = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
           
           {/* Left Column: Heading & Chat Grid (Takes 7 Cols on desktop) */}
-          <div className="lg:col-span-7 space-y-10">
+          <div className="lg:col-span-6 space-y-10">
             <div className="space-y-4">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[8px] font-black uppercase tracking-[0.25em] w-fit">
                  Global Network Validation
@@ -120,7 +130,14 @@ export const EliteSocialProof = () => {
                         {/* Timestamp and Blue Delivered ticks */}
                         <div className="flex items-center gap-1 justify-end mt-1 text-[8px] font-bold text-white/20 select-none">
                           {(() => {
-                            const relativeTimes = ["Just now", "4m ago", "18m ago", "45m ago", "1h ago", "3h ago"];
+                            const relativeTimes = [
+                              "2m ago",
+                              "1h ago",
+                              "5h ago",
+                              "1d ago",
+                              "3d ago",
+                              "5d ago"
+                            ];
                             return <span>{relativeTimes[idx % relativeTimes.length]}</span>;
                           })()}
                           <CheckCheck className="w-3 h-3 text-[#53bdeb]" />
@@ -132,107 +149,195 @@ export const EliteSocialProof = () => {
             </div>
           </div>
 
-          {/* Right Column: Live Rendered Interactive WhatsApp Mockup (Takes 5 Cols on desktop) */}
-          <div className="lg:col-span-5 relative">
+          {/* Right Column: Live Rendered Interactive WhatsApp Desktop mockup (Takes 6 Cols on desktop) */}
+          <div className="lg:col-span-6 relative w-full">
             <div className="absolute inset-0 bg-emerald-500/5 blur-[100px] rounded-full opacity-35" aria-hidden="true" />
             
             <motion.div 
               initial={{ opacity: 0, scale: 0.96 }}
               whileInView={{ opacity: 1, scale: 1 }}
-              className="relative w-full max-w-sm rounded-[2.5rem] overflow-hidden border border-white/10 bg-[#0b141a] shadow-2xl flex flex-col h-[520px] mx-auto"
+              viewport={{ once: true }}
+              className="relative w-full rounded-2xl overflow-hidden border border-white/10 bg-[#0c0f12] shadow-2xl flex flex-col h-[520px]"
             >
-              {/* WhatsApp Header */}
-              <div className="bg-[#202c33] p-4 border-b border-white/5 flex items-center justify-between shrink-0">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 font-black tracking-wider text-sm shadow-inner shadow-black relative">
-                    IFX
-                    <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-[#202c33] rounded-full" />
-                  </div>
-                  <div>
-                    <h3 className="text-white text-xs font-black uppercase tracking-wider flex items-center gap-1.5">
-                      IFX Quant Desk
-                      <CheckCheck className="w-3.5 h-3.5 text-[#53bdeb]" />
-                    </h3>
-                    <p className="text-[8px] font-bold text-emerald-400 tracking-widest uppercase">Active Members: 1,420</p>
-                  </div>
+              {/* Window Desktop Header Bar (macOS Mockup) */}
+              <div className="bg-[#181d22] px-4 py-2.5 flex items-center border-b border-white/5 relative shrink-0">
+                <div className="flex gap-1.5 z-10">
+                  <span className="w-3 h-3 rounded-full bg-[#ff5f56]" />
+                  <span className="w-3 h-3 rounded-full bg-[#ffbd2e]" />
+                  <span className="w-3 h-3 rounded-full bg-[#27c93f]" />
                 </div>
-                
-                <div className="flex items-center gap-4 text-white/40">
-                  <Smartphone className="w-4 h-4" />
-                  <MessageSquare className="w-4 h-4" />
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <span className="text-[10px] font-black uppercase tracking-[0.25em] text-white/30">
+                    IFX Sovereign Terminal - Node 04
+                  </span>
                 </div>
               </div>
 
-              {/* Chat Thread Body (Styled exactly like WhatsApp Dark Wallpaper) */}
-              <div className="flex-1 p-5 overflow-y-auto space-y-4 relative bg-[#0b141a] select-none" style={{ backgroundImage: 'radial-gradient(#1c2c36 1px, transparent 1px)', backgroundSize: '16px 16px' }}>
-                
-                {/* System Notice */}
-                <div className="flex justify-center my-2">
-                  <div className="bg-[#182229] border border-white/5 rounded-lg px-3 py-1.5 text-[8px] font-black uppercase tracking-widest text-[#8696a0]">
-                    🛡️ ENCRYPTED CLIENT TELEMETRY NODE
+              {/* Side-by-Side Windows */}
+              <div className="flex-1 flex overflow-hidden">
+                {/* Desktop Left Sidebar: Channels List (Hidden on mobile) */}
+                <div className="w-[180px] sm:w-[220px] bg-[#11161a] border-r border-white/5 flex flex-col hidden sm:flex select-none">
+                  <div className="p-3 border-b border-white/5 shrink-0">
+                    <div className="bg-white/[0.03] border border-white/[0.06] px-3 py-1.5 rounded-lg text-[9px] font-black text-white/40 uppercase tracking-wider">
+                      Desk Search...
+                    </div>
+                  </div>
+                  
+                  <div className="flex-1 overflow-y-auto space-y-0.5 p-1">
+                    {/* Chat Item 1 (Active) */}
+                    <div className="p-2.5 rounded-xl bg-white/[0.04] border border-white/[0.05] flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 text-[10px] font-black tracking-wider">
+                        QD
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex justify-between items-center">
+                          <span className="text-[9px] font-black text-white uppercase truncate">IFX Quant Desk</span>
+                          <span className="text-[7px] text-white/30 font-bold">10:16</span>
+                        </div>
+                        <p className="text-[7px] text-emerald-400 font-bold uppercase truncate">Tareq K: slippage is 0...</p>
+                      </div>
+                    </div>
+
+                    {/* Chat Item 2 */}
+                    <div className="p-2.5 rounded-xl hover:bg-white/[0.02] flex items-center gap-2 transition-all cursor-pointer">
+                      <div className="w-7 h-7 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 text-[10px] font-black tracking-wider">
+                        EB
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex justify-between items-center">
+                          <span className="text-[9px] font-black text-white/60 uppercase truncate">Execution Bridge</span>
+                          <span className="text-[7px] text-white/20 font-bold">10:10</span>
+                        </div>
+                        <p className="text-[7px] text-white/30 truncate">Bridge telemetry initialized...</p>
+                      </div>
+                    </div>
+
+                    {/* Chat Item 3 */}
+                    <div className="p-2.5 rounded-xl hover:bg-white/[0.02] flex items-center gap-2 transition-all cursor-pointer">
+                      <div className="w-7 h-7 rounded-full bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 text-[10px] font-black tracking-wider">
+                        SS
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex justify-between items-center">
+                          <span className="text-[9px] font-black text-white/60 uppercase truncate">Sovereign Signals</span>
+                          <span className="text-[7px] text-white/20 font-bold">09:45</span>
+                        </div>
+                        <p className="text-[7px] text-white/30 truncate">XAUUSD Target 2 Hit...</p>
+                      </div>
+                    </div>
+
+                    {/* Chat Item 4 */}
+                    <div className="p-2.5 rounded-xl hover:bg-white/[0.02] flex items-center gap-2 transition-all cursor-pointer">
+                      <div className="w-7 h-7 rounded-full bg-zinc-500/10 border border-zinc-500/20 flex items-center justify-center text-zinc-400 text-[10px] font-black tracking-wider">
+                        LN
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex justify-between items-center">
+                          <span className="text-[9px] font-black text-white/60 uppercase truncate">Liquidity Node 4</span>
+                          <span className="text-[7px] text-white/20 font-bold">Yest.</span>
+                        </div>
+                        <p className="text-[7px] text-white/30 truncate">Telemetry log archived...</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                {/* Sent message (CEO/デスク側 - Green Bubble) */}
-                <div className="flex flex-col items-end gap-1 w-full pl-8 animate-in slide-in-from-bottom-2 duration-300">
-                  <div className="bg-[#005c4b] text-white p-3 rounded-2xl rounded-tr-none border border-emerald-500/20 shadow-md relative max-w-[85%] text-left">
-                    {/* Speech Tail */}
-                    <div className="absolute top-0 right-[-6px] w-0 h-0 border-t-[8px] border-t-[#005c4b] border-r-[8px] border-r-transparent" />
-                    <p className="text-[11px] text-white/95 leading-relaxed font-sans font-medium">
-                      All MT5 binaries compiled for this week. Execution latencies optimized to &lt;1.2ms. Please test and report results.
-                    </p>
-                    <div className="flex items-center gap-1 justify-end mt-1 text-[7px] text-white/40 font-bold font-mono">
-                      <span>10:14 AM</span>
-                      <CheckCheck className="w-3 h-3 text-[#53bdeb]" />
+                {/* Right Active Chat Pane */}
+                <div className="flex-1 flex flex-col bg-[#0b141a]">
+                  {/* WhatsApp Desk Active Chat Header */}
+                  <div className="bg-[#202c33] p-3 border-b border-white/5 flex items-center justify-between shrink-0 select-none">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 font-black tracking-wider text-xs shadow-inner relative">
+                        IFX
+                        <span className="absolute bottom-0 right-0 w-2 h-2 bg-emerald-500 border border-[#202c33] rounded-full" />
+                      </div>
+                      <div>
+                        <h3 className="text-white text-[10px] sm:text-xs font-black uppercase tracking-wider flex items-center gap-1.5">
+                          IFX Quant Desk
+                          <CheckCheck className="w-3.5 h-3.5 text-[#53bdeb]" />
+                        </h3>
+                        <p className="text-[7px] sm:text-[8px] font-bold text-emerald-400 tracking-wider uppercase transition-all duration-300">
+                          {typingStatus}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-3.5 text-white/40">
+                      <Smartphone className="w-4 h-4" />
+                      <MessageSquare className="w-4 h-4" />
                     </div>
                   </div>
-                </div>
 
-                {/* Received message 1 (UAE Client - Dark Grey Bubble) */}
-                <div className="flex flex-col items-start gap-1 w-full pr-8 animate-in slide-in-from-bottom-3 duration-500">
-                  <div className="bg-[#202c33] text-white p-3 rounded-2xl rounded-tl-none border border-white/5 shadow-md relative max-w-[85%] text-left">
-                    <div className="absolute top-0 left-[-6px] w-0 h-0 border-t-[8px] border-t-[#202c33] border-l-[8px] border-l-transparent" />
-                    
-                    <div className="flex justify-between items-center gap-2 pb-0.5 border-b border-white/[0.04]">
-                      <span className="text-[9px] font-black tracking-wide text-cyan-400">Tareq K.</span>
-                      <span className="text-[7px] font-bold text-white/30 tracking-widest">DUBAI 🇦🇪</span>
+                  {/* Chat Wallpaper Thread */}
+                  <div className="flex-1 p-4 overflow-y-auto space-y-3 relative bg-[#0b141a] select-none" style={{ backgroundImage: 'radial-gradient(#1c2c36 1px, transparent 1px)', backgroundSize: '16px 16px' }}>
+                    {/* System Notice */}
+                    <div className="flex justify-center my-1.5">
+                      <div className="bg-[#182229] border border-white/5 rounded-lg px-3 py-1 text-[7px] font-black uppercase tracking-widest text-[#8696a0]">
+                        🛡️ ENCRYPTED CLIENT TELEMETRY NODE
+                      </div>
                     </div>
-                    
-                    <p className="text-[11px] text-white/90 leading-relaxed font-sans font-medium">
-                      Confirming latencies in Dubai! Apex Alpha V4 is executing gold trades flawlessly on MT5. Zero slippage detected today. Excellent! 🚀
-                    </p>
-                    <div className="flex items-center gap-1 justify-end mt-1 text-[7px] text-white/30 font-bold font-mono">
-                      <span>10:16 AM</span>
+
+                    {/* Sent message (Green Bubble) */}
+                    <div className="flex flex-col items-end gap-1 w-full pl-6">
+                      <div className="bg-[#005c4b] text-white p-3 rounded-2xl rounded-tr-none border border-emerald-500/20 shadow-md relative max-w-[85%] text-left">
+                        {/* Speech Tail */}
+                        <div className="absolute top-0 right-[-6px] w-0 h-0 border-t-[8px] border-t-[#005c4b] border-r-[8px] border-r-transparent" />
+                        <p className="text-[10px] text-white/95 leading-relaxed font-sans font-medium">
+                          All MT5 binaries compiled for this week. Execution latencies optimized to &lt;1.2ms. Please test and report results.
+                        </p>
+                        <div className="flex items-center gap-1 justify-end mt-1 text-[6px] text-white/40 font-bold font-mono">
+                          <span>10:14 AM</span>
+                          <CheckCheck className="w-2.5 h-2.5 text-[#53bdeb]" />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Received message 1 (Dark Grey Bubble) */}
+                    <div className="flex flex-col items-start gap-1 w-full pr-6">
+                      <div className="bg-[#202c33] text-white p-3 rounded-2xl rounded-tl-none border border-white/5 shadow-md relative max-w-[85%] text-left">
+                        <div className="absolute top-0 left-[-6px] w-0 h-0 border-t-[8px] border-t-[#202c33] border-l-[8px] border-l-transparent" />
+                        
+                        <div className="flex justify-between items-center gap-2 pb-0.5 border-b border-white/[0.04] mb-0.5">
+                          <span className="text-[8px] font-black tracking-wide text-cyan-400">Tareq K.</span>
+                          <span className="text-[6px] font-bold text-white/30 tracking-widest">DUBAI 🇦🇪</span>
+                        </div>
+                        
+                        <p className="text-[10px] text-white/90 leading-relaxed font-sans font-medium">
+                          Confirming latencies in Dubai! Apex Alpha V4 is executing gold trades flawlessly on MT5. Zero slippage detected today. Excellent! 🚀
+                        </p>
+                        <div className="flex items-center justify-end mt-1 text-[6px] text-white/30 font-bold font-mono">
+                          <span>10:16 AM</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Received message 2 (Frankfurt Client) */}
+                    <div className="flex flex-col items-start gap-1 w-full pr-6">
+                      <div className="bg-[#202c33] text-white p-3 rounded-2xl rounded-tl-none border border-white/5 shadow-md relative max-w-[85%] text-left">
+                        <div className="absolute top-0 left-[-6px] w-0 h-0 border-t-[8px] border-t-[#202c33] border-l-[8px] border-l-transparent" />
+                        
+                        <div className="flex justify-between items-center gap-2 pb-0.5 border-b border-white/[0.04] mb-0.5">
+                          <span className="text-[8px] font-black tracking-wide text-amber-400">Christian W.</span>
+                          <span className="text-[6px] font-bold text-white/30 tracking-widest">FRANKFURT 🇩🇪</span>
+                        </div>
+                        
+                        <p className="text-[10px] text-white/90 leading-relaxed font-sans font-medium">
+                          Macro Systematic Desk just triggered EURUSD short. Execution completed under 1ms. Capital allocations syncing nicely. Best quant software we have tested.
+                        </p>
+                        <div className="flex items-center justify-end mt-1 text-[6px] text-white/30 font-bold font-mono">
+                          <span>10:22 AM</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Received message 2 (Germany Client) */}
-                <div className="flex flex-col items-start gap-1 w-full pr-8 animate-in slide-in-from-bottom-4 duration-700">
-                  <div className="bg-[#202c33] text-white p-3 rounded-2xl rounded-tl-none border border-white/5 shadow-md relative max-w-[85%] text-left">
-                    <div className="absolute top-0 left-[-6px] w-0 h-0 border-t-[8px] border-t-[#202c33] border-l-[8px] border-l-transparent" />
-                    
-                    <div className="flex justify-between items-center gap-2 pb-0.5 border-b border-white/[0.04]">
-                      <span className="text-[9px] font-black tracking-wide text-amber-400">Christian W.</span>
-                      <span className="text-[7px] font-bold text-white/30 tracking-widest">FRANKFURT 🇩🇪</span>
-                    </div>
-                    
-                    <p className="text-[11px] text-white/90 leading-relaxed font-sans font-medium">
-                      Macro Systematic Desk just triggered EURUSD short. Execution completed under 1ms. Capital allocations syncing nicely. Best quant software we have tested.
-                    </p>
-                    <div className="flex items-center gap-1 justify-end mt-1 text-[7px] text-white/30 font-bold font-mono">
-                      <span>10:22 AM</span>
+                  {/* Chat Input Mock (Footer) */}
+                  <div className="bg-[#202c33] p-2.5 border-t border-white/5 flex items-center gap-2 shrink-0 select-none">
+                    <div className="flex-1 bg-[#2a3942] rounded-xl px-4 py-2 text-[8px] sm:text-[9px] text-white/30 uppercase tracking-widest font-black flex items-center justify-between">
+                      Secure Desk Message...
+                      <Send className="w-3 h-3 text-white/20" />
                     </div>
                   </div>
-                </div>
-
-              </div>
-
-              {/* Chat Input Mock (Footer) */}
-              <div className="bg-[#202c33] p-3 border-t border-white/5 flex items-center gap-2 shrink-0 select-none">
-                <div className="flex-1 bg-[#2a3942] rounded-xl px-4 py-2 text-[10px] text-white/30 uppercase tracking-widest font-black flex items-center justify-between">
-                  Secure Message...
-                  <Send className="w-3.5 h-3.5 text-white/20" />
                 </div>
               </div>
             </motion.div>
