@@ -128,6 +128,32 @@ export const Footer = () => (
         </div>
       </div>
 
+      {/* --- Settlement & Payment Gateways Matrix --- */}
+      <div className="pt-8 pb-8 border-t border-white/[0.04] flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div className="flex items-center gap-3">
+          <ShieldCheck className="w-4 h-4 text-emerald-400/50" />
+          <span className="text-[9px] font-black uppercase tracking-[0.25em] text-white/30">
+            Encrypted Settlement Gateways Supported
+          </span>
+        </div>
+
+        {/* Payment Network Icons */}
+        <div className="flex flex-wrap items-center justify-center gap-4 select-none opacity-40 hover:opacity-85 transition-opacity duration-300">
+          <span className="text-[8px] font-black tracking-widest text-white/60 hover:text-white font-sans transition-colors cursor-default border border-white/10 px-2 py-0.5 rounded uppercase">
+            Visa
+          </span>
+          <span className="text-[8px] font-black tracking-widest text-white/60 hover:text-white font-sans transition-colors cursor-default border border-white/10 px-2 py-0.5 rounded uppercase">
+            Mastercard
+          </span>
+          <span className="text-[8px] font-black tracking-widest text-white/60 hover:text-white font-sans transition-colors cursor-default border border-white/10 px-2 py-0.5 rounded uppercase">
+            UPI (PhonePe / GPay)
+          </span>
+          <span className="text-[8px] font-black tracking-widest text-[#F7931A] hover:text-[#f8a536] font-mono transition-colors cursor-default border border-[#F7931A]/20 bg-[#F7931A]/5 px-2 py-0.5 rounded uppercase">
+            Bitcoin &amp; Crypto
+          </span>
+        </div>
+      </div>
+
       {/* --- Minimalist Master Base --- */}
       <div className="pt-8 pb-4 border-t border-white/[0.04] flex flex-col lg:flex-row items-center justify-between gap-8">
         <div className="text-[9px] font-black text-[#4F5A69] uppercase tracking-[0.3em] text-center lg:text-left">

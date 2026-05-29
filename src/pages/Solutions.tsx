@@ -16,7 +16,7 @@ export const Solutions = () => {
     <main className="min-h-screen bg-[#020202] text-[#F8FAFC] selection:bg-[#58F2B6]/30">
       <PageMeta 
         title="Institutional Solutions | Bespoke Algorithmic Engineering"
-        description="Asia's #1 institutional engineering hub. Custom algorithmic development, Educational Data Licenses, and private strategic consulting for elite capital deployments."
+        description="Asia's #1 B2B quantitative engineering hub. Custom algorithmic development, systematic software licensing, and private strategic consulting for elite capital deployments."
         path="/solutions"
         keywords={[
           "custom algorithmic trading bot",

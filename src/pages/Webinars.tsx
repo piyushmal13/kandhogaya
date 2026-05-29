@@ -38,14 +38,14 @@ export const Webinars = () => {
           <div className="space-y-6 text-center max-w-4xl mx-auto pt-6">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase tracking-wider">
               <Award className="w-3.5 h-3.5" />
-              IFX Educational Platform
+              IFX Systematic Platform
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tight leading-tight uppercase">
               Institutional <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">Masterclass Series</span>
             </h1>
             <p className="text-sm md:text-base text-gray-400 font-medium leading-relaxed max-w-2xl mx-auto">
-              Accelerate your trading performance with premium education. Access real-time briefings, macro research breakdowns, and advanced algorithmic model tutorials from our global strategy desk.
+              Accelerate your trading performance with premium systematic insights. Access real-time briefings, macro research breakdowns, and advanced algorithmic model tutorials from our global strategy desk.
             </p>
           </div>
 

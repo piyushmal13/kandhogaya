@@ -8,6 +8,7 @@ import { cn } from "@/utils/cn";
 import { PurchaseModal } from "@/components/payments/PurchaseModal";
 import { tracker } from "@/core/tracker";
 import { motion } from "motion/react";
+import { PageMeta } from "../components/site/PageMeta";
 
 const SIGNAL_PLANS = [
   {
@@ -70,6 +71,13 @@ export const Pricing = () => {
 
   return (
     <div className="relative min-h-screen bg-[#020202] pt-32 md:pt-48 pb-20 md:pb-32 px-4 sm:px-6 overflow-hidden">
+      <PageMeta
+        title="Institutional Pricing & EA Licensing Plans"
+        description="Unlock elite systematic trading access. Compare our professional multi-asset quantitative licensing tiers and NY4 low-latency co-location setups."
+        path="/pricing"
+        keywords={["IFX Trades pricing", "MT5 EA licensing cost", "algorithmic trading plans", "custom forex bot subscription"]}
+      />
+
       {/* Background Decor */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden>
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.06)_0%,transparent_70%)]" />
