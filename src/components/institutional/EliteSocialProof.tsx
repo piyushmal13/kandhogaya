@@ -119,7 +119,10 @@ export const EliteSocialProof = () => {
 
                         {/* Timestamp and Blue Delivered ticks */}
                         <div className="flex items-center gap-1 justify-end mt-1 text-[8px] font-bold text-white/20 select-none">
-                          <span>Yesterday, {10 + (idx % 2)}:{(20 + idx * 4) % 60} PM</span>
+                          {(() => {
+                            const relativeTimes = ["Just now", "4m ago", "18m ago", "45m ago", "1h ago", "3h ago"];
+                            return <span>{relativeTimes[idx % relativeTimes.length]}</span>;
+                          })()}
                           <CheckCheck className="w-3 h-3 text-[#53bdeb]" />
                         </div>
                       </div>

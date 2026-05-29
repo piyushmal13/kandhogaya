@@ -56,7 +56,6 @@ const Home = () => {
 
         {/* L2.5: Interactive Workstation Proof & WhatsApp Telemetry */}
         <TerminalShowcase />
-        <EliteSocialProof />
 
         {/* L3: Operational Scope Pillars (What we actually do clearly explained) */}
         <OperationalPillars 
@@ -76,6 +75,9 @@ const Home = () => {
         <section className="hidden sm:block">
           <CustomAlgoTeam />
         </section>
+
+        {/* L5.5: Global Network Social Proof & WhatsApp Telemetry */}
+        <EliteSocialProof />
 
         {/* L6: Capital Inquiry / Onboarding Intake Form */}
         <ConsultationSection />
