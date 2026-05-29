@@ -12,6 +12,7 @@ import { CustomAlgoTeam } from "../components/home/CustomAlgoTeam";
 import { ConsultationSection } from "../components/home/ConsultationSection";
 import { TerminalShowcase } from "../components/home/TerminalShowcase";
 import { EliteSocialProof } from "../components/institutional/EliteSocialProof";
+import { PaymentGateways } from "../components/home/PaymentGateways";
 
 const Home = () => {
   const [isBookingOpen, setBookingOpen] = useState(false);
@@ -61,6 +62,9 @@ const Home = () => {
         <OperationalPillars 
           onRequestBuild={triggerBespokeBuildRequest}
         />
+
+        {/* L3.5: Secure Payment & Settlement Ingress */}
+        <PaymentGateways />
 
         {/* L4: Institutional Performance Registry (Dynamic product cards loaded from Supabase) */}
         <PerformanceHistory />

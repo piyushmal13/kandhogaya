@@ -35,14 +35,7 @@ export const TerminalShowcase = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
               
-              {/* Telemetry Indicator Overlay */}
-              <div className="absolute bottom-6 left-6 sm:bottom-8 sm:left-8 flex items-center gap-3 px-4 py-2 rounded-full bg-black/80 border border-white/10 backdrop-blur-md">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-                </span>
-                <span className="text-[9px] font-black uppercase tracking-[0.25em] text-white/70 font-mono">NY4 Server: Active &lt;1.2ms</span>
-              </div>
+
             </div>
           </motion.div>
           
