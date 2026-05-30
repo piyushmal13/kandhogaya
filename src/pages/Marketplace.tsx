@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "motion/react";
 import { Search, ShieldAlert } from "lucide-react";
@@ -13,6 +13,8 @@ import { useNavigate } from "react-router-dom";
 import { Product } from "../types";
 import { EliteSocialProof } from "../components/institutional/EliteSocialProof";
 import { CustomStrategyTerminal } from "../components/institutional/CustomStrategyTerminal";
+import { supabase } from "../lib/supabase";
+import { MarketplaceProduct } from "../components/institutional/MarketplaceGrid";
 
 export const Marketplace = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -21,8 +23,87 @@ export const Marketplace = () => {
   const [purchaseDetails, setPurchaseDetails] = useState<{ plan: string, amount: number, productId: string } | null>(null);
   
   const { user } = useAuth();
-  const { info } = useToast();
+  const { info, success } = useToast();
   const navigate = useNavigate();
+
+  const [affiliateCode, setAffiliateCode] = useState<string | null>(null);
+
+  // Fetch or dynamically generate on-the-fly affiliate code
+  useEffect(() => {
+    if (user?.id) {
+      const fetchAffiliateCode = async () => {
+        try {
+          const { data, error } = await supabase
+            .from("affiliate_codes")
+            .select("code")
+            .eq("user_id", user.id)
+            .maybeSingle();
+
+          if (error) throw error;
+          if (data) {
+            setAffiliateCode(data.code);
+          }
+        } catch (err) {
+          console.warn("[CRM] Failed to fetch affiliate code on mount:", err);
+        }
+      };
+      fetchAffiliateCode();
+    }
+  }, [user]);
+
+  // Hydrate product modal automatically if product query is set
+  useEffect(() => {
+    if (products.length > 0) {
+      const urlParams = new URLSearchParams(globalThis.location.search);
+      const productId = urlParams.get("product");
+      if (productId) {
+        const found = products.find((p) => p.id === productId);
+        if (found) {
+          const productReviews = reviews.filter((r: any) => r.target_id === found.id);
+          const displayReviews = productReviews.length > 0 ? productReviews : reviews.slice(0, 3);
+          setSelectedProduct({
+            ...found,
+            reviews: displayReviews.length > 0 ? displayReviews : found.reviews
+          });
+        }
+      }
+    }
+  }, [products, reviews]);
+
+  const handleShare = async (algo: MarketplaceProduct) => {
+    try {
+      let code = affiliateCode;
+
+      // Self-healing: if logged in but code doesn't exist, generate one dynamically
+      if (user && !code) {
+        info("Generating your unique partner referral ID...");
+        const { data, error } = await supabase.rpc("generate_affiliate_code", { user_id: user.id });
+        if (error) throw error;
+        if (data) {
+          code = data;
+          setAffiliateCode(data);
+        }
+      }
+
+      const shareUrl = code
+        ? `${globalThis.location.origin}/marketplace?ref=${code}&product=${algo.id}`
+        : `${globalThis.location.origin}/marketplace?product=${algo.id}`;
+
+      await navigator.clipboard.writeText(shareUrl);
+
+      if (user) {
+        success(`Referral link copied! Earn commissions on shares.`);
+      } else {
+        info(`Standard product link copied! Log in to earn affiliate commissions.`);
+      }
+    } catch (err: any) {
+      console.error("[CRM] Share link capture failed:", err);
+      // Fallback
+      const shareUrl = `${globalThis.location.origin}/marketplace?product=${algo.id}`;
+      navigator.clipboard.writeText(shareUrl);
+      info("Standard product link copied.");
+    }
+  };
 
   const { data: products = [], isLoading } = useQuery({
     queryKey: ["marketplace_products"],
@@ -113,6 +194,7 @@ export const Marketplace = () => {
               });
             }
           }}
+          onShare={handleShare}
         />
       );
     }

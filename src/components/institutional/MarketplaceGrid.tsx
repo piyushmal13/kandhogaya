@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Activity, Lock } from 'lucide-react';
+import { Activity, Lock, Share2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Button } from '../ui/Button';
@@ -26,6 +26,7 @@ interface MarketplaceGridProps {
   products: MarketplaceProduct[];
   isLoading?: boolean;
   onSelect?: (product: MarketplaceProduct) => void;
+  onShare?: (product: MarketplaceProduct) => void;
 }
 
 // ── COMPONENTS ──
@@ -53,7 +54,7 @@ const LiveIndicator = () => (
   </div>
 );
 
-export const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({ products, isLoading, onSelect }) => {
+export const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({ products, isLoading, onSelect, onShare }) => {
   const { isEnabled: showPremiumBadges } = useFeatureFlag('show_premium_badges', true);
 
   if (isLoading) {
@@ -157,13 +158,26 @@ export const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({ products, isLo
                 </div>
               </div>
 
-              <Button
-                variant="elite"
-                className="w-full sm:w-auto rounded-xl sm:rounded-2xl px-5 sm:px-10 py-3.5 sm:py-6 h-auto text-[11px] sm:text-[11px] font-black uppercase tracking-[0.2em] shadow-glow-emerald"
-                onClick={() => onSelect?.(product)}
-              >
-                Deploy System
-              </Button>
+              <div className="flex items-center gap-3 w-full sm:w-auto">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onShare?.(product);
+                  }}
+                  className="p-3.5 sm:p-5 rounded-xl sm:rounded-2xl bg-white/5 border border-white/10 hover:border-emerald-500/30 hover:bg-emerald-500/10 text-white/60 hover:text-emerald-400 transition-all shrink-0 active:scale-95 flex items-center justify-center cursor-pointer"
+                  title="Share product referral link"
+                >
+                  <Share2 className="w-4 h-4" />
+                </button>
+
+                <Button
+                  variant="elite"
+                  className="w-full sm:w-auto rounded-xl sm:rounded-2xl px-5 sm:px-10 py-3.5 sm:py-6 h-auto text-[11px] sm:text-[11px] font-black uppercase tracking-[0.2em] shadow-glow-emerald"
+                  onClick={() => onSelect?.(product)}
+                >
+                  Deploy System
+                </Button>
+              </div>
             </div>
           </motion.div>
 
