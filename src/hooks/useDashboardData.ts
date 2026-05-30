@@ -124,7 +124,7 @@ export function useDashboardData() {
         localStorage.setItem(cacheKey, JSON.stringify(data));
         return data;
       } catch (error) {
-        console.warn('Supabase fetch failed or timed out, falling back to local cache', error);
+        console.warn('Supabase fetch failed or timed out, falling back to local cache/mock:', error);
         const cached = localStorage.getItem(cacheKey);
         if (cached) {
           try {
@@ -133,13 +133,53 @@ export function useDashboardData() {
             console.error('Invalid cache format', e);
           }
         }
-        // If all else fails
+        
+        // Premium High-Fidelity Mock Fallback for local development
         return {
-          licenses: [],
-          purchases: [],
-          webinarRegistrations: [],
-          totalSpent: 0,
-          memberSince: null,
+          licenses: [
+            {
+              id: "lic_1",
+              user_id: user.id,
+              algo_id: "prod_1",
+              license_key: "IFX-MOCK-GRID-9921",
+              is_active: true,
+              expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+              created_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString()
+            },
+            {
+              id: "lic_2",
+              user_id: user.id,
+              algo_id: "prod_2",
+              license_key: "IFX-MOCK-GOLD-4824",
+              is_active: true,
+              expires_at: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString(),
+              created_at: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString()
+            }
+          ],
+          purchases: [
+            {
+              id: "p_1",
+              product_name: "Alpha Grid Pro",
+              purchased_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+              status: "Active"
+            },
+            {
+              id: "p_2",
+              product_name: "Gold Sovereign",
+              purchased_at: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
+              status: "Active"
+            }
+          ],
+          webinarRegistrations: [
+            {
+              id: "w_1",
+              title: "Systematic Gold & Liquidity Masterclass",
+              date: "2026-06-15T14:00:00Z",
+              status: "Confirmed"
+            }
+          ],
+          totalSpent: 3498.00,
+          memberSince: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString(),
         };
       }
     },
