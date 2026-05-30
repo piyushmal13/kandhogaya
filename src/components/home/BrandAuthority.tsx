@@ -39,11 +39,11 @@ const SVG_MAP: Record<string, React.ReactNode> = {
 };
 
 const FALLBACK_PARTNERS: Partner[] = [
-  { name: "MetaTrader 5", category: "Trading Platform", logo_url: "/metatrader5.png" },
-  { name: "TradingView", category: "Charting Terminal", logo_url: "/tradingview.png" },
-  { name: "Vantage Markets", category: "Liquidity Bridge", logo_svg: SVG_MAP["vantage markets"] },
-  { name: "VT Markets", category: "Execution Partner", logo_svg: SVG_MAP["vt markets"] },
-  { name: "Markets4you", category: "CFD Provider", logo_svg: SVG_MAP["markets4you"] },
+  { name: "MetaTrader 5", category: "Trading Platform", logo_url: "/metatrader5.svg" },
+  { name: "TradingView", category: "Charting Terminal", logo_url: "/tradingview.svg" },
+  { name: "Vantage Markets", category: "Liquidity Bridge", logo_url: "/vantage.svg" },
+  { name: "VT Markets", category: "Execution Partner", logo_url: "/vtmarkets.svg" },
+  { name: "Markets4you", category: "CFD Provider", logo_url: "/markets4you.svg" },
 ];
 
 const PRESS = [
@@ -71,10 +71,19 @@ export const BrandAuthority = () => {
             const lowerName = name.toLowerCase().trim();
             let logo_url = b.image_url || undefined;
             if (lowerName === "metatrader 5" && !logo_url) {
-              logo_url = "/metatrader5.png";
+              logo_url = "/metatrader5.svg";
             }
             if (lowerName === "tradingview" && !logo_url) {
-              logo_url = "/tradingview.png";
+              logo_url = "/tradingview.svg";
+            }
+            if (lowerName === "vantage markets" && !logo_url) {
+              logo_url = "/vantage.svg";
+            }
+            if (lowerName === "vt markets" && !logo_url) {
+              logo_url = "/vtmarkets.svg";
+            }
+            if (lowerName === "markets4you" && !logo_url) {
+              logo_url = "/markets4you.svg";
             }
             return {
               name,

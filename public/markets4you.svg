@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="36" height="36">
+  <defs>
+    <linearGradient id="m4uGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F59E0B" />
+      <stop offset="50%" stop-color="#F97316" />
+      <stop offset="100%" stop-color="#EF4444" />
+    </linearGradient>
+  </defs>
+  <!-- Beautiful Rising Phoenix Wings representing Markets4you -->
+  <g transform="translate(10, 10)">
+    <path d="M 40,75 C 20,70 10,50 15,30 C 18,22 25,12 35,5 C 30,15 28,28 32,38 C 36,48 44,55 52,62 Z" fill="url(#m4uGrad)" />
+    <path d="M 40,75 C 50,70 58,60 62,48 C 65,38 64,26 58,15 C 68,22 74,32 75,44 C 77,58 68,70 52,76 Z" fill="url(#m4uGrad)" opacity="0.85" />
+    <circle cx="46" cy="74" r="5" fill="url(#m4uGrad)" />
+  </g>
+</svg>

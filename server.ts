@@ -65,8 +65,47 @@ async function startServer() {
   apiRouter.post("/admin/licenses", authenticate, AdminController.createLicense);
   apiRouter.post("/admin/content", authenticate, AdminController.createContent);
 
+  // --- LOCAL SUPABASE PROXY (Mimics Vercel rewrites for local development) ---
+  app.all("/supabase-proxy/*", async (req, res) => {
+    try {
+      const targetUrl = config.supabaseUrl;
+      if (!targetUrl || targetUrl.includes('placeholder')) {
+        return res.status(500).json({ error: "Supabase URL is not configured in local environment." });
+      }
+
+      const path = req.originalUrl.replace(/^\/supabase-proxy/, "");
+      const destination = `${targetUrl}${path}`;
+
+      const headers = { ...req.headers } as any;
+      delete headers.host;
+      delete headers.connection;
+
+      const fetchOptions: any = {
+        method: req.method,
+        headers,
+      };
+
+      if (req.method !== "GET" && req.method !== "HEAD" && req.body && Object.keys(req.body).length > 0) {
+        fetchOptions.body = JSON.stringify(req.body);
+      }
+
+      const response = await fetch(destination, fetchOptions);
+      const data = await response.text();
+
+      response.headers.forEach((value, key) => {
+        res.setHeader(key, value);
+      });
+
+      res.status(response.status).send(data);
+    } catch (error: any) {
+      logger.error(`[Local Supabase Proxy Error]: ${error.message}`);
+      res.status(500).send(`Supabase proxy failed: ${error.message}`);
+    }
+  });
+
   app.use("/api", apiRouter);
   app.use(errorHandler);
+
 
   // --- FRONTEND INTEGRATION ---
   if (config.isProduction) {

@@ -199,45 +199,6 @@ export const Marketplace = () => {
         {/* Elite Social Proof & Performance Validation */}
         <EliteSocialProof />
 
-        {/* MT5 Institutional Showcase */}
-        <motion.div 
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          className="py-24 border-t border-white/5"
-        >
-           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-              <div className="order-2 lg:order-1 relative">
-                 <div className="absolute inset-0 bg-emerald-500/5 blur-[100px] rounded-full opacity-30" />
-                 <div className="relative rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl">
-                    <img 
-                      src="/mt5_elite_terminal_v3.png" 
-                      alt="MT5 Elite Terminal" 
-                      className="w-full h-auto"
-                    />
-                 </div>
-              </div>
-              <div className="order-1 lg:order-2 space-y-8">
-                 <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[9px] font-black uppercase tracking-[0.2em]">
-                    Infrastructure Layer
-                 </div>
-                 <h2 className="text-4xl md:text-6xl font-black text-white tracking-tight leading-tight italic uppercase">
-                    Terminal <br />
-                    <span className="text-emerald-400">Execution.</span>
-                 </h2>
-                 <p className="text-lg text-white/40 leading-relaxed font-medium">
-                    Native MetaTrader 5 (MT5) integration with our proprietary bridge protocols. Experience zero-latency synchronization between our research models and your personal execution workstation.
-                 </p>
-                 <ul className="space-y-4">
-                    {['Automated Strategy Execution', 'Built-in Risk Management', 'Real-time Performance Tracking'].map(feature => (
-                       <li key={feature} className="flex items-center gap-4 text-[11px] font-black uppercase tracking-widest text-white/60">
-                          <div className="w-2 h-2 rounded-full bg-emerald-500" />
-                          {feature}
-                       </li>
-                    ))}
-                 </ul>
-              </div>
-           </div>
-        </motion.div>
       </div>
 
       {/* Detail Modal Overlay */}

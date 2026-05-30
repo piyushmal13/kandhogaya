@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="36" height="36">
+  <defs>
+    <linearGradient id="vtBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E40AF" />
+      <stop offset="100%" stop-color="#1D4ED8" />
+    </linearGradient>
+    <linearGradient id="vtGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FBBF24" />
+      <stop offset="100%" stop-color="#D97706" />
+    </linearGradient>
+  </defs>
+  <!-- Beautiful VT shield monogram -->
+  <g transform="translate(15, 10)">
+    <!-- Shield/Circle Outer Rim -->
+    <path d="M 35,5 C 50,5 65,15 65,35 C 65,55 50,75 35,75 C 20,75 5,55 5,35 C 5,15 20,5 35,5 Z" fill="none" stroke="url(#vtGold)" stroke-width="3" />
+    <!-- V Shape -->
+    <path d="M 12,22 L 35,62 L 58,22 L 48,22 L 35,46 L 22,22 Z" fill="url(#vtBlue)" />
+    <!-- T Shape overlapping V -->
+    <path d="M 20,16 L 50,16 L 50,22 L 38,22 L 38,40 L 32,40 L 32,22 L 20,22 Z" fill="url(#vtGold)" />
+  </g>
+</svg>
