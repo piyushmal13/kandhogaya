@@ -90,7 +90,7 @@ export const B2BLiquidity = () => {
             Co-Located <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Equinix NY4</span> Aggregation.
           </h1>
           <p className="text-gray-400 text-sm leading-relaxed max-w-xl mx-auto font-medium">
-            Access multi-asset aggregated order books exceeding $1.2B per leg. Engineered with physical fiber cross-connections bypass for zero broker-side conflict.
+            Since 2019, we have provided global brokerages with direct, conflict-free connections to top-tier bank liquidity. With 6-7 years of trusted operational history, we aggregate pricing streams to help you deliver tight spreads and reliable trade executions to your clients.
           </p>
         </div>
 
@@ -120,7 +120,7 @@ export const B2BLiquidity = () => {
                 Direct Market Sourcing
               </div>
               <h2 className="text-3xl font-black uppercase tracking-tight italic">
-                Sovereign-Class Liquidity Distribution.
+                Trusted Liquidity Infrastructure.
               </h2>
             </div>
 
@@ -129,17 +129,17 @@ export const B2BLiquidity = () => {
                 { 
                   icon: Cpu, 
                   title: "OneZero Hub & PrimeXM Bridge Aggregation", 
-                  desc: "Connect directly to the industry's most advanced aggregation centers. Route orders via optimized Smart Order Routing (SOR) protocols to instantly achieve the best available bid/ask fill pricing." 
+                  desc: "Connect your servers directly to the world's leading institutional hubs. Orders are routed to the best available bid and ask prices automatically, ensuring your clients get highly accurate execution." 
                 },
                 { 
                   icon: Layers, 
                   title: "Deep Layer-2 Depth of Market", 
-                  desc: "Execute large institutional ticket flows without slippage. Access robust aggregated order books spanning major G10 currencies, gold, indices, and energy nodes with zero conflicts of interest." 
+                  desc: "Fill larger trading volumes smoothly and with minimal price disruption. Access aggregated liquidity streams across currencies, gold, indices, and energy nodes with zero conflicts of interest." 
                 },
                 { 
                   icon: Globe, 
-                  title: "Sovereign Cross-Connected Hosting in NY4 & LD4", 
-                  desc: "Avoid public routing latency. Our matched engines are rack-mounted adjacent to prime liquidity engines inside the Equinix NY4 (New York) and LD4 (London) secure data centers." 
+                  title: "NY4 & LD4 Co-Located Data Centers", 
+                  desc: "Minimize execution delays by bypassing public internet routes. Our servers are installed physically inside the primary Equinix NY4 (New York) and LD4 (London) secure facilities." 
                 }
               ].map((prop, idx) => (
                 <div key={idx} className="flex gap-5">

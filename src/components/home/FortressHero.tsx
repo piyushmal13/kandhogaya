@@ -128,15 +128,15 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
     >
       {/* ── CANVAS BACKGROUND ── */}
       <motion.div
-        style={{ scale, y: backgroundY, opacity: 0.85, willChange: "transform" }}
+        style={{ scale, y: backgroundY, opacity: 0.12, willChange: "transform" }}
         className="absolute inset-0 origin-center flex items-center justify-center pointer-events-none"
       >
         <img
           src="/colocation_network.png"
           alt="IFX ECN Co-location Network Map"
-          className="w-full h-full object-cover opacity-50"
+          className="w-full h-full object-cover opacity-15"
         />
-        <div className="absolute inset-0 bg-black/30" />
+        <div className="absolute inset-0 bg-black/40" />
       </motion.div>
 
       {/* ── FLOATING PARTICLES ── */}
@@ -243,23 +243,24 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
               </button>
             </motion.div>
 
-            {/* Trust Badges Grid */}
+            {/* Trust Badges Bar */}
             <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 0.6, ease: ENTRY }}
-              className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 pt-6 w-full max-w-5xl mx-auto z-30"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6, duration: 0.8 }}
+              className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 pt-10 pb-4 border-t border-white/[0.04] w-full max-w-4xl mx-auto z-30"
             >
-              {TRUST_ITEMS.map((item) => (
+              {TRUST_ITEMS.map((item, idx) => (
                 <div
                   key={item.title}
-                  className="flex flex-col items-center md:items-start text-center md:text-left p-4 rounded-xl bg-white/[0.01] hover:bg-white/[0.03] border border-white/[0.05] hover:border-blue-500/20 transition-all duration-300 shadow-[inset_0_1px_1px_rgba(255,255,255,0.02)] group/badge"
+                  className="flex items-center gap-2.5 text-white/50 text-[10px] font-mono tracking-wider transition-colors hover:text-white"
                 >
-                  <div className="w-8 h-8 rounded-lg bg-blue-500/5 border border-white/5 flex items-center justify-center mb-3 group-hover/badge:bg-blue-500/10 group-hover/badge:border-blue-500/20 transition-colors">
-                    <item.icon className="w-3.5 h-3.5 text-blue-400 group-hover/badge:text-cyan-400 transition-colors" />
-                  </div>
-                  <span className="text-[10px] font-black text-white tracking-wider font-sans uppercase mb-1">{item.title}</span>
-                  <span className="text-[8px] text-white/40 font-mono tracking-normal leading-tight">{item.desc}</span>
+                  <item.icon className="w-3.5 h-3.5 text-blue-500/60" />
+                  <span className="font-bold text-white/80">{item.title}</span>
+                  <span className="text-[9px] text-white/35 font-light">({item.desc})</span>
+                  {idx < TRUST_ITEMS.length - 1 && (
+                    <span className="text-white/10 ml-4 hidden md:inline">|</span>
+                  )}
                 </div>
               ))}
             </motion.div>

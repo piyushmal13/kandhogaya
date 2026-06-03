@@ -6,18 +6,18 @@ import { EliteButton } from "../ui/Button";
 const features = [
   {
     icon: Code2,
-    title: "Proprietary Execution Logic",
-    desc: "Custom frameworks designed from the ground up to bypass retail platform limitations."
+    title: "Custom Platform Systems",
+    desc: "Custom configurations built to support trading workflows beyond standard retail software limits."
   },
   {
     icon: Cpu,
-    title: "High-Performance Architecture",
-    desc: "Specialized quantitative desk focusing exclusively on compiled C++ and MQL5 systems."
+    title: "Experienced Software Team",
+    desc: "A dedicated engineering desk with deep experience in C++, Python, and MT4/MT5 systematic setups."
   },
   {
     icon: ShieldCheck,
-    title: "Audited Trading Logs",
-    desc: "Every bespoke software build is delivered with complete audit trails and performance logs."
+    title: "Thoroughly Tested Software",
+    desc: "Every custom tool we deliver is fully verified for stability, complete with setup logs and performance verification."
   }
 ];
 
@@ -46,7 +46,7 @@ export const CustomAlgoTeam = () => {
             </h2>
             
             <p className="text-white/40 text-base leading-relaxed mb-12 max-w-xl">
-              We house Asia's largest and most senior team of algorithmic architects. Whether you require a proprietary ECN HFT bridge or a custom execution framework, our engineers build for your desk.
+              We are home to a highly experienced team of software developers and trading analysts. Whether you need a custom platform setup, specialized indicators, or automated order routing systems, our engineers design tools tailored to your exact needs.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">

@@ -187,7 +187,7 @@ export const BrokerTalent = () => {
 
           <Reveal delay={0.15}>
             <p className="text-lg md:text-xl text-[#8A9AAB] max-w-3xl mx-auto font-light leading-relaxed mb-12">
-              We provide global partner brokerages with full-scale recruitment pipelines. We identify top-tier talent, run local training programs, provide margin &amp; rebate structure education, and manage the outsourced HR framework.
+              Since 2019, we have spent 6-7 years building the industry's most trusted recruitment and training pipeline for brokerages. We identify top-tier customer support, sales, and technical specialists, train them on MT4/MT5 platforms, and manage all your staffing needs so you can focus on growth.
             </p>
           </Reveal>
 
@@ -234,10 +234,10 @@ export const BrokerTalent = () => {
                 <ShieldCheck className="h-4 w-4 text-cyan-400" /> B2B HUMAN RESOURCES &amp; SERVICES DIRECTIVE
               </div>
               <h2 className="text-3xl font-bold text-white tracking-tight">
-                Bespoke HR Sourcing &amp; Education Desk
+                6+ Years of Trusted Staffing &amp; Onboarding
               </h2>
               <p className="text-[#8A9AAB] leading-relaxed">
-                The IFX B2B Sourcing Desk operates a complete talent acquisition workflow. We scout candidates, deliver intensive system training, teach margin/Economic rebate configurations, and manage localized HR placement processes to ensure candidates hit the ground running.
+                Finding staff who understand commissions, spreads, customer service, and technical trading platforms is a major challenge for growing brokerages. Since 2019, our specialized sourcing desk has been recruiting, vetting, and training professionals so they can support your business operations immediately upon hire.
               </p>
               <div className="flex flex-col gap-3 pt-2">
                 <div className="flex items-center gap-3 text-sm text-white/80">
@@ -260,10 +260,10 @@ export const BrokerTalent = () => {
             <div className="site-panel p-8 relative overflow-hidden border border-blue-500/10 bg-[#040507]/40 backdrop-blur-md rounded-3xl">
               <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl pointer-events-none" />
               <h3 className="text-sm font-bold text-white mb-6 uppercase tracking-wider font-mono text-blue-400 border-b border-white/5 pb-3">
-                // B2B HR PLACEMENT POLICY
+                // COMPREHENSIVE TEAM DEPLOYMENT
               </h3>
               <p className="text-xs font-mono text-white/70 leading-relaxed mb-6">
-                "We support our institutional partners by sourcing and preparing brokerage specialists. Our end-to-end framework includes legal compliance consulting, CRM administration training, and ongoing local market education, giving brokers instant access to verified human resources."
+                "We help our corporate partners build reliable, trained teams. From platform support representatives to business developers, we handle compliance checks, system training, and local onboarding so you have a prepared workforce ready to go."
               </p>
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full border border-white/10 overflow-hidden bg-white/5 flex items-center justify-center text-xs font-bold text-blue-400 font-mono">

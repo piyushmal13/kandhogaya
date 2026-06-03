@@ -96,7 +96,7 @@ export const B2BWhiteLabel = () => {
             Your Premium <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">White Label</span> Partner.
           </h1>
           <p className="text-gray-400 text-sm leading-relaxed max-w-xl mx-auto font-medium">
-            Launch your own fully branded quantitative algorithmic trading business inside 30 days. We provide the frontend website, bespoke brand logos, MT4/MT5 bridges, automated client consoles, payment gateways, and backend management suites.
+            Since 2019, we have spent 6-7 years helping partner firms establish, brand, and scale their trading operations. We supply everything you need: a custom website, professional design, MT4/MT5 server bridges, payment processing systems, and back-office management dashboards.
           </p>
         </div>
 
@@ -126,7 +126,7 @@ export const B2BWhiteLabel = () => {
                 Complete Brokerage in a Box
               </div>
               <h2 className="text-3xl font-black uppercase tracking-tight italic">
-                A True Institutional Partnership.
+                6+ Years of Trusted Infrastructure Delivery.
               </h2>
             </div>
 
@@ -134,23 +134,23 @@ export const B2BWhiteLabel = () => {
               {[
                 { 
                   icon: Layout, 
-                  title: "Custom Brand & Website Setup", 
-                  desc: "We construct a stunning, high-converting dark-mode interface carrying your name, customized typography, corporate logo, and tailored brand aesthetics." 
+                  title: "Custom Website & Brand Styling", 
+                  desc: "We design a professional, high-converting frontend website featuring your custom brand logo, matching colors, clean typography, and a tailored visual identity." 
                 },
                 { 
                   icon: Cpu, 
-                  title: "Pre-Integrated Algorithmic Engine", 
-                  desc: "Deliver instant high-probability trading signals and system execution directly to your clients' dashboards. Fully connected to our elite backtest-verified models." 
+                  title: "Pre-Configured System Connectivity", 
+                  desc: "Provide your clients with automated trading signals and system execution directly inside their accounts, powered by our backtest-verified models." 
                 },
                 { 
                   icon: Smartphone, 
-                  title: "Client & Administration Consoles", 
-                  desc: "Turnkey client terminals with comprehensive analytics, real-time balance tracking, referred affiliate hubs, and master desks for admin operations." 
+                  title: "Client & Admin Portals", 
+                  desc: "Supply your clients with secure dashboards to track account balances, deposits, and affiliate commissions, while you monitor everything from a centralized admin panel." 
                 },
                 { 
                   icon: CreditCard, 
-                  title: "Payment Gateway Enclaves", 
-                  desc: "Pre-integrated checkout nodes supporting credit/debit networks, regional wire systems, and secure on-chain cryptographic settlement paths." 
+                  title: "Payment & Checkout Integration", 
+                  desc: "Set up a secure payment flow supporting bank wires, credit card checkout networks, and major cryptocurrencies for seamless deposits and withdrawals." 
                 }
               ].map((prop, idx) => (
                 <div key={idx} className="flex gap-5">

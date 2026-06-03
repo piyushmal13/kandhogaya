@@ -5,10 +5,14 @@ const getSupabaseConfig = () => {
   const injectedKey = (globalThis as any)._SUPABASE_ANON_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY;
 
   if (typeof window !== "undefined") {
-    // Client-side: route requests through Vercel proxy to conceal raw Supabase URL only in production.
-    // For local development, direct VITE_SUPABASE_URL is used because the local server has no vercel-proxy handler.
-    const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
-    if (!isLocal && import.meta.env.PROD) {
+    // Client-side: route requests through Vercel proxy to conceal raw Supabase URL only in production deployments.
+    // For local development or local preview, direct VITE_SUPABASE_URL is used since the local server does not handle proxy rewrites.
+    const isVercelOrProd = 
+      window.location.hostname === "ifxtrades.com" || 
+      window.location.hostname === "www.ifxtrades.com" || 
+      window.location.hostname.endsWith(".vercel.app");
+
+    if (isVercelOrProd && import.meta.env.PROD) {
       injectedUrl = `${window.location.origin}/supabase-proxy`;
     }
   }

@@ -101,19 +101,6 @@ async function run() {
         true,
         'internal',
         'Remote / London'
-      ),
-      (
-        'Chief Operating Officer (COO) / Sourcing Director',
-        'Executive Management',
-        'Direct global hiring, B2B recruitment pipelines, margin management training programs, and outsourced HR staffing compliance.',
-        ARRAY[
-          '10+ years executive experience in brokerage or fintech industries',
-          'Proven record structuring corporate HR and global staffing pools',
-          'Deep understanding of institutional compliance and business operations'
-        ],
-        true,
-        'internal',
-        'Remote / Dubai'
       );
     `);
 

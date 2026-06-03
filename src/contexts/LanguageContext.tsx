@@ -16,7 +16,7 @@ const translations: Record<LanguageCode, Record<string, string>> = {
     hero_world_class: "World-Class",
     hero_inst_fx: "Institutional FX",
     hero_macro: "& Macro.",
-    hero_sub: "We engineer high-fidelity systematic algorithms and ECN bridge systems for institutional desks. Code your unique trading framework with sub-millisecond precision.",
+    hero_sub: "We design and build reliable automated trading tools, platform integrations, and custom execution setups for traders and brokerages globally. Automate your ideas with our proven, human-led expertise.",
     badge_research: "Institutional Research Desk",
     cta_request: "Request Session",
     cta_results: "See Results",
