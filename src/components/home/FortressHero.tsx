@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { motion, useScroll, useTransform, useSpring } from "motion/react";
-import { ArrowRight, ChevronDown, Play, ShieldCheck, Zap, Globe, Timer, Lock, Server, Upload } from "lucide-react";
+import { ArrowRight, ChevronDown, Play, ShieldCheck, Zap, Globe, Timer, Lock, Server } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const EASING = [0.4, 0, 0.2, 1] as const;
@@ -15,7 +15,6 @@ import { AnimatedCandlesticks } from "../ui/AnimatedCandlesticks";
 interface FortressHeroProps {
   onRequestSession: () => void;
   onRequestBuild: () => void;
-  onRequestCvSubmit: () => void;
 }
 
 // ── FLOATING PARTICLES ──
@@ -24,7 +23,7 @@ const FloatingParticles = () => (
     {Array.from({ length: 30 }).map((_, i) => (
       <div
         key={i}
-        className="absolute w-[2px] h-[2px] rounded-full bg-blue-500/20"
+        className="absolute w-[3px] h-[3px] rounded-full bg-cyan-400/35"
         style={{
           left: `${Math.random() * 100}%`,
           top: `${Math.random() * 100}%`,
@@ -38,14 +37,14 @@ const FloatingParticles = () => (
 
 // ── TRUST BADGES ──
 const TRUST_ITEMS = [
-  { icon: Lock, label: "256-bit Encrypted" },
-  { icon: Timer, label: "<50ms Execution" },
-  { icon: Globe, label: "40+ Countries" },
-  { icon: Server, label: "VPS Hosting*" },
-  { icon: ShieldCheck, label: "Audit Verified" },
+  { icon: Lock, title: "SECURE NODE", desc: "AES-256 ECN tunnel" },
+  { icon: Timer, title: "LATENCY TARGET", desc: "Sub-50ms execution" },
+  { icon: Globe, title: "GLOBAL GRID", desc: "40+ Sovereignty pools" },
+  { icon: Server, title: "CO-LOCATION", desc: "NY4/LD4 cross-connects" },
+  { icon: ShieldCheck, title: "AUDIT VERIFIED", desc: "Third-party logs" },
 ];
 
-export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, onRequestBuild, onRequestCvSubmit }) => {
+export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, onRequestBuild }) => {
   const { t } = useLanguage();
   const { isEnabled: isTickerActive } = useFeatureFlag('market_ticker_active', true);
   const [tickers, setTickers] = useState<string[]>([]);
@@ -129,15 +128,15 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
     >
       {/* ── CANVAS BACKGROUND ── */}
       <motion.div
-        style={{ scale, y: backgroundY, opacity: 0.5, willChange: "transform" }}
+        style={{ scale, y: backgroundY, opacity: 0.85, willChange: "transform" }}
         className="absolute inset-0 origin-center flex items-center justify-center pointer-events-none"
       >
         <img
           src="/colocation_network.png"
           alt="IFX ECN Co-location Network Map"
-          className="w-full h-full object-cover opacity-20"
+          className="w-full h-full object-cover opacity-50"
         />
-        <div className="absolute inset-0 bg-black/50" />
+        <div className="absolute inset-0 bg-black/30" />
       </motion.div>
 
       {/* ── FLOATING PARTICLES ── */}
@@ -242,28 +241,25 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
                   {t("cta_results")}
                 </EliteButton>
               </button>
-
-              <button onClick={(e) => { e.preventDefault(); onRequestCvSubmit(); }} className="w-full sm:w-auto shrink-0 cursor-pointer">
-                <EliteButton variant="elite" size="lg" fluid rightIcon={<Upload className="w-3.5 h-3.5 text-cyan-400" />}>
-                  Submit CV / Join Desk
-                </EliteButton>
-              </button>
             </motion.div>
 
-            {/* Trust Badges */}
+            {/* Trust Badges Grid */}
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6, duration: 0.6, ease: ENTRY }}
-              className="flex flex-wrap items-center justify-center gap-3 sm:gap-6 pt-2 w-full max-w-3xl mx-auto"
+              className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 pt-6 w-full max-w-5xl mx-auto z-30"
             >
               {TRUST_ITEMS.map((item) => (
                 <div
-                  key={item.label}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.02] border border-white/[0.06]"
+                  key={item.title}
+                  className="flex flex-col items-center md:items-start text-center md:text-left p-4 rounded-xl bg-white/[0.01] hover:bg-white/[0.03] border border-white/[0.05] hover:border-blue-500/20 transition-all duration-300 shadow-[inset_0_1px_1px_rgba(255,255,255,0.02)] group/badge"
                 >
-                  <item.icon className="w-3 h-3 text-blue-400/60" />
-                  <span className="text-[8px] sm:text-[9px] font-bold uppercase tracking-[0.2em] text-white/30">{item.label}</span>
+                  <div className="w-8 h-8 rounded-lg bg-blue-500/5 border border-white/5 flex items-center justify-center mb-3 group-hover/badge:bg-blue-500/10 group-hover/badge:border-blue-500/20 transition-colors">
+                    <item.icon className="w-3.5 h-3.5 text-blue-400 group-hover/badge:text-cyan-400 transition-colors" />
+                  </div>
+                  <span className="text-[10px] font-black text-white tracking-wider font-sans uppercase mb-1">{item.title}</span>
+                  <span className="text-[8px] text-white/40 font-mono tracking-normal leading-tight">{item.desc}</span>
                 </div>
               ))}
             </motion.div>

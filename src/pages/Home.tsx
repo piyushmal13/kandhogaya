@@ -14,11 +14,9 @@ import { ConsultationSection } from "../components/home/ConsultationSection";
 import { TerminalShowcase } from "../components/home/TerminalShowcase";
 import { EliteSocialProof } from "../components/institutional/EliteSocialProof";
 import { PaymentGateways } from "../components/home/PaymentGateways";
-import { CvSubmitModal } from "../components/ui/CvSubmitModal";
 
 const Home = () => {
   const [isBookingOpen, setBookingOpen] = useState(false);
-  const [isCvModalOpen, setCvModalOpen] = useState(false);
   const [defaultObjective, setDefaultObjective] = useState("");
 
   const triggerSessionRequest = () => {
@@ -57,7 +55,6 @@ const Home = () => {
         <FortressHero 
           onRequestSession={triggerSessionRequest}
           onRequestBuild={triggerBespokeBuildRequest}
-          onRequestCvSubmit={() => setCvModalOpen(true)}
         />
 
         {/* L2: Partner Matrix & Authority (Dynamic integrations) */}
@@ -82,7 +79,7 @@ const Home = () => {
 
         {/* L5: Custom Engineering Authority (Our story, team size, bespoke desk) */}
         <section className="hidden sm:block">
-          <CustomAlgoTeam onRequestCvSubmit={() => setCvModalOpen(true)} />
+          <CustomAlgoTeam />
         </section>
 
         {/* L5.5: Global Network Social Proof & WhatsApp Telemetry */}
@@ -97,12 +94,6 @@ const Home = () => {
         isOpen={isBookingOpen}
         onClose={() => setBookingOpen(false)}
         defaultObjective={defaultObjective}
-      />
-
-      {/* Global Interactive CV Drop Modal Popup */}
-      <CvSubmitModal 
-        isOpen={isCvModalOpen}
-        onClose={() => setCvModalOpen(false)}
       />
     </>
   );

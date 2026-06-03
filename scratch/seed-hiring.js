@@ -1,7 +1,6 @@
 import pkg from 'pg';
 const { Client } = pkg;
 import dotenv from 'dotenv';
-import path from 'path';
 
 dotenv.config();
 
@@ -16,7 +15,7 @@ async function run() {
   const client = new Client({ connectionString: DATABASE_URL });
   await client.connect();
   try {
-    console.log("Seeding B2B Sourcing and Internal Career positions...");
+    console.log("Seeding extensive B2B Sourcing and Internal Career positions...");
 
     // Clear existing positions to keep seeding clean
     await client.query(`DELETE FROM hiring_positions;`);
@@ -26,30 +25,95 @@ async function run() {
       INSERT INTO hiring_positions (title, department, description, requirements, is_active, type, location)
       VALUES 
       (
-        'Ultra-Low Latency C++ / Rust Systems Developer',
+        'Quantum Execution & Low-Latency Developer',
         'Systems Engineering',
-        'Deploy compiled binaries and optimize socket layers for tick-level currency and gold execution tunnels.',
+        'Deploy compiled binaries, optimize socket layers, and integrate multi-threaded execution tunnels for institutional order flow.',
         ARRAY[
-          'Expertise in kernel-bypass (Solarflare EF_VI)',
-          'Concurrency lock-free pattern designs in C++20 / Rust',
-          'Real-time socket programming and FIX protocol routing'
+          'Expertise in C++20, Rust, and kernel-bypass network adapters',
+          'Lock-free concurrency patterns and memory-aligned structures',
+          'Direct experience with Prime-of-Prime API co-location bridges'
         ],
         true,
         'internal',
         'Remote / London'
       ),
       (
-        'Senior Quantitative Portfolio Analyst',
-        'Quantitative Desk',
-        'Develop and backtest volatility-regime models, GARCH filters, and trailing risk cutoffs.',
+        'MetaTrader 4 (MT4) Integration Specialist',
+        'Technical Services',
+        'Maintain and optimize MT4 server managers, custom bridges, gateway endpoints, and group configuration profiles.',
         ARRAY[
-          'Post-graduate degree in Mathematics, Physics or Quantitative Finance',
-          'Experience with MT5 websocket bridge execution and backtest fidelity verification',
-          'Python / C++ algorithmic simulation models'
+          'Extensive experience configuring MT4 backend panels',
+          'Proficiency writing robust plugins in MQL4 / C++',
+          'Deep understanding of broker liquidity routing protocols'
         ],
         true,
         'internal',
         'Remote / Prague'
+      ),
+      (
+        'MetaTrader 5 (MT5) Bridge Engineer',
+        'Technical Services',
+        'Develop and audit MT5 websocket bridges, trade copy gateways, and real-time database syncing layers.',
+        ARRAY[
+          'Advanced knowledge of MT5 Manager API and gateway systems',
+          'MQL5 systematic development and debug workflows',
+          'Secure database sync design patterns'
+        ],
+        true,
+        'internal',
+        'Remote / Sydney'
+      ),
+      (
+        'Algorithmic Strategy Developer (Algos)',
+        'Quantitative Desk',
+        'Research, simulate, and backtest systematic gold and currency portfolios. Build GARCH risk filters and trailing drawdown cuts.',
+        ARRAY[
+          'Post-graduate degree in Quantitative Finance or Physics',
+          'High-fidelity backtesting with simulated tick data',
+          'Python / C++ algorithmic simulation modeling'
+        ],
+        true,
+        'internal',
+        'Remote / Dubai'
+      ),
+      (
+        'UI/UX & Web Graphic Designer',
+        'Marketing & Brand',
+        'Create beautiful corporate visual collateral, terminal dashboards, and marketing materials adhering to Ice-Blue Diamond guidelines.',
+        ARRAY[
+          'Stunning design portfolio showcasing premium dark-mode aesthetics',
+          'Expertise in Figma, vector illustration, and front-end layout styling',
+          'Familiarity with HTML/CSS responsive typography standards'
+        ],
+        true,
+        'internal',
+        'Remote / Prague'
+      ),
+      (
+        'Back Office Operations & Compliance Analyst',
+        'Operations',
+        'Manage user access verification, KYC onboarding validations, SLA contracts, and regulatory logs for prop firm evaluations.',
+        ARRAY[
+          'Background in financial compliance or back-office administration',
+          'Experience auditing database logs and contract bindings',
+          'Rigorous attention to detail and secure CRM workflows'
+        ],
+        true,
+        'internal',
+        'Remote / London'
+      ),
+      (
+        'Chief Operating Officer (COO) / Sourcing Director',
+        'Executive Management',
+        'Direct global hiring, B2B recruitment pipelines, margin management training programs, and outsourced HR staffing compliance.',
+        ARRAY[
+          '10+ years executive experience in brokerage or fintech industries',
+          'Proven record structuring corporate HR and global staffing pools',
+          'Deep understanding of institutional compliance and business operations'
+        ],
+        true,
+        'internal',
+        'Remote / Dubai'
       );
     `);
 
@@ -85,7 +149,7 @@ async function run() {
       );
     `);
 
-    console.log("Successfully seeded B2B Sourcing and Internal Career positions!");
+    console.log("Successfully seeded extensive B2B Sourcing and Internal Career positions!");
   } catch (err) {
     console.error("Error seeding positions:", err);
   } finally {
