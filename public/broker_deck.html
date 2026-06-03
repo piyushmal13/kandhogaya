@@ -41,6 +41,21 @@
     .slide.active {
       display: flex;
     }
+    .gemini-border-glow {
+      position: relative;
+    }
+    .gemini-border-glow::after {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(0, 163, 255, 0.4) 0%, rgba(0, 229, 255, 0.4) 50%, rgba(139, 92, 246, 0.1) 100%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
     @media print {
       .slide {
         display: block !important;
@@ -54,14 +69,14 @@
     }
   </style>
 </head>
-<body class="overflow-x-hidden antialiased">
+<body class="overflow-x-hidden antialiased bg-[#010203]">
 
   <!-- Nav Controls (Floating) -->
   <div class="nav-controls fixed bottom-8 right-8 z-50 flex items-center gap-4 bg-black/80 backdrop-blur-md border border-white/10 p-3 rounded-2xl select-none">
     <button onclick="prevSlide()" class="p-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors text-white active:scale-95 duration-200">
       <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
     </button>
-    <span class="font-mono text-xs font-bold text-white/50" id="slide-num">01 / 05</span>
+    <span class="font-mono text-xs font-bold text-white/50" id="slide-num">01 / 06</span>
     <button onclick="nextSlide()" class="p-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors text-white active:scale-95 duration-200">
       <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
     </button>
@@ -77,13 +92,13 @@
 
     <div class="max-w-4xl mx-auto space-y-8 relative z-10 w-full">
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px] font-black uppercase tracking-[0.2em] font-mono">
-        B2B Broker Integration Deck v6.5
+        B2B Broker Integration Deck v7.0
       </div>
       <h1 class="text-4xl sm:text-7xl font-black uppercase tracking-tight leading-[0.9]">
         Brokerage <br />
         <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400 italic font-serif">Partnerships & Ingress</span>
       </h1>
-      <p class="text-sm sm:text-xl text-white/40 max-w-2xl leading-relaxed">
+      <p class="text-sm sm:text-xl text-white/40 max-w-2xl leading-relaxed font-medium">
         Establish high-fidelity brokerage integrations. Route high-intent systematic client accounts directly to your platform via custom ECN co-location setups.
       </p>
       <div class="flex flex-wrap gap-6 pt-6 border-t border-white/5 font-mono text-[9px] text-white/30 uppercase tracking-[0.2em]">
@@ -158,10 +173,40 @@
     </div>
   </section>
 
-  <!-- SLIDE 4: REGULATORY COMPLIANCE & CLIENT RISK -->
+  <!-- SLIDE 4: DYNAMIC SUPABASE SPONSOR ENGINE (NEW) -->
   <section class="slide flex-col justify-center relative p-6 sm:p-12 md:p-24" id="slide-4">
     <div class="max-w-4xl mx-auto space-y-8 relative z-10 w-full">
-      <span class="font-mono text-xs font-black text-red-500 uppercase tracking-widest">Protocol 04 / B2B Risk Controls</span>
+      <span class="font-mono text-xs font-black text-blue-400 uppercase tracking-widest">Protocol 04 / Ad Ingress Engine</span>
+      <h2 class="text-3xl sm:text-5xl font-black uppercase tracking-tight leading-[0.95]">
+        Dynamic Database <span class="italic font-serif text-cyan-400">Ad Ingress Control</span>
+      </h2>
+      <p class="text-xs sm:text-base text-white/40 max-w-2xl leading-relaxed">
+        Our platform integrates directly with a live Supabase database cache layer to serve real-time brokerage sponsorship assets. Deploy banner assets dynamically without code revisions.
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
+        <div class="p-6 rounded-3xl bg-white/[0.02] border border-white/5 space-y-3">
+          <h4 class="text-xs font-black text-white uppercase font-mono text-cyan-400">Database Placement Slots</h4>
+          <ul class="text-[10px] text-white/50 space-y-2 list-disc pl-4 font-mono">
+            <li><strong>webinar:</strong> Global header sponsor block on live events.</li>
+            <li><strong>blog_incontent:</strong> Dynamic middle ads in quantitative reports.</li>
+            <li><strong>blog_sidebar:</strong> Floating brand cards on insight sidebars.</li>
+          </ul>
+        </div>
+        <div class="p-6 rounded-3xl bg-white/[0.02] border border-white/5 space-y-3">
+          <h4 class="text-xs font-black text-white uppercase font-mono text-blue-400">Real-Time Ingestion</h4>
+          <p class="text-[10px] text-white/50 leading-relaxed font-mono">
+            Sponsor data is fetched securely via <code>bannerService.getBanners(placement)</code>. Admins control title, tagline, images, trackable links, and priority parameters directly through the admin panel database interface.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 5: REGULATORY COMPLIANCE & CLIENT RISK -->
+  <section class="slide flex-col justify-center relative p-6 sm:p-12 md:p-24" id="slide-5">
+    <div class="max-w-4xl mx-auto space-y-8 relative z-10 w-full">
+      <span class="font-mono text-xs font-black text-red-500 uppercase tracking-widest">Protocol 05 / B2B Risk Controls</span>
       <h2 class="text-3xl sm:text-5xl font-black uppercase tracking-tight leading-[0.95]">
         Compliance & <span class="italic font-serif text-cyan-400">Risk Parameters</span>
       </h2>
@@ -181,21 +226,21 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl">
         <div class="p-4 rounded-xl bg-white/[0.02] border border-white/5">
           <span class="block text-[10px] font-bold text-white font-mono uppercase">Prop-Firm Challenge Pass</span>
-          <span class="text-[9px] text-white/30">Client-signed agreements ensure complete ownership of credentials during evaluation phases.</span>
+          <span class="text-[9px] text-white/30 font-mono">Client-signed agreements ensure complete ownership of credentials during evaluation phases.</span>
         </div>
         <div class="p-4 rounded-xl bg-white/[0.02] border border-white/5">
           <span class="block text-[10px] font-bold text-white font-mono uppercase">Systematic Liquidation Floors</span>
-          <span class="text-[9px] text-white/30">Auto-disconnect logic prevents margin depletion below $1,000 USD balance.</span>
+          <span class="text-[9px] text-white/30 font-mono">Auto-disconnect logic prevents margin depletion below $1,000 USD balance.</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- SLIDE 5: LEAD MANAGEMENT & WHATSAPP ROUTING -->
-  <section class="slide flex-col justify-center relative p-6 sm:p-12 md:p-24" id="slide-5">
+  <!-- SLIDE 6: LEAD MANAGEMENT & WHATSAPP ROUTING -->
+  <section class="slide flex-col justify-center relative p-6 sm:p-12 md:p-24" id="slide-6">
     <div class="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,rgba(139,92,246,0.04)_0%,transparent_70%)]" />
     <div class="max-w-4xl mx-auto space-y-10 relative z-10 w-full">
-      <span class="font-mono text-xs font-black text-blue-400 uppercase tracking-widest">Protocol 05 / Lead Routing</span>
+      <span class="font-mono text-xs font-black text-blue-400 uppercase tracking-widest">Protocol 06 / Lead Routing</span>
       <h2 class="text-3xl sm:text-5xl font-black uppercase tracking-tight leading-[0.95]">
         Hardened CRM Lead <span class="italic font-serif text-cyan-400">Management & Triggers</span>
       </h2>
@@ -218,7 +263,7 @@
   <!-- Slide Logic -->
   <script>
     let currentSlideIndex = 1;
-    const totalSlides = 5;
+    const totalSlides = 6;
 
     function showSlide(index) {
       if (index < 1 || index > totalSlides) return;

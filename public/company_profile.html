@@ -141,7 +141,7 @@
 
     <div class="max-w-4xl mx-auto w-full pt-8 text-[9px] font-mono text-white/30 print-text-muted uppercase tracking-[0.1em] border-t border-white/5 print-border flex justify-between">
       <span>© 2026 IFX Trades Ltd. All Rights Reserved.</span>
-      <span>Document Ref: IFX-CP-2026-V3</span>
+      <span>Document Ref: IFX-CP-2026-V3.5</span>
     </div>
   </section>
 
@@ -246,11 +246,50 @@
     </div>
   </section>
 
-  <!-- Page 4: PROP FIRM INTEGRATIONS & COMPARISONS -->
+  <!-- Page 4: DYNAMIC B2B SPONSOR & AD INGRESS ENGINE (NEW) -->
   <section class="print-page min-h-screen flex flex-col justify-center p-6 sm:p-12 md:p-24 border-t border-white/5 print-border">
     <div class="max-w-4xl mx-auto w-full space-y-12">
       <div class="space-y-3">
-        <span class="font-mono text-xs font-black text-blue-500">03 / Institutional Allocations</span>
+        <span class="font-mono text-xs font-black text-blue-500">03 / Marketing Integrations</span>
+        <h2 class="text-3xl sm:text-5xl font-black uppercase tracking-tight print-text-dark">Dynamic Sponsor Engine</h2>
+      </div>
+
+      <p class="text-xs sm:text-base text-white/50 print-text-muted leading-relaxed">
+        Brokers and liquidity providers can dynamically configure placement real estate, live campaigns, and referral routes on the platform through our real-time database-driven ingestion engine.
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div class="p-6 rounded-2xl bg-white/[0.02] border border-white/5 print-card print-bg-light">
+          <span class="block text-xs font-bold text-white print-text-dark uppercase font-mono mb-2">Webinar Placements</span>
+          <p class="text-[10px] text-white/40 print-text-muted font-mono leading-relaxed">
+            Maps to the <code>webinar</code> key in Supabase. B2B brokers bid for prime title placement and registration intake redirection hooks.
+          </p>
+        </div>
+        <div class="p-6 rounded-2xl bg-white/[0.02] border border-white/5 print-card print-bg-light">
+          <span class="block text-xs font-bold text-white print-text-dark uppercase font-mono mb-2">In-Content Banners</span>
+          <p class="text-[10px] text-white/40 print-text-muted font-mono leading-relaxed">
+            Served through the <code>blog_incontent</code> key. Injects responsive HTML markup or custom banner SVGs directly in quantitative analyses.
+          </p>
+        </div>
+        <div class="p-6 rounded-2xl bg-white/[0.02] border border-white/5 print-card print-bg-light">
+          <span class="block text-xs font-bold text-white print-text-dark uppercase font-mono mb-2">Sidebar Banners</span>
+          <p class="text-[10px] text-white/40 print-text-muted font-mono leading-relaxed">
+            Binds to the <code>blog_sidebar</code> key. Deploys floating broker-branded cards with custom taglines and click-telemetry referral setups.
+          </p>
+        </div>
+      </div>
+
+      <div class="p-6 rounded-[2rem] bg-gradient-to-r from-blue-500/10 to-transparent border border-blue-500/20 text-xs text-white/40 print-card print-text-muted leading-relaxed font-mono">
+        <strong>TECHNICAL FLOW:</strong> Sockets fetch placement nodes continuously. The metadata payload parses brand parameters (logo, referral URL, accent color, taglines), ensuring advertisements load seamlessly with sub-100ms loading speeds.
+      </div>
+    </div>
+  </section>
+
+  <!-- Page 5: PROP FIRM INTEGRATIONS & COMPARISONS -->
+  <section class="print-page min-h-screen flex flex-col justify-center p-6 sm:p-12 md:p-24 border-t border-white/5 print-border">
+    <div class="max-w-4xl mx-auto w-full space-y-12">
+      <div class="space-y-3">
+        <span class="font-mono text-xs font-black text-blue-500">04 / Institutional Allocations</span>
         <h2 class="text-3xl sm:text-5xl font-black uppercase tracking-tight print-text-dark">Prop Firm Operations</h2>
       </div>
 
@@ -277,22 +316,22 @@
             <tr>
               <td class="p-4 font-bold text-white print-text-dark">Daily Loss Limit (typically 5%)</td>
               <td class="p-4 text-white/40 print-text-muted">Broker terminal lag causes trades to drag, breaching limits before a manual exit.</td>
-              <td class="p-4 text-cyan-400 font-medium">Hardcoded local terminal cutoffs disconnect the socket bridge at 4.0% daily equity drop.</td>
+              <td class="p-4 text-cyan-400 font-medium font-mono">Hardcoded local terminal cutoffs disconnect the socket bridge at 4.0% daily equity drop.</td>
             </tr>
             <tr>
               <td class="p-4 font-bold text-white print-text-dark">IP Address / Copying Restrictions</td>
               <td class="p-4 text-white/40 print-text-muted">Simultaneous logins trigger multi-account flagging, leading to account closure.</td>
-              <td class="p-4 text-cyan-400 font-medium">Hardware ID (HWID) binding ensures a dedicated private virtual machine IP per license key.</td>
+              <td class="p-4 text-cyan-400 font-medium font-mono">Hardware ID (HWID) binding ensures a dedicated private virtual machine IP per license key.</td>
             </tr>
             <tr>
               <td class="p-4 font-bold text-white print-text-dark">Execution Speed / HFT Flagging</td>
               <td class="p-4 text-white/40 print-text-muted">Arbitrage spikes create latency gaps which the prop firm flags as toxic trading.</td>
-              <td class="p-4 text-cyan-400 font-medium">Sub-5ms Equinix ECN routing fills trades immediately, matching standard institutional latency.</td>
+              <td class="p-4 text-cyan-400 font-medium font-mono">Sub-5ms Equinix ECN routing fills trades immediately, matching standard institutional latency.</td>
             </tr>
             <tr>
               <td class="p-4 font-bold text-white print-text-dark">Consistency Rule Compliance</td>
               <td class="p-4 text-white/40 print-text-muted">Inconsistent lot sizing triggers evaluation disqualification during payouts.</td>
-              <td class="p-4 text-cyan-400 font-medium">Mathematical grid limits scale position sizes strictly based on dynamic ATR models.</td>
+              <td class="p-4 text-cyan-400 font-medium font-mono">Mathematical grid limits scale position sizes strictly based on dynamic ATR models.</td>
             </tr>
           </tbody>
         </table>
@@ -307,11 +346,11 @@
     </div>
   </section>
 
-  <!-- Page 5: RIGOROUS COMPLIANCE & RISK DISCLAIMER -->
+  <!-- Page 6: RIGOROUS COMPLIANCE & RISK DISCLAIMER -->
   <section class="print-page min-h-screen flex flex-col justify-center p-6 sm:p-12 md:p-24 border-t border-white/5 print-border">
     <div class="max-w-4xl mx-auto w-full space-y-10">
       <div class="space-y-3">
-        <span class="font-mono text-xs font-black text-red-500">04 / Legal Framework</span>
+        <span class="font-mono text-xs font-black text-red-500">05 / Legal Framework</span>
         <h2 class="text-3xl sm:text-5xl font-black uppercase tracking-tight text-red-500">Risk Disclosure & Compliance</h2>
       </div>
 
