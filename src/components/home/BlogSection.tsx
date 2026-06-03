@@ -18,19 +18,19 @@ export const BlogSection = () => {
   }, []);
 
   return (
-    <section className="py-24 bg-[var(--color10)] relative overflow-hidden border-t border-white/5">
+    <section className="py-24 bg-[#010203] relative overflow-hidden border-t border-white/5">
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
           <div>
-            <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tighter">
+            <h2 className="text-4xl md:text-5xl font-black text-white tracking-tighter uppercase italic">
               Institutional Insights
             </h2>
           </div>
           
-          <Link to="/blog" className="group flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
+          <Link to="/blog" className="group flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-xs font-mono uppercase tracking-widest">
             View All Articles
-            <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform text-blue-500" />
           </Link>
         </div>
 
@@ -45,7 +45,7 @@ export const BlogSection = () => {
               <article 
                 className="group cursor-pointer w-[320px] md:w-[450px]"
               >
-                <div className="relative aspect-[16/10] rounded-[32px] overflow-hidden mb-8 border border-white/5 bg-[var(--color7)]">
+                <div className="relative aspect-[16/10] rounded-[2.5rem] overflow-hidden mb-8 border border-white/5 bg-[#040507]/40 backdrop-blur-md">
                   <img 
                     src={resolveBlogImage(blog, "thumb")} 
                     alt={blog.title}
@@ -55,30 +55,30 @@ export const BlogSection = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60" />
                   
                   {/* Category Tag */}
-                  <div className="absolute top-6 left-6 px-3 py-1 rounded-full bg-emerald-500/10 backdrop-blur-md border border-emerald-500/20 text-emerald-500 text-[8px] font-black uppercase tracking-[0.2em]">
+                  <div className="absolute top-6 left-6 px-3.5 py-1 rounded-full bg-blue-500/10 backdrop-blur-md border border-blue-500/20 text-cyan-400 text-[8px] font-black uppercase tracking-[0.25em] font-mono">
                     {blog.category || "Research"}
                   </div>
                 </div>
 
                 <div className="space-y-4 px-2">
-                  <div className="flex items-center gap-4 text-[9px] font-black text-gray-600 uppercase tracking-widest">
-                    <Calendar className="w-3 h-3 text-emerald-500/50" />
+                  <div className="flex items-center gap-4 text-[9px] font-black text-gray-600 uppercase tracking-widest font-mono">
+                    <Calendar className="w-3 h-3 text-blue-500/50" />
                     {new Date(blog.created_at).toLocaleDateString()}
                     <span className="w-1 h-1 rounded-full bg-white/10" />
-                    <span className="flex items-center gap-1"><Clock className="w-2.5 h-2.5" /> 5 MIN</span>
+                    <span className="flex items-center gap-1"><Clock className="w-2.5 h-2.5 text-cyan-400" /> 5 MIN</span>
                   </div>
                   
-                  <h3 className="text-2xl md:text-3xl font-black text-white group-hover:text-emerald-400 transition-colors leading-[0.95] tracking-tighter">
+                  <h3 className="text-2xl md:text-3xl font-black text-white group-hover:text-blue-400 transition-colors leading-[0.95] tracking-tighter uppercase italic">
                     {blog.title}
                   </h3>
                   
-                  <p className="text-gray-500 text-sm leading-relaxed line-clamp-2 font-medium opacity-80">
+                  <p className="text-[#8A9AAB] text-xs leading-relaxed line-clamp-2 font-medium opacity-80">
                     {blog.metadata?.bold_headline || stripHtml(blog.content)}
                   </p>
                   
-                  <div className="pt-4 flex items-center gap-3 text-emerald-500 text-[10px] font-black uppercase tracking-[0.2em] group-hover:gap-5 transition-all">
+                  <div className="pt-4 flex items-center gap-3 text-blue-400 text-[10px] font-black uppercase tracking-[0.2em] group-hover:gap-5 transition-all font-mono">
                     Read Analysis
-                    <ArrowUpRight className="w-3.5 h-3.5" />
+                    <ArrowUpRight className="w-3.5 h-3.5 text-cyan-400" />
                   </div>
                 </div>
               </article>

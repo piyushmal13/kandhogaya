@@ -132,8 +132,8 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
         className="absolute inset-0 origin-center flex items-center justify-center pointer-events-none"
       >
         <img
-          src="/brain/c68f6654-c41f-4f65-a861-7f7e83c4a21d/institutional_rocket_hero_1777829335535.png"
-          alt="IFX Institutional Spacecraft"
+          src="/colocation_network.png"
+          alt="IFX ECN Co-location Network Map"
           className="w-full h-full object-cover opacity-20"
         />
         <div className="absolute inset-0 bg-black/50" />

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B2B Quantitative Strategy Specifications — IFX Trades Whitepaper</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&family=IBM+Plex+Mono:wght@400;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"IBM Plex Mono"', 'monospace'],
+            serif: ['"DM Serif Display"', 'serif'],
+          },
+          colors: {
+            midnight: '#010203',
+            abyss: '#040507',
+            cardbg: '#0E1428',
+            iceblue: '#00A3FF',
+            diamondcyan: '#00E5FF',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #010203;
+      color: #ffffff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    @media print {
+      body {
+        background-color: #ffffff;
+        color: #000000;
+      }
+      .print-invert {
+        filter: invert(1);
+      }
+      .no-print {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="overflow-x-hidden antialiased bg-[#010203] text-white">
+
+  <!-- Header Section -->
+  <header class="py-12 border-b border-white/5 relative bg-[#040507]">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_100%,rgba(0,163,255,0.04),transparent)] pointer-events-none" />
+    <div class="absolute inset-0 pointer-events-none opacity-10">
+      <img src="/company_profile_hero.png" alt="Operations Backdrop" class="w-full h-full object-cover" />
+    </div>
+    
+    <div class="max-w-4xl mx-auto px-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 relative z-10">
+      <div class="space-y-3">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[9px] font-black uppercase tracking-[0.2em] font-mono">
+          Strategy Specifications Ledger v6.5
+        </div>
+        <h1 class="text-2xl sm:text-4xl font-black uppercase tracking-tight">
+          B2B Systematic <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400 font-serif italic">Whitepaper</span>
+        </h1>
+      </div>
+      <div class="flex items-center gap-3 no-print">
+        <button onclick="window.print()" class="px-5 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-all font-black text-[9px] uppercase tracking-widest active:scale-95 duration-200">
+          Print Document
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Body Content -->
+  <main class="py-12 max-w-4xl mx-auto px-6 space-y-12">
+    
+    <!-- Section 1 -->
+    <section class="space-y-4">
+      <div class="flex items-center gap-3">
+        <span class="font-mono text-xs font-black text-blue-500">01 /</span>
+        <h2 class="text-lg sm:text-xl font-black uppercase tracking-wider text-white">Algorithmic Volatility Regime Models</h2>
+      </div>
+      <div class="text-xs sm:text-sm text-white/50 leading-relaxed space-y-4">
+        <p>
+          Our proprietary algorithms employ multi-timeframe regime detection filters based on adaptive Standard Deviation curves and Average True Range (ATR) volatilities.
+        </p>
+        <p>
+          <strong>Regime 1: Mean Reversion (Low Volatility)</strong> — Enforces narrow grid allocations and trailing locks. Trades are triggered only on statistical outliers beyond the 3.0 Standard Deviation band.
+        </p>
+        <p>
+          <strong>Regime 2: Momentum Breakout (High Volatility)</strong> — Trailing stop engines activate, adapting lot sizes dynamically based on standard deviation expansions.
+        </p>
+      </div>
+    </section>
+
+    <!-- Section 2 -->
+    <section class="space-y-4">
+      <div class="flex items-center gap-3">
+        <span class="font-mono text-xs font-black text-blue-500">02 /</span>
+        <h2 class="text-lg sm:text-xl font-black uppercase tracking-wider text-white">Drawdown Safeguards & Trailing Stops</h2>
+      </div>
+      <div class="text-xs sm:text-sm text-white/50 leading-relaxed space-y-4">
+        <p>
+          To maintain strict capital preservation, every compiled Expert Advisor binary (.ex5) contains native risk guardrails:
+        </p>
+        <ul class="list-disc pl-5 space-y-2">
+          <li><strong>Hard Equity Caps:</strong> Automated session shutdown when account balance drops below the customized limit (e.g. 5.0% maximum drawdown threshold).</li>
+          <li><strong>Trailing Stop-Loss:</strong> Lot sizes are scaled dynamically, utilizing real-time ATR spreads to reduce exposure during low-liquidity session crossovers.</li>
+          <li><strong>No Custody Risk:</strong> Executions occur locally on the user's MT5 terminal setup; zero client funds are held.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Section 3 -->
+    <section class="space-y-4">
+      <div class="flex items-center gap-3">
+        <span class="font-mono text-xs font-black text-blue-500">03 /</span>
+        <h2 class="text-lg sm:text-xl font-black uppercase tracking-wider text-white">VPS Co-location & Latency Calibration</h2>
+      </div>
+      <div class="text-xs sm:text-sm text-white/50 leading-relaxed space-y-4">
+        <p>
+          We co-locate our execution bridge protocols inside Equinix NY4 and LD4 data centers to minimize execution slippage. 
+        </p>
+        <div class="grid grid-cols-2 gap-4 my-6">
+          <div class="p-5 rounded-xl bg-white/[0.02] border border-white/5">
+            <span class="text-[8px] font-black text-blue-500 uppercase tracking-widest block font-mono">NY4 Data Center</span>
+            <span class="text-sm font-mono font-bold text-white">0.85ms average network latency</span>
+          </div>
+          <div class="p-5 rounded-xl bg-white/[0.02] border border-white/5">
+            <span class="text-[8px] font-black text-blue-500 uppercase tracking-widest block font-mono">LD4 Data Center</span>
+            <span class="text-sm font-mono font-bold text-white">1.15ms average network latency</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4 -->
+    <section class="space-y-4">
+      <div class="flex items-center gap-3">
+        <span class="font-mono text-xs font-black text-blue-500">04 /</span>
+        <h2 class="text-lg sm:text-xl font-black uppercase tracking-wider text-white">ECN Account Integration FAQ</h2>
+      </div>
+      <div class="text-xs sm:text-sm text-white/50 leading-relaxed space-y-6">
+        <div class="space-y-2">
+          <h4 class="font-bold text-white uppercase text-xs">How do I load the EX5 binary file?</h4>
+          <p>Download the compiled file from your client dashboard. Open MT5 > File > Open Data Folder > MQL5 > Experts, paste the file, restart the terminal, and drag it onto your charts.</p>
+        </div>
+        <div class="space-y-2">
+          <h4 class="font-bold text-white uppercase text-xs">What account leverage is recommended?</h4>
+          <p>A leverage of 1:100 or higher is optimal to ensure margin limits are not hit during peak grid executions. Conservative accounts can use 1:30 leverage.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5 -->
+    <section class="space-y-4">
+      <div class="flex items-center gap-3">
+        <span class="font-mono text-xs font-black text-red-500">05 /</span>
+        <h2 class="text-lg sm:text-xl font-black uppercase tracking-wider text-red-500">Compliance & Prop Firm Allocations</h2>
+      </div>
+      <div class="text-xs sm:text-sm text-white/50 leading-relaxed space-y-4">
+        <p>
+          Quantitative configurations are fully compatible with Prop Firm evaluation structures (FTMO, Alpha Capital, etc.). Built-in safety triggers decouple socket bridges during outliers:
+        </p>
+        <ul class="list-disc pl-5 space-y-2">
+          <li><strong>IP Address Uniqueness:</strong> System licenses bind strictly to unique HWIDs, preventing account flags due to concurrent geolocations.</li>
+          <li><strong>Drawdown Disconnect:</strong> Bridges disconnect automatically if equity draws down by 4%, safeguarding the prop firm's 5% daily cutoff.</li>
+          <li><strong>Signed Declarations:</strong> KYC verification and formal allocation agreements are legally binding.</li>
+        </ul>
+        
+        <div class="p-6 rounded-2xl bg-red-500/5 border border-red-500/10 space-y-2 mt-4">
+          <span class="text-[9px] font-black text-red-500 uppercase tracking-widest font-mono block">MANDATORY CLIENT RISK COMPLIANCE</span>
+          <p class="text-[9px] text-white/50 font-mono leading-relaxed">
+            RISK IS 100% AT THE CLIENT'S END. IFX TRADES OPERATES ONLY AS A SOFTWARE INFRASTRUCTURE PROVIDER. THE COMPANY IS NOT RESPONSIBLE OR LIABLE FOR ANY CAPITAL LOSS, SLIPPAGE DEVIATION, OR TERMINAL LIQUIDATION OCCURRED DURING PLATFORM USAGE.
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="no-print py-12 border-t border-white/5 text-center bg-[#040507]">
+    <p class="text-[9px] font-mono text-gray-500 uppercase tracking-[0.2em]">
+      © 2026 IFX Trades. All Rights Reserved. Private & Confidential.
+    </p>
+  </footer>
+
+</body>
+</html>

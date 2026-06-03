@@ -42,5 +42,19 @@ export const TermsOfService = () => (
         <li>The Promo is subject to availability and may be modified, suspended, or terminated at any time at the platform's sole discretion without prior notice.</li>
       </ul>
     </section>
+
+    <section>
+      <h2>6. Proprietary (Prop) Firm Operations</h2>
+      <p>
+        Systematic execution bridges and socket layers connecting to third-party proprietary trading firms (evaluation accounts or funded allocations) must operate strictly in compliance with prop firm guidelines. Client-side identity parameter checks (KYC) and formal SLA contract signing must be completed prior to license key activation.
+      </p>
+    </section>
+
+    <section className="mt-8 p-6 rounded-2xl bg-red-500/5 border border-red-500/10">
+      <h3 className="text-red-500 font-bold uppercase text-xs mb-2">Allocator Risk and Liability Agreement</h3>
+      <p class="text-[11px] text-gray-400 font-mono leading-relaxed">
+        RISK IS 100% AT THE CLIENT'S END. IFX TRADES OPERATES ONLY AS A TECHNICAL SOFTWARE INFRASTRUCTURE PROVIDER. THE COMPANY IS NOT RESPONSIBLE OR LIABLE FOR TERMINAL DRAWDOWN EXHAUSTION, MARGIN LOSSES, OR ACCOUNT DEACTIVATION OCCURRED DURING EVALUATION CHALLENGES OR FUNDED OPERATIONS.
+      </p>
+    </section>
   </LegalDocument>
 );

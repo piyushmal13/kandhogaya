@@ -35,11 +35,11 @@ END $$;
 DELETE FROM public.banners WHERE placement = 'partner';
 
 -- 4. Seed Dynamic Partners with precise categories, priorities, and image URLs
-INSERT INTO public.banners (name, title, placement, image_url, description, is_active, priority)
+INSERT INTO public.banners (title, placement, image_url, description, is_active, priority)
 VALUES
-('MetaTrader 5', 'MetaTrader 5', 'partner', '/metatrader5.svg', 'Trading Platform', true, 1),
-('TradingView', 'TradingView', 'partner', '/tradingview.svg', 'Charting Terminal', true, 2),
-('Vantage Markets', 'Vantage Markets', 'partner', '/vantage.svg', 'Liquidity Bridge', true, 3),
-('VT Markets', 'VT Markets', 'partner', '/vtmarkets.svg', 'Execution Partner', true, 4),
-('Markets4you', 'Markets4you', 'partner', '/markets4you.svg', 'CFD Provider', true, 5)
+('MetaTrader 5', 'partner', '/metatrader5.svg', 'Trading Platform', true, 1),
+('TradingView', 'partner', '/tradingview.svg', 'Charting Terminal', true, 2),
+('Vantage Markets', 'partner', '/vantage.svg', 'Liquidity Bridge', true, 3),
+('VT Markets', 'partner', '/vtmarkets.svg', 'Execution Partner', true, 4),
+('Markets4you', 'partner', '/markets4you.svg', 'CFD Provider', true, 5)
 ON CONFLICT DO NOTHING;

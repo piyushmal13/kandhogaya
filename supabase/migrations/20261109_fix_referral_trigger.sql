@@ -2,7 +2,6 @@
 -- Links the trigger to the active 'analytics_events' table instead of the dropped 'user_events' table.
 
 -- Drop legacy trigger and function if they exist to be idempotent
-DROP TRIGGER IF EXISTS trigger_increment_affiliate_stats ON user_events;
 DROP TRIGGER IF EXISTS trigger_increment_affiliate_stats ON analytics_events;
 DROP FUNCTION IF EXISTS increment_affiliate_stats();
 

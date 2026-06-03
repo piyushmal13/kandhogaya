@@ -42,6 +42,14 @@ input:focus, textarea:focus, select:focus {
   --color-gold: #00E5FF;
   --color-gold-light: #80F3FF;
   --color-amber-500: #00D2FF;
+
+  /* Institutional Ice-Blue Diamond overrides (maps green utility classes to ice-blue) */
+  --color-emerald-400: #60CDFF;
+  --color-emerald-500: #00A3FF;
+  --color-emerald-600: #008BFF;
+  --color-emerald-700: #0076D9;
+  --color-emerald-800: #005FB3;
+  --color-emerald-900: #004B8C;
 }
 
 /* ── INSTITUTIONAL BASELINE ── */

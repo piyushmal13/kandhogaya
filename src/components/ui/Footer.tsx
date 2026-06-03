@@ -122,6 +122,7 @@ export const Footer = () => (
               <li><Link to="/hiring?mode=careers" className="hover:text-emerald-400 transition-colors">Careers (We're Hiring)</Link></li>
               <li><Link to="/contact" className="hover:text-emerald-400 transition-colors">Support Portal</Link></li>
               <li><Link to="/risk" className="hover:text-emerald-400 transition-colors">Risk Protocol</Link></li>
+              <li><a href="/company_profile.html" target="_blank" className="hover:text-emerald-400 transition-colors">Company Profile</a></li>
             </ul>
           </div>
 

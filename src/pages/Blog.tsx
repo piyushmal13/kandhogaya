@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
-import { Calendar, Clock, ArrowRight, Search, Filter } from "lucide-react";
+import { Calendar, Clock, ArrowRight, Search, LayoutGrid, BarChart2, ShieldCheck, Flame } from "lucide-react";
 
 import { getBlogPosts } from "../services/apiHandlers";
 import { PageHero } from "../components/site/PageHero";
@@ -80,7 +80,7 @@ export const Blog = () => {
   });
 
   return (
-    <div className="relative overflow-hidden pb-20">
+    <div className="relative overflow-hidden pb-24 bg-[#010203]">
       <PageMeta
         title="Institutional Research & Alpha Intelligence"
         description="Deep-dive analysis on liquid currency pairs, gold market structure, and systemic macro developments from the IFX research desk. Strategically engineered for institutional decision makers."
@@ -107,16 +107,16 @@ export const Blog = () => {
         aside={
           <div className="space-y-4 max-w-md w-full ml-auto">
             <form onSubmit={handleSearch} className="relative group">
-              <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500 group-focus-within:text-emerald-200" />
+              <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-400" />
               <input
                 type="text"
                 placeholder="Search analysis..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full rounded-2xl border border-white/10 bg-black/30 py-3 pr-4 pl-12 text-sm text-white outline-none focus:border-emerald-300/40"
+                className="w-full rounded-2xl border border-white/10 bg-black/40 py-3.5 pr-4 pl-12 text-xs text-white outline-none focus:border-blue-500/50 backdrop-blur-md transition-all font-mono"
               />
             </form>
-            <div className="text-[9px] font-black tracking-widest text-emerald-400/50 uppercase">
+            <div className="text-[9px] font-black tracking-widest text-blue-500/50 uppercase font-mono">
               SCAN INTEL MATRIX:
             </div>
             <div className="grid grid-cols-2 gap-2">
@@ -135,10 +135,10 @@ export const Blog = () => {
                       setSelectedIntel(intel.id);
                       setPage(0);
                     }}
-                    className={`px-3 py-2 rounded-xl border text-[9px] font-black uppercase tracking-wider transition-all duration-300 ${
+                    className={`px-3 py-2.5 rounded-xl border text-[8px] font-black uppercase tracking-wider transition-all duration-300 active:scale-95 ${
                       isActive
-                        ? "border-emerald-500/30 bg-emerald-500/10 text-white"
-                        : "border-white/5 bg-white/[0.02] text-gray-500 hover:text-white"
+                        ? "border-blue-500/30 bg-blue-500/10 text-white shadow-[0_0_15px_rgba(59,130,246,0.15)]"
+                        : "border-white/5 bg-white/[0.02] text-gray-500 hover:text-white hover:border-white/10"
                     }`}
                   >
                     {intel.label}
@@ -164,20 +164,20 @@ export const Blog = () => {
                 className="group"
               >
                 <Link to={`/blog/${post.slug}`} className="block h-full">
-                  <div className="relative h-full flex flex-col bg-[var(--color7)] border border-white/5 rounded-[32px] overflow-hidden hover:border-emerald-500/30 transition-all duration-500 hover:shadow-[0_0_50px_rgba(16,185,129,0.05)]">
+                  <div className="relative h-full flex flex-col bg-[#040507]/40 backdrop-blur-xl border border-white/5 rounded-[2.5rem] overflow-hidden hover:border-blue-500/30 transition-all duration-500 hover:shadow-[0_0_50px_rgba(0,163,255,0.06)]">
                     {/* Image Section */}
                     <div className="relative aspect-[16/10] overflow-hidden">
                       <img
                         src={resolveBlogImage(post, "thumb")}
                         alt={post.title}
-                        className="h-full w-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110 opacity-70 group-hover:opacity-100"
+                        className="h-full w-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105 opacity-60 group-hover:opacity-100"
                         referrerPolicy="no-referrer"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[var(--color7)] via-transparent to-transparent opacity-80" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#010203] via-transparent to-transparent opacity-85" />
                       
                       {/* Floating Category Tag */}
                       <div className="absolute top-6 left-6">
-                        <div className="px-3 py-1 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-emerald-400 text-[9px] font-black uppercase tracking-widest">
+                        <div className="px-3.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-cyan-400 text-[8px] font-black uppercase tracking-widest font-mono">
                           {post.category || "Research"}
                         </div>
                       </div>
@@ -186,39 +186,39 @@ export const Blog = () => {
                     {/* Content Section */}
                     <div className="flex flex-1 flex-col p-8 pt-4">
                       {/* Date & Read Time */}
-                      <div className="mb-6 flex items-center justify-between">
-                         <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-600">
-                           <Calendar className="h-3 w-3 text-emerald-500/50" />
+                      <div className="mb-5 flex items-center justify-between">
+                         <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 font-mono">
+                           <Calendar className="h-3 w-3 text-blue-500/50" />
                            {new Date(post.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                          </div>
-                         <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.15em] text-gray-500/50 bg-white/5 px-2 py-0.5 rounded-md">
-                           <Clock className="h-2.5 w-2.5" />
-                           5 MIN
+                         <div className="flex items-center gap-1.5 text-[8px] font-black uppercase tracking-[0.15em] text-white/40 bg-white/5 px-2 py-0.5 rounded-md font-mono">
+                           <Clock className="h-2.5 w-2.5 text-cyan-400" />
+                           {post.category === "Trader Gym" ? "8 MIN" : "5 MIN"}
                          </div>
                       </div>
 
                       {/* Title */}
-                      <h3 className="mb-4 text-2xl font-black leading-tight text-white group-hover:text-emerald-400 transition-colors tracking-tighter">
+                      <h3 className="mb-4 text-xl md:text-2xl font-black leading-[1.1] text-white group-hover:text-blue-400 transition-colors tracking-tighter uppercase italic">
                         {post.title}
                       </h3>
 
                       {/* Content Snippet */}
-                      <p className="mb-8 flex-1 text-[13px] leading-6 text-gray-400 line-clamp-2 font-medium opacity-80 group-hover:opacity-100 transition-opacity">
+                      <p className="mb-6 flex-1 text-xs leading-relaxed text-[#8A9AAB] line-clamp-3 font-medium opacity-80 group-hover:opacity-100 transition-opacity">
                         {post.metadata?.bold_headline || stripHtml(post.content)}
                       </p>
 
                       {/* Footer */}
-                      <div className="flex items-center justify-between border-t border-white/5 pt-6">
+                      <div className="flex items-center justify-between border-t border-white/5 pt-5">
                         <div className="flex items-center gap-3">
-                           <div className="w-8 h-8 rounded-full bg-zinc-800 border border-white/10 flex items-center justify-center text-emerald-500 font-black text-[10px]">
+                           <div className="w-7 h-7 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 font-black text-[10px] font-mono">
                               {(post.metadata?.author_name || (post as any).author?.full_name || "A").charAt(0)}
                            </div>
-                           <span className="text-[10px] font-black uppercase tracking-widest text-gray-500">
+                           <span className="text-[9px] font-black uppercase tracking-widest text-gray-500 font-mono">
                              {post.metadata?.author_name || (post as any).author?.full_name || "IFX ANALYST"}
                            </span>
                         </div>
-                        <div className="w-10 h-10 rounded-full border border-white/5 flex items-center justify-center group-hover:bg-emerald-500 group-hover:border-emerald-500 text-gray-600 group-hover:text-black transition-all duration-300 transform group-hover:rotate-45">
-                          <ArrowRight className="h-4 w-4" />
+                        <div className="w-9 h-9 rounded-xl border border-white/5 flex items-center justify-center bg-white/[0.02] group-hover:bg-blue-500 group-hover:border-blue-500 text-white group-hover:text-black transition-all duration-300 transform group-hover:translate-x-1">
+                          <ArrowRight className="h-4 w-4 text-white group-hover:text-black" />
                         </div>
                       </div>
                     </div>
@@ -239,13 +239,13 @@ export const Blog = () => {
 
         {loading && posts.length > 0 && (
           <div className="mt-12 flex justify-center">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-[var(--accent)] border-t-transparent" />
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent" />
           </div>
         )}
 
         {!loading && posts.length === 0 && (
           <div className="py-20 text-center">
-            <p className="text-slate-500">No analysis found matching your search.</p>
+            <p className="text-slate-500 font-mono text-xs uppercase tracking-widest">No analysis found matching your search.</p>
           </div>
         )}
       </PageSection>

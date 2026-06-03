@@ -240,6 +240,20 @@ export const Marketplace = () => {
             </p>
           </div>
 
+          {/* High-Resolution Inline Preview for SEO / Google Ads */}
+          <div className="relative rounded-[2rem] sm:rounded-[3.5rem] overflow-hidden border border-white/5 bg-[#0e1428]/25 group transition-all duration-700 hover:border-emerald-500/25 w-full max-w-4xl mx-auto lg:mx-0">
+             <img 
+               src="/backtest_dashboard.png" 
+               alt="IFX Algorithmic Trading Performance & Backtest Results Dashboard" 
+               className="w-full h-auto object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700" 
+             />
+             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
+             <div className="absolute bottom-6 left-6 sm:bottom-10 sm:left-10 text-left space-y-1 sm:space-y-2">
+                <span className="text-[7px] sm:text-[9px] font-mono font-black text-emerald-400 uppercase tracking-[0.3em]">Quantitative Backtesting Database</span>
+                <h4 className="text-sm sm:text-2xl font-black text-white uppercase tracking-tighter">Verified Model Performance Telemetry</h4>
+             </div>
+          </div>
+
           {/* Catalog Controls */}
           <div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
             <div className="relative w-full sm:flex-1 lg:w-80 group">

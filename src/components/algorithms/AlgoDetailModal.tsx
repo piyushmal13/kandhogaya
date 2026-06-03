@@ -301,25 +301,23 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
                   </p>
 
                   {/* Dynamic Terms PDF Strategy Document Link */}
-                  {(algo.advanced_features?.terms_pdf_url || (algo as any).metadata?.terms_pdf_url) && (
-                    <div className="p-4 bg-emerald-500/5 border border-emerald-500/10 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
-                      <div className="flex items-center gap-3 text-center sm:text-left">
-                        <FileText className="w-5 h-5 text-emerald-500 shrink-0" />
-                        <div>
-                          <div className="text-white text-xs font-black uppercase tracking-wider">Strategy Specifications PDF</div>
-                          <div className="text-[8px] text-gray-500 uppercase tracking-widest font-mono">Official Document Ledger</div>
-                        </div>
+                  <div className="p-4 bg-emerald-500/5 border border-emerald-500/10 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div className="flex items-center gap-3 text-center sm:text-left">
+                      <FileText className="w-5 h-5 text-emerald-500 shrink-0" />
+                      <div>
+                        <div className="text-white text-xs font-black uppercase tracking-wider">Strategy Specifications</div>
+                        <div className="text-[8px] text-gray-500 uppercase tracking-widest font-mono">Official Document Ledger</div>
                       </div>
-                      <a 
-                        href={algo.advanced_features?.terms_pdf_url || (algo as any).metadata?.terms_pdf_url} 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        className="px-5 py-3 bg-emerald-500 hover:bg-emerald-400 text-black text-[9px] font-black uppercase tracking-widest rounded-xl shadow-2xl transition-all whitespace-nowrap active:scale-95"
-                      >
-                        View PDF Document
-                      </a>
                     </div>
-                  )}
+                    <a 
+                      href={algo.advanced_features?.terms_pdf_url || (algo as any).metadata?.terms_pdf_url || "/strategy_specifications.html"} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="px-5 py-3 bg-emerald-500 hover:bg-emerald-400 text-black text-[9px] font-black uppercase tracking-widest rounded-xl shadow-2xl transition-all whitespace-nowrap active:scale-95"
+                    >
+                      {algo.advanced_features?.terms_pdf_url || (algo as any).metadata?.terms_pdf_url ? "View PDF Document" : "View Strategy Specs"}
+                    </a>
+                  </div>
 
                   <div className="pt-4 border-t border-white/5 text-[9px] text-white/30 uppercase font-medium leading-relaxed">
                      *VPS Promotion: A free, ultra-low latency VPS setup is available for all active clients who maintain a funded account value exceeding $1,000 with our trusted B2B partner brokerage.

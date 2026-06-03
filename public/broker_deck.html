@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Broker Integration & Sponsorships — IFX Trades Presentation Deck</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&family=IBM+Plex+Mono:wght@400;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"IBM Plex Mono"', 'monospace'],
+            serif: ['"DM Serif Display"', 'serif'],
+          },
+          colors: {
+            midnight: '#010203',
+            abyss: '#040507',
+            cardbg: '#0E1428',
+            iceblue: '#00A3FF',
+            diamondcyan: '#00E5FF',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #010203;
+      color: #ffffff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .slide {
+      display: none;
+      min-height: 100vh;
+    }
+    .slide.active {
+      display: flex;
+    }
+    @media print {
+      .slide {
+        display: block !important;
+        page-break-after: always;
+        min-height: auto;
+        padding: 4rem 2rem;
+      }
+      .nav-controls {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="overflow-x-hidden antialiased">
+
+  <!-- Nav Controls (Floating) -->
+  <div class="nav-controls fixed bottom-8 right-8 z-50 flex items-center gap-4 bg-black/80 backdrop-blur-md border border-white/10 p-3 rounded-2xl select-none">
+    <button onclick="prevSlide()" class="p-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors text-white active:scale-95 duration-200">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
+    </button>
+    <span class="font-mono text-xs font-bold text-white/50" id="slide-num">01 / 05</span>
+    <button onclick="nextSlide()" class="p-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors text-white active:scale-95 duration-200">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
+    </button>
+  </div>
+
+  <!-- SLIDE 1: WELCOME & BROKER INTEGRATION -->
+  <section class="slide active flex-col justify-center relative p-6 sm:p-12 md:p-24" id="slide-1">
+    <!-- Visual background image -->
+    <div class="absolute inset-0 pointer-events-none opacity-15">
+      <img src="/company_profile_hero.png" alt="Institutional Partners" class="w-full h-full object-cover" />
+      <div class="absolute inset-0 bg-gradient-to-b from-[#010203] via-transparent to-[#010203]" />
+    </div>
+
+    <div class="max-w-4xl mx-auto space-y-8 relative z-10 w-full">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px] font-black uppercase tracking-[0.2em] font-mono">
+        B2B Broker Integration Deck v6.5
+      </div>
+      <h1 class="text-4xl sm:text-7xl font-black uppercase tracking-tight leading-[0.9]">
+        Brokerage <br />
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400 italic font-serif">Partnerships & Ingress</span>
+      </h1>
+      <p class="text-sm sm:text-xl text-white/40 max-w-2xl leading-relaxed">
+        Establish high-fidelity brokerage integrations. Route high-intent systematic client accounts directly to your platform via custom ECN co-location setups.
+      </p>
+      <div class="flex flex-wrap gap-6 pt-6 border-t border-white/5 font-mono text-[9px] text-white/30 uppercase tracking-[0.2em]">
+        <div>Partner Tiers: Headline & Supporter</div>
+        <div>Liquidity Ingress: MT5 ECN Bridges</div>
+        <div>Audited Accounts: 100% Verified</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 2: THE SYSTEMATIC MASTERCLASS SERIES -->
+  <section class="slide flex-col justify-center relative p-6 sm:p-12 md:p-24" id="slide-2">
+    <div class="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_right,rgba(0,163,255,0.04)_0%,transparent_60%)]" />
+    <div class="absolute inset-0 pointer-events-none opacity-5">
+      <img src="/webinar_masterclass.png" alt="Webinar Masterclass Setup" class="w-full h-full object-cover" />
+    </div>
+
+    <div class="max-w-4xl mx-auto space-y-10 relative z-10 w-full">
+      <span class="font-mono text-xs font-black text-blue-400 uppercase tracking-widest">Protocol 02 / Masterclass Series</span>
+      <h2 class="text-3xl sm:text-5xl font-black uppercase tracking-tight leading-[0.95]">
+        Systematic Masterclass <span class="italic font-serif text-cyan-400">Co-Marketing</span>
+      </h2>
+      <p class="text-xs sm:text-base text-white/40 max-w-2xl">
+        We host bi-weekly quantitative trading webinars to educate B2B clients. Partner brokers get exclusive headline banner space and dynamic registration routing.
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4">
+        <div class="p-8 rounded-3xl bg-white/[0.02] border border-white/5 space-y-3">
+          <h3 class="text-base font-black uppercase text-white tracking-wider">Headline Sponsor</h3>
+          <p class="text-xs text-white/45 leading-relaxed">
+            Exclusive banner branding across all Webinars landing pages. Pre-registration forms automatically configure client account setup with the broker.
+          </p>
+          <div class="text-[9px] font-mono font-bold text-blue-400 uppercase pt-2">Rate: $5,000 / Broadcast</div>
+        </div>
+
+        <div class="p-8 rounded-3xl bg-white/[0.02] border border-white/5 space-y-3">
+          <h3 class="text-base font-black uppercase text-white tracking-wider">Co-Sponsor Partner</h3>
+          <p class="text-xs text-white/45 leading-relaxed">
+            Secondary ad placement in post-webinar email updates. Referral widgets map to your registration ingress.
+          </p>
+          <div class="text-[9px] font-mono font-bold text-cyan-400 uppercase pt-2">Rate: $2,500 / Broadcast</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 3: CO-MARKETING & CPA REVENUE SPLITS -->
+  <section class="slide flex-col justify-center relative p-6 sm:p-12 md:p-24" id="slide-3">
+    <div class="max-w-4xl mx-auto space-y-10 relative z-10 w-full">
+      <span class="font-mono text-xs font-black text-blue-400 uppercase tracking-widest">Protocol 03 / Economic Models</span>
+      <h2 class="text-3xl sm:text-5xl font-black uppercase tracking-tight leading-[0.95]">
+        Revenue Share & <span class="italic font-serif text-cyan-400">CPA Models</span>
+      </h2>
+      <p class="text-xs sm:text-base text-white/40 max-w-2xl">
+        We align incentives by offering dynamic co-marketing economic packages. Choose between volume-based rebates or direct acquisition payouts.
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-4 text-center">
+        <div class="p-6 rounded-2xl bg-white/[0.02] border border-white/5 space-y-2">
+          <h4 class="text-xs font-black text-white uppercase tracking-wider">Hybrid CPA Payouts</h4>
+          <p class="text-[9px] text-white/35 uppercase leading-normal">Get paid up to $500 per qualified active systematic allocator onboarded.</p>
+        </div>
+        <div class="p-6 rounded-2xl bg-white/[0.02] border border-white/5 space-y-2">
+          <h4 class="text-xs font-black text-white uppercase tracking-wider">Volume Rebate Split</h4>
+          <p class="text-[9px] text-white/35 uppercase leading-normal">Up to $2.0 per round turn lot rebate on systematic co-located volume.</p>
+        </div>
+        <div class="p-6 rounded-2xl bg-white/[0.02] border border-white/5 space-y-2">
+          <h4 class="text-xs font-black text-white uppercase tracking-wider">Ad Space Bidding</h4>
+          <p class="text-[9px] text-white/35 uppercase leading-normal">Bid directly for priority placement inside B2B client dashboard.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 4: REGULATORY COMPLIANCE & CLIENT RISK -->
+  <section class="slide flex-col justify-center relative p-6 sm:p-12 md:p-24" id="slide-4">
+    <div class="max-w-4xl mx-auto space-y-8 relative z-10 w-full">
+      <span class="font-mono text-xs font-black text-red-500 uppercase tracking-widest">Protocol 04 / B2B Risk Controls</span>
+      <h2 class="text-3xl sm:text-5xl font-black uppercase tracking-tight leading-[0.95]">
+        Compliance & <span class="italic font-serif text-cyan-400">Risk Parameters</span>
+      </h2>
+      <p class="text-xs sm:text-base text-white/40 max-w-xl">
+        All partner integrations operate under strict mathematical safeguards to isolate brokerage liability.
+      </p>
+
+      <div class="p-6 rounded-2xl bg-red-500/5 border border-red-500/10 space-y-4 max-w-2xl">
+        <div class="text-[10px] font-black text-red-400 uppercase tracking-widest font-mono">
+          Broker Liabilities Safe-Harbor
+        </div>
+        <p class="text-[9px] md:text-[10px] text-white/45 font-mono leading-relaxed">
+          RISK IS 100% AT THE CLIENT'S END. IFX TRADES OPERATES ONLY AS A SOFTWARE PROVIDER. THE COMPANY IS NOT RESPONSIBLE OR LIABLE FOR CLIENT ACCOUNT drawdowns, execution slippage, or platform liquidations. Connected allocators must verify their own leverage limits and execute agreements stating complete risk assumption.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl">
+        <div class="p-4 rounded-xl bg-white/[0.02] border border-white/5">
+          <span class="block text-[10px] font-bold text-white font-mono uppercase">Prop-Firm Challenge Pass</span>
+          <span class="text-[9px] text-white/30">Client-signed agreements ensure complete ownership of credentials during evaluation phases.</span>
+        </div>
+        <div class="p-4 rounded-xl bg-white/[0.02] border border-white/5">
+          <span class="block text-[10px] font-bold text-white font-mono uppercase">Systematic Liquidation Floors</span>
+          <span class="text-[9px] text-white/30">Auto-disconnect logic prevents margin depletion below $1,000 USD balance.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 5: LEAD MANAGEMENT & WHATSAPP ROUTING -->
+  <section class="slide flex-col justify-center relative p-6 sm:p-12 md:p-24" id="slide-5">
+    <div class="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,rgba(139,92,246,0.04)_0%,transparent_70%)]" />
+    <div class="max-w-4xl mx-auto space-y-10 relative z-10 w-full">
+      <span class="font-mono text-xs font-black text-blue-400 uppercase tracking-widest">Protocol 05 / Lead Routing</span>
+      <h2 class="text-3xl sm:text-5xl font-black uppercase tracking-tight leading-[0.95]">
+        Hardened CRM Lead <span class="italic font-serif text-cyan-400">Management & Triggers</span>
+      </h2>
+      <p class="text-xs sm:text-base text-white/40 max-w-2xl">
+        Our system integrates a lead routing mechanism. Leads are classified by intent and synchronized with partner broker API routes automatically.
+      </p>
+
+      <div class="p-8 rounded-[2rem] bg-gradient-to-r from-blue-500/10 to-transparent border border-blue-500/20 max-w-2xl flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div class="space-y-1 text-center sm:text-left">
+          <div class="text-white text-sm font-black uppercase tracking-wider font-mono">Connect Broker API Ingress</div>
+          <div class="text-[9px] text-white/30 uppercase tracking-widest font-mono">Synchronize leads using secure webhook handlers</div>
+        </div>
+        <a href="/consultation?source=broker_deck_api" class="px-6 py-3.5 bg-blue-500 hover:bg-blue-400 text-white font-black text-[10px] uppercase tracking-widest rounded-xl transition-all shadow-[0_10px_20px_rgba(59,130,246,0.2)] active:scale-95">
+          Request API Setup
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide Logic -->
+  <script>
+    let currentSlideIndex = 1;
+    const totalSlides = 5;
+
+    function showSlide(index) {
+      if (index < 1 || index > totalSlides) return;
+      document.querySelectorAll('.slide').forEach(slide => {
+        slide.classList.remove('active');
+      });
+      document.getElementById(`slide-${index}`).classList.add('active');
+      document.getElementById('slide-num').innerText = `${String(index).padStart(2, '0')} / ${String(totalSlides).padStart(2, '0')}`;
+      currentSlideIndex = index;
+    }
+
+    function nextSlide() {
+      if (currentSlideIndex < totalSlides) {
+        showSlide(currentSlideIndex + 1);
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlideIndex > 1) {
+        showSlide(currentSlideIndex - 1);
+      }
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        nextSlide();
+      } else if (e.key === 'ArrowLeft') {
+        prevSlide();
+      }
+    });
+  </script>
+</body>
+</html>

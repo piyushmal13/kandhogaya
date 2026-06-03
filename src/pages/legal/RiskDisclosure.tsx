@@ -71,5 +71,24 @@ export const RiskDisclosure = () => (
         IFX Trades is a financial technology software provider. We do not manage retail client funds, accept trading deposits, or offer authorized investment or financial advisory services. All analytical software, indicators, webinars, and educational documentation are provided for research purposes only. Each trade execution is made at the sole risk and discretion of the account holder.
       </p>
     </section>
+
+    <section>
+      <h2>7. Proprietary (Prop) Firm Operations & Agreement Signing</h2>
+      <p>
+        Allocators and traders using quantitative signal copy-bridges on proprietary firm accounts (e.g., FTMO, FundedNext, Alpha Capital) must comply with strict evaluation guidelines. Standard commercial EAs frequently trigger violations due to IP address geolocation conflicts, consistency margin rules, or HFT toxic flow patterns.
+      </p>
+      <ul>
+        <li><strong>Consistency Rules & Position Sizes:</strong> Built-in position sizing models adjust exposures dynamically using real-time Average True Range metrics, preventing consistency rule flags.</li>
+        <li><strong>IP/HWID Lock Validation:</strong> Each generated binary is bound to a single virtual environment IP (HWID Lock), shielding the account from multi-login IP address discrepancies.</li>
+        <li><strong>Contract Execution & Identity verification:</strong> Prior to signal bridge activation, clients are required to pass identity checks (KYC) and sign the digital SLA agreement confirming sole control of credentials.</li>
+      </ul>
+    </section>
+
+    <section className="mt-8 p-6 rounded-2xl bg-red-500/5 border border-red-500/10">
+      <h3 className="text-red-500 font-bold uppercase text-xs mb-2">Absolute Client Risk Statement</h3>
+      <p class="text-[11px] text-gray-400 font-mono leading-relaxed">
+        CLIENT ABSOLUTE RISK STATEMENT: ALL SYSTEMATIC TRADING RISK RESTS 100% AT THE CLIENT'S END. IFX TRADES OPERATES SOLELY AS A SOFTWARE TECHNOLOGY PROVIDER. THE COMPANY IS NOT AN AUTHORIZED ADVISOR OR BROKER-DEALER, AND IS NOWHERE RESPONSIBLE OR LIABLE FOR ANY CAPITAL LOSS, MARGIN EXHAUSTION, ACCOUNT LIQUIDATION, OR SLIPPAGE OCCURRED DURING PLATFORM USAGE.
+      </p>
+    </section>
   </LegalDocument>
 );

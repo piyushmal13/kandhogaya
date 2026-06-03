@@ -34,7 +34,21 @@ export const PrivacyPolicy = () => (
     </section>
 
     <section>
-      <h2>4. Contact</h2>
+      <h2>4. Institutional Compliance & Allocator KYC</h2>
+      <p>
+        In accordance with ECN brokerage agreements and prop firm challenge verification protocols, users seeking quantitative signal access keys must complete identity validation (KYC) and execute signature bindings. The metadata retrieved is held in encrypted structures to comply with institutional anti-fraud regulations.
+      </p>
+    </section>
+
+    <section className="mt-8 p-6 rounded-2xl bg-red-500/5 border border-red-500/10">
+      <h3 className="text-red-400 font-bold uppercase text-xs mb-2">Mandatory Risk and Liability Decree</h3>
+      <p class="text-[11px] text-gray-400 font-mono leading-relaxed">
+        RISK IS 100% AT THE CLIENT'S END. IFX TRADES OPERATES ENTIRELY AS A SOFTWARE INFRASTRUCTURE PROVIDER. THE COMPANY IS NOT RESPONSIBLE OR LIABLE FOR ANY CAPITAL DEVIATION, POSITION SLIPPAGE, BROKER LIQUIDATION, OR DRAWDOWN LIMIT BREACHES OCCURRED DURING PLATFORM OR BINARY USAGE.
+      </p>
+    </section>
+
+    <section>
+      <h2>5. Contact</h2>
       <p>If you have privacy questions, contact <a href="mailto:support@ifxtrades.com">support@ifxtrades.com</a>.</p>
     </section>
   </LegalDocument>
