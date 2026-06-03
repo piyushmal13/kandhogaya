@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
-import { Briefcase, ShieldCheck, Code2, TrendingUp, ArrowRight, Globe, Cpu, CheckCircle2, AlertCircle, Users, BarChart3, Star, Building, Landmark } from "lucide-react";
+import { Briefcase, ShieldCheck, Code2, TrendingUp, ArrowRight, Globe, Cpu, CheckCircle2, AlertCircle, Users, Building, Landmark, Upload, FileText } from "lucide-react";
 import { PageMeta } from "../components/site/PageMeta";
 import { Reveal } from "../components/site/Reveal";
 import { BRANDING } from "../constants/branding";
@@ -12,8 +12,10 @@ export const Hiring = () => {
   // Read target tab from url parameter: 'b2b' for broker sourcing, 'careers' for joining us
   const initialMode = searchParams.get("mode") === "careers" ? "careers" : "b2b";
   const [activeTab, setActiveTab] = useState<"b2b" | "careers">(initialMode);
+  const [positions, setPositions] = useState<any[]>([]);
+  const [loadingPositions, setLoadingPositions] = useState(true);
 
-  // Sync state if query param changes dynamically (e.g. user clicks different footer links)
+  // Sync state if query param changes dynamically
   useEffect(() => {
     const mode = searchParams.get("mode");
     if (mode === "careers") {
@@ -28,52 +30,96 @@ export const Hiring = () => {
     setSearchParams({ mode: tab });
   };
 
-  const careerTiers = [
-    {
-      title: "Ultra-Low Latency C++ / Rust Systems Developer",
-      domain: "FIX Engines, MT4/MT5 Bridges & Low-Latency Execution Infrastructure",
-      reqs: "Expertise in kernel-bypass (Solarflare EF_VI), concurrency patterns, and real-time socket programming to route orders in under 50 microseconds.",
-      placement: "Sovereign Prop Desks & Prime-of-Prime Liquidity Tunnels",
-      icon: Code2,
-    },
-    {
-      title: "Senior Institutional Business Development Manager (BDM)",
-      domain: "CMT/CFT Brokerage Acquisition & High-Volume Asset Management Deals",
-      reqs: "Proven track record closing seven-figure liquidity deals, deep networks with institutional brokers, and structuring volume-based rebate schedules.",
-      placement: "Corporate FX Sales & Global Affiliate Desk Scaling",
-      icon: TrendingUp,
-    },
-    {
-      title: "CRM, MT4/MT5 Gateway & API Integration Specialist",
-      domain: "Institutional Middle Office, Bridge Setup & Deep Telemetry Syncing",
-      reqs: "Expertise integrating comprehensive CRM APIs with MT4/MT5 servers, customized margin rules, and secure real-time trade synchronizations.",
-      placement: "Global Broker Back-Office & Supervised Liquidity Setup",
-      icon: Cpu,
-    },
-    {
-      title: "Institutional FX Marketing Specialist & Lead Designer",
-      domain: "Premium Corporate Presence, Campaign Growth & Trust Architecture",
-      reqs: "Crafting highly tailored high-net-worth B2B broker marketing strategies, quantitative brand visual engineering, and targeted elite conversion funnels.",
-      placement: "Direct Global Brand Desk & Affiliate Network Scaling",
-      icon: Users,
-    }
-  ];
+  // Fetch hiring positions from Supabase dynamically
+  useEffect(() => {
+    const fetchPositions = async () => {
+      setLoadingPositions(true);
+      try {
+        const targetType = activeTab === "b2b" ? "broker_talent" : "internal";
+        const { data, error } = await supabase
+          .from("hiring_positions")
+          .select("*")
+          .eq("type", targetType)
+          .eq("is_active", true);
+
+        if (error) {
+          console.error("Error fetching hiring positions:", error);
+        } else if (data) {
+          setPositions(data);
+          if (data.length > 0) {
+            setSelectedPositionId(data[0].id);
+          }
+        }
+      } catch (err) {
+        console.error("Crash fetching hiring positions:", err);
+      } finally {
+        setLoadingPositions(false);
+      }
+    };
+    fetchPositions();
+  }, [activeTab]);
 
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     phone: "",
-    specialization: "Ultra-Low Latency C++ / Rust Systems Developer",
     trackRecord: "",
     portfolioLink: "",
-    backtestFidelity: "",
-    engagementType: activeTab === "b2b" ? "Single Role Staffing Outsource" : "Individual Quant Developer seeking placement"
+    engagementType: activeTab === "b2b" ? "Full-Time Placement" : "Core Quant Team Member"
   });
+
+  const [selectedPositionId, setSelectedPositionId] = useState<string>("");
+  const [resumeUrl, setResumeUrl] = useState<string>("");
+  const [resumeName, setResumeName] = useState<string>("");
+  const [uploadingFile, setUploadingFile] = useState(false);
+  const [fileError, setFileError] = useState("");
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [trackingId, setTrackingId] = useState("");
+
+  // Handle Resume PDF/Doc Upload to Supabase Storage
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Check size limit (e.g., 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setFileError("File exceeds 5MB limit.");
+      return;
+    }
+
+    setUploadingFile(true);
+    setFileError("");
+
+    try {
+      const fileExt = file.name.split(".").pop();
+      const fileName = `${Math.random().toString(36).substring(2, 15)}_${Date.now()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("resumes")
+        .upload(filePath, file);
+
+      if (uploadError) {
+        throw uploadError;
+      }
+
+      // Resolve public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from("resumes")
+        .getPublicUrl(filePath);
+
+      setResumeUrl(publicUrl);
+      setResumeName(file.name);
+    } catch (err: any) {
+      console.error("Resume transmission error:", err);
+      setFileError(`Upload failed: ${err.message || err}`);
+    } finally {
+      setUploadingFile(false);
+    }
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -89,41 +135,31 @@ export const Hiring = () => {
       setSubmitError("Please fill out all required fields (*).");
       return;
     }
+    if (!resumeUrl) {
+      setSubmitError("Please upload a valid CV / Resume document.");
+      return;
+    }
     
     setIsSubmitting(true);
     setSubmitError("");
 
     try {
       const generatedId = Math.random().toString(36).substring(2, 12).toUpperCase();
-      const payloadSubject = activeTab === "b2b" 
-        ? `B2B Broker Sourcing - ${formData.specialization}`
-        : `Quant Application - ${formData.specialization}`;
-      
-      const payloadSource = activeTab === "b2b"
-        ? "B2B Broker Sourcing Desk"
-        : "Internal Careers Portal";
-
-      const priorityTag = activeTab === "b2b" ? "B2B Broker" : "Quant Applicant";
 
       const { error } = await supabase
-        .from("leads")
+        .from("hiring_applications")
         .insert([
           {
+            position_id: selectedPositionId || null,
             full_name: formData.fullName,
             email: formData.email,
             phone: formData.phone || null,
-            subject: payloadSubject,
-            message: formData.trackRecord,
-            source: payloadSource,
-            status: "new",
-            stage: "NEW",
-            priority_tag: priorityTag,
-            crm_metadata: {
-              specialization: formData.specialization,
-              portfolio_link: activeTab === "careers" ? formData.portfolioLink : null,
-              backtest_fidelity: activeTab === "careers" ? formData.backtestFidelity : null,
+            resume_url: resumeUrl,
+            portfolio_url: formData.portfolioLink || null,
+            cover_letter: formData.trackRecord,
+            metadata: {
               engagement_type: formData.engagementType,
-              tracking_id: `IFX-TDK-${generatedId}`,
+              tracking_id: `IFX-TAL-${generatedId}`,
               submitted_at: new Date().toISOString()
             }
           }
@@ -133,18 +169,18 @@ export const Hiring = () => {
         console.error("Supabase error inserting candidate:", error);
         setSubmitError(`System rejection: ${error.message}`);
       } else {
-        setTrackingId(`IFX-TDK-${generatedId}`);
+        setTrackingId(`IFX-TAL-${generatedId}`);
         setSubmitSuccess(true);
         setFormData({
           fullName: "",
           email: "",
           phone: "",
-          specialization: "Ultra-Low Latency C++ / Rust Systems Developer",
           trackRecord: "",
           portfolioLink: "",
-          backtestFidelity: "",
-          engagementType: activeTab === "b2b" ? "Single Role Staffing Outsource" : "Individual Quant Developer seeking placement"
+          engagementType: activeTab === "b2b" ? "Full-Time Placement" : "Core Quant Team Member"
         });
+        setResumeUrl("");
+        setResumeName("");
       }
     } catch (err: any) {
       console.error("Vetting Exception Trapped:", err);
@@ -155,21 +191,21 @@ export const Hiring = () => {
   };
 
   return (
-    <div className="relative overflow-hidden min-h-screen bg-[#020203] text-[#BAC9CC] font-sans pb-24">
+    <div className="relative overflow-hidden min-h-screen bg-[#010203] text-[#BAC9CC] font-sans pb-24">
       <PageMeta
         title={activeTab === "b2b" 
-          ? "Sovereign B2B Broker Talent Recruitment Desk" 
+          ? "Broker Talent Sourcing & HR Services" 
           : "IFX Trades Careers — Join the Quantitative Desk"}
         description={activeTab === "b2b"
-          ? "Sourcing the world's finest systems developers, BDMs, CRM experts, and marketing specialists for premium global CMT/CFT brokerages."
-          : "Work with elite quantitative architects, macro strategists, and systems engineers behind Asia's top low-latency algorithmic desk."}
+          ? "Sourcing, training, and educating the finest systems developers and BDMs for global brokers. Complete local HR & recruitment services."
+          : "Join our internal quantitative desk. Sourcing every month, every day as per our technical requirements."}
         path="/hiring"
-        keywords={["quant jobs", "broker talent sourcing", "C++ HFT developer roles", "MT4/MT5 bridge developers", "forex marketing recruitment"]}
+        keywords={["quant jobs", "broker talent sourcing", "broker recruitment training", "HR support for brokers", "low-latency hiring"]}
       />
 
       {/* Decorative Gradients */}
-      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-emerald-500/5 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-emerald-500/2 rounded-full blur-[150px] pointer-events-none" />
+      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-cyan-500/5 rounded-full blur-[150px] pointer-events-none" />
 
       {/* Hero Section */}
       <div className="relative pt-32 pb-16 md:pt-40 md:pb-20 border-b border-white/[0.03] bg-gradient-to-b from-[#010203] to-[#020203]">
@@ -181,18 +217,18 @@ export const Hiring = () => {
               onClick={() => handleTabChange("b2b")}
               className={`flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-widest transition-all duration-300 ${
                 activeTab === "b2b"
-                  ? "bg-emerald-500 text-black shadow-lg"
+                  ? "bg-blue-500 text-white shadow-lg"
                   : "text-white/40 hover:text-white"
               }`}
             >
               <Building className="w-3.5 h-3.5" />
-              B2B Broker Sourcing Desk
+              Broker Talent Recruitment
             </button>
             <button
               onClick={() => handleTabChange("careers")}
               className={`flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-widest transition-all duration-300 ${
                 activeTab === "careers"
-                  ? "bg-emerald-500 text-black shadow-lg"
+                  ? "bg-blue-500 text-white shadow-lg"
                   : "text-white/40 hover:text-white"
               }`}
             >
@@ -202,51 +238,39 @@ export const Hiring = () => {
           </div>
 
           <Reveal delay={0.05}>
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 text-emerald-400 text-[10px] font-black uppercase tracking-[0.25em] mb-8">
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-blue-500/20 bg-blue-500/10 text-blue-400 text-[10px] font-black uppercase tracking-[0.25em] mb-8 font-mono">
               {activeTab === "b2b" ? (
                 <>
-                  <Briefcase className="h-3.5 w-3.5" /> GLOBAL CMT/CFT BROKER TALENT DESK
+                  <Briefcase className="h-3.5 w-3.5 text-cyan-400" /> B2B BROKER RECRUITMENT & TRAINING DESK
                 </>
               ) : (
                 <>
-                  <ShieldCheck className="h-3.5 w-3.5" /> IFX CORE PROPRIETARY ENCLAVE
+                  <ShieldCheck className="h-3.5 w-3.5 text-cyan-400" /> IFX INTERNAL QUANT DESK RECRUITMENT
                 </>
               )}
             </span>
           </Reveal>
 
-          {activeTab === "careers" && (
-            <Reveal delay={0.07}>
-              <div className="mb-6 p-3 px-5 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-black uppercase tracking-widest inline-flex items-center gap-2.5 animate-pulse mx-auto">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                </span>
-                🔥 WE ARE HIRING — Join our Quantitative Desk Operations
-              </div>
-            </Reveal>
-          )}
-          
           <Reveal delay={0.1}>
-            <h1 className="text-4xl md:text-6xl font-extrabold text-white tracking-tight leading-[1.1] mb-6">
+            <h1 className="text-4xl md:text-6xl font-extrabold text-white tracking-tight leading-[1.1] mb-6 uppercase italic">
               {activeTab === "b2b" ? (
                 <>
-                  Sourcing the World's Finest <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-500">Brokerage &amp; Algo Talent</span>
+                  Sourcing &amp; Educating Vetted <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">Brokerage Specialists</span>
                 </>
               ) : (
                 <>
-                  Join Asia's Premier <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-500">Sovereign Quant Desk</span>
+                  Internal Quantitative <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">Sovereign Desk Hiring</span>
                 </>
               )}
             </h1>
           </Reveal>
           
           <Reveal delay={0.15}>
-            <p className="text-lg md:text-xl text-white/50 max-w-3xl mx-auto font-light leading-relaxed mb-12">
+            <p className="text-lg md:text-xl text-[#8A9AAB] max-w-3xl mx-auto font-light leading-relaxed mb-12">
               {activeTab === "b2b" ? (
-                "We stand at the absolute summit of systematic execution. We actively source and vet low-latency developers, B2B sales professionals, CRM integration engineers, and marketing specialists for the top CMT/CFT brokers globally."
+                "We provide specialized recruitment pipelines for global B2B brokerages. We identify elite quantitative talent, facilitate training programs, deliver direct local education, and offer complete outsource HR infrastructure solutions."
               ) : (
-                "Join the senior developers, macro strategists, and systems engineers behind our ultra-low latency sovereign node networks. We operate on absolute mathematical probability, C++ cores, and verified edge."
+                "We recruit internal developers, systems architects, and macro researchers on an ongoing basis. We hire every month, every day, adapting dynamically to our quantitative desk requirements."
               )}
             </p>
           </Reveal>
@@ -255,35 +279,41 @@ export const Hiring = () => {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
               <a href="#vetting-form" className="w-full sm:w-auto">
                 <EliteButton variant="elite" size="lg" fluid glowEffect rightIcon={<ArrowRight className="h-4 w-4" />}>
-                  {activeTab === "b2b" ? "Submit Staffing Request" : "Submit Quant Application"}
+                  {activeTab === "b2b" ? "Submit Staffing Request" : "Submit CV Application"}
                 </EliteButton>
               </a>
               
-              <a href="#vetting-form" className="w-full sm:w-auto">
+              <a href="#active-roles" className="w-full sm:w-auto">
                 <EliteButton variant="secondary" size="lg" fluid>
-                  {activeTab === "b2b" ? "Hire Vetted Specialists" : "Vetting Pipeline Rules"}
+                  View Active Positions
                 </EliteButton>
               </a>
             </div>
           </Reveal>
 
           {/* Quick Metrics */}
-          <div className="mt-16 md:mt-24 grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto border border-white/[0.05] bg-[#050608]/40 backdrop-blur-md rounded-2xl p-8">
+          <div className="mt-16 md:mt-24 grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto border border-white/[0.05] bg-[#040507]/40 backdrop-blur-md rounded-2xl p-8">
             <div className="text-center sm:text-left sm:border-r border-white/5 sm:pr-8">
-              <div className="text-3xl font-extrabold text-white">
-                {activeTab === "b2b" ? "40+ Brokerages" : "Sub-1.2ms"}
+              <div className="text-3xl font-extrabold text-white font-mono">
+                {activeTab === "b2b" ? "100% Outsource" : "Daily Ingress"}
               </div>
               <div className="text-[10px] uppercase tracking-widest text-[#849396] mt-2 font-mono">
-                {activeTab === "b2b" ? "Active Global Clients" : "Engine Target Latency"}
+                {activeTab === "b2b" ? "HR & Training Management" : "Sourcing Operations"}
               </div>
             </div>
             <div className="text-center sm:text-left sm:border-r border-white/5 sm:px-8">
-              <div className="text-3xl font-extrabold text-white">Top 1.5%</div>
-              <div className="text-[10px] uppercase tracking-widest text-[#849396] mt-2 font-mono">Quant Vetting Rigor</div>
+              <div className="text-3xl font-extrabold text-white font-mono">
+                {activeTab === "b2b" ? "Local Services" : "100% Internal"}
+              </div>
+              <div className="text-[10px] uppercase tracking-widest text-[#849396] mt-2 font-mono">
+                {activeTab === "b2b" ? "Technical Training & Education" : "Own Operations Funding"}
+              </div>
             </div>
             <div className="text-center sm:text-left sm:pl-8">
-              <div className="text-3xl font-extrabold text-white">100% Secure</div>
-              <div className="text-[10px] uppercase tracking-widest text-[#849396] mt-2 font-mono">Supabase CRM Sync</div>
+              <div className="text-3xl font-extrabold text-white font-mono">Supabase Sync</div>
+              <div className="text-[10px] uppercase tracking-widest text-[#849396] mt-2 font-mono">
+                Dynamic Job Registry
+              </div>
             </div>
           </div>
         </div>
@@ -295,61 +325,61 @@ export const Hiring = () => {
         <section className="grid md:grid-cols-2 gap-12 items-center">
           <Reveal delay={0.1}>
             <div className="space-y-6">
-              <div className="inline-flex items-center gap-2 text-xs font-bold text-emerald-400 uppercase tracking-widest font-mono">
-                <ShieldCheck className="h-4 w-4" /> VETTING & ALGORITHMIC VERIFICATION
+              <div className="inline-flex items-center gap-2 text-xs font-bold text-blue-400 uppercase tracking-widest font-mono">
+                <ShieldCheck className="h-4 w-4 text-cyan-400" /> B2B HUMAN RESOURCES & SERVICES
               </div>
               <h2 className="text-3xl font-bold text-white tracking-tight">
                 {activeTab === "b2b" 
-                  ? "Standard of excellence for CMT/CFT brokers." 
+                  ? "Bespoke HR Sourcing & Education Desk" 
                   : "We only hire developers of absolute caliber."}
               </h2>
-              <p className="text-white/50 leading-relaxed">
+              <p className="text-[#8A9AAB] leading-relaxed">
                 {activeTab === "b2b" ? (
-                  "Modern high-frequency trading requires more than standard resume matching. Our vetting desk operates a multi-stage quantitative check verifying practical system integration efficiency, low-latency code resilience, compliant CRM data operations, and direct MT4/MT5 bridge latency limits."
+                  "IFX Trades Broker Talent Sourcing Desk operates a complete staffing workflow. Beyond sourcing candidates, we provide intensive training programs, local currency & margin management education, and outsourced HR support to ensure seamlessly integrated placements."
                 ) : (
-                  "IFX Trades does not recruit based on generic credentials. Every developer, architect, or macro researcher entering our core desk must undergo rigorous testing: concurrency loops, kernel-bypass audits, and GARCH volatility regime resilience validation."
+                  "Our quantitative desk has an ongoing mandate. Rather than waiting for specific job slots, we source high-end developers and macro analysts continuously, matching requirements to quantitative parameters in real-time."
                 )}
               </p>
               <div className="flex flex-col gap-3 pt-2">
                 <div className="flex items-center gap-3 text-sm text-white/80">
-                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                  {activeTab === "b2b" ? "Solarflare kernel-bypass optimization check" : "Demonstrated lock-free concurrency loops in C++ / Rust"}
+                  <div className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+                  {activeTab === "b2b" ? "Dynamic local education and technical onboarding" : "Demonstrated lock-free concurrency loops in C++ / Rust"}
                 </div>
                 <div className="flex items-center gap-3 text-sm text-white/80">
-                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                  {activeTab === "b2b" ? "Compliance CRM gateway protocol setup" : "Cryptographic track record validation via verified links"}
+                  <div className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+                  {activeTab === "b2b" ? "Full-lifecycle HR services for partner brokerages" : "Cryptographic track record validation via verified links"}
                 </div>
                 <div className="flex items-center gap-3 text-sm text-white/80">
-                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                  {activeTab === "b2b" ? "Deep-market margin rules validation" : "Understanding of prime-of-prime ECN routing mechanics"}
+                  <div className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+                  {activeTab === "b2b" ? "B2B CRM candidate routing with live status trackers" : "Understanding of prime-of-prime ECN routing mechanics"}
                 </div>
               </div>
             </div>
           </Reveal>
 
           <Reveal delay={0.2} className="relative">
-            <div className="site-panel p-8 relative overflow-hidden border border-emerald-500/10 bg-[#050608]/40">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-2xl pointer-events-none" />
-              <h3 className="text-lg font-bold text-white mb-6 uppercase tracking-wider font-mono text-emerald-400 border-b border-white/5 pb-3">
-                {activeTab === "b2b" ? "// B2B CO-LOCATION DIRECTIVE" : "// CORE ENCLAVE STATEMENTS"}
+            <div className="site-panel p-8 relative overflow-hidden border border-blue-500/10 bg-[#040507]/40 backdrop-blur-md rounded-3xl">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl pointer-events-none" />
+              <h3 className="text-sm font-bold text-white mb-6 uppercase tracking-wider font-mono text-blue-400 border-b border-white/5 pb-3">
+                {activeTab === "b2b" ? "// B2B HR OPERATIONS DIRECTIVE" : "// CORE ENCLAVE STATEMENTS"}
               </h3>
-              <p className="text-sm font-mono text-white/70 leading-relaxed mb-6">
+              <p class="text-xs font-mono text-white/70 leading-relaxed mb-6">
                 {activeTab === "b2b" ? (
-                  "\"IFX Trades supplies critical human infrastructure to the world's most capital-intensive CMT/CFT brokerages. When directors arrive on our desk, they obtain access to the absolute top tier of low-latency talent, ready to integrate into $10B+ operational models.\""
+                  "\"We assist institutional partners by training, educating, and placing quant support specialists. Our service includes full regulatory and HR framework consulting, giving brokers access to certified talent.\""
                 ) : (
-                  "\"We operate as an elite quantitative software laboratory. We do not sell hope or signals. We license high-fidelity systematic models, and we expect our core team to share that focus on mechanical, objective execution.\""
+                  "\"We recruit for our own operational desks. We seek mathematical discipline, microsecond execution optimization, and verified capital tracking records.\""
                 )}
               </p>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full border border-white/10 overflow-hidden bg-white/5 flex items-center justify-center text-xs font-bold text-emerald-400 font-mono">
+                <div className="w-10 h-10 rounded-full border border-white/10 overflow-hidden bg-white/5 flex items-center justify-center text-xs font-bold text-blue-400 font-mono">
                   {activeTab === "b2b" ? "B2B" : "DESK"}
                 </div>
                 <div>
                   <div className="text-xs font-bold text-white">
-                    {activeTab === "b2b" ? "Global Sourcing Desk" : "Quantitative Council"}
+                    {activeTab === "b2b" ? "Broker Sourcing Desk" : "Quantitative Council"}
                   </div>
                   <div className="text-[10px] text-[#849396] font-mono">
-                    {activeTab === "b2b" ? "IFX GENERAL MANAGEMENT" : "IFX EXECUTIVE HEAD"}
+                    {activeTab === "b2b" ? "IFX HR DEPT" : "IFX EXECUTIVE HEAD"}
                   </div>
                 </div>
               </div>
@@ -358,89 +388,124 @@ export const Hiring = () => {
         </section>
 
         {/* Priority Talent Categories */}
-        <section className="space-y-12">
+        <section id="active-roles" className="space-y-12 scroll-mt-24">
           <Reveal>
             <div className="text-center space-y-4">
-              <div className="text-xs font-bold text-emerald-400 uppercase tracking-widest font-mono">
-                {activeTab === "b2b" ? "BROKER STAFFING CAPABILITIES" : "CORE SPECIALTIES REQUIRED"}
+              <div className="text-xs font-bold text-blue-400 uppercase tracking-widest font-mono">
+                {activeTab === "b2b" ? "ACTIVE BROKER TALENT VACANCIES" : "INTERNAL DESK ROLES REQUIRED"}
               </div>
               <h2 className="text-3xl font-bold text-white tracking-tight">
                 {activeTab === "b2b" 
-                  ? "Vetted Brokerage Support Specializations" 
-                  : "Target Operational Specialties"}
+                  ? "Sourced Brokerage Positions" 
+                  : "IFX Internal Vacancies"}
               </h2>
-              <p className="text-white/50 max-w-2xl mx-auto">
-                We track, vet, and place premium-class experts across the following critical brokerage divisions:
+              <p className="text-[#8A9AAB] max-w-2xl mx-auto">
+                {activeTab === "b2b"
+                  ? "These positions are managed by our B2B HR Desk on behalf of partner brokerages."
+                  : "We hire on an ongoing basis for our internal systematic quant desks."}
               </p>
             </div>
           </Reveal>
 
-          <div className="grid gap-6 md:grid-cols-2">
-            {careerTiers.map((tier, index) => (
-              <Reveal key={tier.title} delay={index * 0.08} className="site-panel p-6 bg-[#040506]/80 hover:border-emerald-500/20 transition-all duration-300">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                  <tier.icon className="h-5 w-5" />
-                </div>
-                <h3 className="mt-6 text-lg font-bold text-white tracking-tight">{tier.title}</h3>
-                <div className="text-[10px] text-emerald-400 font-mono uppercase tracking-wider mt-1">{tier.domain}</div>
-                <p className="mt-4 text-sm text-white/50 leading-relaxed font-light">{tier.reqs}</p>
-                <div className="mt-6 border-t border-white/5 pt-4">
-                  <div className="text-[9px] uppercase tracking-widest text-[#849396] font-mono">
-                    {activeTab === "b2b" ? "Target Placements" : "Core Enclave Scope"}
+          {loadingPositions ? (
+            <div className="grid gap-6 md:grid-cols-2">
+              {[1, 2].map((k) => (
+                <div key={k} className="h-64 rounded-3xl bg-white/5 border border-white/5 animate-pulse" />
+              ))}
+            </div>
+          ) : positions.length === 0 ? (
+            <div className="text-center py-12 rounded-3xl border border-white/5 bg-white/[0.01]">
+              <p className="text-[#849396] text-xs font-mono uppercase tracking-widest">No active positions registered in database.</p>
+            </div>
+          ) : (
+            <div className="grid gap-6 md:grid-cols-2">
+              {positions.map((pos, index) => (
+                <Reveal key={pos.id} delay={index * 0.08} className="site-panel p-6 bg-[#040506]/80 hover:border-blue-500/20 border border-white/5 rounded-3xl transition-all duration-300">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                    <Briefcase className="h-5 w-5" />
                   </div>
-                  <div className="text-xs font-semibold text-white mt-1">{tier.placement}</div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
+                  <h3 className="mt-6 text-lg font-bold text-white tracking-tight">{pos.title}</h3>
+                  <div className="text-[10px] text-cyan-400 font-mono uppercase tracking-wider mt-1">{pos.department}</div>
+                  <p className="mt-4 text-xs text-[#8A9AAB] leading-relaxed font-light">{pos.description}</p>
+                  
+                  {Array.isArray(pos.requirements) && pos.requirements.length > 0 && (
+                    <div className="mt-4 space-y-1">
+                      <span className="text-[9px] uppercase tracking-widest text-[#849396] font-mono">Core Metrics</span>
+                      <ul className="list-disc pl-4 text-[10px] text-white/50 space-y-0.5">
+                        {pos.requirements.slice(0, 3).map((req: string, rIdx: number) => (
+                          <li key={rIdx}>{req}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  <div className="mt-6 border-t border-white/5 pt-4 flex justify-between items-center">
+                    <div>
+                      <div className="text-[9px] uppercase tracking-widest text-[#849396] font-mono">Location</div>
+                      <div className="text-xs font-semibold text-white mt-0.5">{pos.location}</div>
+                    </div>
+                    <button 
+                      onClick={() => {
+                        setSelectedPositionId(pos.id);
+                        document.getElementById("vetting-form")?.scrollIntoView({ behavior: 'smooth' });
+                      }}
+                      className="px-4 py-2 rounded-xl bg-blue-500 hover:bg-blue-400 text-white font-mono text-[9px] uppercase tracking-widest font-black transition-all active:scale-95"
+                    >
+                      Apply Now
+                    </button>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          )}
         </section>
 
         {/* Interactive Vetting Form Section */}
         <section id="vetting-form" className="scroll-mt-24">
-          <Reveal className="site-panel p-8 md:p-12 relative overflow-hidden bg-gradient-to-b from-[#05070a]/90 to-[#020305]/95 border border-emerald-500/15 rounded-3xl shadow-2xl">
-            <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-emerald-500/[0.02] rounded-full blur-3xl pointer-events-none" />
+          <Reveal className="site-panel p-8 md:p-12 relative overflow-hidden bg-gradient-to-b from-[#05070a]/90 to-[#020305]/95 border border-blue-500/15 rounded-3xl shadow-2xl">
+            <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-500/[0.02] rounded-full blur-3xl pointer-events-none" />
             
             <div className="max-w-3xl mx-auto">
               <div className="text-center space-y-4 mb-10">
-                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-emerald-500/20 bg-emerald-500/5 text-emerald-400 text-[10px] font-black uppercase tracking-widest font-mono">
+                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-500/20 bg-blue-500/5 text-blue-400 text-[10px] font-black uppercase tracking-widest font-mono">
                   {activeTab === "b2b" 
-                    ? "SECURE B2B BROKERAGE INTAKE // SOURCING PIPELINE"
-                    : "SECURE CAREERS PIPELINE // TIER-1 QUANT VETTING"}
+                    ? "SECURE B2B RECRUITMENT INGRESS // HR PIPELINE"
+                    : "SECURE INTERNAL CAREERS INGRESS // DESK VETTING"}
                 </span>
                 <h2 className="text-2xl md:text-4xl font-extrabold text-white tracking-tight">
                   {activeTab === "b2b" 
-                    ? "Brokerage Staffing & Sourcing Desk"
-                    : "Core Enclave Application Portal"}
+                    ? "Apply for Broker Sourced Positions"
+                    : "IFX Quant Desk Application"}
                 </h2>
                 <p className="text-white/40 text-sm max-w-xl mx-auto leading-relaxed">
                   {activeTab === "b2b" ? (
-                    "Specify your technical requirements. Sourcing requests are cryptographically serialized and directly mapped into our private secure CRM enclave."
+                    "Apply for placements with global partner brokerages. Submissions synchronize directly with partner HR Desks."
                   ) : (
-                    "Submit your technical credentials and quantitative track records directly to our Risk and Quantitative Council."
+                    "Submit your credentials. We recruit continuously every month and day as our quantitative requirements expand."
                   )}
                 </p>
               </div>
 
               {submitSuccess ? (
-                <div className="text-center py-12 px-6 rounded-2xl bg-emerald-500/[0.02] border border-emerald-500/20 max-w-2xl mx-auto">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 mx-auto mb-6">
+                <div className="text-center py-12 px-6 rounded-2xl bg-blue-500/[0.02] border border-blue-500/20 max-w-2xl mx-auto">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 mx-auto mb-6">
                     <CheckCircle2 className="h-8 w-8" />
                   </div>
                   <h3 className="text-2xl font-bold text-white mb-2 uppercase tracking-wide">
-                    {activeTab === "b2b" ? "Staffing Brief Authenticated" : "Application Authenticated"}
+                    Application Document Ingested
                   </h3>
                   <p className="text-white/60 text-sm leading-relaxed max-w-md mx-auto mb-8">
-                    Your request record has been securely logged into the IFX Leads CRM. An institutional validation analyst will review your profile metrics within 48 business hours.
+                    Your details and CV have been uploaded to our secure database records. Our vetting committee will evaluate your track record.
                   </p>
                   <div className="bg-black/40 border border-white/5 p-4 rounded-xl font-mono text-xs max-w-xs mx-auto">
-                    <div className="text-[#849396] uppercase tracking-wider mb-1">CRM Log Receipt</div>
-                    <div className="text-emerald-400 font-bold tracking-widest">{trackingId}</div>
+                    <div className="text-[#849396] uppercase tracking-wider mb-1">Application ID</div>
+                    <div className="text-blue-400 font-bold tracking-widest">{trackingId}</div>
                   </div>
                   <button
                     onClick={() => setSubmitSuccess(false)}
                     className="mt-8 text-xs text-white/40 hover:text-white uppercase tracking-widest transition-colors font-mono underline"
                   >
-                    Submit Another Record
+                    Submit Another Application
                   </button>
                 </div>
               ) : (
@@ -455,7 +520,7 @@ export const Hiring = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label className="block text-xs font-black text-white/60 uppercase tracking-widest font-mono">
-                        {activeTab === "b2b" ? "Brokerage / Corporate Name *" : "Full Legal Name *"}
+                        Full Legal Name *
                       </label>
                       <input
                         type="text"
@@ -463,14 +528,14 @@ export const Hiring = () => {
                         value={formData.fullName}
                         onChange={handleInputChange}
                         required
-                        placeholder={activeTab === "b2b" ? "e.g. Sovereign Markets Corp" : "e.g. Dr. Lawrence Vance"}
-                        className="w-full bg-[#090b0e] border border-white/10 focus:border-emerald-500 rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 focus:outline-none transition-colors"
+                        placeholder="e.g. Lawrence Vance"
+                        className="w-full bg-[#090b0e] border border-white/10 focus:border-blue-500 rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 focus:outline-none transition-colors"
                       />
                     </div>
 
                     <div className="space-y-2">
                       <label className="block text-xs font-black text-white/60 uppercase tracking-widest font-mono">
-                        {activeTab === "b2b" ? "Authorized Corporate Email *" : "Secure Personal Email *"}
+                        Secure Contact Email *
                       </label>
                       <input
                         type="email"
@@ -478,8 +543,8 @@ export const Hiring = () => {
                         value={formData.email}
                         onChange={handleInputChange}
                         required
-                        placeholder={activeTab === "b2b" ? "e.g. operations@sovereignmarkets.com" : "e.g. vance@quantres.net"}
-                        className="w-full bg-[#090b0e] border border-white/10 focus:border-emerald-500 rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 focus:outline-none transition-colors"
+                        placeholder="e.g. vance@quantres.net"
+                        className="w-full bg-[#090b0e] border border-white/10 focus:border-blue-500 rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 focus:outline-none transition-colors"
                       />
                     </div>
                   </div>
@@ -495,93 +560,105 @@ export const Hiring = () => {
                         value={formData.phone}
                         onChange={handleInputChange}
                         placeholder="e.g. +1 (555) 019-2834"
-                        className="w-full bg-[#090b0e] border border-white/10 focus:border-emerald-500 rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 focus:outline-none transition-colors"
+                        className="w-full bg-[#090b0e] border border-white/10 focus:border-blue-500 rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 focus:outline-none transition-colors"
                       />
                     </div>
 
                     <div className="space-y-2">
                       <label className="block text-xs font-black text-white/60 uppercase tracking-widest font-mono">
-                        {activeTab === "b2b" ? "Target Sourcing Role" : "Quantitative Core Specialization"}
+                        Select Target Role *
                       </label>
                       <select
-                        name="specialization"
-                        value={formData.specialization}
-                        onChange={handleInputChange}
-                        className="w-full bg-[#090b0e] border border-white/10 focus:border-emerald-500 rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition-colors appearance-none"
+                        name="positionId"
+                        value={selectedPositionId}
+                        onChange={(e) => setSelectedPositionId(e.target.value)}
+                        required
+                        className="w-full bg-[#090b0e] border border-white/10 focus:border-blue-500 rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition-colors appearance-none"
                         style={{ backgroundImage: 'url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3E%3Cpath stroke=\'%23BAC9CC\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3E%3C/svg%3E")', backgroundPosition: 'right 1rem center', backgroundSize: '1.25rem', backgroundRepeat: 'no-repeat' }}
                       >
-                        <option value="Ultra-Low Latency C++ / Rust Systems Developer">Ultra-Low Latency C++ / Rust Systems Developer</option>
-                        <option value="Senior Institutional Business Development Manager (BDM)">Senior Institutional Business Development Manager (BDM)</option>
-                        <option value="CRM, MT4/MT5 Gateway & API Integration Specialist">CRM, MT4/MT5 Gateway & API Integration Specialist</option>
-                        <option value="Institutional FX Marketing Specialist & Lead Designer">Institutional FX Marketing Specialist & Lead Designer</option>
+                        <option value="">-- Choose Position --</option>
+                        {positions.map((pos) => (
+                          <option key={pos.id} value={pos.id}>{pos.title} ({pos.location})</option>
+                        ))}
                       </select>
                     </div>
                   </div>
 
-                  {activeTab === "careers" && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <label className="block text-xs font-black text-white/60 uppercase tracking-widest font-mono">
-                          GitHub / Portfolio URI
-                        </label>
-                        <input
-                          type="url"
-                          name="portfolioLink"
-                          value={formData.portfolioLink}
-                          onChange={handleInputChange}
-                          placeholder="e.g. https://github.com/quant-architect"
-                          className="w-full bg-[#090b0e] border border-white/10 focus:border-emerald-500 rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 focus:outline-none transition-colors"
-                        />
-                      </div>
-
-                      <div className="space-y-2">
-                        <label className="block text-xs font-black text-white/60 uppercase tracking-widest font-mono">
-                          Verified Backtest / Track Record Link
-                        </label>
-                        <input
-                          type="url"
-                          name="backtestFidelity"
-                          value={formData.backtestFidelity}
-                          onChange={handleInputChange}
-                          placeholder="e.g. https://myfxbook.com/members/fidelity-log"
-                          className="w-full bg-[#090b0e] border border-white/10 focus:border-emerald-500 rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 focus:outline-none transition-colors"
-                        />
-                      </div>
-                    </div>
-                  )}
-
+                  {/* CV Upload Button (Mandatory File Input) */}
                   <div className="space-y-2">
                     <label className="block text-xs font-black text-white/60 uppercase tracking-widest font-mono">
-                      {activeTab === "b2b" ? "Broker Engagement Model" : "Engagement Category"}
+                      Upload CV / Resume Document (PDF / DOC) *
                     </label>
-                    <select
-                      name="engagementType"
-                      value={formData.engagementType}
-                      onChange={handleInputChange}
-                      className="w-full bg-[#090b0e] border border-white/10 focus:border-emerald-500 rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition-colors appearance-none"
-                      style={{ backgroundImage: 'url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3E%3Cpath stroke=\'%23BAC9CC\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3E%3C/svg%3E")', backgroundPosition: 'right 1rem center', backgroundSize: '1.25rem', backgroundRepeat: 'no-repeat' }}
-                    >
-                      {activeTab === "b2b" ? (
-                        <>
-                          <option value="Single Role Staffing Outsource">Single Role Staffing Outsource</option>
-                          <option value="Complete Multi-Role Broker Outsource">Complete Multi-Role Broker Outsource</option>
-                          <option value="Dedicated Quantitative Team Setup">Dedicated Quantitative Team Setup</option>
-                        </>
+                    <div className="flex flex-col sm:flex-row items-center gap-4">
+                      <label className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-6 py-3.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white font-mono text-[10px] font-black uppercase tracking-widest cursor-pointer active:scale-95 transition-all">
+                        <Upload className="w-4 h-4 text-cyan-400" />
+                        {uploadingFile ? "Uploading File..." : "Choose File"}
+                        <input 
+                          type="file" 
+                          accept=".pdf,.doc,.docx"
+                          onChange={handleFileChange}
+                          disabled={uploadingFile}
+                          className="hidden"
+                        />
+                      </label>
+                      {resumeName ? (
+                        <div className="flex items-center gap-2 text-xs font-mono text-cyan-400">
+                          <FileText className="w-4 h-4 shrink-0" />
+                          <span>{resumeName}</span>
+                        </div>
                       ) : (
-                        <>
-                          <option value="Individual Quant Developer seeking placement">Individual Quant Developer seeking placement</option>
-                          <option value="Asset Manager seeking custom talent alignment">Asset Manager seeking custom talent alignment</option>
-                          <option value="Venture/Desk requiring bespoke algorithm outsourcing">Venture/Desk requiring bespoke algorithm outsourcing</option>
-                        </>
+                        <span className="text-[10px] text-white/20 uppercase tracking-widest font-mono">No document uploaded yet</span>
                       )}
-                    </select>
+                    </div>
+                    {fileError && <p className="text-xs text-red-400 font-mono">{fileError}</p>}
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="block text-xs font-black text-white/60 uppercase tracking-widest font-mono">
+                        GitHub / Portfolio URI (Optional)
+                      </label>
+                      <input
+                        type="url"
+                        name="portfolioLink"
+                        value={formData.portfolioLink}
+                        onChange={handleInputChange}
+                        placeholder="e.g. https://github.com/quant-architect"
+                        className="w-full bg-[#090b0e] border border-white/10 focus:border-blue-500 rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 focus:outline-none transition-colors"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-xs font-black text-white/60 uppercase tracking-widest font-mono">
+                        Engagement Category
+                      </label>
+                      <select
+                        name="engagementType"
+                        value={formData.engagementType}
+                        onChange={handleInputChange}
+                        className="w-full bg-[#090b0e] border border-white/10 focus:border-blue-500 rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition-colors appearance-none"
+                        style={{ backgroundImage: 'url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3E%3Cpath stroke=\'%23BAC9CC\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3E%3C/svg%3E")', backgroundPosition: 'right 1rem center', backgroundSize: '1.25rem', backgroundRepeat: 'no-repeat' }}
+                      >
+                        {activeTab === "b2b" ? (
+                          <>
+                            <option value="Full-Time Placement">Full-Time Placement</option>
+                            <option value="Temporary/Contract Staffing">Temporary/Contract Staffing</option>
+                            <option value="HR Consulting / Training Program">HR Consulting / Training Program</option>
+                          </>
+                        ) : (
+                          <>
+                            <option value="Core Quant Team Member">Core Quant Team Member</option>
+                            <option value="Contract Developer">Contract Developer</option>
+                            <option value="Systematic Infrastructure Intern">Systematic Infrastructure Intern</option>
+                          </>
+                        )}
+                      </select>
+                    </div>
                   </div>
 
                   <div className="space-y-2">
                     <label className="block text-xs font-black text-white/60 uppercase tracking-widest font-mono">
-                      {activeTab === "b2b" 
-                        ? "Staffing Objectives & System Specifications *" 
-                        : "Operational Track Record & Sourcing Summary *"}
+                      Cover Letter / Sourcing Summary *
                     </label>
                     <textarea
                       name="trackRecord"
@@ -590,23 +667,23 @@ export const Hiring = () => {
                       required
                       rows={5}
                       placeholder={activeTab === "b2b"
-                        ? "Describe the exact platform integrations, margin matrices, or target sales parameters required for your brokerage..."
-                        : "Outline your backtest parameters, low-latency optimizations, CRM API integration layouts, or strategic B2B acquisition achievements..."}
-                      className="w-full bg-[#090b0e] border border-white/10 focus:border-emerald-500 rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 focus:outline-none transition-colors resize-none"
+                        ? "Briefly describe your training objectives, recruitment specifications, or relevant corporate background..."
+                        : "Outline your quantitative backtests, C++/Rust low-latency coding experience, or technical highlights..."}
+                      className="w-full bg-[#090b0e] border border-white/10 focus:border-blue-500 rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 focus:outline-none transition-colors resize-none"
                     />
                   </div>
 
                   <div className="pt-4">
                     <EliteButton
                       type="submit"
-                      disabled={isSubmitting}
+                      disabled={isSubmitting || uploadingFile}
                       isLoading={isSubmitting}
                       variant="elite"
                       size="lg"
                       fluid
                       rightIcon={<ArrowRight className="h-4 w-4" />}
                     >
-                      {activeTab === "b2b" ? "Transmit Staffing Request" : "Transmit Secure Application"}
+                      Transmit Application Documents
                     </EliteButton>
                   </div>
                 </form>
