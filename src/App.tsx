@@ -37,6 +37,7 @@ const Dashboard = lazy(() => import("./pages/Dashboard").then(m => ({ default: m
 const Admin = lazy(() => import("./pages/Admin").then(m => ({ default: m.Admin })));
 const AgentDashboard = lazy(() => import("./pages/AgentDashboard").then(m => ({ default: m.AgentDashboard })));
 const Hiring = lazy(() => import("./pages/Hiring").then(m => ({ default: m.Hiring })));
+const BrokerTalent = lazy(() => import("./pages/BrokerTalent").then(m => ({ default: m.BrokerTalent })));
 const NotFound = lazy(() => import("./pages/NotFound").then(m => ({ default: m.NotFound })));
 const InstitutionalError = lazy(() => import("./pages/Error").then(m => ({ default: m.InstitutionalError })));
 const Consultation = lazy(() => import("./pages/Consultation").then(m => ({ default: m.Consultation })));
@@ -85,6 +86,8 @@ const AnimatedRoutes = () => {
             <Route path="/results" element={<Results />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/hiring" element={<Hiring />} />
+            <Route path="/careers" element={<Hiring />} />
+            <Route path="/broker-talent" element={<BrokerTalent />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/b2b/liquidity" element={<B2BLiquidity />} />

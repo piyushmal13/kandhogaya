@@ -97,7 +97,7 @@ export const Footer = () => (
             <ul className="space-y-4 text-xs text-[#8A9AAB] font-medium">
               <li><Link to="/b2b/liquidity" className="hover:text-emerald-400 transition-colors flex items-center gap-1.5 group">Liquidity Integration <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
               <li><Link to="/b2b/white-label" className="hover:text-emerald-400 transition-colors flex items-center gap-1.5 group">White Label Partnering <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
-              <li><Link to="/hiring?mode=b2b" className="hover:text-emerald-400 transition-colors">Broker Talent Recruitment</Link></li>
+              <li><Link to="/broker-talent" className="hover:text-emerald-400 transition-colors">Broker Talent Recruitment</Link></li>
             </ul>
           </div>
 
@@ -119,7 +119,7 @@ export const Footer = () => (
             </h4>
             <ul className="space-y-4 text-xs text-[#8A9AAB] font-medium">
               <li><Link to="/about" className="hover:text-emerald-400 transition-colors">About Operations</Link></li>
-              <li><Link to="/hiring?mode=careers" className="hover:text-emerald-400 transition-colors">Careers (We're Hiring)</Link></li>
+              <li><Link to="/careers" className="hover:text-emerald-400 transition-colors">Careers (We're Hiring)</Link></li>
               <li><Link to="/contact" className="hover:text-emerald-400 transition-colors">Support Portal</Link></li>
               <li><Link to="/risk" className="hover:text-emerald-400 transition-colors">Risk Protocol</Link></li>
               <li><a href="/company_profile.html" target="_blank" className="hover:text-emerald-400 transition-colors">Company Profile</a></li>

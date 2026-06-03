@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { motion, useScroll, useTransform, useSpring } from "motion/react";
-import { ArrowRight, ChevronDown, Play, ShieldCheck, Zap, Globe, Timer, Lock, Server } from "lucide-react";
+import { ArrowRight, ChevronDown, Play, ShieldCheck, Zap, Globe, Timer, Lock, Server, Upload } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const EASING = [0.4, 0, 0.2, 1] as const;
@@ -15,6 +15,7 @@ import { AnimatedCandlesticks } from "../ui/AnimatedCandlesticks";
 interface FortressHeroProps {
   onRequestSession: () => void;
   onRequestBuild: () => void;
+  onRequestCvSubmit: () => void;
 }
 
 // ── FLOATING PARTICLES ──
@@ -44,7 +45,7 @@ const TRUST_ITEMS = [
   { icon: ShieldCheck, label: "Audit Verified" },
 ];
 
-export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, onRequestBuild }) => {
+export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, onRequestBuild, onRequestCvSubmit }) => {
   const { t } = useLanguage();
   const { isEnabled: isTickerActive } = useFeatureFlag('market_ticker_active', true);
   const [tickers, setTickers] = useState<string[]>([]);
@@ -239,6 +240,12 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
               <button onClick={handleSeeResults} className="w-full sm:w-auto shrink-0 cursor-pointer">
                 <EliteButton variant="secondary" size="lg" fluid leftIcon={<Play className="w-3.5 h-3.5 text-blue-400 fill-blue-400/20" />}>
                   {t("cta_results")}
+                </EliteButton>
+              </button>
+
+              <button onClick={(e) => { e.preventDefault(); onRequestCvSubmit(); }} className="w-full sm:w-auto shrink-0 cursor-pointer">
+                <EliteButton variant="elite" size="lg" fluid rightIcon={<Upload className="w-3.5 h-3.5 text-cyan-400" />}>
+                  Submit CV / Join Desk
                 </EliteButton>
               </button>
             </motion.div>

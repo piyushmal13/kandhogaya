@@ -86,7 +86,7 @@ export const RiskDisclosure = () => (
 
     <section className="mt-8 p-6 rounded-2xl bg-red-500/5 border border-red-500/10">
       <h3 className="text-red-500 font-bold uppercase text-xs mb-2">Absolute Client Risk Statement</h3>
-      <p class="text-[11px] text-gray-400 font-mono leading-relaxed">
+      <p className="text-[11px] text-gray-400 font-mono leading-relaxed">
         CLIENT ABSOLUTE RISK STATEMENT: ALL SYSTEMATIC TRADING RISK RESTS 100% AT THE CLIENT'S END. IFX TRADES OPERATES SOLELY AS A SOFTWARE TECHNOLOGY PROVIDER. THE COMPANY IS NOT AN AUTHORIZED ADVISOR OR BROKER-DEALER, AND IS NOWHERE RESPONSIBLE OR LIABLE FOR ANY CAPITAL LOSS, MARGIN EXHAUSTION, ACCOUNT LIQUIDATION, OR SLIPPAGE OCCURRED DURING PLATFORM USAGE.
       </p>
     </section>

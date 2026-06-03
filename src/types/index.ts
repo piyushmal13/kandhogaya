@@ -219,6 +219,7 @@ export interface Blog {
       tagline?: string;
     };
     tags?: string[];
+    additional_images?: string[];
   };
   // joined via apiHandlers
   author?: {

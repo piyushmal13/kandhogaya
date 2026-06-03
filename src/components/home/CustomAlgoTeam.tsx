@@ -21,7 +21,11 @@ const features = [
   }
 ];
 
-export const CustomAlgoTeam = () => {
+interface CustomAlgoTeamProps {
+  onRequestCvSubmit: () => void;
+}
+
+export const CustomAlgoTeam: React.FC<CustomAlgoTeamProps> = ({ onRequestCvSubmit }) => {
   return (
     <section className="py-24 md:py-40 bg-[var(--bg-base)] relative overflow-hidden">
       {/* Background VFX */}
@@ -70,15 +74,24 @@ export const CustomAlgoTeam = () => {
               </div>
             </div>
 
-            <EliteButton 
-              variant="elite" 
-              size="lg" 
-              className="group"
-              onClick={() => document.getElementById('consultation')?.scrollIntoView({ behavior: 'smooth' })}
-            >
-              Request Custom Build
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </EliteButton>
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+              <EliteButton 
+                variant="elite" 
+                size="lg" 
+                className="group"
+                onClick={() => document.getElementById('consultation')?.scrollIntoView({ behavior: 'smooth' })}
+              >
+                Request Custom Build
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </EliteButton>
+              <EliteButton 
+                variant="secondary" 
+                size="lg"
+                onClick={onRequestCvSubmit}
+              >
+                Join Our Team (Submit CV)
+              </EliteButton>
+            </div>
           </motion.div>
 
           <div className="space-y-6">

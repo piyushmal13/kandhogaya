@@ -82,6 +82,18 @@ export const routeMetaMap: Record<string, RouteMeta> = {
       "Join the IFXTrades team. Explore careers in quantitative trading, development, market research, and operations.",
     keywords: `${BASE_KEYWORDS}, trading careers, fintech jobs, quantitative analyst`,
   },
+  "/careers": {
+    title: "Careers | IFXTrades",
+    description:
+      "Join the IFXTrades team. Explore careers in quantitative trading, development, market research, and operations.",
+    keywords: `${BASE_KEYWORDS}, trading careers, fintech jobs, quantitative analyst`,
+  },
+  "/broker-talent": {
+    title: "Broker Talent Sourcing & HR Services | IFXTrades",
+    description:
+      "Global outsourced recruitment, margin education, and system developer staffing for broker partners.",
+    keywords: `${BASE_KEYWORDS}, broker talent sourcing, brokerage HR support, training programs`,
+  },
   "/login": {
     title: "Client Access | IFXTrades",
     description:

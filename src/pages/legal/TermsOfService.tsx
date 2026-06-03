@@ -52,7 +52,7 @@ export const TermsOfService = () => (
 
     <section className="mt-8 p-6 rounded-2xl bg-red-500/5 border border-red-500/10">
       <h3 className="text-red-500 font-bold uppercase text-xs mb-2">Allocator Risk and Liability Agreement</h3>
-      <p class="text-[11px] text-gray-400 font-mono leading-relaxed">
+      <p className="text-[11px] text-gray-400 font-mono leading-relaxed">
         RISK IS 100% AT THE CLIENT'S END. IFX TRADES OPERATES ONLY AS A TECHNICAL SOFTWARE INFRASTRUCTURE PROVIDER. THE COMPANY IS NOT RESPONSIBLE OR LIABLE FOR TERMINAL DRAWDOWN EXHAUSTION, MARGIN LOSSES, OR ACCOUNT DEACTIVATION OCCURRED DURING EVALUATION CHALLENGES OR FUNDED OPERATIONS.
       </p>
     </section>
