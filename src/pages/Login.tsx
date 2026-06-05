@@ -237,6 +237,13 @@ export const Login = () => {
             >
               {getButtonText()}
             </button>
+
+            <p className="text-[9px] text-white/25 text-center leading-normal mt-2 font-mono">
+              By accessing the hub, you agree to our{" "}
+              <a href="/terms" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Terms</a>,{" "}
+              <a href="/privacy" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Privacy</a>, and{" "}
+              <a href="/risk" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Risk Disclosures</a>.
+            </p>
           </form>
 
           <div className="space-y-3 text-center">

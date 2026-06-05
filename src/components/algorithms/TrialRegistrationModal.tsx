@@ -199,6 +199,13 @@ export const TrialRegistrationModal = ({ algo, onClose }: TrialRegistrationModal
                   )}
                 </button>
                 
+                <p className="text-[9px] text-white/25 text-center leading-normal font-mono">
+                  By requesting a trial, you agree to our{" "}
+                  <a href="/terms" target="_blank" rel="noopener noreferrer" className="underline hover:text-white transition-colors">Terms</a>,{" "}
+                  <a href="/privacy" target="_blank" rel="noopener noreferrer" className="underline hover:text-white transition-colors">Privacy</a>, and{" "}
+                  <a href="/risk" target="_blank" rel="noopener noreferrer" className="underline hover:text-white transition-colors">Risk Disclosures</a>.
+                </p>
+
                 <div className="flex items-center justify-center gap-2 text-[8px] text-white/20 uppercase font-bold tracking-wider">
                   <Shield className="w-3.5 h-3.5 text-emerald-500/40" />
                   Secured &amp; Sandboxed. Your details are never sold or shared.

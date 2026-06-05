@@ -360,6 +360,13 @@ export const CvSubmitModal: React.FC<CvSubmitModalProps> = ({ isOpen, onClose })
                     <span>Transmit CV Application</span>
                   </EliteButton>
 
+                  <p className="text-[9px] text-white/25 text-center leading-normal mt-2 px-1 font-mono">
+                    By transmitting credentials, you agree to our{" "}
+                    <a href="/terms" target="_blank" rel="noopener noreferrer" className="underline hover:text-white transition-colors">Terms</a>,{" "}
+                    <a href="/privacy" target="_blank" rel="noopener noreferrer" className="underline hover:text-white transition-colors">Privacy</a>, and{" "}
+                    <a href="/risk" target="_blank" rel="noopener noreferrer" className="underline hover:text-white transition-colors">Risk Disclosures</a>.
+                  </p>
+
                   <div className="flex items-center justify-center gap-1.5 pt-1 text-[8px] font-mono text-white/20 uppercase tracking-widest">
                     <ShieldCheck className="w-3.5 h-3.5 text-cyan-500/50" />
                     <span>SECURE DIRECT DESK SUBMISSION</span>

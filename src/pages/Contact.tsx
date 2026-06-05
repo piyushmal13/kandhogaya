@@ -12,14 +12,10 @@ import { sendContactMessage } from "../services/apiHandlers";
 type ContactStatus = "idle" | "loading" | "success" | "error";
 
 export const Contact = () => {
-  const [searchParams] = useSearchParams();
-  const intent = searchParams.get("intent");
-  const isReferral = intent === "referral";
-
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    subject: isReferral ? "Broker Referral Node" : "General Inquiry",
+    subject: "General Inquiry",
     message: "",
   });
   const [status, setStatus] = useState<ContactStatus>("idle");
@@ -46,7 +42,7 @@ export const Contact = () => {
       setFormData({
         name: "",
         email: "",
-        subject: isReferral ? "Broker Referral Node" : "General Inquiry",
+        subject: "General Inquiry",
         message: "",
       });
     } catch (error) {
@@ -65,36 +61,18 @@ export const Contact = () => {
       />
 
       <PageHero
-        eyebrow={isReferral ? "Institutional Partnership Node" : "Institutional Support Desk"}
+        eyebrow="Institutional Support Desk"
         title={
-          isReferral ? (
-            <>
-              B2B Broker Referral & <br />
-              <span className="text-emerald-500">Allocation Bridge.</span>
-            </>
-          ) : (
-            <>
-              Direct Connectivity to the <br />
-              <span className="text-emerald-500">IFX Engineering Desk.</span>
-            </>
-          )
+          <>
+            Direct Connectivity to the <br />
+            <span className="text-emerald-500">IFX Engineering Desk.</span>
+          </>
         }
-        description={
-          isReferral 
-            ? "Establish a secure allocation pipeline. Connect your client base directly to IFX Trades' systematic quantitative execution bridges under premium multi-tier commissions."
-            : "Secure high-fidelity communication for institutional partners, algorithmic licensees, and professional research enclaves. Our desk operates with zero friction and absolute technical transparency."
-        }
-        actions={
-          isReferral 
-            ? [
-                { label: "WhatsApp Secure", href: BRANDING.whatsappUrl },
-                { label: "Affiliate Terminal", href: "/affiliate", variant: "secondary" as const },
-              ]
-            : [
-                { label: "WhatsApp Secure", href: BRANDING.whatsappUrl },
-                { label: "Direct Email", href: `mailto:${BRANDING.supportEmail}`, variant: "secondary" as const },
-              ]
-        }
+        description="Secure high-fidelity communication for institutional partners, algorithmic licensees, and professional research enclaves. Our desk operates with zero friction and absolute technical transparency."
+        actions={[
+          { label: "WhatsApp Secure", href: BRANDING.whatsappUrl },
+          { label: "Direct Email", href: `mailto:${BRANDING.supportEmail}`, variant: "secondary" as const },
+        ]}
         metrics={[
           { label: "Response SLA", value: "< 2 Hours", helper: "During active market cycles" },
           { label: "Encryption", value: "End-to-End", helper: "Secure institutional data handling" },
@@ -217,7 +195,6 @@ export const Contact = () => {
                     <option value="Algo Licensing">Algo Licensing</option>
                     <option value="Bespoke Engineering">Bespoke Engineering</option>
                     <option value="Partnership">Partnership</option>
-                    <option value="Broker Referral Node">Broker Referral Node</option>
                   </select>
                 </div>
                 <div>
@@ -254,6 +231,13 @@ export const Contact = () => {
                     "Authorize Transmission"
                   )}
                 </button>
+
+                <p className="text-[9px] text-white/25 text-center leading-normal mt-3 font-mono">
+                  By transmitting message, you agree to our{" "}
+                  <a href="/terms" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Terms</a>,{" "}
+                  <a href="/privacy" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Privacy</a>, and{" "}
+                  <a href="/risk" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Risk Disclosures</a>.
+                </p>
               </form>
             )}
           </Reveal>

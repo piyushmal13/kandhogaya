@@ -179,6 +179,13 @@ export const PurchaseModal = ({ plan, amount, productId, onClose }: PurchaseModa
                   Initiate Verification Flow
                 </button>
 
+                <p className="text-[9px] text-white/25 text-center leading-normal mt-2 font-mono">
+                  By initiating checkout, you agree to our{" "}
+                  <a href="/terms" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Terms</a>,{" "}
+                  <a href="/privacy" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Privacy</a>, and{" "}
+                  <a href="/risk" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Risk Disclosures</a>.
+                </p>
+
                 {/* Accepted Payment Systems Visual Badging */}
                 <div className="pt-6 border-t border-white/5 space-y-3">
                   <div className="text-[8px] font-black uppercase tracking-[0.25em] text-gray-500 text-center">Accepted Settlement Systems</div>
@@ -296,6 +303,13 @@ export const PurchaseModal = ({ plan, amount, productId, onClose }: PurchaseModa
                   )}
                 </button>
               </div>
+
+              <p className="text-[9px] text-white/25 text-center leading-normal mt-3 font-mono">
+                By fulfilling subscription, you represent you agree to our{" "}
+                <a href="/terms" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Terms</a>,{" "}
+                <a href="/privacy" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Privacy</a>, and{" "}
+                <a href="/risk" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Risk Disclosures</a>.
+              </p>
             </div>
           )}
 

@@ -55,7 +55,6 @@ export function Footer() {
                 <li><Link to="/privacy" className="hover:text-emerald-500 transition-colors">Private Keys</Link></li>
                 <li><Link to="/terms" className="hover:text-emerald-500 transition-colors">Protocols</Link></li>
                 <li><Link to="/risk" className="hover:text-emerald-500 transition-colors">Risk Disclosure</Link></li>
-                <li><a href="/company_profile.html" target="_blank" className="hover:text-emerald-500 transition-colors">Company Profile</a></li>
               </ul>
             </div>
             

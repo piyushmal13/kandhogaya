@@ -284,8 +284,11 @@ export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationM
               </button>
             </form>
             
-            <div className="mt-4 text-center text-[10px] text-gray-600">
-              By registering, you agree to receive webinar reminders via email.
+            <div className="mt-4 text-center text-[9px] text-white/25 font-mono leading-normal">
+              By registering, you agree to receive reminders and agree to our{" "}
+              <a href="/terms" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Terms</a>,{" "}
+              <a href="/privacy" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Privacy</a>, and{" "}
+              <a href="/risk" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Risk Disclosures</a>.
             </div>
           </div>
         )}

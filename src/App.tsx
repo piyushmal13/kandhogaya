@@ -52,6 +52,7 @@ const CookiePolicy = lazy(() => import("./pages/legal/CookiePolicy").then(m => (
 const AffiliateHub = lazy(() => import("./pages/AffiliateHub").then(m => ({ default: m.AffiliateHub })));
 const B2BLiquidity = lazy(() => import("./pages/B2BLiquidity").then(m => ({ default: m.B2BLiquidity })));
 const B2BWhiteLabel = lazy(() => import("./pages/B2BWhiteLabel").then(m => ({ default: m.B2BWhiteLabel })));
+const Settings = lazy(() => import("./pages/Settings").then(m => ({ default: m.Settings })));
 
 import { LegacyRedirect } from "./components/ui/LegacyRedirect";
 
@@ -96,6 +97,7 @@ const AnimatedRoutes = () => {
             <Route path="/terms" element={<TermsOfService />} />
             <Route path="/risk" element={<RiskDisclosure />} />
             <Route path="/cookies" element={<CookiePolicy />} />
+            <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
             <Route path="*" element={<InstitutionalError />} />
           </Routes>
         </Suspense>
@@ -108,7 +110,7 @@ function AppContent() {
   useReferral();
   const location = useLocation();
   const { user } = useAuth();
-  const isPlainLayout = ['/login', '/dashboard', '/admin', '/agent'].some(path => location.pathname.startsWith(path)) || (location.pathname.startsWith('/affiliate') && !!user);
+  const isPlainLayout = ['/login', '/dashboard', '/admin', '/agent', '/settings'].some(path => location.pathname.startsWith(path)) || (location.pathname.startsWith('/affiliate') && !!user);
 
   if (isPlainLayout) {
     return (

@@ -181,6 +181,13 @@ export const ConsultationSection = () => {
                     )}
                   </AnimatePresence>
                 </EliteButton>
+
+                <p className="text-[9px] text-white/25 text-center leading-normal mt-3 font-mono">
+                  By sending this request, you agree to our{" "}
+                  <a href="/terms" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Terms</a>,{" "}
+                  <a href="/privacy" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Privacy</a>, and{" "}
+                  <a href="/risk" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Risk Disclosures</a>.
+                </p>
               </form>
             </motion.div>
           </div>
