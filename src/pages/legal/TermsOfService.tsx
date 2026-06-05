@@ -81,6 +81,18 @@ export const TermsOfService = () => (
       </p>
     </section>
 
+    <section>
+      <h2>8. Kingdom of Thailand Specific Regulatory Disclaimers</h2>
+      <p>
+        If you are accessing the platform, signals, or custom quantitative software from the Kingdom of Thailand, you acknowledge and agree that:
+      </p>
+      <ul>
+        <li>IFXTrades operates strictly as an offshore technological software developer and researcher. We do not hold a license from the Securities and Exchange Commission of Thailand (Thai SEC) or the Bank of Thailand (BOT).</li>
+        <li>No services, bots, compiled models, or signals constitute the solicitation, brokerage, advising, or facilitation of regulated securities or derivatives transactions inside Thailand under the Securities and Exchange Act B.E. 2535.</li>
+        <li>Thai residents executing trades on offshore accounts using our software represent that they do so at their own risk, in full compliance with BOT foreign exchange regulations under the Emergency Decree on Foreign Exchange B.E. 2485.</li>
+      </ul>
+    </section>
+
     <section className="mt-8 p-6 rounded-2xl bg-red-500/5 border border-red-500/10">
       <h3 className="text-red-500 font-bold uppercase text-xs mb-2">Allocator Risk and Liability Agreement</h3>
       <p className="text-[11px] text-gray-400 font-mono leading-relaxed">

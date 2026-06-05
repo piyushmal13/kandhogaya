@@ -3,7 +3,7 @@ import { Navigate, Link } from "react-router-dom";
 import {
   BarChart3, Zap, ShieldCheck, Users, Video, Settings, Star,
   ShoppingCart, Activity, Trophy, DollarSign, FileText, CreditCard,
-  Flag, Image as ImageIcon, HelpCircle
+  Flag, Image as ImageIcon, HelpCircle, Briefcase
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { cn } from "../utils/cn";
@@ -27,12 +27,14 @@ import { PaymentManager } from "../modules/admin/PaymentManager";
 import { FeatureFlagManager } from "../modules/admin/FeatureFlagManager";
 import { BannerManager } from "../modules/admin/BannerManager";
 import { FAQManager } from "../modules/admin/FAQManager";
+import { HiringManager } from "../modules/admin/HiringManager";
 
 const tabs = [
   { id: "ceo",         name: "Executive Overview",  icon: BarChart3,    group: "COMMAND" },
   { id: "revenue",     name: "Revenue Analytics",   icon: DollarSign,   group: "COMMAND" },
   { id: "leads",       name: "CRM Leads",           icon: Users,        group: "GROWTH" },
   { id: "payments",    name: "Revenue Fulfillment", icon: CreditCard,   group: "GROWTH" },
+  { id: "hiring",      name: "Hiring Desk",         icon: Briefcase,    group: "GROWTH" },
   { id: "agents",      name: "Elite Agents",        icon: Trophy,       group: "GROWTH" },
   { id: "retention",   name: "Retention Hub",       icon: Activity,     group: "GROWTH" },
   { id: "webinars",    name: "Webinar Manager",     icon: Video,        group: "CONTENT" },
@@ -158,6 +160,7 @@ export const Admin = () => {
             {activeTab === "agents"      && <AgentSystem />}
             {activeTab === "leads"       && <LeadManager />}
             {activeTab === "payments"    && <FulfillmentManager />}
+            {activeTab === "hiring"      && <HiringManager />}
             {activeTab === "content"     && <ContentManager />}
             {activeTab === "banners"     && <BannerManager />}
             {activeTab === "licenses"    && <LicenseManager />}

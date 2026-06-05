@@ -59,6 +59,17 @@ export const RiskDisclosure = () => (
       </ul>
     </section>
 
+    <section>
+      <h2>Clause 6: Thailand SEC & BOT Compliance Warnings</h2>
+      <p>
+        For users in the Kingdom of Thailand, trading in foreign currency exchange (Forex) and derivatives (CFDs) involves risks regulated by the Securities and Exchange Commission (Thai SEC) and the Bank of Thailand (BOT).
+      </p>
+      <ul>
+        <li><strong>No Local Solicitation:</strong> IFXTrades does not have a physical presence or derivatives licensing inside Thailand. We do not solicit Thai retail investors.</li>
+        <li><strong>Capital Controls:</strong> Thai residents are advised that outward remittances of foreign exchange for derivatives or forex trading are subject to the Emergency Decree on Foreign Exchange B.E. 2485 and BOT regulations. Compliance is entirely the user's responsibility.</li>
+      </ul>
+    </section>
+
     <section className="mt-8 p-6 rounded-2xl bg-red-500/5 border border-red-500/10">
       <h3 className="text-red-500 font-bold uppercase text-xs mb-2">Absolute Client Risk Statement</h3>
       <p className="text-[11px] text-gray-400 font-mono leading-relaxed">
