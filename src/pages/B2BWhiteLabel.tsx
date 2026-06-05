@@ -273,6 +273,13 @@ export const B2BWhiteLabel = () => {
                       </>
                     )}
                   </button>
+
+                  <p className="text-[8px] text-white/20 text-center leading-normal mt-3 font-mono">
+                    By submitting this request, you agree to our{" "}
+                    <a href="/terms" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Terms of Service</a>,{" "}
+                    <a href="/privacy" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Privacy Policy</a>, and{" "}
+                    <a href="/risk" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Risk Disclosure</a>.
+                  </p>
                 </form>
               ) : (
                 <div className="text-center py-10 space-y-6">

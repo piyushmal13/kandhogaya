@@ -553,6 +553,13 @@ export const BrokerTalent = () => {
                       Transmit Application Documents
                     </EliteButton>
                   </div>
+
+                  <p className="text-[9px] text-white/25 text-center leading-normal mt-3 font-mono">
+                    By transmitting application documents, you represent you possess required knowledge and agree to be bound by the{" "}
+                    <a href="/terms" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Terms of Service</a>,{" "}
+                    <a href="/privacy" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Privacy Policy</a>, and{" "}
+                    <a href="/risk" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Risk Disclosure</a>.
+                  </p>
                 </form>
               )}
             </div>
