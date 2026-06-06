@@ -33,7 +33,7 @@ export const PrivacyPolicy = () => (
     <section>
       <h2>3. Data Protection and Encryption</h2>
       <p>
-        All collected personal and system data is stored in high-security databases managed by Supabase, protected by Row-Level Security (RLS) policies and standard AES-256 encryption. We apply advanced security practices to prevent unauthorized access, but no system can guarantee absolute safety.
+        All collected personal and system data is stored in high-security databases managed by Supabase, protected by Row-Level Security (RLS) policies and standard database encryption. We apply advanced security practices to prevent unauthorized access, but no system can guarantee absolute safety.
       </p>
     </section>
 

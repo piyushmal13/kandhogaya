@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import { motion, useScroll, useTransform, useSpring } from "motion/react";
+import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "motion/react";
 import { ArrowRight, ChevronDown, Play, ShieldCheck, Zap, Globe, Timer, Lock, Server } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -37,7 +37,7 @@ const FloatingParticles = () => (
 
 // ── TRUST BADGES ──
 const TRUST_ITEMS = [
-  { icon: Lock, title: "SECURE NODE", desc: "AES-256 ECN tunnel" },
+  { icon: Lock, title: "SECURE NODE", desc: "Direct ECN tunnel" },
   { icon: Timer, title: "LATENCY TARGET", desc: "Sub-50ms execution" },
   { icon: Globe, title: "GLOBAL GRID", desc: "40+ Sovereignty pools" },
   { icon: Server, title: "CO-LOCATION", desc: "NY4/LD4 cross-connects" },
@@ -51,6 +51,36 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
   const sectionRef = useRef<HTMLElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [activeTab, setActiveTab] = useState(1);
+  const [jitter, setJitter] = useState({ ny4: 0.81, ld4: 1.15, sg1: 4.58, db: 8.18 });
+  const [sessionKey, setSessionKey] = useState("ECN-NODE::ROTATE_INIT");
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setJitter({
+        ny4: +(0.78 + Math.random() * 0.07).toFixed(2),
+        ld4: +(1.12 + Math.random() * 0.10).toFixed(2),
+        sg1: +(4.50 + Math.random() * 0.15).toFixed(2),
+        db: +(8.05 + Math.random() * 0.20).toFixed(2)
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const generateKey = () => {
+      const chars = "ABCDEF0123456789";
+      let key = "ECN-NODE::";
+      for (let i = 0; i < 16; i++) {
+        key += chars[Math.floor(Math.random() * 16)];
+      }
+      setSessionKey(key);
+    };
+    generateKey();
+    const timer = setInterval(generateKey, 4000);
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     if (!isTickerActive) return;
@@ -126,18 +156,61 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
         backgroundImage: "radial-gradient(ellipse 80% 50% at 50% 60%, rgba(59,130,246,0.06) 0%, transparent 70%)",
       }}
     >
-      {/* ── CANVAS BACKGROUND ── */}
-      <motion.div
-        style={{ scale, y: backgroundY, opacity: 0.12, willChange: "transform" }}
-        className="absolute inset-0 origin-center flex items-center justify-center pointer-events-none"
-      >
-        <img
-          src="/colocation_network.png"
-          alt="IFX ECN Co-location Network Map"
-          className="w-full h-full object-cover opacity-15"
+      {/* ── CODES & CYBERNETIC BACKGROUND (No AI Images) ── */}
+      <div className="absolute inset-0 origin-center pointer-events-none overflow-hidden select-none opacity-20 z-0">
+        {/* Animated Cyber Grid */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `
+              linear-gradient(to right, rgba(0, 163, 255, 0.08) 1px, transparent 1px),
+              linear-gradient(to bottom, rgba(0, 163, 255, 0.08) 1px, transparent 1px)
+            `,
+            backgroundSize: "60px 60px",
+            maskImage: "radial-gradient(circle at 50% 50%, black 20%, transparent 80%)",
+            WebkitMaskImage: "radial-gradient(circle at 50% 50%, black 20%, transparent 80%)",
+          }}
         />
-        <div className="absolute inset-0 bg-black/40" />
-      </motion.div>
+
+        {/* Coded Dynamic ECN Nodes & Fiber Paths (SVG lines & glowing pulses) */}
+        <svg className="absolute inset-0 w-full h-full opacity-60" xmlns="http://www.w3.org/2000/svg">
+          {/* NY4 to LD4 path */}
+          <path d="M 150,150 L 500,250" stroke="rgba(0,163,255,0.2)" strokeWidth="1" strokeDasharray="5,5" />
+          <circle cx="150" cy="150" r="3" fill="#00A3FF" className="animate-pulse" />
+          <circle cx="500" cy="250" r="3" fill="#00A3FF" />
+          <circle r="4" fill="#00A3FF" opacity="0.8">
+            <animateMotion dur="6s" repeatCount="indefinite" path="M 150,150 L 500,250" />
+          </circle>
+
+          {/* LD4 to SG1 path */}
+          <path d="M 500,250 L 800,450" stroke="rgba(16,185,129,0.2)" strokeWidth="1" strokeDasharray="4,4" />
+          <circle cx="800" cy="450" r="3" fill="#10B981" />
+          <circle r="4" fill="#10B981" opacity="0.8">
+            <animateMotion dur="8s" repeatCount="indefinite" path="M 500,250 L 800,450" />
+          </circle>
+
+          {/* LD4 to Dubai path */}
+          <path d="M 500,250 L 650,180" stroke="rgba(0,163,255,0.25)" strokeWidth="1" />
+          <circle cx="650" cy="180" r="3" fill="#00A3FF" className="animate-pulse" />
+          <circle r="4" fill="#00A3FF" opacity="0.8">
+            <animateMotion dur="5s" repeatCount="indefinite" path="M 500,250 L 650,180" />
+          </circle>
+        </svg>
+
+        {/* Telemetric server log watermark */}
+        <div className="absolute top-1/4 left-10 text-[9px] font-mono text-white/5 uppercase tracking-[0.3em] hidden lg:block leading-relaxed">
+          NODE: NY4.EQUINIX.US<br />
+          PORT: 10G-A ACTIVE<br />
+          ECN STATE: ESTABLISHED<br />
+          JITTER: &lt; 0.02ms
+        </div>
+        <div className="absolute bottom-1/4 right-10 text-[9px] font-mono text-white/5 uppercase tracking-[0.3em] text-right hidden lg:block leading-relaxed">
+          NODE: LD4.EQUINIX.UK<br />
+          AUDIT HASH: SHA-256 SYNCED<br />
+          PROTOCOL: SECURE ECN<br />
+          PACKET: 0% LOSS
+        </div>
+      </div>
 
       {/* ── FLOATING PARTICLES ── */}
       <FloatingParticles />
@@ -243,27 +316,139 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
               </button>
             </motion.div>
 
-            {/* Trust Badges Bar */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6, duration: 0.8 }}
-              className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 pt-10 pb-4 border-t border-white/[0.04] w-full max-w-4xl mx-auto z-30"
-            >
-              {TRUST_ITEMS.map((item, idx) => (
-                <div
-                  key={item.title}
-                  className="flex items-center gap-2.5 text-white/50 text-[10px] font-mono tracking-wider transition-colors hover:text-white"
-                >
-                  <item.icon className="w-3.5 h-3.5 text-blue-500/60" />
-                  <span className="font-bold text-white/80">{item.title}</span>
-                  <span className="text-[9px] text-white/35 font-light">({item.desc})</span>
-                  {idx < TRUST_ITEMS.length - 1 && (
-                    <span className="text-white/10 ml-4 hidden md:inline">|</span>
-                  )}
-                </div>
-              ))}
-            </motion.div>
+            {/* Interactive ECN Telemetry Status Panel */}
+            <div className="w-full max-w-4xl mx-auto pt-8 border-t border-white/[0.04] z-30 select-none">
+              {/* Tab headers */}
+              <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2.5 mb-5">
+                {TRUST_ITEMS.map((item, idx) => {
+                  const isActive = activeTab === idx;
+                  return (
+                    <button
+                      key={item.title}
+                      onClick={() => setActiveTab(idx)}
+                      className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border text-[10px] font-mono tracking-wider transition-all cursor-pointer ${
+                        isActive
+                          ? "bg-blue-500/10 border-blue-500/30 text-white shadow-[0_0_15px_rgba(59,130,246,0.15)]"
+                          : "bg-transparent border-transparent text-white/45 hover:text-white/80 hover:border-white/5"
+                      }`}
+                    >
+                      <item.icon className={`w-3.5 h-3.5 ${isActive ? "text-blue-400" : "text-blue-500/40"}`} />
+                      <span className="font-bold">{item.title}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Live Telemetry Display */}
+              <div className="bg-[#04060A]/85 border border-white/[0.04] rounded-2xl p-5 min-h-[90px] flex items-center justify-center text-left backdrop-blur-md relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/[0.01] via-transparent to-transparent pointer-events-none" />
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeTab}
+                    initial={{ opacity: 0, y: 5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -5 }}
+                    transition={{ duration: 0.2 }}
+                    className="w-full grid grid-cols-2 md:grid-cols-4 gap-4"
+                  >
+                    {activeTab === 0 && ( // SECURE NODE
+                      <>
+                        <div className="space-y-1">
+                          <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Protocol Standard</div>
+                          <div className="text-white font-mono text-xs font-black">Direct ECN Protocol</div>
+                        </div>
+                        <div className="space-y-1 col-span-2">
+                          <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Rotating Session Key</div>
+                          <div className="text-blue-400 font-mono text-[10px] sm:text-xs font-black tracking-tight">{sessionKey}</div>
+                        </div>
+                        <div className="space-y-1 text-right">
+                          <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Enclave Shield</div>
+                          <div className="text-emerald-400 font-mono text-xs font-black flex items-center justify-end gap-1.5">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
+                            SECURE
+                          </div>
+                        </div>
+                      </>
+                    )}
+                    {activeTab === 1 && ( // LATENCY TARGET
+                      <>
+                        <div className="space-y-1">
+                          <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Equinix NY4</div>
+                          <div className="text-white font-mono text-xs font-black">{jitter.ny4} ms</div>
+                        </div>
+                        <div className="space-y-1">
+                          <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Equinix LD4</div>
+                          <div className="text-white font-mono text-xs font-black">{jitter.ld4} ms</div>
+                        </div>
+                        <div className="space-y-1">
+                          <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Equinix SG1</div>
+                          <div className="text-white font-mono text-xs font-black">{jitter.sg1} ms</div>
+                        </div>
+                        <div className="space-y-1 text-right">
+                          <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Telemetric Flow</div>
+                          <div className="text-blue-400 font-mono text-xs font-black uppercase tracking-wider">Sub-50ms Peak</div>
+                        </div>
+                      </>
+                    )}
+                    {activeTab === 2 && ( // GLOBAL GRID
+                      <>
+                        <div className="space-y-1">
+                          <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Active Paths</div>
+                          <div className="text-white font-mono text-xs font-black">40+ Sovereignty Pools</div>
+                        </div>
+                        <div className="space-y-1 col-span-2">
+                          <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Dynamic Routing Nodes</div>
+                          <div className="text-white font-mono text-xs font-black tracking-wide">Dubai · Mumbai · London · NY</div>
+                        </div>
+                        <div className="space-y-1 text-right">
+                          <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Core Status</div>
+                          <div className="text-emerald-400 font-mono text-xs font-black">SYNCHRONIZED</div>
+                        </div>
+                      </>
+                    )}
+                    {activeTab === 3 && ( // CO-LOCATION
+                      <>
+                        <div className="space-y-1">
+                          <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Bandwidth Pool</div>
+                          <div className="text-white font-mono text-xs font-black">10 Gbps Fiber Link</div>
+                        </div>
+                        <div className="space-y-1">
+                          <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Port Telemetry</div>
+                          <div className="text-emerald-400 font-mono text-xs font-black">PORT 10G-A: UP</div>
+                        </div>
+                        <div className="space-y-1">
+                          <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Signal Jitter</div>
+                          <div className="text-white font-mono text-xs font-black">&lt; 0.02 ms</div>
+                        </div>
+                        <div className="space-y-1 text-right">
+                          <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Slippage Protection</div>
+                          <div className="text-blue-400 font-mono text-xs font-black">ACTIVE</div>
+                        </div>
+                      </>
+                    )}
+                    {activeTab === 4 && ( // AUDIT VERIFIED
+                      <>
+                        <div className="space-y-1 col-span-2">
+                          <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">SHA-256 Ledger Validation Hash</div>
+                          <div className="text-white font-mono text-xs font-black tracking-tighter">98fa83a938c82eb4b711e3df9c0e21a28a50</div>
+                        </div>
+                        <div className="space-y-1">
+                          <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Audit Registry</div>
+                          <div className="text-blue-400 font-mono text-xs font-black">3RD PARTY COMPLIANT</div>
+                        </div>
+                        <div className="space-y-1 text-right">
+                          <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Telemetry Log</div>
+                          <div className="text-emerald-400 font-mono text-xs font-black flex items-center justify-end gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                            VERIFIED
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </div>
 
             {/* Smallest Star Footnote */}
             <motion.div

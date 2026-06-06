@@ -44,17 +44,29 @@ export const LeadManager = () => {
   const [editPriority, setEditPriority] = useState("Standard");
   const [editProbability, setEditProbability] = useState(0);
   const [editScore, setEditScore] = useState(0);
+  const [leadFilter, setLeadFilter] = useState<'all' | 'clients' | 'newsletter'>('all');
 
   const showToast = (type: "success" | "error", msg: string) => {
     setToast({ type, msg });
     setTimeout(() => setToast(null), 3000);
   };
 
-  const filteredLeads = leads.filter(l => 
-    l.name?.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    l.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    l.source?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredLeads = leads.filter(l => {
+    const matchesSearch = 
+      l.name?.toLowerCase().includes(searchTerm.toLowerCase()) || 
+      l.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      l.source?.toLowerCase().includes(searchTerm.toLowerCase());
+
+    if (!matchesSearch) return false;
+
+    if (leadFilter === 'clients') {
+      return l.source !== 'newsletter' && l.stage !== 'NEWSLETTER';
+    }
+    if (leadFilter === 'newsletter') {
+      return l.source === 'newsletter' || l.stage === 'NEWSLETTER';
+    }
+    return true;
+  });
 
   const handleOpenEdit = (lead: any) => {
     setSelectedLead(lead);
@@ -262,7 +274,35 @@ export const LeadManager = () => {
           <p className="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em] mt-2">Institutional Prospect Auditing v6.0</p>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center gap-4">
+          {/* Coded Segmentation Tabs */}
+          <div className="flex gap-1.5 bg-zinc-950 p-1.5 rounded-2xl border border-white/5">
+            <button
+              onClick={() => setLeadFilter('all')}
+              className={cn("px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-wider transition-all cursor-pointer",
+                leadFilter === 'all' ? "bg-emerald-500 text-black shadow-lg" : "text-gray-500 hover:text-white"
+              )}
+            >
+              All ({leads.length})
+            </button>
+            <button
+              onClick={() => setLeadFilter('clients')}
+              className={cn("px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-wider transition-all cursor-pointer",
+                leadFilter === 'clients' ? "bg-emerald-500 text-black shadow-lg" : "text-gray-500 hover:text-white"
+              )}
+            >
+              Client Leads ({leads.filter(l => l.source !== 'newsletter' && l.stage !== 'NEWSLETTER').length})
+            </button>
+            <button
+              onClick={() => setLeadFilter('newsletter')}
+              className={cn("px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-wider transition-all cursor-pointer",
+                leadFilter === 'newsletter' ? "bg-emerald-500 text-black shadow-lg" : "text-gray-500 hover:text-white"
+              )}
+            >
+              Newsletter ({leads.filter(l => l.source === 'newsletter' || l.stage === 'NEWSLETTER').length})
+            </button>
+          </div>
+
           <button 
             onClick={() => {
               const csv = [
@@ -440,6 +480,42 @@ export const LeadManager = () => {
                       <p className="text-white/80 font-mono text-[11px] leading-relaxed bg-black/40 p-4 rounded-xl border border-white/5 whitespace-pre-wrap">{selectedLead.message}</p>
                     </div>
                   )}
+                </div>
+              )}
+
+              {/* Brand Promotion & CPA Telemetry */}
+              {((selectedLead.metadata && Object.keys(selectedLead.metadata).length > 0) || selectedLead.referred_by_code) && (
+                <div className="bg-[#050B14] border border-blue-500/15 p-6 rounded-2xl text-xs space-y-4">
+                  <div className="text-[9px] font-black uppercase tracking-widest text-blue-400 flex items-center gap-2">
+                    <Target className="w-3.5 h-3.5" />
+                    Brand Promotion & CPA Attribution
+                  </div>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-xs font-medium">
+                    <div>
+                      <span className="text-gray-500 block uppercase tracking-wider text-[8px]">Target Brand / Partner</span>
+                      <span className="text-white font-bold uppercase">{selectedLead.metadata?.target_brand || selectedLead.metadata?.broker || 'IFX Trades Direct'}</span>
+                    </div>
+                    <div>
+                      <span className="text-gray-500 block uppercase tracking-wider text-[8px]">Attribution Source</span>
+                      <span className="text-white font-bold uppercase">{selectedLead.referred_by_code || selectedLead.metadata?.referred_by_code || 'Organic Link'}</span>
+                    </div>
+                    <div>
+                      <span className="text-gray-500 block uppercase tracking-wider text-[8px]">CPA Conversion Payout</span>
+                      <span className="text-emerald-400 font-mono font-bold">${selectedLead.metadata?.cpa_payout || selectedLead.metadata?.payout_amount || '0.00'}</span>
+                    </div>
+                    <div>
+                      <span className="text-gray-500 block uppercase tracking-wider text-[8px]">Campaign Clicks</span>
+                      <span className="text-white font-bold font-mono">{selectedLead.metadata?.clicks_count || selectedLead.metadata?.click_count || '1'} Clicks</span>
+                    </div>
+                    <div>
+                      <span className="text-gray-500 block uppercase tracking-wider text-[8px]">Converted Sales</span>
+                      <span className="text-white font-bold font-mono">{selectedLead.metadata?.sales_count || '0'} Sales</span>
+                    </div>
+                    <div>
+                      <span className="text-gray-500 block uppercase tracking-wider text-[8px]">Target Campaign</span>
+                      <span className="text-white font-bold uppercase truncate max-w-[120px]">{selectedLead.metadata?.campaign || 'Default Growth'}</span>
+                    </div>
+                  </div>
                 </div>
               )}
 

@@ -1,0 +1,1852 @@
+{
+  "public.affiliate_codes": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "user_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "code",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "total_clicks",
+      "type": "integer",
+      "nullable": true,
+      "default": "0"
+    },
+    {
+      "name": "total_registrations",
+      "type": "integer",
+      "nullable": true,
+      "default": "0"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()"
+    },
+    {
+      "name": "commission_rate",
+      "type": "numeric",
+      "nullable": true,
+      "default": "10.00"
+    }
+  ],
+  "public.analytics_events": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "user_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "event_type",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "metadata",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()"
+    }
+  ],
+  "public.api_keys": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "user_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "key_name",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "hashed_key",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "scopes",
+      "type": "ARRAY",
+      "nullable": true,
+      "default": "ARRAY['signals:read'::text]"
+    },
+    {
+      "name": "is_active",
+      "type": "boolean",
+      "nullable": true,
+      "default": "true"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "timezone('utc'::text, now())"
+    },
+    {
+      "name": "expires_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": null
+    }
+  ],
+  "public.banners": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "title",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "description",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "image_url",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "link_url",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "is_active",
+      "type": "boolean",
+      "nullable": true,
+      "default": "true"
+    },
+    {
+      "name": "placement",
+      "type": "text",
+      "nullable": true,
+      "default": "'webinar'::text"
+    },
+    {
+      "name": "priority",
+      "type": "integer",
+      "nullable": true,
+      "default": "0"
+    },
+    {
+      "name": "metadata",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()"
+    }
+  ],
+  "public.commissions": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "lead_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "agent_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "amount",
+      "type": "numeric",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "percentage",
+      "type": "numeric",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "source",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "product_id",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "status",
+      "type": "USER-DEFINED",
+      "nullable": true,
+      "default": "'PENDING'::commission_status"
+    },
+    {
+      "name": "payout_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()"
+    }
+  ],
+  "public.consultations": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "name",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "email",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "phone",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "company",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "strategy",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "platform",
+      "type": "text",
+      "nullable": true,
+      "default": "'MT5'::text"
+    },
+    {
+      "name": "budget",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "status",
+      "type": "text",
+      "nullable": true,
+      "default": "'pending'::text"
+    },
+    {
+      "name": "notes",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()"
+    }
+  ],
+  "public.contact_messages": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "name",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "email",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "subject",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "message",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()"
+    }
+  ],
+  "public.content_categories": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "name",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "slug",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    }
+  ],
+  "public.content_posts": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "title",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "slug",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "content",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "image_url",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "category",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "status",
+      "type": "text",
+      "nullable": true,
+      "default": "'published'::text"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()"
+    },
+    {
+      "name": "content_type",
+      "type": "text",
+      "nullable": false,
+      "default": "'blog'::text"
+    },
+    {
+      "name": "body",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "featured_image",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "author_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "metadata",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "author_bio",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    }
+  ],
+  "public.faqs": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "question",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "answer",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "category",
+      "type": "text",
+      "nullable": true,
+      "default": "'General'::text"
+    },
+    {
+      "name": "priority",
+      "type": "integer",
+      "nullable": true,
+      "default": "0"
+    },
+    {
+      "name": "is_active",
+      "type": "boolean",
+      "nullable": true,
+      "default": "true"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()"
+    }
+  ],
+  "public.feature_flags": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "key",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "enabled",
+      "type": "boolean",
+      "nullable": true,
+      "default": "true"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()"
+    }
+  ],
+  "public.hiring_applications": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "position_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "full_name",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "email",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "phone",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "resume_url",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "portfolio_url",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "cover_letter",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "metadata",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "public.hiring_positions": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "title",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "department",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "description",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "requirements",
+      "type": "ARRAY",
+      "nullable": false,
+      "default": "'{}'::text[]"
+    },
+    {
+      "name": "is_active",
+      "type": "boolean",
+      "nullable": true,
+      "default": "true"
+    },
+    {
+      "name": "type",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "location",
+      "type": "text",
+      "nullable": true,
+      "default": "'Remote'::text"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "public.leads": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "email",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "source",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()"
+    },
+    {
+      "name": "stage",
+      "type": "USER-DEFINED",
+      "nullable": true,
+      "default": "'NEW'::lead_stage"
+    },
+    {
+      "name": "score",
+      "type": "integer",
+      "nullable": true,
+      "default": "0"
+    },
+    {
+      "name": "is_hot",
+      "type": "boolean",
+      "nullable": true,
+      "default": "false"
+    },
+    {
+      "name": "last_action_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()"
+    },
+    {
+      "name": "crm_metadata",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "assigned_to",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "urgency_triggered_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "reengagement_triggered_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "conversion_probability",
+      "type": "integer",
+      "nullable": true,
+      "default": "0"
+    },
+    {
+      "name": "priority_tag",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "referred_by_code",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    }
+  ],
+  "public.manual_payment_receipts": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "user_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "product_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "amount",
+      "type": "numeric",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "storage_path",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "whatsapp_number",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "status",
+      "type": "text",
+      "nullable": false,
+      "default": "'pending'::text"
+    },
+    {
+      "name": "rejection_reason",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()"
+    },
+    {
+      "name": "referred_by_code",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    }
+  ],
+  "public.market_data": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "symbol",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "price",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "change",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "up",
+      "type": "boolean",
+      "nullable": true,
+      "default": "true"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()"
+    }
+  ],
+  "public.notification_queue": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "recipient",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "channel",
+      "type": "USER-DEFINED",
+      "nullable": true,
+      "default": "'WHATSAPP'::notify_channel"
+    },
+    {
+      "name": "priority",
+      "type": "USER-DEFINED",
+      "nullable": true,
+      "default": "'LOW'::notify_priority"
+    },
+    {
+      "name": "payload",
+      "type": "jsonb",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "status",
+      "type": "text",
+      "nullable": true,
+      "default": "'PENDING'::text"
+    },
+    {
+      "name": "attempts",
+      "type": "integer",
+      "nullable": true,
+      "default": "0"
+    },
+    {
+      "name": "sent_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()"
+    }
+  ],
+  "public.payouts": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "agent_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "total_amount",
+      "type": "numeric",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "currency",
+      "type": "text",
+      "nullable": true,
+      "default": "'INR'::text"
+    },
+    {
+      "name": "method",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "status",
+      "type": "text",
+      "nullable": true,
+      "default": "'PENDING'::text"
+    },
+    {
+      "name": "processed_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()"
+    }
+  ],
+  "public.performance_results": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "month",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "pips",
+      "type": "integer",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "win_rate",
+      "type": "numeric",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "profit_factor",
+      "type": "numeric",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "risk_reward",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "is_featured",
+      "type": "boolean",
+      "nullable": true,
+      "default": "false"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()"
+    },
+    {
+      "name": "year",
+      "type": "integer",
+      "nullable": true,
+      "default": "2026"
+    },
+    {
+      "name": "return_pct",
+      "type": "numeric",
+      "nullable": true,
+      "default": "0"
+    },
+    {
+      "name": "product_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "drawdown",
+      "type": "numeric",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "total_trades",
+      "type": "integer",
+      "nullable": true,
+      "default": "0"
+    },
+    {
+      "name": "equity_curve",
+      "type": "jsonb",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "is_live",
+      "type": "boolean",
+      "nullable": true,
+      "default": "true"
+    }
+  ],
+  "public.platform_flags": [
+    {
+      "name": "key",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "value",
+      "type": "boolean",
+      "nullable": false,
+      "default": "false"
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ],
+  "public.product_variants": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "product_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "name",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "price",
+      "type": "numeric",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "currency",
+      "type": "text",
+      "nullable": true,
+      "default": "'USD'::text"
+    },
+    {
+      "name": "duration_days",
+      "type": "integer",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "stripe_price_id",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "razorpay_plan_id",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()"
+    }
+  ],
+  "public.products": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "name",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "description",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "price",
+      "type": "numeric",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "image_url",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()"
+    },
+    {
+      "name": "strategy_details",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "risk_profile",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "performance_data",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "'[]'::jsonb"
+    },
+    {
+      "name": "q_and_a",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "'[]'::jsonb"
+    },
+    {
+      "name": "terms_and_conditions",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "strategy_graph_url",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "backtesting_result_url",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "video_explanation_url",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "long_plan_offers",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "'[]'::jsonb"
+    },
+    {
+      "name": "category",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "metadata",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "'{}'::jsonb"
+    }
+  ],
+  "public.reviews": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "name",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "role",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "text",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "rating",
+      "type": "integer",
+      "nullable": true,
+      "default": "5"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()"
+    },
+    {
+      "name": "image_url",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "region",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "user_name",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "status",
+      "type": "text",
+      "nullable": true,
+      "default": "'pending'::text"
+    },
+    {
+      "name": "source",
+      "type": "text",
+      "nullable": true,
+      "default": "'web'::text"
+    },
+    {
+      "name": "priority",
+      "type": "integer",
+      "nullable": true,
+      "default": "0"
+    },
+    {
+      "name": "user_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "rejection_reason",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "flagged",
+      "type": "boolean",
+      "nullable": true,
+      "default": "false"
+    },
+    {
+      "name": "ip_address",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "user_agent",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "metadata",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "'{}'::jsonb"
+    }
+  ],
+  "public.subscriptions": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "user_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "product_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "variant_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "status",
+      "type": "text",
+      "nullable": true,
+      "default": "'active'::text"
+    },
+    {
+      "name": "current_period_start",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()"
+    },
+    {
+      "name": "current_period_end",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "stripe_subscription_id",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()"
+    },
+    {
+      "name": "payment_proof_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    }
+  ],
+  "public.system_logs": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "type",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "message",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "metadata",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "user_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "severity",
+      "type": "text",
+      "nullable": true,
+      "default": "'info'::text"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()"
+    }
+  ],
+  "public.user_entitlements": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "user_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "feature",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "active",
+      "type": "boolean",
+      "nullable": true,
+      "default": "true"
+    },
+    {
+      "name": "expires_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()"
+    }
+  ],
+  "public.users": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "email",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "full_name",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "referred_by",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()"
+    },
+    {
+      "name": "avatar_url",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "role",
+      "type": "text",
+      "nullable": true,
+      "default": "'user'::text"
+    }
+  ],
+  "public.webinar_registrations": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "webinar_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "user_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "email",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()"
+    },
+    {
+      "name": "attended",
+      "type": "boolean",
+      "nullable": true,
+      "default": "false"
+    },
+    {
+      "name": "payment_status",
+      "type": "text",
+      "nullable": true,
+      "default": "'completed'::text"
+    },
+    {
+      "name": "payment_id",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "referred_by_code",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "name",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    }
+  ],
+  "public.webinar_sponsors": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "webinar_id",
+      "type": "uuid",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "name",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "tier",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "logo_url",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "website_url",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()"
+    }
+  ],
+  "public.webinars": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "title",
+      "type": "text",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "description",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "date_time",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "speaker_name",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "status",
+      "type": "text",
+      "nullable": true,
+      "default": "'upcoming'::text"
+    },
+    {
+      "name": "is_paid",
+      "type": "boolean",
+      "nullable": true,
+      "default": "false"
+    },
+    {
+      "name": "price",
+      "type": "numeric",
+      "nullable": true,
+      "default": "0"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()"
+    },
+    {
+      "name": "speaker_profile_url",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "brand_logo_url",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "webinar_image_url",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "sponsor_logos",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "'[]'::jsonb"
+    },
+    {
+      "name": "speaker_images",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "'[]'::jsonb"
+    },
+    {
+      "name": "about_content",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "q_and_a",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "'[]'::jsonb"
+    },
+    {
+      "name": "advanced_features",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "'{}'::jsonb"
+    },
+    {
+      "name": "max_attendees",
+      "type": "integer",
+      "nullable": true,
+      "default": "500"
+    },
+    {
+      "name": "registration_count",
+      "type": "integer",
+      "nullable": true,
+      "default": "0"
+    },
+    {
+      "name": "type",
+      "type": "text",
+      "nullable": true,
+      "default": "'free'::text"
+    },
+    {
+      "name": "recording_url",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "streaming_url",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "co_brand_name",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "co_brand_logo",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "co_brand_banner",
+      "type": "text",
+      "nullable": true,
+      "default": null
+    }
+  ],
+  "private.api_audit_logs": [
+    {
+      "name": "id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "key_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "client_ip",
+      "type": "inet",
+      "nullable": true,
+      "default": null
+    },
+    {
+      "name": "endpoint",
+      "type": "character varying",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "status_code",
+      "type": "integer",
+      "nullable": false,
+      "default": null
+    },
+    {
+      "name": "request_timestamp",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "timezone('utc'::text, now())"
+    }
+  ]
+}

@@ -11,12 +11,13 @@ async function run() {
   await client.connect();
   try {
     const res = await client.query(`
-      SELECT column_name, data_type 
-      FROM information_schema.columns 
-      WHERE table_name = 'leads'
+      SELECT enumlabel 
+      FROM pg_enum 
+      JOIN pg_type ON pg_enum.enumtypid = pg_type.oid 
+      WHERE pg_type.typname = 'lead_stage'
     `);
-    console.log("Columns in 'leads' table:");
-    console.log(res.rows);
+    console.log("Enum values for 'lead_stage':");
+    console.log(res.rows.map(r => r.enumlabel));
   } catch (err) {
     console.error(err);
   } finally {

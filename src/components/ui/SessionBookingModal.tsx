@@ -199,10 +199,10 @@ export const SessionBookingModal: React.FC<SessionBookingModalProps> = ({
                     </div>
                   </EliteButton>
 
-                  {/* Encryption Notice */}
+                  {/* Security Notice */}
                   <div className="flex items-center justify-center gap-2 pt-2 text-[9px] font-mono text-white/20 uppercase tracking-widest">
                     <ShieldCheck className="w-3.5 h-3.5 text-cyan-500/50" />
-                    <span>SECURE END-TO-END 256-BIT ENCRYPTION</span>
+                    <span>SECURE DIRECT INGRESS PROTOCOL</span>
                   </div>
                 </form>
               </div>

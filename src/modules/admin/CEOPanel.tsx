@@ -98,7 +98,7 @@ export const CEOPanel = () => {
         supabase.from("sales_tracking").select("sale_amount, created_at"),
         supabase.from("users").select("*", { count: "exact", head: true }),
         supabase.from("leads").select("*", { count: "exact", head: true }),
-        supabase.from("payment_proofs").select("*", { count: "exact", head: true }).eq("status", "pending"),
+        supabase.from("manual_payment_receipts").select("*", { count: "exact", head: true }).eq("status", "pending"),
         supabase.from("webinars").select("*", { count: "exact", head: true }).eq("status", "upcoming"),
         supabase.from("reviews").select("*", { count: "exact", head: true }).eq("status", "pending"),
         supabase.from("subscriptions").select("*", { count: "exact", head: true }).eq("status", "active"),

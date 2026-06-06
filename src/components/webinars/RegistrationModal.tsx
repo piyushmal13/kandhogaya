@@ -123,13 +123,12 @@ export const RegistrationModal = ({ webinar, onClose, onSuccess }: RegistrationM
         const { error: leadError } = await supabase
           .from('leads')
           .upsert({
-            id: user.id || undefined,
-            name: formData.name || userProfile?.full_name || "Webinar Registrant",
-            email: formData.email,
-            status: "interested",
+            email: formData.email.toLowerCase(),
+            stage: "INTERESTED",
             source: "Webinar Registration",
             referred_by_code: refCode,
-            metadata: { 
+            crm_metadata: { 
+              name: formData.name || userProfile?.full_name || "Webinar Registrant",
               phone: formData.phone,
               country: formData.country,
               webinar_id: webinar.id,

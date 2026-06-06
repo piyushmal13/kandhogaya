@@ -32,7 +32,17 @@ export const ExitIntentModal = () => {
      if (email) {
        setFormState('loading');
        try {
-         await supabase.from("leads").insert([{ email, source: "exit_intent" }]);
+         await supabase.from("leads").insert([{ 
+           email: email.toLowerCase(), 
+           source: "exit_intent",
+           stage: "NEW",
+           crm_metadata: {
+             subject: "Exit Intent Subscription",
+             message: "Subscribed to Institutional Alpha weekly digest via exit intent popup.",
+             signup_page: window.location.pathname,
+             user_agent: navigator.userAgent
+           }
+         }]);
        } catch (err) {
          // Silently allow simulation UI processing in absence of table
        }

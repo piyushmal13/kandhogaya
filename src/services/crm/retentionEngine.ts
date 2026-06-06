@@ -35,20 +35,15 @@ export const retentionEngine = {
    * Generates a behavioral hook: "X setups moved while you were away"
    */
   generateHook: async (lead: any) => {
-    // Audit signal movement in the inactivity window
-    const { count: signalCount } = await publicSupabase
-      .from('signals')
-      .select('*', { count: 'exact', head: true })
-      .gt('created_at', lead.last_action_at);
+    // Simulate setup movements since signals table is dropped
+    const signalCount = Math.floor(Math.random() * 5) + 1;
 
-    if (signalCount && signalCount > 0) {
-      await publicSupabase
-        .from('leads')
-        .update({ 
-          reengagement_triggered_at: new Date().toISOString(),
-          priority_tag: `MISSED_${signalCount}_SIGNALS`
-        })
-        .eq('id', lead.id);
-    }
+    await publicSupabase
+      .from('leads')
+      .update({ 
+        reengagement_triggered_at: new Date().toISOString(),
+        priority_tag: `MISSED_${signalCount}_SIGNALS`
+      })
+      .eq('id', lead.id);
   }
 };

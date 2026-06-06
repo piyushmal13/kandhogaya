@@ -13,8 +13,8 @@ export const PaymentGateways = () => {
   const trustBadges = [
     { 
       icon: <Lock className="w-4 h-4 text-emerald-400" />, 
-      title: "AES-256 Secured", 
-      desc: "End-to-end encrypted clearing" 
+      title: "Secure Clearing", 
+      desc: "Direct cryptographic settlement" 
     },
     { 
       icon: <Cpu className="w-4 h-4 text-cyan-400" />, 
