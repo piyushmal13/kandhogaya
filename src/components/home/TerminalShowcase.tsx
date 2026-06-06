@@ -12,22 +12,7 @@ export const TerminalShowcase = () => {
   const [usdjpyPrice, setUsdjpyPrice] = useState(132.85);
   const [priceDirection, setPriceDirection] = useState<"up" | "down">("up");
 
-  // Price ticking emulator
-  useEffect(() => {
-    const timer = setInterval(() => {
-      const change = (Math.random() - 0.5) * 0.00018;
-      setEurusdPrice(prev => {
-        const next = +(prev + change).toFixed(5);
-        setPriceDirection(next >= prev ? "up" : "down");
-        return next;
-      });
-      // Fluctuate other tickers slowly
-      setXauusdPrice(prev => +(prev + (Math.random() - 0.5) * 0.12).toFixed(2));
-      setGbpusdPrice(prev => +(prev + (Math.random() - 0.5) * 0.00015).toFixed(5));
-      setUsdjpyPrice(prev => +(prev + (Math.random() - 0.5) * 0.04).toFixed(2));
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
+
 
   // Account constants
   const balance = 258495.12;

@@ -317,136 +317,119 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
             </motion.div>
 
             {/* Interactive ECN Telemetry Status Panel */}
-            <div className="w-full max-w-4xl mx-auto pt-8 border-t border-white/[0.04] z-30 select-none">
-              {/* Tab headers */}
-              <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2.5 mb-5">
-                {TRUST_ITEMS.map((item, idx) => {
-                  const isActive = activeTab === idx;
-                  return (
-                    <button
-                      key={item.title}
-                      onClick={() => setActiveTab(idx)}
-                      className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border text-[10px] font-mono tracking-wider transition-all cursor-pointer ${
-                        isActive
-                          ? "bg-blue-500/10 border-blue-500/30 text-white shadow-[0_0_15px_rgba(59,130,246,0.15)]"
-                          : "bg-transparent border-transparent text-white/45 hover:text-white/80 hover:border-white/5"
-                      }`}
-                    >
-                      <item.icon className={`w-3.5 h-3.5 ${isActive ? "text-blue-400" : "text-blue-500/40"}`} />
-                      <span className="font-bold">{item.title}</span>
-                    </button>
-                  );
-                })}
-              </div>
+            {/* Responsive ECN Telemetry Grid */}
+            <div className="w-full max-w-5xl mx-auto pt-8 border-t border-white/[0.04] z-30 select-none">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                
+                {/* Card 1: SECURE NODE */}
+                <div className="bg-[#04060A]/85 border border-white/[0.04] rounded-2xl p-5 flex flex-col justify-between backdrop-blur-md relative overflow-hidden text-left hover:border-blue-500/30 transition-all duration-300 min-h-[140px]">
+                  <div className="absolute top-0 right-0 p-3 opacity-[0.03]">
+                    <Lock className="w-12 h-12 text-white" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <Lock className="w-3.5 h-3.5 text-blue-400" />
+                      <span className="text-[10px] font-black uppercase tracking-wider text-white">SECURE NODE</span>
+                    </div>
+                    <p className="text-[7.5px] font-mono text-white/30 uppercase tracking-widest mb-1">Session Key</p>
+                    <p className="text-blue-400 font-mono text-[9px] font-black tracking-tighter truncate">{sessionKey}</p>
+                  </div>
+                  <div className="mt-4 flex items-center justify-between border-t border-white/[0.03] pt-2">
+                    <span className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Enclave</span>
+                    <span className="text-emerald-400 font-mono text-[9px] font-black flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
+                      ACTIVE
+                    </span>
+                  </div>
+                </div>
 
-              {/* Live Telemetry Display */}
-              <div className="bg-[#04060A]/85 border border-white/[0.04] rounded-2xl p-5 min-h-[90px] flex items-center justify-center text-left backdrop-blur-md relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/[0.01] via-transparent to-transparent pointer-events-none" />
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={activeTab}
-                    initial={{ opacity: 0, y: 5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -5 }}
-                    transition={{ duration: 0.2 }}
-                    className="w-full grid grid-cols-2 md:grid-cols-4 gap-4"
-                  >
-                    {activeTab === 0 && ( // SECURE NODE
-                      <>
-                        <div className="space-y-1">
-                          <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Protocol Standard</div>
-                          <div className="text-white font-mono text-xs font-black">Direct ECN Protocol</div>
-                        </div>
-                        <div className="space-y-1 col-span-2">
-                          <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Rotating Session Key</div>
-                          <div className="text-blue-400 font-mono text-[10px] sm:text-xs font-black tracking-tight">{sessionKey}</div>
-                        </div>
-                        <div className="space-y-1 text-right">
-                          <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Enclave Shield</div>
-                          <div className="text-emerald-400 font-mono text-xs font-black flex items-center justify-end gap-1.5">
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
-                            SECURE
-                          </div>
-                        </div>
-                      </>
-                    )}
-                    {activeTab === 1 && ( // LATENCY TARGET
-                      <>
-                        <div className="space-y-1">
-                          <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Equinix NY4</div>
-                          <div className="text-white font-mono text-xs font-black">{jitter.ny4} ms</div>
-                        </div>
-                        <div className="space-y-1">
-                          <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Equinix LD4</div>
-                          <div className="text-white font-mono text-xs font-black">{jitter.ld4} ms</div>
-                        </div>
-                        <div className="space-y-1">
-                          <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Equinix SG1</div>
-                          <div className="text-white font-mono text-xs font-black">{jitter.sg1} ms</div>
-                        </div>
-                        <div className="space-y-1 text-right">
-                          <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Telemetric Flow</div>
-                          <div className="text-blue-400 font-mono text-xs font-black uppercase tracking-wider">Sub-50ms Peak</div>
-                        </div>
-                      </>
-                    )}
-                    {activeTab === 2 && ( // GLOBAL GRID
-                      <>
-                        <div className="space-y-1">
-                          <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Active Paths</div>
-                          <div className="text-white font-mono text-xs font-black">40+ Sovereignty Pools</div>
-                        </div>
-                        <div className="space-y-1 col-span-2">
-                          <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Dynamic Routing Nodes</div>
-                          <div className="text-white font-mono text-xs font-black tracking-wide">Dubai · Mumbai · London · NY</div>
-                        </div>
-                        <div className="space-y-1 text-right">
-                          <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Core Status</div>
-                          <div className="text-emerald-400 font-mono text-xs font-black">SYNCHRONIZED</div>
-                        </div>
-                      </>
-                    )}
-                    {activeTab === 3 && ( // CO-LOCATION
-                      <>
-                        <div className="space-y-1">
-                          <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Bandwidth Pool</div>
-                          <div className="text-white font-mono text-xs font-black">10 Gbps Fiber Link</div>
-                        </div>
-                        <div className="space-y-1">
-                          <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Port Telemetry</div>
-                          <div className="text-emerald-400 font-mono text-xs font-black">PORT 10G-A: UP</div>
-                        </div>
-                        <div className="space-y-1">
-                          <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Signal Jitter</div>
-                          <div className="text-white font-mono text-xs font-black">&lt; 0.02 ms</div>
-                        </div>
-                        <div className="space-y-1 text-right">
-                          <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Slippage Protection</div>
-                          <div className="text-blue-400 font-mono text-xs font-black">ACTIVE</div>
-                        </div>
-                      </>
-                    )}
-                    {activeTab === 4 && ( // AUDIT VERIFIED
-                      <>
-                        <div className="space-y-1 col-span-2">
-                          <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">SHA-256 Ledger Validation Hash</div>
-                          <div className="text-white font-mono text-xs font-black tracking-tighter">98fa83a938c82eb4b711e3df9c0e21a28a50</div>
-                        </div>
-                        <div className="space-y-1">
-                          <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Audit Registry</div>
-                          <div className="text-blue-400 font-mono text-xs font-black">3RD PARTY COMPLIANT</div>
-                        </div>
-                        <div className="space-y-1 text-right">
-                          <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Telemetry Log</div>
-                          <div className="text-emerald-400 font-mono text-xs font-black flex items-center justify-end gap-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                            VERIFIED
-                          </div>
-                        </div>
-                      </>
-                    )}
-                  </motion.div>
-                </AnimatePresence>
+                {/* Card 2: LATENCY TARGET */}
+                <div className="bg-[#04060A]/85 border border-white/[0.04] rounded-2xl p-5 flex flex-col justify-between backdrop-blur-md relative overflow-hidden text-left hover:border-blue-500/30 transition-all duration-300 min-h-[140px]">
+                  <div className="absolute top-0 right-0 p-3 opacity-[0.03]">
+                    <Timer className="w-12 h-12 text-white" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <Timer className="w-3.5 h-3.5 text-blue-400" />
+                      <span className="text-[10px] font-black uppercase tracking-wider text-white">LATENCY TARGET</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-x-2 gap-y-1 mb-2">
+                      <div>
+                        <p className="text-[7px] font-mono text-white/30 uppercase tracking-widest">NY4</p>
+                        <p className="text-white font-mono text-[10px] font-bold">{jitter.ny4}ms</p>
+                      </div>
+                      <div>
+                        <p className="text-[7px] font-mono text-white/30 uppercase tracking-widest">LD4</p>
+                        <p className="text-white font-mono text-[10px] font-bold">{jitter.ld4}ms</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-3 flex items-center justify-between border-t border-white/[0.03] pt-2">
+                    <span className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Peak Flow</span>
+                    <span className="text-blue-400 font-mono text-[9px] font-black uppercase tracking-wider">Sub-50ms</span>
+                  </div>
+                </div>
+
+                {/* Card 3: GLOBAL GRID */}
+                <div className="bg-[#04060A]/85 border border-white/[0.04] rounded-2xl p-5 flex flex-col justify-between backdrop-blur-md relative overflow-hidden text-left hover:border-blue-500/30 transition-all duration-300 min-h-[140px]">
+                  <div className="absolute top-0 right-0 p-3 opacity-[0.03]">
+                    <Globe className="w-12 h-12 text-white" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <Globe className="w-3.5 h-3.5 text-blue-400" />
+                      <span className="text-[10px] font-black uppercase tracking-wider text-white">GLOBAL GRID</span>
+                    </div>
+                    <p className="text-[7.5px] font-mono text-white/30 uppercase tracking-widest mb-1">Active Pools</p>
+                    <p className="text-white font-mono text-[10px] font-black">40+ Sovereignties</p>
+                  </div>
+                  <div className="mt-4 flex items-center justify-between border-t border-white/[0.03] pt-2">
+                    <span className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Routing</span>
+                    <span className="text-emerald-400 font-mono text-[9px] font-black uppercase">SYNCED</span>
+                  </div>
+                </div>
+
+                {/* Card 4: CO-LOCATION */}
+                <div className="bg-[#04060A]/85 border border-white/[0.04] rounded-2xl p-5 flex flex-col justify-between backdrop-blur-md relative overflow-hidden text-left hover:border-blue-500/30 transition-all duration-300 min-h-[140px]">
+                  <div className="absolute top-0 right-0 p-3 opacity-[0.03]">
+                    <Server className="w-12 h-12 text-white" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <Server className="w-3.5 h-3.5 text-blue-400" />
+                      <span className="text-[10px] font-black uppercase tracking-wider text-white">CO-LOCATION</span>
+                    </div>
+                    <p className="text-[7.5px] font-mono text-white/30 uppercase tracking-widest mb-1">Port Link</p>
+                    <p className="text-white font-mono text-[10px] font-black">10G-A NY4/LD4</p>
+                  </div>
+                  <div className="mt-4 flex items-center justify-between border-t border-white/[0.03] pt-2">
+                    <span className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Jitter</span>
+                    <span className="text-blue-400 font-mono text-[9px] font-black">&lt; 0.02ms</span>
+                  </div>
+                </div>
+
+                {/* Card 5: AUDIT VERIFIED */}
+                <div className="bg-[#04060A]/85 border border-white/[0.04] rounded-2xl p-5 flex flex-col justify-between backdrop-blur-md relative overflow-hidden text-left hover:border-blue-500/30 transition-all duration-300 min-h-[140px]">
+                  <div className="absolute top-0 right-0 p-3 opacity-[0.03]">
+                    <ShieldCheck className="w-12 h-12 text-white" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
+                      <span className="text-[10px] font-black uppercase tracking-wider text-white">AUDIT VERIFIED</span>
+                    </div>
+                    <p className="text-[7.5px] font-mono text-white/30 uppercase tracking-widest mb-1">Cryptographic Hash</p>
+                    <p className="text-white font-mono text-[9px] font-black tracking-tighter truncate">98fa83a938c82eb4b711e3df9c0e21a28a50</p>
+                  </div>
+                  <div className="mt-4 flex items-center justify-between border-t border-white/[0.03] pt-2">
+                    <span className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Ledger</span>
+                    <span className="text-emerald-400 font-mono text-[9px] font-black flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                      VERIFIED
+                    </span>
+                  </div>
+                </div>
+
               </div>
             </div>
 
