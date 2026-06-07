@@ -11,7 +11,6 @@ import { useAuth } from "../contexts/AuthContext";
 import { useToast } from "../contexts/ToastContext";
 import { useNavigate } from "react-router-dom";
 import { Product } from "../types";
-import { EliteSocialProof } from "../components/institutional/EliteSocialProof";
 import { CustomStrategyTerminal } from "../components/institutional/CustomStrategyTerminal";
 import { supabase } from "../lib/supabase";
 import { MarketplaceProduct } from "../components/institutional/MarketplaceGrid";
@@ -221,60 +220,47 @@ export const Marketplace = () => {
       />
 
       <div className="max-w-[1440px] mx-auto px-5 sm:px-12 space-y-10 sm:space-y-16">
-        {/* Header Block */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10 sm:gap-12">
-          <div className="space-y-6 sm:space-y-10 flex-1">
+        {/* Header Block: Title & Controls Stack */}
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 sm:gap-12">
+          {/* Left side: Heading */}
+          <div className="space-y-4 sm:space-y-6 flex-1 text-left">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-emerald-500/[0.04] border border-emerald-500/[0.15] text-emerald-400 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em]"
+              className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-emerald-500/[0.04] border border-emerald-500/[0.15] text-emerald-400 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] w-fit"
             >
               Algorithm Marketplace
             </motion.div>
-            <h1 className="text-3xl sm:text-5xl md:text-7xl font-black mb-4 sm:mb-6 text-white tracking-tight leading-[0.9] uppercase italic">
+            <h1 className="text-3xl sm:text-5xl md:text-7xl font-black mb-4 sm:mb-6 text-white tracking-tight leading-[0.95] uppercase italic">
               Institutional <br />
               <span className="text-emerald-400">Algorithms.</span>
             </h1>
-            <p className="text-sm sm:text-base md:text-xl text-white/40 max-w-2xl font-medium leading-relaxed">
+            <p className="text-sm sm:text-base md:text-lg text-zinc-500 max-w-2xl font-medium leading-relaxed">
               Browse our collection of proven algorithmic trading systems. Each algorithm comes with full performance data, backtesting results, and detailed documentation.
             </p>
           </div>
 
-          {/* High-Resolution Inline Preview for SEO / Google Ads */}
-          <div className="relative rounded-[2rem] sm:rounded-[3.5rem] overflow-hidden border border-white/5 bg-[#0e1428]/25 group transition-all duration-700 hover:border-emerald-500/25 w-full max-w-4xl mx-auto lg:mx-0">
-             <img 
-               src="/backtest_dashboard.png" 
-               alt="IFX Algorithmic Trading Performance & Backtest Results Dashboard" 
-               className="w-full h-auto object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700" 
-             />
-             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
-             <div className="absolute bottom-6 left-6 sm:bottom-10 sm:left-10 text-left space-y-1 sm:space-y-2">
-                <span className="text-[7px] sm:text-[9px] font-mono font-black text-emerald-400 uppercase tracking-[0.3em]">Quantitative Backtesting Database</span>
-                <h4 className="text-sm sm:text-2xl font-black text-white uppercase tracking-tighter">Verified Model Performance Telemetry</h4>
-             </div>
-          </div>
-
-          {/* Catalog Controls */}
-          <div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
+          {/* Right side: Catalog Controls */}
+          <div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto shrink-0">
             <div className="relative w-full sm:flex-1 lg:w-80 group">
-              <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20 group-focus-within:text-emerald-500 transition-colors" />
+              <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-emerald-500 transition-colors" />
               <input
                 type="text"
                 placeholder="Search Asset..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-white/[0.02] border border-white/5 rounded-xl sm:rounded-2xl py-3.5 sm:py-4 pl-12 pr-6 text-xs sm:text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-emerald-500/30 focus:bg-white/[0.04] transition-all"
+                className="w-full bg-zinc-900/30 border border-zinc-800/80 rounded-xl sm:rounded-2xl py-3.5 sm:py-4 pl-12 pr-6 text-xs sm:text-sm text-white placeholder:text-zinc-700 focus:outline-none focus:border-zinc-700 focus:bg-zinc-950 transition-all font-medium"
               />
             </div>
-            <div className="flex w-full sm:w-auto p-1.5 bg-white/[0.02] border border-white/5 rounded-xl sm:rounded-2xl">
+            <div className="flex w-full sm:w-auto p-1.5 bg-zinc-900/40 border border-zinc-800 rounded-xl sm:rounded-2xl shrink-0">
               {categories.map((cat) => (
                 <button
                   key={cat.id}
                   onClick={() => setActiveCategory(cat.id)}
-                  className={`flex-1 sm:flex-none px-4 sm:px-6 py-2 rounded-lg sm:rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-widest transition-all ${
+                  className={`flex-1 sm:flex-none px-4 sm:px-6 py-2.5 rounded-lg sm:rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-widest transition-all cursor-pointer ${
                     activeCategory === cat.id
                        ? "bg-emerald-500 text-black"
-                       : "text-white/40 hover:text-white hover:bg-white/5"
+                       : "text-zinc-500 hover:text-white hover:bg-white/5"
                   }`}
                 >
                   {cat.label}
@@ -282,6 +268,20 @@ export const Marketplace = () => {
               ))}
             </div>
           </div>
+        </div>
+
+        {/* High-Resolution Inline Preview for SEO / Google Ads */}
+        <div className="relative rounded-[2rem] sm:rounded-[3.5rem] overflow-hidden border border-zinc-800 bg-[#0e1428]/10 group transition-all duration-700 hover:border-emerald-500/20 w-full shadow-2xl">
+           <img 
+             src="/backtest_dashboard.png" 
+             alt="IFX Algorithmic Trading Performance & Backtest Results Dashboard" 
+             className="w-full h-auto object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700" 
+           />
+           <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent pointer-events-none" />
+           <div className="absolute bottom-6 left-6 sm:bottom-10 sm:left-10 text-left space-y-1 sm:space-y-2">
+              <span className="text-[7px] sm:text-[9px] font-mono font-black text-emerald-400 uppercase tracking-[0.3em]">Quantitative Backtesting Database</span>
+              <h4 className="text-sm sm:text-2xl font-black text-white uppercase tracking-tighter">Verified Model Performance Telemetry</h4>
+           </div>
         </div>
 
         {/* Elite B2B Trust Indicators & Guarantees */}
@@ -330,9 +330,6 @@ export const Marketplace = () => {
 
         {/* Custom Strategy Engineering Terminal */}
         <CustomStrategyTerminal />
-
-        {/* Elite Social Proof & Performance Validation */}
-        <EliteSocialProof />
 
       </div>
 
