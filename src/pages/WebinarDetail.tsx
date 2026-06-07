@@ -86,6 +86,9 @@ interface ExtendedWebinar extends Webinar {
   };
 }
 
+// ── COMING SOON PITCH MODE (REMOVE THIS BLOCK TO RESTORE REAL MODEL) ──
+const IS_COMING_SOON_PITCH = true;
+
 export const WebinarDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -307,18 +310,36 @@ export const WebinarDetail = () => {
   );
 
   if (!webinar) return (
-    <div className="pt-32 text-center text-white bg-[#020203] min-h-screen flex items-center justify-center">
-      <div className="space-y-6">
-        <h2 className="text-3xl font-black uppercase tracking-tighter text-red-500">Session Not Found</h2>
-        <Link to="/webinars" className="inline-flex items-center gap-2 px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-xs font-black uppercase tracking-widest text-gray-300">
-          Return to Schedule
-        </Link>
-      </div>
+    <div className="pt-32 text-center text-white bg-[#020203] min-h-screen flex items-center justify-center px-4">
+      {IS_COMING_SOON_PITCH ? (
+        <div className="space-y-6 max-w-md bg-zinc-900/40 border border-zinc-800 rounded-3xl p-8 sm:p-10 backdrop-blur-md">
+          <div className="w-12 h-12 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mx-auto mb-4 animate-pulse">
+            <Lock className="w-5 h-5 text-blue-400" />
+          </div>
+          <div className="space-y-2">
+            <span className="text-[8px] font-black text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2.5 py-0.5 rounded-full uppercase tracking-wider inline-block font-mono">
+              Clearance Required
+            </span>
+            <h2 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-white leading-tight">Clearance Code Pending</h2>
+            <p className="text-[11px] text-zinc-500 leading-relaxed font-medium">
+              The requested masterclass node is restricted during the broker deployment and co-sponsorship phase. Access keys are required for server routing.
+            </p>
+          </div>
+          <Link to="/webinars" className="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white text-[10px] font-black uppercase tracking-widest rounded-xl transition-all flex items-center justify-center gap-1 cursor-pointer">
+            Request Invite Access
+            <ChevronRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+      ) : (
+        <div className="space-y-6">
+          <h2 className="text-3xl font-black uppercase tracking-tighter text-red-500">Session Not Found</h2>
+          <Link to="/webinars" className="inline-flex items-center gap-2 px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-xs font-black uppercase tracking-widest text-gray-300">
+            Return to Schedule
+          </Link>
+        </div>
+      )}
     </div>
   );
-
-  // ── COMING SOON PITCH MODE (REMOVE THIS BLOCK TO RESTORE REAL MODEL) ──
-  const IS_COMING_SOON_PITCH = true;
 
   const isLive = webinar.status === "live" && webinar.streaming_url;
   const isRecorded = webinar.status === "past";
