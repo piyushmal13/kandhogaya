@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "motion/react";
-import { ArrowRight, ChevronDown, Play, ShieldCheck, Zap, Globe, Timer, Lock, Server } from "lucide-react";
+import { ArrowRight, ChevronDown, Play, ShieldCheck, Zap, Globe, Timer, Lock, Server, Cpu } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const EASING = [0.4, 0, 0.2, 1] as const;
@@ -316,118 +316,79 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
               </button>
             </motion.div>
 
-            {/* Interactive ECN Telemetry Status Panel */}
-            {/* Responsive ECN Telemetry Grid */}
-            <div className="w-full max-w-5xl mx-auto pt-8 border-t border-white/[0.04] z-30 select-none">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            {/* Quantitative Intel & lead-capture download deck */}
+            <div className="w-full max-w-5xl mx-auto pt-10 border-t border-white/[0.04] z-30 text-left select-text">
+              <div className="mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+                <div>
+                  <h3 className="text-[9px] font-mono tracking-[0.25em] text-[#00A3FF] uppercase font-black">Institutional Resources</h3>
+                  <h2 className="text-xl font-black uppercase text-white tracking-tight italic mt-1">Complimentary Systems & Audited Reports</h2>
+                </div>
+                <span className="text-[8px] font-mono text-gray-500 uppercase tracking-widest hidden sm:inline">Download Limit: Unrestricted</span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 
-                {/* Card 1: SECURE NODE */}
-                <div className="bg-[#04060A]/85 border border-white/[0.04] rounded-2xl p-5 flex flex-col justify-between backdrop-blur-md relative overflow-hidden text-left hover:border-blue-500/30 transition-all duration-300 min-h-[140px]">
-                  <div className="absolute top-0 right-0 p-3 opacity-[0.03]">
-                    <Lock className="w-12 h-12 text-white" />
+                {/* Download 1: MT5 Indicator */}
+                <div className="bg-[#04060A]/85 border border-white/[0.04] rounded-3xl p-6 flex flex-col justify-between backdrop-blur-md relative overflow-hidden hover:border-[#00A3FF]/30 transition-all duration-300 min-h-[190px]">
+                  <div className="absolute top-0 right-0 p-3 opacity-[0.03] pointer-events-none">
+                    <Cpu className="w-16 h-16 text-white" />
                   </div>
                   <div>
                     <div className="flex items-center gap-2 mb-3">
-                      <Lock className="w-3.5 h-3.5 text-blue-400" />
-                      <span className="text-[10px] font-black uppercase tracking-wider text-white">SECURE NODE</span>
+                      <Cpu className="w-4 h-4 text-[#00E5FF]" />
+                      <span className="text-[10px] font-black uppercase tracking-wider text-white">ATR Volatility Regime Filter</span>
                     </div>
-                    <p className="text-[7.5px] font-mono text-white/30 uppercase tracking-widest mb-1">Session Key</p>
-                    <p className="text-blue-400 font-mono text-[9px] font-black tracking-tighter truncate">{sessionKey}</p>
+                    <p className="text-[10.5px] text-white/45 font-bold uppercase tracking-wider leading-relaxed mb-4">
+                      Proprietary MT5 indicator compiled to map average true range bands directly on local charts. Purges noise from standard execution paths.
+                    </p>
                   </div>
-                  <div className="mt-4 flex items-center justify-between border-t border-white/[0.03] pt-2">
-                    <span className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Enclave</span>
-                    <span className="text-emerald-400 font-mono text-[9px] font-black flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
-                      ACTIVE
-                    </span>
-                  </div>
+                  <a href="/downloads/IFX_ATR_Regime.ex5" download className="block mt-auto">
+                    <button className="w-full py-3 bg-[#00A3FF]/15 border border-[#00A3FF]/30 hover:bg-[#00A3FF]/25 hover:border-[#00A3FF]/50 text-[#00E5FF] rounded-xl text-[9px] font-mono font-black uppercase tracking-widest transition-all text-center cursor-pointer">
+                      Download Binary (.ex5)
+                    </button>
+                  </a>
                 </div>
 
-                {/* Card 2: LATENCY TARGET */}
-                <div className="bg-[#04060A]/85 border border-white/[0.04] rounded-2xl p-5 flex flex-col justify-between backdrop-blur-md relative overflow-hidden text-left hover:border-blue-500/30 transition-all duration-300 min-h-[140px]">
-                  <div className="absolute top-0 right-0 p-3 opacity-[0.03]">
-                    <Timer className="w-12 h-12 text-white" />
+                {/* Download 2: Liquidity Factsheet */}
+                <div className="bg-[#04060A]/85 border border-white/[0.04] rounded-3xl p-6 flex flex-col justify-between backdrop-blur-md relative overflow-hidden hover:border-[#00A3FF]/30 transition-all duration-300 min-h-[190px]">
+                  <div className="absolute top-0 right-0 p-3 opacity-[0.03] pointer-events-none">
+                    <Timer className="w-16 h-16 text-white" />
                   </div>
                   <div>
                     <div className="flex items-center gap-2 mb-3">
-                      <Timer className="w-3.5 h-3.5 text-blue-400" />
-                      <span className="text-[10px] font-black uppercase tracking-wider text-white">LATENCY TARGET</span>
+                      <Timer className="w-4 h-4 text-[#00E5FF]" />
+                      <span className="text-[10px] font-black uppercase tracking-wider text-white">2026 ECN Liquidity Factsheet</span>
                     </div>
-                    <div className="grid grid-cols-2 gap-x-2 gap-y-1 mb-2">
-                      <div>
-                        <p className="text-[7px] font-mono text-white/30 uppercase tracking-widest">NY4</p>
-                        <p className="text-white font-mono text-[10px] font-bold">{jitter.ny4}ms</p>
-                      </div>
-                      <div>
-                        <p className="text-[7px] font-mono text-white/30 uppercase tracking-widest">LD4</p>
-                        <p className="text-white font-mono text-[10px] font-bold">{jitter.ld4}ms</p>
-                      </div>
-                    </div>
+                    <p className="text-[10.5px] text-white/45 font-bold uppercase tracking-wider leading-relaxed mb-4">
+                      A facts-first structural analysis comparing retail broker processing with institutional matching engines in Equinix NY4 and LD4.
+                    </p>
                   </div>
-                  <div className="mt-3 flex items-center justify-between border-t border-white/[0.03] pt-2">
-                    <span className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Peak Flow</span>
-                    <span className="text-blue-400 font-mono text-[9px] font-black uppercase tracking-wider">Sub-50ms</span>
-                  </div>
+                  <a href="/downloads/IFX_Liquidity_Factsheet_2026.pdf" download className="block mt-auto">
+                    <button className="w-full py-3 bg-[#00A3FF]/15 border border-[#00A3FF]/30 hover:bg-[#00A3FF]/25 hover:border-[#00A3FF]/50 text-[#00E5FF] rounded-xl text-[9px] font-mono font-black uppercase tracking-widest transition-all text-center cursor-pointer">
+                      Download Factsheet (PDF)
+                    </button>
+                  </a>
                 </div>
 
-                {/* Card 3: GLOBAL GRID */}
-                <div className="bg-[#04060A]/85 border border-white/[0.04] rounded-2xl p-5 flex flex-col justify-between backdrop-blur-md relative overflow-hidden text-left hover:border-blue-500/30 transition-all duration-300 min-h-[140px]">
-                  <div className="absolute top-0 right-0 p-3 opacity-[0.03]">
-                    <Globe className="w-12 h-12 text-white" />
+                {/* Download 3: Audit Report */}
+                <div className="bg-[#04060A]/85 border border-white/[0.04] rounded-3xl p-6 flex flex-col justify-between backdrop-blur-md relative overflow-hidden hover:border-[#00A3FF]/30 transition-all duration-300 min-h-[190px]">
+                  <div className="absolute top-0 right-0 p-3 opacity-[0.03] pointer-events-none">
+                    <ShieldCheck className="w-16 h-16 text-white" />
                   </div>
                   <div>
                     <div className="flex items-center gap-2 mb-3">
-                      <Globe className="w-3.5 h-3.5 text-blue-400" />
-                      <span className="text-[10px] font-black uppercase tracking-wider text-white">GLOBAL GRID</span>
+                      <ShieldCheck className="w-4 h-4 text-[#00E5FF]" />
+                      <span className="text-[10px] font-black uppercase tracking-wider text-white">Systematic Backtest Audits</span>
                     </div>
-                    <p className="text-[7.5px] font-mono text-white/30 uppercase tracking-widest mb-1">Active Pools</p>
-                    <p className="text-white font-mono text-[10px] font-black">40+ Sovereignties</p>
+                    <p className="text-[10.5px] text-white/45 font-bold uppercase tracking-wider leading-relaxed mb-4">
+                      Full historical CSV data files showing simulated drawdown periods, profit factors, and trade distributions modeled on 99.9% real tick accuracy.
+                    </p>
                   </div>
-                  <div className="mt-4 flex items-center justify-between border-t border-white/[0.03] pt-2">
-                    <span className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Routing</span>
-                    <span className="text-emerald-400 font-mono text-[9px] font-black uppercase">SYNCED</span>
-                  </div>
-                </div>
-
-                {/* Card 4: CO-LOCATION */}
-                <div className="bg-[#04060A]/85 border border-white/[0.04] rounded-2xl p-5 flex flex-col justify-between backdrop-blur-md relative overflow-hidden text-left hover:border-blue-500/30 transition-all duration-300 min-h-[140px]">
-                  <div className="absolute top-0 right-0 p-3 opacity-[0.03]">
-                    <Server className="w-12 h-12 text-white" />
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2 mb-3">
-                      <Server className="w-3.5 h-3.5 text-blue-400" />
-                      <span className="text-[10px] font-black uppercase tracking-wider text-white">CO-LOCATION</span>
-                    </div>
-                    <p className="text-[7.5px] font-mono text-white/30 uppercase tracking-widest mb-1">Port Link</p>
-                    <p className="text-white font-mono text-[10px] font-black">10G-A NY4/LD4</p>
-                  </div>
-                  <div className="mt-4 flex items-center justify-between border-t border-white/[0.03] pt-2">
-                    <span className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Jitter</span>
-                    <span className="text-blue-400 font-mono text-[9px] font-black">&lt; 0.02ms</span>
-                  </div>
-                </div>
-
-                {/* Card 5: AUDIT VERIFIED */}
-                <div className="bg-[#04060A]/85 border border-white/[0.04] rounded-2xl p-5 flex flex-col justify-between backdrop-blur-md relative overflow-hidden text-left hover:border-blue-500/30 transition-all duration-300 min-h-[140px]">
-                  <div className="absolute top-0 right-0 p-3 opacity-[0.03]">
-                    <ShieldCheck className="w-12 h-12 text-white" />
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2 mb-3">
-                      <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
-                      <span className="text-[10px] font-black uppercase tracking-wider text-white">AUDIT VERIFIED</span>
-                    </div>
-                    <p className="text-[7.5px] font-mono text-white/30 uppercase tracking-widest mb-1">Cryptographic Hash</p>
-                    <p className="text-white font-mono text-[9px] font-black tracking-tighter truncate">98fa83a938c82eb4b711e3df9c0e21a28a50</p>
-                  </div>
-                  <div className="mt-4 flex items-center justify-between border-t border-white/[0.03] pt-2">
-                    <span className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Ledger</span>
-                    <span className="text-emerald-400 font-mono text-[9px] font-black flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                      VERIFIED
-                    </span>
-                  </div>
+                  <a href="/downloads/IFX_Backtest_Audit.zip" download className="block mt-auto">
+                    <button className="w-full py-3 bg-[#00A3FF]/15 border border-[#00A3FF]/30 hover:bg-[#00A3FF]/25 hover:border-[#00A3FF]/50 text-[#00E5FF] rounded-xl text-[9px] font-mono font-black uppercase tracking-widest transition-all text-center cursor-pointer">
+                      Download Audit Package (ZIP)
+                    </button>
+                  </a>
                 </div>
 
               </div>

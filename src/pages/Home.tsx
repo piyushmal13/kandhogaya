@@ -1,11 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { PageMeta } from "../components/site/PageMeta";
 import { educationalOrganizationSchema, websiteSchema } from "../utils/structuredData";
 
 // Institutional Components
 import { FortressHero } from "../components/home/FortressHero";
 import { OperationalPillars } from "../components/home/OperationalPillars";
-import { SessionBookingModal } from "../components/ui/SessionBookingModal";
 import { BrandAuthority } from "../components/home/BrandAuthority";
 import { PerformanceHistory } from "../components/home/PerformanceHistory";
 import { JourneySection } from "../components/home/JourneySection";
@@ -16,17 +16,16 @@ import { EliteSocialProof } from "../components/institutional/EliteSocialProof";
 import { PaymentGateways } from "../components/home/PaymentGateways";
 
 const Home = () => {
+  const navigate = useNavigate();
   const [isBookingOpen, setBookingOpen] = useState(false);
   const [defaultObjective, setDefaultObjective] = useState("");
 
   const triggerSessionRequest = () => {
-    setDefaultObjective("General Session Consultation Request");
-    setBookingOpen(true);
+    navigate("/contact");
   };
 
   const triggerBespokeBuildRequest = () => {
-    setDefaultObjective("Bespoke Quantitative Algorithm Custom Build Request");
-    setBookingOpen(true);
+    navigate("/solutions/custom");
   };
 
   return (
@@ -88,13 +87,6 @@ const Home = () => {
         {/* L6: Capital Inquiry / Onboarding Intake Form */}
         <ConsultationSection />
       </main>
-
-      {/* Global Interactive Intake Onboarding Modal Popup */}
-      <SessionBookingModal 
-        isOpen={isBookingOpen}
-        onClose={() => setBookingOpen(false)}
-        defaultObjective={defaultObjective}
-      />
     </>
   );
 };
