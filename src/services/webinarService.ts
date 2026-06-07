@@ -14,7 +14,7 @@ export const webinarService = {
       const query = supabase
         .from("webinars")
         .select(`
-          id, title, description, date_time, speaker_name,
+          id, title, description, date_time, speaker_name, speaker_role,
           status, is_paid, price, speaker_profile_url,
           brand_logo_url, webinar_image_url, sponsor_logos,
           speaker_images, about_content, q_and_a,
@@ -37,7 +37,7 @@ export const webinarService = {
       const { data, error } = await supabase
         .from("webinars")
         .select(`
-          id, title, description, date_time, speaker_name,
+          id, title, description, date_time, speaker_name, speaker_role,
           status, is_paid, price, speaker_profile_url,
           brand_logo_url, webinar_image_url, sponsor_logos,
           speaker_images, about_content, q_and_a,
@@ -93,12 +93,56 @@ export const webinarService = {
 
       if (error) throw error;
       void supabase.rpc('increment_webinar_registrations', { webinar_id: webinarId });
+
+      // Ingest lead inside CRM pipeline
+      try {
+        const { data: lead } = await supabase.from('leads').select('id, score, crm_metadata').eq('email', email).maybeSingle();
+        if (!lead) {
+          await supabase.from('leads').insert({
+            email,
+            source: 'webinar_registration',
+            score: 20,
+            stage: 'INTERESTED',
+            last_action_at: new Date().toISOString(),
+            crm_metadata: { registered_webinar_id: webinarId }
+          });
+        } else {
+          await supabase.from('leads').update({
+            score: (lead.score || 0) + 20,
+            stage: 'HIGH_INTENT',
+            last_action_at: new Date().toISOString(),
+            crm_metadata: { ...(lead.crm_metadata || {}), registered_webinar_id: webinarId }
+          }).eq('id', lead.id);
+        }
+      } catch (crmErr) {
+        console.error("CRM Lead ingestion skipped during service register:", crmErr);
+      }
+
+      // Enqueue notification in queue
+      try {
+        const { data: web } = await supabase.from('webinars').select('title, date_time').eq('id', webinarId).single();
+        if (web) {
+          await supabase.from('notification_queue').insert({
+            recipient: email,
+            channel: 'EMAIL',
+            priority: 'HIGH',
+            payload: {
+              message: `You have successfully registered for the masterclass: "${web.title}".`,
+              user_name: email.split('@')[0],
+              action_link: `/webinars/${webinarId}`
+            },
+            status: 'PENDING'
+          });
+        }
+      } catch (notifErr) {
+        console.error("CRM Notification enqueue skipped during service register:", notifErr);
+      }
+
       return { success: true };
     } catch {
       return { success: false, error: "Something went wrong. Please try again." };
     }
   },
-
   subscribe: (callback: (payload: any) => void) => {
     return supabase
       .channel('public:webinars')

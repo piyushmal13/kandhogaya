@@ -39,6 +39,7 @@ export const mapWebinar = (raw: any): Webinar => {
     title: raw.title || 'Untitled Session',
     description: raw.description || '',
     speaker_name: raw.speaker_name || 'Institutional Lead Analyst',
+    speaker_role: raw.speaker_role || 'Senior Institutional Analyst',
     date_time: raw.date_time,
     speaker_profile_url: raw.speaker_profile_url || "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=200&auto=format&fit=crop",
     brand_logo_url: raw.brand_logo_url || "https://upload.wikimedia.org/wikipedia/commons/4/4c/Binance_Logo.png",
@@ -74,7 +75,8 @@ export const mapWebinar = (raw: any): Webinar => {
         "Institutional Liquidity Zones",
         "Algorithmic Order Flow Decoding",
         "Macro Structure Alignment"
-      ]
+      ],
+      author_bio: raw.advanced_features?.author_bio || raw.advanced_features?.speaker_bio || raw.about_content || "Institutional Lead Analyst specializing in systematic trading design and execution routing."
     }
   };
 };

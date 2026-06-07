@@ -13,31 +13,43 @@ interface ExtendedWebinar extends Webinar {
   speaker_profile_url?: string;
 }
 
-export function WebinarCard({ webinar }: Readonly<{ webinar: ExtendedWebinar }>) {
+// ── COMING SOON PITCH MODE (REMOVE THIS BLOCK TO RESTORE REAL MODEL) ──
+const IS_COMING_SOON_PITCH = true;
+
+export function WebinarCard({ webinar }: Readonly<{ webinar: Webinar }>) {
   const navigate = useNavigate();
   const { isEnabled: isRegistrationOpen } = useFeatureFlag('webinar_registration_open', true);
   const isLive = webinar.status === 'live' && !!webinar.streaming_url;
   const isRecorded = webinar.status === 'past';
 
-  const hasSponsor = Array.isArray(webinar.sponsors) && webinar.sponsors.length > 0;
+  const partnerName = webinar.metadata?.partner_name || webinar.metadata?.co_brand_name || (webinar.brand_logo_url ? "B2B Partner" : "");
+  const partnerLogo = webinar.brand_logo_url;
+  const hasSponsor = (Array.isArray(webinar.sponsor_logos) && webinar.sponsor_logos.length > 0) || (Array.isArray(webinar.metadata?.sponsors) && webinar.metadata.sponsors.length > 0);
 
   const renderStatusBadge = () => {
+    if (IS_COMING_SOON_PITCH) {
+      return (
+        <span className="px-2.5 py-1 rounded-full bg-blue-600/10 text-[#0071e3] text-[8px] font-black uppercase tracking-widest border border-blue-500/20">
+          COMMENCING SOON
+        </span>
+      );
+    }
     if (isLive) {
       return (
-        <span className="px-3 py-1.5 rounded-full bg-red-500 text-white text-[9px] font-black uppercase tracking-widest animate-pulse border border-white/20">
+        <span className="px-2.5 py-1 rounded-full bg-red-600 text-white text-[8px] font-black uppercase tracking-widest animate-pulse border border-red-500/30">
           LIVE NOW
         </span>
       );
     }
     if (isRecorded) {
       return (
-        <span className="px-3 py-1.5 rounded-full bg-white/10 text-white text-[9px] font-black uppercase tracking-widest border border-white/10 backdrop-blur-md">
+        <span className="px-2.5 py-1 rounded-full bg-zinc-900/80 text-zinc-400 text-[8px] font-black uppercase tracking-widest border border-zinc-800 backdrop-blur-md">
           ARCHIVED
         </span>
       );
     }
     return (
-      <span className="px-3 py-1.5 rounded-full bg-emerald-500/80 text-black text-[9px] font-black uppercase tracking-widest">
+      <span className="px-2.5 py-1 rounded-full bg-[#0071e3] text-white text-[8px] font-black uppercase tracking-widest shadow-lg shadow-blue-500/10">
         UPCOMING
       </span>
     );
@@ -47,9 +59,10 @@ export function WebinarCard({ webinar }: Readonly<{ webinar: ExtendedWebinar }>)
   const maxSeats = webinar.max_attendees || 500;
 
   const getButtonContent = () => {
+    if (IS_COMING_SOON_PITCH) return 'Commencing Soon';
     if (!isRegistrationOpen) return 'Registration Offline';
     if (attendees >= maxSeats) return 'Capacity Reached';
-    return isLive ? 'Join Live Session' : 'Reserve Spot';
+    return isLive ? 'Join Live Stream' : 'Reserve Spot';
   };
   
   const formatDate = (iso: string) => new Date(iso).toLocaleDateString('en-US', {
@@ -58,26 +71,26 @@ export function WebinarCard({ webinar }: Readonly<{ webinar: ExtendedWebinar }>)
     year: 'numeric'
   });
 
-  const duration = "PT1H";
+  const duration = "60 MINS";
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 15 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.4 }}
+      transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
       onClick={() => navigate(`/webinars/${webinar.id}`)}
-      className="group relative rounded-[2rem] bg-white/[0.02] border border-white/5 overflow-hidden hover:border-emerald-500/35 transition-all duration-500 hover:shadow-2xl hover:shadow-emerald-500/5 cursor-pointer flex flex-col h-full"
+      className="group relative rounded-3xl bg-neutral-900/40 border border-zinc-800 hover:border-zinc-700 transition-all duration-500 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] hover:shadow-black/60 cursor-pointer flex flex-col h-full overflow-hidden"
     >
       {/* Event Cover Image */}
-      <div className="relative h-48 overflow-hidden shrink-0">
+      <div className="relative h-44 overflow-hidden shrink-0">
         <img 
           src={webinar.webinar_image_url || "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop"} 
           alt={webinar.title}
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-103"
           loading="lazy"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/40 to-transparent" />
         
         {/* Status Badge */}
         <div className="absolute top-4 left-4">
@@ -85,16 +98,16 @@ export function WebinarCard({ webinar }: Readonly<{ webinar: ExtendedWebinar }>)
         </div>
 
         {/* Co-Branding or Collaboration Badge */}
-        {webinar.co_brand_name && (
-          <div className="absolute top-4 right-4 px-2.5 py-1 rounded-full bg-gradient-to-r from-amber-500/80 to-amber-600/80 text-black text-[8px] font-black uppercase tracking-widest flex items-center gap-1.5 shadow-lg">
-            <HeartHandshake className="w-3 h-3 text-black" />
-            B2B Partner
+        {partnerName && (
+          <div className="absolute top-4 right-4 px-2.5 py-1 rounded-full bg-gradient-to-r from-amber-500/90 to-amber-600/90 text-black text-[8px] font-black uppercase tracking-widest flex items-center gap-1 shadow-lg">
+            <HeartHandshake className="w-2.5 h-2.5 text-black" />
+            Partnered
           </div>
         )}
 
         {/* Dynamic Sponsor Badge */}
-        {hasSponsor && !webinar.co_brand_name && (
-          <div className="absolute top-4 right-4 px-2.5 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md text-white/40 text-[8px] font-black uppercase tracking-widest flex items-center gap-1.5">
+        {hasSponsor && !partnerName && (
+          <div className="absolute top-4 right-4 px-2.5 py-1 rounded-full bg-zinc-900/90 border border-zinc-800 backdrop-blur-md text-zinc-500 text-[8px] font-black uppercase tracking-widest flex items-center gap-1">
             <ShieldCheck className="w-2.5 h-2.5 text-emerald-500" />
             Sponsored
           </div>
@@ -103,70 +116,70 @@ export function WebinarCard({ webinar }: Readonly<{ webinar: ExtendedWebinar }>)
 
       {/* Content Body */}
       <div className="p-6 flex-1 flex flex-col justify-between space-y-6">
-        <div className="space-y-4">
+        <div className="space-y-3">
           
           {/* Brand/Partner Collateral Display */}
-          {webinar.co_brand_name && (
-            <div className="flex items-center gap-2 border-b border-white/5 pb-2">
-              {webinar.co_brand_logo ? (
-                <img src={webinar.co_brand_logo} alt="Partner Logo" className="h-4 w-auto object-contain opacity-70" />
+          {partnerName && (
+            <div className="flex items-center gap-2 border-b border-zinc-800/60 pb-2">
+              {partnerLogo ? (
+                <img src={partnerLogo} alt="Partner Logo" className="h-3.5 w-auto object-contain opacity-80" />
               ) : (
-                <div className="w-2 h-2 rounded-full bg-amber-500" />
+                <div className="w-1.5 h-1.5 rounded-full bg-amber-500" />
               )}
-              <span className="text-[9px] font-black text-amber-400/80 uppercase tracking-[0.2em]">In Collaboration With {webinar.co_brand_name}</span>
+              <span className="text-[8px] font-bold text-amber-500/80 uppercase tracking-widest">In Collaboration With {partnerName}</span>
             </div>
           )}
 
-          <h3 className="text-xl font-black text-white leading-tight uppercase italic tracking-tighter group-hover:text-emerald-400 transition-colors">
+          <h3 className="text-lg font-black text-white leading-tight uppercase tracking-tight group-hover:text-emerald-400 transition-colors duration-300">
             {webinar.title}
           </h3>
 
-          <p className="text-xs text-white/35 leading-relaxed line-clamp-2 uppercase tracking-wide font-medium">
+          <p className="text-[11px] text-zinc-400 leading-relaxed line-clamp-2 font-medium">
             {webinar.description}
           </p>
         </div>
 
-        <div className="space-y-6 pt-4 border-t border-white/5">
+        <div className="space-y-4 pt-4 border-t border-zinc-800/60">
           {/* Metadata Grid */}
-          <div className="flex flex-wrap gap-4 text-[9px] font-mono font-bold uppercase tracking-[0.15em] text-white/55">
-            <div className="flex items-center gap-1.5">
-              <Calendar className="w-3.5 h-3.5 text-emerald-500" />
+          <div className="flex flex-wrap gap-4 text-[8px] font-mono font-bold uppercase tracking-widest text-zinc-500">
+            <div className="flex items-center gap-1">
+              <Calendar className="w-3 h-3 text-[#0071e3]" />
               <span>{formatDate(webinar.date_time)}</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5 text-emerald-500" />
+            <div className="flex items-center gap-1">
+              <Clock className="w-3 h-3 text-[#0071e3]" />
               <span>{duration}</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <Users className="w-3.5 h-3.5 text-emerald-500" />
-              <span>{attendees}/{maxSeats} Units</span>
+            <div className="flex items-center gap-1">
+              <Users className="w-3 h-3 text-[#0071e3]" />
+              <span>{attendees}/{maxSeats} Seats</span>
             </div>
           </div>
 
           {/* Lead/Speaker Info */}
-          <div className="flex items-center gap-3 pt-2">
-            <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-full ring-2 ring-emerald-500/20">
+          <div className="flex items-center gap-3 pt-1">
+            <div className="relative h-8 w-8 shrink-0 overflow-hidden rounded-full ring-1 ring-zinc-800">
               <img 
                 src={webinar.speaker_profile_url || "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=200?auto=format&fit=crop"} 
                 alt={webinar.speaker_name || "Lead Strategist"}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
               />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-[10px] font-black text-white uppercase tracking-wider truncate">
+              <p className="text-[9px] font-black text-white uppercase tracking-wider truncate">
                 {webinar.speaker_name || "Institutional Lead"}
               </p>
-              <p className="text-[8px] font-medium text-white/20 uppercase tracking-widest truncate">
+              <p className="text-[7.5px] font-bold text-zinc-500 uppercase tracking-widest truncate">
                 {webinar.speaker_role || "Senior FX Analyst"}
               </p>
             </div>
           </div>
 
           {/* CTA Actions */}
-          <div className="pt-2">
+          <div className="pt-1">
             {isRecorded ? (
               <button 
-                className="btn-secondary w-full py-3.5 text-[9px] font-black uppercase tracking-widest"
+                className="w-full py-3 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white text-[9px] font-black uppercase tracking-widest transition-all duration-300"
                 onClick={(e) => {
                   e.stopPropagation();
                   webinar.recording_url && globalThis.open(webinar.recording_url, '_blank');
@@ -176,7 +189,11 @@ export function WebinarCard({ webinar }: Readonly<{ webinar: ExtendedWebinar }>)
               </button>
             ) : (
               <button 
-                className={`w-full py-3.5 text-[9px] font-black uppercase tracking-widest ${isLive ? 'btn-primary shadow-[0_0_20px_rgba(16,185,129,0.25)]' : 'btn-primary'}`}
+                className={`w-full py-3 text-[9px] font-black uppercase tracking-widest rounded-xl transition-all duration-300 ${
+                  isLive 
+                    ? 'bg-red-600 hover:bg-red-500 text-white shadow-lg shadow-red-600/15' 
+                    : 'bg-[#0071e3] hover:bg-[#0077ed] text-white shadow-lg shadow-blue-500/10'
+                }`}
                 disabled={!isRegistrationOpen || attendees >= maxSeats}
                 onClick={(e) => {
                   e.stopPropagation();

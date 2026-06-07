@@ -13,7 +13,9 @@ interface Webinar {
   description: string;
   date_time: string;
   speaker_name: string;
+  speaker_role?: string;
   speaker_profile_url: string;
+  speaker_images?: string[];
   brand_logo_url: string;
   webinar_image_url: string;
   about_content: string;
@@ -43,7 +45,9 @@ const EMPTY_FORM = {
   description: "",
   dateTime: "",
   speaker: "",
+  speakerRole: "",
   speakerProfileUrl: "",
+  speakerImages: "",
   brandLogoUrl: "",
   webinarImageUrl: "",
   aboutContent: "",
@@ -113,7 +117,9 @@ export const WebinarManager = () => {
       description: w.description || "",
       dateTime: w.date_time ? new Date(w.date_time).toISOString().slice(0, 16) : "",
       speaker: w.speaker_name || "",
+      speakerRole: w.speaker_role || "",
       speakerProfileUrl: w.speaker_profile_url || "",
+      speakerImages: Array.isArray(w.speaker_images) ? w.speaker_images.join(", ") : "",
       brandLogoUrl: w.brand_logo_url || "",
       webinarImageUrl: w.webinar_image_url || "",
       aboutContent: w.about_content || "",
@@ -142,7 +148,11 @@ export const WebinarManager = () => {
       description: form.description,
       date_time: new Date(form.dateTime).toISOString(),
       speaker_name: form.speaker,
+      speaker_role: form.speakerRole,
       speaker_profile_url: form.speakerProfileUrl,
+      speaker_images: form.speakerImages
+        ? form.speakerImages.split(",").map(s => s.trim()).filter(Boolean)
+        : [],
       brand_logo_url: form.brandLogoUrl,
       webinar_image_url: form.webinarImageUrl,
       about_content: form.aboutContent,
@@ -295,14 +305,24 @@ export const WebinarManager = () => {
           </div>
 
           {/* Row 3: Speaker + Max Attendees */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="space-y-2">
               <label htmlFor="session-speaker" className="text-[9px] font-black uppercase tracking-[0.25em] text-gray-500">Speaker Name</label>
               <input
                 id="session-speaker"
                 type="text" value={form.speaker}
                 onChange={e => setForm(f => ({ ...f, speaker: e.target.value }))}
-                placeholder="e.g. Vikram Shah"
+                placeholder="e.g. Evelyn Sterling"
+                className="w-full bg-black border border-white/5 rounded-2xl p-4 text-white text-sm outline-none transition-all placeholder:text-zinc-700"
+              />
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="session-speaker-role" className="text-[9px] font-black uppercase tracking-[0.25em] text-gray-500">Speaker Role</label>
+              <input
+                id="session-speaker-role"
+                type="text" value={form.speakerRole}
+                onChange={e => setForm(f => ({ ...f, speakerRole: e.target.value }))}
+                placeholder="e.g. Chief Macro Strategist"
                 className="w-full bg-black border border-white/5 rounded-2xl p-4 text-white text-sm outline-none transition-all placeholder:text-zinc-700"
               />
             </div>
@@ -404,16 +424,30 @@ export const WebinarManager = () => {
               </div>
             </div>
 
-            <div className="space-y-2">
-              <label htmlFor="sponsor-logos" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Co-Sponsor Logos (Comma Separated)</label>
-              <textarea
-                id="sponsor-logos"
-                rows={2}
-                value={form.sponsorLogos}
-                onChange={e => setForm(f => ({ ...f, sponsorLogos: e.target.value }))}
-                placeholder="https://broker1.png, https://broker2.png"
-                className="w-full bg-black/60 border border-white/5 rounded-xl p-3.5 text-xs text-white outline-none focus:border-emerald-500/50 transition-all resize-none"
-              />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-2">
+                <label htmlFor="sponsor-logos" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Co-Sponsor Logos (Comma Separated)</label>
+                <textarea
+                  id="sponsor-logos"
+                  rows={2}
+                  value={form.sponsorLogos}
+                  onChange={e => setForm(f => ({ ...f, sponsorLogos: e.target.value }))}
+                  placeholder="https://broker1.png, https://broker2.png"
+                  className="w-full bg-black/60 border border-white/5 rounded-xl p-3.5 text-xs text-white outline-none focus:border-emerald-500/50 transition-all resize-none"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="speaker-images" className="text-[9px] font-black uppercase tracking-widest text-gray-500 px-1">Speaker Showcase Images (Comma Separated)</label>
+                <textarea
+                  id="speaker-images"
+                  rows={2}
+                  value={form.speakerImages}
+                  onChange={e => setForm(f => ({ ...f, speakerImages: e.target.value }))}
+                  placeholder="https://speaker-image1.jpg, https://speaker-image2.jpg"
+                  className="w-full bg-black/60 border border-white/5 rounded-xl p-3.5 text-xs text-white outline-none focus:border-cyan-500/50 transition-all resize-none"
+                />
+              </div>
             </div>
           </div>
 

@@ -66,8 +66,10 @@ export interface Webinar {
   sponsors?: WebinarSponsor[];
   metadata?: {
     partner_name?: string;
+    co_brand_name?: string;
     learning_points?: string[];
     author_bio?: string;
+    sponsors?: any[];
   };
 }
 
