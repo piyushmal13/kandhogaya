@@ -14,6 +14,7 @@ import { supabase } from "../lib/supabase";
 import { useWebinar } from "../hooks/useWebinars";
 import { VideoPlayer } from "../components/institutional/VideoPlayer";
 import { Webinar } from "../types";
+import { ComingSoonWebinar } from "./ComingSoonWebinar";
 
 // ── FLOATING LIVE COUNTDOWN TIMER ──
 const WebinarCountdown = ({ dateTime }: { dateTime: string }) => {
@@ -95,6 +96,11 @@ export const WebinarDetail = () => {
   const queryClient = useQueryClient();
   const { data: webinarData, isLoading: loading } = useWebinar(id);
   const webinar = webinarData as ExtendedWebinar | undefined;
+
+  // If Pitch Mode is active, bypass specific webinar lookup and render the holding page
+  if (IS_COMING_SOON_PITCH) {
+    return <ComingSoonWebinar />;
+  }
 
   const [isRegistered, setIsRegistered] = useState(false);
   const [registering, setRegistering] = useState(false);

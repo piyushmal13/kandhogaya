@@ -219,56 +219,73 @@ export const Marketplace = () => {
         path="/marketplace"
       />
 
-      <div className="max-w-[1440px] mx-auto px-5 sm:px-12 space-y-10 sm:space-y-16">
-        {/* Header Block: Title & Controls Stack */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 sm:gap-12">
-          {/* Left side: Heading */}
-          <div className="space-y-4 sm:space-y-6 flex-1 text-left">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-emerald-500/[0.04] border border-emerald-500/[0.15] text-emerald-400 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] w-fit"
-            >
-              Algorithm Marketplace
-            </motion.div>
-            <h1 className="text-3xl sm:text-5xl md:text-7xl font-black mb-4 sm:mb-6 text-white tracking-tight leading-[0.95] uppercase italic">
-              Institutional <br />
-              <span className="text-emerald-400">Algorithms.</span>
-            </h1>
-            <p className="text-sm sm:text-base md:text-lg text-zinc-500 max-w-2xl font-medium leading-relaxed">
-              Browse our collection of proven algorithmic trading systems. Each algorithm comes with full performance data, backtesting results, and detailed documentation.
-            </p>
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 space-y-12 sm:space-y-24 relative z-10">
+        {/* Apple-Style Hero Block */}
+        <div className="flex flex-col items-center text-center max-w-5xl mx-auto space-y-6 sm:space-y-10 pt-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-black/40 backdrop-blur-2xl border border-white/10 text-white/80 text-[10px] font-black uppercase tracking-[0.3em] shadow-[0_0_30px_rgba(255,255,255,0.05)]"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            Institutional Marketplace
+          </motion.div>
+          
+          <motion.h1 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            className="text-5xl sm:text-7xl md:text-[6.5rem] font-black mb-4 sm:mb-6 text-white tracking-tighter leading-[0.85] uppercase"
+          >
+            Algorithmic <br className="hidden sm:block" />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500">Perfection.</span>
+          </motion.h1>
+          
+          <motion.p 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            className="text-sm sm:text-lg md:text-xl text-zinc-400 max-w-3xl font-medium leading-relaxed"
+          >
+            Deploy elite systematic execution models and macro intelligence tools. Every asset is audited, backtested, and optimized for latency-free institutional deployment.
+          </motion.p>
+        </div>
+
+        {/* High-End Glassmorphic Control Bar */}
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          className="bg-black/60 backdrop-blur-3xl border border-white/10 rounded-[2rem] p-4 sm:p-6 shadow-2xl flex flex-col lg:flex-row items-center justify-between gap-6"
+        >
+          <div className="flex w-full lg:w-auto p-1.5 bg-white/[0.03] border border-white/5 rounded-2xl shrink-0">
+            {categories.map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.id)}
+                className={`flex-1 sm:flex-none px-6 sm:px-8 py-3.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 cursor-pointer ${
+                  activeCategory === cat.id
+                     ? "bg-white text-black shadow-lg"
+                     : "text-zinc-500 hover:text-white hover:bg-white/5"
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
           </div>
 
-          {/* Right side: Catalog Controls */}
-          <div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto shrink-0">
-            <div className="relative w-full sm:flex-1 lg:w-80 group">
-              <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-emerald-500 transition-colors" />
-              <input
-                type="text"
-                placeholder="Search Asset..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-zinc-900/30 border border-zinc-800/80 rounded-xl sm:rounded-2xl py-3.5 sm:py-4 pl-12 pr-6 text-xs sm:text-sm text-white placeholder:text-zinc-700 focus:outline-none focus:border-zinc-700 focus:bg-zinc-950 transition-all font-medium"
-              />
-            </div>
-            <div className="flex w-full sm:w-auto p-1.5 bg-zinc-900/40 border border-zinc-800 rounded-xl sm:rounded-2xl shrink-0">
-              {categories.map((cat) => (
-                <button
-                  key={cat.id}
-                  onClick={() => setActiveCategory(cat.id)}
-                  className={`flex-1 sm:flex-none px-4 sm:px-6 py-2.5 rounded-lg sm:rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-widest transition-all cursor-pointer ${
-                    activeCategory === cat.id
-                       ? "bg-emerald-500 text-black"
-                       : "text-zinc-500 hover:text-white hover:bg-white/5"
-                  }`}
-                >
-                  {cat.label}
-                </button>
-              ))}
-            </div>
+          <div className="relative w-full lg:w-[400px] group">
+            <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 group-focus-within:text-white transition-colors duration-300" />
+            <input
+              type="text"
+              placeholder="Search Execution Models..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full bg-white/[0.03] border border-white/5 rounded-2xl py-4 pl-14 pr-6 text-xs sm:text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-white/20 focus:bg-white/[0.06] transition-all duration-300 font-medium"
+            />
           </div>
-        </div>
+        </motion.div>
 
         {/* High-Resolution Inline Preview for SEO / Google Ads */}
         <div className="relative rounded-[2rem] sm:rounded-[3.5rem] overflow-hidden border border-zinc-800 bg-[#0e1428]/10 group transition-all duration-700 hover:border-emerald-500/20 w-full shadow-2xl">

@@ -68,15 +68,18 @@ export const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({ products, isLo
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-12">
-      {products.map((product, index) => (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-10">
+      {products.map((product, index) => {
+        const isFeatured = index === 0 && products.length > 2;
+
+        return (
         <motion.article
           key={product.id}
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 1, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
-          className="group relative perspective-deep"
+          className={cn("group relative perspective-deep", isFeatured ? "md:col-span-2 lg:col-span-3" : "")}
         >
           {/* Card Container - 3D Tilt Wrapper */}
           <motion.div 
@@ -118,30 +121,38 @@ export const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({ products, isLo
             </div>
 
             {/* Asset Content */}
-            <div className="flex-1 space-y-4 sm:space-y-8">
-              <h3 className="text-xl sm:text-4xl font-black text-white leading-none uppercase tracking-tighter group-hover:text-emerald-400 transition-colors">
+            <div className="flex-1 space-y-4 sm:space-y-6">
+              <h3 className={cn("font-black text-white leading-none uppercase tracking-tighter group-hover:text-emerald-400 transition-colors", isFeatured ? "text-4xl sm:text-6xl md:text-7xl" : "text-2xl sm:text-4xl")}>
                 {product.name}
               </h3>
               
-              <p className="text-white/30 text-xs sm:text-base leading-relaxed line-clamp-3 font-medium">
+              <p className={cn("text-white/40 leading-relaxed font-medium", isFeatured ? "text-sm sm:text-lg max-w-2xl" : "text-xs sm:text-base line-clamp-3")}>
                 {product.description || "Institutional grade execution model designed for liquid indices and global currency markets."}
               </p>
 
               {/* Advanced Performance Analytics */}
               {product.type === 'algorithm' && product.performance && (
-                <div className="grid grid-cols-2 gap-4 sm:gap-8 py-4 sm:py-8 border-y border-white/5 my-4 sm:my-10 bg-white/[0.01] px-4 sm:px-6 rounded-xl sm:rounded-3xl">
+                <div className={cn("grid gap-4 sm:gap-8 py-4 sm:py-6 border-y border-white/5 my-4 sm:my-8 bg-white/[0.01] px-4 sm:px-6 rounded-xl sm:rounded-3xl", isFeatured ? "grid-cols-3" : "grid-cols-2")}>
                   <div className="space-y-1 sm:space-y-2">
-                    <span className="text-[7px] sm:text-[9px] font-black text-white/20 uppercase tracking-[0.25em]">Alpha Rate</span>
-                    <div className="text-lg sm:text-3xl font-black text-emerald-400 font-mono">
+                    <span className="text-[8px] sm:text-[10px] font-black text-zinc-500 uppercase tracking-[0.25em]">Alpha Rate</span>
+                    <div className={cn("font-black text-emerald-400 font-mono tracking-tighter", isFeatured ? "text-3xl sm:text-5xl" : "text-xl sm:text-3xl")}>
                       {product.performance.winRate}%
                     </div>
                   </div>
                   <div className="space-y-1 sm:space-y-2">
-                    <span className="text-[7px] sm:text-[9px] font-black text-white/20 uppercase tracking-[0.25em]">Target CAGR</span>
-                    <div className="text-lg sm:text-3xl font-black text-white font-mono">
+                    <span className="text-[8px] sm:text-[10px] font-black text-zinc-500 uppercase tracking-[0.25em]">Target CAGR</span>
+                    <div className={cn("font-black text-white font-mono tracking-tighter", isFeatured ? "text-3xl sm:text-5xl" : "text-xl sm:text-3xl")}>
                       {product.performance.monthlyReturn || '12.4'}%
                     </div>
                   </div>
+                  {isFeatured && (
+                    <div className="space-y-1 sm:space-y-2 hidden sm:block">
+                      <span className="text-[8px] sm:text-[10px] font-black text-zinc-500 uppercase tracking-[0.25em]">Sharpe</span>
+                      <div className="text-3xl sm:text-5xl font-black text-white font-mono tracking-tighter">
+                        {product.performance.sharpe || '2.1'}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -184,7 +195,8 @@ export const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({ products, isLo
           {/* Ambient Perspective Glow */}
           <div className="absolute -inset-4 bg-emerald-500/10 blur-[100px] rounded-full opacity-0 group-hover:opacity-40 transition-all duration-1000 -z-10" />
         </motion.article>
-      ))}
+        );
+      })}
     </div>
   );
 };
