@@ -49,18 +49,74 @@ export const Webinars = () => {
             </p>
           </div>
 
-          {/* High-Resolution Inline Banner for SEO / Google Ads */}
-          <div className="relative rounded-[2rem] sm:rounded-[3.5rem] overflow-hidden border border-white/5 bg-[#0e1428]/25 group transition-all duration-700 hover:border-emerald-500/25 max-w-4xl mx-auto">
-             <img 
-               src="/webinar_masterclass.png" 
-               alt="IFX Systematic Masterclass Series & Live Macro Strategy Broadcast" 
-               className="w-full h-auto object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700" 
-             />
-             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
-             <div className="absolute bottom-6 left-6 sm:bottom-10 sm:left-10 text-left space-y-1 sm:space-y-2">
-                <span className="text-[7px] sm:text-[9px] font-mono font-black text-emerald-400 uppercase tracking-[0.3em]">Co-location Node Live Broadcast</span>
-                <h4 className="text-sm sm:text-2xl font-black text-white uppercase tracking-tighter">Systematic Execution Syllabus</h4>
-             </div>
+          {/* Executive Webinar Schedule & Operational Status Desk */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-5xl mx-auto bg-[#04060A]/80 border border-white/5 rounded-3xl p-6 sm:p-8 backdrop-blur-md">
+            {/* Column 1 & 2: Syllabus & Structure */}
+            <div className="lg:col-span-2 space-y-6 text-left">
+              <div className="border-b border-white/5 pb-4">
+                <span className="text-[8px] font-mono font-black text-[#00A3FF] uppercase tracking-widest">Masterclass Protocol Scope</span>
+                <h3 className="text-xl font-black text-white uppercase italic mt-1">Structured Systematic Syllabus</h3>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="p-4 bg-white/[0.01] border border-white/[0.03] rounded-2xl">
+                  <h4 className="text-[10px] font-black text-white uppercase tracking-wider mb-2">ATR Volatility Filtering</h4>
+                  <p className="text-[10px] text-gray-500 leading-relaxed uppercase tracking-wider font-bold">
+                    Classifying average true range parameters to adjust systematic targets dynamically.
+                  </p>
+                </div>
+                <div className="p-4 bg-white/[0.01] border border-white/[0.03] rounded-2xl">
+                  <h4 className="text-[10px] font-black text-white uppercase tracking-wider mb-2">Compiled Binary Handover</h4>
+                  <p className="text-[10px] text-gray-500 leading-relaxed uppercase tracking-wider font-bold">
+                    Direct integration of MT5 EX5 files and custom API endpoints on client hosting servers.
+                  </p>
+                </div>
+                <div className="p-4 bg-white/[0.01] border border-white/[0.03] rounded-2xl">
+                  <h4 className="text-[10px] font-black text-white uppercase tracking-wider mb-2">Sovereign Compliance</h4>
+                  <p className="text-[10px] text-gray-500 leading-relaxed uppercase tracking-wider font-bold">
+                    Enforcing zero client capital custody models across all signal and webinar pipelines.
+                  </p>
+                </div>
+                <div className="p-4 bg-white/[0.01] border border-white/[0.03] rounded-2xl">
+                  <h4 className="text-[10px] font-black text-white uppercase tracking-wider mb-2">Order Book Liquidity</h4>
+                  <p className="text-[10px] text-gray-500 leading-relaxed uppercase tracking-wider font-bold">
+                    Mapping matching engine queue prioritizations inside Equinix NY4 and LD4 centers.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Column 3: Live Emergency / Update Feed */}
+            <div className="bg-black/40 border border-white/5 rounded-2xl p-6 flex flex-col justify-between min-h-[240px]">
+              <div>
+                <div className="flex items-center justify-between border-b border-white/5 pb-3 mb-4">
+                  <div className="flex items-center gap-2">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500" />
+                    </span>
+                    <span className="text-[10px] font-mono font-black text-white uppercase tracking-wider">Broadcast Feeds</span>
+                  </div>
+                  <span className="text-[8px] font-mono text-gray-500 uppercase">SYS: ACTIVE</span>
+                </div>
+                <div className="space-y-4 font-mono text-[9px] text-[#00E5FF] text-left leading-normal">
+                  <div className="border-l-2 border-red-500/50 pl-2">
+                    <p className="text-[8px] text-gray-500 font-bold">07:22 UTC - URGENT</p>
+                    <p className="text-white/80">Sovereignty models updated. Verify sitemap and sitemap.xml endpoints.</p>
+                  </div>
+                  <div className="border-l-2 border-blue-500/50 pl-2">
+                    <p className="text-[8px] text-gray-500 font-bold">06:15 UTC - UPDATE</p>
+                    <p className="text-white/80">Equinix SG1 cross-connect active. Signal latency averages &lt;1.2ms.</p>
+                  </div>
+                  <div className="border-l-2 border-green-500/50 pl-2">
+                    <p className="text-[8px] text-gray-500 font-bold">04:30 UTC - SYNC</p>
+                    <p className="text-white/80">Bespoke MT5 compiled indicator distributions successfully synchronized.</p>
+                  </div>
+                </div>
+              </div>
+              <div className="pt-4 border-t border-white/5 text-[8px] font-mono text-gray-500 uppercase tracking-widest text-center">
+                Last Refresh: Just Now
+              </div>
+            </div>
           </div>
 
           {/* Institutional Trust Badges */}

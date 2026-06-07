@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "motion/react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ShieldCheck, ShieldAlert } from "lucide-react";
 import { Link } from "react-router-dom";
 import { EliteButton } from "../ui/Button";
 
@@ -196,6 +196,93 @@ export const OperationalPillars: React.FC<OperationalPillarsProps> = ({ onReques
             </motion.div>
           ))}
         </div>
+
+        {/* B2B Operational Scope & Compliance Division Grid */}
+        <div className="mt-16 md:mt-24 pt-12 border-t border-white/[0.04] grid grid-cols-1 lg:grid-cols-2 gap-8 text-left">
+          {/* Section 1: Core Operations */}
+          <div className="bg-[#05070a]/60 border border-white/[0.04] rounded-[2rem] p-8 backdrop-blur-md relative overflow-hidden flex flex-col justify-between">
+            <div>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-xl bg-[#00A3FF]/10 border border-[#00A3FF]/20 flex items-center justify-center text-[#00A3FF]">
+                  <ShieldCheck className="w-5 h-5" />
+                </div>
+                <div>
+                  <span className="text-[8px] font-mono tracking-[0.25em] text-[#00A3FF] uppercase font-black block">Fulfillment Directives</span>
+                  <h3 className="text-lg font-black uppercase text-white tracking-tight mt-0.5">Core Operational Scope</h3>
+                </div>
+              </div>
+              <ul className="space-y-4">
+                <li className="flex gap-3">
+                  <span className="text-emerald-400 font-mono text-xs font-black">✓</span>
+                  <div>
+                    <h5 className="text-[11px] font-black uppercase text-white tracking-wider">Systematic Software Licensing</h5>
+                    <p className="text-[10px] text-white/40 leading-relaxed font-bold uppercase tracking-wider mt-0.5">Handover of compiled MT5 EX5 binaries, volatility scripts, and custom execution algorithms directly to client environments.</p>
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-emerald-400 font-mono text-xs font-black">✓</span>
+                  <div>
+                    <h5 className="text-[11px] font-black uppercase text-white tracking-wider">Bespoke Engineering Desk</h5>
+                    <p className="text-[10px] text-white/40 leading-relaxed font-bold uppercase tracking-wider mt-0.5">Custom development of low-latency FIX API bridge routers, systematic indicators, and drawdown safety layers on a project-by-project contract basis.</p>
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-emerald-400 font-mono text-xs font-black">✓</span>
+                  <div>
+                    <h5 className="text-[11px] font-black uppercase text-white tracking-wider">Broker & Liquidity Integrations</h5>
+                    <p className="text-[10px] text-white/40 leading-relaxed font-bold uppercase tracking-wider mt-0.5">Partnership protocols with brokerage houses, including global outsourced developer staffing, liquidity bridge custom configurations, and margin education program setups.</p>
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-emerald-400 font-mono text-xs font-black">✓</span>
+                  <div>
+                    <h5 className="text-[11px] font-black uppercase text-white tracking-wider">Quantitative Research & Webinars</h5>
+                    <p className="text-[10px] text-white/40 leading-relaxed font-bold uppercase tracking-wider mt-0.5">Publishing factual market structure models, ATR regime analysis spreadsheets, and hosting developer masterclasses for active clients.</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Section 2: Exclusions */}
+          <div className="bg-[#05070a]/60 border border-white/[0.04] rounded-[2rem] p-8 backdrop-blur-md relative overflow-hidden flex flex-col justify-between">
+            <div>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-500">
+                  <ShieldAlert className="w-5 h-5" />
+                </div>
+                <div>
+                  <span className="text-[8px] font-mono tracking-[0.25em] text-amber-500/80 uppercase font-black block">Regulatory Purge</span>
+                  <h3 className="text-lg font-black uppercase text-white tracking-tight mt-0.5">Explicit Scope Exclusions</h3>
+                </div>
+              </div>
+              <ul className="space-y-4">
+                <li className="flex gap-3">
+                  <span className="text-amber-500 font-mono text-xs font-black">✕</span>
+                  <div>
+                    <h5 className="text-[11px] font-black uppercase text-white tracking-wider">No Capital Custody or Deposits</h5>
+                    <p className="text-[10px] text-white/40 leading-relaxed font-bold uppercase tracking-wider mt-0.5">We do NOT accept trader deposits, execute account funding, or manage client capital. All operations are run strictly inside clients' self-hosted environments.</p>
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-amber-500 font-mono text-xs font-black">✕</span>
+                  <div>
+                    <h5 className="text-[11px] font-black uppercase text-white tracking-wider">No Brokerage or Clearing Affiliations</h5>
+                    <p className="text-[10px] text-white/40 leading-relaxed font-bold uppercase tracking-wider mt-0.5">We are NOT a broker, clearinghouse, custodian, or financial intermediary. Clients maintain complete autonomy over their choice of execution counterparties.</p>
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-amber-500 font-mono text-xs font-black">✕</span>
+                  <div>
+                    <h5 className="text-[11px] font-black uppercase text-white tracking-wider">No Investment or Trade Advising</h5>
+                    <p className="text-[10px] text-white/40 leading-relaxed font-bold uppercase tracking-wider mt-0.5">We do NOT provide retail trade recommendations, financial advice, or speculative return forecasts. All materials are delivered for educational and research parameters only.</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
   );
