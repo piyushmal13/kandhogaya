@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "motion/react";
-import { ArrowRight, ChevronDown, Play, ShieldCheck, Zap, Globe, Timer, Lock, Server, Cpu } from "lucide-react";
+import { ArrowRight, ChevronDown, Play, ShieldCheck, Zap, Globe, Timer, Lock, Server } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const EASING = [0.4, 0, 0.2, 1] as const;
@@ -315,97 +315,6 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
                 </EliteButton>
               </button>
             </motion.div>
-
-            {/* Quantitative Intel & lead-capture download deck */}
-            <div className="w-full max-w-5xl mx-auto pt-10 border-t border-white/[0.04] z-30 text-left select-text">
-              <div className="mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-2">
-                <div>
-                  <h3 className="text-[9px] font-mono tracking-[0.25em] text-[#00A3FF] uppercase font-black">Institutional Resources</h3>
-                  <h2 className="text-xl font-black uppercase text-white tracking-tight italic mt-1">Complimentary Systems & Audited Reports</h2>
-                </div>
-                <span className="text-[8px] font-mono text-gray-500 uppercase tracking-widest hidden sm:inline">Download Limit: Unrestricted</span>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                
-                {/* Download 1: MT5 Indicator */}
-                <div className="bg-[#04060A]/85 border border-white/[0.04] rounded-3xl p-6 flex flex-col justify-between backdrop-blur-md relative overflow-hidden hover:border-[#00A3FF]/30 transition-all duration-300 min-h-[190px]">
-                  <div className="absolute top-0 right-0 p-3 opacity-[0.03] pointer-events-none">
-                    <Cpu className="w-16 h-16 text-white" />
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2 mb-3">
-                      <Cpu className="w-4 h-4 text-[#00E5FF]" />
-                      <span className="text-[10px] font-black uppercase tracking-wider text-white">ATR Volatility Regime Filter</span>
-                    </div>
-                    <p className="text-[10.5px] text-white/45 font-bold uppercase tracking-wider leading-relaxed mb-4">
-                      Proprietary MT5 indicator compiled to map average true range bands directly on local charts. Purges noise from standard execution paths.
-                    </p>
-                  </div>
-                  <a href="/downloads/IFX_ATR_Regime.ex5" download className="block mt-auto">
-                    <button className="w-full py-3 bg-[#00A3FF]/15 border border-[#00A3FF]/30 hover:bg-[#00A3FF]/25 hover:border-[#00A3FF]/50 text-[#00E5FF] rounded-xl text-[9px] font-mono font-black uppercase tracking-widest transition-all text-center cursor-pointer">
-                      Download Binary (.ex5)
-                    </button>
-                  </a>
-                </div>
-
-                {/* Download 2: Liquidity Factsheet */}
-                <div className="bg-[#04060A]/85 border border-white/[0.04] rounded-3xl p-6 flex flex-col justify-between backdrop-blur-md relative overflow-hidden hover:border-[#00A3FF]/30 transition-all duration-300 min-h-[190px]">
-                  <div className="absolute top-0 right-0 p-3 opacity-[0.03] pointer-events-none">
-                    <Timer className="w-16 h-16 text-white" />
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2 mb-3">
-                      <Timer className="w-4 h-4 text-[#00E5FF]" />
-                      <span className="text-[10px] font-black uppercase tracking-wider text-white">2026 ECN Liquidity Factsheet</span>
-                    </div>
-                    <p className="text-[10.5px] text-white/45 font-bold uppercase tracking-wider leading-relaxed mb-4">
-                      A facts-first structural analysis comparing retail broker processing with institutional matching engines in Equinix NY4 and LD4.
-                    </p>
-                  </div>
-                  <a href="/downloads/IFX_Liquidity_Factsheet_2026.pdf" download className="block mt-auto">
-                    <button className="w-full py-3 bg-[#00A3FF]/15 border border-[#00A3FF]/30 hover:bg-[#00A3FF]/25 hover:border-[#00A3FF]/50 text-[#00E5FF] rounded-xl text-[9px] font-mono font-black uppercase tracking-widest transition-all text-center cursor-pointer">
-                      Download Factsheet (PDF)
-                    </button>
-                  </a>
-                </div>
-
-                {/* Download 3: Audit Report */}
-                <div className="bg-[#04060A]/85 border border-white/[0.04] rounded-3xl p-6 flex flex-col justify-between backdrop-blur-md relative overflow-hidden hover:border-[#00A3FF]/30 transition-all duration-300 min-h-[190px]">
-                  <div className="absolute top-0 right-0 p-3 opacity-[0.03] pointer-events-none">
-                    <ShieldCheck className="w-16 h-16 text-white" />
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2 mb-3">
-                      <ShieldCheck className="w-4 h-4 text-[#00E5FF]" />
-                      <span className="text-[10px] font-black uppercase tracking-wider text-white">Systematic Backtest Audits</span>
-                    </div>
-                    <p className="text-[10.5px] text-white/45 font-bold uppercase tracking-wider leading-relaxed mb-4">
-                      Full historical CSV data files showing simulated drawdown periods, profit factors, and trade distributions modeled on 99.9% real tick accuracy.
-                    </p>
-                  </div>
-                  <a href="/downloads/IFX_Backtest_Audit.zip" download className="block mt-auto">
-                    <button className="w-full py-3 bg-[#00A3FF]/15 border border-[#00A3FF]/30 hover:bg-[#00A3FF]/25 hover:border-[#00A3FF]/50 text-[#00E5FF] rounded-xl text-[9px] font-mono font-black uppercase tracking-widest transition-all text-center cursor-pointer">
-                      Download Audit Package (ZIP)
-                    </button>
-                  </a>
-                </div>
-
-              </div>
-            </div>
-
-            {/* Smallest Star Footnote */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0.08 }}
-              whileHover={{ opacity: 0.8 }}
-              transition={{ delay: 0.7, duration: 0.5 }}
-              className="text-[5px] sm:text-[6px] text-white/40 tracking-widest uppercase font-mono transition-opacity select-none cursor-help pt-2"
-              title="VPS Promotion: Complimentary ultra-low latency VPS server setup is available for all active funded clients. Detailed requirements and conditions are specified in our official Terms of Service."
-            >
-              *Complimentary partner server programs. Terms apply.
-            </motion.div>
-
           </div>
       </div>
 
