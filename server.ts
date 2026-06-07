@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 import helmet from "helmet";
 import compression from "compression";
 import fs from "node:fs";
+import { injectMetaTags } from "./src/utils/seoRoutes";
 
 // Modular Imports
 import { config, logger } from "./api/config";
@@ -58,6 +59,7 @@ async function startServer() {
   // Infrastructure Fulfillment
   apiRouter.post("/license/validate", sensitiveLimiter, LicenseController.validateLicense);
   apiRouter.post("/custom-request", RequestController.submitDeepCoding);
+  apiRouter.post("/ai/advisor", sensitiveLimiter, RequestController.askAiAdvisor);
 
   // Administrative Command
   apiRouter.get("/admin/stats", authenticate, AdminController.getDashboardStats);
@@ -114,7 +116,9 @@ async function startServer() {
     app.get("*", (req, res) => {
       const indexPath = path.join(distPath, "index.html");
       if (fs.existsSync(indexPath)) {
-        res.send(fs.readFileSync(indexPath, 'utf8'));
+        let html = fs.readFileSync(indexPath, 'utf8');
+        html = injectMetaTags(html, req.originalUrl);
+        res.send(html);
       } else {
         res.status(404).send("Protocol Error: Index Manifest Missing");
       }
@@ -127,6 +131,7 @@ async function startServer() {
         const indexPath = path.join(__dirname, "index.html");
         let html = fs.readFileSync(indexPath, 'utf8');
         html = await vite.transformIndexHtml(req.originalUrl, html);
+        html = injectMetaTags(html, req.originalUrl);
         res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
       } catch (e) { next(e); }
     });

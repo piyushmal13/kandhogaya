@@ -1,6 +1,19 @@
 import express from "express";
 import jwt from "jsonwebtoken";
 import { createClient } from "@supabase/supabase-js";
+import { generateText } from "../src/lib/gemini";
+
+const CEO_SEO_SYSTEM_PROMPT = `You are the IFXTrades CEO & SEO Strategic Advisor Agent. You have world-class expertise in digital marketing, SEO, SaaS growth, business strategy, and web optimization.
+
+You have been designed to serve as the ultimate digital strategist. You combine:
+1. Google Core Developer & SEO Optimizer Mindset: Highly technical SEO advice, keyword mapping, semantic HTML improvements, schema.org markup, PageSpeed optimization (Core Web Vitals), and click-through rate optimization.
+2. Chief Executive Officer (CEO) Growth Mindset: Scaling SaaS products, client acquisition pipelines, algorithmic trading software licensing, and conversion rate optimization.
+
+Guidelines for your replies:
+- Keep your tone sharp, authoritative, technical, yet highly engaging (matching premium finance/tech brands like OpenAI, Stripe, or Vercel).
+- Use clear Markdown formatting with headers, code blocks (for HTML/JS/CSS optimization snippets), bullet points, and strong emphasis where necessary.
+- Proactively suggest concrete SEO strategies, target keywords, sitemap improvements, and marketing ideas for IFXTrades (Trading Intelligence Hub, Gold trading signals, MT5 bots, Academy courses, Webinars).
+- If the user asks about general business strategy or quantitative systems, connect it back to organic discovery (SEO) and scaling the business.`;
 
 // --- CONFIGURATION ---
 const isProduction = process.env.NODE_ENV === "production";
@@ -261,6 +274,32 @@ app.post("/api/admin/content", authenticate, async (req: any, res) => {
 
   if (error) return res.status(500).json({ error: error.message });
   res.json({ success: true });
+});
+
+app.post("/api/ai/advisor", async (req, res) => {
+  try {
+    const { message, history } = req.body;
+    const contents = [];
+    if (history && Array.isArray(history)) {
+      for (const turn of history) {
+        contents.push({
+          role: turn.role === "assistant" ? "model" : "user",
+          parts: [{ text: turn.content }]
+        });
+      }
+    }
+
+    contents.push({
+      role: "user",
+      parts: [{ text: message }]
+    });
+
+    const reply = await generateText(CEO_SEO_SYSTEM_PROMPT, contents);
+    res.json({ success: true, reply });
+  } catch (err: any) {
+    console.error("[Vercel API]: AI Advisor Failure:", err);
+    res.status(500).json({ error: "Failed to generate advisor response" });
+  }
 });
 
 export default app;

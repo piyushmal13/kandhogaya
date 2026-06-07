@@ -17,5 +17,20 @@ export const RequestController = {
       logger.error({ err: err.message, body: req.body }, "RequestController.submitDeepCoding Failure");
       next(err);
     }
+  },
+
+  /**
+   * Handles AI CEO & SEO advisor chat sessions.
+   */
+  askAiAdvisor: async (req: any, res: Response, next: NextFunction) => {
+    try {
+      const { message, history } = req.body;
+      const result = await RequestService.askAiAdvisor(message, history);
+      res.json(result);
+    } catch (err: any) {
+      logger.error({ err: err.message, body: req.body }, "RequestController.askAiAdvisor Failure");
+      next(err);
+    }
   }
 };
+

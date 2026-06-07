@@ -22,6 +22,21 @@ export const routeMetaMap: Record<string, RouteMeta> = {
       "Institutional-grade algorithmic trading, live signals, trader education, and market intelligence for serious retail execution.",
     keywords: `${BASE_KEYWORDS}, forex trading platform, live trading signals, automated trading bots`,
   },
+  "/solutions": {
+    title: "Institutional Solutions | Bespoke Algorithmic Engineering | IFXTrades",
+    description: "Asia's #1 B2B quantitative engineering hub. Custom algorithmic development, systematic software licensing, and private strategic consulting.",
+    keywords: `${BASE_KEYWORDS}, custom algorithmic trading bot, MT5 expert advisor development, private quant consulting`,
+  },
+  "/solutions/custom": {
+    title: "Deep Coding Terminal | IFXTrades",
+    description: "Access the IFXTrades Deep Coding Terminal. Submit custom high-frequency execution and systematic algorithmic development specifications.",
+    keywords: `${BASE_KEYWORDS}, deep coding, custom trading software, custom MT5 systems`,
+  },
+  "/solutions/seo-agent": {
+    title: "AI CEO & SEO Strategic Advisor Agent | IFXTrades",
+    description: "Consult with our advanced AI CEO & SEO Strategic Advisor. Generate quantitative growth plans, keyword optimizations, and SEO intelligence in real-time.",
+    keywords: `${BASE_KEYWORDS}, AI SEO optimization, AI business strategist, organic growth simulator`,
+  },
   "/signals": {
     title: "Live Signals | IFXTrades",
     description:

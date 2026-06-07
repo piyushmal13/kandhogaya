@@ -36,6 +36,7 @@ const Login = lazy(() => import("./pages/Login").then(m => ({ default: m.Login }
 const Dashboard = lazy(() => import("./pages/Dashboard").then(m => ({ default: m.Dashboard })));
 const Admin = lazy(() => import("./pages/Admin").then(m => ({ default: m.Admin })));
 const AgentDashboard = lazy(() => import("./pages/AgentDashboard").then(m => ({ default: m.AgentDashboard })));
+const SeoAgent = lazy(() => import("./pages/SeoAgent").then(m => ({ default: m.SeoAgent })));
 const Hiring = lazy(() => import("./pages/Hiring").then(m => ({ default: m.Hiring })));
 const BrokerTalent = lazy(() => import("./pages/BrokerTalent").then(m => ({ default: m.BrokerTalent })));
 const NotFound = lazy(() => import("./pages/NotFound").then(m => ({ default: m.NotFound })));
@@ -72,6 +73,7 @@ const AnimatedRoutes = () => {
             <Route path="/" element={<Home />} />
             <Route path="/solutions" element={<Solutions />} />
             <Route path="/solutions/custom" element={<CustomRequestTerminal />} />
+            <Route path="/solutions/seo-agent" element={<SeoAgent />} />
             <Route path="/consultation" element={<Consultation />} />
             <Route path="/marketplace" element={<FeatureGuard flag="marketplace" redirect="/dashboard"><Marketplace /></FeatureGuard>} />
             <Route path="/quantx" element={<QuantX />} />

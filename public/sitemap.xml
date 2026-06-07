@@ -17,6 +17,11 @@
     <priority>0.90</priority>
   </url>
   <url>
+    <loc>https://ifxtrades.com/solutions/seo-agent</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
     <loc>https://ifxtrades.com/consultation</loc>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
