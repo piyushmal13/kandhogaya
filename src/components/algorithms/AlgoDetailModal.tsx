@@ -78,9 +78,17 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
         {/* Left: Details & Tabs */}
         <div className="flex-1 p-5 sm:p-8 md:p-12 overflow-y-visible md:overflow-y-auto border-b md:border-b-0 md:border-r border-white/5 custom-scrollbar">
           <div className="mb-6 md:mb-8 pr-10 md:pr-0">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[9px] md:text-xs font-mono tracking-widest mb-3 md:mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[9px] md:text-xs font-mono tracking-widest mb-3 md:mb-4 whitespace-nowrap">
               <Zap className="w-3 h-3" />
-              {algo.category || "Algorithm"}
+              {(() => {
+                const cat = algo.category;
+                if (!cat) return 'Trading System';
+                const c = cat.toLowerCase();
+                if (c === 'algorithm' || c === 'trading_system' || c === 'trading_systems') return 'Trading System';
+                if (c === 'course' || c === 'education') return 'Education';
+                if (c === 'signals') return 'Macro Signals';
+                return cat.toUpperCase();
+              })()}
             </div>
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-3 md:mb-4">
               <h2 className="text-xl md:text-4xl font-bold text-white">{algo.name}</h2>

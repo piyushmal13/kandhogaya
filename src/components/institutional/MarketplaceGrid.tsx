@@ -98,10 +98,18 @@ export const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({ products, isLo
             {/* Header: Meta & Status */}
             <div className="flex justify-between items-start mb-6 sm:mb-12">
               <div className="space-y-4">
-                <div className="inline-flex items-center gap-3 px-3 py-1 rounded-full bg-white/5 border border-white/10">
+                <div className="inline-flex items-center gap-3 px-3 py-1 rounded-full bg-white/5 border border-white/10 shrink-0">
                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                   <span className="text-[8px] sm:text-[9px] font-black text-white/40 uppercase tracking-[0.2em] font-mono">
-                      {product.category || product.type}
+                   <span className="text-[8px] sm:text-[9px] font-black text-white/40 uppercase tracking-[0.2em] font-mono whitespace-nowrap">
+                      {(() => {
+                        const cat = product.category || product.type;
+                        if (!cat) return 'System Asset';
+                        const c = cat.toLowerCase();
+                        if (c === 'algorithm' || c === 'trading_system' || c === 'trading_systems') return 'Trading System';
+                        if (c === 'course' || c === 'education') return 'Education';
+                        if (c === 'signals') return 'Macro Signals';
+                        return cat.toUpperCase();
+                      })()}
                    </span>
                 </div>
                 {product.type === 'algorithm' && (

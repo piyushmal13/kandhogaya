@@ -124,8 +124,11 @@ export const Marketplace = () => {
 
   const filteredProducts = products.filter((p: Product) => {
     const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                         p.description?.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = activeCategory === "all" || p.category === activeCategory;
+                          p.description?.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = activeCategory === "all" || 
+      (activeCategory === "course" && (p.category === "course" || p.category === "education")) ||
+      (activeCategory === "algorithm" && (p.category === "algorithm" || p.category === "trading_system" || p.category === "trading_systems")) ||
+      p.category === activeCategory;
     return matchesSearch && matchesCategory;
   });
 
@@ -248,8 +251,35 @@ export const Marketplace = () => {
             transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
             className="text-sm sm:text-lg md:text-xl text-zinc-400 max-w-3xl font-medium leading-relaxed"
           >
-            Deploy elite systematic execution models and macro intelligence tools. Every asset is audited, backtested, and optimized for latency-free institutional deployment.
+            Deploy pre-audited quantitative models compiled directly into secure, standalone execution binaries. Connect systems to your brokerage host platforms with sub-1.2ms matching latency.
           </motion.p>
+
+          {/* Institutional Blueprint (Advanced Marketplace Instructions) */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left max-w-4xl w-full pt-4 font-mono select-none"
+          >
+            <div className="p-6 rounded-2xl bg-white/[0.01] border border-white/5 space-y-3">
+              <h4 className="text-[10px] font-black text-emerald-400 uppercase tracking-widest flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                1. Algorithmic Architecture
+              </h4>
+              <p className="text-[9px] text-zinc-400 leading-normal uppercase tracking-wider font-bold">
+                Strategies are compiled directly into secure MT5 (.EX5) binaries. The logic runs completely on client infrastructure with no capital custody.
+              </p>
+            </div>
+            <div className="p-6 rounded-2xl bg-white/[0.01] border border-white/5 space-y-3">
+              <h4 className="text-[10px] font-black text-emerald-400 uppercase tracking-widest flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                2. Live Platform Deployment
+              </h4>
+              <p className="text-[9px] text-zinc-400 leading-normal uppercase tracking-wider font-bold">
+                Deploy systems on dedicated cross-connected VPS systems (Equinix NY4/LD4 Datacenters). Connect via direct DMA protocols for latency-free execution.
+              </p>
+            </div>
+          </motion.div>
         </div>
 
         {/* High-End Glassmorphic Control Bar */}
@@ -287,19 +317,7 @@ export const Marketplace = () => {
           </div>
         </motion.div>
 
-        {/* High-Resolution Inline Preview for SEO / Google Ads */}
-        <div className="relative rounded-[2rem] sm:rounded-[3.5rem] overflow-hidden border border-zinc-800 bg-[#0e1428]/10 group transition-all duration-700 hover:border-emerald-500/20 w-full shadow-2xl">
-           <img 
-             src="/backtest_dashboard.png" 
-             alt="IFX Algorithmic Trading Performance & Backtest Results Dashboard" 
-             className="w-full h-auto object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700" 
-           />
-           <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent pointer-events-none" />
-           <div className="absolute bottom-6 left-6 sm:bottom-10 sm:left-10 text-left space-y-1 sm:space-y-2">
-              <span className="text-[7px] sm:text-[9px] font-mono font-black text-emerald-400 uppercase tracking-[0.3em]">Quantitative Backtesting Database</span>
-              <h4 className="text-sm sm:text-2xl font-black text-white uppercase tracking-tighter">Verified Model Performance Telemetry</h4>
-           </div>
-        </div>
+
 
         {/* Elite B2B Trust Indicators & Guarantees */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 border-t border-b border-white/5 py-8 select-none">

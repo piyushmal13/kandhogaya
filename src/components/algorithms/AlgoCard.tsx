@@ -67,8 +67,16 @@ export const AlgoCard = ({ algo, onSelect }: AlgoCardProps) => {
       <div className="p-8 flex-1 flex flex-col relative">
         <div className="flex justify-between items-start mb-6">
           <div className="space-y-2">
-            <div className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.3em] font-mono">
-              {algo.category || "Institutional Grade"}
+            <div className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.3em] font-mono whitespace-nowrap">
+              {(() => {
+                const cat = algo.category;
+                if (!cat) return 'Trading System';
+                const c = cat.toLowerCase();
+                if (c === 'algorithm' || c === 'trading_system' || c === 'trading_systems') return 'Trading System';
+                if (c === 'course' || c === 'education') return 'Education';
+                if (c === 'signals') return 'Macro Signals';
+                return cat.toUpperCase();
+              })()}
             </div>
             <h3 className="text-2xl font-black text-white group-hover:text-emerald-400 transition-colors uppercase italic tracking-tighter">
               {algo.name}

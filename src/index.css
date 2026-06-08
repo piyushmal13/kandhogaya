@@ -594,6 +594,45 @@ body {
   }
 }
 
+/* ─────────────────────────────────────────────────────────────────────── */
+/* ── ANTI-GRAVITY MATRIX: Institutional Button System ── */
+
+/* Animated gradient border ring (Ice-Blue → Purple → Cyan → Navy) */
+.matrix-btn-border {
+  background: linear-gradient(
+    135deg,
+    #00A3FF 0%,
+    #8B5CF6 25%,
+    #00E5FF 50%,
+    #0A1628 75%,
+    #00A3FF 100%
+  );
+  background-size: 400% 400%;
+  animation: matrix-border-sweep 6s linear infinite;
+}
+
+/* Outer ambient glow pulse */
+.matrix-btn-ambient {
+  background: radial-gradient(ellipse at center, rgba(0, 163, 255, 0.22) 0%, transparent 70%);
+  animation: matrix-ambient-pulse 3s ease-in-out infinite alternate;
+}
+
+@keyframes matrix-border-sweep {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes matrix-ambient-pulse {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1.04); }
+}
+
+@keyframes matrix-shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
 /* ── Reduced motion respect ── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
-import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "motion/react";
-import { ArrowRight, ChevronDown, Play, ShieldCheck, Zap, Globe, Timer, Lock, Server } from "lucide-react";
+import React, { useEffect, useRef, useState, useCallback, Suspense, lazy } from "react";
+import { motion, useScroll, useTransform, useSpring } from "motion/react";
+import { ArrowRight, ChevronDown, Play } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const EASING = [0.4, 0, 0.2, 1] as const;
@@ -8,41 +8,20 @@ const ENTRY = [0.16, 1, 0.3, 1] as const;
 
 import { useFeatureFlag } from "@/hooks/useFeatureFlag";
 import { supabase } from "@/lib/supabase";
-import { EliteButton } from "@/components/ui/Button";
 import { useLanguage } from "../../contexts/LanguageContext";
-import { AnimatedCandlesticks } from "../ui/AnimatedCandlesticks";
+import { MatrixButton } from "@/components/ui/MatrixButton";
+
+// Lazy-load the heavy WebGL canvas — never blocks initial paint
+const AntiGravityMatrix = lazy(() =>
+  import('./AntiGravityMatrix').then(m => ({ default: m.AntiGravityMatrix }))
+);
 
 interface FortressHeroProps {
   onRequestSession: () => void;
   onRequestBuild: () => void;
 }
 
-// ── FLOATING PARTICLES ──
-const FloatingParticles = () => (
-  <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden>
-    {Array.from({ length: 30 }).map((_, i) => (
-      <div
-        key={i}
-        className="absolute w-[3px] h-[3px] rounded-full bg-cyan-400/35"
-        style={{
-          left: `${Math.random() * 100}%`,
-          top: `${Math.random() * 100}%`,
-          animation: `float ${6 + Math.random() * 8}s ease-in-out infinite`,
-          animationDelay: `${Math.random() * 5}s`,
-        }}
-      />
-    ))}
-  </div>
-);
 
-// ── TRUST BADGES ──
-const TRUST_ITEMS = [
-  { icon: Lock, title: "SECURE NODE", desc: "Direct ECN tunnel" },
-  { icon: Timer, title: "LATENCY TARGET", desc: "Sub-50ms execution" },
-  { icon: Globe, title: "GLOBAL GRID", desc: "40+ Sovereignty pools" },
-  { icon: Server, title: "CO-LOCATION", desc: "NY4/LD4 cross-connects" },
-  { icon: ShieldCheck, title: "AUDIT VERIFIED", desc: "Third-party logs" },
-];
 
 export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, onRequestBuild }) => {
   const { t } = useLanguage();
@@ -52,35 +31,7 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [activeTab, setActiveTab] = useState(1);
-  const [jitter, setJitter] = useState({ ny4: 0.81, ld4: 1.15, sg1: 4.58, db: 8.18 });
-  const [sessionKey, setSessionKey] = useState("ECN-NODE::ROTATE_INIT");
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setJitter({
-        ny4: +(0.78 + Math.random() * 0.07).toFixed(2),
-        ld4: +(1.12 + Math.random() * 0.10).toFixed(2),
-        sg1: +(4.50 + Math.random() * 0.15).toFixed(2),
-        db: +(8.05 + Math.random() * 0.20).toFixed(2)
-      });
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
-
-  useEffect(() => {
-    const generateKey = () => {
-      const chars = "ABCDEF0123456789";
-      let key = "ECN-NODE::";
-      for (let i = 0; i < 16; i++) {
-        key += chars[Math.floor(Math.random() * 16)];
-      }
-      setSessionKey(key);
-    };
-    generateKey();
-    const timer = setInterval(generateKey, 4000);
-    return () => clearInterval(timer);
-  }, []);
 
   useEffect(() => {
     if (!isTickerActive) return;
@@ -151,79 +102,16 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
       ref={sectionRef}
       className="relative min-h-[100svh] overflow-hidden flex flex-col"
       aria-label="IFX Trades — Institutional Trading Education"
-      style={{
-        backgroundColor: "#010203",
-        backgroundImage: "radial-gradient(ellipse 80% 50% at 50% 60%, rgba(59,130,246,0.06) 0%, transparent 70%)",
-      }}
+      style={{ backgroundColor: '#020305' }}
     >
-      {/* ── CODES & CYBERNETIC BACKGROUND (No AI Images) ── */}
-      <div className="absolute inset-0 origin-center pointer-events-none overflow-hidden select-none opacity-20 z-0">
-        {/* Animated Cyber Grid */}
-        <div 
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `
-              linear-gradient(to right, rgba(0, 163, 255, 0.08) 1px, transparent 1px),
-              linear-gradient(to bottom, rgba(0, 163, 255, 0.08) 1px, transparent 1px)
-            `,
-            backgroundSize: "60px 60px",
-            maskImage: "radial-gradient(circle at 50% 50%, black 20%, transparent 80%)",
-            WebkitMaskImage: "radial-gradient(circle at 50% 50%, black 20%, transparent 80%)",
-          }}
-        />
-
-        {/* Coded Dynamic ECN Nodes & Fiber Paths (SVG lines & glowing pulses) */}
-        <svg className="absolute inset-0 w-full h-full opacity-60" xmlns="http://www.w3.org/2000/svg">
-          {/* NY4 to LD4 path */}
-          <path d="M 150,150 L 500,250" stroke="rgba(0,163,255,0.2)" strokeWidth="1" strokeDasharray="5,5" />
-          <circle cx="150" cy="150" r="3" fill="#00A3FF" className="animate-pulse" />
-          <circle cx="500" cy="250" r="3" fill="#00A3FF" />
-          <circle r="4" fill="#00A3FF" opacity="0.8">
-            <animateMotion dur="6s" repeatCount="indefinite" path="M 150,150 L 500,250" />
-          </circle>
-
-          {/* LD4 to SG1 path */}
-          <path d="M 500,250 L 800,450" stroke="rgba(16,185,129,0.2)" strokeWidth="1" strokeDasharray="4,4" />
-          <circle cx="800" cy="450" r="3" fill="#10B981" />
-          <circle r="4" fill="#10B981" opacity="0.8">
-            <animateMotion dur="8s" repeatCount="indefinite" path="M 500,250 L 800,450" />
-          </circle>
-
-          {/* LD4 to Dubai path */}
-          <path d="M 500,250 L 650,180" stroke="rgba(0,163,255,0.25)" strokeWidth="1" />
-          <circle cx="650" cy="180" r="3" fill="#00A3FF" className="animate-pulse" />
-          <circle r="4" fill="#00A3FF" opacity="0.8">
-            <animateMotion dur="5s" repeatCount="indefinite" path="M 500,250 L 650,180" />
-          </circle>
-        </svg>
-
-        {/* Telemetric server log watermark */}
-        <div className="absolute top-1/4 left-10 text-[9px] font-mono text-white/5 uppercase tracking-[0.3em] hidden lg:block leading-relaxed">
-          NODE: NY4.EQUINIX.US<br />
-          PORT: 10G-A ACTIVE<br />
-          ECN STATE: ESTABLISHED<br />
-          JITTER: &lt; 0.02ms
-        </div>
-        <div className="absolute bottom-1/4 right-10 text-[9px] font-mono text-white/5 uppercase tracking-[0.3em] text-right hidden lg:block leading-relaxed">
-          NODE: LD4.EQUINIX.UK<br />
-          AUDIT HASH: SHA-256 SYNCED<br />
-          PROTOCOL: SECURE ECN<br />
-          PACKET: 0% LOSS
-        </div>
+      {/* ── ANTI-GRAVITY LIQUIDITY MATRIX (WebGL) ── */}
+      <div className="absolute inset-0 z-0" aria-hidden>
+        <Suspense fallback={
+          <div className="w-full h-full" style={{ background: '#020305' }} />
+        }>
+          <AntiGravityMatrix className="w-full h-full" />
+        </Suspense>
       </div>
-
-      {/* ── FLOATING PARTICLES ── */}
-      <FloatingParticles />
-
-      {/* ── GRADIENT OVERLAY ── */}
-      <div
-        className="absolute inset-0 pointer-events-none z-10"
-        style={{
-          background:
-            "radial-gradient(circle at 50% 50%, transparent 0%, rgba(1,2,3,0.4) 50%, rgba(1,2,3,0.85) 100%), linear-gradient(to bottom, rgba(1,2,3,0.3) 0%, transparent 30%, rgba(1,2,3,1) 100%)",
-        }}
-        aria-hidden="true"
-      />
 
       {/* ── LIVE MARKET TICKER ── */}
       {isTickerActive && (
@@ -296,24 +184,30 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
               {t("hero_sub")}
             </motion.p>
 
-            {/* CTAs (Responsive Stacked Column on Mobile, Row on Desktop) */}
+            {/* CTAs — Institutional Gold MatrixButton System */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.45, duration: 0.6, ease: EASING }}
-              className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto z-30"
+              className="flex flex-col sm:flex-row items-center gap-4 sm:gap-5 w-full sm:w-auto z-30"
             >
-              <button onClick={handleRequestSessionClick} className="w-full sm:w-auto shrink-0 cursor-pointer">
-                <EliteButton variant="gemini" size="lg" fluid rightIcon={<ArrowRight className="w-3.5 h-3.5" />} glowEffect>
-                  {t("cta_request")}
-                </EliteButton>
-              </button>
+              <MatrixButton
+                id="hero-cta-primary"
+                variant="primary"
+                onClick={handleRequestSessionClick}
+                rightIcon={<ArrowRight className="w-3.5 h-3.5" strokeWidth={2.5} />}
+              >
+                {t('cta_request')}
+              </MatrixButton>
 
-              <button onClick={handleSeeResults} className="w-full sm:w-auto shrink-0 cursor-pointer">
-                <EliteButton variant="secondary" size="lg" fluid leftIcon={<Play className="w-3.5 h-3.5 text-blue-400 fill-blue-400/20" />}>
-                  {t("cta_results")}
-                </EliteButton>
-              </button>
+              <MatrixButton
+                id="hero-cta-secondary"
+                variant="secondary"
+                onClick={handleSeeResults}
+                leftIcon={<Play className="w-3 h-3 fill-current opacity-70" />}
+              >
+                {t('cta_results')}
+              </MatrixButton>
             </motion.div>
           </div>
       </div>
