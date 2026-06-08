@@ -407,8 +407,9 @@ function CameraController() {
     const isMobile = size.width < 768;
     const isTablet = size.width >= 768 && size.width < 1024;
 
-    const cameraZ = isMobile ? 18 : isTablet ? 15 : 12;
-    const cameraY = isMobile ? 6 : isTablet ? 5 : 4;
+    // Bring camera MUCH closer on mobile for a more immersive, premium look
+    const cameraZ = isMobile ? 13 : isTablet ? 13 : 12;
+    const cameraY = isMobile ? 3 : isTablet ? 4 : 4;
 
     camera.position.set(0, cameraY, cameraZ);
     camera.lookAt(0, -0.5, 0);
@@ -417,7 +418,7 @@ function CameraController() {
   useFrame((_, delta) => {
     t.current += delta * 0.045;
     const isMobile = size.width < 768;
-    const zOffset = isMobile ? 18 : 12;
+    const zOffset = isMobile ? 13 : 12;
 
     camera.position.x = Math.sin(t.current) * 0.5;
     camera.position.z = zOffset + Math.cos(t.current * 0.5) * 0.4;
@@ -510,8 +511,8 @@ export const AntiGravityMatrix: React.FC<AntiGravityMatrixProps> = ({ className 
     >
       {/* Massive Background Typography */}
       <div className="absolute inset-0 z-0 flex flex-col justify-center items-center pointer-events-none opacity-[0.03] overflow-hidden select-none font-mono">
-         <div className="text-[22vw] font-black text-white leading-[0.8] whitespace-nowrap tracking-tighter blur-[2px]">XAUUSD</div>
-         <div className="text-[22vw] font-black text-white leading-[0.8] whitespace-nowrap tracking-tighter blur-[2px]">EURUSD</div>
+         <div className="text-[35vw] sm:text-[22vw] font-black text-white leading-[0.8] whitespace-nowrap tracking-tighter blur-[1px]">XAUUSD</div>
+         <div className="text-[35vw] sm:text-[22vw] font-black text-white leading-[0.8] whitespace-nowrap tracking-tighter blur-[1px]">EURUSD</div>
       </div>
 
       <Canvas

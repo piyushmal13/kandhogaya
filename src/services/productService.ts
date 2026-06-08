@@ -10,7 +10,7 @@ import { Product, BotLicense } from "../types";
 export const productService = {
   getProducts: async (): Promise<Product[]> => {
     try {
-      const { data: products, error } = await supabase
+      const query = supabase
         .from("products")
         .select(`
           id, name, description, price, category, video_explanation_url, image_url, created_at, 
@@ -19,8 +19,7 @@ export const productService = {
         `)
         .order("created_at", { ascending: false });
 
-      if (error) throw error;
-      return (products || []) as unknown as Product[];
+      return await safeQuery<Product[]>(query);
     } catch {
       return [];
     }
@@ -28,14 +27,13 @@ export const productService = {
 
   getReviews: async (): Promise<any[]> => {
     try {
-      const { data, error } = await supabase
+      const query = supabase
         .from("reviews")
         .select("id, name, role, text, rating, created_at, image_url, region, user_name")
         .eq("status", "approved")
         .order("created_at", { ascending: false });
 
-      if (error) throw error;
-      return data || [];
+      return await safeQuery<any[]>(query);
     } catch {
       return [];
     }
