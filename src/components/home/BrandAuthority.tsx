@@ -5,23 +5,19 @@ import { containerVariants, itemVariants } from "@/lib/motion";
 const INTEGRATION_PARTNERS = [
   {
     name: "MetaTrader 5",
-    logo_url: "https://orbitglobalfx.com/assets/images/metatrader5-logo.png",
-    width: "w-40 sm:w-56"
+    logo_url: "https://orbitglobalfx.com/assets/images/metatrader5-logo.png"
   },
   {
     name: "MetaTrader 4",
-    logo_url: "https://gtcsoftwares.com/wp-content/uploads/2022/07/metatrader4-logo.png",
-    width: "w-40 sm:w-56"
+    logo_url: "https://gtcsoftwares.com/wp-content/uploads/2022/07/metatrader4-logo.png"
   },
   {
     name: "TradingView",
-    logo_url: "https://www.freelogovectors.net/wp-content/uploads/2021/12/tradingview-logo-freelogovectors.net_.png",
-    width: "w-44 sm:w-60"
+    logo_url: "https://www.freelogovectors.net/wp-content/uploads/2021/12/tradingview-logo-freelogovectors.net_.png"
   },
   {
     name: "cTrader",
-    logo_url: "https://help.ctrader.com/ctrader-web/img/logo.png",
-    width: "w-32 sm:w-44"
+    logo_url: "https://help.ctrader.com/ctrader-web/img/logo.png"
   }
 ];
 
@@ -31,7 +27,7 @@ const PRESS = [
 
 export const BrandAuthority = () => {
   return (
-    <section className="py-16 md:py-28 bg-[#020305] relative overflow-hidden border-y border-white/[0.03]">
+    <section className="py-12 md:py-20 bg-[#020305] relative overflow-hidden border-y border-white/[0.03]">
       {/* Premium Ambient Backgrounds */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.015)_0%,transparent_100%)] pointer-events-none" />
 
@@ -41,22 +37,22 @@ export const BrandAuthority = () => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="flex flex-col gap-16 md:gap-24"
+          className="flex flex-col gap-12 md:gap-16"
         >
-          <div className="flex flex-col items-center justify-center space-y-12 sm:space-y-16">
-            <motion.div variants={itemVariants} className="text-center space-y-3">
+          <div className="flex flex-col items-center justify-center space-y-10 sm:space-y-12">
+            <motion.div variants={itemVariants} className="text-center space-y-2">
               <h3 className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.5em] text-emerald-500/80">
                 Seamless Infrastructure
               </h3>
-              <p className="text-xs sm:text-sm font-bold uppercase tracking-[0.25em] text-white">
+              <p className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.25em] text-white">
                 Institutional Integration Partners
               </p>
             </motion.div>
    
-            {/* Ultra-Premium Logo Layout */}
+            {/* Ultra-Premium Uniform Logo Layout */}
             <motion.div 
               variants={itemVariants} 
-              className="w-full max-w-6xl mx-auto flex flex-wrap justify-center items-center gap-12 sm:gap-20 md:gap-24"
+              className="w-full max-w-5xl mx-auto flex flex-wrap justify-center items-center gap-8 sm:gap-14 md:gap-20"
             >
               {INTEGRATION_PARTNERS.map((partner) => (
                 <div 
@@ -64,14 +60,14 @@ export const BrandAuthority = () => {
                   className="group relative flex items-center justify-center p-4"
                 >
                   {/* Subtle Glowing Aura on Hover */}
-                  <div className="absolute inset-0 bg-blue-500/10 blur-[50px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+                  <div className="absolute inset-0 bg-blue-500/10 blur-[40px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
                   
-                  {/* The Image Itself */}
+                  {/* The Image Itself - Strictly sized by height for perfect alignment, staying grayscale */}
                   <img 
                     src={partner.logo_url} 
                     alt={partner.name} 
-                    className={`${partner.width} h-auto object-contain filter grayscale opacity-30 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 ease-out transform group-hover:scale-105`}
-                    style={{ WebkitUserDrag: 'none' }}
+                    draggable={false}
+                    className="h-8 sm:h-10 md:h-12 w-auto object-contain filter grayscale opacity-40 group-hover:opacity-100 group-hover:brightness-150 transition-all duration-700 ease-out transform group-hover:scale-105"
                   />
                 </div>
               ))}
