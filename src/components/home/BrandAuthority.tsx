@@ -5,19 +5,27 @@ import { containerVariants, itemVariants } from "@/lib/motion";
 const INTEGRATION_PARTNERS = [
   {
     name: "MetaTrader 5",
-    logo_url: "https://orbitglobalfx.com/assets/images/metatrader5-logo.png"
+    logo_url: "https://orbitglobalfx.com/assets/images/metatrader5-logo.png",
+    className: "h-11 sm:h-13 md:h-15",
+    filter: "brightness(1.2)"
   },
   {
     name: "MetaTrader 4",
-    logo_url: "https://gtcsoftwares.com/wp-content/uploads/2022/07/metatrader4-logo.png"
+    logo_url: "https://gtcsoftwares.com/wp-content/uploads/2022/07/metatrader4-logo.png",
+    className: "h-22 sm:h-26 md:h-30", // Significantly larger to compensate for massive white space/margins around the MT4 logo
+    filter: "brightness(1.2) drop-shadow(0 0 6px rgba(255, 255, 255, 0.45))" // Aura to make the dark text clearly visible on dark background
   },
   {
     name: "TradingView",
-    logo_url: "https://www.freelogovectors.net/wp-content/uploads/2021/12/tradingview-logo-freelogovectors.net_.png"
+    logo_url: "https://www.freelogovectors.net/wp-content/uploads/2021/12/tradingview-logo-freelogovectors.net_.png",
+    className: "h-9 sm:h-11 md:h-13", // Slightly larger to match visual weight of text logos
+    filter: "invert(1) brightness(1.5)" // Invert black to clean white for high contrast on dark theme
   },
   {
     name: "cTrader",
-    logo_url: "https://help.ctrader.com/ctrader-web/img/logo.png"
+    logo_url: "https://help.ctrader.com/ctrader-web/img/logo.png",
+    className: "h-9 sm:h-11 md:h-13", // Slightly larger to match visual weight
+    filter: "brightness(1.2)"
   }
 ];
 
@@ -62,12 +70,13 @@ export const BrandAuthority = () => {
                   {/* Subtle Glowing Aura on Hover */}
                   <div className="absolute inset-0 bg-blue-500/10 blur-[40px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
                   
-                  {/* The Image Itself - Strictly sized by height for perfect alignment, staying grayscale */}
+                  {/* The Image Itself - Individually sized and displaying full original colors */}
                   <img 
                     src={partner.logo_url} 
                     alt={partner.name} 
                     draggable={false}
-                    className="h-8 sm:h-10 md:h-12 w-auto object-contain filter grayscale opacity-40 group-hover:opacity-100 group-hover:brightness-150 transition-all duration-700 ease-out transform group-hover:scale-105"
+                    style={{ filter: partner.filter }}
+                    className={`${partner.className} w-auto object-contain opacity-95 group-hover:opacity-100 transition-all duration-700 ease-out transform group-hover:scale-105`}
                   />
                 </div>
               ))}
