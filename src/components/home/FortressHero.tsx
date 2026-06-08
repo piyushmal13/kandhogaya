@@ -111,6 +111,32 @@ export const FortressHero: React.FC<FortressHeroProps> = ({ onRequestSession, on
         }>
           <AntiGravityMatrix className="w-full h-full" />
         </Suspense>
+
+        {/* ── CONFIDENTIAL / PROPRIETARY WATERMARKS ── */}
+        <div className="absolute inset-0 pointer-events-none z-10 flex flex-col justify-between p-6 sm:p-10 opacity-60 mix-blend-screen">
+           <div className="flex justify-between items-start font-mono text-[8px] sm:text-[10px] font-black uppercase tracking-[0.3em] text-blue-500/80">
+             <div className="flex flex-col gap-1">
+               <span>IFX TRADES · QUANTITATIVE DIVISION</span>
+               <span className="text-white/40 tracking-[0.4em]">CONFIDENTIAL ALGORITHMIC DATA</span>
+             </div>
+             <div className="text-right flex flex-col gap-1 hidden md:flex">
+               <span>SYS.STATE: SECURE DMA</span>
+               <span className="text-white/40 tracking-[0.4em]">LATENCY: 0.8MS</span>
+             </div>
+           </div>
+           
+           <div className="flex justify-between items-end font-mono text-[8px] sm:text-[10px] font-black uppercase tracking-[0.3em] text-white/30">
+             <div className="flex gap-4 sm:gap-6">
+               <span className="text-blue-500/60">EURUSD</span>
+               <span className="text-emerald-500/60">XAUUSD</span>
+               <span className="hidden sm:inline">GBPUSD</span>
+               <span className="hidden sm:inline">BTCUSD</span>
+             </div>
+             <div className="text-right text-red-500/50">
+               RESTRICTED ACCESS ONLY
+             </div>
+           </div>
+        </div>
       </div>
 
       {/* ── LIVE MARKET TICKER ── */}

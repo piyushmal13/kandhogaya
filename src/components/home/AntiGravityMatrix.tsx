@@ -508,6 +508,12 @@ export const AntiGravityMatrix: React.FC<AntiGravityMatrixProps> = ({ className 
       className={`relative w-full h-full ${className}`}
       style={{ background: '#020305' }}
     >
+      {/* Massive Background Typography */}
+      <div className="absolute inset-0 z-0 flex flex-col justify-center items-center pointer-events-none opacity-[0.03] overflow-hidden select-none font-mono">
+         <div className="text-[22vw] font-black text-white leading-[0.8] whitespace-nowrap tracking-tighter blur-[2px]">XAUUSD</div>
+         <div className="text-[22vw] font-black text-white leading-[0.8] whitespace-nowrap tracking-tighter blur-[2px]">EURUSD</div>
+      </div>
+
       <Canvas
         gl={{
           antialias: true,
