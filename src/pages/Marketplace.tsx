@@ -289,12 +289,12 @@ export const Marketplace = () => {
           transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
           className="bg-black/60 backdrop-blur-3xl border border-white/10 rounded-[2rem] p-4 sm:p-6 shadow-2xl flex flex-col lg:flex-row items-center justify-between gap-6"
         >
-          <div className="flex w-full lg:w-auto p-1.5 bg-white/[0.03] border border-white/5 rounded-2xl shrink-0">
+          <div className="flex w-full lg:w-auto p-1.5 bg-white/[0.03] border border-white/5 rounded-2xl shrink-0 overflow-x-auto snap-x hide-scrollbar">
             {categories.map((cat) => (
               <button
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
-                className={`flex-1 sm:flex-none px-6 sm:px-8 py-3.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 cursor-pointer ${
+                className={`flex-1 sm:flex-none px-6 sm:px-8 py-3.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 cursor-pointer whitespace-nowrap snap-center ${
                   activeCategory === cat.id
                      ? "bg-white text-black shadow-lg"
                      : "text-zinc-500 hover:text-white hover:bg-white/5"

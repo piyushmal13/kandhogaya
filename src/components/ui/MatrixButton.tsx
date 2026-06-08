@@ -71,7 +71,7 @@ export const MatrixButton: React.FC<MatrixButtonProps> = ({
 
       {/* ── Outer ambient glow ── */}
       <div
-        className="absolute -inset-4 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none matrix-btn-ambient"
+        className="absolute -inset-4 rounded-3xl blur-2xl opacity-45 group-hover:opacity-100 transition-all duration-700 pointer-events-none matrix-btn-ambient"
         aria-hidden
       />
 

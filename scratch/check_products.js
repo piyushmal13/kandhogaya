@@ -7,13 +7,19 @@ const supabase = createClient(
   process.env.VITE_SUPABASE_ANON_KEY
 );
 
-async function checkProducts() {
-  const { data, error } = await supabase.from('products').select('*').limit(1);
+async function run() {
+  const { data: products, error } = await supabase
+    .from('products')
+    .select('id, name, category, price');
+  
   if (error) {
-    console.error('Error fetching products:', error.message);
-  } else {
-    console.log('Products columns:', Object.keys(data[0] || {}));
+    console.error('Error fetching products:', error);
+    return;
   }
+  console.log('--- PRODUCTS IN SUPABASE ---');
+  products.forEach(p => {
+    console.log(`ID: ${p.id} | Name: ${p.name} | Category: "${p.category}" | Price: ${p.price}`);
+  });
 }
 
-checkProducts();
+run();

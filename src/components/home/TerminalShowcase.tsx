@@ -273,11 +273,11 @@ export const TerminalShowcase = () => {
                 <Cpu className="w-2.5 h-2.5" /> High-Performance Infrastructure
               </div>
               <h2 className="text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tight leading-[0.95] italic uppercase">
-                Terminal <br />
+                Trading <br />
                 <span className="text-emerald-400">Execution.</span>
               </h2>
               <p className="text-sm sm:text-base text-white/40 leading-relaxed font-medium">
-                Native MetaTrader 5 (MT5) integration built with our proprietary bridge protocols. Experience zero-latency synchronization between our quantitative research models and your B2B execution workstation.
+                Cross-platform integration for MT5, custom web terminals, and advanced TradingView indicators. Deploy our premium institutional algorithms and Pine Script systems to your preferred B2B execution workstation.
               </p>
             </div>
 
