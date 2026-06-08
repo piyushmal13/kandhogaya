@@ -58,7 +58,7 @@ export const Navbar = () => {
   const navLinks = [
     { name: t("nav_home"), path: "/", icon: Home },
     { name: t("nav_ecosystem"), path: "/quantx", icon: Zap },
-    { name: t("nav_webinars"), path: "/webinars", icon: BookOpen },
+    { name: t("nav_webinars"), path: "/webinars", icon: BookOpen, badge: "Soon" },
     { name: t("nav_market"), path: "/marketplace", icon: BarChart3 },
     { name: t("nav_research"), path: "/blog", icon: FileText },
     { name: t("nav_about"), path: "/about", icon: Zap },
@@ -67,7 +67,7 @@ export const Navbar = () => {
   const bottomLinks = [
     { name: t("nav_home"), path: "/", icon: Home },
     { name: t("nav_ecosystem"), path: "/quantx", icon: Zap },
-    { name: t("nav_webinars"), path: "/webinars", icon: BookOpen },
+    { name: t("nav_webinars"), path: "/webinars", icon: BookOpen, badge: "Soon" },
     { name: t("nav_market"), path: "/marketplace", icon: BarChart3 },
     { name: t("portal"), path: "/solutions/custom", icon: Terminal },
   ];
@@ -126,13 +126,18 @@ export const Navbar = () => {
                   to={link.path}
                   itemProp="url"
                   className={cn(
-                    "relative px-3.5 py-1.5 text-[9px] font-black uppercase tracking-[0.2em] transition-all duration-300 rounded-full group/link",
+                    "relative px-3.5 py-1.5 text-[9px] font-black uppercase tracking-[0.2em] transition-all duration-300 rounded-full group/link flex items-center gap-1.5",
                     isActive
                       ? "text-blue-400 bg-blue-500/[0.05] border border-blue-500/10"
                       : "text-white/40 hover:text-white hover:bg-white/[0.04] border border-transparent"
                   )}
                 >
                   <span itemProp="name">{link.name}</span>
+                  {link.badge && (
+                    <span className="text-[7px] font-black px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 scale-90 origin-left">
+                      {link.badge}
+                    </span>
+                  )}
                   {isActive && (
                     <motion.div
                       layoutId="navbar-indicator"
@@ -295,7 +300,14 @@ export const Navbar = () => {
                         )}
                       >
                         <link.icon className="h-5 w-5 shrink-0" aria-hidden />
-                        <span className="text-base font-bold tracking-tight">{link.name}</span>
+                        <span className="text-base font-bold tracking-tight flex items-center gap-2">
+                          {link.name}
+                          {link.badge && (
+                            <span className="text-[8px] font-black px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 uppercase tracking-wider">
+                              {link.badge}
+                            </span>
+                          )}
+                        </span>
                       </Link>
                     </motion.div>
                   ))}

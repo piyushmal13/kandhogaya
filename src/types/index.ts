@@ -132,6 +132,10 @@ export interface Product {
   long_plan_offers: LongPlanOffer[]; // jsonb
   category?: string;
   supported_assets?: string[];
+  metadata?: {
+    download_url?: string;
+    [key: string]: any;
+  };
   advanced_features?: {
     terms_pdf_url?: string;
     [key: string]: any;

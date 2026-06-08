@@ -5,26 +5,32 @@ import { containerVariants, itemVariants } from "@/lib/motion";
 const INTEGRATION_PARTNERS = [
   {
     name: "MetaTrader 5",
-    logo_url: "https://orbitglobalfx.com/assets/images/metatrader5-logo.png",
-    className: "h-11 sm:h-13 md:h-15",
+    logo_url: "https://www.metatrader5.com/images/mt5-logo.png",
+    className: "h-8 sm:h-9 md:h-10",
     filter: "brightness(1.2)"
   },
   {
     name: "MetaTrader 4",
-    logo_url: "https://gtcsoftwares.com/wp-content/uploads/2022/07/metatrader4-logo.png",
-    className: "h-22 sm:h-26 md:h-30", // Significantly larger to compensate for massive white space/margins around the MT4 logo
-    filter: "brightness(1.2) drop-shadow(0 0 6px rgba(255, 255, 255, 0.45))" // Aura to make the dark text clearly visible on dark background
+    logo_url: "https://www.metatrader4.com/images/mt4-logo.png",
+    className: "h-8 sm:h-9 md:h-10",
+    filter: "brightness(1.2)"
   },
   {
     name: "TradingView",
     logo_url: "https://www.freelogovectors.net/wp-content/uploads/2021/12/tradingview-logo-freelogovectors.net_.png",
-    className: "h-9 sm:h-11 md:h-13", // Slightly larger to match visual weight of text logos
-    filter: "invert(1) brightness(1.5)" // Invert black to clean white for high contrast on dark theme
+    className: "h-6 sm:h-7 md:h-8",
+    filter: "invert(1) brightness(1.5)"
   },
   {
     name: "cTrader",
     logo_url: "https://help.ctrader.com/ctrader-web/img/logo.png",
-    className: "h-9 sm:h-11 md:h-13", // Slightly larger to match visual weight
+    className: "h-6 sm:h-7 md:h-8",
+    filter: "brightness(1.2)"
+  },
+  {
+    name: "Binance",
+    logo_url: "https://upload.wikimedia.org/wikipedia/commons/e/e8/Binance_Logo.svg",
+    className: "h-6 sm:h-7 md:h-8",
     filter: "brightness(1.2)"
   }
 ];

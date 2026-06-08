@@ -14,6 +14,7 @@ import { ConsultationSection } from "../components/home/ConsultationSection";
 import { TerminalShowcase } from "../components/home/TerminalShowcase";
 import { EliteSocialProof } from "../components/institutional/EliteSocialProof";
 import { PaymentGateways } from "../components/home/PaymentGateways";
+import { WebinarHypeSection } from "../components/home/WebinarHypeSection";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -83,6 +84,9 @@ const Home = () => {
 
         {/* L5.5: Global Network Social Proof & WhatsApp Telemetry */}
         <EliteSocialProof />
+
+        {/* L5.7: Webinar Hype & Waitlist Capture */}
+        <WebinarHypeSection />
 
         {/* L6: Capital Inquiry / Onboarding Intake Form */}
         <ConsultationSection />
