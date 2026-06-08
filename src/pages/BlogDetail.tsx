@@ -214,7 +214,7 @@ export const BlogDetail = () => {
       {/* Hero Section */}
       <div className="relative pt-40 pb-20 px-4">
         {/* Background Gradients */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-screen h-full opacity-10 pointer-events-none">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full opacity-10 pointer-events-none">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,_rgba(59,130,246,0.1)_0%,_transparent_60%)]" />
         </div>
 

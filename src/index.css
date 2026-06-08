@@ -69,7 +69,13 @@ body {
   overflow-x: hidden;
   color: white;
 }
-#root { min-height: 100vh; isolation: isolate; }
+#root { 
+  min-height: 100vh; 
+  isolation: isolate; 
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
+}
 
 :root {
   --foreground-rgb: 255, 255, 255;
