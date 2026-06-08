@@ -19,7 +19,7 @@ export const Marketplace = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [activeCategory, setActiveCategory] = useState("all");
-  const [purchaseDetails, setPurchaseDetails] = useState<{ plan: string, amount: number, productId: string } | null>(null);
+  const [purchaseDetails, setPurchaseDetails] = useState<{ plan: string, amount: number, productId: string, downloadUrl?: string } | null>(null);
   
   const { user } = useAuth();
   const { info, success } = useToast();
@@ -151,7 +151,8 @@ export const Marketplace = () => {
     setPurchaseDetails({
       plan: `${algo.name} (${plan})`,
       amount,
-      productId: algo.id
+      productId: algo.id,
+      downloadUrl: algo.metadata?.download_url
     });
     
     setSelectedProduct(null);
@@ -386,6 +387,7 @@ export const Marketplace = () => {
             plan={purchaseDetails.plan}
             amount={purchaseDetails.amount}
             productId={purchaseDetails.productId}
+            downloadUrl={purchaseDetails.downloadUrl}
             onClose={() => setPurchaseDetails(null)}
           />
         )}

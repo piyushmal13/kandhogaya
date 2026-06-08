@@ -1,0 +1,4 @@
+//@version=5
+indicator("Delta Order Flow Estimator")
+delta = close > open ? volume : -volume
+plot(delta, style=plot.style_columns, color=delta > 0 ? color.green : color.red)

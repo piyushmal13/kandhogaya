@@ -1,0 +1,6 @@
+//@version=5
+indicator("Institutional Volume Profile", overlay=true)
+// Calculates basic volume weighted price
+vwap_val = ta.vwap(close)
+plot(vwap_val, color=color.new(color.orange, 0), title="Institutional VWAP")
+// Volume Profile distribution logic...

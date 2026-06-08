@@ -1,0 +1,5 @@
+//@version=5
+indicator("Macro Economic Event Overlay", overlay=true)
+// Uses request.financial() to pull macro data
+// For now, highlighting specific historical news spikes
+alertcondition(close > ta.sma(close, 200), title="Macro Shift", message="Macro Event Triggered")

@@ -19,12 +19,13 @@ interface PurchaseModalProps {
   plan: string;
   amount: number;
   productId?: string;
+  downloadUrl?: string;
   onClose: () => void;
 }
 
 type Step = "payment" | "details" | "upload" | "success";
 
-export const PurchaseModal = ({ plan, amount, productId, onClose }: PurchaseModalProps) => {
+export const PurchaseModal = ({ plan, amount, productId, downloadUrl, onClose }: PurchaseModalProps) => {
   const { user } = useAuth();
   const [step, setStep] = useState<Step>("payment");
   const [whatsappNumber, setWhatsappNumber] = useState("");
@@ -321,14 +322,37 @@ export const PurchaseModal = ({ plan, amount, productId, onClose }: PurchaseModa
               <div className="space-y-4">
                 <ReviewPromptModal isOpen={showReviewPrompt} onClose={() => setShowReviewPrompt(false)} />
                 <h2 className="text-3xl font-black text-white uppercase tracking-tighter italic">Signal Acknowledged</h2>
-                <p className="text-gray-500 text-[11px] font-bold uppercase tracking-widest max-w-xs mx-auto leading-relaxed">Your artifact has been uploaded. An institutional auditor will verify and fulfill your subscription shortly.</p>
+                {downloadUrl ? (
+                  <p className="text-gray-500 text-[11px] font-bold uppercase tracking-widest max-w-xs mx-auto leading-relaxed">Your transaction is complete. You can now download your TradingView asset directly.</p>
+                ) : (
+                  <p className="text-gray-500 text-[11px] font-bold uppercase tracking-widest max-w-xs mx-auto leading-relaxed">Your artifact has been uploaded. An institutional auditor will verify and fulfill your subscription shortly.</p>
+                )}
               </div>
-              <button 
-                onClick={onClose}
-                className="px-12 py-5 bg-white text-black text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl hover:scale-110 active:scale-95 transition-all shadow-2xl"
-              >
-                Enter Discovery Console
-              </button>
+              
+              {downloadUrl ? (
+                <div className="flex flex-col gap-4 max-w-xs mx-auto">
+                  <a 
+                    href={downloadUrl}
+                    download
+                    className="w-full px-8 py-5 bg-emerald-500 text-black text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl hover:scale-110 active:scale-95 transition-all shadow-2xl shadow-emerald-500/20 block text-center"
+                  >
+                    Download Pine Script
+                  </a>
+                  <button 
+                    onClick={onClose}
+                    className="w-full px-8 py-4 bg-white/5 border border-white/10 text-white/50 hover:text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl transition-all"
+                  >
+                    Close
+                  </button>
+                </div>
+              ) : (
+                <button 
+                  onClick={onClose}
+                  className="px-12 py-5 bg-white text-black text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl hover:scale-110 active:scale-95 transition-all shadow-2xl"
+                >
+                  Enter Discovery Console
+                </button>
+              )}
             </div>
           )}
         </div>

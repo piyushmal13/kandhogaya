@@ -1,0 +1,5 @@
+//@version=5
+indicator("Currency Strength Heatmap")
+// Mock strength index based on ROC
+roc = ta.roc(close, 14)
+plot(roc, color=roc > 0 ? color.green : color.red, style=plot.style_histogram)

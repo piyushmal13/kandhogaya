@@ -1,0 +1,7 @@
+//@version=5
+indicator("Market Sessions Overlay", overlay=true)
+// Highlights trading sessions based on exchange times
+is_london = time(timeframe.period, "0800-1600")
+bgcolor(is_london ? color.new(color.blue, 90) : na, title="London Session")
+is_ny = time(timeframe.period, "1300-2100")
+bgcolor(is_ny ? color.new(color.red, 90) : na, title="New York Session")

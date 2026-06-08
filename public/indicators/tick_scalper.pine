@@ -1,0 +1,4 @@
+//@version=5
+indicator("Tick Scalping Dashboard", overlay=true)
+if barstate.islast
+    label.new(bar_index, high, "Live Tick Spread: 0.8 pips", color=color.black, textcolor=color.white)

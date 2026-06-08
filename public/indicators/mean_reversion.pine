@@ -1,0 +1,4 @@
+//@version=5
+indicator("Quantitative Mean Reversion", overlay=true)
+zscore = (close - ta.sma(close, 50)) / ta.stdev(close, 50)
+bgcolor(zscore > 2 ? color.new(color.red, 80) : zscore < -2 ? color.new(color.green, 80) : na)

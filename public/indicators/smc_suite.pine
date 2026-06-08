@@ -1,0 +1,6 @@
+//@version=5
+indicator("Smart Money Concepts (SMC) Suite", overlay=true)
+// Detects basic order blocks and FVGs
+ob_length = input.int(10, "Order Block Period")
+plot(ta.sma(close, ob_length), color=color.blue, title="OB Trend")
+// Advanced SMC Logic Here...

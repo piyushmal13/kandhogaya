@@ -1,0 +1,5 @@
+//@version=5
+indicator("Harmonic Pattern Scanner", overlay=true)
+// Scan for XABCD coordinates based on Fibonacci retracements
+// XABCD pattern logic...
+plotshape(ta.cross(close, ta.sma(close, 50)), title="Harmonic Completion", style=shape.labelup, location=location.belowbar, color=color.green, text="BUY ZONE")

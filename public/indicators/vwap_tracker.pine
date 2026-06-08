@@ -1,0 +1,4 @@
+//@version=5
+indicator("VWAP Institutional Tracker", overlay=true)
+vwap_daily = ta.vwap(close)
+plot(vwap_daily, title="Daily VWAP", color=color.fuchsia, linewidth=2)

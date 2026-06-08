@@ -1,0 +1,5 @@
+//@version=5
+indicator("Supply & Demand Imbalance", overlay=true)
+// Algorithm detecting high momentum engulfing candles
+is_engulfing_bull = close > open[1] and open < close[1] and close[1] < open[1]
+plotshape(is_engulfing_bull, style=shape.arrowup, location=location.belowbar, color=color.green, text="Demand")

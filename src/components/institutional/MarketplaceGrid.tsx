@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Activity, Lock, Share2 } from 'lucide-react';
+import { Activity, Lock, Share2, Code } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { Button } from '../ui/Button';
@@ -118,6 +118,12 @@ export const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({ products, isLo
                     Load: {(Math.random() * 20 + 80).toFixed(1)}%
                   </div>
                 )}
+                {product.category === 'course' && (
+                  <div className="flex items-center gap-2 text-[9px] sm:text-[10px] font-black text-blue-400 uppercase tracking-widest font-mono">
+                    <Code className="w-3 h-3" />
+                    Pine Script v5
+                  </div>
+                )}
               </div>
               
               {showPremiumBadges && product.isPremium && (
@@ -194,7 +200,7 @@ export const MarketplaceGrid: React.FC<MarketplaceGridProps> = ({ products, isLo
                   className="w-full sm:w-auto rounded-xl sm:rounded-2xl px-5 sm:px-10 py-3.5 sm:py-6 h-auto text-[11px] sm:text-[11px] font-black uppercase tracking-[0.2em] shadow-glow-emerald"
                   onClick={() => onSelect?.(product)}
                 >
-                  Deploy System
+                  {product.category === 'course' ? 'Purchase Script' : 'Deploy System'}
                 </Button>
               </div>
             </div>

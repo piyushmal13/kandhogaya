@@ -1,0 +1,9 @@
+//@version=5
+indicator("Dynamic Trend Navigator", overlay=true)
+length = input.int(14, "ATR Length")
+multiplier = input.float(2.0, "ATR Multiplier")
+atr = ta.atr(length)
+upper = close + atr * multiplier
+lower = close - atr * multiplier
+plot(upper, color=color.red, title="Upper Resistance")
+plot(lower, color=color.green, title="Lower Support")

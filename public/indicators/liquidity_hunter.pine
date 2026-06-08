@@ -1,0 +1,7 @@
+//@version=5
+indicator("Advanced Liquidity Hunter", overlay=true)
+// Highlight swing highs/lows for liquidity pools
+swing_high = ta.pivothigh(high, 10, 10)
+swing_low = ta.pivotlow(low, 10, 10)
+plotshape(swing_high, style=shape.triangledown, location=location.abovebar, color=color.red, title="Buy Side Liquidity")
+plotshape(swing_low, style=shape.triangleup, location=location.belowbar, color=color.green, title="Sell Side Liquidity")

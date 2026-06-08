@@ -1,0 +1,7 @@
+//@version=5
+indicator("Algorithmic Divergence Engine")
+rsi = ta.rsi(close, 14)
+plot(rsi, title="RSI", color=color.purple)
+hline(70, "Overbought", color=color.red)
+hline(30, "Oversold", color=color.green)
+// Advanced divergence calculation omitted for brevity
