@@ -5,33 +5,28 @@ import { containerVariants, itemVariants } from "@/lib/motion";
 const INTEGRATION_PARTNERS = [
   {
     name: "MetaTrader 5",
-    logo_url: "https://www.metatrader5.com/i/metatrader-5-logo_2x.png",
-    className: "h-7 sm:h-8 md:h-9",
-    filter: "brightness(0) invert(1) opacity(0.85)"
+    logo_url: "/metatrader5.svg",
+    className: "h-8 sm:h-9 md:h-10"
   },
   {
     name: "MetaTrader 4",
-    logo_url: "https://www.metatrader4.com/i/metatrader-4-logo_2x.png",
-    className: "h-7 sm:h-8 md:h-9",
-    filter: "brightness(0) invert(1) opacity(0.85)"
+    logo_url: "/metatrader4.svg",
+    className: "h-8 sm:h-9 md:h-10"
   },
   {
     name: "TradingView",
     logo_url: "/tradingview.svg",
-    className: "h-5 sm:h-6 md:h-7",
-    filter: "brightness(0) invert(1) opacity(0.85)"
+    className: "h-6 sm:h-7 md:h-8"
   },
   {
     name: "cTrader",
     logo_url: "https://help.ctrader.com/ctrader-web/img/logo.png",
-    className: "h-7 sm:h-8 md:h-9",
-    filter: "brightness(1.3) saturate(0.9)"
+    className: "h-7 sm:h-8 md:h-9"
   },
   {
     name: "Binance",
-    logo_url: "https://upload.wikimedia.org/wikipedia/commons/e/e8/Binance_Logo.svg",
-    className: "h-5 sm:h-6 md:h-7",
-    filter: "brightness(0) invert(1) opacity(0.85)"
+    logo_url: "/binance.svg",
+    className: "h-6 sm:h-7 md:h-8"
   }
 ];
 
@@ -63,18 +58,18 @@ export const BrandAuthority = () => {
               </p>
             </motion.div>
    
-            {/* Ultra-Premium Uniform Logo Layout */}
+            {/* Ultra-Premium Flat Logo Row (No Boxes, Original Brand Colors) */}
             <motion.div 
               variants={itemVariants} 
-              className="w-full max-w-5xl mx-auto flex flex-wrap justify-center items-center gap-6 sm:gap-8 md:gap-10"
+              className="w-full max-w-5xl mx-auto flex flex-wrap justify-center items-center gap-10 sm:gap-14 md:gap-16"
             >
               {INTEGRATION_PARTNERS.map((partner) => (
                 <div 
                   key={partner.name} 
-                  className="group relative flex items-center justify-center px-6 sm:px-8 md:px-10 py-5 sm:py-6 rounded-2xl sm:rounded-3xl bg-white/[0.02] border border-white/[0.04] hover:border-white/[0.12] hover:bg-white/[0.04] transition-all duration-500 ease-out"
+                  className="group relative flex items-center justify-center transition-all duration-500 ease-out"
                 >
                   {/* Subtle Glow on Hover */}
-                  <div className="absolute inset-0 bg-white/[0.03] blur-[50px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+                  <div className="absolute inset-0 bg-white/[0.01] blur-[30px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none scale-150" />
                   
                   {/* Logo Image */}
                   <img 
@@ -82,8 +77,7 @@ export const BrandAuthority = () => {
                     alt={partner.name} 
                     draggable={false}
                     loading="lazy"
-                    style={{ filter: partner.filter }}
-                    className={`${partner.className} w-auto object-contain group-hover:opacity-100 transition-all duration-500 ease-out transform group-hover:scale-[1.06]`}
+                    className={`${partner.className} w-auto object-contain transition-all duration-500 ease-out transform group-hover:scale-[1.08]`}
                   />
                 </div>
               ))}

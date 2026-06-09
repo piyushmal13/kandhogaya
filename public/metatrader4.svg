@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="36" height="36">
+  <defs>
+    <!-- Gradients matching official MT4 color theme with premium shine -->
+    <linearGradient id="mt4Blue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E88E5" />
+      <stop offset="100%" stop-color="#1565C0" />
+    </linearGradient>
+    <linearGradient id="mt4Green" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4CAF50" />
+      <stop offset="100%" stop-color="#2E7D32" />
+    </linearGradient>
+    <linearGradient id="mt4Orange" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFA726" />
+      <stop offset="100%" stop-color="#EF6C00" />
+    </linearGradient>
+    <linearGradient id="mt4Center" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2196F3" />
+      <stop offset="100%" stop-color="#0D47A1" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+  
+  <!-- Stylized interlocking figures/arcs -->
+  <g transform="translate(50,50)">
+    <!-- Blue/Green/Orange Interlocking Arcs -->
+    <!-- Arc 1 (Top Blue) -->
+    <path d="M 0,-40 C -15,-40 -28,-30 -35,-15 A 8,8 0 0,0 -32,-5 C -25,-12 -13,-18 0,-18 C 13,-18 25,-12 32,-5 A 8,8 0 0,0 35,-15 C 28,-30 15,-40 0,-40 Z" fill="url(#mt4Blue)" />
+    <circle cx="0" cy="-45" r="7" fill="url(#mt4Blue)" />
+
+    <!-- Arc 2 (Bottom Left Green) -->
+    <path d="M -34,18 C -42,6 -42,-10 -35,-23 A 8,8 0 0,0 -24,-24 C -24,-13 -18,-2 -9,6 C 0,14 12,18 21,18 A 8,8 0 0,0 26,27 C 10,29 -14,26 -34,18 Z" fill="url(#mt4Green)" transform="rotate(120)" />
+    <circle cx="-39" cy="22" r="7" fill="url(#mt4Green)" />
+
+    <!-- Arc 3 (Bottom Right Orange) -->
+    <path d="M -34,18 C -42,6 -42,-10 -35,-23 A 8,8 0 0,0 -24,-24 C -24,-13 -18,-2 -9,6 C 0,14 12,18 21,18 A 8,8 0 0,0 26,27 C 10,29 -14,26 -34,18 Z" fill="url(#mt4Orange)" transform="rotate(240)" />
+    <circle cx="39" cy="22" r="7" fill="url(#mt4Orange)" />
+
+    <!-- Central Glowing Sphere containing the number '4' -->
+    <circle cx="0" cy="0" r="21" fill="url(#mt4Center)" filter="url(#glow)" stroke="#ffffff" stroke-width="1.5" />
+    <text x="0" y="7" text-anchor="middle" fill="#ffffff" font-family="'Inter', sans-serif, system-ui" font-size="22" font-weight="900">4</text>
+  </g>
+</svg>
