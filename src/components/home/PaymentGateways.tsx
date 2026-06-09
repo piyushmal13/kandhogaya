@@ -1,7 +1,8 @@
 import React from "react";
 import { motion } from "motion/react";
 import { containerVariants, itemVariants } from "@/lib/motion";
-import { ShieldCheck, Cpu, Zap, Lock } from "lucide-react";
+import { ShieldCheck, Cpu, Zap, Lock, Wallet } from "lucide-react";
+import { USDT_NETWORKS } from "@/config/cryptoAddresses";
 
 export const PaymentGateways = () => {
   const methods = [
@@ -9,6 +10,15 @@ export const PaymentGateways = () => {
     { name: "Mastercard", src: "/mastercard.jpg", alt: "Mastercard" },
     { name: "UPI", src: "/upi.png", alt: "UPI (Unified Payments Interface)" }
   ];
+
+  const cryptoNetworks = USDT_NETWORKS.map((n) => ({
+    id: n.id,
+    name: n.name,
+    fullName: n.fullName,
+    color: n.color,
+    bgColor: n.bgColor,
+    borderColor: n.borderColor,
+  }));
 
   const trustBadges = [
     { 
@@ -83,10 +93,32 @@ export const PaymentGateways = () => {
             </motion.div>
           </div>
 
-          {/* Divider */}
-          <div className="w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+            {/* Crypto Network Badges */}
+            <motion.div
+              variants={itemVariants}
+              className="space-y-3"
+            >
+              <div className="flex items-center justify-center gap-2">
+                <Wallet className="w-3.5 h-3.5 text-amber-400" />
+                <span className="text-[9px] font-black uppercase tracking-[0.2em] text-amber-400">USDT Accepted On</span>
+              </div>
+              <div className="flex flex-wrap items-center justify-center gap-2">
+                {cryptoNetworks.map((network) => (
+                  <div
+                    key={network.id}
+                    className={`px-4 py-2 rounded-xl ${network.bgColor} ${network.borderColor} border flex items-center gap-2 hover:scale-105 transition-all duration-300 cursor-default`}
+                  >
+                    <span className={`text-[9px] font-black uppercase tracking-widest ${network.color}`}>{network.name}</span>
+                    <span className="text-[7px] text-white/30 font-bold uppercase tracking-wider">{network.fullName}</span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
 
-          {/* Bottom Section: Institutional Security Trust Grid */}
+            {/* Divider */}
+            <div className="w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+
+            {/* Bottom Section: Institutional Security Trust Grid */}
           <motion.div 
             variants={itemVariants}
             className="grid grid-cols-1 sm:grid-cols-3 gap-6"

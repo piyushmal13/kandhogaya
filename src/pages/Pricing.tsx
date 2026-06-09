@@ -9,6 +9,7 @@ import { PurchaseModal } from "@/components/payments/PurchaseModal";
 import { tracker } from "@/core/tracker";
 import { motion } from "motion/react";
 import { PageMeta } from "../components/site/PageMeta";
+import { USDT_NETWORKS } from "@/config/cryptoAddresses";
 
 const SIGNAL_PLANS = [
   {
@@ -190,7 +191,9 @@ export const Pricing = () => {
             <span className="px-3.5 py-1.5 bg-white/[0.02] border border-white/10 rounded-lg text-[9px] font-mono text-white/50 uppercase tracking-widest">Mastercard</span>
             <span className="px-3.5 py-1.5 bg-blue-500/10 border border-blue-500/20 rounded-lg text-[9px] font-mono text-blue-400 uppercase tracking-widest font-black">UPI (PhonePe, GPay)</span>
             <span className="px-3.5 py-1.5 bg-white/[0.02] border border-white/10 rounded-lg text-[9px] font-mono text-white/50 uppercase tracking-widest">Credit/Debit Cards</span>
-            <span className="px-3.5 py-1.5 bg-amber-500/10 border border-amber-500/20 rounded-lg text-[9px] font-mono text-amber-500 uppercase tracking-widest font-black">Crypto (BTC, USDT)</span>
+            {USDT_NETWORKS.map((n) => (
+              <span key={n.id} className={`px-3.5 py-1.5 ${n.bgColor} ${n.borderColor} border rounded-lg text-[9px] font-mono ${n.color} uppercase tracking-widest font-black`}>{n.name}</span>
+            ))}
           </div>
         </div>
 

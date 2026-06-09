@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { 
   X, 
   CheckCircle2, 
@@ -8,12 +8,19 @@ import {
   Check,
   CreditCard,
   CloudUpload,
-  Phone
+  Phone,
+  Wallet,
+  ArrowRight,
+  HelpCircle,
+  ShieldCheck,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
 import { tracker } from "@/core/tracker";
 import { ReviewPromptModal } from "../ui/ReviewPromptModal";
+import { CryptoPaymentFlow } from "./CryptoPaymentFlow";
+import { PaymentGuide } from "./PaymentGuide";
+import { USDT_NETWORKS } from "@/config/cryptoAddresses";
 
 interface PurchaseModalProps {
   plan: string;
@@ -23,17 +30,20 @@ interface PurchaseModalProps {
   onClose: () => void;
 }
 
-type Step = "payment" | "details" | "upload" | "success";
+type PaymentMethod = "upi" | "crypto" | null;
+type Step = "method" | "payment" | "crypto" | "guide" | "details" | "upload" | "success";
 
 export const PurchaseModal = ({ plan, amount, productId, downloadUrl, onClose }: PurchaseModalProps) => {
   const { user } = useAuth();
-  const [step, setStep] = useState<Step>("payment");
+  const [step, setStep] = useState<Step>("method");
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(null);
   const [whatsappNumber, setWhatsappNumber] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showReviewPrompt, setShowReviewPrompt] = useState(false);
+  const [cryptoVerified, setCryptoVerified] = useState<{ networkId: string; address: string } | null>(null);
 
   const upiId = "piyushmal13@okaxis"; 
 
@@ -41,25 +51,35 @@ export const PurchaseModal = ({ plan, amount, productId, downloadUrl, onClose }:
     tracker.track("purchase_attempt", { plan, amount, productId });
   }, []);
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(upiId);
+  const handleCopy = useCallback(async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textarea);
+    }
     setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
+    setTimeout(() => setCopied(false), 2500);
+  }, []);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (!selectedFile) return;
 
-    // Institutional Validation: PNG, JPG, JPEG only. MAX 5MB.
     const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg'];
     if (!allowedTypes.includes(selectedFile.type)) {
-      setError("Institutional Error: Only PNG and JPG formats allowed.");
+      setError("Only PNG and JPG formats allowed.");
       return;
     }
 
     if (selectedFile.size > 5 * 1024 * 1024) {
-      setError("Institutional Error: Payload exceeds 5MB limit.");
+      setError("File exceeds 5MB limit.");
       return;
     }
 
@@ -67,9 +87,13 @@ export const PurchaseModal = ({ plan, amount, productId, downloadUrl, onClose }:
     setStep("upload");
   };
 
+  const handleCryptoVerified = (networkId: string, address: string) => {
+    setCryptoVerified({ networkId, address });
+  };
+
   const handleSubmit = async () => {
     if (!user || !file || !whatsappNumber) {
-      setError("Missing institutional metadata. All fields required.");
+      setError("All fields required — WhatsApp number and screenshot are mandatory.");
       return;
     }
 
@@ -77,7 +101,6 @@ export const PurchaseModal = ({ plan, amount, productId, downloadUrl, onClose }:
     setError(null);
 
     try {
-      // 1. DISCOVERY: Storage Upload
       const timestamp = Date.now();
       const fileExt = file.name.split('.').pop();
       const filePath = `${user.id}/${timestamp}.${fileExt}`;
@@ -88,7 +111,6 @@ export const PurchaseModal = ({ plan, amount, productId, downloadUrl, onClose }:
 
       if (uploadError) throw uploadError;
 
-      // 2. DISCOVERY: Register Metadata Signal
       const refCode = localStorage.getItem("ifx_referral_code");
       
       const { error: dbError } = await supabase
@@ -105,39 +127,408 @@ export const PurchaseModal = ({ plan, amount, productId, downloadUrl, onClose }:
 
       if (dbError) throw dbError;
 
-      // 3. FULFILLMENT: Alerting the CEO (WhatsApp Deep Link)
+      const paymentMethodLabel = paymentMethod === "crypto" 
+        ? `Crypto (${cryptoVerified?.networkId?.toUpperCase() || "USDT"})` 
+        : "UPI";
+
       const encodedMsg = encodeURIComponent(
         `🚨 *REVENUE SIGNAL DETECTED* 🚨\n\n` +
         `👤 *Client:* ${user.email}\n` +
         `📱 *Contact:* ${whatsappNumber}\n` +
         `📦 *Asset:* ${plan}\n` +
         `💰 *Amount:* $${amount}\n` +
+        `💳 *Method:* ${paymentMethodLabel}\n` +
+        (cryptoVerified ? `🔗 *Network:* ${cryptoVerified.networkId.toUpperCase()}\n` : "") +
         (refCode ? `🔗 *Referral:* ${refCode}\n` : "") +
         `\n🔓 *Audit Required:* Please check the Admin Terminal for verification.`
       );
       
       const whatsappUrl = `https://wa.me/919934661831?text=${encodedMsg}`;
       
-      tracker.track("payment_uploaded", { plan, amount, productId });
+      tracker.track("payment_uploaded", { plan, amount, productId, method: paymentMethodLabel });
       
-      // Open WhatsApp notification in background
       window.open(whatsappUrl, '_blank');
       
       setStep("success");
       setTimeout(() => setShowReviewPrompt(true), 2000);
     } catch (err: any) {
-      console.error("Institutional Failsafe: Purchase Fulfillment Signal Failed.", err);
-      setError(err.message || "Institutional connectivity error. Fulfillment discovery halted.");
+      console.error("Purchase Fulfillment Signal Failed.", err);
+      setError(err.message || "Connectivity error. Submission halted.");
     } finally {
       setLoading(false);
     }
   };
 
+  // ─── Step: Method Selection ───────────────────────────────────────
+  const renderMethodSelection = () => (
+    <div className="space-y-8 animate-in slide-in-from-bottom-4 duration-500">
+      {/* Amount Display */}
+      <div className="p-8 bg-white/5 border border-white/10 rounded-[32px] text-center space-y-4 font-mono">
+        <div className="text-[10px] text-gray-500 uppercase tracking-widest italic">Capital Requirement</div>
+        <div className="text-5xl font-black text-white tracking-tight">${amount}</div>
+        <div className="text-[9px] text-gray-600 uppercase tracking-widest">{plan} Access</div>
+      </div>
+
+      {/* Payment Method Selector */}
+      <div className="space-y-3">
+        <div className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 text-center mb-2">Select Settlement Method</div>
+        
+        {/* UPI Option */}
+        <button
+          onClick={() => {
+            setPaymentMethod("upi");
+            setStep("payment");
+          }}
+          className="w-full p-6 bg-emerald-500/5 border border-emerald-500/20 rounded-2xl flex items-center gap-5 hover:bg-emerald-500/10 hover:border-emerald-500/30 transition-all group hover:scale-[1.01] active:scale-[0.99]"
+        >
+          <div className="w-14 h-14 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-black transition-all shrink-0">
+            <Phone className="w-6 h-6" />
+          </div>
+          <div className="text-left flex-1">
+            <div className="text-sm font-black text-white uppercase tracking-wider">UPI Transfer</div>
+            <div className="text-[9px] text-gray-500 font-bold uppercase tracking-widest mt-1">PhonePe, GPay, Paytm — Instant</div>
+            <div className="text-[8px] text-emerald-400/60 font-bold uppercase tracking-widest mt-1">Recommended for India</div>
+          </div>
+          <ArrowRight className="w-4 h-4 text-gray-600 group-hover:text-emerald-500 group-hover:translate-x-1 transition-all shrink-0" />
+        </button>
+
+        {/* Crypto Option */}
+        <button
+          onClick={() => {
+            setPaymentMethod("crypto");
+            setStep("crypto");
+          }}
+          className="w-full p-6 bg-amber-500/5 border border-amber-500/20 rounded-2xl flex items-center gap-5 hover:bg-amber-500/10 hover:border-amber-500/30 transition-all group hover:scale-[1.01] active:scale-[0.99]"
+        >
+          <div className="w-14 h-14 bg-amber-500/10 border border-amber-500/20 rounded-2xl flex items-center justify-center text-amber-500 group-hover:bg-amber-500 group-hover:text-black transition-all shrink-0">
+            <Wallet className="w-6 h-6" />
+          </div>
+          <div className="text-left flex-1">
+            <div className="text-sm font-black text-white uppercase tracking-wider">USDT (Crypto)</div>
+            <div className="text-[9px] text-gray-500 font-bold uppercase tracking-widest mt-1">BSC, TRX, ETH, TON — Global</div>
+            <div className="text-[8px] text-amber-400/60 font-bold uppercase tracking-widest mt-1">
+              {USDT_NETWORKS.length} networks supported
+            </div>
+          </div>
+          <ArrowRight className="w-4 h-4 text-gray-600 group-hover:text-amber-500 group-hover:translate-x-1 transition-all shrink-0" />
+        </button>
+      </div>
+
+      {/* Guide Toggle */}
+      <button
+        onClick={() => setStep("guide")}
+        className="w-full py-4 bg-white/5 border border-white/10 rounded-2xl text-white/50 text-[10px] font-black uppercase tracking-[0.2em] hover:text-white hover:bg-white/10 transition-all flex items-center justify-center gap-2"
+      >
+        <HelpCircle className="w-4 h-4" />
+        How Does This Work?
+      </button>
+
+      {/* Accepted Payment Badges */}
+      <div className="pt-4 border-t border-white/5 space-y-3">
+        <div className="text-[8px] font-black uppercase tracking-[0.25em] text-gray-500 text-center">Accepted Settlement Systems</div>
+        <div className="flex flex-wrap items-center justify-center gap-2 bg-black/30 p-3 rounded-2xl border border-white/5">
+          <div className="px-2.5 py-1 bg-white/[0.02] border border-white/10 rounded-lg shrink-0">
+            <span className="text-[8px] font-bold text-white/50 uppercase tracking-widest">Mastercard</span>
+          </div>
+          <div className="px-2.5 py-1 bg-emerald-500/5 border border-emerald-500/10 rounded-lg shrink-0">
+            <span className="text-[8px] font-bold text-emerald-400 uppercase tracking-widest">UPI</span>
+          </div>
+          <div className="px-2.5 py-1 bg-white/[0.02] border border-white/10 rounded-lg shrink-0">
+            <span className="text-[8px] font-bold text-white/50 uppercase tracking-widest">Cards</span>
+          </div>
+          {USDT_NETWORKS.map((n) => (
+            <div key={n.id} className={`px-2.5 py-1 ${n.bgColor} ${n.borderColor} border rounded-lg shrink-0`}>
+              <span className={`text-[8px] font-bold ${n.color} uppercase tracking-widest`}>{n.name}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <p className="text-[9px] text-white/25 text-center leading-normal font-mono">
+        By initiating checkout, you agree to our{" "}
+        <a href="/terms" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Terms</a>,{" "}
+        <a href="/privacy" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Privacy</a>, and{" "}
+        <a href="/risk" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Risk Disclosures</a>.
+      </p>
+    </div>
+  );
+
+  // ─── Step: UPI Payment ────────────────────────────────────────────
+  const renderUpiPayment = () => (
+    <div className="space-y-8 animate-in slide-in-from-bottom-4 duration-500">
+      {/* Back Button */}
+      <button
+        onClick={() => setStep("method")}
+        className="flex items-center gap-2 text-[10px] text-gray-500 font-black uppercase tracking-widest hover:text-white transition-colors"
+      >
+        <ArrowRight className="w-3 h-3 rotate-180" />
+        All Methods
+      </button>
+
+      <div className="p-8 bg-white/5 border border-white/10 rounded-[32px] text-center space-y-4 font-mono">
+        <div className="text-[10px] text-gray-500 uppercase tracking-widest">Capital Requirement</div>
+        <div className="text-5xl font-black text-white tracking-tight">${amount}</div>
+        <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 text-[8px] font-black uppercase tracking-widest">
+          <Phone className="w-3 h-3" />
+          UPI Settlement
+        </div>
+      </div>
+
+      <div className="space-y-4">
+        <div className="p-6 bg-white/5 border border-white/10 rounded-3xl flex items-center justify-between group">
+          <div>
+            <div className="text-[10px] font-mono text-gray-500 uppercase tracking-tighter mb-1">UPI Destination</div>
+            <div className="text-lg font-bold text-white tracking-tight">{upiId}</div>
+          </div>
+          <button 
+            onClick={() => handleCopy(upiId)}
+            className="p-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 rounded-2xl hover:bg-emerald-500 hover:text-black transition-all group-hover:scale-110 active:scale-95 shadow-[0_0_20px_rgba(16,185,129,0.1)]"
+          >
+            {copied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
+          </button>
+        </div>
+
+        <button
+          onClick={() => setStep("details")}
+          className="w-full py-5 bg-white text-black font-black text-[10px] uppercase tracking-[.25em] rounded-2xl transition-all hover:scale-[1.02] active:scale-95 shadow-xl"
+        >
+          Initiate Verification Flow
+        </button>
+      </div>
+    </div>
+  );
+
+  // ─── Step: Crypto Payment ─────────────────────────────────────────
+  const renderCryptoPayment = () => (
+    <div className="space-y-6 animate-in slide-in-from-bottom-4 duration-500">
+      {/* Back Button */}
+      <button
+        onClick={() => setStep("method")}
+        className="flex items-center gap-2 text-[10px] text-gray-500 font-black uppercase tracking-widest hover:text-white transition-colors"
+      >
+        <ArrowRight className="w-3 h-3 rotate-180" />
+        All Methods
+      </button>
+
+      <CryptoPaymentFlow 
+        amount={amount} 
+        onAddressVerified={handleCryptoVerified}
+      />
+
+      {/* Proceed to upload after crypto verification */}
+      {cryptoVerified && (
+        <button
+          onClick={() => setStep("details")}
+          className="w-full py-5 bg-white text-black font-black text-[10px] uppercase tracking-[.25em] rounded-2xl transition-all hover:scale-[1.02] active:scale-95 shadow-xl flex items-center justify-center gap-3"
+        >
+          <ShieldCheck className="w-4 h-4" />
+          Proceed to Upload Screenshot
+        </button>
+      )}
+    </div>
+  );
+
+  // ─── Step: Payment Guide ──────────────────────────────────────────
+  const renderGuide = () => (
+    <div className="space-y-6 animate-in slide-in-from-bottom-4 duration-500">
+      <button
+        onClick={() => setStep("method")}
+        className="flex items-center gap-2 text-[10px] text-gray-500 font-black uppercase tracking-widest hover:text-white transition-colors"
+      >
+        <ArrowRight className="w-3 h-3 rotate-180" />
+        Back to Methods
+      </button>
+      <PaymentGuide />
+      <button
+        onClick={() => setStep("method")}
+        className="w-full py-4 bg-white/5 border border-white/10 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl hover:bg-white/10 transition-all"
+      >
+        Got It — Select Payment Method
+      </button>
+    </div>
+  );
+
+  // ─── Step: Details (WhatsApp + Screenshot Upload) ─────────────────
+  const renderDetails = () => (
+    <div className="space-y-8 animate-in slide-in-from-bottom-4 duration-500">
+      <button
+        onClick={() => setStep(paymentMethod === "crypto" ? "crypto" : "payment")}
+        className="flex items-center gap-2 text-[10px] text-gray-500 font-black uppercase tracking-widest hover:text-white transition-colors"
+      >
+        <ArrowRight className="w-3 h-3 rotate-180" />
+        {paymentMethod === "crypto" ? "Back to Crypto" : "Back to UPI"}
+      </button>
+
+      {/* Method Badge */}
+      <div className="flex items-center gap-3">
+        <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest ${
+          paymentMethod === "crypto" 
+            ? "bg-amber-500/10 border border-amber-500/20 text-amber-400" 
+            : "bg-emerald-500/10 border border-emerald-500/20 text-emerald-400"
+        }`}>
+          {paymentMethod === "crypto" ? <Wallet className="w-3 h-3" /> : <Phone className="w-3 h-3" />}
+          {paymentMethod === "crypto" ? `USDT${cryptoVerified ? ` (${cryptoVerified.networkId.toUpperCase()})` : ""}` : "UPI"}
+        </div>
+        <span className="text-sm font-black text-white">${amount}</span>
+      </div>
+
+      <div className="p-8 bg-white/5 border border-white/10 rounded-[32px]">
+        <h3 className="text-lg font-black text-white uppercase tracking-tighter mb-6 flex items-center gap-3 italic">
+          <Phone className="w-5 h-5 text-emerald-500" />
+          Communication Link
+        </h3>
+        <div className="space-y-4">
+          <div className="relative">
+            <input 
+              type="text"
+              placeholder="WHATSAPP NUMBER (WITH COUNTRY CODE)"
+              value={whatsappNumber}
+              onChange={(e) => setWhatsappNumber(e.target.value)}
+              className="w-full bg-black/40 border border-white/10 rounded-2xl px-6 py-5 text-white text-[10px] font-black tracking-widest focus:border-emerald-500/50 outline-none transition-all"
+            />
+          </div>
+          <p className="text-[9px] text-gray-600 font-bold uppercase tracking-widest text-center italic">
+            Used strictly for fulfillment notification and support.
+          </p>
+        </div>
+      </div>
+
+      <div className="p-6 border-2 border-dashed border-white/10 rounded-[32px] text-center space-y-4 hover:border-emerald-500/50 transition-all group">
+        <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-2 text-gray-500 group-hover:text-emerald-500 transition-colors">
+          <CloudUpload className="w-8 h-8" />
+        </div>
+        <div className="space-y-1">
+          <h3 className="text-sm font-bold text-white uppercase tracking-widest">Payment Screenshot</h3>
+          <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">
+            {paymentMethod === "crypto" 
+              ? "Upload your successful USDT transfer screenshot"
+              : "Upload your UPI payment success screenshot"
+            }
+          </p>
+        </div>
+        <label className="block">
+          <input 
+            type="file" 
+            accept="image/png,image/jpeg,image/jpg" 
+            onChange={handleFileUpload}
+            className="hidden" 
+          />
+          <div className="inline-flex px-8 py-4 bg-white/5 border border-white/10 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl cursor-pointer hover:bg-white hover:text-black transition-all">
+            Attach Screenshot
+          </div>
+        </label>
+        <p className="text-[8px] text-gray-600 font-bold uppercase tracking-widest">
+          PNG or JPG only • Max 5MB
+        </p>
+      </div>
+    </div>
+  );
+
+  // ─── Step: Upload Review ──────────────────────────────────────────
+  const renderUpload = () => (
+    <div className="space-y-8 animate-in slide-in-from-right-4 duration-500">
+      <div className="p-8 bg-white/5 border border-white/10 rounded-[32px] text-center">
+        <div className="w-20 h-20 bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 rounded-3xl flex items-center justify-center mx-auto mb-6">
+          <CreditCard className="w-10 h-10" />
+        </div>
+        <h3 className="text-xl font-bold text-white tracking-tight uppercase italic font-black">Ready for Audit</h3>
+        <p className="text-xs text-gray-500 mt-2 font-mono uppercase tracking-widest">{file?.name}</p>
+        <div className="mt-4 inline-flex items-center gap-2 px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[8px] text-gray-400 font-bold uppercase tracking-widest">
+          {paymentMethod === "crypto" ? <Wallet className="w-3 h-3" /> : <Phone className="w-3 h-3" />}
+          {paymentMethod === "crypto" ? `USDT${cryptoVerified ? ` (${cryptoVerified.networkId.toUpperCase()})` : ""}` : "UPI"} • ${amount}
+        </div>
+      </div>
+
+      {error && (
+        <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-center gap-3 text-red-500 text-[10px] font-black uppercase tracking-widest italic">
+          <AlertCircle className="w-4 h-4" />
+          {error}
+        </div>
+      )}
+
+      <div className="flex gap-4">
+        <button 
+          onClick={() => setStep("details")}
+          className="flex-1 px-8 py-5 bg-white/5 border border-white/10 text-white text-[10px] font-black uppercase tracking-widest rounded-2xl hover:bg-white/10 transition-all font-mono"
+        >
+          Modify
+        </button>
+        <button 
+          onClick={handleSubmit}
+          disabled={loading}
+          className="flex-[2] px-8 py-5 bg-emerald-500 text-black text-[10px] font-black uppercase tracking-widest rounded-2xl hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-3 shadow-xl shadow-emerald-500/20"
+        >
+          {loading ? (
+            <>
+              <Loader2 className="w-4 h-4 animate-spin" />
+              Auditing Artifact...
+            </>
+          ) : (
+            <>
+              <CheckCircle2 className="w-4 h-4" />
+              Fulfill Subscription
+            </>
+          )}
+        </button>
+      </div>
+
+      <p className="text-[9px] text-white/25 text-center leading-normal mt-3 font-mono">
+        By fulfilling subscription, you represent you agree to our{" "}
+        <a href="/terms" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Terms</a>,{" "}
+        <a href="/privacy" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Privacy</a>, and{" "}
+        <a href="/risk" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Risk Disclosures</a>.
+      </p>
+    </div>
+  );
+
+  // ─── Step: Success ────────────────────────────────────────────────
+  const renderSuccess = () => (
+    <div className="space-y-8 py-12 text-center animate-in zoom-in-95 duration-500">
+      <div className="w-24 h-24 bg-emerald-500 text-black rounded-[40px] flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-emerald-500/20">
+        <CheckCircle2 className="w-12 h-12" />
+      </div>
+      <div className="space-y-4">
+        <ReviewPromptModal isOpen={showReviewPrompt} onClose={() => setShowReviewPrompt(false)} />
+        <h2 className="text-3xl font-black text-white uppercase tracking-tighter italic">Signal Acknowledged</h2>
+        {downloadUrl ? (
+          <p className="text-gray-500 text-[11px] font-bold uppercase tracking-widest max-w-xs mx-auto leading-relaxed">Your transaction is complete. You can now download your TradingView asset directly.</p>
+        ) : (
+          <p className="text-gray-500 text-[11px] font-bold uppercase tracking-widest max-w-xs mx-auto leading-relaxed">Your artifact has been uploaded. An institutional auditor will verify and fulfill your subscription shortly.</p>
+        )}
+      </div>
+      
+      {downloadUrl ? (
+        <div className="flex flex-col gap-4 max-w-xs mx-auto">
+          <a 
+            href={downloadUrl}
+            download
+            className="w-full px-8 py-5 bg-emerald-500 text-black text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl hover:scale-110 active:scale-95 transition-all shadow-2xl shadow-emerald-500/20 block text-center"
+          >
+            Download Pine Script
+          </a>
+          <button 
+            onClick={onClose}
+            className="w-full px-8 py-4 bg-white/5 border border-white/10 text-white/50 hover:text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl transition-all"
+          >
+            Close
+          </button>
+        </div>
+      ) : (
+        <button 
+          onClick={onClose}
+          className="px-12 py-5 bg-white text-black text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl hover:scale-110 active:scale-95 transition-all shadow-2xl"
+        >
+          Enter Discovery Console
+        </button>
+      )}
+    </div>
+  );
+
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl animate-in fade-in duration-300">
-      <div className="relative w-full max-w-lg bg-[var(--raised)] border border-white/10 rounded-[40px] shadow-2xl overflow-hidden">
+      <div className="relative w-full max-w-lg max-h-[90vh] bg-[var(--raised)] border border-white/10 rounded-[40px] shadow-2xl overflow-hidden">
         
-        {/* Modal Discovery Header */}
+        {/* Modal Header */}
         <div className="p-8 pb-4 flex justify-between items-start">
           <div>
             <div className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500 mb-2">Revenue Fulfillment</div>
@@ -151,210 +542,15 @@ export const PurchaseModal = ({ plan, amount, productId, downloadUrl, onClose }:
           </button>
         </div>
 
-        <div className="p-8 pt-0">
-          {step === "payment" && (
-            <div className="space-y-8 animate-in slide-in-from-bottom-4 duration-500">
-              <div className="p-8 bg-white/5 border border-white/10 rounded-[32px] text-center space-y-4 font-mono">
-                <div className="text-[10px] text-gray-500 uppercase tracking-widest italic">Capital Requirement</div>
-                <div className="text-5xl font-black text-white tracking-tight">${amount}</div>
-              </div>
-
-              <div className="space-y-4">
-                <div className="p-6 bg-white/5 border border-white/10 rounded-3xl flex items-center justify-between group">
-                  <div>
-                    <div className="text-[10px] font-mono text-gray-500 uppercase tracking-tighter mb-1">UPI Destination</div>
-                    <div className="text-lg font-bold text-white tracking-tight">{upiId}</div>
-                  </div>
-                  <button 
-                    onClick={handleCopy}
-                    className="p-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 rounded-2xl hover:bg-emerald-500 hover:text-black transition-all group-hover:scale-110 active:scale-95 shadow-[0_0_20px_rgba(16,185,129,0.1)]"
-                  >
-                    {copied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
-                  </button>
-                </div>
-
-                <button
-                  onClick={() => setStep("details")}
-                  className="w-full py-5 bg-white text-black font-black text-[10px] uppercase tracking-[.25em] rounded-2xl transition-all hover:scale-[1.02] active:scale-95 shadow-xl"
-                >
-                  Initiate Verification Flow
-                </button>
-
-                <p className="text-[9px] text-white/25 text-center leading-normal mt-2 font-mono">
-                  By initiating checkout, you agree to our{" "}
-                  <a href="/terms" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Terms</a>,{" "}
-                  <a href="/privacy" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Privacy</a>, and{" "}
-                  <a href="/risk" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Risk Disclosures</a>.
-                </p>
-
-                {/* Accepted Payment Systems Visual Badging */}
-                <div className="pt-6 border-t border-white/5 space-y-3">
-                  <div className="text-[8px] font-black uppercase tracking-[0.25em] text-gray-500 text-center">Accepted Settlement Systems</div>
-                  <div className="flex flex-wrap items-center justify-center gap-2 bg-black/30 p-4 rounded-2xl border border-white/5">
-                    <div className="px-2.5 py-1 bg-white/[0.02] border border-white/10 rounded-lg shrink-0">
-                      <span className="text-[8px] font-bold text-white/50 uppercase tracking-widest">Mastercard</span>
-                    </div>
-                    <div className="px-2.5 py-1 bg-emerald-500/5 border border-emerald-500/10 rounded-lg shrink-0">
-                      <span className="text-[8px] font-bold text-emerald-400 uppercase tracking-widest">UPI (PhonePe, GPay)</span>
-                    </div>
-                    <div className="px-2.5 py-1 bg-white/[0.02] border border-white/10 rounded-lg shrink-0">
-                      <span className="text-[8px] font-bold text-white/50 uppercase tracking-widest">Credit/Debit Cards</span>
-                    </div>
-                    <div className="px-2.5 py-1 bg-amber-500/5 border border-amber-500/10 rounded-lg shrink-0">
-                      <span className="text-[8px] font-bold text-amber-500 uppercase tracking-widest">Crypto (BTC, USDT)</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {step === "details" && (
-            <div className="space-y-8 animate-in slide-in-from-bottom-4 duration-500">
-              <div className="p-8 bg-white/5 border border-white/10 rounded-[32px]">
-                <h3 className="text-lg font-black text-white uppercase tracking-tighter mb-6 flex items-center gap-3 italic">
-                  <Phone className="w-5 h-5 text-emerald-500" />
-                  Communication Link
-                </h3>
-                <div className="space-y-4">
-                  <div className="relative">
-                    <input 
-                      type="text"
-                      placeholder="WHATSAPP NUMBER (WITH COUNTRY CODE)"
-                      value={whatsappNumber}
-                      onChange={(e) => setWhatsappNumber(e.target.value)}
-                      className="w-full bg-black/40 border border-white/10 rounded-2xl px-6 py-5 text-white text-[10px] font-black tracking-widest focus:border-emerald-500/50 outline-none transition-all"
-                    />
-                  </div>
-                  <p className="text-[9px] text-gray-600 font-bold uppercase tracking-widest text-center italic">
-                    Used strictly for fulfillment notification and support.
-                  </p>
-                </div>
-              </div>
-
-              <div className="p-6 border-2 border-dashed border-white/10 rounded-[32px] text-center space-y-4 hover:border-emerald-500/50 transition-all group">
-                  <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-2 text-gray-500 group-hover:text-emerald-500 transition-colors">
-                    <CloudUpload className="w-8 h-8" />
-                  </div>
-                  <div className="space-y-1">
-                    <h3 className="text-sm font-bold text-white uppercase tracking-widest">Metadata Artifact</h3>
-                    <p className="text-xs text-gray-500">Upload your successful payment artifact</p>
-                  </div>
-                  <label className="block">
-                    <input 
-                      type="file" 
-                      accept="image/png,image/jpeg,image/jpg" 
-                      onChange={handleFileUpload}
-                      className="hidden" 
-                    />
-                    <div className="inline-flex px-8 py-4 bg-white/5 border border-white/10 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl cursor-pointer hover:bg-white hover:text-black transition-all">
-                      Attach Screenshot
-                    </div>
-                  </label>
-                </div>
-                
-                <button
-                  onClick={() => setStep("payment")}
-                  className="w-full py-4 text-[10px] text-gray-600 font-bold uppercase tracking-widest hover:text-white transition-colors"
-                >
-                  Return to Destination
-                </button>
-            </div>
-          )}
-
-          {step === "upload" && (
-            <div className="space-y-8 animate-in slide-in-from-right-4 duration-500">
-              <div className="p-8 bg-white/5 border border-white/10 rounded-[32px] text-center">
-                <div className="w-20 h-20 bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 rounded-3xl flex items-center justify-center mx-auto mb-6">
-                  <CreditCard className="w-10 h-10" />
-                </div>
-                <h3 className="text-xl font-bold text-white tracking-tight uppercase italic font-black">Ready for Audit</h3>
-                <p className="text-xs text-gray-500 mt-2 font-mono uppercase tracking-widest">{file?.name}</p>
-              </div>
-
-              {error && (
-                <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-center gap-3 text-red-500 text-[10px] font-black uppercase tracking-widest italic">
-                  <AlertCircle className="w-4 h-4" />
-                  {error}
-                </div>
-              )}
-
-              <div className="flex gap-4">
-                <button 
-                  onClick={() => setStep("details")}
-                  className="flex-1 px-8 py-5 bg-white/5 border border-white/10 text-white text-[10px] font-black uppercase tracking-widest rounded-2xl hover:bg-white/10 transition-all font-mono"
-                >
-                  Modify
-                </button>
-                <button 
-                  onClick={handleSubmit}
-                  disabled={loading}
-                  className="flex-[2] px-8 py-5 bg-emerald-500 text-black text-[10px] font-black uppercase tracking-widest rounded-2xl hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-3 shadow-xl shadow-emerald-500/20"
-                >
-                  {loading ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      Auditing Artifact...
-                    </>
-                  ) : (
-                    <>
-                      <CheckCircle2 className="w-4 h-4" />
-                      Fulfill Subscription
-                    </>
-                  )}
-                </button>
-              </div>
-
-              <p className="text-[9px] text-white/25 text-center leading-normal mt-3 font-mono">
-                By fulfilling subscription, you represent you agree to our{" "}
-                <a href="/terms" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Terms</a>,{" "}
-                <a href="/privacy" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Privacy</a>, and{" "}
-                <a href="/risk" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">Risk Disclosures</a>.
-              </p>
-            </div>
-          )}
-
-          {step === "success" && (
-            <div className="space-y-8 py-12 text-center animate-in zoom-in-95 duration-500">
-              <div className="w-24 h-24 bg-emerald-500 text-black rounded-[40px] flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-emerald-500/20">
-                <CheckCircle2 className="w-12 h-12" />
-              </div>
-              <div className="space-y-4">
-                <ReviewPromptModal isOpen={showReviewPrompt} onClose={() => setShowReviewPrompt(false)} />
-                <h2 className="text-3xl font-black text-white uppercase tracking-tighter italic">Signal Acknowledged</h2>
-                {downloadUrl ? (
-                  <p className="text-gray-500 text-[11px] font-bold uppercase tracking-widest max-w-xs mx-auto leading-relaxed">Your transaction is complete. You can now download your TradingView asset directly.</p>
-                ) : (
-                  <p className="text-gray-500 text-[11px] font-bold uppercase tracking-widest max-w-xs mx-auto leading-relaxed">Your artifact has been uploaded. An institutional auditor will verify and fulfill your subscription shortly.</p>
-                )}
-              </div>
-              
-              {downloadUrl ? (
-                <div className="flex flex-col gap-4 max-w-xs mx-auto">
-                  <a 
-                    href={downloadUrl}
-                    download
-                    className="w-full px-8 py-5 bg-emerald-500 text-black text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl hover:scale-110 active:scale-95 transition-all shadow-2xl shadow-emerald-500/20 block text-center"
-                  >
-                    Download Pine Script
-                  </a>
-                  <button 
-                    onClick={onClose}
-                    className="w-full px-8 py-4 bg-white/5 border border-white/10 text-white/50 hover:text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl transition-all"
-                  >
-                    Close
-                  </button>
-                </div>
-              ) : (
-                <button 
-                  onClick={onClose}
-                  className="px-12 py-5 bg-white text-black text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl hover:scale-110 active:scale-95 transition-all shadow-2xl"
-                >
-                  Enter Discovery Console
-                </button>
-              )}
-            </div>
-          )}
+        {/* Scrollable Content */}
+        <div className="p-8 pt-0 overflow-y-auto max-h-[calc(90vh-100px)]">
+          {step === "method" && renderMethodSelection()}
+          {step === "payment" && renderUpiPayment()}
+          {step === "crypto" && renderCryptoPayment()}
+          {step === "guide" && renderGuide()}
+          {step === "details" && renderDetails()}
+          {step === "upload" && renderUpload()}
+          {step === "success" && renderSuccess()}
         </div>
       </div>
     </div>
