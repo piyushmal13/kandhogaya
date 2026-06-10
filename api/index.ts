@@ -15,36 +15,39 @@ Guidelines for your replies:
 - Proactively suggest concrete SEO strategies, target keywords, sitemap improvements, and marketing ideas for IFXTrades (Trading Intelligence Hub, Gold trading signals, MT5 bots, Academy courses, Webinars).
 - If the user asks about general business strategy or quantitative systems, connect it back to organic discovery (SEO) and scaling the business.`;
 
-// --- CONFIGURATION ---
+// --- CONFIGURATION RESOLVERS ---
 const getIndexEnv = (key: string, fallback = ""): string => {
-  return typeof process !== "undefined" && process.env ? (process.env[key] || fallback) : fallback;
+  if (typeof process === "undefined" || !process.env) return fallback;
+  return process.env[key] || fallback;
 };
 
-const isProduction = getIndexEnv("NODE_ENV") === "production";
-const JWT_SECRET = getIndexEnv("JWT_SECRET") || (isProduction ? "" : "dev-only-jwt-secret");
-const supabaseUrl = getIndexEnv("VITE_SUPABASE_URL", "https://placeholder.supabase.co");
-const supabaseAnonKey = getIndexEnv("VITE_SUPABASE_ANON_KEY", "placeholder");
-const supabaseServiceKey = getIndexEnv("SUPABASE_SERVICE_ROLE_KEY") || undefined;
+const getIsProduction = () => getIndexEnv("NODE_ENV") === "production";
+const getJwtSecret = () => getIndexEnv("JWT_SECRET") || (getIsProduction() ? "" : "dev-only-jwt-secret");
+const getSupabaseUrl = () => getIndexEnv("VITE_SUPABASE_URL", "https://placeholder.supabase.co");
+const getSupabaseAnonKey = () => getIndexEnv("VITE_SUPABASE_ANON_KEY", "placeholder");
+const getSupabaseServiceKey = () => getIndexEnv("SUPABASE_SERVICE_ROLE_KEY") || undefined;
 
-if (!JWT_SECRET) {
-  throw new Error("Missing JWT_SECRET. Set a strong secret before deploying API routes.");
-}
-
-// Initialize Supabase Client
-const supabase = createClient(
-  supabaseUrl, 
-  supabaseServiceKey || supabaseAnonKey,
-  {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false
-    }
+// Supabase Client Getter
+let supabaseInstance: any = null;
+const getSupabase = () => {
+  if (!supabaseInstance) {
+    supabaseInstance = createClient(
+      getSupabaseUrl(),
+      getSupabaseServiceKey() || getSupabaseAnonKey(),
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
+      }
+    );
   }
-);
+  return supabaseInstance;
+};
 
 // Verify connection at startup
 try {
-  const { error } = await supabase.from('products').select('id').limit(1);
+  const { error } = await getSupabase().from('products').select('id').limit(1);
   if (error) {
     console.error("[Vercel API]: Supabase connection failed:", error.message);
   } else {
@@ -122,7 +125,7 @@ const authenticate = async (req: any, res: any, next: any) => {
 // Content Routes
 app.get("/api/content", async (req, res) => {
   const { type } = req.query;
-  const { data: posts, error } = await supabase
+  const { data: posts, error } = await getSupabase()
     .from('content_posts')
     .select('*')
     .eq('content_type', type || 'blog')
@@ -135,12 +138,12 @@ app.get("/api/content", async (req, res) => {
 
 // Product Routes
 app.get("/api/products", async (req, res) => {
-  const { data: products, error } = await supabase
+  const { data: products, error } = await getSupabase()
     .from('products')
     .select('*, product_variants(*)');
 
   if (error) return res.status(500).json({ error: error.message });
-  const formatted = products.map(p => ({
+  const formatted = products.map((p: any) => ({
     ...p,
     variants: p.product_variants
   }));
@@ -149,7 +152,7 @@ app.get("/api/products", async (req, res) => {
 
 // Webinar Routes
 app.get("/api/webinars", async (req, res) => {
-  const { data: webinars, error } = await supabase
+  const { data: webinars, error } = await getSupabase()
     .from('webinars')
     .select('*')
     .order('date_time', { ascending: true });
@@ -179,7 +182,7 @@ app.post("/api/webinars/register", authenticate, async (req: any, res) => {
 app.post("/api/license/validate", async (req, res) => {
   const { license_key, account_id, hardware_id } = req.body;
   
-  const { data: license, error } = await supabase
+  const { data: license, error } = await getSupabase()
     .from('bot_licenses')
     .select('*')
     .eq('license_key', license_key)
@@ -189,7 +192,7 @@ app.post("/api/license/validate", async (req, res) => {
   if (error || !license) return res.status(403).json({ valid: false, error: "Invalid or inactive license" });
   
   if (!license.account_id) {
-    await supabase
+    await getSupabase()
       .from('bot_licenses')
       .update({ account_id, hardware_id, last_validated_at: new Date().toISOString() })
       .eq('id', license.id);
@@ -197,7 +200,7 @@ app.post("/api/license/validate", async (req, res) => {
     return res.status(403).json({ valid: false, error: "License bound to another device" });
   }
 
-  const token = jwt.sign({ key: license_key, account_id }, JWT_SECRET, { expiresIn: "1h" });
+  const token = jwt.sign({ key: license_key, account_id }, getJwtSecret(), { expiresIn: "1h" });
   res.json({ validation_token: token, valid_until: license.expires_at });
 });
 
@@ -227,7 +230,7 @@ app.get("/api/admin/stats", authenticate, async (req: any, res) => {
 app.get("/api/admin/agents", authenticate, async (req: any, res) => {
   if (req.user.role !== "admin") return res.status(403).json({ error: "Forbidden" });
   
-  const { data: agents, error } = await supabase
+  const { data: agents, error } = await getSupabase()
     .from('agent_accounts')
     .select('*, users(email, full_name)');
 
@@ -242,7 +245,7 @@ app.post("/api/admin/licenses", authenticate, async (req: any, res) => {
   const expires_at = new Date();
   expires_at.setDate(expires_at.getDate() + (duration_days || 30));
 
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from('bot_licenses')
     .insert({
       user_id,
@@ -263,7 +266,7 @@ app.post("/api/admin/content", authenticate, async (req: any, res) => {
   const { title, content_type, body, data } = req.body;
   const slug = title.toLowerCase().replaceAll(" ", "-") + "-" + Math.random().toString(36).substring(2, 7);
   
-  const { error } = await supabase
+  const { error } = await getSupabase()
     .from('content_posts')
     .insert({
       title,
