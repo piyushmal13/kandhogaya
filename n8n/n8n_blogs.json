@@ -41,64 +41,67 @@
     },
     {
       "parameters": {
-        "model": "llama3:latest",
-        "prompt": "={{ 'You are Agent Alpha, the SEO Director for an institutional quantitative trading firm. Analyze the following news article:\\n\\nTitle: ' + $json.title + '\\nContent: ' + $json.content + '\\n\\nIdentify the top LSI keywords, search intent, and generate a highly professional, click-worthy headline (not clickbait). Also generate a clean, lowercase URL slug with hyphens.\\n\\nOutput Format MUST BE exactly JSON:\\n{\\n  \"headline\": \"...\",\\n  \"slug\": \"...\",\\n  \"keywords\": [\"...\", \"...\"]\\n}' }}",
-        "options": {
-          "format": "json",
-          "temperature": 0.2
-        }
+        "method": "POST",
+        "url": "http://localhost:11434/api/generate",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"model\": \"llama3:latest\", \"prompt\": \"You are Agent Alpha, the SEO Director for an institutional quantitative trading firm. Analyze the following news article:\\n\\nTitle: \" + $json.title + \"\\nContent: \" + $json.content + \"\\n\\nIdentify the top LSI keywords, search intent, and generate a highly professional, click-worthy headline (not clickbait). Also generate a clean, lowercase URL slug with hyphens.\\n\\nOutput Format MUST BE exactly JSON:\\n{\\n  \\\"headline\\\": \\\"...\\\",\\n  \\\"slug\\\": \\\"...\\\",\\n  \\\"keywords\\\": [\\\"...\\\", \\\"...\\\"]\\n}\", \"stream\": false, \"format\": \"json\" } }}",
+        "responseFormat": "json"
       },
       "id": "273a216d-318e-49b8-b1fc-e3e91129b0f4",
       "name": "Agent Alpha [SEO Director]",
-      "type": "n8n-nodes-base.ollama",
-      "typeVersion": 1,
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
       "position": [660, 200]
     },
     {
       "parameters": {
-        "model": "llama3:latest",
-        "prompt": "={{ 'You are Agent Beta, a Senior Quantitative Analyst. Read the raw news:\\n\\n' + $node[\"Parse XML & Select Top 3\"].json[\"content\"] + '\\n\\nExtract all hard data, numbers, quotes, and central institutional perspectives. Do not write a summary. Write bullet points of pure facts. Strip all fluff.' }}",
-        "options": {
-          "temperature": 0.1
-        }
+        "method": "POST",
+        "url": "http://localhost:11434/api/generate",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"model\": \"deepseek-r1:8b\", \"prompt\": \"You are Agent Beta, a Senior Quantitative Analyst at an institutional trading firm. Read the raw news article:\\n\\n\" + $node[\"Parse XML & Select Top 3\"].json[\"content\"] + \"\\n\\nExtract all hard data, key numbers, rates, central bank perspectives, quotes, and institutional facts. Do not write a summary. Write bullet points of pure data and facts. Strip all fluff and general commentary.\", \"stream\": false } }}",
+        "responseFormat": "json"
       },
       "id": "89ab1037-ea76-4700-be4c-70e63ed49de7",
       "name": "Agent Beta [Quant Analyst]",
-      "type": "n8n-nodes-base.ollama",
-      "typeVersion": 1,
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
       "position": [880, 200]
     },
     {
       "parameters": {
-        "model": "llama3:latest",
-        "prompt": "={{ 'You are Agent Gamma, the elite Ghostwriter for IFX Trades. You must write an institutional market analysis blog post. \\n\\nCRITICAL INSTRUCTIONS TO EVADE AI DETECTORS:\\n- NEVER use the words: \"delve\", \"furthermore\", \"in conclusion\", \"testament\", \"landscape\", \"tapestry\".\\n- Use highly varied sentence lengths (burstiness). Some sentences must be extremely short. Others complex.\\n- Write with an authoritative, direct, and slightly cynical tone. Read like a seasoned human trader on Wall Street.\\n- Do not summarize. Analyze.\\n\\nHere are the facts from Agent Beta:\\n' + $json.message.content + '\\n\\nWrite the article now.' }}",
-        "options": {
-          "temperature": 0.8
-        }
+        "method": "POST",
+        "url": "http://localhost:11434/api/generate",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"model\": \"llama3:latest\", \"prompt\": \"You are Agent Gamma, the elite Ghostwriter for IFX Trades. You must write an institutional market analysis blog post based on the facts provided.\\n\\nCRITICAL INSTRUCTIONS TO EVADE AI DETECTORS AND SOUND 100% HUMAN:\\n- NEVER use typical AI words: \\\"delve\\\", \\\"furthermore\\\", \\\"in conclusion\\\", \\\"testament\\\", \\\"landscape\\\", \\\"tapestry\\\", \\\"revolutionize\\\", \\\"underscores\\\".\\n- Use highly varied sentence lengths (burstiness). Some sentences must be extremely short. Others complex.\\n- Write with an authoritative, direct, and slightly cynical tone. Read like a seasoned human trader on Wall Street.\\n- Do not summarize. Analyze.\\n\\nHere are the facts from Agent Beta (ignore any <think>...</think> thinking logs and focus only on the facts):\\n\" + $node[\"Agent Beta [Quant Analyst]\"].json[\"response\"] + \"\\n\\nWrite the article now.\", \"stream\": false } }}",
+        "responseFormat": "json"
       },
       "id": "b3457cf6-3f1a-4d32-841f-827d532a819b",
       "name": "Agent Gamma [Anti-AI Ghostwriter]",
-      "type": "n8n-nodes-base.ollama",
-      "typeVersion": 1,
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
       "position": [1100, 200]
     },
     {
       "parameters": {
-        "model": "llama3:latest",
-        "prompt": "={{ 'You are Agent Delta, the Auditor and Editor. Review this drafted article:\\n\\n' + $json.message.content + '\\n\\nIf it sounds like an AI wrote it, rewrite the awkward parts to sound 100% human and professional. Output the final article formatted in pristine HTML, using <h2> for subtitles and <ul><li> for lists. Do not include <html> or <body> tags, just the raw inner HTML content. Do not output anything else but the HTML.' }}",
-        "options": {
-          "temperature": 0.3
-        }
+        "method": "POST",
+        "url": "http://localhost:11434/api/generate",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"model\": \"llama3:latest\", \"prompt\": \"You are Agent Delta, the Auditor and Editor. Review this drafted article:\\n\\n\" + $node[\"Agent Gamma [Anti-AI Ghostwriter]\"].json[\"response\"] + \"\\n\\nIf it sounds like an AI wrote it, rewrite the awkward parts to sound 100% human and professional. Output the final article formatted in pristine HTML, using <h2> for subtitles and <ul><li> for lists. Do not include <html> or <body> tags, just the raw inner HTML content. Do not output anything else but the HTML.\", \"stream\": false } }}",
+        "responseFormat": "json"
       },
       "id": "dc9f1b4c-9f81-4b13-9c87-bb71a3c7c8c3",
       "name": "Agent Delta [The Auditor]",
-      "type": "n8n-nodes-base.ollama",
-      "typeVersion": 1,
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
       "position": [1320, 200]
     },
     {
       "parameters": {
-        "jsCode": "const seoData = JSON.parse($node[\"Agent Alpha [SEO Director]\"].json.message.content);\nconst finalHtml = $node[\"Agent Delta [The Auditor]\"].json.message.content;\nconst rawData = $node[\"Parse XML & Select Top 3\"].json;\n\nreturn {\n  json: {\n    title: seoData.headline,\n    slug: seoData.slug,\n    content: finalHtml,\n    image_url: rawData.image_url,\n    featured_image: rawData.image_url,\n    status: \"published\",\n    content_type: \"blog\",\n    category: \"Market Analysis\"\n  }\n};"
+        "jsCode": "const seoData = JSON.parse($node[\"Agent Alpha [SEO Director]\"].json.response);\nconst finalHtml = $node[\"Agent Delta [The Auditor]\"].json.response;\nconst rawData = $node[\"Parse XML & Select Top 3\"].json;\n\nreturn {\n  json: {\n    title: seoData.headline,\n    slug: seoData.slug,\n    content: finalHtml,\n    body: finalHtml,\n    image_url: rawData.image_url,\n    featured_image: rawData.image_url,\n    status: \"published\",\n    content_type: \"blog\",\n    category: \"Market Analysis\"\n  }\n};"
       },
       "id": "a9316715-db14-49c0-be39-819a55be62cb",
       "name": "Format Supabase Payload",
@@ -108,72 +111,60 @@
     },
     {
       "parameters": {
-        "method": "POST",
-        "url": "https://YOUR_SUPABASE_PROJECT_ID.supabase.co/rest/v1/content_posts",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
+        "operation": "create",
+        "table": "content_posts",
+        "fieldsUi": {
+          "fieldValues": [
             {
-              "name": "apikey",
-              "value": "YOUR_SUPABASE_ANON_KEY"
+              "fieldId": "title",
+              "fieldValue": "={{ $json.title }}"
             },
             {
-              "name": "Authorization",
-              "value": "Bearer YOUR_SUPABASE_ANON_KEY"
+              "fieldId": "slug",
+              "fieldValue": "={{ $json.slug }}"
             },
             {
-              "name": "Content-Type",
-              "value": "application/json"
+              "fieldId": "content",
+              "fieldValue": "={{ $json.content }}"
             },
             {
-              "name": "Prefer",
-              "value": "return=representation"
-            }
-          ]
-        },
-        "sendBody": true,
-        "bodyParameters": {
-          "parameters": [
-            {
-              "name": "title",
-              "value": "={{ $json.title }}"
+              "fieldId": "body",
+              "fieldValue": "={{ $json.body }}"
             },
             {
-              "name": "slug",
-              "value": "={{ $json.slug }}"
+              "fieldId": "image_url",
+              "fieldValue": "={{ $json.image_url }}"
             },
             {
-              "name": "content",
-              "value": "={{ $json.content }}"
+              "fieldId": "featured_image",
+              "fieldValue": "={{ $json.featured_image }}"
             },
             {
-              "name": "image_url",
-              "value": "={{ $json.image_url }}"
+              "fieldId": "status",
+              "fieldValue": "={{ $json.status }}"
             },
             {
-              "name": "featured_image",
-              "value": "={{ $json.featured_image }}"
+              "fieldId": "content_type",
+              "fieldValue": "={{ $json.content_type }}"
             },
             {
-              "name": "status",
-              "value": "={{ $json.status }}"
-            },
-            {
-              "name": "content_type",
-              "value": "={{ $json.content_type }}"
-            },
-            {
-              "name": "category",
-              "value": "={{ $json.category }}"
+              "fieldId": "category",
+              "fieldValue": "={{ $json.category }}"
             }
           ]
         }
       },
       "id": "469085ec-bfb6-4ff7-aba7-c0f582f3c3a9",
       "name": "Insert to Supabase",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.1,
-      "position": [1760, 200]
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [1760, 200],
+      "credentials": {
+        "supabaseApi": {
+          "id": "supabase-credential-id",
+          "name": "Supabase Connection"
+        }
+      }
     }
   ],
   "connections": {
