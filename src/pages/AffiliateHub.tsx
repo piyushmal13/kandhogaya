@@ -320,7 +320,7 @@ export const AffiliateHub = () => {
                   {
                     icon: Layers,
                     title: "Advanced Tracking Dashboard",
-                    desc: "Gain instant dashboard access. View raw link clicks, successful conversion logs, geo-locations, and pending payouts in one central corporate terminal."
+                    desc: "Gain instant dashboard access. View raw link clicks, successful conversion logs, geo-locations, and pending payouts in one central corporate dashboard."
                   },
                   {
                     icon: ShieldCheck,
@@ -385,7 +385,7 @@ export const AffiliateHub = () => {
                 </div>
               </div>
               <h1 className="text-4xl md:text-6xl font-black text-white uppercase italic tracking-tighter leading-none">
-                Affiliate <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">Terminal</span>
+                Affiliate <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">Hub</span>
               </h1>
               <p className="text-gray-500 mt-4 max-w-xl text-sm font-bold uppercase tracking-widest leading-relaxed">
                 Scaled revenue through institutional partnership. Manage your referral network and withdraw commissions with sub-second transparency.

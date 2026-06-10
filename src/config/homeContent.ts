@@ -1,6 +1,6 @@
 export const homeContent = {
   hero: {
-    badge: "IFX Elite Terminal v6.0",
+    badge: "IFX Elite Hub v6.0",
     titleLine1: "The Quantitative",
     titleLine2: "Architecture for",
     titleHighlight: "Elite Capital",
@@ -16,7 +16,7 @@ export const homeContent = {
   ],
   terminal: {
     title: "Institutional Precision",
-    description: "Experience the power of our proprietary trading terminal, built for speed and accuracy.",
+    description: "Experience the power of our proprietary trading ecosystem, built for speed and accuracy.",
     activeSignals: [
       { pair: "XAUUSD", type: "BUY", entry: "2150.45", tp: "2165.00", sl: "2140.00", time: "2m ago", profit: "+45 Points" },
       { pair: "EURUSD", type: "SELL", entry: "1.0845", tp: "1.0790", sl: "1.0880", time: "15m ago", profit: "+12 Points" }

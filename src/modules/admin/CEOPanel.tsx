@@ -915,7 +915,7 @@ export const CEOPanel = () => {
       {/* Sync Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-black text-white uppercase tracking-tighter">Executive Terminal</h2>
+          <h2 className="text-3xl font-black text-white uppercase tracking-tighter">Executive Dashboard</h2>
           <p className="text-[10px] text-gray-600 uppercase font-black tracking-widest mt-1">
             {lastSync ? `Last sync: ${lastSync.toLocaleTimeString()}` : "Syncing..."}
           </p>

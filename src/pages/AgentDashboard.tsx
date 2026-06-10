@@ -231,7 +231,7 @@ const AgentContent = ({
     <DashboardLayout>
       <div className="pb-24">
         <PageMeta 
-          title="Institutional Agent Terminal | Partner Intelligence" 
+          title="Institutional Agent Portal | Partner Intelligence" 
           description="Access the IFX Trades Institutional Agent Terminal. Monitor referral performance, track real-time commissions, and manage your partner growth protocols."
           path="/agent"
         />

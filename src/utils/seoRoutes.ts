@@ -28,9 +28,9 @@ export const routeMetaMap: Record<string, RouteMeta> = {
     keywords: `${BASE_KEYWORDS}, custom algorithmic trading bot, MT5 expert advisor development, private quant consulting`,
   },
   "/solutions/custom": {
-    title: "Deep Coding Terminal | IFXTrades",
-    description: "Access the IFXTrades Deep Coding Terminal. Submit custom high-frequency execution and systematic algorithmic development specifications.",
-    keywords: `${BASE_KEYWORDS}, deep coding, custom trading software, custom MT5 systems`,
+    title: "Custom Strategy Engineering | IFXTrades",
+    description: "Access the IFXTrades Custom Strategy Engineering Hub. Submit custom high-frequency execution and systematic algorithmic development specifications.",
+    keywords: `${BASE_KEYWORDS}, custom strategy engineering, custom trading software, custom MT5 systems`,
   },
   "/solutions/seo-agent": {
     title: "AI CEO & SEO Strategic Advisor Agent | IFXTrades",

@@ -35,7 +35,7 @@ const SIGNAL_PLANS = [
     name: "Elite",
     price: 249,
     description: "Full IFX suite for master traders.",
-    features: ["Everything in Pro", "Algo Terminal Access", "Private Webinars", "1-on-1 Mentorship"],
+    features: ["Everything in Pro", "Algo Suite Access", "Private Webinars", "1-on-1 Mentorship"],
     notIncluded: [],
     popular: false
   }

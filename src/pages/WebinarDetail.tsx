@@ -477,7 +477,7 @@ export const WebinarDetail = () => {
                   <Clock className="w-12 h-12 text-[#0071e3] mb-4 animate-pulse" />
                   <h3 className="text-base font-black text-white uppercase tracking-tight">Institutional Stream Commencing Soon</h3>
                   <p className="text-[11px] text-zinc-500 max-w-sm mt-2 leading-relaxed">
-                    The secure data terminal for this session is scheduled for initialization. Broker promotions and sponsorship allocations are currently active.
+                    The secure data stream for this session is scheduled for initialization. Broker promotions and sponsorship allocations are currently active.
                   </p>
                   </div>
               )}

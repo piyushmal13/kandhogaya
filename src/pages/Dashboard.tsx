@@ -25,7 +25,7 @@ export const Dashboard = () => {
   return (
     <>
       <PageMeta 
-        title="Master Terminal | Institutional Hub"
+        title="Client Portal | Institutional Hub"
         description="Asia's #1 high-frequency execution surface. Real-time alpha stream, verified equity tracking, and institutional risk governance."
         path="/dashboard"
       />

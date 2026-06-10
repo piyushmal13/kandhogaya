@@ -89,7 +89,7 @@ const DYNAMIC_PARTNERS: Record<string, {
     logoUrl: "https://upload.wikimedia.org/wikipedia/commons/a/a2/Coinbase_Logo_2019.svg",
     referralUrl: "https://www.coinbase.com/prime",
     tagline: "Capital Protection Vault",
-    description: "Protect large quant reserves with offline cold-storage custody, high-volume OTC execution terminals, and audited capital security protocols."
+    description: "Protect large quant reserves with offline cold-storage custody, high-volume OTC execution platforms, and audited capital security protocols."
   }
 };
 

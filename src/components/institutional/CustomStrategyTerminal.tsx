@@ -52,7 +52,7 @@ export const CustomStrategyTerminal = () => {
     <div className="relative p-6 md:p-10 rounded-[2rem] md:rounded-[2.5rem] bg-gradient-to-br from-cyan-500/[0.03] to-transparent border border-white/5 overflow-hidden group">
       {/* Background Graphic Decorator */}
       <div className="absolute top-0 right-0 p-8 opacity-[0.03] pointer-events-none hidden lg:block" aria-hidden="true">
-        <Terminal className="w-48 h-48 text-cyan-400" />
+        <Cpu className="w-48 h-48 text-cyan-400" />
       </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 relative z-10 items-center">

@@ -324,7 +324,7 @@ export const Marketplace = () => {
           {renderGrid()}
         </div>
 
-        {/* Custom Strategy Engineering Terminal */}
+        {/* Custom Strategy Engineering Hub */}
         <CustomStrategyTerminal />
 
       </div>

@@ -203,7 +203,7 @@ export const FulfillmentManager = () => {
       
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-black text-white uppercase tracking-tighter italic">Fulfillment Terminal</h2>
+          <h2 className="text-3xl font-black text-white uppercase tracking-tighter italic">Fulfillment System</h2>
           <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mt-2">Active manual payment verification and entitlement release</p>
         </div>
         <button onClick={fetchPendingReceipts} className="p-4 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-all group">
