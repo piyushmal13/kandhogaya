@@ -1,0 +1,269 @@
+{
+  "name": "IFX_Advanced_Agentic_Content_Engine",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 2
+            }
+          ]
+        }
+      },
+      "id": "53000677-fc2a-43cf-9f17-b76bb04b159f",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [0, 200]
+    },
+    {
+      "parameters": {
+        "url": "https://www.forexlive.com/feed/news",
+        "responseFormat": "string"
+      },
+      "id": "3127ddf4-1875-40ea-94e8-8a07c336b9e7",
+      "name": "Fetch Market Trends (RSS)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [220, 200]
+    },
+    {
+      "parameters": {
+        "jsCode": "const xml2js = require('xml2js');\nlet parsed = {};\nxml2js.parseString(items[0].json.data, (err, result) => {\n  parsed = result;\n});\n// Target top 3 trending items\nconst topItems = parsed.rss.channel[0].item.slice(0, 3);\nreturn topItems.map(item => ({\n  json: {\n    title: item.title[0],\n    link: item.link[0],\n    description: item.description[0],\n    content: item['content:encoded'] ? item['content:encoded'][0] : item.description[0],\n    pubDate: item.pubDate[0],\n    image_url: item.enclosure ? item.enclosure[0].$.url : ''\n  }\n}));"
+      },
+      "id": "4e7240c5-ee32-4dcf-8bb5-3f360e2a2202",
+      "name": "Parse XML & Select Top 3",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [440, 200]
+    },
+    {
+      "parameters": {
+        "model": "llama3:latest",
+        "prompt": "={{ 'You are Agent Alpha, the SEO Director for an institutional quantitative trading firm. Analyze the following news article:\\n\\nTitle: ' + $json.title + '\\nContent: ' + $json.content + '\\n\\nIdentify the top LSI keywords, search intent, and generate a highly professional, click-worthy headline (not clickbait). Also generate a clean, lowercase URL slug with hyphens.\\n\\nOutput Format MUST BE exactly JSON:\\n{\\n  \"headline\": \"...\",\\n  \"slug\": \"...\",\\n  \"keywords\": [\"...\", \"...\"]\\n}' }}",
+        "options": {
+          "format": "json",
+          "temperature": 0.2
+        }
+      },
+      "id": "273a216d-318e-49b8-b1fc-e3e91129b0f4",
+      "name": "Agent Alpha [SEO Director]",
+      "type": "n8n-nodes-base.ollama",
+      "typeVersion": 1,
+      "position": [660, 200]
+    },
+    {
+      "parameters": {
+        "model": "llama3:latest",
+        "prompt": "={{ 'You are Agent Beta, a Senior Quantitative Analyst. Read the raw news:\\n\\n' + $node[\"Parse XML & Select Top 3\"].json[\"content\"] + '\\n\\nExtract all hard data, numbers, quotes, and central institutional perspectives. Do not write a summary. Write bullet points of pure facts. Strip all fluff.' }}",
+        "options": {
+          "temperature": 0.1
+        }
+      },
+      "id": "89ab1037-ea76-4700-be4c-70e63ed49de7",
+      "name": "Agent Beta [Quant Analyst]",
+      "type": "n8n-nodes-base.ollama",
+      "typeVersion": 1,
+      "position": [880, 200]
+    },
+    {
+      "parameters": {
+        "model": "llama3:latest",
+        "prompt": "={{ 'You are Agent Gamma, the elite Ghostwriter for IFX Trades. You must write an institutional market analysis blog post. \\n\\nCRITICAL INSTRUCTIONS TO EVADE AI DETECTORS:\\n- NEVER use the words: \"delve\", \"furthermore\", \"in conclusion\", \"testament\", \"landscape\", \"tapestry\".\\n- Use highly varied sentence lengths (burstiness). Some sentences must be extremely short. Others complex.\\n- Write with an authoritative, direct, and slightly cynical tone. Read like a seasoned human trader on Wall Street.\\n- Do not summarize. Analyze.\\n\\nHere are the facts from Agent Beta:\\n' + $json.message.content + '\\n\\nWrite the article now.' }}",
+        "options": {
+          "temperature": 0.8
+        }
+      },
+      "id": "b3457cf6-3f1a-4d32-841f-827d532a819b",
+      "name": "Agent Gamma [Anti-AI Ghostwriter]",
+      "type": "n8n-nodes-base.ollama",
+      "typeVersion": 1,
+      "position": [1100, 200]
+    },
+    {
+      "parameters": {
+        "model": "llama3:latest",
+        "prompt": "={{ 'You are Agent Delta, the Auditor and Editor. Review this drafted article:\\n\\n' + $json.message.content + '\\n\\nIf it sounds like an AI wrote it, rewrite the awkward parts to sound 100% human and professional. Output the final article formatted in pristine HTML, using <h2> for subtitles and <ul><li> for lists. Do not include <html> or <body> tags, just the raw inner HTML content. Do not output anything else but the HTML.' }}",
+        "options": {
+          "temperature": 0.3
+        }
+      },
+      "id": "dc9f1b4c-9f81-4b13-9c87-bb71a3c7c8c3",
+      "name": "Agent Delta [The Auditor]",
+      "type": "n8n-nodes-base.ollama",
+      "typeVersion": 1,
+      "position": [1320, 200]
+    },
+    {
+      "parameters": {
+        "jsCode": "const seoData = JSON.parse($node[\"Agent Alpha [SEO Director]\"].json.message.content);\nconst finalHtml = $node[\"Agent Delta [The Auditor]\"].json.message.content;\nconst rawData = $node[\"Parse XML & Select Top 3\"].json;\n\nreturn {\n  json: {\n    title: seoData.headline,\n    slug: seoData.slug,\n    content: finalHtml,\n    image_url: rawData.image_url,\n    featured_image: rawData.image_url,\n    status: \"published\",\n    content_type: \"blog\",\n    category: \"Market Analysis\"\n  }\n};"
+      },
+      "id": "a9316715-db14-49c0-be39-819a55be62cb",
+      "name": "Format Supabase Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1540, 200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://YOUR_SUPABASE_PROJECT_ID.supabase.co/rest/v1/content_posts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "YOUR_SUPABASE_ANON_KEY"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer YOUR_SUPABASE_ANON_KEY"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "title",
+              "value": "={{ $json.title }}"
+            },
+            {
+              "name": "slug",
+              "value": "={{ $json.slug }}"
+            },
+            {
+              "name": "content",
+              "value": "={{ $json.content }}"
+            },
+            {
+              "name": "image_url",
+              "value": "={{ $json.image_url }}"
+            },
+            {
+              "name": "featured_image",
+              "value": "={{ $json.featured_image }}"
+            },
+            {
+              "name": "status",
+              "value": "={{ $json.status }}"
+            },
+            {
+              "name": "content_type",
+              "value": "={{ $json.content_type }}"
+            },
+            {
+              "name": "category",
+              "value": "={{ $json.category }}"
+            }
+          ]
+        }
+      },
+      "id": "469085ec-bfb6-4ff7-aba7-c0f582f3c3a9",
+      "name": "Insert to Supabase",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1760, 200]
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Fetch Market Trends (RSS)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Market Trends (RSS)": {
+      "main": [
+        [
+          {
+            "node": "Parse XML & Select Top 3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse XML & Select Top 3": {
+      "main": [
+        [
+          {
+            "node": "Agent Alpha [SEO Director]",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agent Alpha [SEO Director]": {
+      "main": [
+        [
+          {
+            "node": "Agent Beta [Quant Analyst]",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agent Beta [Quant Analyst]": {
+      "main": [
+        [
+          {
+            "node": "Agent Gamma [Anti-AI Ghostwriter]",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agent Gamma [Anti-AI Ghostwriter]": {
+      "main": [
+        [
+          {
+            "node": "Agent Delta [The Auditor]",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agent Delta [The Auditor]": {
+      "main": [
+        [
+          {
+            "node": "Format Supabase Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Supabase Payload": {
+      "main": [
+        [
+          {
+            "node": "Insert to Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
