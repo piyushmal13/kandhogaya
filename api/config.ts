@@ -10,19 +10,23 @@ export const logger = pino({
   }
 });
 
-const envTier = typeof process !== "undefined" && process.env ? (process.env.NODE_ENV || "development") : "development";
-const isProdTier = envTier === "production" || envTier === "prod";
+// Safely retrieve environment configuration values
+const getEnvVal = (key: string, fallback = ""): string => {
+  return typeof process !== "undefined" && process.env ? (process.env[key] || fallback) : fallback;
+};
+
+const isProdTier = getEnvVal("NODE_ENV") === "production" || getEnvVal("NODE_ENV") === "prod";
 
 export const config = {
   isProduction: isProdTier,
-  port: parseInt(typeof process !== "undefined" ? (process.env.PORT || "3000") : "3000", 10),
-  jwtSecret: typeof process !== "undefined" ? (process.env.JWT_SECRET || (isProdTier ? "" : "dev-only-jwt-secret")) : "dev-only-jwt-secret",
-  supabaseUrl: process.env.VITE_SUPABASE_URL || "",
-  supabaseAnonKey: process.env.VITE_SUPABASE_ANON_KEY || "",
-  supabaseServiceKey: process.env.SUPABASE_SERVICE_ROLE_KEY,
-  stripeSecretKey: process.env.STRIPE_SECRET_KEY,
-  appUrl: process.env.APP_URL || process.env.BASE_URL || "http://localhost:3000",
-  corsAllow: (process.env.CORS_ALLOW || "").split(",").map(s => s.trim()).filter(Boolean)
+  port: parseInt(getEnvVal("PORT", "3000"), 10),
+  jwtSecret: getEnvVal("JWT_SECRET") || (isProdTier ? "" : "dev-only-jwt-secret"),
+  supabaseUrl: getEnvVal("VITE_SUPABASE_URL"),
+  supabaseAnonKey: getEnvVal("VITE_SUPABASE_ANON_KEY"),
+  supabaseServiceKey: getEnvVal("SUPABASE_SERVICE_ROLE_KEY") || undefined,
+  stripeSecretKey: getEnvVal("STRIPE_SECRET_KEY") || undefined,
+  appUrl: getEnvVal("APP_URL") || getEnvVal("BASE_URL") || "http://localhost:3000",
+  corsAllow: (getEnvVal("CORS_ALLOW")).split(",").map(s => s.trim()).filter(Boolean)
 };
 
 if (!config.supabaseUrl || !config.supabaseAnonKey) {

@@ -16,11 +16,15 @@ Guidelines for your replies:
 - If the user asks about general business strategy or quantitative systems, connect it back to organic discovery (SEO) and scaling the business.`;
 
 // --- CONFIGURATION ---
-const isProduction = typeof process !== "undefined" ? (process.env.NODE_ENV === "production") : false;
-const JWT_SECRET = typeof process !== "undefined" ? (process.env.JWT_SECRET || (isProduction ? "" : "dev-only-jwt-secret")) : "dev-only-jwt-secret";
-const supabaseUrl = typeof process !== "undefined" ? (process.env.VITE_SUPABASE_URL || "https://placeholder.supabase.co") : "https://placeholder.supabase.co";
-const supabaseAnonKey = typeof process !== "undefined" ? (process.env.VITE_SUPABASE_ANON_KEY || "placeholder") : "placeholder";
-const supabaseServiceKey = typeof process !== "undefined" ? process.env.SUPABASE_SERVICE_ROLE_KEY : undefined;
+const getIndexEnv = (key: string, fallback = ""): string => {
+  return typeof process !== "undefined" && process.env ? (process.env[key] || fallback) : fallback;
+};
+
+const isProduction = getIndexEnv("NODE_ENV") === "production";
+const JWT_SECRET = getIndexEnv("JWT_SECRET") || (isProduction ? "" : "dev-only-jwt-secret");
+const supabaseUrl = getIndexEnv("VITE_SUPABASE_URL", "https://placeholder.supabase.co");
+const supabaseAnonKey = getIndexEnv("VITE_SUPABASE_ANON_KEY", "placeholder");
+const supabaseServiceKey = getIndexEnv("SUPABASE_SERVICE_ROLE_KEY") || undefined;
 
 if (!JWT_SECRET) {
   throw new Error("Missing JWT_SECRET. Set a strong secret before deploying API routes.");
