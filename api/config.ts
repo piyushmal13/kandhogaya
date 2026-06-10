@@ -10,10 +10,13 @@ export const logger = pino({
   }
 });
 
+const envTier = typeof process !== "undefined" ? (process.env.NODE_ENV || "development") : "development";
+const isProdTier = envTier === "production";
+
 export const config = {
-  isProduction: process.env.NODE_ENV === "production",
-  port: parseInt(process.env.PORT || "3000", 10),
-  jwtSecret: process.env.JWT_SECRET || (process.env.NODE_ENV === "production" ? "" : "dev-only-jwt-secret"),
+  isProduction: isProdTier,
+  port: parseInt(typeof process !== "undefined" ? (process.env.PORT || "3000") : "3000", 10),
+  jwtSecret: typeof process !== "undefined" ? (process.env.JWT_SECRET || (isProdTier ? "" : "dev-only-jwt-secret")) : "dev-only-jwt-secret",
   supabaseUrl: process.env.VITE_SUPABASE_URL || "",
   supabaseAnonKey: process.env.VITE_SUPABASE_ANON_KEY || "",
   supabaseServiceKey: process.env.SUPABASE_SERVICE_ROLE_KEY,
