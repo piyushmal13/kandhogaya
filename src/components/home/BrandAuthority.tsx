@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { containerVariants, itemVariants } from "@/lib/motion";
+import { supabase } from "@/lib/supabase";
 
-const INTEGRATION_PARTNERS = [
+const INTEGRATION_PARTNERS_BACKUP = [
   {
     name: "MetaTrader 5",
     logo_url: "https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/bc/0c/76/bc0c7626-b4e6-ee40-613a-54c6adb623bd/icon-0-0-1x_U007emarketing-0-0-0-4-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/1200x630wa.png"
@@ -30,6 +31,35 @@ const PRESS = [
 ];
 
 export const BrandAuthority = () => {
+  const [partners, setPartners] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchPartners = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("banners")
+          .select("id, title, image_url, description")
+          .eq("placement", "partner")
+          .eq("is_active", true)
+          .order("priority", { ascending: true });
+
+        if (error) throw error;
+        if (data && data.length > 0) {
+          const mapped = data.map((item) => ({
+            name: item.title,
+            logo_url: item.image_url
+          }));
+          setPartners(mapped);
+        } else {
+          setPartners(INTEGRATION_PARTNERS_BACKUP);
+        }
+      } catch (err) {
+        console.error("Error fetching homepage partner logos:", err);
+        setPartners(INTEGRATION_PARTNERS_BACKUP);
+      }
+    };
+    fetchPartners();
+  }, []);
   return (
     <section className="py-16 md:py-24 bg-[#020305] relative overflow-hidden border-y border-white/[0.03]">
       {/* Premium Ambient Backgrounds */}
@@ -58,7 +88,7 @@ export const BrandAuthority = () => {
               variants={itemVariants} 
               className="w-full max-w-5xl mx-auto flex flex-wrap justify-center items-center gap-6 sm:gap-10 md:gap-12"
             >
-              {INTEGRATION_PARTNERS.map((partner) => (
+              {partners.map((partner) => (
                 <div 
                   key={partner.name} 
                   className="group relative flex flex-col items-center gap-2 transition-all duration-500 ease-out"
