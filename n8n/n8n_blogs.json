@@ -185,13 +185,7 @@
       "position": [
         1760,
         200
-      ],
-      "credentials": {
-        "supabaseApi": {
-          "id": "supabase-credential-id",
-          "name": "Supabase Connection"
-        }
-      }
+      ]
     }
   ],
   "connections": {
