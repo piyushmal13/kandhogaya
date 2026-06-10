@@ -300,8 +300,8 @@ export const Marketplace = () => {
             },
             {
               icon: <Lock className="w-5 h-5 text-emerald-400" />,
-              title: "Hardened Risk Shield",
-              desc: "Built-in dynamic drawdown locks and adaptive sizing."
+              title: "Institutional Risk Controls",
+              desc: "Built-in dynamic drawdown limits and adaptive sizing."
             }
           ].map((item, idx) => (
             <div 

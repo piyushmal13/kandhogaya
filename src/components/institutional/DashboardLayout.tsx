@@ -44,7 +44,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         className="relative z-10 flex-1 flex flex-col min-w-0"
       >
         <div className={cn(
-          "w-full transition-all duration-700 ease-in-out px-4 sm:px-8 md:px-12 pt-20 md:pt-24",
+          "w-full transition-all duration-700 ease-in-out px-4 sm:px-8 md:px-12 pt-20 md:pt-24 pb-28 md:pb-12",
           contextPanel ? "max-w-[1800px]" : "max-w-[1400px]"
         )}>
           

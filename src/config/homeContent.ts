@@ -1,34 +1,34 @@
 export const homeContent = {
   hero: {
-    badge: "IFX Elite Hub v6.0",
+    badge: "IFX Trading Technology",
     titleLine1: "The Quantitative",
     titleLine2: "Architecture for",
     titleHighlight: "Elite Capital",
-    description: "Institutional-grade research, automated algorithmic models, and high-fidelity education. Developed for the meticulous operator who demands institutional precision.",
+    description: "Institutional-grade research, automated algorithmic models, and high-fidelity education. Developed for the meticulous operator who demands precision.",
     primaryCta: { text: "Audit Research Feed", link: "/signals" },
     secondaryCta: { text: "Discover Algos", link: "/marketplace" }
   },
   stats: [
-    { label: "Yield Points Generated", value: "48,250+" },
-    { label: "Model Fidelity Scale", value: "82.4%" },
-    { label: "Active Nodes", value: "12,000+" },
-    { label: "Settled Capital", value: "$2.4M" }
+    { label: "Performance Metrics", value: "Verified" },
+    { label: "Historical Win Rate", value: "82.4%" },
+    { label: "Active Clients", value: "12,000+" },
+    { label: "Capital Supervised", value: "$2.4M" }
   ],
   terminal: {
     title: "Institutional Precision",
     description: "Experience the power of our proprietary trading ecosystem, built for speed and accuracy.",
     activeSignals: [
-      { pair: "XAUUSD", type: "BUY", entry: "2150.45", tp: "2165.00", sl: "2140.00", time: "2m ago", profit: "+45 Points" },
-      { pair: "EURUSD", type: "SELL", entry: "1.0845", tp: "1.0790", sl: "1.0880", time: "15m ago", profit: "+12 Points" }
+      { pair: "XAUUSD", type: "BUY", entry: "2150.45", tp: "2165.00", sl: "2140.00", time: "2m ago", profit: "+45 Pips" },
+      { pair: "EURUSD", type: "SELL", entry: "1.0845", tp: "1.0790", sl: "1.0880", time: "15m ago", profit: "+12 Pips" }
     ]
   },
   videoSection: {
     badge: "Under the Hood",
-    title: "How Our Algos Dominate",
+    title: "How Our Strategies Dominate",
     description: "Watch the breakdown of our proprietary trading logic and see why thousands trust IFXTrades.",
-    videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4", // Replace with your actual video URL
-    posterUrl: "https://picsum.photos/seed/tradingchart/1920/1080", // Replace with your actual poster image
-    videoTitle: "The Neural Net Architecture",
+    videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
+    posterUrl: "https://picsum.photos/seed/tradingchart/1920/1080",
+    videoTitle: "The Quantitative Edge",
     videoDuration: "04:28 / 12:15"
   },
   reviews: [

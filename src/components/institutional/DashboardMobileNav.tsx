@@ -23,7 +23,7 @@ export function DashboardMobileNav() {
     { icon: Home, label: 'Home', path: '/' },
     { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
     { icon: ShoppingBag, label: 'Market', path: '/marketplace' },
-    { icon: BarChart3, label: 'Results', path: '/results' },
+    { icon: BarChart3, label: 'Affiliate', path: '/affiliate' },
     ...(isAdmin ? [{ icon: Settings, label: 'Admin', path: '/admin' }] : []),
   ];
 

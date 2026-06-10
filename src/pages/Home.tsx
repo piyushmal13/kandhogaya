@@ -32,17 +32,17 @@ const Home = () => {
   return (
     <>
       <PageMeta
-        title="Systematic Algorithmic EA Deployment Desk"
-        description="Elite B2B institutional systematic algorithmic trading and Expert Advisor (EA) deployment desk. Verify low-latency NY4 server telemetry and deploy robust MT5 models."
+        title="Institutional Quantitative Trading Desk"
+        description="Elite B2B institutional quantitative analysis and strategy deployment desk. Access verified market telemetry and deploy robust execution models."
         path="/"
         keywords={[
           "IFX Trades",
-          "institutional forex algorithms",
+          "institutional forex strategies",
           "quantitative analysis Dubai",
-          "MT5 expert advisors India",
-          "low latency VPS co-location",
-          "algorithmic software desk",
-          "forex signals Dubai",
+          "MT5 execution models India",
+          "low latency infrastructure",
+          "quantitative software desk",
+          "forex insights Dubai",
           "best algorithmic trading course Dubai",
           "quantitative systematic desk UAE",
           "institutional VPS co-location Singapore"
