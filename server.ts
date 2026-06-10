@@ -9,15 +9,15 @@ import fs from "node:fs";
 import { injectMetaTags } from "./src/utils/seoRoutes";
 
 // Modular Imports
-import { config, logger } from "./api/config";
-import { authenticate } from "./api/middleware/auth";
-import { errorHandler, globalLimiter, sensitiveLimiter } from "./api/middleware";
-import { maintenanceGuard } from "./api/middleware/maintenance";
-import { ContentController } from "./api/controllers/ContentController";
-import { LicenseController } from "./api/controllers/LicenseController";
-import { AdminController } from "./api/controllers/AdminController";
-import { SystemController } from "./api/controllers/SystemController";
-import { RequestController } from "./api/controllers/RequestController";
+import { config, logger } from "./server-api/config";
+import { authenticate } from "./server-api/middleware/auth";
+import { errorHandler, globalLimiter, sensitiveLimiter } from "./server-api/middleware";
+import { maintenanceGuard } from "./server-api/middleware/maintenance";
+import { ContentController } from "./server-api/controllers/ContentController";
+import { LicenseController } from "./server-api/controllers/LicenseController";
+import { AdminController } from "./server-api/controllers/AdminController";
+import { SystemController } from "./server-api/controllers/SystemController";
+import { RequestController } from "./server-api/controllers/RequestController";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
