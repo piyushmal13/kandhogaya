@@ -60,84 +60,96 @@ export const FulfillmentManager = () => {
         }
       }
 
-      // 2. REVENUE TRACKING: Insert into Sales Ledger
-      const { error: salesError } = await supabase
-        .from('sales_tracking')
-        .insert({
-          user_id: receipt.user_id,
-          agent_id: agentId,
-          product_id: receipt.product_id,
-          sale_amount: receipt.amount,
-          source: 'manual_verification'
-        });
+      // Cart Items Support: Handle multiple products from Cart
+      const cartItems = receipt.metadata?.items || [];
+      const hasCart = cartItems.length > 0;
 
-      if (salesError) console.warn("Institutional Ledger Signal Delay:", salesError);
+      if (hasCart) {
+        for (const item of cartItems) {
+          // Track Sale
+          const { error: salesError } = await supabase.from('sales_tracking').insert({
+            user_id: receipt.user_id,
+            agent_id: agentId,
+            product_id: item.productId,
+            sale_amount: item.price,
+            source: 'manual_verification'
+          });
+          if (salesError) console.warn("Institutional Ledger Signal Delay:", salesError);
 
-      // 3. COMMISSION ENGINE: Signal Agent Compensation
-      if (agentId) {
-        await revenueSystem.trackCommission(
-          receipt.user_id, 
-          agentId, 
-          { 
-            type: 'manual_sale', 
-            amount: receipt.amount, 
-            id: receipt.product_id 
+          // Track Commission
+          if (agentId) {
+            await revenueSystem.trackCommission(receipt.user_id, agentId, {
+              type: 'manual_sale',
+              amount: item.price,
+              id: item.productId
+            });
           }
-        );
-      }
 
-      // 4. ENTITLEMENT ORCHESTRATION: Release Assets
-      const isTier = ['a1a1a1a1-a1a1-a1a1-a1a1-a1a1a1a1a1a1', 'b2b2b2b2-b2b2-b2b2-b2b2-b2b2b2b2b2b2'].includes(receipt.product_id);
-
-      if (isTier) {
-        const features = receipt.product_id === 'b2b2b2b2-b2b2-b2b2-b2b2-b2b2b2b2b2b2' 
-          ? ['signals', 'algo', 'webinars'] 
-          : ['signals'];
-
-        const expiresAt = new Date();
-        expiresAt.setDate(expiresAt.getDate() + 30);
-
-        const entitlementInserts = features.map(f => ({
-          user_id: receipt.user_id,
-          feature: f,
-          active: true,
-          expires_at: expiresAt.toISOString()
-        }));
-
-        await supabase.from('user_entitlements').insert(entitlementInserts);
-      } else {
-        // Product Fulfillment
-        let { data: bot } = await supabase
-          .from('algo_bots')
-          .select('id')
-          .eq('product_id', receipt.product_id)
-          .maybeSingle();
-
-        if (!bot) {
-          const { data: newBot } = await supabase
-            .from('algo_bots')
-            .insert({
-              product_id: receipt.product_id,
-              name: receipt.products?.name || 'Institutional Bot',
-              version: 'v1.0'
-            })
-            .select()
-            .single();
-          bot = newBot;
-        }
-
-        if (bot) {
+          // Simple license generation for cart items
           const key = `IFX-${Math.random().toString(36).toUpperCase().substring(2, 6)}-${Math.random().toString(36).toUpperCase().substring(2, 6)}`;
           const expiresAt = new Date();
           expiresAt.setDate(expiresAt.getDate() + 30);
 
           await supabase.from('bot_licenses').insert({
             user_id: receipt.user_id,
-            algo_id: bot.id,
+            algo_id: item.productId,
             license_key: key,
             is_active: true,
             expires_at: expiresAt.toISOString()
           });
+        }
+      } else {
+        // Legacy single-product fallback
+        const { error: salesError } = await supabase.from('sales_tracking').insert({
+          user_id: receipt.user_id,
+          agent_id: agentId,
+          product_id: receipt.product_id,
+          sale_amount: receipt.amount,
+          source: 'manual_verification'
+        });
+        if (salesError) console.warn("Institutional Ledger Signal Delay:", salesError);
+
+        if (agentId) {
+          await revenueSystem.trackCommission(receipt.user_id, agentId, { 
+            type: 'manual_sale', 
+            amount: receipt.amount, 
+            id: receipt.product_id 
+          });
+        }
+
+        const isTier = ['a1a1a1a1-a1a1-a1a1-a1a1-a1a1a1a1a1a1', 'b2b2b2b2-b2b2-b2b2-b2b2-b2b2b2b2b2b2'].includes(receipt.product_id);
+        if (isTier) {
+          const features = receipt.product_id === 'b2b2b2b2-b2b2-b2b2-b2b2-b2b2b2b2b2b2' ? ['signals', 'algo', 'webinars'] : ['signals'];
+          const expiresAt = new Date();
+          expiresAt.setDate(expiresAt.getDate() + 30);
+          await supabase.from('user_entitlements').insert(features.map(f => ({
+            user_id: receipt.user_id,
+            feature: f,
+            active: true,
+            expires_at: expiresAt.toISOString()
+          })));
+        } else {
+          let { data: bot } = await supabase.from('algo_bots').select('id').eq('product_id', receipt.product_id).maybeSingle();
+          if (!bot) {
+            const { data: newBot } = await supabase.from('algo_bots').insert({
+              product_id: receipt.product_id,
+              name: receipt.products?.name || 'Institutional Bot',
+              version: 'v1.0'
+            }).select().single();
+            bot = newBot;
+          }
+          if (bot) {
+            const key = `IFX-${Math.random().toString(36).toUpperCase().substring(2, 6)}-${Math.random().toString(36).toUpperCase().substring(2, 6)}`;
+            const expiresAt = new Date();
+            expiresAt.setDate(expiresAt.getDate() + 30);
+            await supabase.from('bot_licenses').insert({
+              user_id: receipt.user_id,
+              algo_id: bot.id,
+              license_key: key,
+              is_active: true,
+              expires_at: expiresAt.toISOString()
+            });
+          }
         }
       }
 
@@ -226,7 +238,7 @@ export const FulfillmentManager = () => {
                   <div className="flex flex-wrap items-center gap-6 mt-4">
                      <span className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest transition-colors group-hover:text-white"><User className="w-3.5 h-3.5 text-emerald-500" /> {receipt.users?.email}</span>
                      <span className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest transition-colors group-hover:text-white"><Phone className="w-3.5 h-3.5 text-emerald-500" /> {receipt.whatsapp_number}</span>
-                     <span className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest transition-colors group-hover:text-white"><Package className="w-3.5 h-3.5 text-emerald-500" /> {receipt.products?.name}</span>
+                     <span className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest transition-colors group-hover:text-white"><Package className="w-3.5 h-3.5 text-emerald-500" /> {receipt.metadata?.items ? `${receipt.metadata.items.length} Asset(s) Bundle` : receipt.products?.name}</span>
                      <span className="flex items-center gap-2 text-[10px] font-black text-emerald-500 uppercase tracking-widest"><DollarSign className="w-3.5 h-3.5" /> ${receipt.amount}</span>
                   </div>
                 </div>

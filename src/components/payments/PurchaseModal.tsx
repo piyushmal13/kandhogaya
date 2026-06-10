@@ -28,12 +28,13 @@ interface PurchaseModalProps {
   productId?: string;
   downloadUrl?: string;
   onClose: () => void;
+  cartItems?: { id: string; productId: string; name: string; plan: string; price: number }[];
 }
 
 type PaymentMethod = "upi" | "crypto" | null;
 type Step = "method" | "payment" | "crypto" | "guide" | "details" | "upload" | "success";
 
-export const PurchaseModal = ({ plan, amount, productId, downloadUrl, onClose }: PurchaseModalProps) => {
+export const PurchaseModal = ({ plan, amount, productId, downloadUrl, onClose, cartItems }: PurchaseModalProps) => {
   const { user } = useAuth();
   const [step, setStep] = useState<Step>("method");
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(null);
@@ -122,7 +123,11 @@ export const PurchaseModal = ({ plan, amount, productId, downloadUrl, onClose }:
           storage_path: filePath,
           whatsapp_number: whatsappNumber,
           referred_by_code: refCode,
-          status: 'pending'
+          status: 'pending',
+          metadata: {
+            items: cartItems || [],
+            plan_name: plan
+          }
         });
 
       if (dbError) throw dbError;
@@ -150,6 +155,13 @@ export const PurchaseModal = ({ plan, amount, productId, downloadUrl, onClose }:
       window.open(whatsappUrl, '_blank');
       
       setStep("success");
+      
+      // If we had cartItems, we can clear the cart from local storage 
+      // (ideally we should call clearCart from context, but we don't have it here yet unless we import useCart)
+      if (cartItems) {
+        localStorage.removeItem(`ifx_cart_${user.id}`);
+      }
+
       setTimeout(() => setShowReviewPrompt(true), 2000);
     } catch (err: any) {
       console.error("Purchase Fulfillment Signal Failed.", err);

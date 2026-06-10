@@ -93,9 +93,8 @@ export const BrandAuthority = () => {
                   key={partner.name} 
                   className="group relative flex flex-col items-center gap-2 transition-all duration-500 ease-out"
                 >
-                  {/* Outer glowing border card with exact size bounds */}
-                  <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden bg-zinc-950/80 border border-white/5 flex items-center justify-center p-3 relative shadow-lg group-hover:border-blue-500/30 transition-all duration-500">
-                    <div className="absolute inset-0 bg-white/[0.01] blur-[30px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none scale-150" />
+                  {/* Clean, borderless floating logo */}
+                  <div className="w-24 h-12 sm:w-32 sm:h-16 flex items-center justify-center relative">
                     
                     {/* Logo Image */}
                     <img 
@@ -103,12 +102,9 @@ export const BrandAuthority = () => {
                       alt={partner.name} 
                       draggable={false}
                       loading="lazy"
-                      className="w-full h-full object-contain transition-all duration-500 ease-out transform group-hover:scale-[1.08]"
+                      className="max-w-full max-h-full object-contain drop-shadow-md"
                     />
                   </div>
-                  <span className="text-[9px] font-black tracking-widest text-gray-500 uppercase opacity-60 group-hover:opacity-100 transition-opacity">
-                    {partner.name}
-                  </span>
                 </div>
               ))}
             </motion.div>

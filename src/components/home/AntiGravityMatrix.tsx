@@ -185,7 +185,10 @@ function CandlestickChart() {
   }, []);
 
   useFrame((_, delta) => {
-    clockRef.current += delta;
+    // Clamp delta to prevent physics blow-up on background tab resume
+    const cappedDelta = Math.min(delta, 0.1);
+    
+    clockRef.current += cappedDelta;
     const t = clockRef.current;
 
     mouseVelocity.x = mouseNDC.x - prevMouse.x;
@@ -197,7 +200,7 @@ function CandlestickChart() {
     const mx3d = mouseNDC.x * (NUM_CANDLES * CANDLE_SPACING * 0.5);
 
     // ── Live Scrolling Queue ──
-    scrollAccum.current += delta * SCROLL_SPEED;
+    scrollAccum.current += cappedDelta * SCROLL_SPEED;
     if (scrollAccum.current >= CANDLE_SPACING) {
       candles.shift(); // remove leftmost
 
@@ -349,7 +352,8 @@ function GridFloor() {
   const livePositions = useMemo(() => new Float32Array(segments), [segments]);
 
   useFrame((_, delta) => {
-    clockRef.current += delta;
+    const cappedDelta = Math.min(delta, 0.1);
+    clockRef.current += cappedDelta;
     const t = clockRef.current;
 
     const mx3d = mouseNDC.x * (GRID_ROWS * GRID_SPACING * 0.5);
@@ -416,7 +420,8 @@ function CameraController() {
   }, [camera, size]);
 
   useFrame((_, delta) => {
-    t.current += delta * 0.045;
+    const cappedDelta = Math.min(delta, 0.1);
+    t.current += cappedDelta * 0.045;
     const isMobile = size.width < 768;
     const zOffset = isMobile ? 13 : 12;
 
@@ -447,7 +452,8 @@ function CursorLight() {
     }
 
     // Delayed trailing light logic
-    delayPos.current.x += (targetX - delayPos.current.x) * delta * 4.5;
+    const cappedDelta = Math.min(delta, 0.1);
+    delayPos.current.x += (targetX - delayPos.current.x) * cappedDelta * 4.5;
     
     const light2 = lightRef2.current;
     if (light2) {

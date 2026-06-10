@@ -13,13 +13,15 @@ import {
   Terminal,
   X,
   Zap,
-  FileText
+  FileText,
+  ShoppingBag
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { BRANDING } from "../../constants/branding";
 import { useAuth } from "../../contexts/AuthContext";
 import { cn } from "../../utils/cn";
 import { useLanguage, LanguageCode } from "../../contexts/LanguageContext";
+import { useCart } from "../../contexts/CartContext";
 
 export const Navbar = () => {
   const { t, language, setLanguage } = useLanguage();
@@ -29,6 +31,7 @@ export const Navbar = () => {
   const [lastY, setLastY] = useState(0);
   const [hidden, setHidden] = useState(false);
   const location = useLocation();
+  const { items, setIsCartOpen } = useCart();
 
   useEffect(() => {
     setIsOpen(false);
@@ -182,6 +185,21 @@ export const Navbar = () => {
               </div>
             </div>
 
+            {/* Cart Icon */}
+            <button
+              type="button"
+              onClick={() => setIsCartOpen(true)}
+              className="relative p-2 text-white/50 hover:text-white transition-all bg-white/[0.02] border border-white/[0.05] rounded-full hover:bg-white/[0.04]"
+              aria-label="View Cart"
+            >
+              <ShoppingBag className="h-4 w-4" />
+              {items.length > 0 && (
+                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 text-[8px] font-bold text-black border border-black">
+                  {items.length}
+                </span>
+              )}
+            </button>
+
             {user ? (
               <div className="flex items-center gap-2 bg-white/[0.02] p-1.5 rounded-full border border-white/[0.05]">
                 <Link
@@ -234,6 +252,20 @@ export const Navbar = () => {
                 Sign In
               </Link>
             )}
+            {/* Mobile Cart Icon */}
+            <button
+              type="button"
+              onClick={() => setIsCartOpen(true)}
+              className="relative p-2 text-white/50 hover:text-white transition-all bg-white/[0.04] border border-white/10 rounded-xl hover:bg-white/[0.08]"
+              aria-label="View Cart"
+            >
+              <ShoppingBag className="h-5 w-5" />
+              {items.length > 0 && (
+                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 text-[8px] font-bold text-black border border-[#040608]">
+                  {items.length}
+                </span>
+              )}
+            </button>
             {user && (
               <div className="flex items-center gap-2">
                 {isAdmin && (

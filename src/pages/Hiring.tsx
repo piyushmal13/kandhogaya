@@ -206,21 +206,7 @@ export const Hiring = () => {
             </div>
           </Reveal>
 
-          {/* Quick Metrics */}
-          <div className="mt-16 md:mt-24 grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto border border-white/[0.05] bg-[#040507]/40 backdrop-blur-md rounded-2xl p-8">
-            <div className="text-center sm:text-left sm:border-r border-white/5 sm:pr-8">
-              <div className="text-3xl font-extrabold text-white font-mono">Daily Ingress</div>
-              <div className="text-[10px] uppercase tracking-widest text-[#849396] mt-2 font-mono">Sourcing Operations</div>
-            </div>
-            <div className="text-center sm:text-left sm:border-r border-white/5 sm:px-8">
-              <div className="text-3xl font-extrabold text-white font-mono">100% Internal</div>
-              <div className="text-[10px] uppercase tracking-widest text-[#849396] mt-2 font-mono">Own Operations Funding</div>
-            </div>
-            <div className="text-center sm:text-left sm:pl-8">
-              <div className="text-3xl font-extrabold text-white font-mono">Supabase Sync</div>
-              <div className="text-[10px] uppercase tracking-widest text-[#849396] mt-2 font-mono">Dynamic Job Registry</div>
-            </div>
-          </div>
+          {/* Quick Metrics removed as per user request to avoid exposing internal logic */}
         </div>
       </div>
 

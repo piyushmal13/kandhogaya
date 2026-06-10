@@ -7,6 +7,7 @@ import { RiskMetrics } from '@/components/institutional/RiskMetrics';
 import { RecentActivity } from '@/components/institutional/RecentActivity';
 import { WebinarAccessPanel } from '@/components/institutional/WebinarAccessPanel';
 import { LicenseVault } from '@/components/institutional/LicenseVault';
+import { PendingOrders } from '@/components/institutional/PendingOrders';
 import { PageMeta } from '@/components/site/PageMeta';
 import { tracker } from '@/core/tracker';
 
@@ -34,6 +35,7 @@ export const Dashboard = () => {
           
           {/* PRIMARY ALPHA SURFACE (2/3) */}
           <div className="xl:col-span-2 space-y-8">
+            <PendingOrders />
             <PortfolioValue />
             <DashboardPromo />
           </div>

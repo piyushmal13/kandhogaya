@@ -5,16 +5,15 @@ const getSupabaseConfig = () => {
   const injectedKey = (globalThis as any)._SUPABASE_ANON_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY;
 
   if (typeof window !== "undefined") {
-    // Client-side: route requests through Vercel proxy to conceal raw Supabase URL only in production deployments.
-    // For local development or local preview, direct VITE_SUPABASE_URL is used since the local server does not handle proxy rewrites.
+    // Client-side: Connect directly to Supabase
+    // This resolves CORS and Vercel routing proxy issues in production.
     const isVercelOrProd = 
       window.location.hostname === "ifxtrades.com" || 
       window.location.hostname === "www.ifxtrades.com" || 
       window.location.hostname.endsWith(".vercel.app");
 
-    if (isVercelOrProd && import.meta.env.PROD) {
-      injectedUrl = `${window.location.origin}/supabase-proxy`;
-    }
+    // We no longer route through /supabase-proxy because it causes 
+    // network failures on the live deployment. Direct connection is the robust standard.
   }
 
   if (!injectedUrl || injectedUrl.includes('placeholder')) {
@@ -298,7 +297,7 @@ export const safeQuery = async <T>(query: any): Promise<T | []> => {
 export const getSupabasePublicUrl = (bucket: string, path: string): string => {
   if (!path) return "";
   if (path.startsWith("http")) return path;
-  const bakedUrl = typeof window !== "undefined" ? '/supabase-proxy' : import.meta.env.VITE_SUPABASE_URL;
+  const bakedUrl = import.meta.env.VITE_SUPABASE_URL || "https://fjvuzgkctuwmkhajmgeo.supabase.co";
   return `${bakedUrl}/storage/v1/object/public/${bucket}/${path}`;
 };
 

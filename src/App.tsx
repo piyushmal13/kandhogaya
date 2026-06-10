@@ -15,6 +15,8 @@ import { loadSystem } from "./core/systemLoader";
 import { HelmetProvider } from "react-helmet-async";
 import { FeatureGuard } from "./components/ui/FeatureGuard";
 import { useReferral } from "./hooks/useReferral";
+import { CartProvider } from "./contexts/CartContext";
+import { CartSlideover } from "./components/payments/CartSlideover";
 
 // ⚡ STATIC IMPORTS FOR EAGER PUBLIC PAGES (0ms chunk latency)
 import Home from "./pages/Home";
@@ -119,6 +121,7 @@ function AppContent() {
       <>
         <LegacyRedirect />
         <AnimatedRoutes />
+        <CartSlideover />
       </>
     );
   }
@@ -129,6 +132,7 @@ function AppContent() {
       {/* <GlobalPromotionBanner /> - Deactivated per CEO's 'zero pop-up' directive */}
       <AnimatedRoutes />
       <NewsletterPopup />
+      <CartSlideover />
     </StandardLayout>
   );
 }
@@ -145,11 +149,13 @@ export default function App() {
           <ToastProvider>
             <AuthProvider>
               <LanguageProvider>
-                <DataPulseProvider>
-                  <Router>
-                    <AppContent />
-                  </Router>
-                </DataPulseProvider>
+                <CartProvider>
+                  <DataPulseProvider>
+                    <Router>
+                      <AppContent />
+                    </Router>
+                  </DataPulseProvider>
+                </CartProvider>
               </LanguageProvider>
             </AuthProvider>
           </ToastProvider>
