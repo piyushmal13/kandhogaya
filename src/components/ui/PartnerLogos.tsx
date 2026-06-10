@@ -24,11 +24,31 @@ const GRADIENTS = [
 
 // HARDCODED INSTITUTIONAL BACKUPS IF DATABASE FAILS OR IS EMPTY
 const BACKUP_PARTNERS = [
-  { name: "MetaTrader 5", category: "Trading Platform", abbr: "MT5", color: "from-blue-600 to-blue-400" },
-  { name: "TradingView", category: "Charting Terminal", abbr: "TV", color: "from-sky-500 to-cyan-400" },
-  { name: "Vantage Markets", category: "Liquidity Bridge", abbr: "VTG", color: "from-emerald-600 to-green-400" },
-  { name: "VT Markets", category: "Execution Partner", abbr: "VTM", color: "from-violet-600 to-purple-400" },
-  { name: "Markets4you", category: "CFD Provider", abbr: "M4Y", color: "from-orange-600 to-amber-400" },
+  {
+    name: "MetaTrader 5",
+    category: "Trading Platform",
+    logoUrl: "https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/bc/0c/76/bc0c7626-b4e6-ee40-613a-54c6adb623bd/icon-0-0-1x_U007emarketing-0-0-0-4-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/1200x630wa.png"
+  },
+  {
+    name: "MetaTrader 4",
+    category: "Trading Platform",
+    logoUrl: "https://is1-ssl.mzstatic.com/image/thumb/Purple113/v4/f4/bd/18/f4bd18ff-edcb-0d5f-2ced-94144a113321/icon-0-0-1x_U007emarketing-0-0-0-4-0-0-85-220.png/1200x630wa.png"
+  },
+  {
+    name: "TradingView",
+    category: "Charting Terminal",
+    logoUrl: "https://crystalpng.com/wp-content/uploads/2025/03/tradingview-logo-768x768.png"
+  },
+  {
+    name: "cTrader",
+    category: "Trading Client",
+    logoUrl: "https://is4-ssl.mzstatic.com/image/thumb/Purple115/v4/13/f7/d6/13f7d654-a8d5-8d84-e8a0-674e2a7eacac/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/1200x630wa.png"
+  },
+  {
+    name: "Match-Trader",
+    category: "Forex Platform",
+    logoUrl: "https://is1-ssl.mzstatic.com/image/thumb/Purple116/v4/91/45/ab/9145abee-c374-f850-3e0f-747847dcfe9f/AppIcons-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/1200x630wa.png"
+  }
 ];
 
 const BACKUP_SUCCESS_STORIES = [
@@ -135,26 +155,29 @@ export const PartnerLogos = () => {
 
   useEffect(() => {
     // 1. Fetch Integration Partners dynamically from Supabase
-    const fetchSponsors = async () => {
+    const fetchPartners = async () => {
       try {
         const { data, error } = await supabase
-          .from("webinar_sponsors")
-          .select("id, name, tier, logo_url, website_url")
-          .order("name", { ascending: true });
+          .from("banners")
+          .select("id, title, image_url, description")
+          .eq("placement", "partner")
+          .eq("is_active", true)
+          .order("priority", { ascending: true });
 
         if (error) throw error;
         
         if (data && data.length > 0) {
           const mapped = data.map((item) => ({
-            name: item.name,
-            category: item.tier === "Headline" ? "Institutional Partner" : "Execution Network",
-            logoUrl: item.logo_url,
+            name: item.title,
+            category: item.description || "Platform Integration",
+            logoUrl: item.image_url,
           }));
           setPartners(mapped);
         } else {
           setPartners(BACKUP_PARTNERS);
         }
-      } catch {
+      } catch (err) {
+        console.error("Error fetching partner logos:", err);
         setPartners(BACKUP_PARTNERS);
       }
     };
@@ -189,7 +212,7 @@ export const PartnerLogos = () => {
       }
     };
 
-    fetchSponsors();
+    fetchPartners();
     fetchReviews();
   }, []);
 
@@ -226,7 +249,7 @@ export const PartnerLogos = () => {
         </motion.div>
 
         {/* === PARTNER LOGO GRID === */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-24">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-24">
           {partners.map((partner, i) => (
             <LogoPill
               key={`${partner.name}-${i}`}
