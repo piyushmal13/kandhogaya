@@ -34,9 +34,6 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     persistSession: true,
     autoRefreshToken: true,
     detectSessionInUrl: true
-  },
-  global: {
-    headers: { 'x-institutional-resilience': 'active' }
   }
 });
 
@@ -240,29 +237,7 @@ const FALLBACK_SIGNALS = [
 
 const getFallbackData = <T>(query: any): T => {
   const urlStr = query?.url?.pathname || query?.url?.toString() || "";
-  console.warn(`[Supabase Resilience Fallback]: Missing connection for endpoint "${urlStr}". Loading high-fidelity fallback data.`);
-
-  if (urlStr.includes('/webinars')) {
-    return FALLBACK_WEBINARS as unknown as T;
-  }
-  if (urlStr.includes('/products')) {
-    return FALLBACK_PRODUCTS as unknown as T;
-  }
-  if (urlStr.includes('/reviews')) {
-    return FALLBACK_REVIEWS as unknown as T;
-  }
-  if (urlStr.includes('/performance_results')) {
-    return FALLBACK_RESULTS as unknown as T;
-  }
-  if (urlStr.includes('/banners')) {
-    return FALLBACK_BANNERS as unknown as T;
-  }
-  if (urlStr.includes('/feature_flags')) {
-    return FALLBACK_FLAGS as unknown as T;
-  }
-  if (urlStr.includes('/signals')) {
-    return FALLBACK_SIGNALS as unknown as T;
-  }
+  console.warn(`[Supabase Error]: Fetch failed for endpoint "${urlStr}". Returning empty dataset instead of fake fallbacks.`);
   
   return [] as unknown as T;
 };

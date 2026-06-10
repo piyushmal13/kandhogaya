@@ -159,7 +159,7 @@ export const ComingSoonWebinar = () => {
             className="text-4xl sm:text-6xl md:text-7xl lg:text-[5rem] font-black tracking-tight uppercase leading-[0.9] text-white"
           >
             Institutional <br className="hidden sm:block" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-[#60CDFF] to-emerald-400">Masterclass Series</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-[#60CDFF] to-emerald-400">Webinar Series</span>
           </motion.h1>
           
           <motion.p 
@@ -168,7 +168,7 @@ export const ComingSoonWebinar = () => {
             transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
             className="text-sm sm:text-base md:text-lg text-zinc-400 leading-relaxed font-medium max-w-2xl mx-auto lg:mx-0"
           >
-            Deploying high-performance educational models in collaboration with top-tier brokers and liquidity providers. Get priority clearance keys to decode volatility and access MT5 binary distributions.
+            The IFX Trades Institutional Webinar Series is launching soon. Get priority clearance keys now to secure your spot and decode volatility with our top-tier execution models.
           </motion.p>
 
           <motion.div 
