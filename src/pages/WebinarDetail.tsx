@@ -12,6 +12,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { useToast } from "../contexts/ToastContext";
 import { supabase } from "../lib/supabase";
 import { useWebinar } from "../hooks/useWebinars";
+import { useFlags } from "../hooks/useFlags";
 import { VideoPlayer } from "../components/institutional/VideoPlayer";
 import { Webinar } from "../types";
 import { ComingSoonWebinar } from "./ComingSoonWebinar";
@@ -87,10 +88,10 @@ interface ExtendedWebinar extends Webinar {
   };
 }
 
-// ── COMING SOON PITCH MODE (REMOVE THIS BLOCK TO RESTORE REAL MODEL) ──
-const IS_COMING_SOON_PITCH = true;
-
 export const WebinarDetail = () => {
+  const { flags } = useFlags();
+  const isComingSoonPitch = flags.webinar_pitch_mode;
+
   const { id } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -98,7 +99,7 @@ export const WebinarDetail = () => {
   const webinar = webinarData as ExtendedWebinar | undefined;
 
   // If Pitch Mode is active, bypass specific webinar lookup and render the holding page
-  if (IS_COMING_SOON_PITCH) {
+  if (isComingSoonPitch) {
     return <ComingSoonWebinar />;
   }
 
@@ -317,7 +318,7 @@ export const WebinarDetail = () => {
 
   if (!webinar) return (
     <div className="pt-32 text-center text-white bg-[#020203] min-h-screen flex items-center justify-center px-4">
-      {IS_COMING_SOON_PITCH ? (
+      {isComingSoonPitch ? (
         <div className="space-y-6 max-w-md bg-zinc-900/40 border border-zinc-800 rounded-3xl p-8 sm:p-10 backdrop-blur-md">
           <div className="w-12 h-12 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mx-auto mb-4 animate-pulse">
             <Lock className="w-5 h-5 text-blue-400" />
@@ -356,7 +357,7 @@ export const WebinarDetail = () => {
 
   return (
     <div className="pt-20 bg-[#09090b] min-h-screen relative overflow-hidden text-white">
-      {IS_COMING_SOON_PITCH && (
+      {isComingSoonPitch && (
         <div className="bg-gradient-to-r from-blue-600/10 to-indigo-600/10 border-b border-blue-500/20 py-3 text-center text-[10px] font-bold uppercase tracking-[0.25em] text-blue-400 relative z-20">
           ⚡ Promotion Desk: Masterclass Commencing Soon — Broker &amp; Sponsorship Allocation Active
         </div>
@@ -471,14 +472,14 @@ export const WebinarDetail = () => {
             
             {/* Dynamic Media Section */}
             <div className="relative aspect-video bg-zinc-950 rounded-3xl overflow-hidden border border-zinc-800 shadow-[0_20px_50px_rgba(0,0,0,0.6)] group ring-1 ring-white/5">
-              {IS_COMING_SOON_PITCH && (
+              {isComingSoonPitch && (
                 <div className="absolute inset-0 bg-zinc-950/90 backdrop-blur-md flex flex-col items-center justify-center text-center p-6 z-20">
                   <Clock className="w-12 h-12 text-[#0071e3] mb-4 animate-pulse" />
                   <h3 className="text-base font-black text-white uppercase tracking-tight">Institutional Stream Commencing Soon</h3>
                   <p className="text-[11px] text-zinc-500 max-w-sm mt-2 leading-relaxed">
                     The secure data terminal for this session is scheduled for initialization. Broker promotions and sponsorship allocations are currently active.
                   </p>
-                </div>
+                  </div>
               )}
               {(() => {
                 if (isLive) {
@@ -859,7 +860,7 @@ export const WebinarDetail = () => {
                   ) : (
                     // TICKETING AND CLEARANCE CONFIRMED STATE
                     <div className="space-y-5 text-center py-4">
-                      {IS_COMING_SOON_PITCH ? (
+                      {isComingSoonPitch ? (
                         <div className="space-y-4">
                           <div className="w-12 h-12 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mx-auto mb-2 animate-pulse">
                              <Clock className="w-5 h-5 text-blue-400" />

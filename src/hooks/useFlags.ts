@@ -22,6 +22,7 @@ export type FlagKey =
   | 'urgency_banner_active'
   | 'maintenance_mode'
   | 'webinar_realtime_updates'
+  | 'webinar_pitch_mode'
   // Homepage Sections toggles
   | 'home_brand_authority'
   | 'home_trust_grid'
@@ -60,6 +61,7 @@ const FLAG_DEFAULTS: Flags = {
   urgency_banner_active:     true,
   maintenance_mode:          false,
   webinar_realtime_updates:  false,
+  webinar_pitch_mode:        true,
   // Homepage Sections defaults (graceful degradation)
   home_brand_authority:         true,
   home_trust_grid:              true,

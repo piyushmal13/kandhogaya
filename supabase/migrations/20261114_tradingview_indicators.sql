@@ -1,6 +1,12 @@
 -- Add TradingView indicators to the marketplace
 -- Category: 'course' (maps to Education in the marketplace)
 -- Price: $10.00 each
+ALTER TABLE products ADD COLUMN IF NOT EXISTS strategy_type TEXT;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS type TEXT DEFAULT 'algorithm';
+ALTER TABLE products ADD COLUMN IF NOT EXISTS risk_level TEXT;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS win_rate DECIMAL(5, 2);
+ALTER TABLE products ADD COLUMN IF NOT EXISTS features TEXT[];
+ALTER TABLE products ADD COLUMN IF NOT EXISTS supported_assets TEXT[];
 
 INSERT INTO products (name, strategy_type, description, price, category, type, risk_level, metadata, features, supported_assets)
 VALUES

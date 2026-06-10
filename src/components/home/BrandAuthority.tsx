@@ -5,28 +5,23 @@ import { containerVariants, itemVariants } from "@/lib/motion";
 const INTEGRATION_PARTNERS = [
   {
     name: "MetaTrader 5",
-    logo_url: "/metatrader5.svg",
-    className: "h-8 sm:h-9 md:h-10"
+    logo_url: "https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/bc/0c/76/bc0c7626-b4e6-ee40-613a-54c6adb623bd/icon-0-0-1x_U007emarketing-0-0-0-4-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/1200x630wa.png"
   },
   {
     name: "MetaTrader 4",
-    logo_url: "/metatrader4.svg",
-    className: "h-8 sm:h-9 md:h-10"
+    logo_url: "https://is1-ssl.mzstatic.com/image/thumb/Purple113/v4/f4/bd/18/f4bd18ff-edcb-0d5f-2ced-94144a113321/icon-0-0-1x_U007emarketing-0-0-0-4-0-0-85-220.png/1200x630wa.png"
   },
   {
     name: "TradingView",
-    logo_url: "/tradingview.svg",
-    className: "h-6 sm:h-7 md:h-8"
+    logo_url: "https://crystalpng.com/wp-content/uploads/2025/03/tradingview-logo-768x768.png"
   },
   {
     name: "cTrader",
-    logo_url: "https://help.ctrader.com/ctrader-web/img/logo.png",
-    className: "h-7 sm:h-8 md:h-9"
+    logo_url: "https://is4-ssl.mzstatic.com/image/thumb/Purple115/v4/13/f7/d6/13f7d654-a8d5-8d84-e8a0-674e2a7eacac/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/1200x630wa.png"
   },
   {
-    name: "Binance",
-    logo_url: "/binance.svg",
-    className: "h-6 sm:h-7 md:h-8"
+    name: "Match-Trader",
+    logo_url: "https://is1-ssl.mzstatic.com/image/thumb/Purple116/v4/91/45/ab/9145abee-c374-f850-3e0f-747847dcfe9f/AppIcons-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/1200x630wa.png"
   }
 ];
 
@@ -58,27 +53,32 @@ export const BrandAuthority = () => {
               </p>
             </motion.div>
    
-            {/* Ultra-Premium Flat Logo Row (No Boxes, Original Brand Colors) */}
+            {/* Ultra-Premium Flat Logo Row (Standardized square bounding boxes, centered, uniform size) */}
             <motion.div 
               variants={itemVariants} 
-              className="w-full max-w-5xl mx-auto flex flex-wrap justify-center items-center gap-10 sm:gap-14 md:gap-16"
+              className="w-full max-w-5xl mx-auto flex flex-wrap justify-center items-center gap-6 sm:gap-10 md:gap-12"
             >
               {INTEGRATION_PARTNERS.map((partner) => (
                 <div 
                   key={partner.name} 
-                  className="group relative flex items-center justify-center transition-all duration-500 ease-out"
+                  className="group relative flex flex-col items-center gap-2 transition-all duration-500 ease-out"
                 >
-                  {/* Subtle Glow on Hover */}
-                  <div className="absolute inset-0 bg-white/[0.01] blur-[30px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none scale-150" />
-                  
-                  {/* Logo Image */}
-                  <img 
-                    src={partner.logo_url} 
-                    alt={partner.name} 
-                    draggable={false}
-                    loading="lazy"
-                    className={`${partner.className} w-auto object-contain transition-all duration-500 ease-out transform group-hover:scale-[1.08]`}
-                  />
+                  {/* Outer glowing border card with exact size bounds */}
+                  <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden bg-zinc-950/80 border border-white/5 flex items-center justify-center p-3 relative shadow-lg group-hover:border-blue-500/30 transition-all duration-500">
+                    <div className="absolute inset-0 bg-white/[0.01] blur-[30px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none scale-150" />
+                    
+                    {/* Logo Image */}
+                    <img 
+                      src={partner.logo_url} 
+                      alt={partner.name} 
+                      draggable={false}
+                      loading="lazy"
+                      className="w-full h-full object-cover rounded-lg transition-all duration-500 ease-out transform group-hover:scale-[1.08]"
+                    />
+                  </div>
+                  <span className="text-[9px] font-black tracking-widest text-gray-500 uppercase opacity-60 group-hover:opacity-100 transition-opacity">
+                    {partner.name}
+                  </span>
                 </div>
               ))}
             </motion.div>

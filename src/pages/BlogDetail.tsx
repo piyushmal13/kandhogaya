@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ArrowUpRight, Share2, Calendar, Clock, User, Shield, ExternalLink, Globe } from "lucide-react";
+import { ArrowUpRight, Share2, Calendar, Clock, User, Shield, ExternalLink, Globe, TrendingUp, TrendingDown, Cpu, Layers } from "lucide-react";
 import { motion, useScroll, useSpring } from "motion/react";
 
 import { PageMeta } from "../components/site/PageMeta";
 import { WebinarPromoInline } from "../components/webinars/WebinarPromoInline";
-import { getBlogPostBySlug } from "../services/apiHandlers";
+import { getBlogPostBySlug, getMarketData, getPerformanceResults } from "../services/apiHandlers";
+import { marketService } from "../services/marketService";
 import { bannerService, Banner } from "../services/bannerService";
 import { Blog } from "../types";
 import { KeyInsightsCard } from "../components/blog/KeyInsightsCard";
@@ -100,6 +101,36 @@ export const BlogDetail = () => {
   const [loading, setLoading] = useState(true);
   const [incontentBanner, setIncontentBanner] = useState<Banner | null>(null);
   const [sidebarBanner, setSidebarBanner] = useState<Banner | null>(null);
+  const [marketRates, setMarketRates] = useState<any[]>([]);
+  const [performanceStats, setPerformanceStats] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const stats = await getPerformanceResults();
+        if (stats && stats.length > 0) {
+          setPerformanceStats(stats.slice(-4));
+        }
+      } catch (err) {
+        console.error("Fetch performance stats error:", err);
+      }
+    };
+    fetchStats();
+  }, []);
+
+  useEffect(() => {
+    const fetchRates = async () => {
+      try {
+        const rates = await getMarketData();
+        setMarketRates(rates);
+      } catch (err) {
+        console.error("Fetch market rates error:", err);
+      }
+    };
+    fetchRates();
+    const sub = marketService.subscribe(fetchRates);
+    return () => sub.unsubscribe();
+  }, []);
 
   // Scroll Progress Bar
   const { scrollYProgress } = useScroll();
@@ -110,33 +141,62 @@ export const BlogDetail = () => {
   });
 
   useEffect(() => {
-    const fetchPost = async () => {
+    const loadContentAndSponsors = async () => {
       if (!slug) return;
       setLoading(true);
       try {
-        const data = await getBlogPostBySlug(slug);
-        setPost(data);
+        const postData = await getBlogPostBySlug(slug);
+        setPost(postData);
+
+        if (postData) {
+          const metadata = postData.metadata as any;
+          if (metadata?.sponsor) {
+            const locked = {
+              id: "locked_sponsor",
+              title: metadata.sponsor.name,
+              description: metadata.sponsor.description || "",
+              image_url: metadata.sponsor.logo_url || "",
+              link_url: metadata.sponsor.link_url || "",
+              is_active: true,
+              placement: "blog_sponsor",
+              priority: 1,
+              metadata: { tagline: metadata.sponsor.tagline || "Official Sponsor" },
+              created_at: new Date().toISOString()
+            };
+            setIncontentBanner(locked);
+            setSidebarBanner(locked);
+          } else {
+            const dbSponsors = await bannerService.getBanners("blog_sponsor");
+            if (dbSponsors && dbSponsors.length > 0) {
+              const randomIncontent = dbSponsors[Math.floor(Math.random() * dbSponsors.length)];
+              setIncontentBanner(randomIncontent);
+
+              const otherSponsors = dbSponsors.filter(s => s.id !== randomIncontent.id);
+              if (otherSponsors.length > 0) {
+                setSidebarBanner(otherSponsors[Math.floor(Math.random() * otherSponsors.length)]);
+              } else {
+                setSidebarBanner(randomIncontent);
+              }
+            } else {
+              const legacyIncontent = await bannerService.getBanners("blog_incontent");
+              if (legacyIncontent && legacyIncontent.length > 0) {
+                setIncontentBanner(legacyIncontent[0]);
+              }
+              const legacySidebar = await bannerService.getBanners("blog_sidebar");
+              if (legacySidebar && legacySidebar.length > 0) {
+                setSidebarBanner(legacySidebar[0]);
+              }
+            }
+          }
+        }
       } catch (err) {
-        console.error("Fetch blog detail failed:", err);
+        console.error("Fetch blog detail and sponsors failed:", err);
       } finally {
         setLoading(false);
       }
     };
 
-    const fetchBanners = async () => {
-      try {
-        const incontent = await bannerService.getBanners("blog_incontent");
-        if (incontent && incontent.length > 0) setIncontentBanner(incontent[0]);
-
-        const sidebar = await bannerService.getBanners("blog_sidebar");
-        if (sidebar && sidebar.length > 0) setSidebarBanner(sidebar[0]);
-      } catch (e) {
-        console.error("Banner fetch failed", e);
-      }
-    };
-
-    fetchPost();
-    fetchBanners();
+    loadContentAndSponsors();
     window.scrollTo(0, 0);
   }, [slug]);
 
@@ -211,8 +271,31 @@ export const BlogDetail = () => {
       {/* Progress Bar */}
       <motion.div className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 z-[100] origin-left" style={{ scaleX }} />
 
+      {/* Live Market Terminal Ticker */}
+      <div className="w-full bg-[#030712]/80 backdrop-blur-md border-b border-white/5 py-3.5 pt-28 px-4 flex overflow-x-auto gap-8 justify-start lg:justify-center scrollbar-none select-none font-mono text-[10px]">
+        {marketRates.length > 0 ? (
+          marketRates.map((rate) => {
+            const isUp = rate.change && rate.change.startsWith("+");
+            return (
+              <div key={rate.id || rate.symbol} className="flex items-center gap-2 shrink-0 bg-white/[0.01] border border-white/5 px-3 py-1.5 rounded-lg">
+                <span className="text-gray-400 font-black tracking-tight">{rate.symbol.replace("/", "")}</span>
+                <span className="text-white font-black">{rate.price}</span>
+                <span className={`flex items-center gap-0.5 font-bold ${isUp ? "text-emerald-400" : "text-rose-500"}`}>
+                  {isUp ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
+                  {rate.change}
+                </span>
+              </div>
+            );
+          })
+        ) : (
+          <div className="text-gray-500 font-mono text-[9px] uppercase tracking-widest animate-pulse">
+            Connecting to Institutional Liquidity Node...
+          </div>
+        )}
+      </div>
+
       {/* Hero Section */}
-      <div className="relative pt-40 pb-20 px-4">
+      <div className="relative pt-16 pb-20 px-4">
         {/* Background Gradients */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full opacity-10 pointer-events-none">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,_rgba(59,130,246,0.1)_0%,_transparent_60%)]" />
@@ -471,6 +554,87 @@ export const BlogDetail = () => {
                   >
                     Launch Node
                   </a>
+                </div>
+              </div>
+
+              {/* Quant Performance Telemetry (Direct from Supabase database) */}
+              <div className="bg-[#05070a]/90 backdrop-blur-xl p-8 rounded-[40px] border border-white/5 relative overflow-hidden group shadow-2xl">
+                <div className="absolute top-0 right-0 p-8 opacity-[0.02] pointer-events-none">
+                  <Cpu className="w-40 h-40 text-blue-500" />
+                </div>
+                
+                <h4 className="text-white font-black text-xs uppercase tracking-widest mb-6 flex items-center gap-3 font-mono">
+                  <Cpu className="w-4 h-4 text-blue-500" />
+                  Quant Performance Desk
+                </h4>
+                
+                {performanceStats.length > 0 ? (
+                  <div className="space-y-4">
+                    {performanceStats.map((stat) => (
+                      <div key={stat.id} className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-all font-mono">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-[10px] text-gray-500 font-black uppercase">
+                            {stat.month} {stat.year}
+                          </span>
+                          <span className="text-[11px] text-emerald-400 font-bold">
+                            +{stat.return_pct}% Return
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4 text-[10px]">
+                          <div>
+                            <span className="text-gray-600 uppercase block text-[8px] tracking-wider">Win Rate</span>
+                            <span className="text-white font-bold">{stat.win_rate}%</span>
+                          </div>
+                          <div>
+                            <span className="text-gray-600 uppercase block text-[8px] tracking-wider">Total Volume</span>
+                            <span className="text-white font-bold">+{stat.pips} Pips</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-6 text-gray-600 text-[10px] font-mono uppercase tracking-widest animate-pulse">
+                    Fulfilling Performance Matrix...
+                  </div>
+                )}
+              </div>
+
+              {/* Live Terminal Feed */}
+              <div className="bg-[#05070a]/90 backdrop-blur-xl p-8 rounded-[40px] border border-white/5 relative overflow-hidden group shadow-2xl">
+                <div className="absolute top-0 right-0 p-8 opacity-[0.02] pointer-events-none">
+                  <Layers className="w-40 h-40 text-cyan-500" />
+                </div>
+                
+                <h4 className="text-white font-black text-xs uppercase tracking-widest mb-6 flex items-center gap-3 font-mono">
+                  <Layers className="w-4 h-4 text-cyan-500" />
+                  Institutional Data Nodes
+                </h4>
+                
+                <div className="space-y-3 font-mono text-xs">
+                  {marketRates.length > 0 ? (
+                    marketRates.map((rate) => {
+                      const isUp = rate.change && rate.change.startsWith("+");
+                      return (
+                        <div key={rate.id || rate.symbol} className="flex items-center justify-between p-3 rounded-xl bg-white/[0.01] border border-white/5 hover:bg-white/[0.02] transition-colors">
+                          <div className="flex items-center gap-2">
+                            <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse" />
+                            <span className="text-white font-black tracking-tight">{rate.symbol}</span>
+                          </div>
+                          <div className="text-right">
+                            <span className="text-white block font-bold">{rate.price}</span>
+                            <span className={`text-[10px] font-bold ${isUp ? "text-emerald-400" : "text-rose-500"}`}>
+                              {rate.change}
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <div className="text-center py-6 text-gray-600 text-[10px] uppercase tracking-widest animate-pulse">
+                      Initializing ECN Liquidity Desks...
+                    </div>
+                  )}
                 </div>
               </div>
 

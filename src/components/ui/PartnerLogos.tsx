@@ -101,12 +101,12 @@ const LogoPill: React.FC<LogoPillProps> = ({ name, category, logoUrl, index }) =
     >
       {hasLogo ? (
         // RENDER CENTRED LOGO IMAGE EXCLUSIVELY (NO TEXT LABELS)
-        <div className="w-full h-full flex items-center justify-center relative z-10 max-w-[80%]">
+        <div className="w-full h-full flex items-center justify-center relative z-10">
           <img
             src={logoUrl}
             alt={`${name} integration logo`}
             onError={() => setImageError(true)}
-            className="max-w-full max-h-full object-contain filter opacity-65 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+            className="w-14 h-14 sm:w-16 sm:h-16 object-cover rounded-xl filter opacity-65 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
           />
         </div>
       ) : (

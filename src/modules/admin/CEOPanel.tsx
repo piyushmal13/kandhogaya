@@ -46,6 +46,290 @@ export const CEOPanel = () => {
   const [localFlags, setLocalFlags] = useState<Record<string, boolean>>({});
   const [updatingFlag, setUpdatingFlag] = useState<string | null>(null);
 
+  // Web Customizer & Sponsorship Desk States
+  const [customizerTab, setCustomizerTab] = useState<"partners" | "blog_sponsors" | "webinar_sponsors" | "blog_allocator">("partners");
+  
+  const [partnerBanners, setPartnerBanners] = useState<any[]>([]);
+  const [blogSponsorBanners, setBlogSponsorBanners] = useState<any[]>([]);
+  const [customizerLoading, setCustomizerLoading] = useState(false);
+  
+  const [sponsorForm, setSponsorForm] = useState({
+    id: "",
+    title: "",
+    description: "",
+    image_url: "",
+    link_url: "",
+    placement: "partner",
+    priority: 1,
+    metadata: { tagline: "" }
+  });
+  const [isSponsorEditing, setIsSponsorEditing] = useState(false);
+
+  const [webinarsList, setWebinarsList] = useState<any[]>([]);
+  const [selectedWebinarId, setSelectedWebinarId] = useState("");
+  const [webinarSponsorsList, setWebinarSponsorsList] = useState<any[]>([]);
+  const [webinarSponsorForm, setWebinarSponsorForm] = useState({
+    name: "",
+    tier: "Headline",
+    logo_url: "",
+    website_url: ""
+  });
+
+  const [blogsList, setBlogsList] = useState<any[]>([]);
+  const [selectedBlogId, setSelectedBlogId] = useState("");
+  const [blogSponsorConfig, setBlogSponsorConfig] = useState({
+    name: "",
+    logo_url: "",
+    link_url: "",
+    tagline: "",
+    description: ""
+  });
+
+  const loadCustomizerData = async () => {
+    setCustomizerLoading(true);
+    try {
+      const { data: partnersData } = await supabase
+        .from("banners")
+        .select("*")
+        .eq("placement", "partner")
+        .order("priority", { ascending: false });
+      setPartnerBanners(partnersData || []);
+
+      const { data: blogSponsorsData } = await supabase
+        .from("banners")
+        .select("*")
+        .eq("placement", "blog_sponsor")
+        .order("priority", { ascending: false });
+      setBlogSponsorBanners(blogSponsorsData || []);
+
+      const { data: webData } = await supabase
+        .from("webinars")
+        .select("id, title")
+        .order("date_time", { ascending: false });
+      setWebinarsList(webData || []);
+      if (webData && webData.length > 0 && !selectedWebinarId) {
+        setSelectedWebinarId(webData[0].id);
+      }
+
+      const { data: blgData } = await supabase
+        .from("content_posts")
+        .select("id, title, slug, metadata")
+        .eq("content_type", "blog")
+        .order("created_at", { ascending: false });
+      setBlogsList(blgData || []);
+      if (blgData && blgData.length > 0 && !selectedBlogId) {
+        setSelectedBlogId(blgData[0].id);
+      }
+    } catch (err) {
+      console.error("[CEOPanel Customizer] Load error:", err);
+    } finally {
+      setCustomizerLoading(false);
+    }
+  };
+
+  const loadWebinarSponsors = async (webinarId: string) => {
+    if (!webinarId) return;
+    try {
+      const { data } = await supabase
+        .from("webinar_sponsors")
+        .select("*")
+        .eq("webinar_id", webinarId);
+      setWebinarSponsorsList(data || []);
+    } catch (err) {
+      console.error("Failed loading webinar sponsors:", err);
+    }
+  };
+
+  useEffect(() => {
+    if (selectedWebinarId) {
+      loadWebinarSponsors(selectedWebinarId);
+    }
+  }, [selectedWebinarId]);
+
+  useEffect(() => {
+    if (selectedBlogId && blogsList.length > 0) {
+      const blog = blogsList.find(b => b.id === selectedBlogId);
+      if (blog && blog.metadata?.sponsor) {
+        setBlogSponsorConfig({
+          name: blog.metadata.sponsor.name || "",
+          logo_url: blog.metadata.sponsor.logo_url || "",
+          link_url: blog.metadata.sponsor.link_url || "",
+          tagline: blog.metadata.sponsor.tagline || "",
+          description: blog.metadata.sponsor.description || ""
+        });
+      } else {
+        setBlogSponsorConfig({
+          name: "",
+          logo_url: "",
+          link_url: "",
+          tagline: "",
+          description: ""
+        });
+      }
+    }
+  }, [selectedBlogId, blogsList]);
+
+  useEffect(() => {
+    loadCustomizerData();
+  }, []);
+
+  const handleSaveSponsorBanner = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!sponsorForm.title) return;
+    setCustomizerLoading(true);
+
+    const payload = {
+      title: sponsorForm.title,
+      description: sponsorForm.description,
+      image_url: sponsorForm.image_url,
+      link_url: sponsorForm.link_url,
+      placement: sponsorForm.placement,
+      priority: sponsorForm.priority,
+      metadata: sponsorForm.metadata,
+      is_active: true
+    };
+
+    try {
+      if (isSponsorEditing && sponsorForm.id) {
+        const { error } = await supabase
+          .from("banners")
+          .update(payload)
+          .eq("id", sponsorForm.id);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase
+          .from("banners")
+          .insert([payload]);
+        if (error) throw error;
+      }
+
+      setSponsorForm({
+        id: "",
+        title: "",
+        description: "",
+        image_url: "",
+        link_url: "",
+        placement: sponsorForm.placement,
+        priority: 1,
+        metadata: { tagline: "" }
+      });
+      setIsSponsorEditing(false);
+      loadCustomizerData();
+    } catch (err) {
+      console.error("Save sponsor banner failed:", err);
+    } finally {
+      setCustomizerLoading(false);
+    }
+  };
+
+  const handleEditSponsorBanner = (banner: any) => {
+    setSponsorForm({
+      id: banner.id,
+      title: banner.title || "",
+      description: banner.description || "",
+      image_url: banner.image_url || "",
+      link_url: banner.link_url || "",
+      placement: banner.placement || "partner",
+      priority: banner.priority || 1,
+      metadata: banner.metadata || { tagline: "" }
+    });
+    setIsSponsorEditing(true);
+  };
+
+  const handleDeleteSponsorBanner = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this partner/sponsor?")) return;
+    setCustomizerLoading(true);
+    try {
+      const { error } = await supabase
+        .from("banners")
+        .delete()
+        .eq("id", id);
+      if (error) throw error;
+      loadCustomizerData();
+    } catch (err) {
+      console.error("Delete failed:", err);
+    } finally {
+      setCustomizerLoading(false);
+    }
+  };
+
+  const handleAddWebinarSponsor = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedWebinarId || !webinarSponsorForm.name) return;
+    try {
+      const { error } = await supabase
+        .from("webinar_sponsors")
+        .insert([{
+          webinar_id: selectedWebinarId,
+          name: webinarSponsorForm.name,
+          tier: webinarSponsorForm.tier,
+          logo_url: webinarSponsorForm.logo_url,
+          website_url: webinarSponsorForm.website_url
+        }]);
+      if (error) throw error;
+      setWebinarSponsorForm({
+        name: "",
+        tier: "Headline",
+        logo_url: "",
+        website_url: ""
+      });
+      loadWebinarSponsors(selectedWebinarId);
+    } catch (err) {
+      console.error("Failed adding webinar sponsor:", err);
+    }
+  };
+
+  const handleDeleteWebinarSponsor = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from("webinar_sponsors")
+        .delete()
+        .eq("id", id);
+      if (error) throw error;
+      loadWebinarSponsors(selectedWebinarId);
+    } catch (err) {
+      console.error("Failed deleting webinar sponsor:", err);
+    }
+  };
+
+  const handleAssignBlogSponsor = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedBlogId) return;
+    setCustomizerLoading(true);
+    try {
+      const blog = blogsList.find(b => b.id === selectedBlogId);
+      if (!blog) return;
+
+      const updatedMetadata = {
+        ...(blog.metadata || {}),
+        sponsor: blogSponsorConfig.name ? {
+          name: blogSponsorConfig.name,
+          logo_url: blogSponsorConfig.logo_url,
+          link_url: blogSponsorConfig.link_url,
+          tagline: blogSponsorConfig.tagline,
+          description: blogSponsorConfig.description
+        } : null
+      };
+
+      if (!blogSponsorConfig.name) {
+        delete updatedMetadata.sponsor;
+      }
+
+      const { error } = await supabase
+        .from("content_posts")
+        .update({ metadata: updatedMetadata })
+        .eq("id", selectedBlogId);
+      if (error) throw error;
+
+      setBlogsList(prev => prev.map(b => b.id === selectedBlogId ? { ...b, metadata: updatedMetadata } : b));
+      alert("Blog post sponsorship updated successfully!");
+    } catch (err) {
+      console.error("Failed updating blog sponsor:", err);
+    } finally {
+      setCustomizerLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (flags) {
       setLocalFlags({
@@ -54,6 +338,7 @@ export const CEOPanel = () => {
         institutional_reviews_live: !!flags.institutional_reviews_live,
         show_retail_brokers: !!flags.show_retail_brokers,
         maintenance_mode: !!flags.maintenance_mode,
+        webinar_pitch_mode: !!flags.webinar_pitch_mode,
       });
     }
   }, [flags]);
@@ -487,7 +772,7 @@ export const CEOPanel = () => {
           </span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
           {[
             {
               key: "urgency_banner_active",
@@ -524,6 +809,15 @@ export const CEOPanel = () => {
               color: "text-emerald-500",
               bg: "bg-emerald-500/5",
               border: "border-emerald-500/20"
+            },
+            {
+              key: "webinar_pitch_mode",
+              label: "Webinar Pitch Mode",
+              desc: "Toggle holding page vs real workspace.",
+              icon: Video,
+              color: "text-blue-500",
+              bg: "bg-blue-500/5",
+              border: "border-blue-500/20"
             },
             {
               key: "maintenance_mode",
@@ -588,6 +882,440 @@ export const CEOPanel = () => {
               </div>
             );
           })}
+        </div>
+      </div>
+
+      {/* Sovereign Customizer & Sponsorship Console */}
+      <div className="bg-[var(--raised)] border border-white/5 p-8 rounded-[48px] shadow-2xl relative overflow-hidden mt-8">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+          <div>
+            <h3 className="text-xl font-black text-white uppercase tracking-tighter italic">
+              Sovereign Web Customizer <span className="text-[#00A3FF]">&amp; Sponsorship Desk</span>
+            </h3>
+            <p className="text-[10px] text-gray-500 uppercase tracking-widest font-black mt-1">
+              Link ECN Brokers, configure co-sponsorship nodes, and deploy partners dynamically
+            </p>
+          </div>
+          <button
+            onClick={loadCustomizerData}
+            disabled={customizerLoading}
+            className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-gray-400 hover:text-white text-[10px] font-black uppercase tracking-widest transition-all"
+          >
+            <RefreshCw className={cn("w-3.5 h-3.5", customizerLoading && "animate-spin")} />
+            Sync Customizer
+          </button>
+        </div>
+
+        {/* Tab Buttons */}
+        <div className="flex flex-wrap gap-2 border-b border-white/5 pb-4 mb-6">
+          {[
+            { id: "partners", label: "Home Partners" },
+            { id: "blog_sponsors", label: "Blog CPA Sponsors" },
+            { id: "webinar_sponsors", label: "Webinar Sponsors" },
+            { id: "blog_allocator", label: "Blog Sponsor Allocator" }
+          ].map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setCustomizerTab(tab.id as any)}
+              className={cn(
+                "px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
+                customizerTab === tab.id
+                  ? "bg-[#00A3FF]/10 text-[#00A3FF] border border-[#00A3FF]/20"
+                  : "text-gray-500 hover:text-white bg-white/[0.02]"
+              )}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Customizer Sub-content */}
+        <div className="space-y-6">
+          {customizerLoading && (
+            <div className="py-10 text-center text-[10px] uppercase font-black tracking-widest text-gray-500 animate-pulse">
+              Synchronizing with Supabase database...
+            </div>
+          )}
+
+          {!customizerLoading && (customizerTab === "partners" || customizerTab === "blog_sponsors") && (
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+              {/* Form Column */}
+              <form onSubmit={handleSaveSponsorBanner} className="lg:col-span-5 space-y-4 bg-black/40 border border-white/5 p-6 rounded-3xl">
+                <h4 className="text-xs font-black text-white uppercase tracking-wider">
+                  {isSponsorEditing ? "Modify" : "Create"} {customizerTab === "partners" ? "Integration Partner" : "CPA Broker Sponsor"}
+                </h4>
+                
+                <div className="space-y-1">
+                  <label className="text-[9px] font-black uppercase tracking-widest text-gray-500">Name / Title *</label>
+                  <input
+                    type="text"
+                    required
+                    value={sponsorForm.title}
+                    onChange={e => setSponsorForm({ ...sponsorForm, title: e.target.value, placement: customizerTab === "partners" ? "partner" : "blog_sponsor" })}
+                    placeholder={customizerTab === "partners" ? "e.g. MetaTrader 5" : "e.g. Vantage Markets"}
+                    className="w-full bg-black border border-white/10 rounded-xl px-4 py-2.5 text-white text-xs outline-none focus:border-[#00A3FF]/50 transition-all"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[9px] font-black uppercase tracking-widest text-gray-500">
+                    {customizerTab === "partners" ? "Category / Label" : "Description *"}
+                  </label>
+                  <input
+                    type="text"
+                    required={customizerTab === "blog_sponsors"}
+                    value={sponsorForm.description}
+                    onChange={e => setSponsorForm({ ...sponsorForm, description: e.target.value })}
+                    placeholder={customizerTab === "partners" ? "e.g. Trading Platform" : "e.g. Access raw spreads with 1:500 leverage"}
+                    className="w-full bg-black border border-white/10 rounded-xl px-4 py-2.5 text-white text-xs outline-none focus:border-[#00A3FF]/50 transition-all"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[9px] font-black uppercase tracking-widest text-gray-500">Logo URL *</label>
+                  <input
+                    type="url"
+                    required
+                    value={sponsorForm.image_url}
+                    onChange={e => setSponsorForm({ ...sponsorForm, image_url: e.target.value })}
+                    placeholder="https://..."
+                    className="w-full bg-black border border-white/10 rounded-xl px-4 py-2.5 text-white text-xs outline-none focus:border-[#00A3FF]/50 transition-all"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[9px] font-black uppercase tracking-widest text-gray-500">CPA / Referral Link URL</label>
+                  <input
+                    type="url"
+                    value={sponsorForm.link_url}
+                    onChange={e => setSponsorForm({ ...sponsorForm, link_url: e.target.value })}
+                    placeholder="https://..."
+                    className="w-full bg-black border border-white/10 rounded-xl px-4 py-2.5 text-white text-xs outline-none focus:border-[#00A3FF]/50 transition-all"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-black uppercase tracking-widest text-gray-500">Priority (Sort)</label>
+                    <input
+                      type="number"
+                      value={sponsorForm.priority}
+                      onChange={e => setSponsorForm({ ...sponsorForm, priority: parseInt(e.target.value) || 1 })}
+                      className="w-full bg-black border border-white/10 rounded-xl px-4 py-2.5 text-white text-xs outline-none focus:border-[#00A3FF]/50 transition-all"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-black uppercase tracking-widest text-gray-500">Ad Tagline (Accent)</label>
+                    <input
+                      type="text"
+                      value={sponsorForm.metadata?.tagline || ""}
+                      onChange={e => setSponsorForm({ ...sponsorForm, metadata: { ...sponsorForm.metadata, tagline: e.target.value } })}
+                      placeholder="e.g. CPA Broker Partner"
+                      className="w-full bg-black border border-white/10 rounded-xl px-4 py-2.5 text-white text-xs outline-none focus:border-[#00A3FF]/50 transition-all"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex gap-2 pt-2">
+                  <button
+                    type="submit"
+                    className="flex-1 py-3 bg-[#00A3FF] hover:bg-[#008BE3] text-black font-black text-[10px] uppercase tracking-widest rounded-xl transition-all"
+                  >
+                    {isSponsorEditing ? "Update Banner" : "Deploy Live"}
+                  </button>
+                  {isSponsorEditing && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsSponsorEditing(false);
+                        setSponsorForm({
+                          id: "",
+                          title: "",
+                          description: "",
+                          image_url: "",
+                          link_url: "",
+                          placement: customizerTab === "partners" ? "partner" : "blog_sponsor",
+                          priority: 1,
+                          metadata: { tagline: "" }
+                        });
+                      }}
+                      className="px-4 py-3 bg-white/5 text-white text-[10px] font-black uppercase tracking-widest rounded-xl"
+                    >
+                      Cancel
+                    </button>
+                  )}
+                </div>
+              </form>
+
+              {/* List Column */}
+              <div className="lg:col-span-7 space-y-3">
+                <h4 className="text-xs font-black text-white uppercase tracking-wider">
+                  Active database records ({customizerTab === "partners" ? partnerBanners.length : blogSponsorBanners.length})
+                </h4>
+                
+                <div className="space-y-2 max-h-[360px] overflow-y-auto pr-2 scrollbar-hide">
+                  {(customizerTab === "partners" ? partnerBanners : blogSponsorBanners).map(item => (
+                    <div key={item.id} className="p-4 bg-zinc-900 border border-white/5 rounded-2xl flex items-center justify-between gap-4 group">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-xl bg-black border border-white/10 flex items-center justify-center p-1.5 shrink-0 overflow-hidden">
+                          <img src={item.image_url} alt="" className="w-full h-full object-cover rounded" />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <div className="text-xs font-black text-white uppercase tracking-tight truncate">{item.title}</div>
+                          <div className="text-[10px] text-gray-500 leading-normal line-clamp-1">{item.description}</div>
+                          {item.link_url && (
+                            <div className="text-[9px] text-[#00A3FF] font-mono leading-none mt-1 truncate max-w-[200px]">CPA: {item.link_url}</div>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        <button
+                          type="button"
+                          onClick={() => handleEditSponsorBanner(item)}
+                          className="px-3 py-2 bg-white/5 hover:bg-white/10 rounded-lg text-xs font-bold text-white transition-all"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteSponsorBanner(item.id)}
+                          className="px-3 py-2 bg-red-500/10 hover:bg-red-500/20 rounded-lg text-xs font-bold text-red-400 transition-all"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+
+                  {(customizerTab === "partners" ? partnerBanners : blogSponsorBanners).length === 0 && (
+                    <div className="py-12 text-center border-2 border-dashed border-white/5 rounded-2xl text-[10px] text-gray-500 uppercase tracking-widest font-black">
+                      No sponsor records configured. Create one using the form.
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {!customizerLoading && customizerTab === "webinar_sponsors" && (
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+              {/* Webinar Selection & Sponsor List */}
+              <div className="lg:col-span-7 space-y-4">
+                <div className="space-y-1">
+                  <label className="text-[9px] font-black uppercase tracking-widest text-gray-500">Select Webinar Target</label>
+                  <select
+                    value={selectedWebinarId}
+                    onChange={e => setSelectedWebinarId(e.target.value)}
+                    className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white text-xs outline-none focus:border-[#00A3FF]/50 transition-all font-black uppercase"
+                  >
+                    {webinarsList.map(w => (
+                      <option key={w.id} value={w.id}>{w.title}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="space-y-2">
+                  <h4 className="text-xs font-black text-white uppercase tracking-wider">
+                    Linked Broker Sponsors ({webinarSponsorsList.length})
+                  </h4>
+                  
+                  <div className="space-y-2">
+                    {webinarSponsorsList.map(s => (
+                      <div key={s.id} className="p-4 bg-zinc-900 border border-white/5 rounded-2xl flex items-center justify-between gap-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-lg bg-black border border-white/10 flex items-center justify-center p-1 shrink-0 overflow-hidden">
+                            {s.logo_url ? (
+                              <img src={s.logo_url} alt="" className="w-full h-full object-cover rounded" />
+                            ) : (
+                              <span className="text-[10px] font-bold text-white">{s.name.charAt(0)}</span>
+                            )}
+                          </div>
+                          <div>
+                            <div className="text-xs font-black text-white uppercase tracking-tight">{s.name}</div>
+                            <div className="text-[9px] font-black uppercase tracking-widest text-[#00A3FF]">{s.tier} Sponsor</div>
+                            {s.website_url && (
+                              <div className="text-[9px] text-gray-600 font-mono truncate max-w-[200px]">{s.website_url}</div>
+                            )}
+                          </div>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteWebinarSponsor(s.id)}
+                          className="px-3 py-2 bg-red-500/10 hover:bg-red-500/20 rounded-lg text-xs font-bold text-red-400 transition-all"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+
+                    {webinarSponsorsList.length === 0 && (
+                      <div className="py-12 text-center border-2 border-dashed border-white/5 rounded-2xl text-[10px] text-gray-500 uppercase tracking-widest font-black">
+                        No broker sponsors assigned to this webinar yet.
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Add Sponsor Form */}
+              <form onSubmit={handleAddWebinarSponsor} className="lg:col-span-5 space-y-4 bg-black/40 border border-white/5 p-6 rounded-3xl">
+                <h4 className="text-xs font-black text-white uppercase tracking-wider">Link Broker Sponsor</h4>
+                
+                <div className="space-y-1">
+                  <label className="text-[9px] font-black uppercase tracking-widest text-gray-500">Broker Name *</label>
+                  <input
+                    type="text"
+                    required
+                    value={webinarSponsorForm.name}
+                    onChange={e => setWebinarSponsorForm({ ...webinarSponsorForm, name: e.target.value })}
+                    placeholder="e.g. Pepperstone"
+                    className="w-full bg-black border border-white/10 rounded-xl px-4 py-2.5 text-white text-xs outline-none focus:border-[#00A3FF]/50 transition-all"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[9px] font-black uppercase tracking-widest text-gray-500">Sponsor Tier</label>
+                  <select
+                    value={webinarSponsorForm.tier}
+                    onChange={e => setWebinarSponsorForm({ ...webinarSponsorForm, tier: e.target.value })}
+                    className="w-full bg-black border border-white/10 rounded-xl px-4 py-2.5 text-white text-xs outline-none focus:border-[#00A3FF]/50 transition-all font-bold"
+                  >
+                    <option value="Headline">Headline Presentation</option>
+                    <option value="Partner">Official Platform Partner</option>
+                    <option value="Supporter">Supporter</option>
+                  </select>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[9px] font-black uppercase tracking-widest text-gray-500">Logo Image URL</label>
+                  <input
+                    type="url"
+                    value={webinarSponsorForm.logo_url}
+                    onChange={e => setWebinarSponsorForm({ ...webinarSponsorForm, logo_url: e.target.value })}
+                    placeholder="https://..."
+                    className="w-full bg-black border border-white/10 rounded-xl px-4 py-2.5 text-white text-xs outline-none focus:border-[#00A3FF]/50 transition-all"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[9px] font-black uppercase tracking-widest text-gray-500">Website / CPA Referral URL</label>
+                  <input
+                    type="url"
+                    value={webinarSponsorForm.website_url}
+                    onChange={e => setWebinarSponsorForm({ ...webinarSponsorForm, website_url: e.target.value })}
+                    placeholder="https://..."
+                    className="w-full bg-black border border-white/10 rounded-xl px-4 py-2.5 text-white text-xs outline-none focus:border-[#00A3FF]/50 transition-all"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full py-3 bg-[#00A3FF] hover:bg-[#008BE3] text-black font-black text-[10px] uppercase tracking-widest rounded-xl transition-all"
+                >
+                  Link Broker Sponsor
+                </button>
+              </form>
+            </div>
+          )}
+
+          {!customizerLoading && customizerTab === "blog_allocator" && (
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+              {/* Blog Selection */}
+              <div className="lg:col-span-6 space-y-4">
+                <div className="space-y-1">
+                  <label className="text-[9px] font-black uppercase tracking-widest text-gray-500">Select Blog Post Target</label>
+                  <select
+                    value={selectedBlogId}
+                    onChange={e => setSelectedBlogId(e.target.value)}
+                    className="w-full bg-black border border-white/10 rounded-xl px-4 py-3 text-white text-xs outline-none focus:border-[#00A3FF]/50 transition-all font-black uppercase"
+                  >
+                    {blogsList.map(b => (
+                      <option key={b.id} value={b.id}>{b.title}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="p-6 bg-zinc-950/80 border border-white/5 rounded-3xl space-y-3 text-xs leading-relaxed">
+                  <div className="text-[#00A3FF] font-black uppercase tracking-wider text-[10px]">Sponsorship Protocol</div>
+                  <p className="text-gray-400 font-medium">
+                    By default, blog posts rotate randomly through active broker sponsors configured under <strong>"Blog CPA Sponsors"</strong>.
+                  </p>
+                  <p className="text-gray-400 font-medium">
+                    If you fill the form on the right and save, it will lock that specific sponsor for this article only. To unlock and return to random rotation, clear the Broker Name field and click "Update Allocations".
+                  </p>
+                </div>
+              </div>
+
+              {/* Assignment Form */}
+              <form onSubmit={handleAssignBlogSponsor} className="lg:col-span-6 space-y-4 bg-black/40 border border-white/5 p-6 rounded-3xl">
+                <h4 className="text-xs font-black text-white uppercase tracking-wider">Assign Specific Broker Sponsor</h4>
+                
+                <div className="space-y-1">
+                  <label className="text-[9px] font-black uppercase tracking-widest text-gray-500">Broker Name (Leave empty to reset to Random)</label>
+                  <input
+                    type="text"
+                    value={blogSponsorConfig.name}
+                    onChange={e => setBlogSponsorConfig({ ...blogSponsorConfig, name: e.target.value })}
+                    placeholder="e.g. Pepperstone"
+                    className="w-full bg-black border border-white/10 rounded-xl px-4 py-2.5 text-white text-xs outline-none focus:border-[#00A3FF]/50 transition-all"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[9px] font-black uppercase tracking-widest text-gray-500">Ad Tagline / Accent Badge</label>
+                  <input
+                    type="text"
+                    value={blogSponsorConfig.tagline}
+                    onChange={e => setBlogSponsorConfig({ ...blogSponsorConfig, tagline: e.target.value })}
+                    placeholder="e.g. Exclusive B2B Partner"
+                    className="w-full bg-black border border-white/10 rounded-xl px-4 py-2.5 text-white text-xs outline-none focus:border-[#00A3FF]/50 transition-all"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[9px] font-black uppercase tracking-widest text-gray-500">Logo Image URL</label>
+                  <input
+                    type="url"
+                    value={blogSponsorConfig.logo_url}
+                    onChange={e => setBlogSponsorConfig({ ...blogSponsorConfig, logo_url: e.target.value })}
+                    placeholder="https://..."
+                    className="w-full bg-black border border-white/10 rounded-xl px-4 py-2.5 text-white text-xs outline-none focus:border-[#00A3FF]/50 transition-all"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[9px] font-black uppercase tracking-widest text-gray-500">Website / CPA Referral Link</label>
+                  <input
+                    type="url"
+                    value={blogSponsorConfig.link_url}
+                    onChange={e => setBlogSponsorConfig({ ...blogSponsorConfig, link_url: e.target.value })}
+                    placeholder="https://..."
+                    className="w-full bg-black border border-white/10 rounded-xl px-4 py-2.5 text-white text-xs outline-none focus:border-[#00A3FF]/50 transition-all"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[9px] font-black uppercase tracking-widest text-gray-500">Ad / Sponsor Description</label>
+                  <textarea
+                    rows={2}
+                    value={blogSponsorConfig.description}
+                    onChange={e => setBlogSponsorConfig({ ...blogSponsorConfig, description: e.target.value })}
+                    placeholder="Describe their execution latency, leverage, and client sovereignty profiles..."
+                    className="w-full bg-black border border-white/10 rounded-xl px-4 py-2.5 text-white text-xs outline-none focus:border-[#00A3FF]/50 transition-all resize-none"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full py-3 bg-[#00A3FF] hover:bg-[#008BE3] text-black font-black text-[10px] uppercase tracking-widest rounded-xl transition-all font-mono"
+                >
+                  Update Allocations
+                </button>
+              </form>
+            </div>
+          )}
         </div>
       </div>
 
