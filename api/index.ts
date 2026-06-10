@@ -69,14 +69,14 @@ const normalizeRole = (role: unknown): AppUserRole | null => {
     : null;
 };
 
-const createAuthedSupabaseClient = (token: string) => createClient(supabaseUrl, supabaseAnonKey, {
+const createAuthedSupabaseClient = (token: string) => createClient(getSupabaseUrl(), getSupabaseAnonKey(), {
   global: { headers: { Authorization: `Bearer ${token}` } },
   auth: { persistSession: false, autoRefreshToken: false }
 });
 
 const resolveUserRole = async (authUser: any, authedClient: any): Promise<AppUserRole> => {
   const appMetadataRole = normalizeRole(authUser.app_metadata?.role);
-  const roleClient = supabaseServiceKey ? supabase : authedClient;
+  const roleClient = getSupabaseServiceKey() ? getSupabase() : authedClient;
 
   const { data } = await roleClient
     .from("users")
