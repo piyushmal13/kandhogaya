@@ -2,25 +2,28 @@ import { GoogleGenAI } from '@google/genai';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const apiKey = process.env.GEMINI_API_KEY || (typeof window === "undefined" ? process.env.GEMINI_API_KEY : undefined) || "";
-
-// Initialize the new @google/genai SDK
-const ai = new GoogleGenAI({
-  apiKey: apiKey,
-});
+let aiInstance: GoogleGenAI | null = null;
+function getAi() {
+  if (!aiInstance) {
+    const key = typeof process !== "undefined" ? (process.env.GEMINI_API_KEY || "") : "";
+    aiInstance = new GoogleGenAI({ apiKey: key });
+  }
+  return aiInstance;
+}
 
 /**
  * Generic helper – feeds a system instruction + user string and returns JSON.
  * Returns raw response text; callers are responsible for JSON.parse().
  */
 export async function generate<T>(systemPrompt: string, userPrompt: string, modelName = 'gemini-2.5-pro'): Promise<T> {
-  if (!process.env.GEMINI_API_KEY) {
+  const hasKey = typeof process !== "undefined" && !!process.env.GEMINI_API_KEY;
+  if (!hasKey) {
     console.warn("⚠️ No GEMINI_API_KEY detected. Simulating audit output for development.");
     return {} as T;
   }
 
   try {
-    const response = await ai.models.generateContent({
+    const response = await getAi().models.generateContent({
       model: modelName,
       contents: userPrompt,
       config: {
@@ -42,13 +45,14 @@ export async function generate<T>(systemPrompt: string, userPrompt: string, mode
  * Generic text helper – feeds system instruction + content history and returns plain text.
  */
 export async function generateText(systemPrompt: string, contents: any, modelName = 'gemini-2.5-flash'): Promise<string> {
-  if (!process.env.GEMINI_API_KEY) {
+  const hasKey = typeof process !== "undefined" && !!process.env.GEMINI_API_KEY;
+  if (!hasKey) {
     console.warn("⚠️ No GEMINI_API_KEY detected. Simulating advisor output for development.");
     return "This is a simulated AI Advisor response. To activate live responses, please configure your GEMINI_API_KEY in the environment.";
   }
 
   try {
-    const response = await ai.models.generateContent({
+    const response = await getAi().models.generateContent({
       model: modelName,
       contents: contents,
       config: {
