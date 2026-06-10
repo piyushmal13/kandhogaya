@@ -41,7 +41,7 @@ export const createAuthedClient = (token: string) => createClient(
  * Addresses "cracking" connections by handling transient failures gracefully.
  */
 export async function safeQuery<T>(
-  queryFn: () => Promise<{ data: T | null; error: any }>,
+  queryFn: () => any,
   context: string,
   retries = 3
 ): Promise<T> {
@@ -49,7 +49,9 @@ export async function safeQuery<T>(
 
   for (let attempt = 1; attempt <= retries; attempt++) {
     try {
-      const { data, error } = await queryFn();
+      const result = await queryFn();
+      const data = result?.data;
+      const error = result?.error;
       
       if (error) {
         lastError = error;
@@ -60,10 +62,6 @@ export async function safeQuery<T>(
         logger.warn({ attempt, context, error: error.message }, "Supabase query attempt failed");
         if (attempt < retries) await new Promise(r => setTimeout(r, 100 * attempt));
         continue;
-      }
-
-      if (data === null) {
-        logger.debug({ context }, "Supabase query returned null data");
       }
 
       return data as T;

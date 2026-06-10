@@ -10,8 +10,8 @@ export const logger = pino({
   }
 });
 
-const envTier = typeof process !== "undefined" ? (process.env.NODE_ENV || "development") : "development";
-const isProdTier = envTier === "production";
+const envTier = typeof process !== "undefined" && process.env ? (process.env.NODE_ENV || "development") : "development";
+const isProdTier = envTier === "production" || envTier === "prod";
 
 export const config = {
   isProduction: isProdTier,
