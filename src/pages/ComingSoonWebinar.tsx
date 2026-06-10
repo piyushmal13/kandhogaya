@@ -12,6 +12,7 @@ export const ComingSoonWebinar = () => {
   const [registering, setRegistering] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
   const [clearanceKey, setClearanceKey] = useState("");
+  const [partners, setPartners] = useState<any[]>([]);
 
   useEffect(() => {
     const savedKey = localStorage.getItem("ifx_webinar_clearance_key");
@@ -21,6 +22,46 @@ export const ComingSoonWebinar = () => {
       setClearanceKey(savedKey);
       setRegName(savedName);
     }
+  }, []);
+
+  useEffect(() => {
+    const fetchPartners = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("banners")
+          .select("id, title, image_url, description")
+          .eq("placement", "partner")
+          .eq("is_active", true)
+          .order("priority", { ascending: true });
+
+        if (error) throw error;
+        if (data && data.length > 0) {
+          const mapped = data.map((item) => ({
+            name: item.title,
+            logo_url: item.image_url
+          }));
+          setPartners(mapped);
+        } else {
+          setPartners([
+            { name: "MetaTrader 5", logo_url: "/metatrader5.png" },
+            { name: "MetaTrader 4", logo_url: "/metatrader4.png" },
+            { name: "TradingView", logo_url: "/tradingview.png" },
+            { name: "cTrader", logo_url: "/ctrader.png" },
+            { name: "Binance", logo_url: "/binance.png" }
+          ]);
+        }
+      } catch (err) {
+        console.error("Error fetching partner logos:", err);
+        setPartners([
+          { name: "MetaTrader 5", logo_url: "/metatrader5.png" },
+          { name: "MetaTrader 4", logo_url: "/metatrader4.png" },
+          { name: "TradingView", logo_url: "/tradingview.png" },
+          { name: "cTrader", logo_url: "/ctrader.png" },
+          { name: "Binance", logo_url: "/binance.png" }
+        ]);
+      }
+    };
+    fetchPartners();
   }, []);
 
   const handleRequestAccess = async (e: React.FormEvent) => {
@@ -151,6 +192,34 @@ export const ComingSoonWebinar = () => {
               </div>
             ))}
           </motion.div>
+
+          {/* Institutional Integration Partners / Co-Sponsors Row */}
+          {partners.length > 0 && (
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="w-full space-y-4 text-left border-t border-white/5 pt-8"
+            >
+              <span className="text-[9px] font-mono font-black text-zinc-500 uppercase tracking-widest block">
+                Platform Integration & Masterclass Co-Sponsors
+              </span>
+              <div className="flex flex-wrap items-center gap-4 sm:gap-6">
+                {partners.map((partner) => (
+                  <div key={partner.name} className="flex items-center gap-2.5 bg-white/[0.01] border border-white/5 pl-2.5 pr-4 py-2 rounded-2xl hover:bg-white/[0.03] transition-all duration-300">
+                    <img 
+                      src={partner.logo_url} 
+                      alt={partner.name} 
+                      className="w-6 h-6 rounded-lg object-contain"
+                    />
+                    <span className="text-[9px] font-black tracking-wider text-zinc-400 uppercase">
+                      {partner.name}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          )}
         </div>
 
         {/* Right Column: Dynamic Form Box */}

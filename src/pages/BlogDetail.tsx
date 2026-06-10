@@ -24,21 +24,21 @@ const DYNAMIC_PARTNERS: Record<string, {
 }> = {
   "retail-vs-institutional-forex": {
     name: "Binance Institutional",
-    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/4/4c/Binance_Logo.png",
+    logoUrl: "/binance.png",
     referralUrl: "https://accounts.binance.com/register?ref=IFXTRADES",
     tagline: "Liquidity Node Partner",
     description: "Access the world's deepest liquidity pools, sovereign OTC desks, and institutional-grade digital asset execution corridors."
   },
   "master-trading-psychology-gym": {
     name: "TradingView Premium",
-    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/2/23/TradingView_Logo.svg",
+    logoUrl: "/tradingview.png",
     referralUrl: "https://www.tradingview.com",
     tagline: "Institutional Charting Enclave",
     description: "Map institutional order blocks, visualize advanced volume profiles, and deploy multi-timeframe market indicators with the gold-standard charting console."
   },
   "algorithmic-trading-software-forex": {
     name: "MetaQuotes MT5",
-    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e0/MetaTrader_5_logo.png",
+    logoUrl: "/metatrader5.png",
     referralUrl: "https://www.metatrader5.com",
     tagline: "Execution Bridge Architect",
     description: "Deploy high-performance quantitative algorithms built on optimized C++ and Python cores directly on the world's most stable execution client."
@@ -93,6 +93,8 @@ const DYNAMIC_PARTNERS: Record<string, {
     description: "Protect large quant reserves with offline cold-storage custody, high-volume OTC execution terminals, and audited capital security protocols."
   }
 };
+
+import { supabase } from "../lib/supabase";
 
 export const BlogDetail = () => {
   const { pathname } = useLocation();
@@ -166,25 +168,57 @@ export const BlogDetail = () => {
             setIncontentBanner(locked);
             setSidebarBanner(locked);
           } else {
-            const dbSponsors = await bannerService.getBanners("blog_sponsor");
-            if (dbSponsors && dbSponsors.length > 0) {
-              const randomIncontent = dbSponsors[Math.floor(Math.random() * dbSponsors.length)];
+            // Fetch dynamic sponsors from public.brokers master registry
+            const { data: dbBrokers } = await supabase
+              .from("brokers")
+              .select("*")
+              .eq("is_active", true);
+
+            if (dbBrokers && dbBrokers.length > 0) {
+              const mappedSponsors: Banner[] = dbBrokers.map(b => ({
+                id: b.id,
+                title: b.name,
+                description: b.description || "",
+                image_url: b.logo_url,
+                link_url: b.website_url || "",
+                is_active: b.is_active,
+                placement: "blog_sponsor",
+                priority: 1,
+                metadata: { tagline: b.tagline || "Official Sponsor" },
+                created_at: b.created_at
+              }));
+
+              const randomIncontent = mappedSponsors[Math.floor(Math.random() * mappedSponsors.length)];
               setIncontentBanner(randomIncontent);
 
-              const otherSponsors = dbSponsors.filter(s => s.id !== randomIncontent.id);
+              const otherSponsors = mappedSponsors.filter(s => s.id !== randomIncontent.id);
               if (otherSponsors.length > 0) {
                 setSidebarBanner(otherSponsors[Math.floor(Math.random() * otherSponsors.length)]);
               } else {
                 setSidebarBanner(randomIncontent);
               }
             } else {
-              const legacyIncontent = await bannerService.getBanners("blog_incontent");
-              if (legacyIncontent && legacyIncontent.length > 0) {
-                setIncontentBanner(legacyIncontent[0]);
-              }
-              const legacySidebar = await bannerService.getBanners("blog_sidebar");
-              if (legacySidebar && legacySidebar.length > 0) {
-                setSidebarBanner(legacySidebar[0]);
+              // Legacy banners fallback
+              const dbSponsors = await bannerService.getBanners("blog_sponsor");
+              if (dbSponsors && dbSponsors.length > 0) {
+                const randomIncontent = dbSponsors[Math.floor(Math.random() * dbSponsors.length)];
+                setIncontentBanner(randomIncontent);
+
+                const otherSponsors = dbSponsors.filter(s => s.id !== randomIncontent.id);
+                if (otherSponsors.length > 0) {
+                  setSidebarBanner(otherSponsors[Math.floor(Math.random() * otherSponsors.length)]);
+                } else {
+                  setSidebarBanner(randomIncontent);
+                }
+              } else {
+                const legacyIncontent = await bannerService.getBanners("blog_incontent");
+                if (legacyIncontent && legacyIncontent.length > 0) {
+                  setIncontentBanner(legacyIncontent[0]);
+                }
+                const legacySidebar = await bannerService.getBanners("blog_sidebar");
+                if (legacySidebar && legacySidebar.length > 0) {
+                  setSidebarBanner(legacySidebar[0]);
+                }
               }
             }
           }
