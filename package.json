@@ -17,6 +17,7 @@
     "alt-check": "node scripts/altCheck.js",
     "sitemap": "node scripts/gen-sitemap.js && node scripts/gen-robots.js",
     "indexing:ping": "node scripts/google-indexing.js",
+    "indexing:indexnow": "node scripts/indexnow.js",
     "test": "npm run lint && npm run alt-check && vitest run"
   },
   "dependencies": {
