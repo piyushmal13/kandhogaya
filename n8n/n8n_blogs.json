@@ -51,32 +51,14 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "http://localhost:11434/api/generate",
+        "url": "http://host.docker.internal:11434/api/generate",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ { \"model\": \"llama3:latest\", \"prompt\": \"You are Agent Alpha, the SEO Director for an institutional quantitative trading firm. Analyze the following news article:\\n\\nTitle: \" + $json.title + \"\\nContent: \" + $json.content + \"\\n\\nIdentify the top LSI keywords, search intent, and generate a highly professional, click-worthy headline (not clickbait). Also generate a clean, lowercase URL slug with hyphens.\\n\\nOutput Format MUST BE exactly JSON:\\n{\\n  \\\"headline\\\": \\\"...\\\",\\n  \\\"slug\\\": \\\"...\\\",\\n  \\\"keywords\\\": [\\\"...\\\", \\\"...\\\"]\\n}\", \"stream\": false, \"format\": \"json\" } }}",
+        "jsonBody": "={{ { \"model\": \"llama3:latest\", \"prompt\": \"You are Agent Alpha, the SEO Director for an institutional quantitative trading firm. Analyze the following news article:\\n\\nTitle: \" + $node[\"Parse XML & Select Top 3\"].json.title + \"\\nContent: \" + $json.data + \"\\n\\nIdentify the top LSI keywords, search intent, and generate a highly professional, click-worthy headline (not clickbait). Also generate a clean, lowercase URL slug with hyphens.\\n\\nOutput Format MUST BE exactly JSON:\\n{\\n  \\\"headline\\\": \\\"...\\\",\\n  \\\"slug\\\": \\\"...\\\",\\n  \\\"keywords\\\": [\\\"...\\\", \\\"...\\\"]\\n}\", \"stream\": false, \"format\": \"json\", \"keep_alive\": 0 } }}",
         "responseFormat": "json"
       },
       "id": "273a216d-318e-49b8-b1fc-e3e91129b0f4",
       "name": "Agent Alpha [SEO Director]",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.1,
-      "position": [
-        660,
-        200
-      ]
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "http://localhost:11434/api/generate",
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{ { \"model\": \"deepseek-r1:8b\", \"prompt\": \"You are Agent Beta, a Senior Quantitative Analyst at an institutional trading firm. Read the raw news article:\\n\\n\" + $node[\"Parse XML & Select Top 3\"].json[\"content\"] + \"\\n\\nExtract all hard data, key numbers, rates, central bank perspectives, quotes, and institutional facts. Do not write a summary. Write bullet points of pure data and facts. Strip all fluff and general commentary.\", \"stream\": false } }}",
-        "responseFormat": "json"
-      },
-      "id": "89ab1037-ea76-4700-be4c-70e63ed49de7",
-      "name": "Agent Beta [Quant Analyst]",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
       "position": [
@@ -87,14 +69,14 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "http://localhost:11434/api/generate",
+        "url": "http://host.docker.internal:11434/api/generate",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ { \"model\": \"llama3:latest\", \"prompt\": \"You are Agent Gamma, the elite Ghostwriter for IFX Trades. You must write an institutional market analysis blog post based on the facts provided.\\n\\nCRITICAL INSTRUCTIONS TO EVADE AI DETECTORS AND SOUND 100% HUMAN:\\n- NEVER use typical AI words: \\\"delve\\\", \\\"furthermore\\\", \\\"in conclusion\\\", \\\"testament\\\", \\\"landscape\\\", \\\"tapestry\\\", \\\"revolutionize\\\", \\\"underscores\\\".\\n- Use highly varied sentence lengths (burstiness). Some sentences must be extremely short. Others complex.\\n- Write with an authoritative, direct, and slightly cynical tone. Read like a seasoned human trader on Wall Street.\\n- Do not summarize. Analyze.\\n\\nHere are the facts from Agent Beta (ignore any <think>...</think> thinking logs and focus only on the facts):\\n\" + $node[\"Agent Beta [Quant Analyst]\"].json[\"response\"] + \"\\n\\nWrite the article now.\", \"stream\": false } }}",
+        "jsonBody": "={{ { \"model\": \"deepseek-r1:8b\", \"prompt\": \"You are Agent Beta, a Senior Quantitative Analyst at an institutional trading firm. Read the raw news article:\\n\\n\" + $node[\"Fetch Full Article [Huge Research]\"].json.data + \"\\n\\nExtract all hard data, key numbers, rates, central bank perspectives, quotes, and institutional facts. Do not write a summary. Write bullet points of pure data and facts. Strip all fluff and general commentary.\", \"stream\": false, \"keep_alive\": 0 } }}",
         "responseFormat": "json"
       },
-      "id": "b3457cf6-3f1a-4d32-841f-827d532a819b",
-      "name": "Agent Gamma [Anti-AI Ghostwriter]",
+      "id": "89ab1037-ea76-4700-be4c-70e63ed49de7",
+      "name": "Agent Beta [Quant Analyst]",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
       "position": [
@@ -105,10 +87,28 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "http://localhost:11434/api/generate",
+        "url": "http://host.docker.internal:11434/api/generate",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ { \"model\": \"llama3:latest\", \"prompt\": \"You are Agent Delta, the Auditor and Editor. Review this drafted article:\\n\\n\" + $node[\"Agent Gamma [Anti-AI Ghostwriter]\"].json[\"response\"] + \"\\n\\nIf it sounds like an AI wrote it, rewrite the awkward parts to sound 100% human and professional. Output the final article formatted in pristine HTML, using <h2> for subtitles and <ul><li> for lists. Do not include <html> or <body> tags, just the raw inner HTML content. Do not output anything else but the HTML.\", \"stream\": false } }}",
+        "jsonBody": "={{ { \"model\": \"llama3:latest\", \"prompt\": \"You are Agent Gamma, the elite Ghostwriter for IFX Trades. You must write an institutional market analysis blog post based on the facts provided.\\n\\nCRITICAL INSTRUCTIONS TO EVADE AI DETECTORS AND SOUND 100% HUMAN:\\n- NEVER use typical AI words: \\\"delve\\\", \\\"furthermore\\\", \\\"in conclusion\\\", \\\"testament\\\", \\\"landscape\\\", \\\"tapestry\\\", \\\"revolutionize\\\", \\\"underscores\\\".\\n- Use highly varied sentence lengths (burstiness). Some sentences must be extremely short. Others complex.\\n- Write with an authoritative, direct, and slightly cynical tone. Read like a seasoned human trader on Wall Street.\\n- Do not summarize. Analyze.\\n\\nHere are the facts from Agent Beta (ignore any <think>...</think> thinking logs and focus only on the facts):\\n\" + $node[\"Agent Beta [Quant Analyst]\"].json[\"response\"] + \"\\n\\nWrite the article now.\", \"stream\": false, \"keep_alive\": 0 } }}",
+        "responseFormat": "json"
+      },
+      "id": "b3457cf6-3f1a-4d32-841f-827d532a819b",
+      "name": "Agent Gamma [Anti-AI Ghostwriter]",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1320,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:11434/api/generate",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"model\": \"llama3:latest\", \"prompt\": \"You are Agent Delta, the Auditor and Editor. Review this drafted article:\\n\\n\" + $node[\"Agent Gamma [Anti-AI Ghostwriter]\"].json[\"response\"] + \"\\n\\nIf it sounds like an AI wrote it, rewrite the awkward parts to sound 100% human and professional. Output the final article formatted in pristine HTML, using <h2> for subtitles and <ul><li> for lists. Do not include <html> or <body> tags, just the raw inner HTML content. Do not output anything else but the HTML.\", \"stream\": false, \"keep_alive\": 0 } }}",
         "responseFormat": "json"
       },
       "id": "dc9f1b4c-9f81-4b13-9c87-bb71a3c7c8c3",
@@ -116,7 +116,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
       "position": [
-        1320,
+        1540,
         200
       ]
     },
@@ -129,7 +129,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1540,
+        1760,
         200
       ]
     },
@@ -183,7 +183,21 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        1760,
+        1980,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://r.jina.ai/={{ $json.link }}",
+        "responseFormat": "string"
+      },
+      "id": "fetch-full-article-node-id",
+      "name": "Fetch Full Article [Huge Research]",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        550,
         200
       ]
     }
@@ -215,7 +229,7 @@
       "main": [
         [
           {
-            "node": "Agent Alpha [SEO Director]",
+            "node": "Fetch Full Article [Huge Research]",
             "type": "main",
             "index": 0
           }
@@ -271,6 +285,17 @@
         [
           {
             "node": "Insert to Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Full Article [Huge Research]": {
+      "main": [
+        [
+          {
+            "node": "Agent Alpha [SEO Director]",
             "type": "main",
             "index": 0
           }
