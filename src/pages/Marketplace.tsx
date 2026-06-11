@@ -63,6 +63,15 @@ export const Marketplace = () => {
     }
   }, [user]);
 
+  // Hydrate search query state from URL parameters
+  useEffect(() => {
+    const urlParams = new URLSearchParams(globalThis.location.search);
+    const query = urlParams.get("q") || urlParams.get("search");
+    if (query) {
+      setSearchQuery(query);
+    }
+  }, []);
+
   // Hydrate product modal automatically if product query is set
   useEffect(() => {
     if (products.length > 0) {
@@ -124,12 +133,18 @@ export const Marketplace = () => {
   ];
 
   const filteredProducts = products.filter((p: Product) => {
-    const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          p.description?.toLowerCase().includes(searchQuery.toLowerCase());
+    const nameStr = p.name || "";
+    const descStr = p.description || "";
+    const matchesSearch = nameStr.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          descStr.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const cat = p.category || (p as any).type || "algorithm"; // Fallback to algorithm or type if null
+    
     const matchesCategory = activeCategory === "all" || 
-      (activeCategory === "course" && (p.category === "course" || p.category === "education")) ||
-      (activeCategory === "algorithm" && (p.category === "algorithm" || p.category === "trading_system" || p.category === "trading_systems")) ||
-      p.category === activeCategory;
+      (activeCategory === "course" && (cat === "course" || cat === "education")) ||
+      (activeCategory === "algorithm" && (cat === "algorithm" || cat === "trading_system" || cat === "trading_systems")) ||
+      cat === activeCategory;
+      
     return matchesSearch && matchesCategory;
   });
 
@@ -171,20 +186,23 @@ export const Marketplace = () => {
     if (filteredProducts.length > 0) {
       return (
         <MarketplaceGrid
-          products={filteredProducts.map((p: Product) => ({
-            id: p.id,
-            name: p.name,
-            type: p.category as any,
-            price: p.price,
-            category: p.category,
-            description: p.description,
-            isPremium: p.price > 1000,
-            performance: p.performance ? {
-              winRate: p.performance.win_rate || 72,
-              monthlyReturn: p.performance.monthly_return || 12.4,
-              sharpe: (p.performance as any).sharpe_ratio || 2.1
-            } : undefined
-          }))}
+          products={filteredProducts.map((p: Product) => {
+            const cat = p.category || (p as any).type || "algorithm";
+            return {
+              id: p.id,
+              name: p.name || "Institutional Asset",
+              type: cat as any,
+              price: p.price || 0,
+              category: cat,
+              description: p.description,
+              isPremium: p.price > 1000,
+              performance: p.performance ? {
+                winRate: p.performance.win_rate || 72,
+                monthlyReturn: p.performance.monthly_return || 12.4,
+                sharpe: (p.performance as any).sharpe_ratio || 2.1
+              } : undefined
+            };
+          })}
           onSelect={(p) => {
             const original = products.find(o => o.id === p.id);
             if (original) {

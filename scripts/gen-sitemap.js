@@ -46,6 +46,7 @@ const STATIC_URLS = [
   { loc: '/solutions',   changefreq: 'weekly',  priority: '0.95' },
   { loc: '/solutions/custom', changefreq: 'weekly',  priority: '0.90' },
   { loc: '/solutions/seo-agent', changefreq: 'weekly',  priority: '0.90' },
+  { loc: '/solutions/bridge', changefreq: 'weekly',  priority: '0.95' },
   { loc: '/consultation', changefreq: 'weekly',  priority: '0.90' },
   { loc: '/quantx',      changefreq: 'weekly',  priority: '0.95' },
   { loc: '/webinars',    changefreq: 'daily',   priority: '0.90' },

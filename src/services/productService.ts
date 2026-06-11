@@ -21,7 +21,8 @@ export const productService = {
 
       const data = await safeQuery<Product[]>(query);
       return (data || []).map(p => {
-        if (p.category === 'algorithm') {
+        const cat = p.category || (p as any).type;
+        if (cat === 'algorithm' || cat === 'trading_system' || !cat) {
           const downloadUrl = p.metadata?.download_url || "/downloads/IFX_ATR_Regime.ex5";
           
           const nameLower = (p.name || "").toLowerCase();

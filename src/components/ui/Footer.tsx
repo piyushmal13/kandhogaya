@@ -95,8 +95,9 @@ export const Footer = () => (
               <Building className="w-3.5 h-3.5 text-emerald-500/50" /> B2B Services
             </h4>
             <ul className="space-y-4 text-xs text-[#8A9AAB] font-medium">
-              <li><Link to="/b2b/liquidity" className="hover:text-emerald-400 transition-colors flex items-center gap-1.5 group">Liquidity Integration <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
-              <li><Link to="/b2b/white-label" className="hover:text-emerald-400 transition-colors flex items-center gap-1.5 group">White Label Partnering <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
+              <li><Link to="/solutions/bridge" className="hover:text-emerald-400 transition-colors flex items-center gap-1.5 group">MT4/MT5 Execution Bridging <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
+              <li><Link to="/b2b/liquidity" className="hover:text-emerald-400 transition-colors flex items-center gap-1.5 group">Liquidity Integration <ArrowUpRight className="w-3.5 h-3.5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
+              <li><Link to="/b2b/white-label" className="hover:text-emerald-400 transition-colors flex items-center gap-1.5 group">White Label Partnering <ArrowUpRight className="w-3.5 h-3.5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-emerald-500" /></Link></li>
               <li><Link to="/broker-talent" className="hover:text-emerald-400 transition-colors">Broker Talent Recruitment</Link></li>
             </ul>
           </div>

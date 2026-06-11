@@ -13,27 +13,32 @@ export interface RouteMeta {
 }
 
 const BASE_KEYWORDS =
-  "IFXTrades, algo trading, algorithmic trading, forex signals, gold trading, trading academy, market intelligence";
+  "IFX Trades, IFX, FX, IFX trading, ifx trading, MT4 MT5 bridging, FX algorithmic trading, algo trading, algorithmic trading, forex signals, gold trading, market intelligence";
 
 export const routeMetaMap: Record<string, RouteMeta> = {
   "/": {
-    title: "IFXTrades | Institutional Trading Intelligence",
+    title: "IFX Trades | Institutional Trading & EA Deployment Desk",
     description:
-      "Institutional-grade algorithmic trading, live signals, trader education, and market intelligence for serious retail execution.",
+      "IFX Trades is the premier systematic algorithmic trading, MT4/MT5 execution bridging, and Expert Advisor (EA) co-location desk. Deploy low-latency FX models and quantitative algorithms.",
     keywords: `${BASE_KEYWORDS}, forex trading platform, live trading signals, automated trading bots`,
   },
   "/solutions": {
-    title: "Institutional Solutions | Bespoke Algorithmic Engineering | IFXTrades",
+    title: "Institutional Solutions | Bespoke Algorithmic Engineering | IFX Trades",
     description: "Asia's #1 B2B quantitative engineering hub. Custom algorithmic development, systematic software licensing, and private strategic consulting.",
     keywords: `${BASE_KEYWORDS}, custom algorithmic trading bot, MT5 expert advisor development, private quant consulting`,
   },
+  "/solutions/bridge": {
+    title: "MT4/MT5 Execution Bridging | Equinix NY4 Co-Location | IFX Trades",
+    description: "Deploy sub-millisecond MT4/MT5 execution bridges. Ultra-low latency FIX API routing co-located in Equinix NY4/LD4 fiber loops with smart order routing (SOR).",
+    keywords: "IFX Trades, IFX, FX, MT4 MT5 bridging, execution bridges, FIX API alignment, smart order routing, sub-millisecond latency profiling, Equinix NY4 cross-connection, broker server bridging",
+  },
   "/solutions/custom": {
-    title: "Custom Strategy Engineering | IFXTrades",
-    description: "Access the IFXTrades Custom Strategy Engineering Hub. Submit custom high-frequency execution and systematic algorithmic development specifications.",
+    title: "Custom Strategy Engineering | IFX Trades",
+    description: "Access the IFX Trades Custom Strategy Engineering Hub. Submit custom high-frequency execution and systematic algorithmic development specifications.",
     keywords: `${BASE_KEYWORDS}, custom strategy engineering, custom trading software, custom MT5 systems`,
   },
   "/solutions/seo-agent": {
-    title: "AI CEO & SEO Strategic Advisor Agent | IFXTrades",
+    title: "AI CEO & SEO Strategic Advisor Agent | IFX Trades",
     description: "Consult with our advanced AI CEO & SEO Strategic Advisor. Generate quantitative growth plans, keyword optimizations, and SEO intelligence in real-time.",
     keywords: `${BASE_KEYWORDS}, AI SEO optimization, AI business strategist, organic growth simulator`,
   },

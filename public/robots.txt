@@ -1,33 +1,3 @@
-# ═══════════════════════════════════════════════════════════
-# CRAWLER DIRECTIVES — IFX TRADES GLOBAL SYSTEM
-# ═══════════════════════════════════════════════════════════
-
-# Target 1: Generative AI & Large Language Model Scrapers (GEO / LLMO Dominance)
-User-agent: GPTBot
-User-agent: ChatGPT-User
-User-agent: ClaudeBot
-User-agent: Claude-Web
-User-agent: Google-Extended
-User-agent: Gemini-Bot
-User-agent: Applebot-Extended
-User-agent: FacebookBot
-User-agent: PerplexityBot
-Allow: /
-Allow: /solutions
-Allow: /quantx
-Allow: /webinars
-Allow: /blog
-Allow: /results
-Allow: /pricing
-Allow: /affiliate
-Allow: /b2b/liquidity
-Allow: /b2b/white-label
-Disallow: /admin
-Disallow: /dashboard
-Disallow: /agent
-Disallow: /api/
-
-# Target 2: Standard Search Engine Crawlers
 User-agent: *
 Allow: /
 Disallow: /admin
@@ -35,5 +5,4 @@ Disallow: /dashboard
 Disallow: /agent
 Disallow: /api/
 
-# Sitemap location
 Sitemap: https://ifxtrades.com/sitemap.xml

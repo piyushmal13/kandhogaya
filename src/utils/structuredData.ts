@@ -10,6 +10,7 @@ const SITE_URL = "https://ifxtrades.com";
 export const organizationSchema = () => ({
   "@context": "https://schema.org",
   "@type": "Organization",
+  "@id": "https://ifxtrades.com/#organization",
   name: BRANDING.name,
   url: SITE_URL,
   logo: `${SITE_URL}/logo.png`,
@@ -26,6 +27,7 @@ export const organizationSchema = () => ({
 export const educationalOrganizationSchema = () => ({
   "@context": "https://schema.org",
   "@type": "EducationalOrganization",
+  "@id": "https://ifxtrades.com/#organization",
   name: "IFX Trades",
   url: "https://ifxtrades.com",
   logo: "https://ifxtrades.com/logo.png",
@@ -43,14 +45,49 @@ export const educationalOrganizationSchema = () => ({
 export const websiteSchema = () => ({
   "@context": "https://schema.org",
   "@type": "WebSite",
+  "@id": "https://ifxtrades.com/#website",
   name: BRANDING.name,
   url: SITE_URL,
+  publisher: {
+    "@id": "https://ifxtrades.com/#organization"
+  },
   potentialAction: {
     "@type": "SearchAction",
-    target: `${SITE_URL}/blog?q={search_term_string}`,
+    target: `${SITE_URL}/search?q={search_term_string}`,
     "query-input": "required name=search_term_string",
   },
 });
+
+export const siteNavigationSchema = () => ({
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SiteNavigationElement",
+      "name": "Algorithm Marketplace",
+      "description": "Explore institutional-grade MT5 trading systems and quantitative expert advisors (EAs).",
+      "url": `${SITE_URL}/marketplace`
+    },
+    {
+      "@type": "SiteNavigationElement",
+      "name": "Institutional Research",
+      "description": "Read deep-dive forex research, gold market structures, and systematic trading briefings.",
+      "url": `${SITE_URL}/blog`
+    },
+    {
+      "@type": "SiteNavigationElement",
+      "name": "MT4/MT5 Execution Bridging",
+      "description": "Deploy sub-millisecond FIX API bridging infrastructure co-located in Equinix NY4.",
+      "url": `${SITE_URL}/solutions/bridge`
+    },
+    {
+      "@type": "SiteNavigationElement",
+      "name": "Contact Support Portal",
+      "description": "Establish direct channels with quantitative analysts and licensing representatives.",
+      "url": `${SITE_URL}/contact`
+    }
+  ]
+});
+
 
 export const breadcrumbSchema = (
   items: Array<{ name: string; path: string }>
@@ -131,20 +168,29 @@ export const articleSchema = (article: {
     dateModified: article.published_at || article.created_at,
     author: {
       "@type": "Person",
-      name: author,
+      "name": author,
+      "jobTitle": "Quantitative Strategy Desk Analyst",
+      "worksFor": {
+        "@id": "https://ifxtrades.com/#organization"
+      },
+      "sameAs": [
+        "https://www.linkedin.com/company/ifxtrades",
+        `https://linkedin.com/in/${author.toLowerCase().replace(/\s+/g, "")}`
+      ]
     },
     publisher: {
       "@type": "EducationalOrganization",
-      name: BRANDING.name,
-      logo: {
+      "@id": "https://ifxtrades.com/#organization",
+      "name": BRANDING.name,
+      "logo": {
         "@type": "ImageObject",
-        url: `${SITE_URL}/logo.png`,
-      },
+        "url": `${SITE_URL}/logo.png`
+      }
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `${SITE_URL}/blog/${article.slug}`,
-    },
+      "@id": `${SITE_URL}/blog/${article.slug}`
+    }
   };
 };
 

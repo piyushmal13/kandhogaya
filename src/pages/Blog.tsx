@@ -34,6 +34,15 @@ export const Blog = () => {
     if (node) observer.current.observe(node);
   }, [loading, hasMore]);
 
+  // Hydrate search query state from URL parameters
+  useEffect(() => {
+    const urlParams = new URLSearchParams(globalThis.location.search);
+    const query = urlParams.get("q") || urlParams.get("search");
+    if (query) {
+      setSearchQuery(query);
+    }
+  }, []);
+
   useEffect(() => {
     const fetchPosts = async () => {
       setLoading(true);

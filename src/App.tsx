@@ -1,5 +1,5 @@
 import React, { lazy, Suspense, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 
 import { ErrorBoundary } from "./components/ui/ErrorBoundary";
@@ -55,9 +55,16 @@ const CookiePolicy = lazy(() => import("./pages/legal/CookiePolicy").then(m => (
 const AffiliateHub = lazy(() => import("./pages/AffiliateHub").then(m => ({ default: m.AffiliateHub })));
 const B2BLiquidity = lazy(() => import("./pages/B2BLiquidity").then(m => ({ default: m.B2BLiquidity })));
 const B2BWhiteLabel = lazy(() => import("./pages/B2BWhiteLabel").then(m => ({ default: m.B2BWhiteLabel })));
+const MT4MT5Bridge = lazy(() => import("./pages/MT4MT5Bridge").then(m => ({ default: m.MT4MT5Bridge })));
 const Settings = lazy(() => import("./pages/Settings").then(m => ({ default: m.Settings })));
 
 import { LegacyRedirect } from "./components/ui/LegacyRedirect";
+
+const SearchRedirect = () => {
+  const [searchParams] = useSearchParams();
+  const q = searchParams.get("q") || searchParams.get("search") || "";
+  return <Navigate to={`/marketplace?q=${encodeURIComponent(q)}`} replace />;
+};
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -74,8 +81,10 @@ const AnimatedRoutes = () => {
           <Routes location={location}>
             <Route path="/" element={<Home />} />
             <Route path="/solutions" element={<Solutions />} />
+            <Route path="/solutions/bridge" element={<MT4MT5Bridge />} />
             <Route path="/solutions/custom" element={<CustomRequestTerminal />} />
             <Route path="/solutions/seo-agent" element={<SeoAgent />} />
+            <Route path="/search" element={<SearchRedirect />} />
             <Route path="/consultation" element={<Consultation />} />
             <Route path="/marketplace" element={<FeatureGuard flag="marketplace" redirect="/dashboard"><Marketplace /></FeatureGuard>} />
             <Route path="/quantx" element={<QuantX />} />
