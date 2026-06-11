@@ -44,6 +44,23 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
     onSubscribe(algo, plan);
   };
 
+  const isEducationOrPineScript = ['course', 'education', 'pine_script', 'pinescript'].includes(algo.category?.toLowerCase() || '');
+
+  const defaultEducationQa = [
+    { question: `What will I learn in ${algo.name}?`, answer: `You will learn the core concepts and strategies behind ${algo.name}, structured for comprehensive understanding.` },
+    { question: `Do I need prior experience for ${algo.name}?`, answer: `This is designed to accommodate various skill levels, but basic understanding of the market is helpful.` },
+    { question: `Is there support provided with ${algo.name}?`, answer: `Yes, you get access to our support community to ask questions and clarify concepts.` }
+  ];
+
+  const defaultEducationReviews = [
+    { id: '1', user_name: 'Alex M.', rating: 5, text: `The ${algo.name} material was incredibly detailed and well-structured. Highly recommend for serious learners.`, created_at: new Date().toISOString() },
+    { id: '2', user_name: 'Sarah K.', rating: 5, text: `I've taken many courses, but ${algo.name} provided the most practical insights.`, created_at: new Date().toISOString() },
+    { id: '3', user_name: 'David R.', rating: 4, text: `Great content and clear explanations. ${algo.name} really helped me understand the strategy.`, created_at: new Date().toISOString() }
+  ];
+
+  const displayQa = algo.q_and_a?.length ? algo.q_and_a : (isEducationOrPineScript ? defaultEducationQa : []);
+  const displayReviews = algo.reviews?.length ? algo.reviews : (isEducationOrPineScript ? defaultEducationReviews : []);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -51,32 +68,22 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
       exit={{ opacity: 0 }}
       className="fixed inset-0 z-[200] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 overflow-y-auto"
     >
-      {/* Mobile Floating Close Button: Remains fixed at top-right of screen, independent of card scroll */}
-      <button 
-        onClick={onClose}
-        className="fixed top-6 right-6 z-[220] p-2.5 bg-black/60 border border-white/10 rounded-full hover:bg-white/10 transition-all text-white md:hidden shadow-2xl active:scale-95 flex items-center justify-center"
-        aria-label="Close modal"
-      >
-        <X className="w-5 h-5" />
-      </button>
-
       <motion.div
         initial={{ scale: 0.95, y: 20 }}
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.95, y: 20 }}
-        className="bg-[var(--color7)] border border-white/10 rounded-2xl md:rounded-3xl w-full max-w-5xl overflow-y-auto flex flex-col md:flex-row h-full max-h-[92vh] md:max-h-[85vh] shadow-2xl relative"
+        className="bg-[var(--color7)] border border-white/10 rounded-2xl md:rounded-3xl w-full max-w-5xl overflow-y-auto flex flex-col md:flex-row h-full max-h-[92vh] md:max-h-[85vh] shadow-2xl relative custom-scrollbar"
       >
-        {/* Desktop Close Button: Absolute positioned inside the card */}
+        {/* Close Button: Absolute positioned inside the card */}
         <button 
           onClick={onClose}
-          className="hidden md:flex absolute top-4 right-4 z-30 p-2 bg-black/50 rounded-full hover:bg-white/10 transition-colors text-white"
+          className="flex absolute top-4 right-4 z-[220] p-2 bg-black/50 border border-white/10 rounded-full hover:bg-white/10 transition-colors text-white shadow-lg backdrop-blur-sm"
           aria-label="Close modal"
         >
           <X className="w-5 h-5 md:w-6 md:h-6" />
         </button>
-
         {/* Left: Details & Tabs */}
-        <div className="flex-1 p-5 sm:p-8 md:p-12 overflow-y-visible md:overflow-y-auto border-b md:border-b-0 md:border-r border-white/5 custom-scrollbar">
+        <div className="flex-1 p-5 sm:p-8 md:p-12 overflow-y-visible md:overflow-y-auto border-b md:border-b-0 md:border-r border-white/5 custom-scrollbar pb-10">
           <div className="mb-6 md:mb-8 pr-10 md:pr-0">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[9px] md:text-xs font-mono tracking-widest mb-3 md:mb-4 whitespace-nowrap">
               <Zap className="w-3 h-3" />
@@ -112,7 +119,7 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
 
           {/* Tabs Navigation */}
           <div className="flex gap-4 md:gap-6 border-b border-white/5 mb-6 md:mb-8 overflow-x-auto whitespace-nowrap scrollbar-hide no-scrollbar">
-            {['overview', 'performance', 'reviews', 'qa', 'terms'].map((tab) => (
+            {(['overview', 'performance', 'reviews', 'qa', 'terms'] as const).filter(tab => tab !== 'performance' || !isEducationOrPineScript).map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab as any)}
@@ -159,30 +166,32 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
                   </div>
                 )}
 
-                <div className="p-6 rounded-2xl bg-white/5 border border-white/5">
-                  <h4 className="text-white font-bold mb-6 flex items-center gap-2">
-                    <BarChart3 className="w-5 h-5 text-emerald-500" />
-                    Technical Specifications
-                  </h4>
-                  <div className="grid grid-cols-2 gap-y-6 gap-x-8">
-                    <div>
-                      <div className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Slippage Tolerance</div>
-                      <div className="text-white font-mono font-bold">{(algo.performance as any)?.slippage || "N/A"}</div>
-                    </div>
-                    <div>
-                      <div className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Recommended Capital</div>
-                      <div className="text-white font-mono font-bold">{(algo.performance as any)?.min_capital || "N/A"}</div>
-                    </div>
-                    <div>
-                      <div className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Avg Monthly Return</div>
-                      <div className="text-emerald-400 font-mono font-bold">{algo.performance?.monthly_return ? `+${algo.performance.monthly_return}%` : 'N/A'}</div>
-                    </div>
-                    <div>
-                      <div className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Max Drawdown</div>
-                      <div className="text-red-400 font-mono font-bold">{algo.performance?.drawdown ? `-${algo.performance.drawdown}%` : 'N/A'}</div>
+                {!isEducationOrPineScript && (
+                  <div className="p-6 rounded-2xl bg-white/5 border border-white/5">
+                    <h4 className="text-white font-bold mb-6 flex items-center gap-2">
+                      <BarChart3 className="w-5 h-5 text-emerald-500" />
+                      Technical Specifications
+                    </h4>
+                    <div className="grid grid-cols-2 gap-y-6 gap-x-8">
+                      <div>
+                        <div className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Slippage Tolerance</div>
+                        <div className="text-white font-mono font-bold">{(algo.performance as any)?.slippage || "N/A"}</div>
+                      </div>
+                      <div>
+                        <div className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Recommended Capital</div>
+                        <div className="text-white font-mono font-bold">{(algo.performance as any)?.min_capital || "N/A"}</div>
+                      </div>
+                      <div>
+                        <div className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Avg Monthly Return</div>
+                        <div className="text-emerald-400 font-mono font-bold">{algo.performance?.monthly_return ? `+${algo.performance.monthly_return}%` : 'N/A'}</div>
+                      </div>
+                      <div>
+                        <div className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Max Drawdown</div>
+                        <div className="text-red-400 font-mono font-bold">{algo.performance?.drawdown ? `-${algo.performance.drawdown}%` : 'N/A'}</div>
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
               </div>
             )}
 
@@ -242,9 +251,9 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
 
             {activeTab === 'reviews' && (
               <div>
-                {algo.reviews?.length ? (
+                {displayReviews.length ? (
                   <div className="flex gap-4 overflow-x-auto pb-4 hide-scrollbar snap-x snap-mandatory scroll-smooth">
-                    {algo.reviews.map((review, idx) => (
+                    {displayReviews.map((review, idx) => (
                       <div 
                         key={review.id || `review-${idx}`} 
                         className="w-[285px] sm:w-[350px] shrink-0 snap-start p-5 sm:p-6 rounded-2xl bg-white/[0.03] border border-white/5 flex flex-col justify-between"
@@ -274,15 +283,15 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
                     ))}
                   </div>
                 ) : (
-                  <div className="text-center py-20 text-gray-500">No reviews yet for this algorithm.</div>
+                  <div className="text-center py-20 text-gray-500">No reviews yet for this product.</div>
                 )}
               </div>
             )}
 
             {activeTab === 'qa' && (
               <div className="space-y-6">
-                {algo.q_and_a?.length ? algo.q_and_a.map((qa) => (
-                  <div key={qa.question} className="p-6 rounded-2xl bg-white/5 border border-white/5">
+                {displayQa.length ? displayQa.map((qa, index) => (
+                  <div key={index} className="p-6 rounded-2xl bg-white/5 border border-white/5">
                     <div className="flex items-start gap-4">
                       <HelpCircle className="w-5 h-5 text-emerald-500 shrink-0 mt-1" />
                       <div>
@@ -292,7 +301,7 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
                     </div>
                   </div>
                 )) : (
-                  <div className="text-center py-20 text-gray-500">No Q&A available for this algorithm.</div>
+                  <div className="text-center py-20 text-gray-500">No Q&A available for this product.</div>
                 )}
               </div>
             )}
@@ -334,10 +343,23 @@ export const AlgoDetailModal = ({ algo, onClose, onSubscribe }: AlgoDetailModalP
               </div>
             )}
           </div>
+
+          {/* Mobile Next Button */}
+          <div className="mt-8 md:hidden">
+            <button 
+              onClick={() => {
+                document.getElementById('subscribe-section')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="w-full py-4 bg-emerald-500 text-black font-black text-xs uppercase tracking-[0.2em] rounded-xl flex items-center justify-center gap-2 shadow-lg"
+            >
+              Choose a Plan
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
         </div>
 
         {/* Right: Subscription */}
-        <div className="w-full md:w-[400px] bg-[var(--color6)] p-6 md:p-12 flex flex-col relative shrink-0 overflow-y-visible md:overflow-y-auto">
+        <div id="subscribe-section" className="w-full md:w-[400px] bg-[var(--color6)] p-6 md:p-12 flex flex-col relative shrink-0 overflow-y-visible md:overflow-y-auto">
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-cyan-500" />
           
           <div className="mb-6 md:mb-10 mt-4">

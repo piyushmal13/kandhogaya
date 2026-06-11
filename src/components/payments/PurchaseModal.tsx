@@ -173,11 +173,11 @@ export const PurchaseModal = ({ plan, amount, productId, downloadUrl, onClose, c
 
   // ─── Step: Method Selection ───────────────────────────────────────
   const renderMethodSelection = () => (
-    <div className="space-y-8 animate-in slide-in-from-bottom-4 duration-500">
+    <div className="space-y-6 md:space-y-8 animate-in slide-in-from-bottom-4 duration-500">
       {/* Amount Display */}
-      <div className="p-8 bg-white/5 border border-white/10 rounded-[32px] text-center space-y-4 font-mono">
+      <div className="p-6 md:p-8 bg-white/5 border border-white/10 rounded-3xl md:rounded-[32px] text-center space-y-2 md:space-y-4 font-mono">
         <div className="text-[10px] text-gray-500 uppercase tracking-widest italic">Capital Requirement</div>
-        <div className="text-5xl font-black text-white tracking-tight">${amount}</div>
+        <div className="text-4xl md:text-5xl font-black text-white tracking-tight">${amount}</div>
         <div className="text-[9px] text-gray-600 uppercase tracking-widest">{plan} Access</div>
       </div>
 
@@ -191,9 +191,9 @@ export const PurchaseModal = ({ plan, amount, productId, downloadUrl, onClose, c
             setPaymentMethod("upi");
             setStep("payment");
           }}
-          className="w-full p-6 bg-emerald-500/5 border border-emerald-500/20 rounded-2xl flex items-center gap-5 hover:bg-emerald-500/10 hover:border-emerald-500/30 transition-all group hover:scale-[1.01] active:scale-[0.99]"
+          className="w-full p-4 md:p-6 bg-emerald-500/5 border border-emerald-500/20 rounded-2xl flex items-center gap-4 md:gap-5 hover:bg-emerald-500/10 hover:border-emerald-500/30 transition-all group hover:scale-[1.01] active:scale-[0.99]"
         >
-          <div className="w-14 h-14 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-black transition-all shrink-0">
+          <div className="w-12 h-12 md:w-14 md:h-14 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-black transition-all shrink-0">
             <Phone className="w-6 h-6" />
           </div>
           <div className="text-left flex-1">
@@ -210,9 +210,9 @@ export const PurchaseModal = ({ plan, amount, productId, downloadUrl, onClose, c
             setPaymentMethod("crypto");
             setStep("crypto");
           }}
-          className="w-full p-6 bg-amber-500/5 border border-amber-500/20 rounded-2xl flex items-center gap-5 hover:bg-amber-500/10 hover:border-amber-500/30 transition-all group hover:scale-[1.01] active:scale-[0.99]"
+          className="w-full p-4 md:p-6 bg-amber-500/5 border border-amber-500/20 rounded-2xl flex items-center gap-4 md:gap-5 hover:bg-amber-500/10 hover:border-amber-500/30 transition-all group hover:scale-[1.01] active:scale-[0.99]"
         >
-          <div className="w-14 h-14 bg-amber-500/10 border border-amber-500/20 rounded-2xl flex items-center justify-center text-amber-500 group-hover:bg-amber-500 group-hover:text-black transition-all shrink-0">
+          <div className="w-12 h-12 md:w-14 md:h-14 bg-amber-500/10 border border-amber-500/20 rounded-2xl flex items-center justify-center text-amber-500 group-hover:bg-amber-500 group-hover:text-black transition-all shrink-0">
             <Wallet className="w-6 h-6" />
           </div>
           <div className="text-left flex-1">
@@ -277,9 +277,9 @@ export const PurchaseModal = ({ plan, amount, productId, downloadUrl, onClose, c
         All Methods
       </button>
 
-      <div className="p-8 bg-white/5 border border-white/10 rounded-[32px] text-center space-y-4 font-mono">
+      <div className="p-6 md:p-8 bg-white/5 border border-white/10 rounded-3xl md:rounded-[32px] text-center space-y-2 md:space-y-4 font-mono">
         <div className="text-[10px] text-gray-500 uppercase tracking-widest">Capital Requirement</div>
-        <div className="text-5xl font-black text-white tracking-tight">${amount}</div>
+        <div className="text-4xl md:text-5xl font-black text-white tracking-tight">${amount}</div>
         <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 text-[8px] font-black uppercase tracking-widest">
           <Phone className="w-3 h-3" />
           UPI Settlement
@@ -384,9 +384,9 @@ export const PurchaseModal = ({ plan, amount, productId, downloadUrl, onClose, c
         <span className="text-sm font-black text-white">${amount}</span>
       </div>
 
-      <div className="p-8 bg-white/5 border border-white/10 rounded-[32px]">
-        <h3 className="text-lg font-black text-white uppercase tracking-tighter mb-6 flex items-center gap-3 italic">
-          <Phone className="w-5 h-5 text-emerald-500" />
+      <div className="p-6 md:p-8 bg-white/5 border border-white/10 rounded-3xl md:rounded-[32px]">
+        <h3 className="text-base md:text-lg font-black text-white uppercase tracking-tighter mb-4 md:mb-6 flex items-center gap-3 italic">
+          <Phone className="w-4 h-4 md:w-5 md:h-5 text-emerald-500" />
           Communication Link
         </h3>
         <div className="space-y-4">
@@ -438,10 +438,10 @@ export const PurchaseModal = ({ plan, amount, productId, downloadUrl, onClose, c
 
   // ─── Step: Upload Review ──────────────────────────────────────────
   const renderUpload = () => (
-    <div className="space-y-8 animate-in slide-in-from-right-4 duration-500">
-      <div className="p-8 bg-white/5 border border-white/10 rounded-[32px] text-center">
-        <div className="w-20 h-20 bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 rounded-3xl flex items-center justify-center mx-auto mb-6">
-          <CreditCard className="w-10 h-10" />
+    <div className="space-y-6 md:space-y-8 animate-in slide-in-from-right-4 duration-500">
+      <div className="p-6 md:p-8 bg-white/5 border border-white/10 rounded-3xl md:rounded-[32px] text-center">
+        <div className="w-16 h-16 md:w-20 md:h-20 bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 rounded-2xl md:rounded-3xl flex items-center justify-center mx-auto mb-4 md:mb-6">
+          <CreditCard className="w-8 h-8 md:w-10 md:h-10" />
         </div>
         <h3 className="text-xl font-bold text-white tracking-tight uppercase italic font-black">Ready for Audit</h3>
         <p className="text-xs text-gray-500 mt-2 font-mono uppercase tracking-widest">{file?.name}</p>
@@ -538,24 +538,24 @@ export const PurchaseModal = ({ plan, amount, productId, downloadUrl, onClose, c
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl animate-in fade-in duration-300">
-      <div className="relative w-full max-w-lg max-h-[90vh] bg-[var(--raised)] border border-white/10 rounded-[40px] shadow-2xl overflow-hidden">
+      <div className="relative w-full max-w-lg max-h-[90vh] bg-[var(--raised)] border border-white/10 rounded-[32px] md:rounded-[40px] shadow-2xl overflow-hidden flex flex-col">
         
         {/* Modal Header */}
-        <div className="p-8 pb-4 flex justify-between items-start">
+        <div className="p-6 md:p-8 pb-3 md:pb-4 flex justify-between items-start shrink-0">
           <div>
-            <div className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500 mb-2">Revenue Fulfillment</div>
-            <h2 className="text-3xl font-black text-white tracking-tighter uppercase">{plan} Access</h2>
+            <div className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500 mb-1 md:mb-2">Revenue Fulfillment</div>
+            <h2 className="text-2xl md:text-3xl font-black text-white tracking-tighter uppercase">{plan} Access</h2>
           </div>
           <button 
             onClick={onClose}
-            className="p-3 bg-white/5 border border-white/10 rounded-2xl text-gray-400 hover:text-white hover:bg-white/10 transition-all"
+            className="p-2.5 md:p-3 bg-white/5 border border-white/10 rounded-xl md:rounded-2xl text-gray-400 hover:text-white hover:bg-white/10 transition-all"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4 md:w-5 md:h-5" />
           </button>
         </div>
 
         {/* Scrollable Content */}
-        <div className="p-8 pt-0 overflow-y-auto max-h-[calc(90vh-100px)]">
+        <div className="p-6 md:p-8 pt-0 flex-1 overflow-y-auto custom-scrollbar">
           {step === "method" && renderMethodSelection()}
           {step === "payment" && renderUpiPayment()}
           {step === "crypto" && renderCryptoPayment()}
