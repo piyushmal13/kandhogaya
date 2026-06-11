@@ -322,7 +322,9 @@ function CandlestickChart() {
 
 // ── COORDINATE FLOOR GRID COMPONENT ──────────────────────────────────────────
 function GridFloor() {
-  const geomRef = useRef<THREE.BufferGeometry>(null!);
+  const geomRef1 = useRef<THREE.BufferGeometry>(null!);
+  const geomRef2 = useRef<THREE.BufferGeometry>(null!);
+  const nodesGeomRef = useRef<THREE.BufferGeometry>(null!);
   const clockRef = useRef(0);
 
   const GRID_ROWS = 40;
@@ -349,7 +351,21 @@ function GridFloor() {
     return { segments: new Float32Array(lines), count: lines.length / 3 };
   }, []);
 
-  const livePositions = useMemo(() => new Float32Array(segments), [segments]);
+  const { nodePositions, totalNodes } = useMemo(() => {
+    const pts: number[] = [];
+    const offX = ((GRID_ROWS - 1) * GRID_SPACING) / 2;
+    const offZ = ((GRID_COLS - 1) * GRID_SPACING) / 2;
+    for (let zi = 0; zi < GRID_COLS; zi++) {
+      for (let xi = 0; xi < GRID_ROWS; xi++) {
+        pts.push(xi * GRID_SPACING - offX, -3, zi * GRID_SPACING - offZ);
+      }
+    }
+    return { nodePositions: new Float32Array(pts), totalNodes: pts.length / 3 };
+  }, []);
+
+  const livePositions1 = useMemo(() => new Float32Array(segments), [segments]);
+  const livePositions2 = useMemo(() => new Float32Array(segments), [segments]);
+  const liveNodePositions = useMemo(() => new Float32Array(nodePositions), [nodePositions]);
 
   useFrame((_, delta) => {
     const cappedDelta = Math.min(delta, 0.1);
@@ -359,12 +375,43 @@ function GridFloor() {
     const mx3d = mouseNDC.x * (GRID_ROWS * GRID_SPACING * 0.5);
     const mz3d = -mouseNDC.y * (GRID_COLS * GRID_SPACING * 0.5);
 
-    const geom = geomRef.current;
-    if (!geom) return;
+    const geom1 = geomRef1.current;
+    const geom2 = geomRef2.current;
+    const nGeom = nodesGeomRef.current;
 
+    if (!geom1 || !geom2 || !nGeom) return;
+
+    // Update lines
     for (let i = 0; i < count; i++) {
       const bx = segments[i * 3];
       const bz = segments[i * 3 + 2];
+
+      const baseY1 = -3 + Math.sin(t * 0.45 + bx * 0.2) * 0.05 * Math.cos(bz * 0.2);
+      const baseY2 = -3.05 + Math.sin(t * 0.45 + bx * 0.2) * 0.05 * Math.cos(bz * 0.2);
+
+      const dx = bx - mx3d;
+      const dz = bz - mz3d;
+      const dist = Math.sqrt(dx * dx + dz * dz);
+
+      let agY = 0;
+      if (dist < INTERACTION_RADIUS * 1.5) {
+        const falloff = 1 - (dist / (INTERACTION_RADIUS * 1.5));
+        agY = falloff * 0.5;
+      }
+
+      livePositions1[i * 3]     = bx;
+      livePositions1[i * 3 + 1] = baseY1 + agY;
+      livePositions1[i * 3 + 2] = bz;
+
+      livePositions2[i * 3]     = bx;
+      livePositions2[i * 3 + 1] = baseY2 + agY;
+      livePositions2[i * 3 + 2] = bz;
+    }
+
+    // Update nodes
+    for (let i = 0; i < totalNodes; i++) {
+      const bx = nodePositions[i * 3];
+      const bz = nodePositions[i * 3 + 2];
 
       const baseY = -3 + Math.sin(t * 0.45 + bx * 0.2) * 0.05 * Math.cos(bz * 0.2);
 
@@ -378,29 +425,65 @@ function GridFloor() {
         agY = falloff * 0.5;
       }
 
-      livePositions[i * 3]     = bx;
-      livePositions[i * 3 + 1] = baseY + agY;
-      livePositions[i * 3 + 2] = bz;
+      liveNodePositions[i * 3]     = bx;
+      liveNodePositions[i * 3 + 1] = baseY + agY;
+      liveNodePositions[i * 3 + 2] = bz;
     }
 
-    (geom.getAttribute('position') as THREE.BufferAttribute).needsUpdate = true;
+    (geom1.getAttribute('position') as THREE.BufferAttribute).needsUpdate = true;
+    (geom2.getAttribute('position') as THREE.BufferAttribute).needsUpdate = true;
+    (nGeom.getAttribute('position') as THREE.BufferAttribute).needsUpdate = true;
   });
 
   return (
-    <lineSegments>
-      <bufferGeometry ref={geomRef}>
-        <bufferAttribute attach="attributes-position" args={[livePositions, 3]} />
-      </bufferGeometry>
-      <lineBasicMaterial
-        color={COLOR_GRID}
-        transparent
-        opacity={0.04}
-        depthWrite={false}
-        blending={THREE.AdditiveBlending}
-      />
-    </lineSegments>
+    <group>
+      {/* Layer 1: Electric Ice-Blue Grid (Cyan) */}
+      <lineSegments>
+        <bufferGeometry ref={geomRef1}>
+          <bufferAttribute attach="attributes-position" args={[livePositions1, 3]} />
+        </bufferGeometry>
+        <lineBasicMaterial
+          color={COLOR_GRID}
+          transparent
+          opacity={0.06}
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+        />
+      </lineSegments>
+
+      {/* Layer 2: Soft Purple Offset Grid */}
+      <lineSegments>
+        <bufferGeometry ref={geomRef2}>
+          <bufferAttribute attach="attributes-position" args={[livePositions2, 3]} />
+        </bufferGeometry>
+        <lineBasicMaterial
+          color={COLOR_BEARISH}
+          transparent
+          opacity={0.04}
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+        />
+      </lineSegments>
+
+      {/* Layer 3: Glowing Intersection Nodes */}
+      <points>
+        <bufferGeometry ref={nodesGeomRef}>
+          <bufferAttribute attach="attributes-position" args={[liveNodePositions, 3]} />
+        </bufferGeometry>
+        <pointsMaterial
+          color={COLOR_CYAN}
+          size={0.035}
+          transparent
+          opacity={0.4}
+          sizeAttenuation={true}
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+        />
+      </points>
+    </group>
   );
 }
+
 
 // ── CAMERA CONTROLLER WITH DRIFT & RESPONSIVE VIEWPORT ───────────────────────
 function CameraController() {

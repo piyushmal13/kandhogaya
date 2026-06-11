@@ -63,7 +63,7 @@ export const WhatsAppButton = () => {
 
       {/* 2. Open State: Elegant Mini Drawer Support Terminal */}
       {isOpen && (
-        <div className="absolute bottom-0 right-0 w-[320px] sm:w-[350px] bg-[#0c0f12] border border-white/10 rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-bottom-5 duration-300">
+        <div className="absolute bottom-0 right-0 w-[calc(100vw-2rem)] sm:w-[350px] bg-[#0c0f12] border border-white/10 rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-bottom-5 duration-300">
           
           {/* macOS Desktop Header Bar */}
           <div className="bg-[#181d22] px-3.5 py-2 flex items-center border-b border-white/5 relative shrink-0">
